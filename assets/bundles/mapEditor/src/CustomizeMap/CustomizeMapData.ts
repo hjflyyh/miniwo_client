@@ -1,5 +1,5 @@
-import { _decorator, Component, instantiate, UITransform, Vec3 } from 'cc';
-import { MapEditor } from '../MapEditor';
+import { _decorator, Component, instantiate, UITransform, Vec2, Vec3 } from 'cc';
+import { MapEditor, NpcDebugTileData } from '../MapEditor';
 import { MapManager } from '../MapManager';
 import { AppConst } from '../../../../scripts/AppConst';
 import { MapModel } from '../../../../scripts/Model/MapModel';
@@ -13,6 +13,8 @@ export class CustomizeMapData extends Component {
     map : MapEditor
 
     npcNodes: Record<string, MapNpc> = {}
+    npcDebugTiles: Record<string, NpcDebugTileData> = {}
+    private npcTileCoordMode: 'raw' | 'flipY' | 'oneBased' | 'oneBasedFlipY' = 'raw';
 
     protected onLoad(): void {
         EventSystem.addListent("OnMatchData" , this.OnMatchData , this)
@@ -83,6 +85,82 @@ export class CustomizeMapData extends Component {
 
         return mapNpc
     }
+
+    private applyTileCoordMode(mode: 'raw' | 'flipY' | 'oneBased' | 'oneBasedFlipY', rawX: number, rawY: number): Vec2 {
+        const x = Math.round(rawX);
+        const y = Math.round(rawY);
+        if (mode === 'flipY') {
+            return new Vec2(x, this.map.mapHeight - 1 - y);
+        }
+        if (mode === 'oneBased') {
+            return new Vec2(x - 1, y - 1);
+        }
+        if (mode === 'oneBasedFlipY') {
+            return new Vec2(x - 1, this.map.mapHeight - y);
+        }
+        return new Vec2(x, y);
+    }
+
+    private gridToNpcLayerPos(grid: Vec2): Vec3 | null {
+        if (!this.map?.mapContainer || !this.map?.npcLayer) {
+            return null;
+        }
+        const mapLocal = MapModel.getInstance().gridToWorld(grid, null, this.map);
+        const world = this.map.mapContainer.getComponent(UITransform).convertToWorldSpaceAR(mapLocal);
+        return this.map.npcLayer.getComponent(UITransform).convertToNodeSpaceAR(world);
+    }
+
+    private normalizeNpcTileCoord(rawX: any, rawY: any, npcLocal?: Vec3): Vec2 | null {
+        const x = Number(rawX);
+        const y = Number(rawY);
+        if (!Number.isFinite(x) || !Number.isFinite(y)) {
+            return null;
+        }
+
+        const modes: Array<'raw' | 'flipY' | 'oneBased' | 'oneBasedFlipY'> = ['raw', 'flipY', 'oneBased', 'oneBasedFlipY'];
+        if (!npcLocal) {
+            return this.applyTileCoordMode(this.npcTileCoordMode, x, y);
+        }
+
+        let bestMode = this.npcTileCoordMode;
+        let bestDistSq = Number.POSITIVE_INFINITY;
+        for (let i = 0; i < modes.length; i++) {
+            const mode = modes[i];
+            const grid = this.applyTileCoordMode(mode, x, y);
+            const pos = this.gridToNpcLayerPos(grid);
+            if (!pos) {
+                continue;
+            }
+            const dx = pos.x - npcLocal.x;
+            const dy = pos.y - npcLocal.y;
+            const distSq = dx * dx + dy * dy;
+            if (distSq < bestDistSq) {
+                bestDistSq = distSq;
+                bestMode = mode;
+            }
+        }
+        this.npcTileCoordMode = bestMode;
+        return this.applyTileCoordMode(bestMode, x, y);
+    }
+
+    private updateNpcDebugTileCache(npcData: any, npcLocal?: Vec3) {
+        const npcId = String(npcData?.id ?? '');
+        if (!npcId) {
+            return;
+        }
+        const tile = this.normalizeNpcTileCoord(npcData?.tile_x, npcData?.tile_y, npcLocal);
+        const targetTile = this.normalizeNpcTileCoord(npcData?.target_tile_x, npcData?.target_tile_y, npcLocal);
+        this.npcDebugTiles[npcId] = {
+            tile_x: tile?.x,
+            tile_y: tile?.y,
+            target_tile_x: targetTile?.x,
+            target_tile_y: targetTile?.y,
+        };
+    }
+
+    private renderNpcDebugTileOverlay() {
+        this.map.renderNpcTileDebugOverlay(Object.values(this.npcDebugTiles));
+    }
     
     OnMatchData(data) {
         console.log("比赛数据：")
@@ -95,6 +173,8 @@ export class CustomizeMapData extends Component {
         if(data.opCode == 1){
             if(data.payload.map_id == this.map.map_id){
                 this.npcNodes = {}
+                this.npcDebugTiles = {}
+                this.npcTileCoordMode = 'raw';
                 let npcs = data.payload.npcs
                 for(let n = 0 ;n < npcs.length ; n++){
                     let npcId = data.payload.npcs[n].id
@@ -113,6 +193,7 @@ export class CustomizeMapData extends Component {
                     if (!npcLocal) {
                         continue;
                     }
+                    this.updateNpcDebugTileCache(npcs[n], npcLocal);
 
                     mapNpc.node.x = npcLocal.x
                     mapNpc.node.y = npcLocal.y
@@ -129,6 +210,7 @@ export class CustomizeMapData extends Component {
 
                     this.npcNodes[String(npcs[n].id)] = mapNpc
                 }
+                this.renderNpcDebugTileOverlay();
             }
         }else if(data.opCode == 2){
             if(data.payload.map_id == this.map.map_id){
@@ -141,6 +223,7 @@ export class CustomizeMapData extends Component {
                         if (!npcLocal) {
                             continue;
                         }
+                        this.updateNpcDebugTileCache(npcData, npcLocal);
 
                         npc.onServerMove({
                             x: npcLocal.x,
@@ -153,6 +236,7 @@ export class CustomizeMapData extends Component {
                         })
                     }
                 }
+                this.renderNpcDebugTileOverlay();
             }
         }
     }

@@ -348,7 +348,7 @@ export class MapModel {
         // 家具阻挡（以 mapData==3 为准）
         for (let x = 0; x < map.mapWidth; x++) {
             for (let y = 0; y < map.mapHeight; y++) {
-                if (map.mapData[x][y] === 3) {
+                if (map.mapData[x][y] === 3 || map.mapData[x][y] === 2) {
                     walkableSet.delete(`${x},${y}`);
                 }
             }
