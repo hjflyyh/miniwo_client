@@ -1,13 +1,15 @@
 import { _decorator, Component, instantiate, Label, Node } from 'cc';
+import { AppConst } from '../../AppConst';
+import { network } from '../../Model/RequestData';
 const { ccclass, property } = _decorator;
 
 @ccclass('CardCombine')
 export class CardCombine extends Component {
     @property(Label)
-    public cardName : Label
+    public cardName: Label
 
     @property(Node)
-    public itemRender : Node
+    public itemRender: Node
 
     private cardData
 
@@ -22,22 +24,26 @@ export class CardCombine extends Component {
         this.setItems()
     }
 
-    setItems(){
-        for(let s = 0 ; s < this.showItems.length ; s++){
+    setItems() {
+        for (let s = 0; s < this.showItems.length; s++) {
             this.showItems[s].destroy()
         }
         this.showItems = []
 
-        for(let f = 0 ; f < this.cardData.fragment_ids.length ; f++){
+        for (let f = 0; f < this.cardData.fragment_ids.length; f++) {
             let newItem = instantiate(this.itemRender)
             newItem.active = true
             newItem.parent = this.itemRender.parent
         }
     }
 
-    onClickCombine(){
-
+    onClickCombine() {
+        console.log(this.cardData)
+        console.log("组合卡片")
+         let json = new network.CombineRequest();
+        AppConst.WebSocketManager.send(json.toJSON(this.cardData["card_id"]))
     }
 }
+
 
 

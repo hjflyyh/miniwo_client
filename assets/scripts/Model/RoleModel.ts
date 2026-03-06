@@ -48,7 +48,7 @@ export class RoleModel {
             this.playerId = data.player_id
 
             
-            AppConst.WebSocketManager.setConfig("ws://192.168.30.109:7350/ws?token=" + data.nakama_token);
+            AppConst.WebSocketManager.setConfig("ws://127.0.0.1:7350/ws?token=" + data.nakama_token);
             AppConst.WebSocketManager.connect();
             EventSystem.send("LoginSuccess")
         }
