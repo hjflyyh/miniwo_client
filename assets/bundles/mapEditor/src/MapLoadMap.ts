@@ -10,6 +10,7 @@ export class MapLoadMap {
 
         mapEditor.allMapAssetsData = map;
         mapEditor.clearWalkableDebugOverlay();
+        mapEditor.clearNpcTileDebugOverlay();
 
         //马路
         for (let i = 0; i < mapEditor.allMapAssetsData.Ground.length; i++) {

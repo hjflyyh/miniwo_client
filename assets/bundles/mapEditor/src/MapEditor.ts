@@ -56,6 +56,13 @@ export interface MapData {
     }
 }
 
+export interface NpcDebugTileData {
+    tile_x?: number;
+    tile_y?: number;
+    target_tile_x?: number;
+    target_tile_y?: number;
+}
+
 @ccclass('MapEditor')
 export class MapEditor extends Component {
     @property(Camera)
@@ -206,6 +213,8 @@ export class MapEditor extends Component {
 
     private walkableDebugNode: Node | null = null;
     private walkableDebugGraphics: Graphics | null = null;
+    private npcTileDebugNode: Node | null = null;
+    private npcTileDebugGraphics: Graphics | null = null;
 
     /**
      * 绘制选择框
@@ -600,6 +609,75 @@ export class MapEditor extends Component {
             this.walkableDebugGraphics.rect(center.x - half, center.y - half, this.tileSize, this.tileSize);
         }
         this.walkableDebugGraphics.fill();
+    }
+
+    private ensureNpcTileDebugLayer() {
+        if (this.npcTileDebugNode && this.npcTileDebugNode.isValid && this.npcTileDebugGraphics) {
+            return;
+        }
+        this.npcTileDebugNode = new Node('npcTileDebugLayer');
+        this.npcTileDebugNode.layer = 1 << 0;
+        this.npcTileDebugGraphics = this.npcTileDebugNode.addComponent(Graphics);
+        const hostParent = this.mapContainer?.parent ?? this.disMapContainer?.parent ?? this.node;
+        hostParent.addChild(this.npcTileDebugNode);
+
+        // 与逻辑格子（mapContainer）保持同一局部坐标系，避免半格偏移
+        if (this.mapContainer) {
+            this.npcTileDebugNode.setPosition(this.mapContainer.position);
+            const srcUIT = this.mapContainer.getComponent(UITransform);
+            if (srcUIT) {
+                const dstUIT = this.npcTileDebugNode.addComponent(UITransform);
+                dstUIT.setContentSize(srcUIT.contentSize);
+                dstUIT.setAnchorPoint(srcUIT.anchorPoint);
+            }
+        }
+
+        // 保证在父节点最上层，压过建筑层
+        this.npcTileDebugNode.setSiblingIndex(hostParent.children.length - 1);
+    }
+
+    public clearNpcTileDebugOverlay() {
+        if (this.npcTileDebugGraphics) {
+            this.npcTileDebugGraphics.clear();
+        }
+    }
+
+    public renderNpcTileDebugOverlay(npcs: NpcDebugTileData[] | undefined) {
+        if (!this.debugShowWalkable) {
+            this.clearNpcTileDebugOverlay();
+            return;
+        }
+        this.ensureNpcTileDebugLayer();
+        if (!this.npcTileDebugGraphics) return;
+
+        this.npcTileDebugGraphics.clear();
+        if (!npcs || npcs.length === 0) {
+            return;
+        }
+
+        const drawKeys = new Set<string>();
+        this.npcTileDebugGraphics.fillColor = new Color(255, 255, 0, 140);
+        for (let i = 0; i < npcs.length; i++) {
+            const npc = npcs[i];
+            const coords = [
+                [Number(npc?.tile_x), Number(npc?.tile_y)],
+                [Number(npc?.target_tile_x), Number(npc?.target_tile_y)],
+            ];
+            for (let c = 0; c < coords.length; c++) {
+                const x = coords[c][0];
+                const y = coords[c][1];
+                if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
+                if (x < 0 || y < 0 || x >= this.mapWidth || y >= this.mapHeight) continue;
+                const key = `${x},${y}`;
+                if (drawKeys.has(key)) continue;
+                drawKeys.add(key);
+
+                const center = MapModel.getInstance().gridToWorld(new Vec2(x, y), null, this);
+                const half = this.tileSize * 0.5;
+                this.npcTileDebugGraphics.rect(center.x - half, center.y - half, this.tileSize, this.tileSize);
+            }
+        }
+        this.npcTileDebugGraphics.fill();
     }
 
     // 构建家具
