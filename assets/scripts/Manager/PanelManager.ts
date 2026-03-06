@@ -66,6 +66,7 @@ export class PanelManager extends Component {
             return
         }
         if(this.UIMap[url] != null){
+            this.UIMap[url].active = true
             if(callBack){
                 callBack()
             }
