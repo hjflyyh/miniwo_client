@@ -1,0 +1,74 @@
+{
+  "1": {
+    "name_cn": "树1",
+    "icon": "plant/icon/tree_100_icon",
+    "image": "plant/image/tree_100",
+    "tags": "",
+    "map_size": "64#84",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0"
+  },
+  "2": {
+    "name_cn": "树2",
+    "icon": "plant/icon/tree_101_icon",
+    "image": "plant/image/tree_101",
+    "tags": "",
+    "map_size": "64#128",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0"
+  },
+  "3": {
+    "name_cn": "树3",
+    "icon": "plant/icon/tree_102_icon",
+    "image": "plant/image/tree_102",
+    "tags": "",
+    "map_size": "64#64",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0"
+  },
+  "4": {
+    "name_cn": "马路1",
+    "icon": "road/icon/road1_icon",
+    "image": "road/image/road1",
+    "tags": "",
+    "map_size": "160#160",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0"
+  },
+  "5": {
+    "name_cn": "房子1",
+    "icon": "test/sprite_003",
+    "image": "test/sprite_003",
+    "tags": "",
+    "map_size": "352#288",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0"
+  },
+  "6": {
+    "name_cn": "房子2",
+    "icon": "test/sprite_004",
+    "image": "test/sprite_004",
+    "tags": "",
+    "map_size": "224#288",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0"
+  }
+}

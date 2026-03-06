@@ -1,0 +1,103 @@
+// Copyright (c) 2017-2020 Xiamen Yaji Software Co., Ltd.
+// GradientLabel.effect — 基于内置 sprite 着色器，增加渐变纹理采样
+
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: sprite-vs:vert
+      frag: sprite-fs:frag
+      depthStencilState:
+        depthTest: false
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendDstAlpha: one_minus_src_alpha
+      rasterizerState:
+        cullMode: none
+      properties:
+        alphaThreshold: { value: 0.5 }
+        gradientTexture: { value: white, editor: { tooltip: '渐变纹理（由 GradientLabel 组件自动生成）' } }
+}%
+
+// ===================== 顶点着色器（与内置 sprite-vs 一致）=====================
+CCProgram sprite-vs %{
+  precision highp float;
+  #include <builtin/uniforms/cc-global>
+  #if USE_LOCAL
+    #include <builtin/uniforms/cc-local>
+  #endif
+  #if SAMPLE_FROM_RT
+    #include <common/common-define>
+  #endif
+
+  in vec3 a_position;
+  in vec2 a_texCoord;
+  in vec4 a_color;
+
+  out vec4 color;
+  out vec2 uv0;
+
+  vec4 vert () {
+    vec4 pos = vec4(a_position, 1);
+    #if USE_LOCAL
+      pos = cc_matWorld * pos;
+    #endif
+    #if USE_PIXEL_ALIGNMENT
+      pos = cc_matView * pos;
+      pos.xyz = floor(pos.xyz);
+      pos = cc_matProj * pos;
+    #else
+      pos = cc_matViewProj * pos;
+    #endif
+    uv0 = a_texCoord;
+    #if SAMPLE_FROM_RT
+      CC_HANDLE_RT_SAMPLE_FLIP(uv0);
+    #endif
+    color = a_color;
+    return pos;
+  }
+}%
+
+// ===================== 片元着色器 =====================
+CCProgram sprite-fs %{
+  precision highp float;
+  #include <builtin/internal/embedded-alpha>
+  #include <builtin/internal/alpha-test>
+
+  in vec4 color;
+
+  #if USE_TEXTURE
+    in vec2 uv0;
+    #pragma builtin(local)
+    layout(set = 2, binding = 11) uniform sampler2D cc_spriteTexture;
+  #endif
+
+  uniform sampler2D gradientTexture;
+
+  vec4 frag () {
+    vec4 o = vec4(1, 1, 1, 1);
+
+    #if USE_TEXTURE
+      // 采样文字纹理（白色文字 + alpha 遮罩）
+      o *= CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
+
+      #if IS_GRAY
+        float gray = 0.2126 * o.r + 0.7152 * o.g + 0.0722 * o.b;
+        o.r = o.g = o.b = gray;
+      #endif
+
+      // 用 UV.x（文字横向位置 0~1）采样渐变纹理，替代顶点色
+      vec4 gradColor = texture(gradientTexture, vec2(uv0.x, 0.5));
+      o *= gradColor;
+    #endif
+
+    // 仅使用顶点 alpha（节点不透明度），不使用顶点颜色
+    o.a *= color.a;
+
+    ALPHA_TEST(o);
+    return o;
+  }
+}%

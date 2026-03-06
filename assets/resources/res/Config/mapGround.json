@@ -1,0 +1,162 @@
+{
+  "1": {
+    "name_cn": "地板1",
+    "resource": "dirty_road",
+    "size": 32,
+    "tags": "",
+    "baseImg": "ground_100",
+    "is_link_grid": 1
+  },
+  "2": {
+    "name_cn": "地板2",
+    "resource": "plaza",
+    "size": 32,
+    "tags": "",
+    "baseImg": "ground_101",
+    "is_link_grid": 1
+  },
+  "3": {
+    "name_cn": "地板3",
+    "resource": "pool",
+    "size": 32,
+    "tags": "",
+    "baseImg": "ground_102",
+    "is_link_grid": 1
+  },
+  "4": {
+    "name_cn": "地板4",
+    "resource": "textroad",
+    "size": 32,
+    "tags": "",
+    "baseImg": "textroad_1",
+    "is_link_grid": 1
+  },
+  "5": {
+    "name_cn": "basic_black_brick",
+    "resource": "basic_black_brick",
+    "size": 32,
+    "tags": "",
+    "baseImg": "basic_black_brick_1",
+    "is_link_grid": 1
+  },
+  "6": {
+    "name_cn": "basic_blue_brick",
+    "resource": "basic_blue_brick",
+    "size": 32,
+    "tags": "",
+    "baseImg": "basic_blue_brick_1",
+    "is_link_grid": 1
+  },
+  "7": {
+    "name_cn": "basic_pink_brick",
+    "resource": "basic_pink_brick",
+    "size": 32,
+    "tags": "",
+    "baseImg": "basic_pink_brick_1",
+    "is_link_grid": 1
+  },
+  "8": {
+    "name_cn": "basic_white_brick",
+    "resource": "basic_white_brick",
+    "size": 32,
+    "tags": "",
+    "baseImg": "basic_white_brick_1",
+    "is_link_grid": 1
+  },
+  "9": {
+    "name_cn": "flower_grass",
+    "resource": "flower_grass",
+    "size": 32,
+    "tags": "",
+    "baseImg": "flower_grass_1",
+    "is_link_grid": 1
+  },
+  "10": {
+    "name_cn": "grass",
+    "resource": "grass",
+    "size": 32,
+    "tags": "",
+    "baseImg": "grass_1",
+    "is_link_grid": 1
+  },
+  "11": {
+    "name_cn": "horizontal_wood_grain_brick",
+    "resource": "horizontal_wood_grain_brick",
+    "size": 32,
+    "tags": "",
+    "baseImg": "horizontal_wood_grain_brick_1",
+    "is_link_grid": 1
+  },
+  "12": {
+    "name_cn": "horizontal_wood_grain_khaki_brick",
+    "resource": "horizontal_wood_grain_khaki_brick",
+    "size": 32,
+    "tags": "",
+    "baseImg": "horizontal_wood_grain_khaki_brick_1",
+    "is_link_grid": 1
+  },
+  "13": {
+    "name_cn": "marble_diagonal_grain_brick",
+    "resource": "marble_diagonal_grain_brick",
+    "size": 32,
+    "tags": "",
+    "baseImg": "marble_diagonal_grain_brick_1",
+    "is_link_grid": 1
+  },
+  "14": {
+    "name_cn": "marble_diagonal_grain_khaki_brick",
+    "resource": "marble_diagonal_grain_khaki_brick",
+    "size": 32,
+    "tags": "",
+    "baseImg": "marble_diagonal_grain_khaki_brick_1",
+    "is_link_grid": 1
+  },
+  "15": {
+    "name_cn": "basic_green_brick",
+    "resource": "basic_green_brick",
+    "size": 32,
+    "tags": "",
+    "baseImg": "basic_green_brick_1",
+    "is_link_grid": 1
+  },
+  "16": {
+    "name_cn": "basic_purple_brick",
+    "resource": "basic_purple_brick",
+    "size": 32,
+    "tags": "",
+    "baseImg": "basic_purple_brick_1",
+    "is_link_grid": 1
+  },
+  "17": {
+    "name_cn": "basic_red_brick",
+    "resource": "basic_red_brick",
+    "size": 32,
+    "tags": "",
+    "baseImg": "basic_red_brick_1",
+    "is_link_grid": 1
+  },
+  "18": {
+    "name_cn": "basic_yellow_brick",
+    "resource": "basic_yellow_brick",
+    "size": 32,
+    "tags": "",
+    "baseImg": "basic_yellow_brick_1",
+    "is_link_grid": 1
+  },
+  "19": {
+    "name_cn": "dirt_grass",
+    "resource": "dirt_grass",
+    "size": 32,
+    "tags": "",
+    "baseImg": "dirt_grass_1",
+    "is_link_grid": 1
+  },
+  "20": {
+    "name_cn": "dirt_pebble_path",
+    "resource": "dirt_pebble_path",
+    "size": 32,
+    "tags": "",
+    "baseImg": "dirt_pebble_path_1",
+    "is_link_grid": 1
+  }
+}

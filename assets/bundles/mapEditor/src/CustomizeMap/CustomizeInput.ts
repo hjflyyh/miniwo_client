@@ -1,0 +1,378 @@
+import { _decorator, Component, EventMouse, EventTouch, Input, input, Node, sys, UITransform, Vec2, Vec3 } from 'cc';
+import { ActionStatus, MapManager } from '../MapManager';
+import { MapEditor } from '../MapEditor';
+import { MapModel } from '../../../../scripts/Model/MapModel';
+
+const { ccclass, property } = _decorator;
+
+@ccclass('CustomizeInput')
+export class CustomizeInput extends Component {
+    @property(MapEditor)
+    mapEditor : MapEditor = null
+
+    start() {
+        if (sys.isMobile) {
+            input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
+            input.on(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
+            input.on(Input.EventType.TOUCH_END, this.onTouchEnd, this);
+        } else {
+            input.on(Input.EventType.MOUSE_WHEEL , (event : EventMouse)=>{
+                const manager = MapManager.GetInstance();
+                if(manager.actionStatus != ActionStatus.Back){
+                    return
+                }
+                const dir = Math.sign(event.getScrollY())
+                if(dir === 0) return;
+
+                this.mapEditor.zoomCamera(-dir * this.mapEditor.wheelZoomStep)
+            })
+            input.on(Input.EventType.MOUSE_MOVE, (event: EventMouse) => {
+                const manager = MapManager.GetInstance();
+
+                if (this.mapEditor.isBuildSwitch) {
+                    const gridPos = MapModel.getInstance().worldPosToGride(event.getLocation() , this.mapEditor);
+                    const localPos = MapModel.getInstance().gridToWorld(gridPos , null , this.mapEditor);
+                    const worldPos = this.mapEditor.mapContainer.getComponent(UITransform).convertToWorldSpaceAR(localPos)
+                    this.mapEditor.tileMaskNode.setWorldPosition(worldPos);
+
+                    this.mapEditor.showMaskColor(gridPos);
+                    if (manager.actionStatus == ActionStatus.MOVE) {
+                        if (this.mapEditor.moveActionIndex == 2) {
+                            this.mapEditor.buildMap(gridPos);
+                        } else {
+                            this.mapEditor.signMoveTile(gridPos);
+                        }
+                    } else if (manager.actionStatus == ActionStatus.DETELE) {
+                        this.mapEditor.signDeteleTile(gridPos);
+                    } else if (manager.actionStatus == ActionStatus.FLOOR) {
+                        if (this.mapEditor.isMousePoint) {
+                            if(this.mapEditor.mapGraphics != null){
+                                this.mapEditor._currentPoint = localPos
+                                this.mapEditor._currentGrad = gridPos;
+                                this.mapEditor.drawSelectionBox();
+                            }
+                        }
+                    } else if (manager.actionStatus == ActionStatus.GROUND) {
+                        if (this.mapEditor.isMousePoint) {
+                            this.mapEditor.buildMap(gridPos);
+                        }
+                    }
+                }
+
+                if (manager.actionStatus == ActionStatus.Back) {
+                    if (this.mapEditor.isDragging) {
+                        const currentPosition = new Vec3(event.getLocation().x, event.getLocation().y, 0);
+                        const delta = new Vec3(0, 0, 0);
+                        delta.x = currentPosition.x - this.mapEditor.lastMousePosition.x;
+                        delta.y = currentPosition.y - this.mapEditor.lastMousePosition.y;
+
+                        // 将屏幕坐标差异转换为世界坐标差异
+                        const cameraWorldPos = this.mapEditor.mainCamera.node.getPosition();
+                        const newWorldPos = new Vec3(
+                            cameraWorldPos.x - delta.x * 20,
+                            cameraWorldPos.y - delta.y * 20,
+                            cameraWorldPos.z
+                        );
+
+                        this.mapEditor.targetPos = newWorldPos;
+                        this.mapEditor.lastMousePosition.set(currentPosition);
+
+                        // 确保相机在边界内
+                        this.mapEditor.targetPos.x = Math.max(this.mapEditor.minXCamera, Math.min(this.mapEditor.maxXCamera, this.mapEditor.targetPos.x));
+                        this.mapEditor.targetPos.y = Math.max(this.mapEditor.minYCamera, Math.min(this.mapEditor.maxYCamera, this.mapEditor.targetPos.y));
+                    }
+                }
+            }, this);
+
+            input.on(Input.EventType.MOUSE_DOWN, (event: EventMouse) => {
+                const manager = MapManager.GetInstance();
+
+                const gridPos = MapModel.getInstance().worldPosToGride(event.getLocation() , this.mapEditor);
+                const localPos = MapModel.getInstance().gridToWorld(gridPos , null , this.mapEditor);
+                // 转换到当前节点的局部坐标
+                // this._startPoint = Utils.screenToLocal(event.getUILocation() , this.node.getComponent(UITransform));
+                // this._startPoint = this.worldPosToGride(event.getLocation())
+                this.mapEditor._startPoint = localPos
+                this.mapEditor._startGrad = gridPos
+                this.mapEditor._currentPoint = this.mapEditor._startPoint.clone();
+                this.mapEditor._currentGrad = this.mapEditor._startGrad.clone();
+
+                if (!this.mapEditor.isBuildSwitch) {
+                    const mouseWorldPoint = this.mapEditor.mainCamera.screenToWorld(new Vec3(event.getLocation().x, event.getLocation().y, 0))
+                    if (this.mapEditor.tileMaskNode.getComponent(UITransform).getBoundingBoxToWorld().contains(new Vec2(mouseWorldPoint.x, mouseWorldPoint.y))) {
+                        const gridPos = MapModel.getInstance().worldPosToGride(event.getLocation() , this.mapEditor);
+                        const localPos = MapModel.getInstance().gridToWorld(gridPos , null , this.mapEditor);
+                        const worldPos = this.mapEditor.mapContainer.getComponent(UITransform).convertToWorldSpaceAR(localPos)
+                        this.mapEditor.tileMaskNode.setWorldPosition(worldPos);
+
+                        this.mapEditor.isBuildSwitch = true;
+                    } else if (manager.actionStatus == ActionStatus.WALL) {
+                        this.mapEditor.isMousePoint = true;
+                    }
+
+                } else {
+                    this.mapEditor.isMousePoint = true;
+                    this.mapEditor.startMousePosition = event.getLocation();
+                }
+
+                if (manager.actionStatus == ActionStatus.Back) {
+                    this.mapEditor.isDragging = true;
+                    this.mapEditor.lastMousePosition.set(event.getLocation().x, event.getLocation().y, 0);
+                }
+            }, this);
+
+            input.on(Input.EventType.MOUSE_UP, (event: EventMouse) => {
+                this.mapEditor.mapGraphics.clear()
+                if (!this.mapEditor.isBuildSwitch) {
+                    const mouseWorldPoint = this.mapEditor.mainCamera.screenToWorld(new Vec3(event.getLocation().x, event.getLocation().y, 0))
+                    if (this.mapEditor.tileMaskNode.getComponent(UITransform).getBoundingBoxToWorld().contains(new Vec2(mouseWorldPoint.x, mouseWorldPoint.y))) {
+                        this.mapEditor.isBuildSwitch = true;
+                    }
+                } else {
+                    const manager = MapManager.GetInstance();
+                    if (manager.actionStatus != ActionStatus.MOVE) {
+                        const dis = Vec2.distance(event.getLocation(), this.mapEditor.startMousePosition);
+                        if (dis > 10) {
+                            this.mapEditor.isMousePoint = false;
+                        }
+
+                        if (this.mapEditor.isMousePoint) {
+                            const manager = MapManager.GetInstance();
+                            if (manager.actionStatus == ActionStatus.MOVE) {
+                                this.mapEditor.moveStatus = 2;
+                            }
+
+                            if(manager.actionStatus != ActionStatus.FLOOR){
+                                const gridPos = MapModel.getInstance().worldPosToGride(event.getLocation() , this.mapEditor);
+                                this.mapEditor.buildMap(gridPos);
+                            }
+
+                        }else{
+                            if(manager.actionStatus == ActionStatus.FLOOR){
+                                if(this.mapEditor.autoGraphicsWall()){
+                                    this.mapEditor.drawAutoBuildWall()
+                                }
+                            }
+                        }
+
+                        this.mapEditor.isMousePoint = false;
+                    } else {
+                        if (this.mapEditor.moveActionIndex == 1) {
+                            this.mapEditor.moveActionIndex = 2;
+                        } else if (this.mapEditor.moveActionIndex == 2) {
+                            this.mapEditor.moveActionIndex = 0;
+
+                            const manager = MapManager.GetInstance();
+                            if (manager.actionStatus == ActionStatus.MOVE) {
+                                this.mapEditor.moveStatus = 2;
+                            }
+                        }
+                    }
+                }
+
+                this.mapEditor.isDragging = false;
+
+                this.mapEditor._startGrad = new Vec2(0,0)
+                this.mapEditor._currentGrad = new Vec2(0,0)
+            }, this);
+        }
+    }
+
+
+    private getActiveTouches(e: EventTouch): any[] {
+        const anyEvent = e as any;
+        const touches = typeof anyEvent.getAllTouches === "function" ? anyEvent.getAllTouches() : e.getTouches();
+        return touches || [];
+    }
+
+    private getTouchDistance(e :EventTouch) : number{
+        const touches = this.getActiveTouches(e)
+        if(!touches || touches.length < 2) return 0
+        const p1 = touches[0].getLocation()
+        const p2 = touches[1].getLocation()
+        return Vec2.distance(new Vec2(p1.x , p1.y) , new Vec2(p2.x,p2.y))
+    }
+
+    private isPinching: boolean = false
+    private lastPinchDistance: number = 0
+    private onTouchStart(event: EventTouch) {
+        const manager = MapManager.GetInstance();
+        const activeTouches = this.getActiveTouches(event);
+        if(activeTouches.length >= 2 && manager.actionStatus == ActionStatus.Back){
+            this.isPinching = true
+            this.lastPinchDistance = this.getTouchDistance(event)
+            // 双指开始时，关闭单指拖拽/建造状态，避免手势串扰
+            // this.mapEditor.isDragging = false;
+            // this.mapEditor.isMousePoint = false;
+            // this.mapEditor.isBuildSwitch = false;
+            return;
+        }
+        this.isPinching = false;
+        this.lastPinchDistance = 0;
+
+        const gridPos = MapModel.getInstance().worldPosToGride(event.getLocation() , this.mapEditor);
+        const localPos = MapModel.getInstance().gridToWorld(gridPos , null , this.mapEditor);
+        this.mapEditor._startPoint = localPos
+        this.mapEditor._startGrad = gridPos
+        this.mapEditor._currentPoint = this.mapEditor._startPoint.clone();
+        this.mapEditor._currentGrad = this.mapEditor._startGrad.clone();
+
+
+        if(manager.actionStatus == ActionStatus.FLOOR){
+            this.mapEditor.isBuildSwitch = true
+            const worldPos = this.mapEditor.mapContainer.getComponent(UITransform).convertToWorldSpaceAR(localPos)
+            this.mapEditor.tileMaskNode.setWorldPosition(worldPos);
+            this.mapEditor.isMousePoint = true;
+            return
+        }
+
+        if (!this.mapEditor.isBuildSwitch) {
+            const mouseWorldPoint = this.mapEditor.mainCamera.screenToWorld(new Vec3(event.getLocation().x, event.getLocation().y, 0))
+            if (this.mapEditor.tileMaskNode.getComponent(UITransform).getBoundingBoxToWorld().contains(new Vec2(mouseWorldPoint.x, mouseWorldPoint.y))) {
+                this.mapEditor.isBuildSwitch = true;
+                this.mapEditor.isMousePoint = true;
+                this.mapEditor.startMousePosition = event.getLocation();
+            } else if (manager.actionStatus == ActionStatus.WALL) {
+                this.mapEditor.isMousePoint = true;
+            }
+        }
+
+        if (manager.actionStatus == ActionStatus.Back) {
+            this.mapEditor.isDragging = true;
+            this.mapEditor.lastMousePosition.set(event.getLocation().x, event.getLocation().y, 0);
+        }
+    }
+
+    private onTouchMove(event: EventTouch) {
+        const activeTouches = this.getActiveTouches(event);
+        const manager = MapManager.GetInstance();
+        if(this.isPinching || activeTouches.length >= 2){
+            if(manager.actionStatus == ActionStatus.Back){
+                this.isPinching = true;
+                this.mapEditor.isDragging = false;
+                const dist = this.getTouchDistance(event)
+                if(this.lastPinchDistance > 0 && dist > 0){
+                    const delta = dist - this.lastPinchDistance
+                    // 过滤微抖动，避免缩放和位移手感冲突
+                    if (Math.abs(delta) < 2) {
+                        this.lastPinchDistance = dist
+                        return
+                    }
+                    const zoomDelta = -delta * 1.2
+                    this.mapEditor.zoomCamera(zoomDelta)
+                }
+                this.lastPinchDistance = dist
+                return
+            }
+        }
+        if(activeTouches.length >= 2){
+            return
+        }
+        if (this.mapEditor.isBuildSwitch) {
+            const gridPos = MapModel.getInstance().worldPosToGride(event.getLocation() , this.mapEditor);
+            const localPos = MapModel.getInstance().gridToWorld(gridPos , null , this.mapEditor);
+            const worldPos = this.mapEditor.mapContainer.getComponent(UITransform).convertToWorldSpaceAR(localPos)
+            this.mapEditor.tileMaskNode.setWorldPosition(worldPos);
+
+            this.mapEditor.showMaskColor(gridPos);
+
+            if (manager.actionStatus == ActionStatus.MOVE) {
+                this.mapEditor.signMoveTile(gridPos);
+                this.mapEditor.buildMap(gridPos);
+            } else if (manager.actionStatus == ActionStatus.DETELE) {
+                this.mapEditor.signDeteleTile(gridPos);
+            } else if (manager.actionStatus == ActionStatus.FLOOR) {
+                if (this.mapEditor.isMousePoint) {
+                    // this.buildMap(gridPos);
+                    if(this.mapEditor.mapGraphics != null){
+                        this.mapEditor._currentPoint = localPos
+                        this.mapEditor._currentGrad = gridPos;
+                        // this._currentPoint = this.worldPosToGride(event.getLocation());
+                        // this._currentPoint = Utils.screenToLocal(event.getLocation() , this.node.getComponent(UITransform))
+                        // this._currentPoint = event.getLocation()
+                        this.mapEditor.drawSelectionBox();
+                    }
+                }
+            } else if (manager.actionStatus == ActionStatus.GROUND) {
+                // if (this.mapEditor.isMousePoint) {
+                    this.mapEditor.buildMap(gridPos);
+                // }
+            }
+        }
+
+        if (this.mapEditor.isDragging) {
+            const currentPosition = new Vec3(event.getLocation().x, event.getLocation().y, 0);
+            const delta = new Vec3(0, 0, 0);
+            delta.x = currentPosition.x - this.mapEditor.lastMousePosition.x;
+            delta.y = currentPosition.y - this.mapEditor.lastMousePosition.y;
+
+            // 将屏幕坐标差异转换为世界坐标差异
+            const cameraWorldPos = this.mapEditor.mainCamera.node.getPosition();
+            const newWorldPos = new Vec3(
+                cameraWorldPos.x - delta.x * 20,
+                cameraWorldPos.y - delta.y * 20,
+                cameraWorldPos.z
+            );
+
+            this.mapEditor.targetPos = newWorldPos;
+            this.mapEditor.lastMousePosition.set(currentPosition);
+
+            // 确保相机在边界内
+            this.mapEditor.targetPos.x = Math.max(this.mapEditor.minXCamera, Math.min(this.mapEditor.maxXCamera, this.mapEditor.targetPos.x));
+            this.mapEditor.targetPos.y = Math.max(this.mapEditor.minYCamera, Math.min(this.mapEditor.maxYCamera, this.mapEditor.targetPos.y));
+        }
+    }
+
+    private onTouchEnd(event: EventTouch) {
+        const manager = MapManager.GetInstance();
+        if(this.isPinching && manager.actionStatus == ActionStatus.Back){
+            const activeTouches = this.getActiveTouches(event);
+            if(activeTouches.length < 2){
+                this.lastPinchDistance = 0
+                this.isPinching = false
+            }
+            // 双指结束时不触发单指建造/点击提交
+            return
+        }
+        this.mapEditor.mapGraphics.clear()
+        if (manager.actionStatus != ActionStatus.MOVE) {
+            const dis = Vec2.distance(event.getLocation(), this.mapEditor.startMousePosition);
+            if (dis > 10) {
+                this.mapEditor.isMousePoint = false;
+            }
+        }
+
+        if (this.mapEditor.isMousePoint) {
+            const manager = MapManager.GetInstance();
+            if (manager.actionStatus == ActionStatus.MOVE) {
+                this.mapEditor.moveStatus = 2;
+            }
+
+            const localPos = this.mapEditor.mapContainer.getComponent(UITransform).convertToNodeSpaceAR(this.mapEditor.tileMaskNode.worldPosition);
+            const gridPos = this.mapEditor.getPositionToGrid(new Vec2(localPos.x, localPos.y), this.mapEditor.tileMaskNode.getComponent(UITransform).contentSize);
+            if(manager.actionStatus != ActionStatus.FLOOR){
+                this.mapEditor.buildMap(gridPos);
+            }
+        }else{
+            if(manager.actionStatus == ActionStatus.FLOOR){
+                if(this.mapEditor.autoGraphicsWall()){
+                    this.mapEditor.drawAutoBuildWall()
+                }
+            }
+        }
+
+        if (manager.actionStatus != ActionStatus.GROUND) {
+            this.mapEditor.isBuildSwitch = false;
+        }else{
+            const gridPos = MapModel.getInstance().worldPosToGride(event.getLocation() , this.mapEditor);
+            const localPos = MapModel.getInstance().gridToWorld(gridPos , null , this.mapEditor);
+            const worldPos = this.mapEditor.mapContainer.getComponent(UITransform).convertToWorldSpaceAR(localPos)
+            this.mapEditor.tileMaskNode.setWorldPosition(worldPos);
+            this.mapEditor.buildMap(gridPos);
+        }
+        this.mapEditor.isMousePoint = false;
+        this.mapEditor.isDragging = false;
+    }
+}
+
+

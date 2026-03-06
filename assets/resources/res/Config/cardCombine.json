@@ -1,0 +1,26 @@
+{
+  "50000": {
+    "name_cn": "N",
+    "name_en": "N",
+    "rare": 1,
+    "suipian_number": "2"
+  },
+  "50001": {
+    "name_cn": "R",
+    "name_en": "R",
+    "rare": 2,
+    "suipian_number": "4"
+  },
+  "50002": {
+    "name_cn": "SR",
+    "name_en": "SR",
+    "rare": 3,
+    "suipian_number": "8"
+  },
+  "50003": {
+    "name_cn": "SSR",
+    "name_en": "SSR",
+    "rare": 4,
+    "suipian_number": "12"
+  }
+}

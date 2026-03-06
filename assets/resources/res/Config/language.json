@@ -1,0 +1,62 @@
+{
+  "101": {
+    "name_cn": "介绍",
+    "name_en": "introduce"
+  },
+  "102": {
+    "name_cn": "确认",
+    "name_en": "confim"
+  },
+  "103": {
+    "name_cn": "取消",
+    "name_en": "cancel"
+  },
+  "104": {
+    "name_cn": "请先选择房子地板类型",
+    "name_en": ""
+  },
+  "105": {
+    "name_cn": "谷歌登录",
+    "name_en": "Google"
+  },
+  "106": {
+    "name_cn": "苹果登录",
+    "name_en": "Apple"
+  },
+  "107": {
+    "name_cn": "邮箱登录",
+    "name_en": "Email "
+  },
+  "108": {
+    "name_cn": "加载",
+    "name_en": "Loading"
+  },
+  "109": {
+    "name_cn": "世界",
+    "name_en": "WORLD"
+  },
+  "110": {
+    "name_cn": "角色",
+    "name_en": "CHARACTER"
+  },
+  "111": {
+    "name_cn": "输入文字",
+    "name_en": "enter the text"
+  },
+  "112": {
+    "name_cn": "聊天",
+    "name_en": "CHAT"
+  },
+  "113": {
+    "name_cn": "WECHAT",
+    "name_en": "WECHAT"
+  },
+  "114": {
+    "name_cn": "社交",
+    "name_en": "FOLLOW"
+  },
+  "115": {
+    "name_cn": "推荐",
+    "name_en": "RECOMMEND"
+  }
+}

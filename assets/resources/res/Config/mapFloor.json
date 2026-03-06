@@ -1,0 +1,14 @@
+{
+  "1": {
+    "name_cn": "地板1",
+    "icon": "floor/icon/floor_100_icon",
+    "image": "floor/image/floor_100",
+    "tags": ""
+  },
+  "2": {
+    "name_cn": "地板2",
+    "icon": "floor/icon/floor_101_icon",
+    "image": "floor/image/floor_101",
+    "tags": ""
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "999": {
+    "name_cn": "地图道具",
+    "name_en": "",
+    "info_cn": "",
+    "info_en": "",
+    "rare": 0,
+    "type": 2,
+    "box_map1": [
+      [
+        1000
+      ],
+      [
+        10101
+      ]
+    ],
+    "box_map2": "1001",
+    "box_map3": "1002",
+    "box_map4": "1003",
+    "reward": "",
+    "icon": "m",
+    "map_img": "xx",
+    "map_spine": "n"
+  },
+  "1000": {
+    "name_cn": "",
+    "name_en": "",
+    "info_cn": "",
+    "info_en": "",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [
+      [
+        "id",
+        56,
+        "权重"
+      ],
+      [
+        "id",
+        "num",
+        "权重"
+      ]
+    ],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": ""
+  },
+  "1001": {
+    "name_cn": "",
+    "name_en": "",
+    "info_cn": "",
+    "info_en": "",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": ""
+  },
+  "1002": {
+    "name_cn": "",
+    "name_en": "",
+    "info_cn": "",
+    "info_en": "",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": ""
+  }
+}

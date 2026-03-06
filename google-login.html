@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Google login</title>
+    <style>
+      html, body { height: 100%; margin: 0; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial; }
+      .wrap { height: 100%; display: flex; align-items: center; justify-content: center; background: #0b1220; padding: 16px; }
+      .card { width: 100%; max-width: 460px; background: #111a2e; border: 1px solid rgba(255,255,255,.08); border-radius: 14px; padding: 18px; color: #e7eefc; }
+      .title { font-size: 18px; font-weight: 600; margin: 0 0 10px; }
+      .desc { margin: 0 0 16px; opacity: .85; font-size: 13px; line-height: 1.5; }
+      #button { display: flex; justify-content: center; min-height: 44px; }
+      #status { margin-top: 14px; font-size: 12px; opacity: .85; text-align: center; word-break: break-word; }
+      .btn { margin-top: 14px; width: 100%; padding: 12px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); color: #e7eefc; cursor: pointer; }
+      code { background: rgba(255,255,255,.08); padding: 2px 6px; border-radius: 6px; }
+    </style>
+    <!-- 新版 Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="card">
+        <p class="title">Use Google login</p>
+        <p class="desc">
+          
+            
+        </p>
+        <div id="button"></div>
+        <div id="status"></div>
+        <button class="btn" id="closeBtn" type="button">Close</button>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        // TODO: 替换为你的 Web Client ID
+        const CLIENT_ID = '808005965201-9fj5v7jbfo33gkng9c4br0kb1a5gdnrs.apps.googleusercontent.com';
+
+        const $status = document.getElementById('status');
+        const setStatus = (msg) => { if ($status) $status.textContent = msg; };
+        document.getElementById('closeBtn').addEventListener('click', () => { try { 
+            console.log("close google")
+            window.parent.postMessage({ type: 'GOOGLE_LOGIN_CLOSE' }, '*'); } catch(e) {} });
+
+        function getParentOrigin() {
+          try {
+            if (document.referrer) return new URL(document.referrer).origin;
+          } catch (e) {}
+          return '*';
+        }
+
+        function sendToGame(payload) {
+          // 给 iframe parent（Cocos WebView）发消息
+          try {
+            const targetOrigin = getParentOrigin();
+            if (window.parent && window.parent !== window) {
+              window.parent.postMessage({ type: 'GOOGLE_LOGIN', payload }, targetOrigin);
+            }
+          } catch (e) {}
+
+          // 兼容：如果是 window.open 打开的，也发给 opener
+          try {
+            const targetOrigin = getParentOrigin();
+            if (window.opener && window.opener !== window) {
+              window.opener.postMessage({ type: 'GOOGLE_LOGIN', payload }, targetOrigin);
+            }
+          } catch (e) {}
+        }
+
+        function onCredential(resp) {
+          if (!resp || !resp.credential) {
+            setStatus('未获取到 credential(id_token)。');
+            return;
+          }
+          setStatus('login success please wait…');
+          sendToGame({
+            id_token: resp.credential,
+            select_by: resp.select_by,
+            ts: Date.now(),
+          });
+        }
+
+        function initWhenReady() {
+          if (!window.google || !google.accounts || !google.accounts.id) {
+            setTimeout(initWhenReady, 50);
+            return;
+          }
+          google.accounts.id.initialize({
+            client_id: CLIENT_ID,
+            callback: onCredential,
+            auto_select: false,
+            cancel_on_tap_outside: false,
+          });
+          google.accounts.id.renderButton(
+            document.getElementById('button'),
+            { theme: 'outline', size: 'large', shape: 'rectangular', text: 'signin_with', width: 300 }
+          );
+          setStatus('Click Login Btn。');
+        }
+
+        if (!CLIENT_ID || CLIENT_ID === 'REPLACE_WITH_YOUR_WEB_CLIENT_ID') {
+          setStatus('请先在页面里填写 CLIENT_ID（Web Client ID）。');
+          return;
+        }
+        initWhenReady();
+      })();
+    </script>
+  </body>
+  </html>
+

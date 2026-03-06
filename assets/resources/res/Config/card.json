@@ -1,0 +1,11 @@
+{
+  "10000": {
+    "name_cn": "测试卡",
+    "name_en": "testcaard",
+    "info_cn": "中文介绍",
+    "info_en": "eng_info",
+    "rare": 1,
+    "suipian_ids": "",
+    "icon": ""
+  }
+}
