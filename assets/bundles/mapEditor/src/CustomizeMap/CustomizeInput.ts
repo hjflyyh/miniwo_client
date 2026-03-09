@@ -149,9 +149,8 @@ export class CustomizeInput extends Component {
 
                         }else{
                             if(manager.actionStatus == ActionStatus.FLOOR){
-                                if(this.mapEditor.autoGraphicsWall()){
-                                    this.mapEditor.drawAutoBuildWall()
-                                }
+                                this.mapEditor.autoGraphicsWall();
+                                this.mapEditor.drawAutoBuildWall();
                             }
                         }
 
@@ -355,9 +354,8 @@ export class CustomizeInput extends Component {
             }
         }else{
             if(manager.actionStatus == ActionStatus.FLOOR){
-                if(this.mapEditor.autoGraphicsWall()){
-                    this.mapEditor.drawAutoBuildWall()
-                }
+                this.mapEditor.autoGraphicsWall();
+                this.mapEditor.drawAutoBuildWall();
             }
         }
 

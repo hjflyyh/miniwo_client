@@ -339,9 +339,27 @@ export class MapModel {
         }
 
         // 房间门（OpenWall 记录的是门洞锚点）
+        // 若门开在下墙（门锚点 y 大于房间地板最大 y），额外将门上方一格标记为可走。
         map.allHouse.forEach((house) => {
+            let maxFloorY = Number.NEGATIVE_INFINITY;
+            if (house.grid && house.grid.length > 0) {
+                for (let i = 0; i < house.grid.length; i++) {
+                    if (house.grid[i].y > maxFloorY) {
+                        maxFloorY = house.grid[i].y;
+                    }
+                }
+            }
+
             house.openWall.forEach((pos) => {
                 walkableSet.add(`${pos.x},${pos.y}`);
+
+                // 下墙门：再把门上方一格加入可行走
+                if (pos.y > maxFloorY) {
+                    const upY = pos.y - 1;
+                    if (pos.x >= 0 && pos.x < map.mapWidth && upY >= 0 && upY < map.mapHeight) {
+                        walkableSet.add(`${pos.x},${upY}`);
+                    }
+                }
             });
         });
 

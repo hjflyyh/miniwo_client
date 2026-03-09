@@ -2177,7 +2177,7 @@
     "mapGraphics": {
       "__id__": 54
     },
-    "debugShowWalkable": false,
+    "debugShowWalkable": true,
     "_id": "abq+rSUgpJcoQNEssTNPU6"
   },
   {

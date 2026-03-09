@@ -105,6 +105,13 @@ export class MapEditor extends Component {
 
     public groundType: number = 1;
     public _houseIndex: number = 100;
+    private readonly houseMinWidth = 8;
+    private readonly houseMinHeight = 10;
+    private readonly houseInsetTop = 4;
+    private readonly houseInsetBottom = 1;
+    private readonly houseInsetLeft = 1;
+    private readonly houseInsetRight = 1;
+    private lastSelectionFailReason: '' | 'size' | 'placement' = '';
 
     private NEIGHBOURS: Vec2[] = [
         new Vec2(0, 0),
@@ -1043,20 +1050,71 @@ export class MapEditor extends Component {
     }
 
     //判断手滑的框，是否可以造房子
+    private getInsetBuildRect(): { minX: number; maxX: number; minY: number; maxY: number } | null {
+        if (!this._startGrad || !this._currentGrad) {
+            return null;
+        }
+
+        const rawMinX = Math.min(this._startGrad.x, this._currentGrad.x);
+        const rawMaxX = Math.max(this._startGrad.x, this._currentGrad.x);
+        const rawMinY = Math.min(this._startGrad.y, this._currentGrad.y);
+        const rawMaxY = Math.max(this._startGrad.y, this._currentGrad.y);
+
+        let minX = rawMinX + this.houseInsetLeft;
+        let maxX = rawMaxX - this.houseInsetRight;
+        let minY = rawMinY + this.houseInsetTop;
+        let maxY = rawMaxY - this.houseInsetBottom;
+
+        minX = Math.max(0, minX);
+        minY = Math.max(0, minY);
+        maxX = Math.min(this.mapWidth - 1, maxX);
+        maxY = Math.min(this.mapHeight - 1, maxY);
+
+        if (minX > maxX || minY > maxY) {
+            return null;
+        }
+
+        return { minX, maxX, minY, maxY };
+    }
+
+    private isHouseRectSizeValid(minX: number, maxX: number, minY: number, maxY: number): boolean {
+        const width = maxX - minX + 1;
+        const height = maxY - minY + 1;
+        return width >= this.houseMinWidth && height >= this.houseMinHeight;
+    }
+
+    private showHouseSizeTips() {
+        EventSystem.send("ShowTips", `房屋建造失败：宽至少${this.houseMinWidth}格，高至少${this.houseMinHeight}格`);
+    }
+
     autoGraphicsWall(){
+        const rect = this.getInsetBuildRect();
+        if (!rect) {
+            this.lastSelectionFailReason = 'size';
+            return false;
+        }
+        if (!this.isHouseRectSizeValid(rect.minX, rect.maxX, rect.minY, rect.maxY)) {
+            this.lastSelectionFailReason = 'size';
+            return false;
+        }
+
         let isDraw = true
-        let startGrad = this._startGrad
-        let currentGrad = this._currentGrad
+        const startGrad = new Vec2(rect.minX, rect.minY);
+        const currentGrad = new Vec2(rect.maxX, rect.maxY);
         const path = Utils.traverseRectangle(startGrad, currentGrad);
         path.forEach((point, index) => {
             let gridPos = new Vec2(point.x , point.y)
             if (this.checkPlacementValidity(gridPos) && !this.containsArray(this.buildFloorPoints, gridPos)) {
 
             }else{
+                this.lastSelectionFailReason = 'placement';
                 isDraw = false
                 return false
             }
         });
+        if (isDraw) {
+            this.lastSelectionFailReason = '';
+        }
         return isDraw
     }
 
@@ -2051,41 +2109,29 @@ export class MapEditor extends Component {
         }
 
         if(!this.isDrawSelectionBox){
+            if (this.lastSelectionFailReason === 'size') {
+                this.showHouseSizeTips();
+            }
             return
         }
 
-        // 原始拖拽范围（无论从哪个方向拖，都先归一化）
-        const rawMinX = Math.min(this._startGrad.x, this._currentGrad.x);
-        const rawMaxX = Math.max(this._startGrad.x, this._currentGrad.x);
-        const rawMinY = Math.min(this._startGrad.y, this._currentGrad.y);
-        const rawMaxY = Math.max(this._startGrad.y, this._currentGrad.y);
-
-        // 上面 -2 格，下面 -1 格，左 -1 格，右 -1 格
-        // 注意：本项目 y 轴向下增大，"上面"是 minY 侧
-        let minX = rawMinX + 1;
-        let maxX = rawMaxX - 1;
-        let minY = rawMinY + 4;
-        let maxY = rawMaxY - 1;
-
-        // 边界保护
-        minX = Math.max(0, minX);
-        minY = Math.max(0, minY);
-        maxX = Math.min(this.mapWidth - 1, maxX);
-        maxY = Math.min(this.mapHeight - 1, maxY);
-
-        // 裁剪后无有效区域，直接返回
-        if (minX > maxX || minY > maxY) {
+        const rect = this.getInsetBuildRect();
+        if (!rect) {
+            return;
+        }
+        if (!this.isHouseRectSizeValid(rect.minX, rect.maxX, rect.minY, rect.maxY)) {
+            this.showHouseSizeTips();
             return;
         }
 
-        let startGrad = new Vec2(minX , minY)
-        let currentGrad = new Vec2(maxX , maxY)
+        let startGrad = new Vec2(rect.minX , rect.minY)
+        let currentGrad = new Vec2(rect.maxX , rect.maxY)
         const path = Utils.traverseRectangle(startGrad, currentGrad);
         const dragPoints: Vec2[] = path.map((p) => new Vec2(p.x , p.y))
         const candidates = RectangleHouseBuilder.collectBuildableRectangles({
             floorPoints: dragPoints,
-            minWidth: 5,
-            minHeight: 5,
+            minWidth: this.houseMinWidth,
+            minHeight: this.houseMinHeight,
             passExtraCheck: (cell) => this.checkPlacementValidity(cell)
         })
 
@@ -2144,7 +2190,24 @@ export class MapEditor extends Component {
         }
 
         for (const house of allHousePoints) {
-            if (MapModel.getInstance().isContinuousRectangle(house , this) && house.length >= 9) {
+            let minX = house[0][0];
+            let maxX = house[0][0];
+            let minY = house[0][1];
+            let maxY = house[0][1];
+            for (let i = 1; i < house.length; i++) {
+                const px = house[i][0];
+                const py = house[i][1];
+                if (px < minX) minX = px;
+                if (px > maxX) maxX = px;
+                if (py < minY) minY = py;
+                if (py > maxY) maxY = py;
+            }
+            if (!this.isHouseRectSizeValid(minX, maxX, minY, maxY)) {
+                this.showHouseSizeTips();
+                continue;
+            }
+
+            if (MapModel.getInstance().isContinuousRectangle(house , this)) {
 
                 for (let i = 0; i < house.length; i++) {
                     const child = house[i];
@@ -2153,7 +2216,7 @@ export class MapEditor extends Component {
                     }
                 }
 
-                let makeWalls: { pos: Vec2; _node: Node }[] = [];
+                let makeWalls: { pos: Vec2; _node: Node; dir?: string }[] = [];
 
                 let topLeft = house[0];
                 let topRight = house[0];
@@ -2214,7 +2277,10 @@ export class MapEditor extends Component {
                         const item = this.buildOutWall(pos, frame, dir);
                         if (item) {
                             outWallPoints.push(item);
-                            makeWalls.push(item);
+                            // 门位只允许从左右和下边外墙中挑选
+                            if (item.dir === 'left' || item.dir === 'right' || item.dir === 'down') {
+                                makeWalls.push(item);
+                            }
 
                             // 删除占位的地板
                             if (j == 0) {
@@ -2282,16 +2348,28 @@ export class MapEditor extends Component {
                     out.push(pt.pos);
                 })
 
-                let _count = 2;
                 let _open: Vec2[] = [];
-                while (_count > 0) {
-                    const item = makeWalls[Math.floor(Math.random() * (makeWalls.length - 0)) + 0]
-                    makeWalls = makeWalls.filter((pt) => { return pt._node != item._node });
-                    houseItems.get(`${item.pos.x},${item.pos.y}`).tile = null;
-                    this.houseItems.get(`${item.pos.x},${item.pos.y}`).tile = null;
+                const downWallCandidates = makeWalls.filter((pt) => pt.dir === 'down');
+                const sideWallCandidates = makeWalls.filter((pt) => pt.dir === 'left' || pt.dir === 'right');
+                const selectedDoorWalls: { pos: Vec2; _node: Node; dir?: string }[] = [];
+
+                if (downWallCandidates.length > 0) {
+                    const downDoor = downWallCandidates[Math.floor(Math.random() * downWallCandidates.length)];
+                    selectedDoorWalls.push(downDoor);
+                }
+                if (sideWallCandidates.length > 0) {
+                    const sideDoor = sideWallCandidates[Math.floor(Math.random() * sideWallCandidates.length)];
+                    selectedDoorWalls.push(sideDoor);
+                }
+
+                for (let i = 0; i < selectedDoorWalls.length; i++) {
+                    const item = selectedDoorWalls[i];
+                    const localWall = houseItems.get(`${item.pos.x},${item.pos.y}`);
+                    const globalWall = this.houseItems.get(`${item.pos.x},${item.pos.y}`);
+                    if (localWall) localWall.tile = null;
+                    if (globalWall) globalWall.tile = null;
                     item._node.destroy();
                     _open.push(item.pos);
-                    _count--;
 
                     const buildingSize = MapModel.getInstance().getBuildingSize(item._node.getComponent(UITransform).contentSize , this);
                     // 更新网格数据
@@ -2299,9 +2377,16 @@ export class MapEditor extends Component {
                         for (let y = 0; y < buildingSize.y; y++) {
                             const gridX = item.pos.x + x;
                             const gridY = item.pos.y - y;
-                            this.mapData[gridX][gridY] = 0;
+                            // 下边墙开门时，保留室内地板，避免门口被挖掉一格
+                            if (item.dir === 'down' && y > 0) {
+                                this.mapData[gridX][gridY] = 1;
+                            } else {
+                                this.mapData[gridX][gridY] = 0;
+                            }
                         }
                     }
+                    // 保险：挖门后强制补回室内门口地板
+                    this.reinforceDoorFloor(item.pos, item.dir);
                 }
 
 
@@ -2340,6 +2425,27 @@ export class MapEditor extends Component {
     }
 
     // 构建外墙
+    private reinforceDoorFloor(doorPos: Vec2, dir?: string) {
+        let floorX = doorPos.x;
+        let floorY = doorPos.y;
+        if (dir === 'down') {
+            floorY = doorPos.y - 1;
+        } else if (dir === 'up') {
+            floorY = doorPos.y + 1;
+        } else if (dir === 'left') {
+            floorX = doorPos.x + 1;
+        } else if (dir === 'right') {
+            floorX = doorPos.x - 1;
+        } else {
+            return;
+        }
+
+        if (floorX < 0 || floorX >= this.mapWidth || floorY < 0 || floorY >= this.mapHeight) {
+            return;
+        }
+        this.mapData[floorX][floorY] = 1;
+    }
+
     buildOutWall(pos: Vec2, frame: SpriteFrame, dir: string = ''): { pos: Vec2; _node: Node, dir: string } {
         if (this.checkPlacementValidity(pos)) {
             let islike = this.containsArray(this.buildFloorPoints, pos);
@@ -2541,6 +2647,8 @@ export class MapEditor extends Component {
             let _open: Vec2[] = [];
             while (makeWalls.length > 0) {
                 const item = makeWalls.shift();
+                const key = `${item.pos.x},${item.pos.y}`;
+                const dir = houseItems.get(key)?.dir ?? '';
 
                 if(!this.houseItems.get(`${item.pos.x},${item.pos.y}`).tile){
                     console.log(item.pos)
@@ -2551,9 +2659,15 @@ export class MapEditor extends Component {
                     for (let y = 0; y < buildingSize.y; y++) {
                         const gridX = item.pos.x + x;
                         const gridY = item.pos.y - y;
-                        this.mapData[gridX][gridY] = 0;
+                        if (dir === 'down' && y > 0) {
+                            this.mapData[gridX][gridY] = 1;
+                        } else {
+                            this.mapData[gridX][gridY] = 0;
+                        }
                     }
                 }
+                // 保险：挖门后强制补回室内门口地板
+                this.reinforceDoorFloor(item.pos, dir);
 
                 houseItems.get(`${item.pos.x},${item.pos.y}`).tile = null;
                 this.houseItems.get(`${item.pos.x},${item.pos.y}`).tile.destroy();
