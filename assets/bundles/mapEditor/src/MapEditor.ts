@@ -12,21 +12,6 @@ import { MapLoadMap } from './MapLoadMap';
 import { network } from '../../../scripts/Model/RequestData';
 const { ccclass, property } = _decorator;
 
-// 墙体类型枚举
-enum WallType {
-    EMPTY = 0,         // 空
-    HORIZONTAL = 1,    // 横向墙
-    VERTICAL = 2,      // 纵向墙
-    TOP_LEFT = 3,      // 左上转角
-    TOP_RIGHT = 4,     // 右上转角
-    BOTTOM_LEFT = 5,   // 左下转角
-    BOTTOM_RIGHT = 6,  // 右下转角
-    CROSS = 7,         // 十字交叉
-    T_UP = 8,          // T型向上
-    T_DOWN = 9,        // T型向下
-    T_LEFT = 10,       // T型向左
-    T_RIGHT = 11,      // T型向右
-}
 
 enum GridCellType {
     EMPTY,   // 空
@@ -81,6 +66,9 @@ export class MapEditor extends Component {
     public disMapContainer: Node = null!;
 
     @property(Node)
+    public homeWallTilemap: Node = null
+
+    @property(Node)
     public tileMaskNode: Node = null;
 
     @property(UITransform)
@@ -91,9 +79,6 @@ export class MapEditor extends Component {
 
     @property([SpriteFrame])
     public outWallSprites: SpriteFrame[] = [];
-
-    @property([SpriteFrame])
-    public wallSprites: SpriteFrame[] = [];
 
     private buildFloorPoints: Vec2[] = [];
     public houseItems: Map<string, { tile: Node, tileType: string, belong?: string }> = new Map();
@@ -172,21 +157,7 @@ export class MapEditor extends Component {
     public moveActionIndex: number = 0;
 
     private currentOrthoSize: number = 700;
-
-    // 墙体贴图配置映射
-    private wallSpriteConfig: WallSpriteConfig = {
-        [WallType.HORIZONTAL]: null!,
-        [WallType.VERTICAL]: null!,
-        [WallType.TOP_LEFT]: null!,
-        [WallType.TOP_RIGHT]: null!,
-        [WallType.BOTTOM_LEFT]: null!,
-        [WallType.BOTTOM_RIGHT]: null!,
-        [WallType.CROSS]: null!,
-        [WallType.T_UP]: null!,
-        [WallType.T_DOWN]: null!,
-        [WallType.T_LEFT]: null!,
-        [WallType.T_RIGHT]: null!,
-    };
+    
 
     isDragging: boolean = false;
     minXCamera: number = 0;
@@ -261,7 +232,7 @@ export class MapEditor extends Component {
         this.mapBgTransform.contentSize = new Size(this.mapWidth * this.tileSize , this.mapHeight * this.tileSize)
 
         this.init();
-        this.initSpriteConfig();
+        
         this.initGridData();
         this.updateSizeLabel();
         MapModel.getInstance().setMapGround(MapManager.GetInstance().getGroundAssetsStr()[this.chooseGroundId], 0 , this);
@@ -315,21 +286,6 @@ export class MapEditor extends Component {
         this.setArrowSignActive(false);
     }
 
-    private initSpriteConfig() {
-        // 映射墙体类型到对应的SpriteFrame
-        this.wallSpriteConfig[WallType.HORIZONTAL] = this.wallSprites[0];
-        this.wallSpriteConfig[WallType.VERTICAL] = this.wallSprites[1];
-        this.wallSpriteConfig[WallType.TOP_LEFT] = this.wallSprites[2];
-        this.wallSpriteConfig[WallType.TOP_RIGHT] = this.wallSprites[3];
-        this.wallSpriteConfig[WallType.BOTTOM_LEFT] = this.wallSprites[4];
-        this.wallSpriteConfig[WallType.BOTTOM_RIGHT] = this.wallSprites[5];
-        this.wallSpriteConfig[WallType.CROSS] = this.wallSprites[6];
-        this.wallSpriteConfig[WallType.T_UP] = this.wallSprites[7];
-        this.wallSpriteConfig[WallType.T_DOWN] = this.wallSprites[8];
-        this.wallSpriteConfig[WallType.T_LEFT] = this.wallSprites[9];
-        this.wallSpriteConfig[WallType.T_RIGHT] = this.wallSprites[10];
-    }
-
     private initGridData() {
         // 初始化网格数据，0表示空，1表示已占用
         for (let x = 0; x < this.mapWidth; x++) {
@@ -341,6 +297,9 @@ export class MapEditor extends Component {
     }
 
     buildMap(gridPos: Vec2) {
+        if(gridPos.x <= 0 || gridPos.y <= 0){
+            return
+        }
         const manager = MapManager.GetInstance();
         log(manager.actionStatus)
         switch (manager.actionStatus) {
@@ -1374,50 +1333,7 @@ export class MapEditor extends Component {
         verWalls: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string }>,
         outWall: Vec2[]
     ) {
-        verWalls.forEach((value, key) => {
-            const pos = new Vec2(parseInt(key.split(',')[0]), parseInt(key.split(',')[1]))
-            if (horWalls.has(`${pos.x - 1},${pos.y + 1}`) && verWalls.has(`${pos.x},${pos.y + 1}`) && !horWalls.has(`${pos.x},${pos.y + 1}`)) {
-                value.tile.getComponent(Sprite).spriteFrame = this.wallSprites[0];
-            }
-
-            if (horWalls.has(`${pos.x - 1},${pos.y + 1}`) && verWalls.has(`${pos.x},${pos.y - 1}`) && !horWalls.has(`${pos.x},${pos.y + 1}`)) {
-                value.tile.getComponent(Sprite).spriteFrame = this.wallSprites[1];
-            }
-
-            if (horWalls.has(`${pos.x},${pos.y + 1}`) && verWalls.has(`${pos.x},${pos.y - 1}`) && !horWalls.has(`${pos.x - 1},${pos.y + 1}`)) {
-                value.tile.getComponent(Sprite).spriteFrame = this.wallSprites[2];
-            }
-
-            if (verWalls.has(`${pos.x},${pos.y - 1}`) && horWalls.has(`${pos.x},${pos.y + 1}`) && horWalls.has(`${pos.x - 1},${pos.y + 1}`)) {
-                value.tile.getComponent(Sprite).spriteFrame = this.wallSprites[3];
-            }
-
-            if (horWalls.has(`${pos.x},${pos.y + 1}`) && !verWalls.has(`${pos.x},${pos.y - 1}`) && !horWalls.has(`${pos.x - 1},${pos.y + 1}`)) {
-                value.tile.getComponent(Sprite).spriteFrame = this.wallSprites[4];
-            }
-
-            if (!horWalls.has(`${pos.x - 1},${pos.y + 1}`) && verWalls.has(`${pos.x},${pos.y - 1}`) && !horWalls.has(`${pos.x},${pos.y - 1}`) && !horWalls.has(`${pos.x},${pos.y + 1}`)) {
-                value.tile.getComponent(Sprite).spriteFrame = this.wallSprites[5];
-            }
-
-            if (verWalls.has(`${pos.x},${pos.y - 1}`) && verWalls.has(`${pos.x},${pos.y + 1}`) && !horWalls.has(`${pos.x},${pos.y + 1}`) && !horWalls.has(`${pos.x - 1},${pos.y + 1}`)) {
-                value.tile.getComponent(Sprite).spriteFrame = this.wallSprites[6];
-            }
-
-            if (!verWalls.has(`${pos.x},${pos.y - 1}`) && horWalls.has(`${pos.x - 1},${pos.y + 1}`) && horWalls.has(`${pos.x},${pos.y + 1}`)) {
-                value.tile.getComponent(Sprite).spriteFrame = this.wallSprites[7];
-            }
-
-            if (!verWalls.has(`${pos.x},${pos.y - 1}`) && verWalls.has(`${pos.x},${pos.y}`) && !horWalls.has(`${pos.x},${pos.y}`) && !horWalls.has(`${pos.x - 1},${pos.y}`)
-                && !horWalls.has(`${pos.x - 1},${pos.y + 1}`) && !horWalls.has(`${pos.x},${pos.y + 1}`)) {
-                value.tile.getComponent(Sprite).spriteFrame = this.wallSprites[11];
-            }
-
-            if (verWalls.has(`${pos.x},${pos.y - 1}`) && !verWalls.has(`${pos.x},${pos.y + 1}`) && !horWalls.has(`${pos.x},${pos.y}`) && !horWalls.has(`${pos.x - 1},${pos.y}`)
-                && !horWalls.has(`${pos.x - 1},${pos.y + 1}`) && !horWalls.has(`${pos.x},${pos.y + 1}`)) {
-                value.tile.getComponent(Sprite).spriteFrame = this.wallSprites[5];
-            }
-        });
+        
 
         let num = 0;
 
@@ -1430,28 +1346,6 @@ export class MapEditor extends Component {
         verWalls.forEach((value, key) => {
             num += 1;
             value.tile.setSiblingIndex(num);
-        })
-
-        horWalls.forEach((value, key) => {
-            const pos = new Vec2(parseInt(key.split(',')[0]), parseInt(key.split(',')[1]))
-
-            if (this.isNearOutWall(outWall, new Vec2(pos.x - 1, pos.y)) && !horWalls.has(`${pos.x + 1},${pos.y}`) && !horWalls.has(`${pos.x - 1},${pos.y}`)) {
-                value.tile.getComponent(Sprite).spriteFrame = this.wallSprites[8];
-            } else if (this.isNearOutWall(outWall, new Vec2(pos.x + 1, pos.y)) && !horWalls.has(`${pos.x + 1},${pos.y}`) && !horWalls.has(`${pos.x - 1},${pos.y}`)) {
-                value.tile.getComponent(Sprite).spriteFrame = this.wallSprites[9];
-            } else if (horWalls.has(`${pos.x + 1},${pos.y}`) && horWalls.has(`${pos.x - 1},${pos.y}`)) {
-                value.tile.getComponent(Sprite).spriteFrame = this.wallSprites[10];
-            } else if (horWalls.has(`${pos.x - 1},${pos.y}`) && !horWalls.has(`${pos.x + 1},${pos.y}`) && !this.isNearOutWall(outWall, new Vec2(pos.x - 1, pos.y)) && !this.isNearOutWall(outWall, new Vec2(pos.x + 1, pos.y))) {
-                value.tile.getComponent(Sprite).spriteFrame = this.wallSprites[8];
-            } else if (horWalls.has(`${pos.x + 1},${pos.y}`) && !horWalls.has(`${pos.x - 1},${pos.y}`) && !this.isNearOutWall(outWall, new Vec2(pos.x - 1, pos.y)) && !this.isNearOutWall(outWall, new Vec2(pos.x + 1, pos.y))) {
-                value.tile.getComponent(Sprite).spriteFrame = this.wallSprites[9];
-            } else if (!horWalls.has(`${pos.x + 1},${pos.y}`) && verWalls.has(`${pos.x},${pos.y}`)) {
-                value.tile.getComponent(Sprite).spriteFrame = this.wallSprites[8];
-            } else if (!horWalls.has(`${pos.x - 1},${pos.y}`) && verWalls.has(`${pos.x + 1},${pos.y}`)) {
-                value.tile.getComponent(Sprite).spriteFrame = this.wallSprites[9];
-            } else {
-                value.tile.getComponent(Sprite).spriteFrame = this.wallSprites[10];
-            }
         })
     }
 
@@ -2166,12 +2060,11 @@ export class MapEditor extends Component {
         const rawMinY = Math.min(this._startGrad.y, this._currentGrad.y);
         const rawMaxY = Math.max(this._startGrad.y, this._currentGrad.y);
 
-        // 按你的要求做内缩：
         // 上面 -2 格，下面 -1 格，左 -1 格，右 -1 格
         // 注意：本项目 y 轴向下增大，"上面"是 minY 侧
         let minX = rawMinX + 1;
         let maxX = rawMaxX - 1;
-        let minY = rawMinY + 2;
+        let minY = rawMinY + 4;
         let maxY = rawMaxY - 1;
 
         // 边界保护
@@ -2220,7 +2113,7 @@ export class MapEditor extends Component {
             tile.name = this.curTileNode.name + "#" + this.curTileNode["tileType"]
             tile["cfgId"] = this.curTileNode.name
             tile.setPosition(worldPos);
-            this.mapContainer.addChild(tile);
+            this.homeWallTilemap.addChild(tile);
             this.buildFloorPoints.push(gridPos);
             this.houseItems.set(`${gridPos.x},${gridPos.y}`, { tile: tile, tileType: "Floor" });
 
@@ -2307,7 +2200,8 @@ export class MapEditor extends Component {
                             dir = "down";
                             pos.y += 1;
                             frame = this.outWallSprites[1];
-                        } else if (j == 2) {
+                        } 
+                        else if (j == 2) {
                             dir = "left";
                             pos.x -= 1;
                             frame = this.outWallSprites[2];
@@ -2410,76 +2304,7 @@ export class MapEditor extends Component {
                     }
                 }
 
-                houseItems.forEach((value, key) => {
-                    if (value.tileType == 'OutWall' && value.dir && value.tile) {
-                        const pos = new Vec2(parseInt(key.split(',')[0]), parseInt(key.split(',')[1]))
-                        if (value.dir == 'up') {
-                            if (houseItems.get(`${pos.x - 1},${pos.y}`).tile == null && houseItems.get(`${pos.x + 1},${pos.y}`).tile) {
-                                value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[8];
-                            } else if (houseItems.get(`${pos.x - 1},${pos.y}`).tile && houseItems.get(`${pos.x + 1},${pos.y}`).tile == null) {
-                                value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[9];
-                            } else if (houseItems.get(`${pos.x - 1},${pos.y}`).tile == null && houseItems.get(`${pos.x + 1},${pos.y}`).tile == null) {
-                                value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[16];
-                            }
-                        } else if (value.dir == 'down') {
-                            if (houseItems.get(`${pos.x - 1},${pos.y}`).tile == null && houseItems.get(`${pos.x + 1},${pos.y}`).tile) {
-                                value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[10];
-                            } else if (houseItems.get(`${pos.x - 1},${pos.y}`).tile && houseItems.get(`${pos.x + 1},${pos.y}`).tile == null) {
-                                value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[11];
-                            } else if (houseItems.get(`${pos.x - 1},${pos.y}`).tile == null && houseItems.get(`${pos.x + 1},${pos.y}`).tile == null) {
-                                value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[17];
-                            }
-                        } else if (value.dir == 'left') {
-                            if (houseItems.get(`${pos.x},${pos.y - 1}`).tile && houseItems.get(`${pos.x},${pos.y + 1}`).tile == null) {
-                                value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[12];
-                            } else if (houseItems.get(`${pos.x},${pos.y - 1}`).tile == null && houseItems.get(`${pos.x},${pos.y + 1}`).tile) {
-                                value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[13];
-                            } else if (houseItems.get(`${pos.x},${pos.y - 1}`).tile == null && houseItems.get(`${pos.x},${pos.y + 1}`).tile == null) {
-                                value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[18];
-                            }
-                        } else if (value.dir == 'right') {
-                            if (houseItems.get(`${pos.x},${pos.y - 1}`).tile && houseItems.get(`${pos.x},${pos.y + 1}`).tile == null) {
-                                value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[14];
-                            } else if (houseItems.get(`${pos.x},${pos.y - 1}`).tile == null && houseItems.get(`${pos.x},${pos.y + 1}`).tile) {
-                                value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[15];
-                            } else if (houseItems.get(`${pos.x},${pos.y - 1}`).tile == null && houseItems.get(`${pos.x},${pos.y + 1}`).tile == null) {
-                                value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[19];
-                            }
-                        } else if (value.dir == 'topLeft') {
-                            if (houseItems.get(`${pos.x + 1},${pos.y}`).tile && houseItems.get(`${pos.x},${pos.y + 1}`).tile == null) {
-                                value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[21];
-                            } else if (houseItems.get(`${pos.x + 1},${pos.y}`).tile == null && houseItems.get(`${pos.x},${pos.y + 1}`).tile) {
-                                value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[20];
-                            } else if (houseItems.get(`${pos.x + 1},${pos.y}`).tile == null && houseItems.get(`${pos.x},${pos.y + 1}`).tile == null) {
-                                value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[22];
-                            }
-                        } else if (value.dir == 'topRight') {
-                            if (houseItems.get(`${pos.x - 1},${pos.y}`).tile && houseItems.get(`${pos.x},${pos.y + 1}`).tile == null) {
-                                value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[24];
-                            } else if (houseItems.get(`${pos.x - 1},${pos.y}`).tile == null && houseItems.get(`${pos.x},${pos.y + 1}`).tile) {
-                                value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[23];
-                            } else if (houseItems.get(`${pos.x - 1},${pos.y}`).tile == null && houseItems.get(`${pos.x},${pos.y - 1}`).tile == null) {
-                                value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[25];
-                            }
-                        } else if (value.dir == 'bottomLeft') {
-                            if (houseItems.get(`${pos.x + 1},${pos.y}`).tile && houseItems.get(`${pos.x},${pos.y - 1}`).tile == null) {
-                                value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[26];
-                            } else if (houseItems.get(`${pos.x + 1},${pos.y}`).tile == null && houseItems.get(`${pos.x},${pos.y - 1}`).tile) {
-                                value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[27];
-                            } else if (houseItems.get(`${pos.x + 1},${pos.y}`).tile == null && houseItems.get(`${pos.x},${pos.y - 1}`).tile == null) {
-                                value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[28];
-                            }
-                        } else if (value.dir == 'bottomRight') {
-                            if (houseItems.get(`${pos.x - 1},${pos.y}`).tile && houseItems.get(`${pos.x},${pos.y - 1}`).tile == null) {
-                                value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[29];
-                            } else if (houseItems.get(`${pos.x - 1},${pos.y}`).tile == null && houseItems.get(`${pos.x},${pos.y - 1}`).tile) {
-                                value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[30];
-                            } else if (houseItems.get(`${pos.x - 1},${pos.y}`).tile == null && houseItems.get(`${pos.x},${pos.y - 1}`).tile == null) {
-                                value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[31];
-                            }
-                        }
-                    }
-                })
+
                 let cfgId 
                 house.forEach((pt) => {
                     const item = this.houseItems.get(`${pt[0]},${pt[1]}`);
@@ -2525,7 +2350,7 @@ export class MapEditor extends Component {
                 // 放置建筑
                 const worldPos = MapModel.getInstance().gridToWorld(pos, wall.getComponent(UITransform).contentSize , this);
                 wall.setPosition(worldPos);
-                this.mapContainer.addChild(wall);
+                this.homeWallTilemap.addChild(wall);
                 this.houseItems.set(`${pos.x},${pos.y}`, { tile: wall, tileType: "OutWall" });
 
                 const buildingSize = MapModel.getInstance().getBuildingSize(wall.getComponent(UITransform).contentSize , this);
@@ -2588,7 +2413,7 @@ export class MapEditor extends Component {
                 const worldPos = MapModel.getInstance().gridToWorld(gridPos, size , this);
                 tile.name = floor.id
                 tile.setPosition(worldPos);
-                this.mapContainer.addChild(tile);
+                this.homeWallTilemap.addChild(tile);
                 this.houseItems.set(`${gridPos.x},${gridPos.y}`, { tile: tile, tileType: "Floor" });
 
                 // 更新网格数据
@@ -2736,76 +2561,6 @@ export class MapEditor extends Component {
                 _open.push(item.pos);
             }
 
-            houseItems.forEach((value, key) => {
-                if (value.tileType == 'OutWall' && value.dir && value.tile) {
-                    const pos = new Vec2(parseInt(key.split(',')[0]), parseInt(key.split(',')[1]))
-                    if (value.dir == 'up') {
-                        if (houseItems.get(`${pos.x - 1},${pos.y}`).tile == null && houseItems.get(`${pos.x + 1},${pos.y}`).tile) {
-                            value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[8];
-                        } else if (houseItems.get(`${pos.x - 1},${pos.y}`).tile && houseItems.get(`${pos.x + 1},${pos.y}`).tile == null) {
-                            value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[9];
-                        } else if (houseItems.get(`${pos.x - 1},${pos.y}`).tile == null && houseItems.get(`${pos.x + 1},${pos.y}`).tile == null) {
-                            value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[16];
-                        }
-                    } else if (value.dir == 'down') {
-                        if (houseItems.get(`${pos.x - 1},${pos.y}`).tile == null && houseItems.get(`${pos.x + 1},${pos.y}`).tile) {
-                            value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[10];
-                        } else if (houseItems.get(`${pos.x - 1},${pos.y}`).tile && houseItems.get(`${pos.x + 1},${pos.y}`).tile == null) {
-                            value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[11];
-                        } else if (houseItems.get(`${pos.x - 1},${pos.y}`).tile == null && houseItems.get(`${pos.x + 1},${pos.y}`).tile == null) {
-                            value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[17];
-                        }
-                    } else if (value.dir == 'left') {
-                        if (houseItems.get(`${pos.x},${pos.y - 1}`).tile && houseItems.get(`${pos.x},${pos.y + 1}`).tile == null) {
-                            value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[12];
-                        } else if (houseItems.get(`${pos.x},${pos.y - 1}`).tile == null && houseItems.get(`${pos.x},${pos.y + 1}`).tile) {
-                            value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[13];
-                        } else if (houseItems.get(`${pos.x},${pos.y - 1}`).tile == null && houseItems.get(`${pos.x},${pos.y + 1}`).tile == null) {
-                            value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[18];
-                        }
-                    } else if (value.dir == 'right') {
-                        if (houseItems.get(`${pos.x},${pos.y - 1}`).tile && houseItems.get(`${pos.x},${pos.y + 1}`).tile == null) {
-                            value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[14];
-                        } else if (houseItems.get(`${pos.x},${pos.y - 1}`).tile == null && houseItems.get(`${pos.x},${pos.y + 1}`).tile) {
-                            value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[15];
-                        } else if (houseItems.get(`${pos.x},${pos.y - 1}`).tile == null && houseItems.get(`${pos.x},${pos.y + 1}`).tile == null) {
-                            value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[19];
-                        }
-                    } else if (value.dir == 'topLeft') {
-                        if (houseItems.get(`${pos.x + 1},${pos.y}`).tile && houseItems.get(`${pos.x},${pos.y + 1}`).tile == null) {
-                            value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[21];
-                        } else if (houseItems.get(`${pos.x + 1},${pos.y}`).tile == null && houseItems.get(`${pos.x},${pos.y + 1}`).tile) {
-                            value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[20];
-                        } else if (houseItems.get(`${pos.x + 1},${pos.y}`).tile == null && houseItems.get(`${pos.x},${pos.y + 1}`).tile == null) {
-                            value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[22];
-                        }
-                    } else if (value.dir == 'topRight') {
-                        if (houseItems.get(`${pos.x - 1},${pos.y}`).tile && houseItems.get(`${pos.x},${pos.y + 1}`).tile == null) {
-                            value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[24];
-                        } else if (houseItems.get(`${pos.x - 1},${pos.y}`).tile == null && houseItems.get(`${pos.x},${pos.y + 1}`).tile) {
-                            value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[23];
-                        } else if (houseItems.get(`${pos.x - 1},${pos.y}`).tile == null && houseItems.get(`${pos.x},${pos.y - 1}`).tile == null) {
-                            value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[25];
-                        }
-                    } else if (value.dir == 'bottomLeft') {
-                        if (houseItems.get(`${pos.x + 1},${pos.y}`).tile && houseItems.get(`${pos.x},${pos.y - 1}`).tile == null) {
-                            value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[26];
-                        } else if (houseItems.get(`${pos.x + 1},${pos.y}`).tile == null && houseItems.get(`${pos.x},${pos.y - 1}`).tile) {
-                            value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[27];
-                        } else if (houseItems.get(`${pos.x + 1},${pos.y}`).tile == null && houseItems.get(`${pos.x},${pos.y - 1}`).tile == null) {
-                            value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[28];
-                        }
-                    } else if (value.dir == 'bottomRight') {
-                        if (houseItems.get(`${pos.x - 1},${pos.y}`).tile && houseItems.get(`${pos.x},${pos.y - 1}`).tile == null) {
-                            value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[29];
-                        } else if (houseItems.get(`${pos.x - 1},${pos.y}`).tile == null && houseItems.get(`${pos.x},${pos.y - 1}`).tile) {
-                            value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[30];
-                        } else if (houseItems.get(`${pos.x - 1},${pos.y}`).tile == null && houseItems.get(`${pos.x},${pos.y - 1}`).tile == null) {
-                            value.tile.getComponent(Sprite).spriteFrame = this.outWallSprites[31];
-                        }
-                    }
-                }
-            })
 
             floorPoints.forEach((pt) => {
                 const item = this.houseItems.get(`${pt[0]},${pt[1]}`);
