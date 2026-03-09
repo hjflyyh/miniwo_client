@@ -120,6 +120,12 @@ export class MapEditor extends Component {
 
     public groundType: number = 1;
     public _houseIndex: number = 100;
+    private readonly houseMinWidth = 8;
+    private readonly houseMinHeight = 12;
+    private readonly houseInsetTop = 4;
+    private readonly houseInsetBottom = 2;
+    private readonly wallOccupyTop = 4;
+    private readonly wallOccupyBottom = 2;
 
     private NEIGHBOURS: Vec2[] = [
         new Vec2(0, 0),
@@ -2167,12 +2173,12 @@ export class MapEditor extends Component {
         const rawMaxY = Math.max(this._startGrad.y, this._currentGrad.y);
 
         // 按你的要求做内缩：
-        // 上面 -2 格，下面 -1 格，左 -1 格，右 -1 格
+        // 上面 -4 格，下面 -2 格，左 -1 格，右 -1 格
         // 注意：本项目 y 轴向下增大，"上面"是 minY 侧
         let minX = rawMinX + 1;
         let maxX = rawMaxX - 1;
-        let minY = rawMinY + 2;
-        let maxY = rawMaxY - 1;
+        let minY = rawMinY + this.houseInsetTop;
+        let maxY = rawMaxY - this.houseInsetBottom;
 
         // 边界保护
         minX = Math.max(0, minX);
@@ -2191,8 +2197,8 @@ export class MapEditor extends Component {
         const dragPoints: Vec2[] = path.map((p) => new Vec2(p.x , p.y))
         const candidates = RectangleHouseBuilder.collectBuildableRectangles({
             floorPoints: dragPoints,
-            minWidth: 5,
-            minHeight: 5,
+            minWidth: this.houseMinWidth,
+            minHeight: this.houseMinHeight,
             passExtraCheck: (cell) => this.checkPlacementValidity(cell)
         })
 
@@ -2251,7 +2257,27 @@ export class MapEditor extends Component {
         }
 
         for (const house of allHousePoints) {
-            if (MapModel.getInstance().isContinuousRectangle(house , this) && house.length >= 9) {
+            let minX = house[0][0];
+            let maxX = house[0][0];
+            let minY = house[0][1];
+            let maxY = house[0][1];
+            for (let i = 1; i < house.length; i++) {
+                const px = house[i][0];
+                const py = house[i][1];
+                if (px < minX) minX = px;
+                if (px > maxX) maxX = px;
+                if (py < minY) minY = py;
+                if (py > maxY) maxY = py;
+            }
+
+            const houseWidth = maxX - minX + 1;
+            const houseHeight = maxY - minY + 1;
+            if (houseWidth < this.houseMinWidth || houseHeight < this.houseMinHeight) {
+                EventSystem.send("ShowTips", `房屋最小尺寸需满足：左右至少${this.houseMinWidth}格，高至少${this.houseMinHeight}格`);
+                continue;
+            }
+
+            if (MapModel.getInstance().isContinuousRectangle(house , this)) {
 
                 for (let i = 0; i < house.length; i++) {
                     const child = house[i];
@@ -2515,6 +2541,23 @@ export class MapEditor extends Component {
     }
 
     // 构建外墙
+    private applyWallOccupancy(anchorPos: Vec2, widthInCells: number) {
+        const safeWidth = Math.max(1, widthInCells);
+        for (let x = 0; x < safeWidth; x++) {
+            const gridX = anchorPos.x + x;
+            if (gridX < 0 || gridX >= this.mapWidth) {
+                continue;
+            }
+            for (let dy = -this.wallOccupyTop; dy <= this.wallOccupyBottom; dy++) {
+                const gridY = anchorPos.y + dy;
+                if (gridY < 0 || gridY >= this.mapHeight) {
+                    continue;
+                }
+                this.mapData[gridX][gridY] = 2;
+            }
+        }
+    }
+
     buildOutWall(pos: Vec2, frame: SpriteFrame, dir: string = ''): { pos: Vec2; _node: Node, dir: string } {
         if (this.checkPlacementValidity(pos)) {
             let islike = this.containsArray(this.buildFloorPoints, pos);
@@ -2529,20 +2572,7 @@ export class MapEditor extends Component {
                 this.houseItems.set(`${pos.x},${pos.y}`, { tile: wall, tileType: "OutWall" });
 
                 const buildingSize = MapModel.getInstance().getBuildingSize(wall.getComponent(UITransform).contentSize , this);
-                // 更新网格数据
-                for (let x = 0; x < buildingSize.x; x++) {
-                    for (let y = 0; y < buildingSize.y; y++) {
-                        const gridX = pos.x + x;
-                        const gridY = pos.y - y;
-
-                        // 处理上面墙 缩进一格
-                        if (dir == "up" && y == 0) {
-                            this.mapData[gridX][gridY] = 1;
-                        } else {
-                            this.mapData[gridX][gridY] = 2;
-                        }
-                    }
-                }
+                this.applyWallOccupancy(pos, buildingSize.x);
 
                 return { pos: pos, _node: wall, dir: dir };
             }
@@ -2869,19 +2899,7 @@ export class MapEditor extends Component {
                 if (_index == 1) {
                     wallHouse.inWall.push(gridPos);
                     wallHouse.horWalls.set(`${gridPos.x},${gridPos.y}`, { tile: wall, tileType: "HorWall", width: size.width, height: size.height, belong: _name });
-                    // 更新网格数据
-                    for (let x = 0; x < buildingSize.x; x++) {
-                        for (let y = 0; y < buildingSize.y; y++) {
-                            const gridX = gridPos.x + x;
-                            const gridY = gridPos.y - y;
-                            // 处理上面墙 缩进一格
-                            if (y == 0) {
-                                this.mapData[gridX][gridY] = 1;
-                            } else {
-                                this.mapData[gridX][gridY] = 2;
-                            }
-                        }
-                    }
+                    this.applyWallOccupancy(gridPos, buildingSize.x);
                 } else {
                     wallHouse.verWalls.set(`${gridPos.x},${gridPos.y}`, { tile: wall, tileType: "VerWall", width: size.width, height: size.height, belong: _name });
                 }
