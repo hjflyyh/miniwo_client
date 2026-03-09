@@ -37,7 +37,7 @@ export class CardListCell extends Component {
             let combine = CardModel.getInstance().combine[this.cardData["quality"]]
             let combineCfg = CardModel.getInstance().getCardCombineCfg(combine)
             let suipian_number = combineCfg.suipian_number
-            let player_suipian_number = CardModel.getInstance().getCardSuipianNum(this.cardData);
+            let player_suipian_number = CardModel.getInstance().getCardSuipianNum(this.cardData)
             this.suipianNum.string = player_suipian_number + "/" + suipian_number
             this.suipianPorg.progress = player_suipian_number / suipian_number
         } else{
@@ -48,8 +48,11 @@ export class CardListCell extends Component {
     }
 
     onClickCell(){
+        console.log(this.cardData)
         if(this.cardData.level <= 0){
             AppConst.PanelManager.openView("res/View/Card/CardCombine" , this.cardData , null , "res/View/Card/CardList")
+        }else{
+            AppConst.PanelManager.openView("res/View/Card/CardDetail" , this.cardData , null , "res/View/Card/CardList")
         }
     }
 }

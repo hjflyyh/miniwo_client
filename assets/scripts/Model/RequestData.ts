@@ -1,9 +1,9 @@
 export module network {
-    export enum ServerHttpCommand{
+    export enum ServerHttpCommand {
         COMMON_LOGIN = 1, // 登录
     }
 
-    export enum ServerCode{
+    export enum ServerCode {
         CodeProfile = 100, //个人信息
         CodeBagUpdate = 101, //背包
         CodeMailList = 102, //邮件列表
@@ -27,21 +27,21 @@ export module network {
         apple = 3
     }
 
-    export class HeartbeatRequest{
+    export class HeartbeatRequest {
         toJSON() {
-            return { rpc : {id : "heartbeat" , payload : JSON.stringify({})} };
+            return { rpc: { id: "heartbeat", payload: JSON.stringify({}) } };
         }
     }
 
-    export class JoinMapEequest{
+    export class JoinMapEequest {
         toJSON(map_id) {
-            return { rpc : {id : "join_map" , payload : JSON.stringify({map_id : map_id})} };
+            return { rpc: { id: "join_map", payload: JSON.stringify({ map_id: map_id }) } };
         }
     }
 
-    export class MatchJoinEequest{
+    export class MatchJoinEequest {
         toJSON(match_id) {
-            return { match_join : {match_id : match_id} };
+            return { match_join: { match_id: match_id } };
         }
     }
 
@@ -53,53 +53,70 @@ export module network {
         }
 
         toJSON() {
-            return { rpc : {id : "game_login" , payload : JSON.stringify({player_id : this.player_id})} };
+            return { rpc: { id: "game_login", payload: JSON.stringify({ player_id: this.player_id }) } };
         }
     }
 
     //npc 列表
     export class GetAllNPCRequest {
-        requestId: number;type: number;command: number;
-        
+        requestId: number; type: number; command: number;
+
         constructor() {
             this.requestId = 0;
             this.type = 1; // 固定值
             this.command = ServerCommandConstants.COMMON_NPC_LIST;
         }
         toJSON() {
-            return { requestId: this.requestId,type: this.type,command: this.command};
+            return { requestId: this.requestId, type: this.type, command: this.command };
         }
     }
 
     //房间信息
     export class GetRoomDataRequest {
-        requestId: number;type: number;command: number;
-        
+        requestId: number; type: number; command: number;
+
         constructor() {
             this.requestId = 0;
             this.type = 1; // 固定值
             this.command = ServerCommandConstants.COMMON_ROOM_DATA;
         }
         toJSON() {
-            return { requestId: this.requestId,type: this.type,command: this.command};
+            return { requestId: this.requestId, type: this.type, command: this.command };
         }
     }
 
     //获取自定义地图数据
-    export class GetMapData{
-        requestId: number;type: number;command: number;
-        data : {}
-        
+    export class GetMapData {
+        requestId: number; type: number; command: number;
+        data: {}
+
         constructor() {
             this.requestId = 0;
             this.type = 1; // 固定值
             this.command = ServerCommandConstants.COMMON_ROLE_MAP_DATA;
             this.data = {
-                id : 0
+                id: 0
             }
         }
         toJSON() {
-            return { requestId: this.requestId,type: this.type,command: this.command , data : this.data};
+            return { requestId: this.requestId, type: this.type, command: this.command, data: this.data };
+        }
+    }
+
+    export class CombineRequest {
+        toJSON(card_id) {
+            return { rpc: { id: "card_combine", payload: JSON.stringify({ card_id: card_id }) } };
+        }
+    }
+
+    export class StarUpRequest {
+        toJSON(card_id, count) {
+            return { rpc: { id: "card_star_up", payload: JSON.stringify({ card_id: card_id, count: count }) } };
+        }
+    }
+    export class LevelUpRequest {
+        toJSON(card_id, count) {
+            return { rpc: { id: "card_lv_up", payload: JSON.stringify({ card_id: card_id, count: count }) } };
         }
     }
 }
