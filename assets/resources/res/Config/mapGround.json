@@ -5,7 +5,8 @@
     "size": 32,
     "tags": "",
     "baseImg": "ground_100",
-    "is_link_grid": 1
+    "is_link_grid": 1,
+    "is_link_water": 0
   },
   "2": {
     "name_cn": "地板2",
@@ -13,7 +14,8 @@
     "size": 32,
     "tags": "",
     "baseImg": "ground_101",
-    "is_link_grid": 1
+    "is_link_grid": 1,
+    "is_link_water": 0
   },
   "3": {
     "name_cn": "地板3",
@@ -21,7 +23,8 @@
     "size": 32,
     "tags": "",
     "baseImg": "ground_102",
-    "is_link_grid": 1
+    "is_link_grid": 1,
+    "is_link_water": 1
   },
   "4": {
     "name_cn": "地板4",
@@ -29,7 +32,8 @@
     "size": 32,
     "tags": "",
     "baseImg": "textroad_1",
-    "is_link_grid": 1
+    "is_link_grid": 1,
+    "is_link_water": 0
   },
   "5": {
     "name_cn": "basic_black_brick",
@@ -37,7 +41,8 @@
     "size": 32,
     "tags": "",
     "baseImg": "basic_black_brick_1",
-    "is_link_grid": 1
+    "is_link_grid": 1,
+    "is_link_water": 0
   },
   "6": {
     "name_cn": "basic_blue_brick",
@@ -45,7 +50,8 @@
     "size": 32,
     "tags": "",
     "baseImg": "basic_blue_brick_1",
-    "is_link_grid": 1
+    "is_link_grid": 1,
+    "is_link_water": 0
   },
   "7": {
     "name_cn": "basic_pink_brick",
@@ -53,7 +59,8 @@
     "size": 32,
     "tags": "",
     "baseImg": "basic_pink_brick_1",
-    "is_link_grid": 1
+    "is_link_grid": 1,
+    "is_link_water": 0
   },
   "8": {
     "name_cn": "basic_white_brick",
@@ -61,7 +68,8 @@
     "size": 32,
     "tags": "",
     "baseImg": "basic_white_brick_1",
-    "is_link_grid": 1
+    "is_link_grid": 1,
+    "is_link_water": 0
   },
   "9": {
     "name_cn": "flower_grass",
@@ -69,7 +77,8 @@
     "size": 32,
     "tags": "",
     "baseImg": "flower_grass_1",
-    "is_link_grid": 1
+    "is_link_grid": 1,
+    "is_link_water": 0
   },
   "10": {
     "name_cn": "grass",
@@ -77,7 +86,8 @@
     "size": 32,
     "tags": "",
     "baseImg": "grass_1",
-    "is_link_grid": 1
+    "is_link_grid": 1,
+    "is_link_water": 0
   },
   "11": {
     "name_cn": "horizontal_wood_grain_brick",
@@ -85,7 +95,8 @@
     "size": 32,
     "tags": "",
     "baseImg": "horizontal_wood_grain_brick_1",
-    "is_link_grid": 1
+    "is_link_grid": 1,
+    "is_link_water": 0
   },
   "12": {
     "name_cn": "horizontal_wood_grain_khaki_brick",
@@ -93,7 +104,8 @@
     "size": 32,
     "tags": "",
     "baseImg": "horizontal_wood_grain_khaki_brick_1",
-    "is_link_grid": 1
+    "is_link_grid": 1,
+    "is_link_water": 0
   },
   "13": {
     "name_cn": "marble_diagonal_grain_brick",
@@ -101,7 +113,8 @@
     "size": 32,
     "tags": "",
     "baseImg": "marble_diagonal_grain_brick_1",
-    "is_link_grid": 1
+    "is_link_grid": 1,
+    "is_link_water": 0
   },
   "14": {
     "name_cn": "marble_diagonal_grain_khaki_brick",
@@ -109,7 +122,8 @@
     "size": 32,
     "tags": "",
     "baseImg": "marble_diagonal_grain_khaki_brick_1",
-    "is_link_grid": 1
+    "is_link_grid": 1,
+    "is_link_water": 0
   },
   "15": {
     "name_cn": "basic_green_brick",
@@ -117,7 +131,8 @@
     "size": 32,
     "tags": "",
     "baseImg": "basic_green_brick_1",
-    "is_link_grid": 1
+    "is_link_grid": 1,
+    "is_link_water": 0
   },
   "16": {
     "name_cn": "basic_purple_brick",
@@ -125,7 +140,8 @@
     "size": 32,
     "tags": "",
     "baseImg": "basic_purple_brick_1",
-    "is_link_grid": 1
+    "is_link_grid": 1,
+    "is_link_water": 0
   },
   "17": {
     "name_cn": "basic_red_brick",
@@ -133,7 +149,8 @@
     "size": 32,
     "tags": "",
     "baseImg": "basic_red_brick_1",
-    "is_link_grid": 1
+    "is_link_grid": 1,
+    "is_link_water": 0
   },
   "18": {
     "name_cn": "basic_yellow_brick",
@@ -141,7 +158,8 @@
     "size": 32,
     "tags": "",
     "baseImg": "basic_yellow_brick_1",
-    "is_link_grid": 1
+    "is_link_grid": 1,
+    "is_link_water": 0
   },
   "19": {
     "name_cn": "dirt_grass",
@@ -149,7 +167,8 @@
     "size": 32,
     "tags": "",
     "baseImg": "dirt_grass_1",
-    "is_link_grid": 1
+    "is_link_grid": 1,
+    "is_link_water": 0
   },
   "20": {
     "name_cn": "dirt_pebble_path",
@@ -157,6 +176,88 @@
     "size": 32,
     "tags": "",
     "baseImg": "dirt_pebble_path_1",
-    "is_link_grid": 1
+    "is_link_grid": 1,
+    "is_link_water": 0
+  },
+  "21": {
+    "name_cn": "black_checker_two_tone_tile",
+    "resource": "black_checker_two_tone_tile",
+    "size": 32,
+    "tags": "",
+    "baseImg": "black_checker_two_tone_tile_1",
+    "is_link_grid": 1,
+    "is_link_water": 0
+  },
+  "22": {
+    "name_cn": "blue_checker_two_tone_tile",
+    "resource": "blue_checker_two_tone_tile",
+    "size": 32,
+    "tags": "",
+    "baseImg": "blue_checker_two_tone_tile_1",
+    "is_link_grid": 1,
+    "is_link_water": 0
+  },
+  "23": {
+    "name_cn": "dirt_flower_grass",
+    "resource": "dirt_flower_grass",
+    "size": 32,
+    "tags": "",
+    "baseImg": "dirt_flower_grass_1",
+    "is_link_grid": 1,
+    "is_link_water": 0
+  },
+  "24": {
+    "name_cn": "dirt_path",
+    "resource": "dirt_path",
+    "size": 32,
+    "tags": "",
+    "baseImg": "dirt_path_1",
+    "is_link_grid": 1,
+    "is_link_water": 0
+  },
+  "25": {
+    "name_cn": "gravel_grassy_path",
+    "resource": "gravel_grassy_path",
+    "size": 32,
+    "tags": "",
+    "baseImg": "gravel_grassy_path_1",
+    "is_link_grid": 1,
+    "is_link_water": 0
+  },
+  "26": {
+    "name_cn": "gravel_path",
+    "resource": "gravel_path",
+    "size": 32,
+    "tags": "",
+    "baseImg": "gravel_path_1",
+    "is_link_grid": 1,
+    "is_link_water": 0
+  },
+  "27": {
+    "name_cn": "red_checker_two_tone_tile",
+    "resource": "red_checker_two_tone_tile",
+    "size": 32,
+    "tags": "",
+    "baseImg": "red_checker_two_tone_tile_1",
+    "is_link_grid": 1,
+    "is_link_water": 0
+  },
+  "28": {
+    "name_cn": "swimming_pool",
+    "resource": "swimming_pool",
+    "size": 32,
+    "tags": "",
+    "baseImg": "swimming_pool_1",
+    "is_link_grid": 1,
+    "is_link_water": 1
+  },
+  "29": {
+    "name_cn": "white_checker_two_tone_tile",
+    "resource": "white_checker_two_tone_tile",
+    "size": 32,
+    "tags": "",
+    "baseImg": "white_checker_two_tone_tile_1",
+    "is_link_grid": 1,
+    "is_link_water": 0
   }
 }

@@ -1,0 +1,27 @@
+{
+  "1000000": {
+    "name_cn": "围巾熊",
+    "resource": "bear_scarf",
+    "icon": ""
+  },
+  "1000001": {
+    "name_cn": "汪汪",
+    "resource": "dog",
+    "icon": ""
+  },
+  "1000002": {
+    "name_cn": "甜甜圈",
+    "resource": "donut",
+    "icon": ""
+  },
+  "1000003": {
+    "name_cn": "冰淇淋",
+    "resource": "ice_cream",
+    "icon": ""
+  },
+  "1000004": {
+    "name_cn": "睡睡喵",
+    "resource": "sleeping_cat",
+    "icon": ""
+  }
+}

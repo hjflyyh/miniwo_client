@@ -70,5 +70,17 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0"
+  },
+  "7": {
+    "name_cn": "足球场",
+    "icon": "test/Court",
+    "image": "test/Court",
+    "tags": "",
+    "map_size": "768#416",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0"
   }
 }
