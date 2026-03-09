@@ -6,8 +6,13 @@
       "label": "customSplash",
       "enable": false,
       "customSplash": {
+<<<<<<< Updated upstream
         "complete": false,
         "form": "https://creator-api.cocos.com/api/form/show?"
+=======
+        "complete": true,
+        "form": "https://creator-api.cocos.com/api/form/show?sid=98f37ce7d526d39a8b9aad7e73deb964"
+>>>>>>> Stashed changes
       }
     },
     "removeSplash": {
@@ -15,8 +20,13 @@
       "label": "removeSplash",
       "enable": false,
       "removeSplash": {
+<<<<<<< Updated upstream
         "complete": false,
         "form": "https://creator-api.cocos.com/api/form/show?"
+=======
+        "complete": true,
+        "form": "https://creator-api.cocos.com/api/form/show?sid=98f37ce7d526d39a8b9aad7e73deb964"
+>>>>>>> Stashed changes
       }
     }
   }
