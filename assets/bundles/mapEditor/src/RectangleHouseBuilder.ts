@@ -18,12 +18,12 @@ export interface RectangleHouseBuildOptions {
     floorPoints: Vec2[];
     /**
      * Min rectangle width in grid cells.
-     * Default: 8
+     * Default: 5
      */
     minWidth?: number;
     /**
      * Min rectangle height in grid cells.
-     * Default: 12
+     * Default: 5
      */
     minHeight?: number;
     /**
@@ -44,13 +44,13 @@ export interface RectangleHouseBuildResult {
  * Key differences vs old logic:
  * - Uses strict 4-neighbour grouping to avoid diagonal merge issues
  * - Never early-returns all candidates because one group fails
- * - Supports custom min size; defaults to width>=8 and height>=12
+ * - Supports custom min size; defaults to width>=5 and height>=5
  */
 export class RectangleHouseBuilder {
     public static collectBuildableRectangles(options: RectangleHouseBuildOptions): RectangleHouseCandidate[] {
         const points = options.floorPoints ?? [];
-        const minWidth = options.minWidth ?? 8;
-        const minHeight = options.minHeight ?? 12;
+        const minWidth = options.minWidth ?? 5;
+        const minHeight = options.minHeight ?? 5;
         const passExtraCheck = options.passExtraCheck;
 
         if (points.length === 0) {
@@ -69,7 +69,7 @@ export class RectangleHouseBuilder {
         for (let gi = 0; gi < groups.length; gi++) {
             const group = groups[gi];
             if (group.length < minWidth * minHeight) {
-                EventSystem.send("ShowTips" , `房屋最小尺寸需满足：左右至少${minWidth}格，高至少${minHeight}格`)
+                EventSystem.send("ShowTips" , "高度或宽度不足，有障碍物不得建造房屋")
                 continue;
             }
 
@@ -165,7 +165,7 @@ export class RectangleHouseBuilder {
         const width = maxX - minX + 1;
         const height = maxY - minY + 1;
         if (width < minWidth || height < minHeight) {
-            EventSystem.send("ShowTips" , `房屋最小尺寸需满足：左右至少${minWidth}格，高至少${minHeight}格`)
+            EventSystem.send("ShowTips" , "高度或宽度不足，有障碍物不得建造房屋")
             return null;
         }
 
