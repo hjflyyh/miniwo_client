@@ -1815,18 +1815,25 @@ export class MapEditor extends Component {
             return false;
         }
 
-        // 默认规则：家具只能在房间内地板摆放，不能堆叠
+        const currentDecorId = this.getCurrentDecorConfigId();
+        const currentDecorCfg = AppConst.JSONManager.getItem("mapDecor", currentDecorId);
+        const placeTypes = this.parseDecorTypeSet(currentDecorCfg?.place_type);
+
+        const hasPlaceTypeConfig = currentDecorCfg?.place_type != null && String(currentDecorCfg.place_type).trim() !== '';
+
+        // 没发生碰撞：有 place_type 时必须包含 0 才能落地；无 place_type 走旧逻辑（可落地）
         if (!hasDecorCollision) {
+            if (hasPlaceTypeConfig) {
+                return placeTypes.has('0');
+            }
             return true;
         }
 
         // 发生堆叠碰撞时，只有配置了 place_type/decor_type 且匹配才允许
-        const currentDecorId = this.getCurrentDecorConfigId();
-        if (!currentDecorId) {
+        if (!currentDecorId || !hasPlaceTypeConfig) {
             return false;
         }
-        const currentDecorCfg = AppConst.JSONManager.getItem("mapDecor", currentDecorId);
-        const placeTypes = this.parseDecorTypeSet(currentDecorCfg?.place_type);
+
         if (placeTypes.size === 0) {
             return false;
         }

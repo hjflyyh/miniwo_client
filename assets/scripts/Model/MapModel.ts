@@ -139,7 +139,9 @@ export class MapModel {
     }
 
     public getBuildingSize(size: Size ,  map : MapEditor): Vec2 {
-        return new Vec2(Math.floor(size.width / map.tileSize), Math.floor(size.height / map.tileSize));
+        const width = Math.max(1, Math.floor(size.width / map.tileSize));
+        const height = Math.max(1, Math.floor(size.height / map.tileSize));
+        return new Vec2(width, height);
     }
 
     //分页显示地图列表，当前的页数
