@@ -4,7 +4,7 @@ const { ccclass, property } = _decorator;
 
 @ccclass('HttpManager')
 export class HttpManager extends Component {
-    private static baseUrl = "http://127.0.0.1:8080"
+    private static baseUrl = "http://192.168.30.109:8080"
 
     start() {
         AppConst.HttpManager = this
