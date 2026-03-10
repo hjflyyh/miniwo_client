@@ -99,7 +99,7 @@ export class MapEditor extends Component {
         npc_banner1: Node,
     } = { move: null, detele: null, frame: null, sign: null, npc_banner1: null };
 
-    moveItem: { id: string, tile: Node, tileType: string, initGride: Vec2, belong?: string } = null;
+    moveItem: { id: string, tile: Node, tileType: string, initGride: Vec2, belong?: string, decorKey?: string } = null;
     deteleItem: { tile: Node, tileType: string, belong?: string } = null;
     moveStatus: number = 0;
 
@@ -127,7 +127,7 @@ export class MapEditor extends Component {
         outWall: Vec2[],
         openWall: Vec2[],
         base: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string }>,
-        decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string }>,
+        decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string }>,
         npc: { id: string, _node: Node, position: string, design: { npcName: string, npcIntro: string } },
         horWalls: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string }>,
         verWalls: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string }>,
@@ -164,6 +164,8 @@ export class MapEditor extends Component {
     public moveActionIndex: number = 0;
 
     private currentOrthoSize: number = 700;
+    private decorStackSeed = 0;
+    private lastDecorHoverLogState = '';
     
 
     isDragging: boolean = false;
@@ -344,6 +346,8 @@ export class MapEditor extends Component {
     showMaskColor(gridPos: Vec2) {
         const manager = MapManager.GetInstance();
         if (manager.actionStatus == ActionStatus.DECOR) {
+            const hoverItem = this.houseItems.get(`${gridPos.x},${gridPos.y}`);
+            this.logDecorHoverDebug(gridPos, hoverItem?.belong);
             if (this.checkPlacementDecorValidity(gridPos)) {
                 if (this.houseItems.has(`${gridPos.x},${gridPos.y}`)) {
                     const item = this.houseItems.get(`${gridPos.x},${gridPos.y}`);
@@ -668,7 +672,18 @@ export class MapEditor extends Component {
                     this.mapContainer.addChild(tile);
 
                     const house = this.allHouse.get(item.belong);
-                    house.decor.set(`${gridPos.x},${gridPos.y}`, { tile: tile, tileType: "Decor", width: size.width, height: size.height, belong: item.belong });
+                    if (this.hasSameDecorAtGrid(house, gridPos, tile.name)) {
+                        tile.destroy();
+                        return;
+                    }
+                    house.decor.set(this.buildDecorStackKey(gridPos, tile.name), {
+                        tile: tile,
+                        tileType: "Decor",
+                        width: size.width,
+                        height: size.height,
+                        belong: item.belong,
+                        position: `${gridPos.x},${gridPos.y}`
+                    });
 
                     // 更新网格数据
                     for (let x = 0; x < buildingSize.x; x++) {
@@ -722,6 +737,7 @@ export class MapEditor extends Component {
             if (this.mapItems.has(`${gridPos.x},${gridPos.y}`)) {
                 const item = this.mapItems.get(`${gridPos.x},${gridPos.y}`);
                 this.moveItem = { id: item.id, tile: item.tile, tileType: item.tileType, initGride: gridPos };
+                console.log(`[MOVE_SELECT] id=${this.moveItem.id}, name=${this.moveItem.tile?.name}, type=${this.moveItem.tileType}, grid=${gridPos.x},${gridPos.y}`);
                 size = this.moveItem.tile.getComponent(UITransform).contentSize;
                 this.setArrowSignActive(true);
                 this.updateArrowSign(size);
@@ -732,9 +748,18 @@ export class MapEditor extends Component {
                 const item = this.houseItems.get(`${gridPos.x},${gridPos.y}`);
                 if (item.belong) {
                     const house = this.allHouse.get(item.belong);
-                    if (house.decor.has(`${gridPos.x},${gridPos.y}`)) {
-                        const item = house.decor.get(`${gridPos.x},${gridPos.y}`);
-                        this.moveItem = { id: item.tile.name, tile: item.tile, tileType: item.tileType, initGride: gridPos, belong: item.belong };
+                    const topDecor = this.getTopDecorAtGrid(house, gridPos);
+                    if (topDecor) {
+                        const item = topDecor.value;
+                        this.moveItem = {
+                            id: item.tile.name,
+                            tile: item.tile,
+                            tileType: item.tileType,
+                            initGride: gridPos,
+                            belong: item.belong,
+                            decorKey: topDecor.key
+                        };
+                        console.log(`[MOVE_SELECT] id=${this.moveItem.id}, name=${this.moveItem.tile?.name}, type=${this.moveItem.tileType}, grid=${gridPos.x},${gridPos.y}`);
                         size = this.moveItem.tile.getComponent(UITransform).contentSize;
                         this.setArrowSignActive(true);
                         this.updateArrowSign(size);
@@ -876,12 +901,14 @@ export class MapEditor extends Component {
             if (this.moveStatus == 0) {
                 const buildingSize = MapModel.getInstance().getBuildingSize(this.moveItem.tile.getComponent(UITransform).contentSize , this);
                 if (this.moveItem.tileType == "Decor") {
+                    const house = this.allHouse.get(this.moveItem.belong);
+                    const movingDecorKey = this.moveItem.decorKey || '';
                     // 更新网格数据
                     for (let x = 0; x < buildingSize.x; x++) {
                         for (let y = 0; y < buildingSize.y; y++) {
                             const gridX = gridPos.x + x;
                             const gridY = gridPos.y - y;
-                            this.mapData[gridX][gridY] = 1;
+                            this.mapData[gridX][gridY] = this.hasDecorCoveringCell(house, gridX, gridY, movingDecorKey) ? 3 : 1;
                         }
                     }
                 } else {
@@ -899,6 +926,7 @@ export class MapEditor extends Component {
 
                 this.moveStatus = 1;
                 this.buildControl.move.play('move_drag');
+                console.log(`[MOVE_START] id=${this.moveItem.id}, name=${this.moveItem.tile?.name}, type=${this.moveItem.tileType}, from=${this.moveItem.initGride.x},${this.moveItem.initGride.y}`);
             } else if (this.moveStatus == 1) {
                 // 移动
                 const worldPos = MapModel.getInstance().gridToWorld(gridPos , null , this);
@@ -922,9 +950,15 @@ export class MapEditor extends Component {
                         }
 
                         const house = this.allHouse.get(this.moveItem.belong);
-                        const next = house.decor.get(`${this.moveItem.initGride.x},${this.moveItem.initGride.y}`);
-                        house.decor.delete(`${this.moveItem.initGride.x},${this.moveItem.initGride.y}`);
-                        house.decor.set(`${gridPos.x},${gridPos.y}`, next);
+                        const movingDecorKey = this.moveItem.decorKey || '';
+                        const next = house.decor.get(movingDecorKey);
+                        if (next) {
+                            house.decor.delete(movingDecorKey);
+                            const nextKey = this.buildDecorStackKey(gridPos, next.tile.name);
+                            next.position = `${gridPos.x},${gridPos.y}`;
+                            house.decor.set(nextKey, next);
+                            this.moveItem.decorKey = nextKey;
+                        }
                     } else {
                         // 移动
                         const worldPos = MapModel.getInstance().gridToWorld(this.moveItem.initGride , null , this);
@@ -935,7 +969,7 @@ export class MapEditor extends Component {
                             for (let y = 0; y < buildingSize.y; y++) {
                                 const gridX = this.moveItem.initGride.x + x;
                                 const gridY = this.moveItem.initGride.y - y;
-                                this.mapData[gridX][gridY] = 2;
+                                this.mapData[gridX][gridY] = 3;
                             }
                         }
                     }
@@ -1443,7 +1477,8 @@ export class MapEditor extends Component {
             house.decor.forEach((pt, key) => {
                 pt.tile && pt.tile.destroy();
 
-                const pos = new Vec2(parseInt(key.split(',')[0]), parseInt(key.split(',')[1]))
+                const posKey = this.getDecorPositionKey(key, pt);
+                const pos = new Vec2(parseInt(posKey.split(',')[0]), parseInt(posKey.split(',')[1]))
                 const buildingSize = MapModel.getInstance().getBuildingSize(new Size(pt.width, pt.height) , this);
                 // 更新网格数据
                 for (let x = 0; x < buildingSize.x; x++) {
@@ -1744,14 +1779,18 @@ export class MapEditor extends Component {
         }
 
         let pack: Vec2[] = [];
+        let hasDecorCollision = false;
         for (let x = 0; x < buildingSize.x; x++) {
             for (let y = 0; y < buildingSize.y; y++) {
                 const checkX1 = gridPos.x + x;
                 const checkY1 = gridPos.y - y;
 
                 pack.push(new Vec2(checkX1, checkY1));
-                if (this.mapData[checkX1][checkY1] !== 1) {
+                if (this.mapData[checkX1][checkY1] !== 1 && this.mapData[checkX1][checkY1] !== 3) {
                     return false;
+                }
+                if (this.mapData[checkX1][checkY1] === 3) {
+                    hasDecorCollision = true;
                 }
             }
         }
@@ -1774,6 +1813,42 @@ export class MapEditor extends Component {
 
         if (isResult) {
             return false;
+        }
+
+        // 默认规则：家具只能在房间内地板摆放，不能堆叠
+        if (!hasDecorCollision) {
+            return true;
+        }
+
+        // 发生堆叠碰撞时，只有配置了 place_type/decor_type 且匹配才允许
+        const currentDecorId = this.getCurrentDecorConfigId();
+        if (!currentDecorId) {
+            return false;
+        }
+        const currentDecorCfg = AppConst.JSONManager.getItem("mapDecor", currentDecorId);
+        const placeTypes = this.parseDecorTypeSet(currentDecorCfg?.place_type);
+        if (placeTypes.size === 0) {
+            return false;
+        }
+
+        // 仅填 0 表示可放地板，但不可堆叠
+        placeTypes.delete('0');
+        if (placeTypes.size === 0) {
+            return false;
+        }
+
+        const collisions = this.collectDecorCollisions(pack, this.moveItem?.decorKey || '');
+        if (collisions.length === 0) {
+            return false;
+        }
+
+        // 与碰撞家具逐个比对 decor_type，全部命中 place_type 才允许
+        for (let i = 0; i < collisions.length; i++) {
+            const hitDecorCfg = AppConst.JSONManager.getItem("mapDecor", collisions[i]);
+            const decorType = String(hitDecorCfg?.decor_type ?? '').trim();
+            if (!decorType || !placeTypes.has(decorType)) {
+                return false;
+            }
         }
 
         return true;
@@ -2094,6 +2169,186 @@ export class MapEditor extends Component {
         })
 
         return decor;
+    }
+
+    private logDecorHoverDebug(gridPos: Vec2, belong?: string) {
+        const currentName = this.curTileNode?.name || this.moveItem?.tile?.name || '';
+        const currentId = this.curTileNode?.name || this.moveItem?.id || '';
+        if (!currentName && !currentId) {
+            return;
+        }
+
+        let matched: string[] = [];
+        if (belong) {
+            const house = this.allHouse.get(belong);
+            if (house) {
+                house.decor.forEach((value, key) => {
+                    const posKey = this.getDecorPositionKey(key, value);
+                    if (posKey === `${gridPos.x},${gridPos.y}`) {
+                        matched.push(value.tile?.name || key);
+                    }
+                });
+            }
+        }
+
+        matched = matched.filter(Boolean).sort();
+        const state = `${gridPos.x},${gridPos.y}|${currentId}|${matched.join(',')}`;
+        if (state === this.lastDecorHoverLogState) {
+            return;
+        }
+        this.lastDecorHoverLogState = state;
+
+        console.log(`[DECOR_DRAG] current_id=${currentId}, current_name=${currentName}, grid=${gridPos.x},${gridPos.y}`);
+        if (matched.length > 0) {
+            console.log(`[DECOR_STACK_MATCH] grid=${gridPos.x},${gridPos.y}, matched=${matched.join(' | ')}`);
+        }
+    }
+
+    private buildDecorStackKey(gridPos: Vec2, tileName: string): string {
+        this.decorStackSeed += 1;
+        return `${gridPos.x},${gridPos.y}|${tileName}|${Date.now()}_${this.decorStackSeed}`;
+    }
+
+    private getDecorPositionKey(rawKey: string, decor: { position?: string }): string {
+        if (decor?.position && decor.position.includes(',')) {
+            return decor.position;
+        }
+        return rawKey.includes('|') ? rawKey.split('|')[0] : rawKey;
+    }
+
+    private getDecorPosition(rawKey: string, decor: { position?: string }): Vec2 {
+        const posKey = this.getDecorPositionKey(rawKey, decor);
+        const x = parseInt(posKey.split(',')[0]);
+        const y = parseInt(posKey.split(',')[1]);
+        return new Vec2(x, y);
+    }
+
+    private parseDecorTypeSet(raw: any): Set<string> {
+        if (raw == null) {
+            return new Set();
+        }
+        return new Set(
+            String(raw)
+                .split('#')
+                .map((s) => s.trim())
+                .filter((s) => s.length > 0)
+        );
+    }
+
+    private extractDecorConfigId(nameOrId: string): string {
+        if (!nameOrId) {
+            return '';
+        }
+        const base = String(nameOrId).split('#')[0];
+        if (base.startsWith('gear_')) {
+            return base.replace('gear_', '');
+        }
+        return base;
+    }
+
+    private getCurrentDecorConfigId(): string {
+        if (this.moveItem && this.moveItem.tileType === 'Decor') {
+            return this.extractDecorConfigId(this.moveItem.id || this.moveItem.tile?.name || '');
+        }
+        if (this.curTileNode) {
+            return this.extractDecorConfigId(this.curTileNode.name || '');
+        }
+        return '';
+    }
+
+    private collectDecorCollisions(cells: Vec2[], excludeDecorKey: string = ''): string[] {
+        const hit = new Set<string>();
+        this.allHouse.forEach((house) => {
+            house.decor.forEach((value, key) => {
+                if (excludeDecorKey && key === excludeDecorKey) {
+                    return;
+                }
+                const anchor = this.getDecorPosition(key, value);
+                const buildingSize = MapModel.getInstance().getBuildingSize(new Size(value.width, value.height), this);
+                for (let x = 0; x < buildingSize.x; x++) {
+                    for (let y = 0; y < buildingSize.y; y++) {
+                        const coverX = anchor.x + x;
+                        const coverY = anchor.y - y;
+                        for (let c = 0; c < cells.length; c++) {
+                            if (cells[c].x === coverX && cells[c].y === coverY) {
+                                const cfgId = this.extractDecorConfigId(value.tile?.name || '');
+                                if (cfgId) {
+                                    hit.add(cfgId);
+                                }
+                                return;
+                            }
+                        }
+                    }
+                }
+            });
+        });
+        return Array.from(hit);
+    }
+
+    private getTopDecorAtGrid(
+        house: {
+            decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string }>
+        },
+        gridPos: Vec2
+    ): { key: string; value: { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string } } | null {
+        let top: { key: string; value: { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string } } | null = null;
+        house.decor.forEach((value, key) => {
+            const posKey = this.getDecorPositionKey(key, value);
+            if (posKey !== `${gridPos.x},${gridPos.y}`) {
+                return;
+            }
+            if (!top || value.tile.getSiblingIndex() >= top.value.tile.getSiblingIndex()) {
+                top = { key, value };
+            }
+        });
+        return top;
+    }
+
+    private hasSameDecorAtGrid(
+        house: {
+            decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string }>
+        },
+        gridPos: Vec2,
+        tileName: string
+    ): boolean {
+        let exists = false;
+        house.decor.forEach((value, key) => {
+            const posKey = this.getDecorPositionKey(key, value);
+            if (posKey === `${gridPos.x},${gridPos.y}` && value.tile.name === tileName) {
+                exists = true;
+            }
+        });
+        return exists;
+    }
+
+    private hasDecorCoveringCell(
+        house: {
+            decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string }>
+        },
+        gridX: number,
+        gridY: number,
+        excludeKey: string = ''
+    ): boolean {
+        let covered = false;
+        house.decor.forEach((value, key) => {
+            if (excludeKey && key === excludeKey) {
+                return;
+            }
+            const anchor = this.getDecorPosition(key, value);
+            const buildingSize = MapModel.getInstance().getBuildingSize(new Size(value.width, value.height), this);
+            for (let x = 0; x < buildingSize.x; x++) {
+                for (let y = 0; y < buildingSize.y; y++) {
+                    if (anchor.x + x === gridX && anchor.y - y === gridY) {
+                        covered = true;
+                        return;
+                    }
+                }
+                if (covered) {
+                    return;
+                }
+            }
+        });
+        return covered;
     }
 
     followCameraAction(tarPos: Vec3, _call: Function) {
@@ -2774,7 +3029,14 @@ export class MapEditor extends Component {
                 tile.setPosition(worldPos);
                 this.mapContainer.addChild(tile);
 
-                wallHouse.decor.set(`${gridPos.x},${gridPos.y}`, { tile: tile, tileType: "Decor", width: size.width, height: size.height, belong: _name });
+                wallHouse.decor.set(this.buildDecorStackKey(gridPos, tile.name), {
+                    tile: tile,
+                    tileType: "Decor",
+                    width: size.width,
+                    height: size.height,
+                    belong: _name,
+                    position: `${gridPos.x},${gridPos.y}`
+                });
 
                 // 更新网格数据
                 for (let x = 0; x < buildingSize.x; x++) {

@@ -287,11 +287,14 @@ export class MapModel {
             let arr_3: { id: string, oid: string, _type: string, position: string }[] = [];
             value.decor.forEach((value_4, key_4) => {
                 if (value_4.tileType == "Decor") {
+                    const posKey = value_4.position && value_4.position.includes(',')
+                        ? value_4.position
+                        : (key_4.includes('|') ? key_4.split('|')[0] : key_4);
                     arr_3.push({
                         id: value_4.tile.name,
                         oid: value_4.tile.name.split('_')[1],
                         _type: "Decor",
-                        position: key_4
+                        position: posKey
                     })
                 }
             })
