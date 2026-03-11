@@ -148,7 +148,8 @@ export class MapEditor extends Component {
         verWalls: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string }>,
         cfgId : number,
         floorTileId?: string,
-        floorRenderNode?: Node
+        floorRenderNode?: Node,
+        floorPatchRenderNodes?: Node[]
     }> = new Map();
 
     private displayTilemap: Map<string, { tileNode: Node, _type: number , cfgId : number}> = new Map();
@@ -219,6 +220,7 @@ export class MapEditor extends Component {
     private isDrawSelectionBox = false
     public drawSelectionBox(): void {
         if (!this.mapGraphics) return;
+        const manager = MapManager.GetInstance();
 
         // 清除之前的绘制
         this.mapGraphics.clear();
@@ -232,16 +234,17 @@ export class MapEditor extends Component {
         // 如果框太小，不绘制
         if (width < 5 || height < 5) return;
 
-        //判断范围是否能造房子
-        if(this.autoGraphicsWall()){
-            this.mapGraphics.strokeColor = Color.GREEN
-
-            this.isDrawSelectionBox = true
-        }else{
-            this.mapGraphics.strokeColor = Color.RED
-
-            this.isDrawSelectionBox = false
+        let canDraw = false;
+        if (manager.actionStatus === ActionStatus.FLOOR) {
+            canDraw = this.canReplaceIndoorFloorRect();
+            if (!canDraw) {
+                canDraw = this.autoGraphicsWall();
+            }
+        } else {
+            canDraw = this.autoGraphicsWall();
         }
+        this.mapGraphics.strokeColor = canDraw ? Color.GREEN : Color.RED;
+        this.isDrawSelectionBox = canDraw;
         // let localPos = this.gridToWorld(v2(x , y));
         // 绘制矩形框
         this.mapGraphics.rect(x, y, width, height);
@@ -1323,6 +1326,164 @@ export class MapEditor extends Component {
         EventSystem.send("ShowTips", `房屋建造失败：宽至少${this.houseMinWidth}格，高至少${this.houseMinHeight}格`);
     }
 
+    private getRawDragRect(): { minX: number; maxX: number; minY: number; maxY: number } | null {
+        if (!this._startGrad || !this._currentGrad) {
+            return null;
+        }
+        const minX = Math.max(0, Math.min(this._startGrad.x, this._currentGrad.x));
+        const maxX = Math.min(this.mapWidth - 1, Math.max(this._startGrad.x, this._currentGrad.x));
+        const minY = Math.max(0, Math.min(this._startGrad.y, this._currentGrad.y));
+        const maxY = Math.min(this.mapHeight - 1, Math.max(this._startGrad.y, this._currentGrad.y));
+        if (minX > maxX || minY > maxY) {
+            return null;
+        }
+        return { minX, maxX, minY, maxY };
+    }
+
+    private getIndoorReplaceHouseId(rect: { minX: number; maxX: number; minY: number; maxY: number }): string | null {
+        let houseId = '';
+        for (let x = rect.minX; x <= rect.maxX; x++) {
+            for (let y = rect.minY; y <= rect.maxY; y++) {
+                const item = this.houseItems.get(`${x},${y}`);
+                if (!item || item.tileType !== "Floor" || !item.belong) {
+                    return null;
+                }
+                if (!houseId) {
+                    houseId = item.belong;
+                } else if (houseId !== item.belong) {
+                    return null;
+                }
+            }
+        }
+        return houseId || null;
+    }
+
+    private canReplaceIndoorFloorRect(): boolean {
+        if (this.curTileNode?.["tileType"] !== "Floor") {
+            return false;
+        }
+        const rect = this.getRawDragRect();
+        if (!rect) {
+            return false;
+        }
+        return this.getIndoorReplaceHouseId(rect) !== null;
+    }
+
+    private applyIndoorFloorTiledPatch(
+        houseId: string,
+        floorId: string,
+        rect: { minX: number; maxX: number; minY: number; maxY: number }
+    ) {
+        const house = this.allHouse.get(houseId);
+        if (!house) {
+            return;
+        }
+        if (!house.floorPatchRenderNodes) {
+            house.floorPatchRenderNodes = [];
+        }
+
+        const innerMinX = rect.minX + 1;
+        const innerMaxX = rect.maxX - 1;
+        const innerMinY = rect.minY + 1;
+        const innerMaxY = rect.maxY - 1;
+        if (innerMinX > innerMaxX || innerMinY > innerMaxY) {
+            return;
+        }
+
+        for (let x = rect.minX; x <= rect.maxX; x++) {
+            for (let y = rect.minY; y <= rect.maxY; y++) {
+                const key = `${x},${y}`;
+                const baseCell = house.base.get(key);
+                if (!baseCell || baseCell.tileType !== "Floor") {
+                    continue;
+                }
+                const isInner = x > rect.minX && x < rect.maxX && y > rect.minY && y < rect.maxY;
+                this.setFloorTileVisualVisible(baseCell.tile, !isInner);
+            }
+        }
+
+        const floorCfg = AppConst.JSONManager.getItem("mapFloor", floorId);
+        if (!floorCfg || !floorCfg["image"]) {
+            return;
+        }
+
+        const patchNode = new Node(`houseFloorPatch_${houseId}_${Date.now()}`);
+        const patchTransform = patchNode.addComponent(UITransform);
+        patchTransform.setContentSize((innerMaxX - innerMinX + 1) * this.tileSize, (innerMaxY - innerMinY + 1) * this.tileSize);
+        const patchSprite = patchNode.addComponent(Sprite);
+        patchSprite.type = Sprite.Type.TILED;
+        patchSprite.sizeMode = Sprite.SizeMode.CUSTOM;
+        const spLoad = patchNode.addComponent(PrefabLoad);
+        spLoad.isTexture = true;
+        spLoad.bundleName = "mapEditor";
+        spLoad.url = floorCfg["image"] + "/spriteFrame";
+
+        const topLeftCenter = MapModel.getInstance().gridToWorld(new Vec2(innerMinX, innerMinY), null, this);
+        const bottomRightCenter = MapModel.getInstance().gridToWorld(new Vec2(innerMaxX, innerMaxY), null, this);
+        patchNode.setPosition(
+            (topLeftCenter.x + bottomRightCenter.x) * 0.5,
+            (topLeftCenter.y + bottomRightCenter.y) * 0.5,
+            topLeftCenter.z
+        );
+        this.homeWallTilemap.addChild(patchNode);
+        patchNode.setSiblingIndex(0);
+        house.floorPatchRenderNodes.push(patchNode);
+    }
+
+    private replaceIndoorFloorByDragRect() {
+        const rect = this.getRawDragRect();
+        if (!rect) {
+            return false;
+        }
+        const houseId = this.getIndoorReplaceHouseId(rect);
+        if (!houseId) {
+            return false;
+        }
+        if (this.curTileNode?.["tileType"] !== "Floor") {
+            return false;
+        }
+        const house = this.allHouse.get(houseId);
+        if (!house) {
+            return false;
+        }
+
+        if (house.floorRenderNode && house.floorRenderNode.isValid) {
+            house.floorRenderNode.destroy();
+            house.floorRenderNode = null;
+            house.base.forEach((cell) => {
+                if (cell.tileType === "Floor") {
+                    this.setFloorTileVisualVisible(cell.tile, true);
+                }
+            });
+        }
+
+        for (let x = rect.minX; x <= rect.maxX; x++) {
+            for (let y = rect.minY; y <= rect.maxY; y++) {
+                const key = `${x},${y}`;
+                const oldCell = this.houseItems.get(key);
+                if (!oldCell || oldCell.tileType !== "Floor" || !oldCell.belong) {
+                    continue;
+                }
+
+                oldCell.tile && oldCell.tile.destroy();
+                const tile = MapManager.GetInstance().getMapCurTileNode(this.curTileNode.name, "Floor");
+                tile.name = this.curTileNode.name + "#Floor";
+                tile["cfgId"] = this.curTileNode.name;
+                const worldPos = MapModel.getInstance().gridToWorld(new Vec2(x, y), null, this);
+                tile.setPosition(worldPos);
+                this.homeWallTilemap.addChild(tile);
+
+                this.houseItems.set(key, { tile, tileType: "Floor", belong: oldCell.belong });
+                const size = tile.getComponent(UITransform).contentSize;
+                house.base.set(key, { tile, tileType: "Floor", width: size.width, height: size.height, belong: oldCell.belong });
+                this.mapData[x][y] = 1;
+            }
+        }
+
+        this.applyIndoorFloorTiledPatch(houseId, this.curTileNode.name, rect);
+        return true;
+    }
+
     autoGraphicsWall(){
         const rect = this.getInsetBuildRect();
         if (!rect) {
@@ -1662,6 +1823,15 @@ export class MapEditor extends Component {
             if (house?.floorRenderNode && house.floorRenderNode.isValid) {
                 house.floorRenderNode.destroy();
                 house.floorRenderNode = null;
+            }
+            if (house?.floorPatchRenderNodes && house.floorPatchRenderNodes.length > 0) {
+                for (let i = 0; i < house.floorPatchRenderNodes.length; i++) {
+                    const node = house.floorPatchRenderNodes[i];
+                    if (node && node.isValid) {
+                        node.destroy();
+                    }
+                }
+                house.floorPatchRenderNodes = [];
             }
 
             house.base.forEach((pt, key) => {
@@ -2579,6 +2749,11 @@ export class MapEditor extends Component {
             EventSystem.send("ShowTips" , AppConst.LanguageManager.getTextByConfig(104))
             return    
         }
+        const manager = MapManager.GetInstance();
+        if (manager.actionStatus === ActionStatus.FLOOR && this.replaceIndoorFloorByDragRect()) {
+            this.refreshWalkableDebugOverlayIfNeeded();
+            return;
+        }
 
         if(!this.isDrawSelectionBox){
             if (this.lastSelectionFailReason === 'size') {
@@ -2890,7 +3065,7 @@ export class MapEditor extends Component {
 
                 const houseName = `house_${this._houseIndex}`;
                 this.allHouse.set(houseName, 
-                    { grid: posVec, base: houseItems, decor: new Map(), npc: null, cfgId : parseInt(cfgId), floorTileId: String(cfgId), floorRenderNode: null,
+                    { grid: posVec, base: houseItems, decor: new Map(), npc: null, cfgId : parseInt(cfgId), floorTileId: String(cfgId), floorRenderNode: null, floorPatchRenderNodes: [],
                         horWalls: new Map(), verWalls: new Map(), surround: gridCells, outWall: out, inWall: [], openWall: _open });
                 this.refreshHouseFloorRenderNode(houseName);
                 for (let i = 0; i < doorOpenings.length; i++) {
@@ -3345,7 +3520,7 @@ export class MapEditor extends Component {
             const _name = `house_${this._houseIndex}`;
             this.allHouse.set(_name, {
                 grid: posVec, base: houseItems, decor: new Map(), npc: null, horWalls: new Map(), verWalls: new Map(),
-                surround: gridCells, outWall: out, inWall: [], openWall: _open, cfgId: cfgId, floorTileId: String(cfgId), floorRenderNode: null
+                surround: gridCells, outWall: out, inWall: [], openWall: _open, cfgId: cfgId, floorTileId: String(cfgId), floorRenderNode: null, floorPatchRenderNodes: []
             });
             this.refreshHouseFloorRenderNode(_name);
             for (let i = 0; i < doorOpenings.length; i++) {

@@ -149,8 +149,14 @@ export class CustomizeInput extends Component {
 
                         }else{
                             if(manager.actionStatus == ActionStatus.FLOOR){
-                                this.mapEditor.autoGraphicsWall();
-                                this.mapEditor.drawAutoBuildWall();
+                                const startGrad = this.mapEditor._startGrad;
+                                const endGrad = this.mapEditor._currentGrad;
+                                const hasDraggedAtLeastOneGrid = !!startGrad && !!endGrad &&
+                                    (Math.abs(endGrad.x - startGrad.x) >= 1 || Math.abs(endGrad.y - startGrad.y) >= 1);
+                                if (hasDraggedAtLeastOneGrid) {
+                                    this.mapEditor.autoGraphicsWall();
+                                    this.mapEditor.drawAutoBuildWall();
+                                }
                             }
                         }
 
