@@ -828,7 +828,11 @@ export class MapEditor extends Component {
                 const checkY = gridPos.y - y;
                 const cell = this.mapData[checkX][checkY];
                 if (cell === 2) {
-                    hasWallCell = true;
+                    const wallItem = this.houseItems.get(`${checkX},${checkY}`);
+                    const wallDir = wallItem ? (wallItem as any).dir : '';
+                    if (!(wallItem?.tileType === "OutWall" && (wallDir === "left" || wallDir === "right"))) {
+                        hasWallCell = true;
+                    }
                 }
                 pack.push(new Vec2(checkX, checkY));
             }
@@ -2816,6 +2820,7 @@ export class MapEditor extends Component {
                     const globalWall = this.houseItems.get(`${pt.pos.x},${pt.pos.y}`);
                     if (globalWall) {
                         globalWall.belong = `house_${this._houseIndex}`;
+                        (globalWall as any).dir = pt.dir;
                     }
                     posVec.push(pt.pos);
                     out.push(pt.pos);
@@ -3094,7 +3099,7 @@ export class MapEditor extends Component {
                 const worldPos = MapModel.getInstance().gridToWorld(pos, wall.getComponent(UITransform).contentSize , this);
                 wall.setPosition(worldPos);
                 this.homeWallTilemap.addChild(wall);
-                this.houseItems.set(`${pos.x},${pos.y}`, { tile: wall, tileType: "OutWall" });
+                this.houseItems.set(`${pos.x},${pos.y}`, { tile: wall, tileType: "OutWall", dir: dir } as any);
 
                 const buildingSize = MapModel.getInstance().getBuildingSize(wall.getComponent(UITransform).contentSize , this);
                 // 更新网格数据
@@ -3281,6 +3286,7 @@ export class MapEditor extends Component {
                 const globalWall = this.houseItems.get(`${pt.pos.x},${pt.pos.y}`);
                 if (globalWall) {
                     globalWall.belong = `house_${this._houseIndex}`;
+                    (globalWall as any).dir = pt.dir;
                 }
                 posVec.push(pt.pos);
                 out.push(pt.pos);
