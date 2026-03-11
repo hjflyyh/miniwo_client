@@ -77,7 +77,7 @@ export class LoginView extends Component {
     }
 
     onClickServer1(){
-        HttpManager.ipBase = "192.168.30.108"
+        HttpManager.ipBase = "192.168.30.109"
         HttpManager.baseUrl = "http://" + HttpManager.ipBase + ":8080"
     }
 
