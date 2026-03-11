@@ -1,8 +1,8 @@
 {
   "1": {
     "name_cn": "黄色痛包",
-    "icon": "Ita Bag - Yellow",
-    "image": "Ita Bag - Yellow",
+    "icon": "WallDecor/icon/Ita Bag - Yellow",
+    "image": "WallDecor/image/Ita Bag - Yellow",
     "tags": "",
     "map_size": "24#37",
     "img_size": "1",
@@ -13,8 +13,8 @@
   },
   "2": {
     "name_cn": "实木花格窗",
-    "icon": "Solid Wood - Latticed Window",
-    "image": "Solid Wood - Latticed Window",
+    "icon": "WallDecor/icon/Solid Wood - Latticed Window",
+    "image": "WallDecor/image/Solid Wood - Latticed Window",
     "tags": "",
     "map_size": "64#66",
     "img_size": "1",
@@ -25,8 +25,8 @@
   },
   "3": {
     "name_cn": "墙面包架含包",
-    "icon": "Wall Bag Rack - With Accessories",
-    "image": "Wall Bag Rack - With Accessories",
+    "icon": "WallDecor/icon/Wall Bag Rack - With Accessories",
+    "image": "WallDecor/image/Wall Bag Rack - With Accessories",
     "tags": "",
     "map_size": "44#59",
     "img_size": "1",
@@ -37,8 +37,8 @@
   },
   "4": {
     "name_cn": "墙面包架",
-    "icon": "Wall Bag Rack - Without Accessories",
-    "image": "Wall Bag Rack - Without Accessories",
+    "icon": "WallDecor/icon/Wall Bag Rack - Without Accessories",
+    "image": "WallDecor/image/Wall Bag Rack - Without Accessories",
     "tags": "",
     "map_size": "44#30",
     "img_size": "1",
@@ -49,8 +49,8 @@
   },
   "5": {
     "name_cn": "墙面置物架",
-    "icon": "Wall Shelf",
-    "image": "Wall Shelf",
+    "icon": "WallDecor/icon/Wall Shelf",
+    "image": "WallDecor/image/Wall Shelf",
     "tags": "",
     "map_size": "62#55",
     "img_size": "1",
@@ -61,8 +61,8 @@
   },
   "6": {
     "name_cn": "蓝色女士单肩包",
-    "icon": "Women's Shoulder Bag - Blue",
-    "image": "Women's Shoulder Bag - Blue",
+    "icon": "WallDecor/icon/Women's Shoulder Bag - Blue",
+    "image": "WallDecor/image/Women's Shoulder Bag - Blue",
     "tags": "",
     "map_size": "14#27",
     "img_size": "1",

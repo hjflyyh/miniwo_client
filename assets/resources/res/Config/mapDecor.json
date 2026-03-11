@@ -184,7 +184,7 @@
     "icon": "pool/icon/Solid Wood - Desk",
     "image": "pool/image/Solid Wood - Desk",
     "tags": "",
-    "map_size": "100#40",
+    "map_size": "90#40",
     "img_size": "1",
     "img_pos": "0#-20",
     "spine_url": "",
@@ -535,7 +535,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "place_type": "0#1#5",
+    "place_type": "0#1#2#3#5",
     "decor_type": "0",
     "type": "1"
   },
@@ -550,7 +550,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "place_type": "0#1#5",
+    "place_type": "0#1#2#3#5",
     "decor_type": "0",
     "type": "1"
   },
@@ -565,7 +565,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "place_type": "0#1#5",
+    "place_type": "0#1#2#3#5",
     "decor_type": "0",
     "type": "1"
   },
