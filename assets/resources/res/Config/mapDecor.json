@@ -1,19 +1,5 @@
 {
   "1": {
-    "name_cn": "电脑",
-    "icon": "pool/icon/gear_108_icon",
-    "image": "pool/image/gear_108",
-    "tags": "",
-    "map_size": "128#128",
-    "img_size": "1",
-    "img_pos": "0#0",
-    "spine_url": "",
-    "spine_size": "1",
-    "spine_pos": "0#0",
-    "place_type": "0",
-    "decor_type": "0"
-  },
-  "2": {
     "name_cn": "白桌子",
     "icon": "pool/icon/gear_107_icon",
     "image": "pool/image/gear_107",
@@ -25,9 +11,10 @@
     "spine_size": "1",
     "spine_pos": "0#0",
     "place_type": "0",
-    "decor_type": "1"
+    "decor_type": "1",
+    "type": "0"
   },
-  "3": {
+  "2": {
     "name_cn": "黄桌子",
     "icon": "pool/icon/gear_106_icon",
     "image": "pool/image/gear_106",
@@ -39,9 +26,10 @@
     "spine_size": "1",
     "spine_pos": "0#0",
     "place_type": "0",
-    "decor_type": "1"
+    "decor_type": "1",
+    "type": "0"
   },
-  "4": {
+  "3": {
     "name_cn": "厨卫",
     "icon": "pool/icon/gear_105_icon",
     "image": "pool/image/gear_105",
@@ -53,9 +41,10 @@
     "spine_size": "1",
     "spine_pos": "0#0",
     "place_type": "0",
-    "decor_type": "0"
+    "decor_type": "0",
+    "type": "0"
   },
-  "5": {
+  "4": {
     "name_cn": "厨卫2",
     "icon": "pool/icon/gear_104_icon",
     "image": "pool/image/gear_104",
@@ -67,9 +56,10 @@
     "spine_size": "1",
     "spine_pos": "0#0",
     "place_type": "0",
-    "decor_type": "0"
+    "decor_type": "0",
+    "type": "0"
   },
-  "6": {
+  "5": {
     "name_cn": "绘画",
     "icon": "pool/icon/gear_103_icon",
     "image": "pool/image/gear_103",
@@ -81,9 +71,10 @@
     "spine_size": "1",
     "spine_pos": "0#0",
     "place_type": "0",
-    "decor_type": "0"
+    "decor_type": "0",
+    "type": "0"
   },
-  "7": {
+  "6": {
     "name_cn": "电脑桌",
     "icon": "pool/icon/gear_102_icon",
     "image": "pool/image/gear_102",
@@ -95,9 +86,10 @@
     "spine_size": "1",
     "spine_pos": "0#0",
     "place_type": "0",
-    "decor_type": "1"
+    "decor_type": "1",
+    "type": "0"
   },
-  "8": {
+  "7": {
     "name_cn": "大床",
     "icon": "pool/icon/gear_101_icon",
     "image": "pool/image/gear_101",
@@ -109,9 +101,10 @@
     "spine_size": "1",
     "spine_pos": "0#0",
     "place_type": "0",
-    "decor_type": "3"
+    "decor_type": "3",
+    "type": "0"
   },
-  "9": {
+  "8": {
     "name_cn": "小床",
     "icon": "pool/icon/gear_100_icon",
     "image": "pool/image/gear_100",
@@ -123,23 +116,10 @@
     "spine_size": "1",
     "spine_pos": "0#0",
     "place_type": "0",
-    "decor_type": "3"
+    "decor_type": "3",
+    "type": "0"
   },
-  "10": {
-    "name_cn": "苹果闹钟",
-    "icon": "pool/icon/Apple-Style Alarm Clock",
-    "image": "pool/image/Apple-Style Alarm Clock",
-    "tags": "",
-    "map_size": "18#32",
-    "img_size": "1",
-    "img_pos": "0#0",
-    "spine_url": "",
-    "spine_size": "1",
-    "spine_pos": "0#0",
-    "place_type": "1",
-    "decor_type": "0"
-  },
-  "11": {
+  "9": {
     "name_cn": "黄色小床",
     "icon": "pool/icon/Bed - Yellow",
     "image": "pool/image/Bed - Yellow",
@@ -151,51 +131,10 @@
     "spine_size": "1",
     "spine_pos": "0#0",
     "place_type": "0",
-    "decor_type": "3"
+    "decor_type": "3",
+    "type": "0"
   },
-  "12": {
-    "name_cn": "水晶球",
-    "icon": "pool/icon/Crystal Ball",
-    "image": "pool/image/Crystal Ball",
-    "tags": "",
-    "map_size": "19#20",
-    "img_size": "1",
-    "img_pos": "0#0",
-    "spine_url": "",
-    "spine_size": "1",
-    "spine_pos": "0#0",
-    "place_type": "1",
-    "decor_type": "0"
-  },
-  "13": {
-    "name_cn": "红玻璃杯",
-    "icon": "pool/icon/Mug - Red",
-    "image": "pool/image/Mug - Red",
-    "tags": "",
-    "map_size": "26#23",
-    "img_size": "1",
-    "img_pos": "0#0",
-    "spine_url": "",
-    "spine_size": "1",
-    "spine_pos": "0#0",
-    "place_type": "1",
-    "decor_type": "0"
-  },
-  "14": {
-    "name_cn": "黄玻璃杯",
-    "icon": "pool/icon/Mug - Yellow",
-    "image": "pool/image/Mug - Yellow",
-    "tags": "",
-    "map_size": "26#23",
-    "img_size": "1",
-    "img_pos": "0#0",
-    "spine_url": "",
-    "spine_size": "1",
-    "spine_pos": "0#0",
-    "place_type": "1",
-    "decor_type": "0"
-  },
-  "15": {
+  "10": {
     "name_cn": "白拖鞋",
     "icon": "pool/icon/Slippers - White",
     "image": "pool/image/Slippers - White",
@@ -207,51 +146,10 @@
     "spine_size": "1",
     "spine_pos": "0#0",
     "place_type": "0",
-    "decor_type": "0"
+    "decor_type": "0",
+    "type": "0"
   },
-  "16": {
-    "name_cn": "黄紫小瓶",
-    "icon": "pool/icon/Small Bottles - YellowPurple",
-    "image": "pool/image/Small Bottles - YellowPurple",
-    "tags": "",
-    "map_size": "26#23",
-    "img_size": "1",
-    "img_pos": "0#0",
-    "spine_url": "",
-    "spine_size": "1",
-    "spine_pos": "0#0",
-    "place_type": "1",
-    "decor_type": "0"
-  },
-  "17": {
-    "name_cn": "木质香熏",
-    "icon": "pool/icon/Solid Wood - Aromatherapy",
-    "image": "pool/image/Solid Wood - Aromatherapy",
-    "tags": "",
-    "map_size": "14#30",
-    "img_size": "1",
-    "img_pos": "0#0",
-    "spine_url": "",
-    "spine_size": "1",
-    "spine_pos": "0#0",
-    "place_type": "1",
-    "decor_type": "0"
-  },
-  "18": {
-    "name_cn": "木制床头灯",
-    "icon": "pool/icon/Solid Wood - Bedside Lamp",
-    "image": "pool/image/Solid Wood - Bedside Lamp",
-    "tags": "",
-    "map_size": "21#27",
-    "img_size": "1",
-    "img_pos": "0#0",
-    "spine_url": "",
-    "spine_size": "1",
-    "spine_pos": "0#0",
-    "place_type": "1",
-    "decor_type": "0"
-  },
-  "19": {
+  "11": {
     "name_cn": "藤编橱柜",
     "icon": "pool/icon/Solid Wood - Cabinet",
     "image": "pool/image/Solid Wood - Cabinet",
@@ -263,9 +161,10 @@
     "spine_size": "1",
     "spine_pos": "0#0",
     "place_type": "0",
-    "decor_type": "0"
+    "decor_type": "0",
+    "type": "0"
   },
-  "20": {
+  "12": {
     "name_cn": "木制矮凳",
     "icon": "pool/icon/Solid Wood - Chair - Backrest",
     "image": "pool/image/Solid Wood - Chair - Backrest",
@@ -277,135 +176,55 @@
     "spine_size": "1",
     "spine_pos": "0#0",
     "place_type": "0",
-    "decor_type": "0"
+    "decor_type": "0",
+    "type": "0"
   },
-  "21": {
+  "13": {
     "name_cn": "木制办公桌",
     "icon": "pool/icon/Solid Wood - Desk",
     "image": "pool/image/Solid Wood - Desk",
     "tags": "",
-    "map_size": "81#96",
+    "map_size": "100#40",
     "img_size": "1",
-    "img_pos": "0#0",
+    "img_pos": "0#-20",
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
     "place_type": "0",
-    "decor_type": "1"
+    "decor_type": "1",
+    "type": "0"
   },
-  "22": {
-    "name_cn": "木制落地灯",
-    "icon": "pool/icon/Solid Wood - Floor Lamp",
-    "image": "pool/image/Solid Wood - Floor Lamp",
-    "tags": "",
-    "map_size": "21#103",
-    "img_size": "1",
-    "img_pos": "0#0",
-    "spine_url": "",
-    "spine_size": "1",
-    "spine_pos": "0#0",
-    "place_type": "0",
-    "decor_type": "0"
-  },
-  "23": {
+  "14": {
     "name_cn": "木制异形桌",
     "icon": "pool/icon/Solid Wood - Irregular Table",
     "image": "pool/image/Solid Wood - Irregular Table",
     "tags": "",
-    "map_size": "64#56",
+    "map_size": "74#55",
     "img_size": "1",
-    "img_pos": "0#0",
+    "img_pos": "0#-5",
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
     "place_type": "0",
-    "decor_type": "1"
+    "decor_type": "1",
+    "type": "0"
   },
-  "24": {
+  "15": {
     "name_cn": "木制床头柜",
     "icon": "pool/icon/Solid Wood - Nightstand",
     "image": "pool/image/Solid Wood - Nightstand",
     "tags": "",
-    "map_size": "41#41",
+    "map_size": "50#50",
     "img_size": "1",
-    "img_pos": "0#0",
+    "img_pos": "0#-3",
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
     "place_type": "0",
-    "decor_type": "0"
+    "decor_type": "0",
+    "type": "0"
   },
-  "25": {
-    "name_cn": "木制纸巾盒",
-    "icon": "pool/icon/Solid Wood - Tissue Box",
-    "image": "pool/image/Solid Wood - Tissue Box",
-    "tags": "",
-    "map_size": "20#17",
-    "img_size": "1",
-    "img_pos": "0#0",
-    "spine_url": "",
-    "spine_size": "1",
-    "spine_pos": "0#0",
-    "place_type": "1",
-    "decor_type": "0"
-  },
-  "26": {
-    "name_cn": "黄茶壶",
-    "icon": "pool/icon/Teapot - Yellow",
-    "image": "pool/image/Teapot - Yellow",
-    "tags": "",
-    "map_size": "24#32",
-    "img_size": "1",
-    "img_pos": "0#0",
-    "spine_url": "",
-    "spine_size": "1",
-    "spine_pos": "0#0",
-    "place_type": "1",
-    "decor_type": "0"
-  },
-  "27": {
-    "name_cn": "红玩具车",
-    "icon": "pool/icon/Toy Car - Red",
-    "image": "pool/image/Toy Car - Red",
-    "tags": "",
-    "map_size": "26#16",
-    "img_size": "1",
-    "img_pos": "0#0",
-    "spine_url": "",
-    "spine_size": "1",
-    "spine_pos": "0#0",
-    "place_type": "1",
-    "decor_type": "0"
-  },
-  "28": {
-    "name_cn": "绿玩具坦克",
-    "icon": "pool/icon/Toy Tank",
-    "image": "pool/image/Toy Tank",
-    "tags": "",
-    "map_size": "25#16",
-    "img_size": "1",
-    "img_pos": "0#0",
-    "spine_url": "",
-    "spine_size": "1",
-    "spine_pos": "0#0",
-    "place_type": "1",
-    "decor_type": "0"
-  },
-  "29": {
-    "name_cn": "白花瓶",
-    "icon": "pool/icon/Vase - White",
-    "image": "pool/image/Vase - White",
-    "tags": "",
-    "map_size": "25#26",
-    "img_size": "1",
-    "img_pos": "0#0",
-    "spine_url": "",
-    "spine_size": "1",
-    "spine_pos": "0#0",
-    "place_type": "1",
-    "decor_type": "0"
-  },
-  "30": {
+  "16": {
     "name_cn": "坐垫白沙发",
     "icon": "pool/icon/White Sofa - Flower Pillow",
     "image": "pool/image/White Sofa - Flower Pillow",
@@ -417,9 +236,10 @@
     "spine_size": "1",
     "spine_pos": "0#0",
     "place_type": "0",
-    "decor_type": "2"
+    "decor_type": "2",
+    "type": "0"
   },
-  "31": {
+  "17": {
     "name_cn": "白沙发",
     "icon": "pool/icon/White Sofa",
     "image": "pool/image/White Sofa",
@@ -431,9 +251,250 @@
     "spine_size": "1",
     "spine_pos": "0#0",
     "place_type": "0",
-    "decor_type": "2"
+    "decor_type": "2",
+    "type": "0"
+  },
+  "18": {
+    "name_cn": "绿圆形毛绒地毯",
+    "icon": "pool/icon/Plush Carpet - Circular Pattern - Green",
+    "image": "pool/image/Plush Carpet - Circular Pattern - Green",
+    "tags": "",
+    "map_size": "96#73",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0",
+    "decor_type": "5",
+    "type": "0"
+  },
+  "19": {
+    "name_cn": "白圆形毛绒地毯",
+    "icon": "pool/icon/Plush Carpet - Circular Pattern - White",
+    "image": "pool/image/Plush Carpet - Circular Pattern - White",
+    "tags": "",
+    "map_size": "96#73",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0",
+    "decor_type": "5",
+    "type": "0"
+  },
+  "20": {
+    "name_cn": "黄圆形毛绒地毯",
+    "icon": "pool/icon/Plush Carpet - Circular Pattern - Yellow,",
+    "image": "pool/image/Plush Carpet - Circular Pattern - Yellow,",
+    "tags": "",
+    "map_size": "96#73",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0",
+    "decor_type": "5",
+    "type": "0"
+  },
+  "21": {
+    "name_cn": "实木电视柜",
+    "icon": "pool/icon/Solid Wood - TV Stand",
+    "image": "pool/image/Solid Wood - TV Stand",
+    "tags": "",
+    "map_size": "160#37",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0",
+    "decor_type": "1",
+    "type": "0"
+  },
+  "22": {
+    "name_cn": "苹果闹钟",
+    "icon": "pool/icon/Apple-Style Alarm Clock",
+    "image": "pool/image/Apple-Style Alarm Clock",
+    "tags": "",
+    "map_size": "18#32",
+    "img_size": "1",
+    "img_pos": "0#-3",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0#1#5",
+    "decor_type": "0",
+    "type": "1"
+  },
+  "23": {
+    "name_cn": "水晶球",
+    "icon": "pool/icon/Crystal Ball",
+    "image": "pool/image/Crystal Ball",
+    "tags": "",
+    "map_size": "19#20",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0#1#5",
+    "decor_type": "0",
+    "type": "1"
+  },
+  "24": {
+    "name_cn": "红玻璃杯",
+    "icon": "pool/icon/Mug - Red",
+    "image": "pool/image/Mug - Red",
+    "tags": "",
+    "map_size": "26#23",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0#1#5",
+    "decor_type": "0",
+    "type": "1"
+  },
+  "25": {
+    "name_cn": "黄玻璃杯",
+    "icon": "pool/icon/Mug - Yellow",
+    "image": "pool/image/Mug - Yellow",
+    "tags": "",
+    "map_size": "26#23",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0#1#5",
+    "decor_type": "0",
+    "type": "1"
+  },
+  "26": {
+    "name_cn": "黄紫小瓶",
+    "icon": "pool/icon/Small Bottles - YellowPurple",
+    "image": "pool/image/Small Bottles - YellowPurple",
+    "tags": "",
+    "map_size": "26#23",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0#1#5",
+    "decor_type": "0",
+    "type": "1"
+  },
+  "27": {
+    "name_cn": "木质香熏",
+    "icon": "pool/icon/Solid Wood - Aromatherapy",
+    "image": "pool/image/Solid Wood - Aromatherapy",
+    "tags": "",
+    "map_size": "14#30",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0#1#5",
+    "decor_type": "0",
+    "type": "1"
+  },
+  "28": {
+    "name_cn": "木制床头灯",
+    "icon": "pool/icon/Solid Wood - Bedside Lamp",
+    "image": "pool/image/Solid Wood - Bedside Lamp",
+    "tags": "",
+    "map_size": "21#27",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0#1#5",
+    "decor_type": "0",
+    "type": "1"
+  },
+  "29": {
+    "name_cn": "木制纸巾盒",
+    "icon": "pool/icon/Solid Wood - Tissue Box",
+    "image": "pool/image/Solid Wood - Tissue Box",
+    "tags": "",
+    "map_size": "20#17",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0#1#5",
+    "decor_type": "0",
+    "type": "1"
+  },
+  "30": {
+    "name_cn": "黄茶壶",
+    "icon": "pool/icon/Teapot - Yellow",
+    "image": "pool/image/Teapot - Yellow",
+    "tags": "",
+    "map_size": "24#32",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0#1#5",
+    "decor_type": "0",
+    "type": "1"
+  },
+  "31": {
+    "name_cn": "红玩具车",
+    "icon": "pool/icon/Toy Car - Red",
+    "image": "pool/image/Toy Car - Red",
+    "tags": "",
+    "map_size": "26#16",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0#1#5",
+    "decor_type": "0",
+    "type": "1"
   },
   "32": {
+    "name_cn": "绿玩具坦克",
+    "icon": "pool/icon/Toy Tank",
+    "image": "pool/image/Toy Tank",
+    "tags": "",
+    "map_size": "25#16",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0#1#5",
+    "decor_type": "0",
+    "type": "1"
+  },
+  "33": {
+    "name_cn": "白花瓶",
+    "icon": "pool/icon/Vase - White",
+    "image": "pool/image/Vase - White",
+    "tags": "",
+    "map_size": "25#26",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0#1#5",
+    "decor_type": "0",
+    "type": "1"
+  },
+  "34": {
     "name_cn": "棕葡萄酒瓶",
     "icon": "pool/icon/Wine Bottle - Brown",
     "image": "pool/image/Wine Bottle - Brown",
@@ -444,10 +505,11 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "place_type": "1",
-    "decor_type": "0"
+    "place_type": "0#1#5",
+    "decor_type": "0",
+    "type": "1"
   },
-  "33": {
+  "35": {
     "name_cn": "绿葡萄酒瓶",
     "icon": "pool/icon/Wine Bottle - Green",
     "image": "pool/image/Wine Bottle - Green",
@@ -458,7 +520,173 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "place_type": "1",
-    "decor_type": "0"
+    "place_type": "0#1#5",
+    "decor_type": "0",
+    "type": "1"
+  },
+  "36": {
+    "name_cn": "吉祥物1",
+    "icon": "pool/icon/Mascot1",
+    "image": "pool/image/Mascot1",
+    "tags": "",
+    "map_size": "14#12",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0#1#5",
+    "decor_type": "0",
+    "type": "1"
+  },
+  "37": {
+    "name_cn": "吉祥物2",
+    "icon": "pool/icon/Mascot2",
+    "image": "pool/image/Mascot2",
+    "tags": "",
+    "map_size": "16#10",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0#1#5",
+    "decor_type": "0",
+    "type": "1"
+  },
+  "38": {
+    "name_cn": "吉祥物3",
+    "icon": "pool/icon/Mascot3",
+    "image": "pool/image/Mascot3",
+    "tags": "",
+    "map_size": "14#13",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0#1#5",
+    "decor_type": "0",
+    "type": "1"
+  },
+  "39": {
+    "name_cn": "收音机",
+    "icon": "pool/icon/Radio",
+    "image": "pool/image/Radio",
+    "tags": "",
+    "map_size": "15#14",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0#1#5",
+    "decor_type": "0",
+    "type": "1"
+  },
+  "40": {
+    "name_cn": "白色小花瓶",
+    "icon": "pool/icon/Small Vase - White",
+    "image": "pool/image/Small Vase - White",
+    "tags": "",
+    "map_size": "11#28",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0#1#5",
+    "decor_type": "0",
+    "type": "1"
+  },
+  "41": {
+    "name_cn": "实木高架花架 - 仙人掌款",
+    "icon": "pool/icon/Solid Wood - Elevated Flower Shelf - Cactus",
+    "image": "pool/image/Solid Wood - Elevated Flower Shelf - Cactus",
+    "tags": "",
+    "map_size": "26#66",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0#1#5",
+    "decor_type": "0",
+    "type": "1"
+  },
+  "42": {
+    "name_cn": "实木高架花架 - 菊花款",
+    "icon": "pool/icon/Solid Wood - Elevated Flower Shelf - Chrysanthemums",
+    "image": "pool/image/Solid Wood - Elevated Flower Shelf - Chrysanthemums",
+    "tags": "",
+    "map_size": "32#65",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0#1#5",
+    "decor_type": "0",
+    "type": "1"
+  },
+  "43": {
+    "name_cn": "实木高架花架 - 白色花卉款",
+    "icon": "pool/icon/Solid Wood - Elevated Flower Shelf - White Flowers",
+    "image": "pool/image/Solid Wood - Elevated Flower Shelf - White Flowers",
+    "tags": "",
+    "map_size": "32#63",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0#1#5",
+    "decor_type": "0",
+    "type": "1"
+  },
+  "44": {
+    "name_cn": "实木高架花架",
+    "icon": "pool/icon/Solid Wood - Elevated Flower Shelf",
+    "image": "pool/image/Solid Wood - Elevated Flower Shelf",
+    "tags": "",
+    "map_size": "26#46",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0#1#5",
+    "decor_type": "0",
+    "type": "1"
+  },
+  "45": {
+    "name_cn": "电脑",
+    "icon": "pool/icon/gear_108_icon",
+    "image": "pool/image/gear_108",
+    "tags": "",
+    "map_size": "128#128",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0",
+    "decor_type": "0",
+    "type": "2"
+  },
+  "46": {
+    "name_cn": "木制落地灯",
+    "icon": "pool/icon/Solid Wood - Floor Lamp",
+    "image": "pool/image/Solid Wood - Floor Lamp",
+    "tags": "",
+    "map_size": "21#103",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "place_type": "0",
+    "decor_type": "0",
+    "type": "3"
   }
 }
