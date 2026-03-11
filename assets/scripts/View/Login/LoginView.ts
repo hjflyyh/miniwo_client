@@ -50,7 +50,7 @@ export class LoginView extends Component {
 
     onClickApple(){
         this.webview.node.active = true;
-        this.webview.url = "http://117.50.198.104/apple-login.html";
+        this.webview.url = "http://"+ HttpManager.ipBase +"/apple-login.html";
     }
 
     onClickMailNext(){
@@ -74,6 +74,16 @@ export class LoginView extends Component {
 
     protected onDestroy(): void {
         window.removeEventListener("message" , onMsg)
+    }
+
+    onClickServer1(){
+        HttpManager.ipBase = "192.168.30.108"
+        HttpManager.baseUrl = "http://" + HttpManager.ipBase + ":8080"
+    }
+
+    onClickServer2(){
+        HttpManager.ipBase = "192.168.31.102"
+        HttpManager.baseUrl = "http://" + HttpManager.ipBase + ":8080"
     }
 }
 

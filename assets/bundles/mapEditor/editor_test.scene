@@ -2174,10 +2174,15 @@
         "__expectedType__": "cc.SpriteFrame"
       }
     ],
+    "bottomDoorOffsetX": 0,
+    "bottomDoorOffsetY": 16,
+    "sideDoorOffsetX": 0,
+    "sideDoorOffsetY": 0,
+    "sideDoorInsetX": 10,
     "mapGraphics": {
       "__id__": 54
     },
-    "debugShowWalkable": true,
+    "debugShowWalkable": false,
     "_id": "abq+rSUgpJcoQNEssTNPU6"
   },
   {

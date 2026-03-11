@@ -2,6 +2,7 @@ import { sys } from "cc";
 import { network } from "./RequestData";
 import { AppConst } from "../AppConst";
 import { NPCModel } from "./NPCModel";
+import { HttpManager } from "../Manager/HttpManager";
 
 export class RoleModel {
     private static _instance: RoleModel = null;
@@ -48,7 +49,7 @@ export class RoleModel {
             this.playerId = data.player_id
 
             
-            AppConst.WebSocketManager.setConfig("ws://192.168.30.109:7350/ws?token=" + data.nakama_token);
+            AppConst.WebSocketManager.setConfig("ws://" + HttpManager.ipBase + ":7350/ws?token=" + data.nakama_token);
             AppConst.WebSocketManager.connect();
             EventSystem.send("LoginSuccess")
         }
