@@ -845,7 +845,7 @@ export class MapEditor extends Component {
             return false;
         }
 
-        return true
+        return this.getWallDacorationBelongByArea(gridPos, buildingSize) !== null;
     }
 
     private buildWallDacoration(gridPos: Vec2) {
