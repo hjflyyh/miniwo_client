@@ -273,6 +273,10 @@ export class MapEditorUI extends Component {
             _index = 11;
             MapManager.GetInstance().actionStatus = ActionStatus.Back;
             MapManager.GetInstance().getMapEditor().hideTileMask();
+        } else if (target.name == 'wallDacoration') {
+            _index = 12;
+            this.tileMenu.get('panel_wall_decor').active = true;
+            MapManager.GetInstance().actionStatus = ActionStatus.WALL_DECOR;
         }
 
         // if (this.mapToolNode[_index].switch) {

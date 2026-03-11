@@ -20,7 +20,8 @@ export enum ActionStatus {
     Script,
     Video_Action,
     Video_Stop,
-    Back
+    Back,
+    WALL_DECOR,
 }
 
 @ccclass('MapManager')
@@ -102,6 +103,9 @@ export class MapManager extends Component {
         }
         if(type == "Decor"){
             cfgName = "mapDecor"
+        }
+        if(type == "WallDacoration"){
+            cfgName = "mapWallDecor"
         }
         let cfg = AppConst.JSONManager.getItem(cfgName , id)
         let cfgSize = [32,32]
