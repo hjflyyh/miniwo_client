@@ -1,4 +1,4 @@
-import { _decorator, Component, EditBox, Node, WebView } from 'cc';
+import { _decorator, Component, EditBox, Node, WebView, sys } from 'cc';
 import { GoogleAuthManager } from '../../Manager/GoogleAuthManager';
 import { RoleModel } from '../../Model/RoleModel';
 import { network } from '../../Model/RequestData';
@@ -8,6 +8,9 @@ const { ccclass, property } = _decorator;
 
 @ccclass('LoginView')
 export class LoginView extends Component {
+    private readonly STORAGE_IP_KEY = "LOGIN_HTTP_IP_BASE";
+    private readonly STORAGE_URL_KEY = "LOGIN_HTTP_BASE_URL";
+
     @property(WebView)
     public webview: WebView;
 
@@ -24,6 +27,7 @@ export class LoginView extends Component {
     public passwordEditBox
 
     start() {
+        this.initHttpServerFromStorage();
         this.firstNode.active = true
         this.mailNode.active = false
         GoogleAuthManager.GetInstance().init()
@@ -32,6 +36,28 @@ export class LoginView extends Component {
         EventSystem.addListent("GOOGLE_LOGIN_CLOSE" , this.onGooleLoginClose  , this)
 
         EventSystem.addListent("LoginSuccess" , this.onLoginSuccess , this)
+    }
+
+    private initHttpServerFromStorage() {
+        const defaultIp = "192.168.30.109";
+        const defaultUrl = `http://${defaultIp}:8080`;
+        const storage = sys.localStorage;
+        const savedIp = storage.getItem(this.STORAGE_IP_KEY) || "";
+        const savedUrl = storage.getItem(this.STORAGE_URL_KEY) || "";
+
+        HttpManager.ipBase = savedIp.trim() || defaultIp;
+        HttpManager.baseUrl = savedUrl.trim() || `http://${HttpManager.ipBase}:8080`;
+        if (!savedIp || !savedUrl) {
+            HttpManager.ipBase = defaultIp;
+            HttpManager.baseUrl = defaultUrl;
+            this.persistHttpServer();
+        }
+    }
+
+    private persistHttpServer() {
+        const storage = sys.localStorage;
+        storage.setItem(this.STORAGE_IP_KEY, HttpManager.ipBase);
+        storage.setItem(this.STORAGE_URL_KEY, HttpManager.baseUrl);
     }
 
     onGooleLoginClose(){
@@ -79,11 +105,13 @@ export class LoginView extends Component {
     onClickServer1(){
         HttpManager.ipBase = "192.168.30.109"
         HttpManager.baseUrl = "http://" + HttpManager.ipBase + ":8080"
+        this.persistHttpServer();
     }
 
     onClickServer2(){
         HttpManager.ipBase = "192.168.31.102"
         HttpManager.baseUrl = "http://" + HttpManager.ipBase + ":8080"
+        this.persistHttpServer();
     }
 }
 
