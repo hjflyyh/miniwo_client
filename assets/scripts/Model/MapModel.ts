@@ -288,14 +288,15 @@ export class MapModel {
 
             let arr_3: { id: string, oid: string, _type: string, position: string }[] = [];
             value.decor.forEach((value_4, key_4) => {
-                if (value_4.tileType == "Decor") {
+                if (value_4.tileType == "Decor" || value_4.tileType == "WallDacoration" || value_4.tileType == "WallDecor") {
                     const posKey = value_4.position && value_4.position.includes(',')
                         ? value_4.position
                         : (key_4.includes('|') ? key_4.split('|')[0] : key_4);
+                    const decorType = value_4.tileType == "WallDecor" ? "WallDacoration" : value_4.tileType;
                     arr_3.push({
                         id: value_4.tile.name,
                         oid: value_4.tile.name.split('_')[1],
-                        _type: "Decor",
+                        _type: decorType,
                         position: posKey
                     })
                 }

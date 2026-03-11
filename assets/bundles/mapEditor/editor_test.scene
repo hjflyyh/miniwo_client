@@ -26094,6 +26094,9 @@
     "decorList": {
       "__id__": 250
     },
+    "wallDecorList": {
+      "__id__": 488
+    },
     "mapCanvas": {
       "__id__": 718
     },

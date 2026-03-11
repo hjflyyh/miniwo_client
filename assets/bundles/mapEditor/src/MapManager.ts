@@ -104,7 +104,7 @@ export class MapManager extends Component {
         if(type == "Decor"){
             cfgName = "mapDecor"
         }
-        if(type == "WallDacoration"){
+        if(type == "WallDacoration" || type == "WallDecor"){
             cfgName = "mapWallDecor"
         }
         let cfg = AppConst.JSONManager.getItem(cfgName , id)

@@ -54,6 +54,9 @@ export class MapEditorUI extends Component {
     @property(InfiniteList)
     decorList : InfiniteList
 
+    @property(InfiniteList)
+    wallDecorList : InfiniteList
+
     @property(Canvas)
     public mapCanvas : Canvas
 
@@ -135,6 +138,7 @@ export class MapEditorUI extends Component {
         this.wallList.Init(this.wallList.node.getComponent("GroundDataSource") as GroundDataSource)
         this.floorList.Init(this.floorList.node.getComponent("GroundDataSource") as GroundDataSource)
         this.decorList.Init(this.decorList.node.getComponent("GroundDataSource") as GroundDataSource)
+        this.wallDecorList.Init(this.wallDecorList.node.getComponent("GroundDataSource") as GroundDataSource)
     }
 
     update(deltaTime: number) {
