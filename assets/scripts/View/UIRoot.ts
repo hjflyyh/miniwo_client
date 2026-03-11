@@ -37,8 +37,8 @@ export class UIRoot extends Component {
     @property(Prefab)
     npc : Prefab
 
-    public MapEditorWidth = 46;
-    public MapEditorHeight = 88;
+    public MapEditorWidth = 46 * 2;
+    public MapEditorHeight = 88 * 2;
     public MapTag = 0
     public MapEditormCharacters = 4
     public MapEditormItems = 12

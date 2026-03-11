@@ -319,12 +319,33 @@ export class MapModel {
             })
         })
 
-        // 服务器寻路加速：保存可行走网格
+        const walkableCells = this.buildWalkableCells(map);
+
+        map.allMapAssetsData.Walkable = {
+            width: map.mapWidth,
+            height: map.mapHeight,
+            cells: walkableCells,
+        };
+
+        const _data = JSON.stringify(map.allMapAssetsData);
+        sys.localStorage.setItem("MapData", _data);
+        console.log(_data);
+        if(AppConst.SDKManager.isEditMapingWeb){
+            window.parent.postMessage({
+                channel: 'miniwo-map-editor',
+                source: 'miniwo-cocos',
+                type: 'COCOS_SEND_MAP_DATA',
+                data : _data
+            }, '*');
+        }
+    }
+
+    public buildWalkableCells(map: MapEditor): string[] {
         // 规则：
         // 1) 道路（placeholder 非空）可走
         // 2) 房间地板（mapData==1）可走
         // 3) 房间门（openWall）可走
-        // 4) 家具格（mapData==3）不可走，最终覆盖
+        // 4) 家具格（mapData==3）与墙格（mapData==2）不可走，最终覆盖
         const walkableSet = new Set<string>();
 
         // 道路
@@ -344,31 +365,38 @@ export class MapModel {
         }
 
         // 房间门（OpenWall 记录的是门洞锚点）
-        // 若门开在下墙（门锚点 y 大于房间地板最大 y），额外将门上方一格标记为可走。
+        // 门洞锚点可走；门洞相邻的室内地板格也可走（覆盖下墙/侧墙门）。
         map.allHouse.forEach((house) => {
-            let maxFloorY = Number.NEGATIVE_INFINITY;
+            const floorSet = new Set<string>();
             if (house.grid && house.grid.length > 0) {
                 for (let i = 0; i < house.grid.length; i++) {
-                    if (house.grid[i].y > maxFloorY) {
-                        maxFloorY = house.grid[i].y;
-                    }
+                    floorSet.add(`${house.grid[i].x},${house.grid[i].y}`);
                 }
             }
 
             house.openWall.forEach((pos) => {
                 walkableSet.add(`${pos.x},${pos.y}`);
 
-                // 下墙门：再把门上方一格加入可行走
-                if (pos.y > maxFloorY) {
-                    const upY = pos.y - 1;
-                    if (pos.x >= 0 && pos.x < map.mapWidth && upY >= 0 && upY < map.mapHeight) {
-                        walkableSet.add(`${pos.x},${upY}`);
+                const offsets = [
+                    [0, -1],
+                    [0, 1],
+                    [-1, 0],
+                    [1, 0],
+                ];
+                for (let i = 0; i < offsets.length; i++) {
+                    const nx = pos.x + offsets[i][0];
+                    const ny = pos.y + offsets[i][1];
+                    if (nx < 0 || nx >= map.mapWidth || ny < 0 || ny >= map.mapHeight) {
+                        continue;
+                    }
+                    if (floorSet.has(`${nx},${ny}`)) {
+                        walkableSet.add(`${nx},${ny}`);
                     }
                 }
             });
         });
 
-        // 家具阻挡（以 mapData==3 为准）
+        // 家具/墙体阻挡
         for (let x = 0; x < map.mapWidth; x++) {
             for (let y = 0; y < map.mapHeight; y++) {
                 if (map.mapData[x][y] === 3 || map.mapData[x][y] === 2) {
@@ -377,30 +405,14 @@ export class MapModel {
             }
         }
 
-        map.allMapAssetsData.Walkable = {
-            width: map.mapWidth,
-            height: map.mapHeight,
-            cells: Array.from(walkableSet).sort((a, b) => {
-                const ax = parseInt(a.split(',')[0]);
-                const ay = parseInt(a.split(',')[1]);
-                const bx = parseInt(b.split(',')[0]);
-                const by = parseInt(b.split(',')[1]);
-                if (ay !== by) return ay - by;
-                return ax - bx;
-            }),
-        };
-
-        const _data = JSON.stringify(map.allMapAssetsData);
-        sys.localStorage.setItem("MapData", _data);
-        console.log(_data);
-        if(AppConst.SDKManager.isEditMapingWeb){
-            window.parent.postMessage({
-                channel: 'miniwo-map-editor',
-                source: 'miniwo-cocos',
-                type: 'COCOS_SEND_MAP_DATA',
-                data : _data
-            }, '*');
-        }
+        return Array.from(walkableSet).sort((a, b) => {
+            const ax = parseInt(a.split(',')[0]);
+            const ay = parseInt(a.split(',')[1]);
+            const bx = parseInt(b.split(',')[0]);
+            const by = parseInt(b.split(',')[1]);
+            if (ay !== by) return ay - by;
+            return ax - bx;
+        });
     }
 
     lerp(a: number, b: number, t: number): number {

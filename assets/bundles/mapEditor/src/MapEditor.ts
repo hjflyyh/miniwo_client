@@ -80,6 +80,21 @@ export class MapEditor extends Component {
     @property([SpriteFrame])
     public outWallSprites: SpriteFrame[] = [];
 
+    @property
+    public bottomDoorOffsetX: number = 0;
+
+    @property
+    public bottomDoorOffsetY: number = 16;
+
+    @property
+    public sideDoorOffsetX: number = 0;
+
+    @property
+    public sideDoorOffsetY: number = 0;
+
+    @property
+    public sideDoorInsetX: number = 10;
+
     private buildFloorPoints: Vec2[] = [];
     public houseItems: Map<string, { tile: Node, tileType: string, belong?: string }> = new Map();
     public mapItems: Map<string, { id: string, tile: Node, tileType: string, belong?: string }> = new Map();
@@ -333,6 +348,16 @@ export class MapEditor extends Component {
             default:
                 break;
         }
+
+        this.refreshWalkableDebugOverlayIfNeeded();
+    }
+
+    private refreshWalkableDebugOverlayIfNeeded() {
+        if (!this.debugShowWalkable) {
+            return;
+        }
+        const walkableCells = MapModel.getInstance().buildWalkableCells(this);
+        this.renderWalkableDebugOverlay(walkableCells);
     }
 
     hideTileMask() {
@@ -1512,6 +1537,7 @@ export class MapEditor extends Component {
             house.verWalls.forEach((pt, key) => {
                 pt.tile && pt.tile.destroy();
             })
+            this.clearHouseDoors(id);
 
             this.allHouse.delete(id);
             this.deteleItem = null;
@@ -2439,6 +2465,7 @@ export class MapEditor extends Component {
     checkBuildHouse() {
         const allHousePoints: Array<number[][]> = new Array<number[][]>();
         const groups = this.groupByAdjacency(this.buildFloorPoints);
+        let hasBuiltHouse = false;
 
         for (let i = 0; i < groups.length; i++) {
             const element = groups[i];
@@ -2614,6 +2641,7 @@ export class MapEditor extends Component {
                 const downWallCandidates = makeWalls.filter((pt) => pt.dir === 'down');
                 const sideWallCandidates = makeWalls.filter((pt) => pt.dir === 'left' || pt.dir === 'right');
                 const selectedDoorWalls: { pos: Vec2; _node: Node; dir?: string }[] = [];
+                const doorOpenings: { pos: Vec2, dir: string }[] = [];
 
                 if (downWallCandidates.length > 0) {
                     const downDoor = downWallCandidates[Math.floor(Math.random() * downWallCandidates.length)];
@@ -2632,6 +2660,9 @@ export class MapEditor extends Component {
                     if (globalWall) globalWall.tile = null;
                     item._node.destroy();
                     _open.push(item.pos);
+                    if (item.dir === 'down' || item.dir === 'left' || item.dir === 'right') {
+                        doorOpenings.push({ pos: new Vec2(item.pos.x, item.pos.y), dir: item.dir });
+                    }
 
                     const buildingSize = MapModel.getInstance().getBuildingSize(item._node.getComponent(UITransform).contentSize , this);
                     // 更新网格数据
@@ -2668,10 +2699,15 @@ export class MapEditor extends Component {
 
                 let gridCells: GridCellType[][] = this.buildSurround(posVec, openVec);
 
-                this.allHouse.set(`house_${this._houseIndex}`, 
+                const houseName = `house_${this._houseIndex}`;
+                this.allHouse.set(houseName, 
                     { grid: posVec, base: houseItems, decor: new Map(), npc: null, cfgId : parseInt(cfgId) ,
                         horWalls: new Map(), verWalls: new Map(), surround: gridCells, outWall: out, inWall: [], openWall: _open });
+                for (let i = 0; i < doorOpenings.length; i++) {
+                    this.placeDoorForHouse(houseName, doorOpenings[i].pos, doorOpenings[i].dir);
+                }
                 this._houseIndex++;
+                hasBuiltHouse = true;
 
                 house.forEach((pt) => {
                     for (let j = 0; j < this.buildFloorPoints.length; j++) {
@@ -2683,6 +2719,12 @@ export class MapEditor extends Component {
                     }
                 })
             }
+        }
+
+        // 测试态下画完房子后，立即刷新可行走调试层（蓝绿块）
+        if (hasBuiltHouse && this.debugShowWalkable) {
+            const walkableCells = MapModel.getInstance().buildWalkableCells(this);
+            this.renderWalkableDebugOverlay(walkableCells);
         }
     }
 
@@ -2706,6 +2748,53 @@ export class MapEditor extends Component {
             return;
         }
         this.mapData[floorX][floorY] = 1;
+    }
+
+    private getHouseDoorNodeName(houseName: string, doorPos: Vec2, doorSkin: 'door1' | 'cebianDoor1'): string {
+        return `${doorSkin}_${houseName}_${doorPos.x}_${doorPos.y}`;
+    }
+
+    private placeDoorForHouse(houseName: string, doorPos: Vec2, dir: string) {
+        const useSideDoor = dir === 'left' || dir === 'right';
+        const doorSkin: 'door1' | 'cebianDoor1' = useSideDoor ? 'cebianDoor1' : 'door1';
+        const doorName = this.getHouseDoorNodeName(houseName, doorPos, doorSkin);
+        if (this.homeWallTilemap.getChildByName(doorName)) {
+            return;
+        }
+
+        const doorNode = new Node(doorName);
+        const tr = doorNode.addComponent(UITransform);
+        tr.setContentSize(this.tileSize, this.tileSize);
+        doorNode.addComponent(Sprite);
+
+        const loader = doorNode.addComponent(PrefabLoad);
+        loader.bundleName = "mapEditor";
+        loader.isTexture = true;
+        loader.url = useSideDoor ? "door/cebianDoor1/spriteFrame" : "door/door1/spriteFrame";
+
+        const worldPos = MapModel.getInstance().gridToWorld(doorPos, null, this);
+        if (useSideDoor) {
+            const inwardOffsetX = dir === 'left' ? this.sideDoorInsetX : (dir === 'right' ? -this.sideDoorInsetX : 0);
+            doorNode.setPosition(worldPos.x + this.sideDoorOffsetX + inwardOffsetX, worldPos.y + this.sideDoorOffsetY, worldPos.z);
+        } else {
+            doorNode.setPosition(worldPos.x + this.bottomDoorOffsetX, worldPos.y + this.bottomDoorOffsetY, worldPos.z);
+        }
+        this.homeWallTilemap.addChild(doorNode);
+    }
+
+    private clearHouseDoors(houseName: string) {
+        if (!houseName) {
+            return;
+        }
+        const bottomPrefix = `door1_${houseName}_`;
+        const sidePrefix = `cebianDoor1_${houseName}_`;
+        const children = [...this.homeWallTilemap.children];
+        for (let i = 0; i < children.length; i++) {
+            const child = children[i];
+            if (child && (child.name.startsWith(bottomPrefix) || child.name.startsWith(sidePrefix))) {
+                child.destroy();
+            }
+        }
     }
 
     buildOutWall(pos: Vec2, frame: SpriteFrame, dir: string = ''): { pos: Vec2; _node: Node, dir: string } {
@@ -2907,6 +2996,7 @@ export class MapEditor extends Component {
             })
 
             let _open: Vec2[] = [];
+            const doorOpenings: { pos: Vec2, dir: string }[] = [];
             while (makeWalls.length > 0) {
                 const item = makeWalls.shift();
                 const key = `${item.pos.x},${item.pos.y}`;
@@ -2935,6 +3025,9 @@ export class MapEditor extends Component {
                 this.houseItems.get(`${item.pos.x},${item.pos.y}`).tile.destroy();
                 this.houseItems.get(`${item.pos.x},${item.pos.y}`).tile = null;
                 _open.push(item.pos);
+                if (dir === 'down' || dir === 'left' || dir === 'right') {
+                    doorOpenings.push({ pos: new Vec2(item.pos.x, item.pos.y), dir: dir });
+                }
             }
 
 
@@ -2954,6 +3047,9 @@ export class MapEditor extends Component {
 
             const _name = `house_${this._houseIndex}`;
             this.allHouse.set(_name, { grid: posVec, base: houseItems, decor: new Map(), npc: null, horWalls: new Map(), verWalls: new Map(), surround: gridCells, outWall: out, inWall: [], openWall: _open , cfgId : cfgId});
+            for (let i = 0; i < doorOpenings.length; i++) {
+                this.placeDoorForHouse(_name, doorOpenings[i].pos, doorOpenings[i].dir);
+            }
             this._houseIndex++;
             const wallHouse = this.allHouse.get(_name);
 
