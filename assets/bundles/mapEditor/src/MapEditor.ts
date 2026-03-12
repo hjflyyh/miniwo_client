@@ -381,6 +381,12 @@ export class MapEditor extends Component {
     showMaskColor(gridPos: Vec2) {
         const manager = MapManager.GetInstance();
         if (manager.actionStatus == ActionStatus.DECOR) {
+            let cfgId = this.curTileNode.name
+            let mapDecor = AppConst.JSONManager.getItem("mapDecor" , cfgId)
+            if(mapDecor["place_type"] == 6){
+                //如果mapDecor["place_type"] == 6 则判断为房子的门，房子的门只能开在房子下方的墙，一个房子只能有一扇门
+                return
+            }
             if (this.isCurrentWallDacoration()) {
                 if (this.checkPlacementWallDacorationValidity(gridPos)) {
                     this.maskSp.color = new Color('#00FF296A');
@@ -852,6 +858,14 @@ export class MapEditor extends Component {
     }
 
     private buildWallDacoration(gridPos: Vec2) {
+        let cfgId = this.curTileNode.name
+        let mapDecor = AppConst.JSONManager.getItem("mapDecor" , cfgId)
+        if(mapDecor["place_type"] == 6){
+            //如果mapDecor["place_type"] == 6 则判断为房子的门，房子的门只能开在房子下方的墙，一个房子只能有一扇门
+            
+            return
+        }
+
         if (!this.checkPlacementWallDacorationValidity(gridPos)) {
             return;
         }
@@ -3004,47 +3018,47 @@ export class MapEditor extends Component {
                 let _open: Vec2[] = [];
                 const downWallCandidates = makeWalls.filter((pt) => pt.dir === 'down');
                 const sideWallCandidates = makeWalls.filter((pt) => pt.dir === 'left' || pt.dir === 'right');
-                const selectedDoorWalls: { pos: Vec2; _node: Node; dir?: string }[] = [];
-                const doorOpenings: { pos: Vec2, dir: string }[] = [];
+                // const selectedDoorWalls: { pos: Vec2; _node: Node; dir?: string }[] = [];
+                // const doorOpenings: { pos: Vec2, dir: string }[] = [];
 
-                if (downWallCandidates.length > 0) {
-                    const downDoor = downWallCandidates[Math.floor(Math.random() * downWallCandidates.length)];
-                    selectedDoorWalls.push(downDoor);
-                }
-                if (sideWallCandidates.length > 0) {
-                    const sideDoor = sideWallCandidates[Math.floor(Math.random() * sideWallCandidates.length)];
-                    selectedDoorWalls.push(sideDoor);
-                }
+                // if (downWallCandidates.length > 0) {
+                //     const downDoor = downWallCandidates[Math.floor(Math.random() * downWallCandidates.length)];
+                //     selectedDoorWalls.push(downDoor);
+                // }
+                // if (sideWallCandidates.length > 0) {
+                //     const sideDoor = sideWallCandidates[Math.floor(Math.random() * sideWallCandidates.length)];
+                //     selectedDoorWalls.push(sideDoor);
+                // }
 
-                for (let i = 0; i < selectedDoorWalls.length; i++) {
-                    const item = selectedDoorWalls[i];
-                    const localWall = houseItems.get(`${item.pos.x},${item.pos.y}`);
-                    const globalWall = this.houseItems.get(`${item.pos.x},${item.pos.y}`);
-                    if (localWall) localWall.tile = null;
-                    if (globalWall) globalWall.tile = null;
-                    item._node.destroy();
-                    _open.push(item.pos);
-                    if (item.dir === 'down' || item.dir === 'left' || item.dir === 'right') {
-                        doorOpenings.push({ pos: new Vec2(item.pos.x, item.pos.y), dir: item.dir });
-                    }
+                // for (let i = 0; i < selectedDoorWalls.length; i++) {
+                //     const item = selectedDoorWalls[i];
+                //     const localWall = houseItems.get(`${item.pos.x},${item.pos.y}`);
+                //     const globalWall = this.houseItems.get(`${item.pos.x},${item.pos.y}`);
+                //     if (localWall) localWall.tile = null;
+                //     if (globalWall) globalWall.tile = null;
+                //     item._node.destroy();
+                //     _open.push(item.pos);
+                //     if (item.dir === 'down' || item.dir === 'left' || item.dir === 'right') {
+                //         doorOpenings.push({ pos: new Vec2(item.pos.x, item.pos.y), dir: item.dir });
+                //     }
 
-                    const buildingSize = MapModel.getInstance().getBuildingSize(item._node.getComponent(UITransform).contentSize , this);
-                    // 更新网格数据
-                    for (let x = 0; x < buildingSize.x; x++) {
-                        for (let y = 0; y < buildingSize.y; y++) {
-                            const gridX = item.pos.x + x;
-                            const gridY = item.pos.y - y;
-                            // 下边墙开门时，保留室内地板，避免门口被挖掉一格
-                            if (item.dir === 'down' && y > 0) {
-                                this.mapData[gridX][gridY] = 1;
-                            } else {
-                                this.mapData[gridX][gridY] = 0;
-                            }
-                        }
-                    }
-                    // 保险：挖门后强制补回室内门口地板
-                    this.reinforceDoorFloor(item.pos, item.dir);
-                }
+                //     const buildingSize = MapModel.getInstance().getBuildingSize(item._node.getComponent(UITransform).contentSize , this);
+                //     // 更新网格数据
+                //     for (let x = 0; x < buildingSize.x; x++) {
+                //         for (let y = 0; y < buildingSize.y; y++) {
+                //             const gridX = item.pos.x + x;
+                //             const gridY = item.pos.y - y;
+                //             // 下边墙开门时，保留室内地板，避免门口被挖掉一格
+                //             if (item.dir === 'down' && y > 0) {
+                //                 this.mapData[gridX][gridY] = 1;
+                //             } else {
+                //                 this.mapData[gridX][gridY] = 0;
+                //             }
+                //         }
+                //     }
+                //     // 保险：挖门后强制补回室内门口地板
+                //     this.reinforceDoorFloor(item.pos, item.dir);
+                // }
 
 
                 let cfgId 
@@ -3068,9 +3082,9 @@ export class MapEditor extends Component {
                     { grid: posVec, base: houseItems, decor: new Map(), npc: null, cfgId : parseInt(cfgId), floorTileId: String(cfgId), floorRenderNode: null, floorPatchRenderNodes: [],
                         horWalls: new Map(), verWalls: new Map(), surround: gridCells, outWall: out, inWall: [], openWall: _open });
                 this.refreshHouseFloorRenderNode(houseName);
-                for (let i = 0; i < doorOpenings.length; i++) {
-                    this.placeDoorForHouse(houseName, doorOpenings[i].pos, doorOpenings[i].dir);
-                }
+                // for (let i = 0; i < doorOpenings.length; i++) {
+                //     this.placeDoorForHouse(houseName, doorOpenings[i].pos, doorOpenings[i].dir);
+                // }
                 this._houseIndex++;
                 hasBuiltHouse = true;
 
