@@ -224,7 +224,7 @@ export class MapEditorUI extends Component {
         } else if (target.name == 'house') {
             _index = 4;
             this.tileMenu.get('panel_floor').active = true;
-            this.tileMenu.get('panel_wall').active = true;
+            this.tileMenu.get('panel_wall').active = false;
 
             if (MapManager.GetInstance().actionStatus != ActionStatus.FLOOR && MapManager.GetInstance().actionStatus != ActionStatus.WALL) {
                 const floor_1 = this.tileMenu.get('panel_floor').getSiblingIndex();

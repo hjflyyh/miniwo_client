@@ -1,6 +1,7 @@
 import { _decorator, Component, math, Node } from 'cc';
 import { YXCollectionView } from '../../../../plugin/list-3x/yx-collection-view';
 import { CustomGridFlowLayout } from '../../../../plugin/list-3x/custom-grid-flow-layout';
+import { AppConst } from '../../../AppConst';
 const { ccclass, property } = _decorator;
 
 @ccclass('MainFollowList')
@@ -10,6 +11,17 @@ export class MainFollowList extends Component {
      */
     @property(YXCollectionView)
     listComp: YXCollectionView = null
+
+    @property(Node)
+    addBtn : Node = null
+
+    @property(Node)
+    editBtn : Node = null
+
+    @property(Node)
+    oldBtn : Node = null
+
+    isOpenEdit = false
 
     /**
      * 测试数据源
@@ -62,8 +74,28 @@ export class MainFollowList extends Component {
             // 模拟获取数据
             this.receivedData()
         } , 0.1)
+
+        this.setBtns()
     }
   
+    setBtns(){
+        this.editBtn.active = this.isOpenEdit
+        this.oldBtn.active = this.isOpenEdit
+    }
+
+    onClickAddBtn(){
+        if(this.isOpenEdit){
+            this.isOpenEdit = false
+        }else{
+            this.isOpenEdit = true
+        }
+        this.setBtns()
+    }
+
+    onClickEditBtn(){
+        AppConst.PanelManager.openView("res/View/Follow/FollowEditView")
+    }
+
     updateFlowLayout(column: number = this.column, alignment: number = this.alignment) {
         let layout = new CustomGridFlowLayout()
         layout.horizontalSpacing = 10
