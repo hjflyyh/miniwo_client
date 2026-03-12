@@ -302,9 +302,15 @@ export class MapModel {
                 }
             })
 
-            let openWall: { position: string }[] = [];
+            let openWall: { position: string, doorDecorId?: string }[] = [];
             value.openWall.forEach((pos) => {
-                openWall.push({ position: `${pos.x},${pos.y}` });
+                const posKey = `${pos.x},${pos.y}`;
+                const doorDecorId = value.openWallDoorDecorIdMap?.get(posKey) || '';
+                if (doorDecorId) {
+                    openWall.push({ position: posKey, doorDecorId });
+                } else {
+                    openWall.push({ position: posKey });
+                }
             })
 
             let _npc: { id: string, position: string, design: { npcName: string, npcIntro: string } } = null;
