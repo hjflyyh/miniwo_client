@@ -307,7 +307,8 @@ export class MapModel {
                 const posKey = `${pos.x},${pos.y}`;
                 const doorDecorId = value.openWallDoorDecorIdMap?.get(posKey) || '';
                 if (doorDecorId) {
-                    openWall.push({ position: posKey, doorDecorId });
+                    // 兼容后端可能忽略额外字段，资源id同时编码进 position
+                    openWall.push({ position: `${posKey}|${doorDecorId}`, doorDecorId });
                 } else {
                     openWall.push({ position: posKey });
                 }

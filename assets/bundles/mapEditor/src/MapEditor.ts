@@ -906,7 +906,8 @@ export class MapEditor extends Component {
         if (this.curTileNode?.name) {
             house.openWallDoorDecorIdMap.set(`${doorPos.x},${doorPos.y}`, this.curTileNode.name);
         }
-        this.placeDoorForHouse(houseName, doorPos, 'down', this.curTileNode?.name || '');
+        // 编辑安装时，门节点视觉向下补半格，避免当前编辑态显示偏上
+        this.placeDoorForHouse(houseName, doorPos, 'down', this.curTileNode?.name || '', -this.tileSize * 0.5);
     }
 
     private getWallDacorationBelongByArea(gridPos: Vec2, buildingSize: Vec2): string | null {
@@ -3389,7 +3390,7 @@ export class MapEditor extends Component {
         return `${doorSkin}_${houseName}_${doorPos.x}_${doorPos.y}`;
     }
 
-    private placeDoorForHouse(houseName: string, doorPos: Vec2, dir: string, doorDecorId: string = '') {
+    private placeDoorForHouse(houseName: string, doorPos: Vec2, dir: string, doorDecorId: string = '', extraYOffset: number = 0) {
         const useSideDoor = dir === 'left' || dir === 'right';
         const doorSkin: 'door1' | 'cebianDoor1' = useSideDoor ? 'cebianDoor1' : 'door1';
         const doorName = this.getHouseDoorNodeName(houseName, doorPos, doorSkin);
@@ -3416,9 +3417,9 @@ export class MapEditor extends Component {
         const worldPos = MapModel.getInstance().gridToWorld(doorPos, null, this);
         if (useSideDoor) {
             const inwardOffsetX = dir === 'left' ? this.sideDoorInsetX : (dir === 'right' ? -this.sideDoorInsetX : 0);
-            doorNode.setPosition(worldPos.x + this.sideDoorOffsetX + inwardOffsetX, worldPos.y + this.sideDoorOffsetY, worldPos.z);
+            doorNode.setPosition(worldPos.x + this.sideDoorOffsetX + inwardOffsetX, worldPos.y + this.sideDoorOffsetY + extraYOffset, worldPos.z);
         } else {
-            doorNode.setPosition(worldPos.x + this.bottomDoorOffsetX, worldPos.y + this.bottomDoorOffsetY, worldPos.z);
+            doorNode.setPosition(worldPos.x + this.bottomDoorOffsetX, worldPos.y + this.bottomDoorOffsetY + extraYOffset, worldPos.z);
         }
         this.homeWallTilemap.addChild(doorNode);
     }
@@ -3525,10 +3526,13 @@ export class MapEditor extends Component {
                 }
             }
 
-            let makeWalls: { pos: Vec2 }[] = [];
+            let makeWalls: { pos: Vec2, doorDecorId?: string }[] = [];
             element.OpenWall.forEach((pos) => {
-                const xcx = new Vec2(parseInt(pos.position.split(',')[0]), parseInt(pos.position.split(',')[1]))
-                makeWalls.push({ pos: xcx });
+                const rawPos = String((pos as any).position || '');
+                const posPart = rawPos.includes('|') ? rawPos.split('|')[0] : rawPos;
+                const encodedDoorDecorId = rawPos.includes('|') ? rawPos.split('|')[1] : '';
+                const xcx = new Vec2(parseInt(posPart.split(',')[0]), parseInt(posPart.split(',')[1]))
+                makeWalls.push({ pos: xcx, doorDecorId: (pos as any).doorDecorId || encodedDoorDecorId || '' });
             })
 
             const outWallPoints: { pos: Vec2; _node: Node, dir?: string }[] = [];
@@ -3643,7 +3647,8 @@ export class MapEditor extends Component {
             })
 
             let _open: Vec2[] = [];
-            const doorOpenings: { pos: Vec2, dir: string }[] = [];
+            const doorOpenings: { pos: Vec2, dir: string, doorDecorId?: string }[] = [];
+            const openWallDoorDecorIdMap = new Map<string, string>();
             while (makeWalls.length > 0) {
                 const item = makeWalls.shift();
                 const key = `${item.pos.x},${item.pos.y}`;
@@ -3672,8 +3677,11 @@ export class MapEditor extends Component {
                 this.houseItems.get(`${item.pos.x},${item.pos.y}`).tile.destroy();
                 this.houseItems.get(`${item.pos.x},${item.pos.y}`).tile = null;
                 _open.push(item.pos);
+                if (item.doorDecorId) {
+                    openWallDoorDecorIdMap.set(`${item.pos.x},${item.pos.y}`, item.doorDecorId);
+                }
                 if (dir === 'down' || dir === 'left' || dir === 'right') {
-                    doorOpenings.push({ pos: new Vec2(item.pos.x, item.pos.y), dir: dir });
+                    doorOpenings.push({ pos: new Vec2(item.pos.x, item.pos.y), dir: dir, doorDecorId: item.doorDecorId || '' });
                 }
             }
 
@@ -3695,11 +3703,11 @@ export class MapEditor extends Component {
             const _name = `house_${this._houseIndex}`;
             this.allHouse.set(_name, {
                 grid: posVec, base: houseItems, decor: new Map(), npc: null, horWalls: new Map(), verWalls: new Map(),
-                surround: gridCells, outWall: out, inWall: [], openWall: _open, cfgId: cfgId, floorTileId: String(cfgId), floorRenderNode: null, floorPatchRenderNodes: []
+                surround: gridCells, outWall: out, inWall: [], openWall: _open, openWallDoorDecorIdMap: openWallDoorDecorIdMap, cfgId: cfgId, floorTileId: String(cfgId), floorRenderNode: null, floorPatchRenderNodes: []
             });
             this.refreshHouseFloorRenderNode(_name);
             for (let i = 0; i < doorOpenings.length; i++) {
-                this.placeDoorForHouse(_name, doorOpenings[i].pos, doorOpenings[i].dir);
+                this.placeDoorForHouse(_name, doorOpenings[i].pos, doorOpenings[i].dir, doorOpenings[i].doorDecorId || '');
             }
             this._houseIndex++;
             const wallHouse = this.allHouse.get(_name);
