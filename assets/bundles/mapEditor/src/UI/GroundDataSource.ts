@@ -33,7 +33,7 @@ export class GroundDataSource extends Component implements IFDataSource {
     }
 
     GetCellNumber(): number {
-        let funcTyppe = {4:0}
+        let funcTyppe = {4:0 , 13:1 , 14:2}
         this.list = []
         let cfg_name = ""
         if(this.tileType == 0){
@@ -42,7 +42,7 @@ export class GroundDataSource extends Component implements IFDataSource {
             cfg_name = "mapFloor"
         }else if(this.tileType == 3){
             cfg_name = "mapOutsideRenovation"
-        }else if(this.tileType == 4){
+        }else if(this.tileType == 4 || this.tileType == 13 || this.tileType == 14){
             cfg_name = "mapDecor"
         }else if(this.tileType == 12){
             cfg_name = "mapWallDecor"
@@ -100,6 +100,10 @@ export class GroundDataSource extends Component implements IFDataSource {
             return {dataIndex : dataIndex , bundle : "mapEditor" , list : this.list , type : "Decor"}
         }else if(this.tileType == 12){
             return {dataIndex : dataIndex , bundle : "mapEditor" , list : this.list , type : "WallDacoration"}
+        }else if(this.tileType == 13){
+            return {dataIndex : dataIndex , bundle : "mapEditor" , list : this.list , type : "DecorOrnament"}
+        }else if(this.tileType == 14){
+            return {dataIndex : dataIndex , bundle : "mapEditor" , list : this.list , type : "Appliance"}
         }
         // return {dataIndex : dataIndex , bundle : "mapEditor" , list : this.list , type : "Ground"}
     }

@@ -101,7 +101,7 @@ export class MapManager extends Component {
         if(type == "Floor"){
             cfgName = "mapFloor"
         }
-        if(type == "Decor"){
+        if(type == "Decor" || type == "DecorOrnament" || type == "Appliance"){
             cfgName = "mapDecor"
         }
         if(type == "WallDacoration" || type == "WallDecor"){
