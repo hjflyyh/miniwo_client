@@ -33,6 +33,7 @@ export class GroundDataSource extends Component implements IFDataSource {
     }
 
     GetCellNumber(): number {
+        let funcTyppe = {4:0}
         this.list = []
         let cfg_name = ""
         if(this.tileType == 0){
@@ -61,9 +62,18 @@ export class GroundDataSource extends Component implements IFDataSource {
                 }
             }
             if(isAdd){
-                this.list.push({
-                    id : m
-                })
+                if(funcTyppe[this.tileType] != null){
+                    //配置表的type字段要和funcTyppe匹配
+                    if(parseInt(mapGroundAll[m].type) == funcTyppe[this.tileType]){
+                        this.list.push({
+                            id : m
+                        })
+                    }
+                }else{
+                    this.list.push({
+                        id : m
+                    })
+                }
             }
         }
         return this.list.length
