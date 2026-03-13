@@ -1,4 +1,4 @@
-import { Sprite, UITransform , Animation, Vec2, Size, Vec3, sys, RenderTexture, find} from "cc";
+import { Sprite, UITransform , Animation, Vec2, Size, Vec3, sys, RenderTexture, director, view} from "cc";
 import { AppConst } from "../AppConst";
 import { network } from "./RequestData";
 import { MapEditor } from "../../bundles/mapEditor/src/MapEditor";
@@ -340,17 +340,44 @@ export class MapModel {
         sys.localStorage.setItem("MapData", _data);
         console.log(_data);
 
-        const _frame = CaptureUtils.capture(find("Canvas"), { x: 0, y: 0, width: 876, height: 1446 });
-        CaptureUtils.captureAndUpload(_frame.texture as RenderTexture, (base64Image) => {
-            console.log(base64Image)
-        })
+
+        let base64Image = '';
+        // 截图改为直接抓主相机输出，保证与 mainCamera 看到的画面一致（中心、朝向、可见层）
+        try {
+            const visible = view.getVisibleSize();
+            const rt = new RenderTexture();
+            rt.reset({
+                width: Math.max(1, Math.floor(visible.width)),
+                height: Math.max(1, Math.floor(visible.height)),
+            });
+            const prevTarget = map.mainCamera.targetTexture;
+            map.mainCamera.targetTexture = rt;
+            director.root.frameMove(0);
+            map.mainCamera.targetTexture = prevTarget;
+
+            CaptureUtils.captureScreenToBlob(rt, (blob) => {
+                if (!blob) return;
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    base64Image = String(reader.result || '');
+                    if (base64Image) {
+                        console.log(base64Image)
+                        // sys.localStorage.setItem("MapDataPreview", base64Image);
+                    }
+                };
+                reader.readAsDataURL(blob);
+            });
+        } catch (e) {
+            console.warn("[saveMapData] capture preview failed", e);
+        }
 
         if(AppConst.SDKManager.isEditMapingWeb){
             window.parent.postMessage({
                 channel: 'miniwo-map-editor',
                 source: 'miniwo-cocos',
                 type: 'COCOS_SEND_MAP_DATA',
-                data : _data
+                data : _data,
+                base64Image : base64Image
             }, '*');
         }
     }
