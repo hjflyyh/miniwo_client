@@ -28,6 +28,10 @@ export class NpcHeadNode extends Component {
     @property
     public debugLogIntervalMs = 300;
 
+    // 点击头像时，相机平移速度（世界单位/秒）
+    @property
+    public cameraMoveSpeed = 3600;
+
     private mapCamera: Camera | null = null;
     private parentUITransform: UITransform | null = null;
     private tmpWorld = new Vec3();
@@ -166,6 +170,41 @@ export class NpcHeadNode extends Component {
             const rad = Math.atan2(wy, wx);
             this.arrowNode.angle = (rad * 180) / Math.PI;
         }
+    }
+
+    OnClickHead(){
+        const editor = MapManager.GetInstance()?.getMapEditor?.();
+        if (!editor || !this.npcNode || !this.npcNode.isValid) {
+            return;
+        }
+
+        this.npcNode.getWorldPosition(this.tmpWorld);
+        const curCamPos = editor.mainCamera.node.getPosition();
+        const cameraParent = editor.mainCamera.node.parent;
+        const target = new Vec3(0, 0, curCamPos.z);
+        if (cameraParent) {
+            const parentUI = cameraParent.getComponent(UITransform);
+            if (parentUI) {
+                const local = parentUI.convertToNodeSpaceAR(this.tmpWorld);
+                target.set(local.x, local.y, curCamPos.z);
+            } else {
+                target.set(this.tmpWorld.x, this.tmpWorld.y, curCamPos.z);
+            }
+        } else {
+            target.set(this.tmpWorld.x, this.tmpWorld.y, curCamPos.z);
+        }
+
+        // 保证目标在相机边界内
+        target.x = Math.max(editor.minXCamera, Math.min(editor.maxXCamera, target.x));
+        target.y = Math.max(editor.minYCamera, Math.min(editor.maxYCamera, target.y));
+
+        // 按“速度=距离/时间”换算平滑时间
+        const dist = Math.hypot(target.x - curCamPos.x, target.y - curCamPos.y);
+        const speed = Math.max(1, this.cameraMoveSpeed);
+        const duration = Math.max(0.08, Math.min(1.2, dist / speed));
+
+        editor.smoothTime = duration;
+        editor.targetPos = target;
     }
 
     private isInMainCameraViewByWorldRect(worldPos: Vec3): boolean {

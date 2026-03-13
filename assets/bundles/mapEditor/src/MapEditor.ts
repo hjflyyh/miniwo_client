@@ -492,6 +492,14 @@ export class MapEditor extends Component {
             }
         }
 
+        //进入地图，根据地图显示内容
+        if(MapModel.getInstance().showEditMapType == 0){
+            this.map_id = MapModel.getInstance().map_detail.id
+            let data = JSON.parse(MapModel.getInstance().map_detail.map_data)
+            MapLoadMap.loadMapData(data , this)
+            return
+        }
+
         //编辑器进入，如果有编辑数据，显示之前编辑的内容
         if (this.map_data_test) {
             const localMapData = sys.localStorage.getItem("MapData");
@@ -510,13 +518,6 @@ export class MapEditor extends Component {
         //编辑器进入，如果有编辑数据，显示之前编辑的内容
         if(AppConst.SDKManager.isEditMapingWeb && MapModel.getInstance().mapEditData != null && MapModel.getInstance().mapEditData != ""){
             MapLoadMap.loadMapData(JSON.parse(MapModel.getInstance().mapEditData) , this)
-        }
-
-        //进入地图，根据地图显示内容
-        if(MapModel.getInstance().showEditMapType == 0){
-            this.map_id = MapModel.getInstance().map_detail.id
-            let data = JSON.parse(MapModel.getInstance().map_detail.map_data)
-            MapLoadMap.loadMapData(data , this)
         }
     }
 

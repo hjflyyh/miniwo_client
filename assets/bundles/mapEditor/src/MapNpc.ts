@@ -135,6 +135,8 @@ export class MapNpc extends Component {
     private pendingNearLastMs = 0;
     private movedByQueueSyncThisFrame = false;
     private lastSegVelocity = new Vec2(0, 0); // 像素/秒
+    private useHorizontalMoveAnim = false;
+    private facingScaleX = 1;
 
     start() {
         this.spineNode = this.node.getChildByName('spine')!;
@@ -278,6 +280,7 @@ export class MapNpc extends Component {
                 // 长时间无包视为停稳，避免角色持续“空走”
                 this.lastSegVelocity.set(0, 0);
             }
+            this.updateMoveFacingByTarget(target);
 
             const dist = Math.hypot(target.x - cur.x, target.y - cur.y);
             const catchupSpeed = Math.min(this.maxSpeedPxPerSec, Math.max(this.baseSpeedPxPerSec, dist * 2));
@@ -298,6 +301,7 @@ export class MapNpc extends Component {
             this.currentSample.pos.y + (next.pos.y - this.currentSample.pos.y) * alpha,
             0
         );
+        this.updateMoveFacingByTarget(target);
         const segDist = Math.hypot(next.pos.x - this.currentSample.pos.x, next.pos.y - this.currentSample.pos.y);
         // 按“目标时间戳与本地时间”的差值动态调速：落后越多越快，超前则更慢
         const lagMs = nowMs - next.ts;
@@ -479,22 +483,43 @@ export class MapNpc extends Component {
     }
 
     private setState(next: NpcState, force = false) {
-        if (!force && this.state === next) return;
+        const prevState = this.state;
+        if (!force && prevState === next && next !== NpcState.Move) return;
         this.state = next;
 
         if (!this.spine) return;
-        const anim = next === NpcState.Move ? 'walk' : 'idle';
+        const anim = next === NpcState.Move
+            ? (this.useHorizontalMoveAnim ? 'c walk' : 'walk')
+            : 'idle';
         try {
             // 可选混合，减少切换生硬感
             if ((this.spine as any).setMix) {
                 this.spine.setMix('idle', 'walk', 0.12);
                 this.spine.setMix('walk', 'idle', 0.16);
             }
-            if ((this.spine as any).animation !== anim || force) {
+            if ((this.spine as any).animation !== anim || force || prevState !== next) {
                 this.spine.setAnimation(0, anim, true);
             }
         } catch (e) {
             // 动画名不存在时防御
+        }
+    }
+
+    private updateMoveFacingByTarget(target: Vec3) {
+        const cur = this.node.position;
+        const dx = target.x - cur.x;
+        const dy = target.y - cur.y;
+        if (Math.abs(dx) < 0.001 && Math.abs(dy) < 0.001) {
+            return;
+        }
+        const horizontal = Math.abs(dx) >= Math.abs(dy);
+        this.useHorizontalMoveAnim = horizontal;
+        if (horizontal) {
+            // c walk 默认朝左，右移时做镜像
+            this.facingScaleX = dx >= 0 ? -1 : 1;
+            this.node.setScale(this.facingScaleX, 1, 1);
+        } else {
+            this.node.setScale(1, 1, 1);
         }
     }
 }
