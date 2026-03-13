@@ -1,0 +1,26 @@
+{
+  "1": {
+    "name_cn": "农场猪",
+    "icon": "animal/icon/farm_pig",
+    "image": "animal/image/farm_pig",
+    "tags": "",
+    "map_size": "58#37",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0"
+  },
+  "2": {
+    "name_cn": "白鸡",
+    "icon": "animal/icon/white_rooster",
+    "image": "animal/image/white_rooster",
+    "tags": "",
+    "map_size": "28#34",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0"
+  }
+}

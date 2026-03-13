@@ -2,7 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "919c4a2c-99c9-4570-bde4-3e2e5b460153",
+  "uuid": "8c877e96-4335-410a-b6a3-18c5ba4e19df",
   "files": [
     ".json",
     ".png"
@@ -10,14 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "919c4a2c-99c9-4570-bde4-3e2e5b460153@6c48a",
-      "displayName": "Deer Pattern Door - Green ",
+      "uuid": "8c877e96-4335-410a-b6a3-18c5ba4e19df@6c48a",
+      "displayName": "grey_stone04",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "919c4a2c-99c9-4570-bde4-3e2e5b460153",
+        "imageUuidOrDatabaseUri": "8c877e96-4335-410a-b6a3-18c5ba4e19df",
         "isUuid": true,
         "visible": false,
         "minfilter": "linear",
@@ -34,8 +34,8 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "919c4a2c-99c9-4570-bde4-3e2e5b460153@f9941",
-      "displayName": "Deer Pattern Door - Green ",
+      "uuid": "8c877e96-4335-410a-b6a3-18c5ba4e19df@f9941",
+      "displayName": "grey_stone04",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
@@ -45,10 +45,10 @@
         "offsetY": 0,
         "trimX": 0,
         "trimY": 0,
-        "width": 32,
-        "height": 64,
-        "rawWidth": 32,
-        "rawHeight": 64,
+        "width": 20,
+        "height": 15,
+        "rawWidth": 20,
+        "rawHeight": 15,
         "borderTop": 0,
         "borderBottom": 0,
         "borderLeft": 0,
@@ -60,17 +60,17 @@
         "meshType": 0,
         "vertices": {
           "rawPosition": [
-            -16,
-            -32,
+            -10,
+            -7.5,
             0,
-            16,
-            -32,
+            10,
+            -7.5,
             0,
-            -16,
-            32,
+            -10,
+            7.5,
             0,
-            16,
-            32,
+            10,
+            7.5,
             0
           ],
           "indexes": [
@@ -83,12 +83,12 @@
           ],
           "uv": [
             0,
-            64,
-            32,
-            64,
+            15,
+            20,
+            15,
             0,
             0,
-            32,
+            20,
             0
           ],
           "nuv": [
@@ -102,18 +102,18 @@
             1
           ],
           "minPos": [
-            -16,
-            -32,
+            -10,
+            -7.5,
             0
           ],
           "maxPos": [
-            16,
-            32,
+            10,
+            7.5,
             0
           ]
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "919c4a2c-99c9-4570-bde4-3e2e5b460153@6c48a",
+        "imageUuidOrDatabaseUri": "8c877e96-4335-410a-b6a3-18c5ba4e19df@6c48a",
         "atlasUuid": "",
         "trimType": "auto"
       },
@@ -128,7 +128,7 @@
   "userData": {
     "type": "sprite-frame",
     "fixAlphaTransparencyArtifacts": false,
-    "hasAlpha": false,
-    "redirect": "919c4a2c-99c9-4570-bde4-3e2e5b460153@6c48a"
+    "hasAlpha": true,
+    "redirect": "8c877e96-4335-410a-b6a3-18c5ba4e19df@6c48a"
   }
 }

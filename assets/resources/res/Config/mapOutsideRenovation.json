@@ -142,5 +142,77 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0"
+  },
+  "13": {
+    "name_cn": "农场稻草人",
+    "icon": "plant/icon/farm_scarecrow",
+    "image": "plant/image/farm_scarecrow",
+    "tags": "",
+    "map_size": "51#69",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0"
+  },
+  "14": {
+    "name_cn": "园艺洒水壶",
+    "icon": "plant/icon/garden_watering_pot",
+    "image": "plant/image/garden_watering_pot",
+    "tags": "",
+    "map_size": "37#29",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0"
+  },
+  "15": {
+    "name_cn": "椒盐卷饼餐车",
+    "icon": "plant/icon/pretzel_food_cart",
+    "image": "plant/image/pretzel_food_cart",
+    "tags": "",
+    "map_size": "61#85",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0"
+  },
+  "16": {
+    "name_cn": "玫瑰窗台花箱",
+    "icon": "plant/icon/rose_window_box",
+    "image": "plant/image/rose_window_box",
+    "tags": "",
+    "map_size": "86#51",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0"
+  },
+  "17": {
+    "name_cn": "街道红绿灯",
+    "icon": "plant/icon/traffic_light_pole",
+    "image": "plant/image/traffic_light_pole",
+    "tags": "",
+    "map_size": "24#68",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0"
+  },
+  "18": {
+    "name_cn": "双人咖啡桌",
+    "icon": "plant/icon/two_seat_coffee_table",
+    "image": "plant/image/two_seat_coffee_table",
+    "tags": "",
+    "map_size": "48#49",
+    "img_size": "1",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0"
   }
 }

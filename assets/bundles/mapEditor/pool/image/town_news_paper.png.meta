@@ -2,7 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "d8381ce7-e40c-417b-b415-d1460b84fd93",
+  "uuid": "0aa574ff-0c08-459b-a3ba-79629696ca91",
   "files": [
     ".json",
     ".png"
@@ -10,14 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "d8381ce7-e40c-417b-b415-d1460b84fd93@6c48a",
-      "displayName": "Black Door ",
+      "uuid": "0aa574ff-0c08-459b-a3ba-79629696ca91@6c48a",
+      "displayName": "town_news_paper",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "d8381ce7-e40c-417b-b415-d1460b84fd93",
+        "imageUuidOrDatabaseUri": "0aa574ff-0c08-459b-a3ba-79629696ca91",
         "isUuid": true,
         "visible": false,
         "minfilter": "linear",
@@ -34,8 +34,8 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "d8381ce7-e40c-417b-b415-d1460b84fd93@f9941",
-      "displayName": "Black Door ",
+      "uuid": "0aa574ff-0c08-459b-a3ba-79629696ca91@f9941",
+      "displayName": "town_news_paper",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
@@ -45,10 +45,10 @@
         "offsetY": 0,
         "trimX": 0,
         "trimY": 0,
-        "width": 32,
-        "height": 64,
-        "rawWidth": 32,
-        "rawHeight": 64,
+        "width": 37,
+        "height": 33,
+        "rawWidth": 37,
+        "rawHeight": 33,
         "borderTop": 0,
         "borderBottom": 0,
         "borderLeft": 0,
@@ -60,17 +60,17 @@
         "meshType": 0,
         "vertices": {
           "rawPosition": [
-            -16,
-            -32,
+            -18.5,
+            -16.5,
             0,
-            16,
-            -32,
+            18.5,
+            -16.5,
             0,
-            -16,
-            32,
+            -18.5,
+            16.5,
             0,
-            16,
-            32,
+            18.5,
+            16.5,
             0
           ],
           "indexes": [
@@ -83,12 +83,12 @@
           ],
           "uv": [
             0,
-            64,
-            32,
-            64,
+            33,
+            37,
+            33,
             0,
             0,
-            32,
+            37,
             0
           ],
           "nuv": [
@@ -102,18 +102,18 @@
             1
           ],
           "minPos": [
-            -16,
-            -32,
+            -18.5,
+            -16.5,
             0
           ],
           "maxPos": [
-            16,
-            32,
+            18.5,
+            16.5,
             0
           ]
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "d8381ce7-e40c-417b-b415-d1460b84fd93@6c48a",
+        "imageUuidOrDatabaseUri": "0aa574ff-0c08-459b-a3ba-79629696ca91@6c48a",
         "atlasUuid": "",
         "trimType": "auto"
       },
@@ -129,6 +129,6 @@
     "type": "sprite-frame",
     "fixAlphaTransparencyArtifacts": false,
     "hasAlpha": true,
-    "redirect": "d8381ce7-e40c-417b-b415-d1460b84fd93@6c48a"
+    "redirect": "0aa574ff-0c08-459b-a3ba-79629696ca91@6c48a"
   }
 }
