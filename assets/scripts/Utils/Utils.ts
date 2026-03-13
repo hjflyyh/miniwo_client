@@ -1,7 +1,27 @@
-import { Color, instantiate, v2, Vec2, Vec3 } from "cc";
+import { assetManager, Color, ImageAsset, instantiate, Sprite, SpriteFrame, Texture2D, v2, Vec2, Vec3 } from "cc";
 import { PrefabLoad } from "./PrefabLoad";
+import { HttpManager } from "../Manager/HttpManager";
 
 export class Utils{
+
+    public static loadCover(url : string , sprite : Sprite , width = null , height = null){
+        if(!url.includes('http')){
+            url = HttpManager.baseUrl + url
+        }
+        assetManager.loadRemote<ImageAsset>(url , (err , ImageAsset) => {
+            if(err || !ImageAsset){
+                console.log("图片下载失败" , err)
+                return
+            }
+            const tex = new Texture2D()
+            tex.image = ImageAsset
+
+            const sf = new SpriteFrame()
+            sf.texture = tex
+            sprite.spriteFrame = sf
+        })
+    }
+
     public static randomNum(minNum : number , maxNum: number){
         let num = 1;
         switch(arguments.length){

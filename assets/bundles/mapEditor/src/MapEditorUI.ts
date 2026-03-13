@@ -376,7 +376,30 @@ export class MapEditorUI extends Component {
     // 发送地图数据保存
     sendSaveMapData() {
         const editor = MapManager.GetInstance().getMapEditor();
-        MapModel.getInstance().saveMapData(editor);
+        const visible = view.getVisibleSize();
+        const rt = new RenderTexture();
+        rt.reset({
+            width: Math.max(1, Math.floor(visible.width)),
+            height: Math.max(1, Math.floor(visible.height)),
+        });
+        const prevTarget = editor.mainCamera.targetTexture;
+        editor.mainCamera.targetTexture = rt;
+        director.root.frameMove(0);
+        editor.mainCamera.targetTexture = prevTarget;
+        
+        CaptureUtils.captureScreenToBlob(rt, (blob) => {
+            if (!blob) return;
+            const reader = new FileReader();
+            reader.onloadend = () => {
+            let base64Image = String(reader.result || '');
+                if (base64Image) {
+                    console.log(base64Image)
+                    // sys.localStorage.setItem("MapDataPreview", base64Image);
+                    MapModel.getInstance().saveMapData(editor , base64Image);
+                }
+            };
+            reader.readAsDataURL(blob);
+        });        
     }
 
     // 发送剧场信息
