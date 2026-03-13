@@ -1,4 +1,4 @@
-import { _decorator, Animation, Camera, Color, Component, director, EventMouse, EventTouch, find, Graphics, Input, input, instantiate, Label, Layers, log, math, Node, Prefab, RenderTexture, size, Size, Sprite, SpriteFrame, sys, Texture2D, tween, UITransform, v2, Vec2, Vec3, view } from 'cc';
+import { _decorator, Animation, Camera, CCInteger, Color, Component, director, EventMouse, EventTouch, find, Graphics, Input, input, instantiate, Label, Layers, log, math, Node, Prefab, RenderTexture, size, Size, Sprite, SpriteFrame, sys, Texture2D, tween, UITransform, v2, Vec2, Vec3, view } from 'cc';
 import { TileObjectData } from './TileItem';
 import { ActionStatus, MapManager } from './MapManager';
 import {DisplayTitle} from "db://assets/scripts/View/Utils/DisplayTitle";
@@ -188,6 +188,8 @@ export class MapEditor extends Component {
     
 
     isDragging: boolean = false;
+
+    
     minXCamera: number = 0;
     maxXCamera: number = 0;
     minYCamera: number = 0;
@@ -3477,7 +3479,10 @@ export class MapEditor extends Component {
         return null;
     }
 
+    @property(CCInteger)
     public minOrthoSize: number = 420;
+
+    @property(CCInteger)
     public maxOrthoSize: number = 1100;
     public wheelZoomStep: number = 60;
 

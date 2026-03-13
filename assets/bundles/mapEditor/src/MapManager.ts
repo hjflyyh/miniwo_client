@@ -123,7 +123,7 @@ export class MapManager extends Component {
         let spriteNode = new Node()
         spriteNode.addComponent(Sprite)
         if(cfg["img_size"] != null){
-            spriteNode.scale = new Vec3(parseInt(cfg["img_size"]) , parseInt(cfg["img_size"]) , parseInt(cfg["img_size"]))
+            spriteNode.scale = new Vec3(parseFloat(cfg["img_size"]) , parseFloat(cfg["img_size"]) , parseFloat(cfg["img_size"]))
         }
 
         if(cfg["img_pos"] != null){
