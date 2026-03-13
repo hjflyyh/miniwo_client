@@ -1,4 +1,4 @@
-import { assetManager, Color, ImageAsset, instantiate, Sprite, SpriteFrame, Texture2D, v2, Vec2, Vec3 } from "cc";
+import { assetManager, Color, ImageAsset, instantiate, Sprite, SpriteFrame, Texture2D, UITransform, v2, Vec2, Vec3 } from "cc";
 import { PrefabLoad } from "./PrefabLoad";
 import { HttpManager } from "../Manager/HttpManager";
 
@@ -19,6 +19,27 @@ export class Utils{
             const sf = new SpriteFrame()
             sf.texture = tex
             sprite.spriteFrame = sf
+
+
+            const ui = sprite.getComponent(UITransform) || sprite.node.getComponent(UITransform);
+            if (!ui) return;
+            // 1) 目标框：参数为 null 的维度保持不变
+            const targetW = width == null ? ui.width : width;
+            const targetH = height == null ? ui.height : height;
+            // 2) 原图尺寸
+            const srcW = ImageAsset.width;
+            const srcH = ImageAsset.height;
+            if (srcW <= 0 || srcH <= 0 || targetW <= 0 || targetH <= 0) return;
+            // 3) cover 等比填充：取较大缩放比
+            //    - 大图会缩小
+            //    - 小图会放大
+            //    - 至少一边刚好撑满，另一边 >= 目标
+            const scale = Math.max(targetW / srcW, targetH / srcH);
+            const finalW = srcW * scale;
+            const finalH = srcH * scale;
+            // 4) 仅改图片显示尺寸，不改目标框定义
+            //    如果你希望目标框固定 + 裁切，请确保父节点有 Mask
+            ui.setContentSize(finalW, finalH);
         })
     }
 

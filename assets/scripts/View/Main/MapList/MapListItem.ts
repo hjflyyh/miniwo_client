@@ -32,7 +32,7 @@ export class MapListItem extends Component implements InfiniteCell{
         this.mapName.string = mapData.map_name
         this.mapInfo.string = mapData.map_worldview
 
-        Utils.loadCover(mapData["map_cover_url"], this.banner);
+        Utils.loadCover(mapData["map_cover_url"], this.banner , 850 , 1420);
     }
 
     OnClick(){
