@@ -1,7 +1,8 @@
-import { Sprite, UITransform , Animation, Vec2, Size, Vec3, sys} from "cc";
+import { Sprite, UITransform , Animation, Vec2, Size, Vec3, sys, RenderTexture, find} from "cc";
 import { AppConst } from "../AppConst";
 import { network } from "./RequestData";
 import { MapEditor } from "../../bundles/mapEditor/src/MapEditor";
+import { CaptureUtils } from "../../bundles/mapEditor/src/CaptureUtils";
 
 export class MapModel {
     private static _instance: MapModel = null;
@@ -338,6 +339,12 @@ export class MapModel {
         const _data = JSON.stringify(map.allMapAssetsData);
         sys.localStorage.setItem("MapData", _data);
         console.log(_data);
+
+        const _frame = CaptureUtils.capture(find("Canvas"), { x: 0, y: 0, width: 876, height: 1446 });
+        CaptureUtils.captureAndUpload(_frame.texture as RenderTexture, (base64Image) => {
+            console.log(base64Image)
+        })
+
         if(AppConst.SDKManager.isEditMapingWeb){
             window.parent.postMessage({
                 channel: 'miniwo-map-editor',
