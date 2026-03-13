@@ -4950,7 +4950,7 @@
     "arrowNode": null,
     "debugLog": false,
     "debugLogIntervalMs": 300,
-    "cameraMoveSpeed": 4200,
+    "cameraMoveSpeed": 3600,
     "_id": "c1I6EyAPVDJ4mVgabZG3Rp"
   },
   {
