@@ -40,7 +40,7 @@ export class TileIconLayout extends Component implements InfiniteCell {
                     let cfg = AppConst.JSONManager.getItem("mapFloor" , data["list"][startIndex + s].id)
                     prefab.url = cfg["icon"]  + "/spriteFrame";
                 }
-                if(data["type"] == "Decor"){
+                if(data["type"] == "Decor" || data["type"] == "DecorOrnament" || data["type"] == "Appliance"){
                     let cfg = AppConst.JSONManager.getItem("mapDecor" , data["list"][startIndex + s].id)
                     prefab.url = cfg["icon"]  + "/spriteFrame";
                 }

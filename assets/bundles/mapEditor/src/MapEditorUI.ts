@@ -57,6 +57,12 @@ export class MapEditorUI extends Component {
     @property(InfiniteList)
     wallDecorList : InfiniteList
 
+    @property(InfiniteList)
+    decorOrnament : InfiniteList
+
+    @property(InfiniteList)
+    decorAppliance : InfiniteList
+
     @property(Canvas)
     public mapCanvas : Canvas
 
@@ -139,6 +145,8 @@ export class MapEditorUI extends Component {
         this.floorList.Init(this.floorList.node.getComponent("GroundDataSource") as GroundDataSource)
         this.decorList.Init(this.decorList.node.getComponent("GroundDataSource") as GroundDataSource)
         this.wallDecorList.Init(this.wallDecorList.node.getComponent("GroundDataSource") as GroundDataSource)
+        this.decorOrnament.Init(this.decorOrnament.node.getComponent("GroundDataSource") as GroundDataSource)
+        this.decorAppliance.Init(this.decorAppliance.node.getComponent("GroundDataSource") as GroundDataSource)
     }
 
     update(deltaTime: number) {
@@ -216,7 +224,7 @@ export class MapEditorUI extends Component {
         } else if (target.name == 'house') {
             _index = 4;
             this.tileMenu.get('panel_floor').active = true;
-            this.tileMenu.get('panel_wall').active = true;
+            this.tileMenu.get('panel_wall').active = false;
 
             if (MapManager.GetInstance().actionStatus != ActionStatus.FLOOR && MapManager.GetInstance().actionStatus != ActionStatus.WALL) {
                 const floor_1 = this.tileMenu.get('panel_floor').getSiblingIndex();
@@ -281,6 +289,14 @@ export class MapEditorUI extends Component {
             _index = 12;
             this.tileMenu.get('panel_wall_decor').active = true;
             MapManager.GetInstance().actionStatus = ActionStatus.WALL_DECOR;
+        }else if (target.name == 'decor_ornament') {
+            _index = 13;
+            this.tileMenu.get('panel_decor_ornament').active = true;
+            MapManager.GetInstance().actionStatus = ActionStatus.DECOR;
+        }else if (target.name == 'appliance') {
+            _index = 14;
+            this.tileMenu.get('panel_appliance').active = true;
+            MapManager.GetInstance().actionStatus = ActionStatus.DECOR;
         }
 
         // if (this.mapToolNode[_index].switch) {
