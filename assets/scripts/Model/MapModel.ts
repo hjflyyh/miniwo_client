@@ -24,6 +24,9 @@ export class MapModel {
 
     //当前选择的地图标签类型
     public EditMapTag = 0
+    public currentMapId: number = 0
+    public isInMap: boolean = false
+    private isRecoveringAfterReconnect: boolean = false
 
     public static getInstance(): MapModel {
         if (!this._instance) {
@@ -35,6 +38,8 @@ export class MapModel {
     public init(){
         EventSystem.addListent("WebSocketNotifications" , this.OnWSNotification , this)
         EventSystem.addListent("WebSocketMessage" , this.OnWebSocketMessage , this)
+        EventSystem.addListent("LoginSuccess" , this.OnGameLoginSuccess , this)
+        EventSystem.addListent("ForceLogout" , this.OnForceLogout , this)
     }
 
     public GetMapData(index){
@@ -49,9 +54,41 @@ export class MapModel {
     //type 0根据地图列表进入地图，需要去掉所有UI   1进入编辑
     public EnterMap(type , map_detail = null){
         this.map_detail = map_detail
+        this.isInMap = true
         AppConst.PanelManager.CloseAll()
         this.showEditMapType = type
         AppConst.PanelManager.openView("res/View/Loading/EditMapLoading")
+    }
+
+    public requestJoinMap(mapId: number, fromReconnect: boolean = false){
+        if(!mapId || mapId <= 0){
+            return;
+        }
+        this.currentMapId = mapId;
+        this.isRecoveringAfterReconnect = fromReconnect;
+        let joinMapRequest = new network.JoinMapEequest();
+        AppConst.WebSocketManager.send(joinMapRequest.toJSON(mapId));
+    }
+
+    private sendMatchJoin(matchId: string){
+        if(!matchId){
+            return;
+        }
+        let matchJoinRequest = new network.MatchJoinEequest();
+        AppConst.WebSocketManager.send(matchJoinRequest.toJSON(matchId));
+    }
+
+    private OnGameLoginSuccess(){
+        if(this.isInMap && this.currentMapId > 0){
+            this.requestJoinMap(this.currentMapId, true);
+        }
+    }
+
+    private OnForceLogout(){
+        this.isInMap = false;
+        this.currentMapId = 0;
+        this.match_id = "";
+        this.isRecoveringAfterReconnect = false;
     }
 
     public initGridData(map : MapEditor){
@@ -168,10 +205,33 @@ export class MapModel {
     public match_id;
     private OnWebSocketMessage(data){
         if(data["id"] == "join_map"){
-            console.log("收到消息进入地图")
-            let payload = JSON.parse(data["payload"])
+            let payload = null;
+            if (typeof data["payload"] === "string") {
+                try {
+                    payload = JSON.parse(data["payload"]);
+                } catch {
+                    payload = null;
+                }
+            } else {
+                payload = data["payload"];
+            }
+            if(!payload || payload.success !== true){
+                const msg = (payload && payload.message) ? payload.message : "加入地图失败";
+                if(payload && payload.code !== "SESSION_REPLACED"){
+                    EventSystem.send("ShowTips" , msg);
+                }
+                return;
+            }
+            this.currentMapId = Number(payload["map_id"] || this.currentMapId || 0);
             this.match_id = payload["match_id"]
+            this.isInMap = true;
 
+            if(this.isRecoveringAfterReconnect){
+                this.isRecoveringAfterReconnect = false;
+                this.sendMatchJoin(this.match_id);
+                return;
+            }
+            console.log("收到消息进入地图")
             MapModel.getInstance().EnterMap(0 , payload.map_detail)
         }
     }

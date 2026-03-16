@@ -115,7 +115,7 @@ export class MapEditor extends Component {
     } = { move: null, detele: null, frame: null, sign: null, npc_banner1: null };
 
     moveItem: { id: string, tile: Node, tileType: string, initGride: Vec2, belong?: string, decorKey?: string } = null;
-    deteleItem: { tile: Node, tileType: string, belong?: string } = null;
+    deteleItem: { tile: Node | null, tileType: string, belong?: string, decorKey?: string, doorPos?: Vec2, doorDir?: string } = null;
     moveStatus: number = 0;
 
     public groundType: number = 1;
@@ -277,8 +277,11 @@ export class MapEditor extends Component {
         EventSystem.addListent("OnClickFloorIcon" , this.OnClickFloorIcon , this)
 
     
-        let MatchJoinEequest = new network.MatchJoinEequest();
-        AppConst.WebSocketManager.send(MatchJoinEequest.toJSON(MapModel.getInstance().match_id))
+        const matchId = MapModel.getInstance().match_id;
+        if (matchId) {
+            let MatchJoinEequest = new network.MatchJoinEequest();
+            AppConst.WebSocketManager.send(MatchJoinEequest.toJSON(matchId))
+        }
     }
 
     smoothTime: number = 0.35;
@@ -1134,34 +1137,90 @@ export class MapEditor extends Component {
         }
     }
 
-    // 标识当前要删除的物品
+    private resolveDeleteTarget(gridPos: Vec2): { tile: Node | null, tileType: string, belong?: string, decorKey?: string, doorPos?: Vec2, doorDir?: string } | null {
+        const key = `${gridPos.x},${gridPos.y}`;
+        const houseCell = this.houseItems.get(key);
+        if (houseCell?.belong) {
+            const doorTarget = this.getHouseDoorDeleteTarget(gridPos, houseCell.belong);
+            if (doorTarget) {
+                return doorTarget;
+            }
+
+            const topDecorAny = this.getTopDecorCoveringGridGlobal(gridPos);
+            if (topDecorAny && (topDecorAny.value.tileType === "Decor" || this.isWallDacorationTileType(topDecorAny.value.tileType))) {
+                return {
+                    tile: topDecorAny.value.tile || null,
+                    tileType: topDecorAny.value.tileType,
+                    belong: topDecorAny.belong,
+                    decorKey: topDecorAny.key
+                };
+            }
+            return { tile: null, tileType: "House", belong: houseCell.belong };
+        }
+
+        const topDecorAny = this.getTopDecorCoveringGridGlobal(gridPos);
+        if (topDecorAny && (topDecorAny.value.tileType === "Decor" || this.isWallDacorationTileType(topDecorAny.value.tileType))) {
+            return {
+                tile: topDecorAny.value.tile || null,
+                tileType: topDecorAny.value.tileType,
+                belong: topDecorAny.belong,
+                decorKey: topDecorAny.key
+            };
+        }
+
+        const mapItem = this.mapItems.get(key);
+        if (mapItem) {
+            return { tile: mapItem.tile || null, tileType: mapItem.tileType };
+        }
+
+        return null;
+    }
+
+    private getHouseDoorDeleteTarget(gridPos: Vec2, preferHouseName: string = ''): { tile: Node | null, tileType: string, belong?: string, doorPos?: Vec2, doorDir?: string } | null {
+        const key = `${gridPos.x},${gridPos.y}`;
+        const houseNames = preferHouseName ? [preferHouseName] : Array.from(this.allHouse.keys());
+        for (let i = 0; i < houseNames.length; i++) {
+            const houseName = houseNames[i];
+            const house = this.allHouse.get(houseName);
+            if (!house) {
+                continue;
+            }
+            const opened = house.openWall.some((pt) => pt.x === gridPos.x && pt.y === gridPos.y);
+            if (!opened) {
+                continue;
+            }
+
+            const baseWall = house.base.get(key) as any;
+            const doorDir = baseWall?.dir || 'down';
+            const sideDoor = this.homeWallTilemap.getChildByName(this.getHouseDoorNodeName(houseName, gridPos, 'cebianDoor1'));
+            const bottomDoor = this.homeWallTilemap.getChildByName(this.getHouseDoorNodeName(houseName, gridPos, 'door1'));
+            return {
+                tile: sideDoor || bottomDoor || null,
+                tileType: "HouseDoor",
+                belong: houseName,
+                doorPos: new Vec2(gridPos.x, gridPos.y),
+                doorDir: doorDir
+            };
+        }
+        return null;
+    }
+
+    // 标识当前要删除的物品（优先单拆：房门、家具、墙饰；否则拆整屋）
     signDeteleTile(gridPos: Vec2) {
         const manager = MapManager.GetInstance();
         if (manager.actionStatus == ActionStatus.DETELE) {
-            let size = null;
-            if (this.houseItems.has(`${gridPos.x},${gridPos.y}`)) {
-                const item = this.houseItems.get(`${gridPos.x},${gridPos.y}`);
-                if (item.tileType == "Floor" && item.belong) {
-                    const house = this.allHouse.get(item.belong);
-                    size = this.getHouseSize(house.grid);
+            const target = this.resolveDeleteTarget(gridPos);
+            this.deteleItem = target;
 
-                    this.deteleItem = { tile: null, tileType: "House", belong: item.belong };
-                    this.tileMaskNode.setWorldPosition(MapModel.getInstance().getHouseCenterPos(house.grid , this));
-                } else {
-                    if (item.tile) {
-                        size = item.tile.getComponent(UITransform).contentSize;
-                    } else {
-                        size = new Size(this.tileSize, this.tileSize);
-                    }
-                    this.deteleItem = null;
+            let size = new Size(this.tileSize, this.tileSize);
+            if (target?.tileType === "House" && target?.belong) {
+                const house = this.allHouse.get(target.belong);
+                if (house) {
+                    size = this.getHouseSize(house.grid);
+                    this.tileMaskNode.setWorldPosition(MapModel.getInstance().getHouseCenterPos(house.grid, this));
                 }
-            } else if (this.mapItems.has(`${gridPos.x},${gridPos.y}`)) {
-                const item = this.mapItems.get(`${gridPos.x},${gridPos.y}`);
-                size = item.tile.getComponent(UITransform).contentSize;
-                this.deteleItem = null;
-            } else {
-                size = new Size(this.tileSize, this.tileSize);
-                this.deteleItem = null;
+            } else if (target?.tile && target.tile.isValid) {
+                size = target.tile.getComponent(UITransform)?.contentSize || size;
             }
 
             this.buildIcon.getComponent(UITransform).setContentSize(size);
@@ -1169,6 +1228,80 @@ export class MapEditor extends Component {
             this.tileMaskNode.getComponent(UITransform).setContentSize(size);
             this.buildControl.frame.setContentSize(size.width + 15, size.height + 15);
         }
+    }
+
+    private removeWholeHouse(houseId: string) {
+        const house = this.allHouse.get(houseId);
+        if (!house) {
+            return;
+        }
+
+        if (house.floorRenderNode && house.floorRenderNode.isValid) {
+            house.floorRenderNode.destroy();
+            house.floorRenderNode = null;
+        }
+        if (house.floorPatchRenderNodes && house.floorPatchRenderNodes.length > 0) {
+            for (let i = 0; i < house.floorPatchRenderNodes.length; i++) {
+                const node = house.floorPatchRenderNodes[i];
+                if (node && node.isValid) {
+                    node.destroy();
+                }
+            }
+            house.floorPatchRenderNodes = [];
+        }
+
+        house.base.forEach((pt, key) => {
+            pt.tile && pt.tile.destroy();
+            this.houseItems.delete(key);
+
+            const pos = new Vec2(parseInt(key.split(',')[0]), parseInt(key.split(',')[1]));
+            const buildingSize = MapModel.getInstance().getBuildingSize(new Size(pt.width, pt.height), this);
+            for (let x = 0; x < buildingSize.x; x++) {
+                for (let y = 0; y < buildingSize.y; y++) {
+                    const gridX = pos.x + x;
+                    const gridY = pos.y - y;
+                    this.mapData[gridX][gridY] = 0;
+                }
+            }
+        });
+
+        house.decor.forEach((pt, key) => {
+            pt.tile && pt.tile.destroy();
+
+            const posKey = this.getDecorPositionKey(key, pt);
+            const pos = new Vec2(parseInt(posKey.split(',')[0]), parseInt(posKey.split(',')[1]));
+            const buildingSize = MapModel.getInstance().getBuildingSize(new Size(pt.width, pt.height), this);
+            for (let x = 0; x < buildingSize.x; x++) {
+                for (let y = 0; y < buildingSize.y; y++) {
+                    const gridX = pos.x + x;
+                    const gridY = pos.y - y;
+                    this.mapData[gridX][gridY] = 0;
+                }
+            }
+        });
+
+        if (house.npc != null) {
+            house.npc._node.destroy();
+        }
+
+        house.horWalls.forEach((pt, key) => {
+            pt.tile && pt.tile.destroy();
+            const pos = new Vec2(parseInt(key.split(',')[0]), parseInt(key.split(',')[1]));
+            const buildingSize = MapModel.getInstance().getBuildingSize(new Size(pt.width, pt.height), this);
+            for (let x = 0; x < buildingSize.x; x++) {
+                for (let y = 0; y < buildingSize.y; y++) {
+                    const gridX = pos.x + x;
+                    const gridY = pos.y - y;
+                    this.mapData[gridX][gridY] = 0;
+                }
+            }
+        });
+
+        house.verWalls.forEach((pt) => {
+            pt.tile && pt.tile.destroy();
+        });
+        this.clearHouseDoors(houseId);
+        this.allHouse.delete(houseId);
     }
 
     // 根据房子占地面积算出尺寸
@@ -1970,88 +2103,132 @@ export class MapEditor extends Component {
         return false;
     }
 
-    // 销毁地块
+    private getOutWallFrameByDir(dir: string): SpriteFrame | null {
+        if (dir === 'up') return this.outWallSprites[0];
+        if (dir === 'down') return this.outWallSprites[1];
+        if (dir === 'left') return this.outWallSprites[2];
+        if (dir === 'right') return this.outWallSprites[3];
+        return this.outWallSprites[1] || null;
+    }
+
+    private removeHouseDoor(target: { belong?: string, doorPos?: Vec2, doorDir?: string }) {
+        if (!target?.belong || !target?.doorPos) {
+            return;
+        }
+        const house = this.allHouse.get(target.belong);
+        if (!house) {
+            return;
+        }
+
+        const key = `${target.doorPos.x},${target.doorPos.y}`;
+        const sideName = this.getHouseDoorNodeName(target.belong, target.doorPos, 'cebianDoor1');
+        const bottomName = this.getHouseDoorNodeName(target.belong, target.doorPos, 'door1');
+        const sideDoor = this.homeWallTilemap.getChildByName(sideName);
+        const bottomDoor = this.homeWallTilemap.getChildByName(bottomName);
+        sideDoor && sideDoor.destroy();
+        bottomDoor && bottomDoor.destroy();
+
+        house.openWall = house.openWall.filter((pt) => !(pt.x === target.doorPos.x && pt.y === target.doorPos.y));
+        house.openWallDoorDecorIdMap?.delete(key);
+
+        const localWall = house.base.get(key) as any;
+        const globalWall = this.houseItems.get(key) as any;
+        const wallDir = target.doorDir || localWall?.dir || globalWall?.dir || 'down';
+        let wallNode: Node | null = (globalWall?.tile && globalWall.tile.isValid) ? globalWall.tile : null;
+        if (!wallNode) {
+            wallNode = instantiate(this.wallPrefab);
+            const frame = this.getOutWallFrameByDir(wallDir);
+            if (frame) {
+                wallNode.getComponent(Sprite).spriteFrame = frame;
+            }
+            const worldPos = MapModel.getInstance().gridToWorld(target.doorPos, wallNode.getComponent(UITransform).contentSize, this);
+            wallNode.setPosition(worldPos);
+            this.homeWallTilemap.addChild(wallNode);
+        }
+
+        if (localWall) {
+            localWall.tile = wallNode;
+            localWall.tileType = "OutWall";
+            localWall.dir = wallDir;
+        }
+        if (globalWall) {
+            globalWall.tile = wallNode;
+            globalWall.tileType = "OutWall";
+            globalWall.belong = target.belong;
+            globalWall.dir = wallDir;
+        } else {
+            this.houseItems.set(key, { tile: wallNode, tileType: "OutWall", belong: target.belong, dir: wallDir } as any);
+        }
+
+        const wallSize = wallNode.getComponent(UITransform).contentSize;
+        const wallGridSize = MapModel.getInstance().getBuildingSize(wallSize, this);
+        for (let x = 0; x < wallGridSize.x; x++) {
+            for (let y = 0; y < wallGridSize.y; y++) {
+                const gx = target.doorPos.x + x;
+                const gy = target.doorPos.y - y;
+                if (gx < 0 || gx >= this.mapWidth || gy < 0 || gy >= this.mapHeight) {
+                    continue;
+                }
+                this.mapData[gx][gy] = 2;
+            }
+        }
+    }
+
+    private removeHouseDecor(target: { belong?: string, decorKey?: string }) {
+        if (!target?.belong || !target?.decorKey) {
+            return;
+        }
+        const house = this.allHouse.get(target.belong);
+        if (!house) {
+            return;
+        }
+        const decor = house.decor.get(target.decorKey);
+        if (!decor) {
+            return;
+        }
+
+        decor.tile && decor.tile.destroy();
+        const pos = this.getDecorPosition(target.decorKey, decor);
+        const buildingSize = MapModel.getInstance().getBuildingSize(new Size(decor.width, decor.height), this);
+        if (decor.tileType === "Decor") {
+            for (let x = 0; x < buildingSize.x; x++) {
+                for (let y = 0; y < buildingSize.y; y++) {
+                    const gridX = pos.x + x;
+                    const gridY = pos.y - y;
+                    if (gridX < 0 || gridX >= this.mapWidth || gridY < 0 || gridY >= this.mapHeight) {
+                        continue;
+                    }
+                    this.mapData[gridX][gridY] = this.hasDecorCoveringCell(house, gridX, gridY, target.decorKey) ? 3 : 1;
+                }
+            }
+        }
+
+        house.decor.delete(target.decorKey);
+    }
+
+    // 销毁地块（优先单拆：房门、家具、墙饰；否则拆整屋）
     deteleTile(gridPos: Vec2) {
-        if (this.deteleItem) {
-            const id = this.deteleItem.belong;
-            const house = this.allHouse.get(id);
-            if (house?.floorRenderNode && house.floorRenderNode.isValid) {
-                house.floorRenderNode.destroy();
-                house.floorRenderNode = null;
-            }
-            if (house?.floorPatchRenderNodes && house.floorPatchRenderNodes.length > 0) {
-                for (let i = 0; i < house.floorPatchRenderNodes.length; i++) {
-                    const node = house.floorPatchRenderNodes[i];
-                    if (node && node.isValid) {
-                        node.destroy();
-                    }
-                }
-                house.floorPatchRenderNodes = [];
-            }
-
-            house.base.forEach((pt, key) => {
-                pt.tile && pt.tile.destroy();
-                this.houseItems.delete(key);
-
-                const pos = new Vec2(parseInt(key.split(',')[0]), parseInt(key.split(',')[1]))
-                const buildingSize = MapModel.getInstance().getBuildingSize(new Size(pt.width, pt.height) , this);
-                // 更新网格数据
-                for (let x = 0; x < buildingSize.x; x++) {
-                    for (let y = 0; y < buildingSize.y; y++) {
-                        const gridX = pos.x + x;
-                        const gridY = pos.y - y;
-                        this.mapData[gridX][gridY] = 0;
-                    }
-                }
-            })
-
-            house.decor.forEach((pt, key) => {
-                pt.tile && pt.tile.destroy();
-
-                const posKey = this.getDecorPositionKey(key, pt);
-                const pos = new Vec2(parseInt(posKey.split(',')[0]), parseInt(posKey.split(',')[1]))
-                const buildingSize = MapModel.getInstance().getBuildingSize(new Size(pt.width, pt.height) , this);
-                // 更新网格数据
-                for (let x = 0; x < buildingSize.x; x++) {
-                    for (let y = 0; y < buildingSize.y; y++) {
-                        const gridX = pos.x + x;
-                        const gridY = pos.y - y;
-                        this.mapData[gridX][gridY] = 0;
-                    }
-                }
-            })
-
-            if (house.npc != null) {
-                house.npc._node.destroy();
-            }
-
-            house.horWalls.forEach((pt, key) => {
-                pt.tile && pt.tile.destroy();
-
-                const pos = new Vec2(parseInt(key.split(',')[0]), parseInt(key.split(',')[1]))
-                const buildingSize = MapModel.getInstance().getBuildingSize(new Size(pt.width, pt.height) ,this);
-                // 更新网格数据
-                for (let x = 0; x < buildingSize.x; x++) {
-                    for (let y = 0; y < buildingSize.y; y++) {
-                        const gridX = pos.x + x;
-                        const gridY = pos.y - y;
-                        this.mapData[gridX][gridY] = 0;
-                    }
-                }
-            })
-
-            house.verWalls.forEach((pt, key) => {
-                pt.tile && pt.tile.destroy();
-            })
-            this.clearHouseDoors(id);
-
-            this.allHouse.delete(id);
+        const target = this.deteleItem || this.resolveDeleteTarget(gridPos);
+        if (target?.tileType === "House" && target?.belong) {
+            this.removeWholeHouse(target.belong);
             this.deteleItem = null;
             this.setTileMaskSp();
-
-            // 检查按钮的显隐
-            const manager = MapManager.GetInstance();
-            manager.getMapEditorUI().checkButtonVisible(true);
+            MapManager.GetInstance().getMapEditorUI().checkButtonVisible(true);
+            this.buildControl.detele.play('detele_action');
+            return;
+        } else if (target?.tileType === "HouseDoor") {
+            this.removeHouseDoor(target);
+            this.deteleItem = null;
+            this.setTileMaskSp();
+            MapManager.GetInstance().getMapEditorUI().checkButtonVisible(true);
+            this.buildControl.detele.play('detele_action');
+            return;
+        } else if (target?.belong && target?.decorKey && (target.tileType === "Decor" || this.isWallDacorationTileType(target.tileType))) {
+            this.removeHouseDecor(target);
+            this.deteleItem = null;
+            this.setTileMaskSp();
+            MapManager.GetInstance().getMapEditorUI().checkButtonVisible(true);
+            this.buildControl.detele.play('detele_action');
             return;
         } else if (this.mapItems.has(`${gridPos.x},${gridPos.y}`)) {
             if (this.mapItems.get(`${gridPos.x},${gridPos.y}`).tileType == "Floor") {
@@ -2077,19 +2254,6 @@ export class MapEditor extends Component {
                     this.mapData[gridX][gridY] = 0;
                 }
             }
-        } else if (!this.placeholderTilemap.get(`${gridPos.x},${gridPos.y}`).empty) {
-            let _tag = 0;
-            for (let i = 0; i < this.NEIGHBOURS.length; i++) {
-                const newPos = new Vec2(gridPos.x + this.NEIGHBOURS[i].x, gridPos.y + this.NEIGHBOURS[i].y);
-                this.displayTilemap.get(`${newPos.x},${newPos.y}`).tileNode.destroy();
-                _tag = this.displayTilemap.get(`${newPos.x},${newPos.y}`)._type;
-            }
-
-            // const manager = MapManager.GetInstance();
-            // manager.setGroundStrIndex(_tag);
-
-            this.placeholderTilemap.set(`${gridPos.x},${gridPos.y}`, { _type: 1, empty: true, _tileType: this.groundType });
-            this.setDisplayTile(gridPos, new Size(this.tileSize, this.tileSize), _tag);
         } else if (this.containsArray(this.buildFloorPoints, gridPos)) {
             const item = this.houseItems.get(`${gridPos.x},${gridPos.y}`);
             if (!item.belong) {
@@ -2119,6 +2283,7 @@ export class MapEditor extends Component {
             }
         }
 
+        this.deteleItem = null;
         this.buildControl.detele.play('detele_action');
     }
 
@@ -2838,6 +3003,51 @@ export class MapEditor extends Component {
             }
             if (!top || value.tile.getSiblingIndex() >= top.value.tile.getSiblingIndex()) {
                 top = { key, value };
+            }
+        });
+        return top;
+    }
+
+    private getTopDecorCoveringGrid(
+        house: {
+            decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string }>
+        },
+        gridPos: Vec2
+    ): { key: string; value: { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string } } | null {
+        let top: { key: string; value: { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string } } | null = null;
+        house.decor.forEach((value, key) => {
+            const anchor = this.getDecorPosition(key, value);
+            const buildingSize = MapModel.getInstance().getBuildingSize(new Size(value.width, value.height), this);
+            let covered = false;
+            for (let x = 0; x < buildingSize.x && !covered; x++) {
+                for (let y = 0; y < buildingSize.y; y++) {
+                    if (anchor.x + x === gridPos.x && anchor.y - y === gridPos.y) {
+                        covered = true;
+                        break;
+                    }
+                }
+            }
+            if (!covered) {
+                return;
+            }
+            if (!top || value.tile.getSiblingIndex() >= top.value.tile.getSiblingIndex()) {
+                top = { key, value };
+            }
+        });
+        return top;
+    }
+
+    private getTopDecorCoveringGridGlobal(
+        gridPos: Vec2
+    ): { belong: string; key: string; value: { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string } } | null {
+        let top: { belong: string; key: string; value: { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string } } | null = null;
+        this.allHouse.forEach((house, houseName) => {
+            const cur = this.getTopDecorCoveringGrid(house, gridPos);
+            if (!cur) {
+                return;
+            }
+            if (!top || cur.value.tile.getSiblingIndex() >= top.value.tile.getSiblingIndex()) {
+                top = { belong: houseName, key: cur.key, value: cur.value };
             }
         });
         return top;

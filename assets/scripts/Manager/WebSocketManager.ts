@@ -92,6 +92,26 @@ export class WebSocketManager extends Component {
         this.doConnect();
     }
 
+    // 主动断开（例如被顶号），并阻止自动重连
+    public disconnect(): void {
+        this.isManualClose = true;
+        this.clearReconnectTimer();
+        this.stopHeartbeat();
+
+        if (!this.ws) {
+            this.setState(WebSocketState.CLOSED);
+            return;
+        }
+
+        if (this.ws.readyState === WebSocket.OPEN || this.ws.readyState === WebSocket.CONNECTING) {
+            this.ws.close();
+            return;
+        }
+
+        this.cleanupWebSocket();
+        this.setState(WebSocketState.CLOSED);
+    }
+
     public setConfig(url){
         log("socket:" + url)
         this.config = {
@@ -194,12 +214,14 @@ export class WebSocketManager extends Component {
      * 连接成功回调
      */
     private onOpen(event: Event): void {
+        const wasReconnecting = this.reconnectAttempts > 0 || this.state === WebSocketState.RECONNECTING;
         console.log('WebSocketManager: 连接成功');
         this.setState(WebSocketState.OPEN);
         this.reconnectAttempts = 0;
         this.lastMessageTime = Date.now();
         
-        RoleModel.getInstance().loginWS()
+        RoleModel.getInstance().onWebSocketConnected()
+        EventSystem.send("WebSocketConnected", { reconnected: wasReconnecting });
 
         this.sendHeartbeat()
         
@@ -413,8 +435,8 @@ export class WebSocketManager extends Component {
             const timeSinceLastMessage = now - this.lastMessageTime;
             
             if (timeSinceLastMessage > this.config.heartbeatTimeout!) {
-                // console.error('WebSocketManager: 心跳超时，连接可能已断开');
-                // this.handleConnectionError();
+                console.error('WebSocketManager: 心跳超时，连接可能已断开');
+                this.handleConnectionError();
             }
         }, this.config.heartbeatTimeout) as unknown as number;
     }    
