@@ -486,7 +486,23 @@ export class MapEditor extends Component {
 
             const items: string[] = [];
             house.decor.forEach((decor) => {
-                const name = decor?.tile?.name || '';
+                let stary = decor?.tile?.name.split("#")
+                let cfgName = "mapOutsideRenovation"
+                let type = stary[1]
+                if(type == "OutsideRenovation"){
+                    cfgName = "mapOutsideRenovation"
+                }
+                if(type == "Floor"){
+                    cfgName = "mapFloor"
+                }
+                if(type == "Decor" || type == "DecorOrnament" || type == "Appliance"){
+                    cfgName = "mapDecor"
+                }
+                if(type == "WallDacoration" || type == "WallDecor"){
+                    cfgName = "mapWallDecor"
+                }
+                let decCfg = AppConst.JSONManager.getItem(cfgName , stary[0])
+                const name = decCfg["name_cn"];
                 if (name) {
                     items.push(name);
                 }
@@ -508,9 +524,25 @@ export class MapEditor extends Component {
             const x = parseInt(key.split(',')[0]);
             const y = parseInt(key.split(',')[1]);
             const gridSize = this.getNodeGridSize(item.tile);
+            let stary = item.id.split("#")
+            let cfgName = "mapOutsideRenovation"
+            let type = stary[1]
+            if(type == "OutsideRenovation"){
+                cfgName = "mapOutsideRenovation"
+            }
+            if(type == "Floor"){
+                cfgName = "mapFloor"
+            }
+            if(type == "Decor" || type == "DecorOrnament" || type == "Appliance"){
+                cfgName = "mapDecor"
+            }
+            if(type == "WallDacoration" || type == "WallDecor"){
+                cfgName = "mapWallDecor"
+            }
+            let decCfg = AppConst.JSONManager.getItem(cfgName , stary[0])
             items.push({
                 item_id: String(item.id || item.tile?.name || ''),
-                name: String(item.tile?.name || item.id || ''),
+                name: decCfg["name_cn"],
                 location: this.formatGridRange(x, y, x + gridSize.x - 1, y - (gridSize.y - 1))
             });
         });
@@ -683,6 +715,8 @@ export class MapEditor extends Component {
                     const data = JSON.parse(localMapData);
                     MapModel.getInstance().showEditMapType = 1;
                     MapLoadMap.loadMapData(data, this);
+
+                    this.sendWebMapInfoIfChanged();
                     return;
                 } catch (e) {
                     console.warn("[map_data_test] parse local MapData failed", e);
