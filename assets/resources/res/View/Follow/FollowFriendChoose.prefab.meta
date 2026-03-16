@@ -2,12 +2,12 @@
   "ver": "1.1.50",
   "importer": "prefab",
   "imported": true,
-  "uuid": "a129f8ff-e82b-40fb-adca-592eff549410",
+  "uuid": "740afee9-b146-46df-a2a3-486632494bb1",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "gear_102"
+    "syncNodeName": "FollowFriendChoose"
   }
 }
