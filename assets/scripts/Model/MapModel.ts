@@ -278,6 +278,10 @@ export class MapModel {
         map.allMapAssetsData.Plant = [];
         map.allMapAssetsData.Floor = [];
         map.allMapAssetsData.House = [];
+        map.allMapAssetsData.mapWidth = map.mapWidth;
+        map.allMapAssetsData.mapHeight = map.mapHeight;
+        map.allMapAssetsData.gridWidth = map.mapWidth;
+        map.allMapAssetsData.gridHeight = map.mapHeight;
         map.allMapAssetsData.Walkable = {
             width: map.mapWidth,
             height: map.mapHeight,

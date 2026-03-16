@@ -38,7 +38,11 @@ export interface MapData {
         width: number,
         height: number,
         cells: string[],
-    }
+    },
+    mapWidth?: number,
+    mapHeight?: number,
+    gridWidth?: number,
+    gridHeight?: number
 }
 
 export interface NpcDebugTileData {
@@ -219,6 +223,7 @@ export class MapEditor extends Component {
     private walkableDebugGraphics: Graphics | null = null;
     private npcTileDebugNode: Node | null = null;
     private npcTileDebugGraphics: Graphics | null = null;
+    private lastWebMapInfoPayload = '';
 
     /**
      * 绘制选择框
@@ -262,6 +267,7 @@ export class MapEditor extends Component {
     start() {
         this.mapWidth = AppConst.UIRoot.MapEditorWidth
         this.mapHeight = AppConst.UIRoot.MapEditorHeight
+        this.applyExternalGridSizeIfNeeded();
         console.log("地图格子尺寸：" + this.mapWidth + ":" + this.mapHeight)
 
         this.mapBgTransform.contentSize = new Size(this.mapWidth * this.tileSize , this.mapHeight * this.tileSize)
@@ -282,6 +288,71 @@ export class MapEditor extends Component {
             let MatchJoinEequest = new network.MatchJoinEequest();
             AppConst.WebSocketManager.send(MatchJoinEequest.toJSON(matchId))
         }
+    }
+
+    private parseGridSizeFromMapData(data: any): { width: number, height: number } | null {
+        if (!data || typeof data !== 'object') {
+            return null;
+        }
+        const rawWidth = data.mapWidth ?? data.gridWidth ?? data.width ?? data?.Walkable?.width;
+        const rawHeight = data.mapHeight ?? data.gridHeight ?? data.height ?? data?.Walkable?.height;
+        const width = Number(rawWidth);
+        const height = Number(rawHeight);
+        if (!Number.isFinite(width) || !Number.isFinite(height)) {
+            return null;
+        }
+        if (width <= 0 || height <= 0) {
+            return null;
+        }
+        return { width: Math.floor(width), height: Math.floor(height) };
+    }
+
+    private getBootMapDataForGridSize(): any | null {
+        // 进入地图：优先使用服务器 map_detail 里的地图数据
+        if (MapModel.getInstance().showEditMapType == 0) {
+            const mapRaw = MapModel.getInstance().map_detail?.map_data;
+            if (mapRaw && String(mapRaw).trim() !== '') {
+                try {
+                    return JSON.parse(mapRaw);
+                } catch (e) {
+                    console.warn('[MapEditor] parse map_detail.map_data failed', e);
+                }
+            }
+            return null;
+        }
+
+        // 编辑器测试模式：优先本地 MapData
+        if (this.map_data_test) {
+            const localRaw = sys.localStorage.getItem("MapData");
+            if (localRaw && localRaw.trim() !== "") {
+                try {
+                    return JSON.parse(localRaw);
+                } catch (e) {
+                    console.warn('[MapEditor] parse local MapData failed', e);
+                }
+            }
+        }
+
+        // Web 编辑模式：使用外部注入 mapEditData
+        if (AppConst.SDKManager.isEditMapingWeb && MapModel.getInstance().mapEditData) {
+            try {
+                return JSON.parse(MapModel.getInstance().mapEditData);
+            } catch (e) {
+                console.warn('[MapEditor] parse mapEditData failed', e);
+            }
+        }
+
+        return null;
+    }
+
+    private applyExternalGridSizeIfNeeded() {
+        const data = this.getBootMapDataForGridSize();
+        const size = this.parseGridSizeFromMapData(data);
+        if (!size) {
+            return;
+        }
+        this.mapWidth = size.width;
+        this.mapHeight = size.height;
     }
 
     smoothTime: number = 0.35;
@@ -369,6 +440,7 @@ export class MapEditor extends Component {
         }
 
         this.refreshWalkableDebugOverlayIfNeeded();
+        this.sendWebMapInfoIfChanged();
     }
 
     private refreshWalkableDebugOverlayIfNeeded() {
@@ -377,6 +449,104 @@ export class MapEditor extends Component {
         }
         const walkableCells = MapModel.getInstance().buildWalkableCells(this);
         this.renderWalkableDebugOverlay(walkableCells);
+    }
+
+    private formatGridRange(startX: number, startY: number, endX: number, endY: number): string {
+        return `${startX},${startY}#${endX},${endY}`;
+    }
+
+    private getNodeGridSize(node: Node | null): Vec2 {
+        if (!node || !node.isValid) {
+            return new Vec2(1, 1);
+        }
+        const ui = node.getComponent(UITransform);
+        if (!ui) {
+            return new Vec2(1, 1);
+        }
+        return MapModel.getInstance().getBuildingSize(ui.contentSize, this);
+    }
+
+    private buildMapInfoPayload(): any {
+        const houses: any[] = [];
+        this.allHouse.forEach((house, houseName) => {
+            if (!house.grid || house.grid.length === 0) {
+                return;
+            }
+            let minX = Number.POSITIVE_INFINITY;
+            let minY = Number.POSITIVE_INFINITY;
+            let maxX = Number.NEGATIVE_INFINITY;
+            let maxY = Number.NEGATIVE_INFINITY;
+            for (let i = 0; i < house.grid.length; i++) {
+                const p = house.grid[i];
+                minX = Math.min(minX, p.x);
+                minY = Math.min(minY, p.y);
+                maxX = Math.max(maxX, p.x);
+                maxY = Math.max(maxY, p.y);
+            }
+
+            const items: string[] = [];
+            house.decor.forEach((decor) => {
+                const name = decor?.tile?.name || '';
+                if (name) {
+                    items.push(name);
+                }
+            });
+
+            houses.push({
+                house_id: String(houseName),
+                position: this.formatGridRange(minX, minY, maxX, maxY),
+                "belongs to": house.npc?.id || '',
+                items
+            });
+        });
+
+        const items: any[] = [];
+        this.mapItems.forEach((item, key) => {
+            if (!item || item.tileType === "Floor") {
+                return;
+            }
+            const x = parseInt(key.split(',')[0]);
+            const y = parseInt(key.split(',')[1]);
+            const gridSize = this.getNodeGridSize(item.tile);
+            items.push({
+                item_id: String(item.id || item.tile?.name || ''),
+                name: String(item.tile?.name || item.id || ''),
+                location: this.formatGridRange(x, y, x + gridSize.x - 1, y - (gridSize.y - 1))
+            });
+        });
+
+        return {
+            map_info: {
+                houses,
+                items,
+                locations: [
+                    {
+                        location_id: "",
+                        name: "",
+                        "belongs to": ""
+                    }
+                ]
+            }
+        };
+    }
+
+    private sendWebMapInfoIfChanged() {
+        if (!AppConst.SDKManager.isEditMapingWeb || MapModel.getInstance().showEditMapType !== 1) {
+            return;
+        }
+        const payload = this.buildMapInfoPayload();
+        const payloadStr = JSON.stringify(payload);
+        if (payloadStr === this.lastWebMapInfoPayload) {
+            return;
+        }
+        this.lastWebMapInfoPayload = payloadStr;
+
+        window.parent.postMessage({
+            channel: 'miniwo-map-editor',
+            source: 'miniwo-cocos',
+            type: 'COCOS_MAP_INFO_UPDATE',
+            ...payload
+        }, '*');
     }
 
     hideTileMask() {
@@ -3117,6 +3287,7 @@ export class MapEditor extends Component {
         const manager = MapManager.GetInstance();
         if (manager.actionStatus === ActionStatus.FLOOR && this.replaceIndoorFloorByDragRect()) {
             this.refreshWalkableDebugOverlayIfNeeded();
+            this.sendWebMapInfoIfChanged();
             return;
         }
 
@@ -3156,6 +3327,7 @@ export class MapEditor extends Component {
             console.log("房子大小:" + path.length)
         }
         this.checkBuildHouse();
+        this.sendWebMapInfoIfChanged();
     }
 
     // 自动化房屋建造
