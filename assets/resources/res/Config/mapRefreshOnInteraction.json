@@ -1,0 +1,102 @@
+{
+  "1": {
+    "interaction_type": "0",
+    "refresh_interaction_point_count": "2",
+    "weight": "20"
+  },
+  "2": {
+    "interaction_type": "0",
+    "refresh_interaction_point_count": "3",
+    "weight": "80"
+  },
+  "3": {
+    "interaction_type": "0",
+    "refresh_interaction_point_count": "4",
+    "weight": "100"
+  },
+  "4": {
+    "interaction_type": "0",
+    "refresh_interaction_point_count": "5",
+    "weight": "100"
+  },
+  "5": {
+    "interaction_type": "0",
+    "refresh_interaction_point_count": "6",
+    "weight": "50"
+  },
+  "6": {
+    "interaction_type": "0",
+    "refresh_interaction_point_count": "7",
+    "weight": "25"
+  },
+  "7": {
+    "interaction_type": "0",
+    "refresh_interaction_point_count": "8",
+    "weight": "20"
+  },
+  "8": {
+    "interaction_type": "0",
+    "refresh_interaction_point_count": "9",
+    "weight": "10"
+  },
+  "9": {
+    "interaction_type": "0",
+    "refresh_interaction_point_count": "10",
+    "weight": "5"
+  },
+  "10": {
+    "interaction_type": "3",
+    "refresh_interaction_point_count": "1",
+    "weight": "200"
+  },
+  "11": {
+    "interaction_type": "3",
+    "refresh_interaction_point_count": "2",
+    "weight": "100"
+  },
+  "12": {
+    "interaction_type": "3",
+    "refresh_interaction_point_count": "3",
+    "weight": "10"
+  },
+  "13": {
+    "interaction_type": "1",
+    "refresh_interaction_point_count": "2",
+    "weight": "150"
+  },
+  "14": {
+    "interaction_type": "1",
+    "refresh_interaction_point_count": "3",
+    "weight": "20"
+  },
+  "15": {
+    "interaction_type": "1",
+    "refresh_interaction_point_count": "4",
+    "weight": "5"
+  },
+  "16": {
+    "interaction_type": "1",
+    "refresh_interaction_point_count": "5",
+    "weight": "5"
+  },
+  "17": {
+    "interaction_type": "2",
+    "refresh_interaction_point_count": "2",
+    "weight": "150"
+  },
+  "18": {
+    "interaction_type": "2",
+    "refresh_interaction_point_count": "3",
+    "weight": "20"
+  },
+  "19": {
+    "interaction_type": "2",
+    "refresh_interaction_point_count": "4",
+    "weight": "5"
+  },
+  "20": {
+    "interaction_type": "2",
+    "refresh_interaction_point_count": "5",
+    "weight": "5"
+  }
+}

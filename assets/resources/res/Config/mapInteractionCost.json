@@ -1,0 +1,282 @@
+{
+  "1": {
+    "interaction_type": "0",
+    "interaction_weight": "100",
+    "cost_stamina": "2",
+    "cost_stamina_weight": null,
+    "task_condition": "",
+    "task_weight": null
+  },
+  "2": {
+    "interaction_type": "0",
+    "interaction_weight": "100",
+    "cost_stamina": "2",
+    "cost_stamina_weight": null,
+    "task_condition": "",
+    "task_weight": null
+  },
+  "3": {
+    "interaction_type": "3",
+    "interaction_weight": "100",
+    "cost_stamina": "5",
+    "cost_stamina_weight": null,
+    "task_condition": "",
+    "task_weight": null
+  },
+  "4": {
+    "interaction_type": "1",
+    "interaction_weight": "70",
+    "cost_stamina": "1",
+    "cost_stamina_weight": "5",
+    "task_condition": "",
+    "task_weight": null
+  },
+  "5": {
+    "interaction_type": "1",
+    "interaction_weight": null,
+    "cost_stamina": "2",
+    "cost_stamina_weight": "40",
+    "task_condition": "",
+    "task_weight": null
+  },
+  "6": {
+    "interaction_type": "1",
+    "interaction_weight": null,
+    "cost_stamina": "3",
+    "cost_stamina_weight": "80",
+    "task_condition": "",
+    "task_weight": null
+  },
+  "7": {
+    "interaction_type": "1",
+    "interaction_weight": null,
+    "cost_stamina": "4",
+    "cost_stamina_weight": "100",
+    "task_condition": "",
+    "task_weight": null
+  },
+  "8": {
+    "interaction_type": "1",
+    "interaction_weight": null,
+    "cost_stamina": "5",
+    "cost_stamina_weight": "150",
+    "task_condition": "",
+    "task_weight": null
+  },
+  "9": {
+    "interaction_type": "1",
+    "interaction_weight": null,
+    "cost_stamina": "6",
+    "cost_stamina_weight": "120",
+    "task_condition": "",
+    "task_weight": null
+  },
+  "10": {
+    "interaction_type": "1",
+    "interaction_weight": null,
+    "cost_stamina": "7",
+    "cost_stamina_weight": "80",
+    "task_condition": "",
+    "task_weight": null
+  },
+  "11": {
+    "interaction_type": "1",
+    "interaction_weight": null,
+    "cost_stamina": "8",
+    "cost_stamina_weight": "50",
+    "task_condition": "",
+    "task_weight": null
+  },
+  "12": {
+    "interaction_type": "1",
+    "interaction_weight": null,
+    "cost_stamina": "9",
+    "cost_stamina_weight": "20",
+    "task_condition": "",
+    "task_weight": null
+  },
+  "13": {
+    "interaction_type": "1",
+    "interaction_weight": null,
+    "cost_stamina": "10",
+    "cost_stamina_weight": "5",
+    "task_condition": "",
+    "task_weight": null
+  },
+  "14": {
+    "interaction_type": "1",
+    "interaction_weight": "30",
+    "cost_stamina": "1",
+    "cost_stamina_weight": "5",
+    "task_condition": "",
+    "task_weight": null
+  },
+  "15": {
+    "interaction_type": "1",
+    "interaction_weight": null,
+    "cost_stamina": "2",
+    "cost_stamina_weight": "40",
+    "task_condition": "",
+    "task_weight": null
+  },
+  "16": {
+    "interaction_type": "1",
+    "interaction_weight": null,
+    "cost_stamina": "3",
+    "cost_stamina_weight": "80",
+    "task_condition": "",
+    "task_weight": null
+  },
+  "17": {
+    "interaction_type": "1",
+    "interaction_weight": null,
+    "cost_stamina": "4",
+    "cost_stamina_weight": "100",
+    "task_condition": "",
+    "task_weight": null
+  },
+  "18": {
+    "interaction_type": "1",
+    "interaction_weight": null,
+    "cost_stamina": "5",
+    "cost_stamina_weight": "150",
+    "task_condition": "",
+    "task_weight": null
+  },
+  "19": {
+    "interaction_type": "1",
+    "interaction_weight": null,
+    "cost_stamina": "6",
+    "cost_stamina_weight": "120",
+    "task_condition": "",
+    "task_weight": null
+  },
+  "20": {
+    "interaction_type": "1",
+    "interaction_weight": null,
+    "cost_stamina": "7",
+    "cost_stamina_weight": "80",
+    "task_condition": "",
+    "task_weight": null
+  },
+  "21": {
+    "interaction_type": "1",
+    "interaction_weight": null,
+    "cost_stamina": "8",
+    "cost_stamina_weight": "50",
+    "task_condition": "",
+    "task_weight": null
+  },
+  "22": {
+    "interaction_type": "1",
+    "interaction_weight": null,
+    "cost_stamina": "9",
+    "cost_stamina_weight": "20",
+    "task_condition": "",
+    "task_weight": null
+  },
+  "23": {
+    "interaction_type": "1",
+    "interaction_weight": null,
+    "cost_stamina": "10",
+    "cost_stamina_weight": "5",
+    "task_condition": "",
+    "task_weight": null
+  },
+  "24": {
+    "interaction_type": "2",
+    "interaction_weight": "150",
+    "cost_stamina": null,
+    "cost_stamina_weight": null,
+    "task_condition": "拾取10朵鲜花",
+    "task_weight": "100"
+  },
+  "25": {
+    "interaction_type": "2",
+    "interaction_weight": null,
+    "cost_stamina": null,
+    "cost_stamina_weight": null,
+    "task_condition": "给1只小动物喂食",
+    "task_weight": "100"
+  },
+  "26": {
+    "interaction_type": "2",
+    "interaction_weight": null,
+    "cost_stamina": null,
+    "cost_stamina_weight": null,
+    "task_condition": "给1名NPC赠送礼物",
+    "task_weight": "100"
+  },
+  "27": {
+    "interaction_type": "2",
+    "interaction_weight": null,
+    "cost_stamina": null,
+    "cost_stamina_weight": null,
+    "task_condition": "拾取10片小动物羽毛",
+    "task_weight": "100"
+  },
+  "28": {
+    "interaction_type": "2",
+    "interaction_weight": null,
+    "cost_stamina": null,
+    "cost_stamina_weight": null,
+    "task_condition": "与3名NPC玩石头剪刀布并获得胜利",
+    "task_weight": "100"
+  },
+  "29": {
+    "interaction_type": "2",
+    "interaction_weight": null,
+    "cost_stamina": null,
+    "cost_stamina_weight": null,
+    "task_condition": "与地图上的物品交互3次",
+    "task_weight": "100"
+  },
+  "30": {
+    "interaction_type": "2",
+    "interaction_weight": "150",
+    "cost_stamina": null,
+    "cost_stamina_weight": null,
+    "task_condition": "提交10朵鲜花1",
+    "task_weight": "100"
+  },
+  "31": {
+    "interaction_type": "2",
+    "interaction_weight": null,
+    "cost_stamina": null,
+    "cost_stamina_weight": null,
+    "task_condition": "提交10朵鲜花2",
+    "task_weight": "100"
+  },
+  "32": {
+    "interaction_type": "2",
+    "interaction_weight": null,
+    "cost_stamina": null,
+    "cost_stamina_weight": null,
+    "task_condition": "提交5钻石",
+    "task_weight": "100"
+  },
+  "33": {
+    "interaction_type": "2",
+    "interaction_weight": null,
+    "cost_stamina": null,
+    "cost_stamina_weight": null,
+    "task_condition": "提交10钻石",
+    "task_weight": "100"
+  },
+  "34": {
+    "interaction_type": "2",
+    "interaction_weight": null,
+    "cost_stamina": null,
+    "cost_stamina_weight": null,
+    "task_condition": "提交10片动物羽毛1",
+    "task_weight": "100"
+  },
+  "35": {
+    "interaction_type": "2",
+    "interaction_weight": null,
+    "cost_stamina": null,
+    "cost_stamina_weight": null,
+    "task_condition": "提交10片动物羽毛2",
+    "task_weight": "100"
+  }
+}
