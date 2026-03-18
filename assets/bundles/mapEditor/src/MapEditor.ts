@@ -727,6 +727,7 @@ export class MapEditor extends Component {
         //编辑器进入，如果有编辑数据，显示之前编辑的内容
         if(AppConst.SDKManager.isEditMapingWeb && MapModel.getInstance().mapEditData != null && MapModel.getInstance().mapEditData != ""){
             MapLoadMap.loadMapData(JSON.parse(MapModel.getInstance().mapEditData) , this)
+            this.sendWebMapInfoIfChanged();
         }
     }
 

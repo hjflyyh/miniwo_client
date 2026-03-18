@@ -2180,7 +2180,7 @@
       "__id__": 54
     },
     "debugShowWalkable": false,
-    "map_data_test": true,
+    "map_data_test": false,
     "minOrthoSize": 420,
     "maxOrthoSize": 1100,
     "_id": "abq+rSUgpJcoQNEssTNPU6"
