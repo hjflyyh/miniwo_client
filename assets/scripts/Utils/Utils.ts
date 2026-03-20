@@ -5,6 +5,7 @@ import { HttpManager } from "../Manager/HttpManager";
 export class Utils{
 
     public static loadCover(url : string , sprite : Sprite , width = null , height = null){
+        if (!url) return;
         if(!url.includes('http')){
             url = HttpManager.baseUrl + url
         }
@@ -205,5 +206,10 @@ export class Utils{
                 sprite.color = color;
             }
         }
+    }
+
+    public static getDateFromStr(timeStr) {
+        // 截取T之前的部分（2026-03-18）
+        return timeStr.split('T')[0];
     }
 }

@@ -12,6 +12,19 @@ export module network {
         CodeMapList = 105, //地图列表
     }
 
+    export enum FollowSocialCode {
+        FollowData = 4001, // 关注数据
+        // TimelineData = 4002, // 朋友圈数据
+        PostData = 403,// 帖子数据
+        OtherPostData = 4004,// other帖子数据
+        CommentData = 4005,// 评论数据
+        TopCommentData = 4006, // 一级评论数据
+        LikeData = 4007, // 点赞数据
+        PostCreate = 4008, // 发布帖子
+        LikeConfirm = 4009, // 点赞确认
+        UnLikeConfirm = 4010, // 取消点赞确认
+    }
+
     export enum ServerCommandConstants {
         COMMON_HEARBEAT = 99996, // 心跳
         COMMON_LOGIN = 10000, // 登录

@@ -4,6 +4,7 @@ import { NPCModel } from '../Model/NPCModel';
 import { AppConst } from '../AppConst';
 import { MapModel } from '../Model/MapModel';
 import { CardModel } from '../Model/CardModel';
+import { SocialModel } from '../Model/SocialModel';
 const { ccclass, property } = _decorator;
 
 @ccclass('UtilsManager')
@@ -15,6 +16,7 @@ export class UtilsManager extends Component {
         NPCModel.getInstance().init()
         MapModel.getInstance().init()
         CardModel.getInstance().init()
+        SocialModel.getInstance().init()
     }
 
     start() {

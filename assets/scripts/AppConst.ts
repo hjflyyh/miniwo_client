@@ -3,6 +3,7 @@ import { JSONManager } from "./Manager/JSONManager";
 import { LanguageManager } from "./Manager/LanguageManager";
 import { PanelManager } from "./Manager/PanelManager";
 import { SDKManager } from "./Manager/SDKManager";
+import { SocialHttpManager } from "./Manager/SocialHttpManager";
 import { UtilsManager } from "./Manager/UtilsManager";
 import { WebSocketManager } from "./Manager/WebSocketManager";
 import { UIRoot } from "./View/UIRoot";
@@ -16,4 +17,5 @@ export class AppConst{
     public static LanguageManager : LanguageManager;
     public static SDKManager : SDKManager;
     public static HttpManager : HttpManager;
+    public static SocialHttpManager : SocialHttpManager;
 }
