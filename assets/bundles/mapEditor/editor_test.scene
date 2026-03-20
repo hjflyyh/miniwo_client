@@ -2183,9 +2183,9 @@
       "__id__": 54
     },
     "debugShowWalkable": false,
-    "map_data_test": false,
-    "minOrthoSize": 420,
-    "maxOrthoSize": 1100,
+    "map_data_test": true,
+    "minOrthoSize": 210,
+    "maxOrthoSize": 550,
     "_id": "abq+rSUgpJcoQNEssTNPU6"
   },
   {
