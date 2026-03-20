@@ -281,7 +281,7 @@ export class WebSocketManager extends Component {
                     }else if(data.notifications != null && data.notifications.notifications != null){
                         for(let d = 0 ; d < data.notifications.notifications.length ; d++){
                             EventSystem.send("WebSocketNotifications" , data.notifications.notifications[d])
-                            // console.log(JSON.parse(data.notifications.notifications[d].content))
+                            console.log(JSON.parse(data.notifications.notifications[d].content))
                         }
                         
                     }else if(data.match_data != null){

@@ -163,7 +163,7 @@ export class CustomizeMapData extends Component {
     }
     
     OnMatchData(data) {
-        console.log("比赛数据：")
+        // console.log("比赛数据：")
         // console.log(data)
         const serverTs = this.extractServerTimestamp(data);
         if (serverTs && AppConst.WebSocketManager && AppConst.WebSocketManager.syncServerTimestampMs) {

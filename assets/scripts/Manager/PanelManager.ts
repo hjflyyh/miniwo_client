@@ -61,7 +61,7 @@ export class PanelManager extends Component {
     }
 
     //resources打开
-    public openView(url , openParam = null , callBack = null , upperPanel = ""){
+    public openView(url , openParam = null , callBack = null , upperPanel = ""  , paramNode = null){
         if(!url || url == ""){
             return
         }
@@ -111,7 +111,11 @@ export class PanelManager extends Component {
             if(baseView["FullScreen"]){
                 _this.addView(newView)
             }
-            _this.addViewChild(baseView , newView);
+            if(paramNode != null){
+                paramNode.addChild(newView)
+            }else{
+                _this.addViewChild(baseView , newView);
+            }
 
             _this.UIMap[url] = newView
             if(callBack){

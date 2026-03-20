@@ -29,6 +29,7 @@ export interface MapData {
     Plant: { id: string, _type: string, position: string }[],
     Floor: { id: string, _type: string, position: string }[],
     House: {
+        houseName?: string,
         Floor: { id: string, _type: string, position: string }[],
         OpenWall: { position: string, doorDecorId?: string }[],
         Wall: { id: string, _type: string, position: string }[],

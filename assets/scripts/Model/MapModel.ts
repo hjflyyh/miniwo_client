@@ -385,6 +385,7 @@ export class MapModel {
             }
 
             map.allMapAssetsData.House.push({
+                houseName: String(key),
                 Floor: arr_1,
                 Wall: arr_2,
                 OpenWall: openWall,

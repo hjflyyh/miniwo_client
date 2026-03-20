@@ -19,6 +19,7 @@ export class RoleModel {
     public inviteCode: string;
     public invite: string;
     public address: string;
+    public nakama_token : string;
 
     public token : string;
     public playerId : string
@@ -144,7 +145,7 @@ export class RoleModel {
             this.token = data.token
             this.nickName = data.nick_name
             this.playerId = data.player_id
-
+            this.nakama_token = data.nakama_token
             
             AppConst.WebSocketManager.setConfig("ws://" + HttpManager.ipBase + ":7350/ws?token=" + data.nakama_token);
             AppConst.WebSocketManager.connect();
