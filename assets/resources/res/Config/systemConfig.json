@@ -34,5 +34,37 @@
   "9": {
     "function": "用户等级及积分对应关系",
     "configuration": "1_0_1000#2_1001_3000#3_3001_6000#4_6001_10000#5_10001_15000"
+  },
+  "10": {
+    "function": "好感度增加规则",
+    "configuration": "公屏建议被采纳_3"
+  },
+  "11": {
+    "function": "好感度增加规则",
+    "configuration": "私聊命中隐藏关键词_1"
+  },
+  "12": {
+    "function": "好感度增加规则",
+    "configuration": "手帐中 @该 NPC 并设为公开_1"
+  },
+  "13": {
+    "function": "好感度增加规则",
+    "configuration": "连续3天互动（每日至少1次）_1"
+  },
+  "14": {
+    "function": "好感度减少规则",
+    "configuration": "连续3天未互动_5"
+  },
+  "15": {
+    "function": "好感度减少规则",
+    "configuration": "在公屏发送明显 OOC建议_10"
+  },
+  "16": {
+    "function": "公屏禁言规则",
+    "configuration": "连续3次在公屏和私聊中对NPC发送OOC建议或违规发言_86400"
+  },
+  "17": {
+    "function": "公屏禁言规则",
+    "configuration": "任意NPC对用户的好感度为负"
   }
 }

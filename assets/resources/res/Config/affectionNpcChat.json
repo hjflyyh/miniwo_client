@@ -1,0 +1,470 @@
+{
+  "1": {
+    "affection_level": "3",
+    "triggerable_round": "30",
+    "trigger_weight": "500",
+    "trigger_card_fragment_level": "1"
+  },
+  "2": {
+    "affection_level": "3",
+    "triggerable_round": "31",
+    "trigger_weight": "300",
+    "trigger_card_fragment_level": "2"
+  },
+  "3": {
+    "affection_level": "3",
+    "triggerable_round": "32",
+    "trigger_weight": "200",
+    "trigger_card_fragment_level": "3"
+  },
+  "4": {
+    "affection_level": "3",
+    "triggerable_round": "33",
+    "trigger_weight": "5",
+    "trigger_card_fragment_level": "4"
+  },
+  "5": {
+    "affection_level": "3",
+    "triggerable_round": "34",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "6": {
+    "affection_level": "3",
+    "triggerable_round": "35",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "7": {
+    "affection_level": "3",
+    "triggerable_round": "36",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "8": {
+    "affection_level": "3",
+    "triggerable_round": "37",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "9": {
+    "affection_level": "3",
+    "triggerable_round": "38",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "10": {
+    "affection_level": "3",
+    "triggerable_round": "39",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "11": {
+    "affection_level": "3",
+    "triggerable_round": "40",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "12": {
+    "affection_level": "3",
+    "triggerable_round": "41",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "13": {
+    "affection_level": "3",
+    "triggerable_round": "42",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "14": {
+    "affection_level": "3",
+    "triggerable_round": "43",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "15": {
+    "affection_level": "3",
+    "triggerable_round": "44",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "16": {
+    "affection_level": "3",
+    "triggerable_round": "45",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "17": {
+    "affection_level": "3",
+    "triggerable_round": "46",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "18": {
+    "affection_level": "3",
+    "triggerable_round": "47",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "19": {
+    "affection_level": "3",
+    "triggerable_round": "48",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "20": {
+    "affection_level": "3",
+    "triggerable_round": "49",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "21": {
+    "affection_level": "3",
+    "triggerable_round": "50",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "22": {
+    "affection_level": "3",
+    "triggerable_round": "51",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "23": {
+    "affection_level": "3",
+    "triggerable_round": "52",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "24": {
+    "affection_level": "3",
+    "triggerable_round": "53",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "25": {
+    "affection_level": "3",
+    "triggerable_round": "54",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "26": {
+    "affection_level": "3",
+    "triggerable_round": "55",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "27": {
+    "affection_level": "4",
+    "triggerable_round": "50",
+    "trigger_weight": "500",
+    "trigger_card_fragment_level": "1"
+  },
+  "28": {
+    "affection_level": "4",
+    "triggerable_round": "51",
+    "trigger_weight": "300",
+    "trigger_card_fragment_level": "2"
+  },
+  "29": {
+    "affection_level": "4",
+    "triggerable_round": "52",
+    "trigger_weight": "200",
+    "trigger_card_fragment_level": "3"
+  },
+  "30": {
+    "affection_level": "4",
+    "triggerable_round": "53",
+    "trigger_weight": "5",
+    "trigger_card_fragment_level": "4"
+  },
+  "31": {
+    "affection_level": "4",
+    "triggerable_round": "54",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "32": {
+    "affection_level": "4",
+    "triggerable_round": "55",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "33": {
+    "affection_level": "4",
+    "triggerable_round": "56",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "34": {
+    "affection_level": "4",
+    "triggerable_round": "57",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "35": {
+    "affection_level": "4",
+    "triggerable_round": "58",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "36": {
+    "affection_level": "4",
+    "triggerable_round": "59",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "37": {
+    "affection_level": "4",
+    "triggerable_round": "60",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "38": {
+    "affection_level": "4",
+    "triggerable_round": "61",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "39": {
+    "affection_level": "4",
+    "triggerable_round": "62",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "40": {
+    "affection_level": "4",
+    "triggerable_round": "63",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "41": {
+    "affection_level": "4",
+    "triggerable_round": "64",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "42": {
+    "affection_level": "4",
+    "triggerable_round": "65",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "43": {
+    "affection_level": "4",
+    "triggerable_round": "66",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "44": {
+    "affection_level": "4",
+    "triggerable_round": "67",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "45": {
+    "affection_level": "4",
+    "triggerable_round": "68",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "46": {
+    "affection_level": "4",
+    "triggerable_round": "69",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "47": {
+    "affection_level": "4",
+    "triggerable_round": "70",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "48": {
+    "affection_level": "4",
+    "triggerable_round": "71",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "49": {
+    "affection_level": "4",
+    "triggerable_round": "72",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "50": {
+    "affection_level": "4",
+    "triggerable_round": "73",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "51": {
+    "affection_level": "4",
+    "triggerable_round": "74",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "52": {
+    "affection_level": "4",
+    "triggerable_round": "75",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "53": {
+    "affection_level": "5",
+    "triggerable_round": "60",
+    "trigger_weight": "500",
+    "trigger_card_fragment_level": "1"
+  },
+  "54": {
+    "affection_level": "5",
+    "triggerable_round": "61",
+    "trigger_weight": "300",
+    "trigger_card_fragment_level": "2"
+  },
+  "55": {
+    "affection_level": "5",
+    "triggerable_round": "62",
+    "trigger_weight": "200",
+    "trigger_card_fragment_level": "3"
+  },
+  "56": {
+    "affection_level": "5",
+    "triggerable_round": "63",
+    "trigger_weight": "5",
+    "trigger_card_fragment_level": "4"
+  },
+  "57": {
+    "affection_level": "5",
+    "triggerable_round": "64",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "58": {
+    "affection_level": "5",
+    "triggerable_round": "65",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "59": {
+    "affection_level": "5",
+    "triggerable_round": "66",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "60": {
+    "affection_level": "5",
+    "triggerable_round": "67",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "61": {
+    "affection_level": "5",
+    "triggerable_round": "68",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "62": {
+    "affection_level": "5",
+    "triggerable_round": "69",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "63": {
+    "affection_level": "5",
+    "triggerable_round": "70",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "64": {
+    "affection_level": "5",
+    "triggerable_round": "71",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "65": {
+    "affection_level": "5",
+    "triggerable_round": "72",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "66": {
+    "affection_level": "5",
+    "triggerable_round": "73",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "67": {
+    "affection_level": "5",
+    "triggerable_round": "74",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "68": {
+    "affection_level": "5",
+    "triggerable_round": "75",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "69": {
+    "affection_level": "5",
+    "triggerable_round": "76",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "70": {
+    "affection_level": "5",
+    "triggerable_round": "77",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "71": {
+    "affection_level": "5",
+    "triggerable_round": "78",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "72": {
+    "affection_level": "5",
+    "triggerable_round": "79",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "73": {
+    "affection_level": "5",
+    "triggerable_round": "80",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "74": {
+    "affection_level": "5",
+    "triggerable_round": "81",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "75": {
+    "affection_level": "5",
+    "triggerable_round": "82",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "76": {
+    "affection_level": "5",
+    "triggerable_round": "83",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "77": {
+    "affection_level": "5",
+    "triggerable_round": "84",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  },
+  "78": {
+    "affection_level": "5",
+    "triggerable_round": "85",
+    "trigger_weight": null,
+    "trigger_card_fragment_level": null
+  }
+}

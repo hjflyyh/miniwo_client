@@ -3,84 +3,72 @@
     "task_type": "0",
     "daily_task": "与{}位NPC聊天交互",
     "amount": "3",
-    "reward": null,
-    "quantity": null
+    "reward": "100025_10"
   },
   "2": {
     "task_type": "0",
     "daily_task": "消耗{}体力",
     "amount": "150",
-    "reward": null,
-    "quantity": null
+    "reward": "100025_10"
   },
   "3": {
     "task_type": "0",
     "daily_task": "给{}位NPC赠送礼物",
     "amount": "1",
-    "reward": null,
-    "quantity": null
+    "reward": "100025_10"
   },
   "4": {
     "task_type": "0",
     "daily_task": "将{}张卡牌升到满级",
     "amount": "1",
-    "reward": null,
-    "quantity": null
+    "reward": "100025_10"
   },
   "5": {
     "task_type": "0",
     "daily_task": "将{}张卡牌升星10级",
     "amount": "10",
-    "reward": null,
-    "quantity": null
+    "reward": "100025_10"
   },
   "6": {
     "task_type": "0",
     "daily_task": "商店购买{}次商品",
     "amount": "3",
-    "reward": null,
-    "quantity": null
+    "reward": "100025_10"
   },
   "7": {
     "task_type": "0",
     "daily_task": "收集{}张卡牌",
     "amount": "3",
-    "reward": null,
-    "quantity": null
+    "reward": "100025_10"
   },
   "8": {
     "task_type": "1",
     "daily_task": "累计登录{}天",
     "amount": "7",
-    "reward": null,
-    "quantity": null
+    "reward": "100025_10"
   },
   "9": {
     "task_type": "1",
     "daily_task": "累计消耗{}钻石",
     "amount": "200",
-    "reward": null,
-    "quantity": null
+    "reward": "100025_10"
   },
   "10": {
     "task_type": "1",
     "daily_task": "商店购买{}次商品",
     "amount": "10",
-    "reward": null,
-    "quantity": null
+    "reward": "100025_10"
   },
   "11": {
     "task_type": "1",
     "daily_task": "NPC好感度增加{}",
     "amount": "150",
-    "reward": null,
-    "quantity": null
+    "reward": "100025_10"
   },
   "12": {
     "task_type": "1",
     "daily_task": "收集{}张SSR卡",
     "amount": "3",
-    "reward": null,
-    "quantity": null
+    "reward": "100025_10"
   }
 }
