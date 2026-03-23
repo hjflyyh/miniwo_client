@@ -56,6 +56,7 @@ export class ChunkVisibilityController extends Component {
     private lastDebugLogFrame = -1;
     private lastMapWidth = -1;
     private lastMapHeight = -1;
+    private missingGridKeyCount = 0;
 
     update(): void {
         if (!this.tryBindEditor()) return;
@@ -153,6 +154,7 @@ export class ChunkVisibilityController extends Component {
         const newChunkNodes: Map<string, Set<Node>> = new Map();
         const newNodeToChunk: Map<Node, string> = new Map();
 
+        this.missingGridKeyCount = 0;
         const children = container.children;
         for (let i = 0; i < children.length; i++) {
             const n = children[i];
@@ -161,19 +163,22 @@ export class ChunkVisibilityController extends Component {
             // 只处理 DisplayTitle tile，避免误伤其他节点
             if (!n.getComponent('DisplayTitle')) continue;
 
-            // 关键：使用“mapContainer 节点空间坐标”来反算 grid，
-            // 而不是直接用 disMapContainer 的 local 坐标。
-            // 否则在不同设备/分辨率/anchor 下，disMapContainer 与 mapContainer 的原点偏移可能导致 chunk 归类错位。
-            const worldPos = n.getWorldPosition();
-            const localInMapGrid = mapGridUI
-                ? mapGridUI.convertToNodeSpaceAR(new Vec3(worldPos.x, worldPos.y, 0))
-                : new Vec2(worldPos.x, worldPos.y);
-
-            const ui = n.getComponent(UITransform);
-            const uiSize = ui?.contentSize ?? new Size(this.mapEditor!.tileSize, this.mapEditor!.tileSize);
-            const buildingSize = MapModel.getInstance().getBuildingSize(uiSize, this.mapEditor!);
-
-            const { gx, gy } = this.localPosToGridWithBuildingSize(localInMapGrid.x, localInMapGrid.y, buildingSize);
+            // 最可靠：直接使用 DisplayTitle 里保存的 gridKey。
+            // gridKey 在 MapEditor.setDisplayTile 处被赋值为 `${newPos.x},${newPos.y}`，
+            // 其坐标系与 hot/warm 的 bounds 计算使用的 grid 坐标一致。
+            const disp = n.getComponent('DisplayTitle') as any;
+            const gridKey: string | undefined = disp?.gridKey;
+            if (!gridKey || typeof gridKey !== 'string') {
+                this.missingGridKeyCount++;
+                continue;
+            }
+            const parts = gridKey.split(',');
+            const gx = parseInt(parts[0]);
+            const gy = parseInt(parts[1]);
+            if (!Number.isFinite(gx) || !Number.isFinite(gy)) {
+                this.missingGridKeyCount++;
+                continue;
+            }
             const { cx, cy } = this.gridToChunk(gx, gy);
             const chunkKey = this.getChunkKey(cx, cy);
 
@@ -332,6 +337,7 @@ export class ChunkVisibilityController extends Component {
                 frame,
                 bounds: b,
                 chunkNodes: this.chunkNodes.size,
+                missingGridKeyCount: this.missingGridKeyCount,
             });
             return;
         }
@@ -358,14 +364,12 @@ export class ChunkVisibilityController extends Component {
         this.lastCameraChunkX = centerChunk.cx;
         this.lastCameraChunkY = centerChunk.cy;
 
-        // 统计当前 active 数量，帮助判断“chunkKey 归属是否错误”导致的误隐藏
-        let totalNodeCount = 0;
+        // 统计当前 active 数量，帮助判断 chunkKey 归属是否正确
         let activeNodeCount = 0;
         let matchedChunkCount = 0;
         for (const [chunkKey, nodes] of this.chunkNodes.entries()) {
             if (hotSet.has(chunkKey) || warmSet.has(chunkKey)) matchedChunkCount++;
             nodes.forEach((n) => {
-                totalNodeCount++;
                 if (n && n.isValid && n.active) activeNodeCount++;
             });
         }
@@ -391,16 +395,16 @@ export class ChunkVisibilityController extends Component {
         this.debugLog({
             phase: "normal",
             frame,
-            bounds: b,
-            centerGrid,
-            centerChunk,
-            crossedChunk,
             hotSet: hotSet.size,
             warmSet: warmSet.size,
             chunkNodes: this.chunkNodes.size,
             matchedChunksInHotWarm: matchedChunkCount,
-            totalNodes: totalNodeCount,
             activeNodes: activeNodeCount,
+            // 如果归类依赖 gridKey 失败，会导致误隐藏
+            missingGridKeyCount: this.missingGridKeyCount,
+            // 仅保留最关键的边界信息（便于你贴日志时判断）
+            bounds: b,
+            centerGrid,
             mapWidth: this.mapEditor.mapWidth,
             mapHeight: this.mapEditor.mapHeight,
             orthoHeight: this.camera.orthoHeight,
