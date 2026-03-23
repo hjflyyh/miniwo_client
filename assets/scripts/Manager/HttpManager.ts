@@ -6,7 +6,7 @@ const { ccclass, property } = _decorator;
 export class HttpManager extends Component {
     public static ipBase = "192.168.30.109"
     public static baseUrl = "http://" + HttpManager.ipBase + ":8080"
-
+    public static chatBaseUrl = "http://" + HttpManager.ipBase + ":7350"
     start() {
         AppConst.HttpManager = this
     }

@@ -8,6 +8,7 @@ import { PrefabLoad } from '../../../scripts/Utils/PrefabLoad';
 import { InfiniteList } from '../../../plugin/InfiniteList/InfiniteList';
 import { GroundDataSource } from './UI/GroundDataSource';
 import { MapModel } from '../../../scripts/Model/MapModel';
+import { AppConst } from 'db://assets/scripts/AppConst';
 const { ccclass, property } = _decorator;
 
 @ccclass('MapEditorUI')
@@ -35,6 +36,9 @@ export class MapEditorUI extends Component {
 
     @property(Node)
     npcHeadNode: Node = null;
+
+    @property(Node)
+    GameUI: Node = null;
 
     @property(Node)
     buttonStepPack: Node[] = [];
@@ -127,6 +131,8 @@ export class MapEditorUI extends Component {
         this.backBtn.active = false;
         if(MapModel.getInstance().showEditMapType == 0){
             this.node.active = false
+
+            AppConst.PanelManager.openView("res/View/Game/GameView" , null , null , null , this.GameUI)
         }
     }
 

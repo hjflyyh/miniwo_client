@@ -1,3 +1,5 @@
+import { MapModel } from "./MapModel";
+
 export module network {
     export enum ServerHttpCommand {
         COMMON_LOGIN = 1, // 登录
@@ -95,6 +97,17 @@ export module network {
         }
         toJSON() {
             return { requestId: this.requestId, type: this.type, command: this.command };
+        }
+    }
+
+    //进入聊天
+    export class MapChatHistory {
+        public static toJSON() {
+            return { id : "map_chat_history" , payload: JSON.stringify({
+                map_id: MapModel.getInstance().currentMapId, // 或可省略，用当前地图
+                limit: 50,
+                cursor: ""
+            }) };
         }
     }
 

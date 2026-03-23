@@ -1,0 +1,14 @@
+{
+  "1": {
+    "recharge_diamonds": "300",
+    "monthly_card_benefits": "一次性领取300钻石"
+  },
+  "2": {
+    "recharge_diamonds": null,
+    "monthly_card_benefits": "每日上线赠送30钻石"
+  },
+  "3": {
+    "recharge_diamonds": null,
+    "monthly_card_benefits": "每日赠送1次补领体力"
+  }
+}

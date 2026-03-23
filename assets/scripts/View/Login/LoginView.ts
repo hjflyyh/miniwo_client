@@ -47,6 +47,8 @@ export class LoginView extends Component {
 
         HttpManager.ipBase = savedIp.trim() || defaultIp;
         HttpManager.baseUrl = savedUrl.trim() || `http://${HttpManager.ipBase}:8080`;
+        HttpManager.chatBaseUrl = `http://${HttpManager.ipBase}:7350`;
+
         if (!savedIp || !savedUrl) {
             HttpManager.ipBase = defaultIp;
             HttpManager.baseUrl = defaultUrl;
@@ -105,12 +107,14 @@ export class LoginView extends Component {
     onClickServer1(){
         HttpManager.ipBase = "192.168.30.109"
         HttpManager.baseUrl = "http://" + HttpManager.ipBase + ":8080"
+        HttpManager.chatBaseUrl = `http://${HttpManager.ipBase}:7350`;
         this.persistHttpServer();
     }
 
     onClickServer2(){
         HttpManager.ipBase = "192.168.31.102"
         HttpManager.baseUrl = "http://" + HttpManager.ipBase + ":8080"
+        HttpManager.chatBaseUrl = `http://${HttpManager.ipBase}:7350`;
         this.persistHttpServer();
     }
 }
