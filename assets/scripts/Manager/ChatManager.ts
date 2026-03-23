@@ -1,6 +1,8 @@
 import { AppConst } from "../AppConst";
 import { MapModel } from "../Model/MapModel";
 import { network } from "../Model/RequestData";
+import { RoleModel } from "../Model/RoleModel";
+import { HttpManager } from "./HttpManager";
 
 
 type ChatMessage = {
@@ -9,6 +11,7 @@ type ChatMessage = {
   text: string;
   map_id: number;
   ts: number;
+  username : string;
 };
 
 export class MapChatManager {
@@ -18,12 +21,20 @@ export class MapChatManager {
     return this._instance;
   }
 
-  public onMessages: (msgs: ChatMessage[]) => void = () => {};
+  public onMessages: (msgs: ChatMessage[]) => void = () => {
+
+  };
+  public msessages: ChatMessage[] = [];
   private _currentMapId = -1;
   private _inited = false;
 
+  public init(){
+        EventSystem.addListent("WebSocketMessage" , this.OnWebSocketMessage , this)
+        EventSystem.addListent("ChannelMessage" , this.OnChannelMessage , this)
+  }
+
   /** 在 websocket 连接成功后、进入地图后调用一次 */
-  public init(mapId?: number) {
+  public initMap(mapId?: number) {
     if (this._inited) return;
 
     const mid = mapId ?? MapModel.getInstance().currentMapId;
@@ -52,48 +63,122 @@ export class MapChatManager {
     this._inited = true;
   }
 
-  /** 发送聊天（RPC） */
-  public send(text: string) {
-    // const t = (text ?? "").trim();
-    // if (!t) return;
+     // mapId: 传 <=0 也可以（服务端会用“当前所在地图”）
+    public async sendMapChat(text: string, mapId: number = -1) {
+        const t = (text ?? '').trim();
+        if (!t) return { success: false, message: '消息不能为空' };
+        // 服务端限制：<= 200 字（按 rune 计数更稳）
+        if ([...t].length > 200) return { success: false, message: '消息内容过长（最多200字）' };
+        const result = await this.rpc('map_chat_send_player', {
+          map_id: mapId,
+          text: t,
+          player_id : RoleModel.getInstance().playerId
+        });
+        // 期望：{success:true, message_id:...} 或 {success:false, message:...}
+        return result;
+    }
 
-    // AppConst.WebSocketManager.send({
-    //   rpc: network.MapChatSendPlayer.toJSON(t, this._currentMapId),
-    // });
-  }
+    public async rpc(name: string, payload: any) {
+        const base = HttpManager.chatBaseUrl.replace(/\/+$/, ''); // 去掉末尾 /
+        const url = `${base}/v2/rpc/${name}`;
+
+        const token = RoleModel.getInstance().nakama_token;
+        if (!token) {
+            throw new Error('nakama_token 为空，无法调用 RPC');
+        }
+
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            },
+            body: JSON.stringify(JSON.stringify(payload ?? {})),
+        });
+
+        const raw = await res.text();
+        if (!res.ok) {
+            console.error('RPC failed', name, res.status, raw);
+            throw new Error(`RPC ${name} HTTP ${res.status}: ${raw}`);
+        }
+
+        try {
+            return JSON.parse(raw);
+        } catch (e) {
+            console.error('RPC JSON parse error', name, raw);
+            throw e;
+        }
+    }
+
+    private OnChannelMessage(data){
+          const msg: ChatMessage = {
+            from_type: data.from_type,
+            from_id: String(data.from_id ?? ""),
+            text: data.text,
+            map_id: Number(data.map_id),
+            ts: Number(data.ts),
+            username : data.nick_name
+          };
+          this.msessages.push(msg);
+
+          EventSystem.send("EventRefreshChat")
+    }
+
+    private OnWebSocketMessage(data){
+      if(data["id"] == "map_chat_history"){
+        let payload = JSON.parse(data["payload"]);
+        this.msessages = [];
+        for(let m = 0 ; m < payload.messages.length ; m++){ 
+          let content = payload.messages[m].content
+          const msg: ChatMessage = {
+            from_type: content.from_type,
+            from_id: String(content.from_id ?? ""),
+            text: content.text,
+            map_id: Number(content.map_id),
+            ts: Number(content.ts),
+            username : payload.messages[m].username
+          };
+          this.msessages.push(msg);
+        }
+
+        // console.log(this.msessages)
+      }
+    }
+
 
   /** 在你的 websocket onmessage 里，把 notification.content 丢给这个 */
-  public handleNotification(notification: any) {
-    if (!notification || notification.code !== 100) return;
+  // public handleNotification(notification: any) {
+  //   if (!notification || notification.code !== 100) return;
 
-    let content: any = null;
-    try {
-      content = JSON.parse(notification.content);
-    } catch {
-      return;
-    }
+  //   let content: any = null;
+  //   try {
+  //     content = JSON.parse(notification.content);
+  //   } catch {
+  //     return;
+  //   }
 
-    // 兼容你的现有 npc_update 解析：你之前是 content.data.npcs
-    // chat 消息通常 content.data 里带 from_type/text/map_id/ts
-    const payload = content?.data ?? content;
+  //   // 兼容你的现有 npc_update 解析：你之前是 content.data.npcs
+  //   // chat 消息通常 content.data 里带 from_type/text/map_id/ts
+  //   const payload = content?.data ?? content;
 
-    if (
-      payload &&
-      typeof payload.from_type === "string" &&
-      typeof payload.text === "string" &&
-      payload.map_id !== undefined &&
-      payload.ts !== undefined
-    ) {
-      const msg: ChatMessage = {
-        from_type: payload.from_type,
-        from_id: String(payload.from_id ?? ""),
-        text: payload.text,
-        map_id: Number(payload.map_id),
-        ts: Number(payload.ts),
-      };
+  //   if (
+  //     payload &&
+  //     typeof payload.from_type === "string" &&
+  //     typeof payload.text === "string" &&
+  //     payload.map_id !== undefined &&
+  //     payload.ts !== undefined
+  //   ) {
+  //     const msg: ChatMessage = {
+  //       from_type: payload.from_type,
+  //       from_id: String(payload.from_id ?? ""),
+  //       text: payload.text,
+  //       map_id: Number(payload.map_id),
+  //       ts: Number(payload.ts),
+  //     };
 
-      // 你可以改成 append 单条
-      this.onMessages([msg]);
-    }
-  }
+  //     // 你可以改成 append 单条
+  //     this.onMessages([msg]);
+  //   }
+  // }
 }

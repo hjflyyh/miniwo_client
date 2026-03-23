@@ -203,6 +203,7 @@ export class MapModel {
     }
 
     public match_id;
+    public showMatchPayLoad;
     private OnWebSocketMessage(data){
         if(data["id"] == "join_map"){
             let payload = null;
@@ -232,6 +233,8 @@ export class MapModel {
                 return;
             }
             console.log("收到消息进入地图")
+            console.log(payload)
+            this.showMatchPayLoad = payload
             MapModel.getInstance().EnterMap(0 , payload.map_detail)
         }
     }

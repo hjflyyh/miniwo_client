@@ -5,6 +5,7 @@ import { AppConst } from '../AppConst';
 import { MapModel } from '../Model/MapModel';
 import { CardModel } from '../Model/CardModel';
 import { SocialModel } from '../Model/SocialModel';
+import { MapChatManager } from './ChatManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('UtilsManager')
@@ -17,6 +18,7 @@ export class UtilsManager extends Component {
         MapModel.getInstance().init()
         CardModel.getInstance().init()
         SocialModel.getInstance().init()
+        MapChatManager.instance.init()
     }
 
     start() {
