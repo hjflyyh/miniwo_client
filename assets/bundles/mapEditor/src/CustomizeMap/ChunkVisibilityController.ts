@@ -42,6 +42,7 @@ export class ChunkVisibilityController extends Component {
 
     private mapEditor: MapEditor | null = null;
     private mapContainer: Node | null = null; // disMapContainer
+    private mapGridContainer: Node | null = null; // mapContainer
 
     private chunkNodes: Map<string, Set<Node>> = new Map();
     private nodeToChunk: Map<Node, string> = new Map();
@@ -81,7 +82,7 @@ export class ChunkVisibilityController extends Component {
     }
 
     private tryBindEditor(): boolean {
-        if (this.mapEditor && this.mapContainer && this.camera) return true;
+        if (this.mapEditor && this.mapContainer && this.mapGridContainer && this.camera) return true;
 
         const mgr = MapManager.GetInstance();
         if (!mgr) return false;
@@ -91,9 +92,10 @@ export class ChunkVisibilityController extends Component {
 
         this.mapEditor = editor;
         this.mapContainer = editor.disMapContainer;
+        this.mapGridContainer = editor.mapContainer;
         if (!this.camera) this.camera = editor.mainCamera;
 
-        return !!this.mapEditor && !!this.mapContainer && !!this.camera;
+        return !!this.mapEditor && !!this.mapContainer && !!this.mapGridContainer && !!this.camera;
     }
 
     private getChunkKey(cx: number, cy: number): string {
@@ -146,6 +148,8 @@ export class ChunkVisibilityController extends Component {
 
     private rebuildChunkIndexByScanningChildren(): void {
         const container = this.mapContainer!;
+        const mapGridContainer = this.mapGridContainer!;
+        const mapGridUI = mapGridContainer.getComponent(UITransform);
         const newChunkNodes: Map<string, Set<Node>> = new Map();
         const newNodeToChunk: Map<Node, string> = new Map();
 
@@ -157,12 +161,19 @@ export class ChunkVisibilityController extends Component {
             // 只处理 DisplayTitle tile，避免误伤其他节点
             if (!n.getComponent('DisplayTitle')) continue;
 
-            const p = n.position;
-            // 用 UITransform 尺寸推断 buildingSize，减少不同设备下的 contentSize 差异导致的归类偏移
+            // 关键：使用“mapContainer 节点空间坐标”来反算 grid，
+            // 而不是直接用 disMapContainer 的 local 坐标。
+            // 否则在不同设备/分辨率/anchor 下，disMapContainer 与 mapContainer 的原点偏移可能导致 chunk 归类错位。
+            const worldPos = n.getWorldPosition();
+            const localInMapGrid = mapGridUI
+                ? mapGridUI.convertToNodeSpaceAR(new Vec3(worldPos.x, worldPos.y, 0))
+                : new Vec2(worldPos.x, worldPos.y);
+
             const ui = n.getComponent(UITransform);
             const uiSize = ui?.contentSize ?? new Size(this.mapEditor!.tileSize, this.mapEditor!.tileSize);
             const buildingSize = MapModel.getInstance().getBuildingSize(uiSize, this.mapEditor!);
-            const { gx, gy } = this.localPosToGridWithBuildingSize(p.x, p.y, buildingSize);
+
+            const { gx, gy } = this.localPosToGridWithBuildingSize(localInMapGrid.x, localInMapGrid.y, buildingSize);
             const { cx, cy } = this.gridToChunk(gx, gy);
             const chunkKey = this.getChunkKey(cx, cy);
 
