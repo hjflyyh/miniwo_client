@@ -1,4 +1,4 @@
-import { _decorator, Camera, Component, Node, Vec2, director, view } from 'cc';
+import { _decorator, Camera, Component, Node, Vec2, director, view, UITransform, Size } from 'cc';
 import { MapEditor } from '../MapEditor';
 import { MapManager } from '../MapManager';
 import { MapModel } from 'db://assets/scripts/Model/MapModel';
@@ -53,11 +53,22 @@ export class ChunkVisibilityController extends Component {
     private lastRescanFrame = -1;
     private startFrame = -1;
     private lastDebugLogFrame = -1;
+    private lastMapWidth = -1;
+    private lastMapHeight = -1;
 
     update(): void {
         if (!this.tryBindEditor()) return;
 
         const frame = director.getTotalFrames();
+        if (this.mapEditor) {
+            if (this.lastMapWidth !== this.mapEditor.mapWidth || this.lastMapHeight !== this.mapEditor.mapHeight) {
+                // map 尺寸一旦变化，必须重建 chunk 索引；否则会出现“chunkKey 不匹配 hot/warm”导致误隐藏
+                this.rebuildChunkIndexByScanningChildren();
+                this.lastMapWidth = this.mapEditor.mapWidth;
+                this.lastMapHeight = this.mapEditor.mapHeight;
+                this.lastRescanFrame = frame;
+            }
+        }
         if (this.startFrame < 0) this.startFrame = frame;
 
         // 定期重扫 disMapContainer children，完全不依赖 MapEditor 回调
@@ -102,9 +113,31 @@ export class ChunkVisibilityController extends Component {
         const startX = -map.tileSize * (map.mapWidth - 1) / 2;
         const startY = map.tileSize * (map.mapHeight - 1) / 2;
 
-        const gx = Math.round((localX - startX) / map.tileSize);
-        const gy = Math.round((startY - localY) / map.tileSize);
+        // 注意：MapModel.gridToWorld 会引入 buildingSize 的偏移项。
+        // 这里为了避免不同设备/缩放导致 contentSize 变化造成误归类，需要用节点 UITransform 尺寸反推 buildingSize。
+        // 由于本函数当前只接收 localX/localY，所以交给调用方通过 node 的 UITransform 提供一个更精确的 buildingSize。
+        // 为了不破坏调用方，默认 buildingSize = 1（等价于 tileSize）。
+        const buildingSize = new Vec2(1, 1);
+        const offsetX = (buildingSize.x * map.tileSize) / 2 - map.tileSize / 2;
+        const offsetY = (buildingSize.y * map.tileSize) / 2 - map.tileSize / 2;
 
+        const gx = Math.floor(((localX - startX - offsetX) / map.tileSize) + 0.5);
+        const gy = Math.floor(((startY + offsetY - localY) / map.tileSize) + 0.5);
+
+        return {
+            gx: Math.max(0, Math.min(map.mapWidth - 1, gx)),
+            gy: Math.max(0, Math.min(map.mapHeight - 1, gy)),
+        };
+    }
+
+    private localPosToGridWithBuildingSize(localX: number, localY: number, buildingSize: Vec2): { gx: number; gy: number } {
+        const map = this.mapEditor!;
+        const startX = -map.tileSize * (map.mapWidth - 1) / 2;
+        const startY = map.tileSize * (map.mapHeight - 1) / 2;
+        const offsetX = (buildingSize.x * map.tileSize) / 2 - map.tileSize / 2;
+        const offsetY = (buildingSize.y * map.tileSize) / 2 - map.tileSize / 2;
+        const gx = Math.floor(((localX - startX - offsetX) / map.tileSize) + 0.5);
+        const gy = Math.floor(((startY + offsetY - localY) / map.tileSize) + 0.5);
         return {
             gx: Math.max(0, Math.min(map.mapWidth - 1, gx)),
             gy: Math.max(0, Math.min(map.mapHeight - 1, gy)),
@@ -125,7 +158,11 @@ export class ChunkVisibilityController extends Component {
             if (!n.getComponent('DisplayTitle')) continue;
 
             const p = n.position;
-            const { gx, gy } = this.localPosToGrid(p.x, p.y);
+            // 用 UITransform 尺寸推断 buildingSize，减少不同设备下的 contentSize 差异导致的归类偏移
+            const ui = n.getComponent(UITransform);
+            const uiSize = ui?.contentSize ?? new Size(this.mapEditor!.tileSize, this.mapEditor!.tileSize);
+            const buildingSize = MapModel.getInstance().getBuildingSize(uiSize, this.mapEditor!);
+            const { gx, gy } = this.localPosToGridWithBuildingSize(p.x, p.y, buildingSize);
             const { cx, cy } = this.gridToChunk(gx, gy);
             const chunkKey = this.getChunkKey(cx, cy);
 
@@ -310,6 +347,18 @@ export class ChunkVisibilityController extends Component {
         this.lastCameraChunkX = centerChunk.cx;
         this.lastCameraChunkY = centerChunk.cy;
 
+        // 统计当前 active 数量，帮助判断“chunkKey 归属是否错误”导致的误隐藏
+        let totalNodeCount = 0;
+        let activeNodeCount = 0;
+        let matchedChunkCount = 0;
+        for (const [chunkKey, nodes] of this.chunkNodes.entries()) {
+            if (hotSet.has(chunkKey) || warmSet.has(chunkKey)) matchedChunkCount++;
+            nodes.forEach((n) => {
+                totalNodeCount++;
+                if (n && n.isValid && n.active) activeNodeCount++;
+            });
+        }
+
         this.chunkNodes.forEach((_nodes, chunkKey) => {
             if (hotSet.has(chunkKey) || warmSet.has(chunkKey)) {
                 this.chunkColdSinceFrame.delete(chunkKey);
@@ -338,6 +387,9 @@ export class ChunkVisibilityController extends Component {
             hotSet: hotSet.size,
             warmSet: warmSet.size,
             chunkNodes: this.chunkNodes.size,
+            matchedChunksInHotWarm: matchedChunkCount,
+            totalNodes: totalNodeCount,
+            activeNodes: activeNodeCount,
             mapWidth: this.mapEditor.mapWidth,
             mapHeight: this.mapEditor.mapHeight,
             orthoHeight: this.camera.orthoHeight,
