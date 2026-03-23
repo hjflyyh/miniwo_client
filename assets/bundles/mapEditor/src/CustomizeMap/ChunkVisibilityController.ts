@@ -200,12 +200,15 @@ export class ChunkVisibilityController extends Component {
         const cam = this.camera!;
 
         const visible = view.getVisibleSize();
-        const centerGrid = MapModel.getInstance().worldPosToGride(
-            new Vec2(visible.width * 0.5, visible.height * 0.5),
-            map
-        );
+        // 更稳：用相机四个屏幕角点反算 grid 范围，避免不同设备/适配导致 orthoHeight/viewport 估算偏移。
+        const w = visible.width;
+        const h = visible.height;
+        const pBL = MapModel.getInstance().worldPosToGride(new Vec2(0, 0), map);
+        const pBR = MapModel.getInstance().worldPosToGride(new Vec2(w, 0), map);
+        const pTL = MapModel.getInstance().worldPosToGride(new Vec2(0, h), map);
+        const pTR = MapModel.getInstance().worldPosToGride(new Vec2(w, h), map);
 
-        if (!Number.isFinite(centerGrid.x) || !Number.isFinite(centerGrid.y)) {
+        if (!pBL || !pBR || !pTL || !pTR) {
             return {
                 minX: 0,
                 maxX: map.mapWidth - 1,
@@ -214,18 +217,28 @@ export class ChunkVisibilityController extends Component {
             };
         }
 
-        const aspect = visible.width / Math.max(1, visible.height);
-        const halfHWorld = cam.orthoHeight;
-        const halfWWorld = halfHWorld * aspect;
+        const xs = [pBL.x, pBR.x, pTL.x, pTR.x];
+        const ys = [pBL.y, pBR.y, pTL.y, pTR.y];
 
-        const halfTilesX = Math.ceil(halfWWorld / map.tileSize);
-        const halfTilesY = Math.ceil(halfHWorld / map.tileSize);
+        const minXRaw = Math.min(...xs);
+        const maxXRaw = Math.max(...xs);
+        const minYRaw = Math.min(...ys);
+        const maxYRaw = Math.max(...ys);
+
+        if (![minXRaw, maxXRaw, minYRaw, maxYRaw].every((v) => Number.isFinite(v))) {
+            return {
+                minX: 0,
+                maxX: map.mapWidth - 1,
+                minY: 0,
+                maxY: map.mapHeight - 1,
+            };
+        }
 
         return {
-            minX: Math.max(0, centerGrid.x - halfTilesX),
-            maxX: Math.min(map.mapWidth - 1, centerGrid.x + halfTilesX),
-            minY: Math.max(0, centerGrid.y - halfTilesY),
-            maxY: Math.min(map.mapHeight - 1, centerGrid.y + halfTilesY),
+            minX: Math.max(0, Math.floor(minXRaw)),
+            maxX: Math.min(map.mapWidth - 1, Math.ceil(maxXRaw)),
+            minY: Math.max(0, Math.floor(minYRaw)),
+            maxY: Math.min(map.mapHeight - 1, Math.ceil(maxYRaw)),
         };
     }
 
