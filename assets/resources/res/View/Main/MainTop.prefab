@@ -112,7 +112,7 @@
     "_lscale": {
       "__type__": "cc.Vec3",
       "x": 1,
-      "y": 1,
+      "y": -1,
       "z": 1
     },
     "_mobility": 0,
@@ -243,6 +243,8 @@
       "__id__": 0
     },
     "fileId": "c7ZqRHWulOMIgifjVIvoTd",
+    "instance": null,
+    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {

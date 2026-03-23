@@ -236,7 +236,7 @@
     "defaultSkin": "default",
     "defaultAnimation": "animation",
     "_premultipliedAlpha": false,
-    "_timeScale": 1,
+    "_timeScale": 2,
     "_preCacheMode": 0,
     "_cacheMode": 0,
     "_sockets": [],
