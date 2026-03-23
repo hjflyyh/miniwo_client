@@ -31,6 +31,9 @@ export class FollowView extends Component {
     @property(Node)
     public offLike: Node = null
 
+    @property(EditBox)
+    commentNode: EditBox = null
+
     private isLike: boolean = false
     private likeCount: number = 0
     // 一级评论列表
@@ -127,6 +130,17 @@ export class FollowView extends Component {
             postID: this.postID,
             postAt: this.postAt,
         })
+    }
+
+    onClickComment() {
+        if (this.commentNode.string) {
+            AppConst.SocialHttpManager.sendPostHttp("commentTimeline", {
+                postID: this.postID,
+                postAt: this.postAt,
+                content: this.commentNode.string,
+            })
+            this.commentNode.string = ""
+        }
     }
 
     postLikeConfirmBack(postID) {
