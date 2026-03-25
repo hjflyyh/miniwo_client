@@ -40,7 +40,8 @@ export class FollowCommentCell extends Component {
             console.error("commentData is null")
             return
         }
-        this.commentContent.string = this.commentData.Content
+        const reply = !!this.commentData?.ParentID ? "reply from userID:" + this.commentData?.ParentID + " " : ""
+        this.commentContent.string = reply  + this.commentData.Content
         this.commentAt.string = Utils.getDateFromStr(this.commentData.CreatedAt)
         this.likeCount = this.commentData?.LikeCount || 0
         if (SocialModel.getInstance().commentPostID == this.postID) {
@@ -54,7 +55,8 @@ export class FollowCommentCell extends Component {
             postID: this.postID,
             postAt: this.postAt,
             topID: this.topID,
-            commentID: this.commentID,
+            // commentID: this.commentID,
+            userID: this.commentData.UserID,
         })
     }
 

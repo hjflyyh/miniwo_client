@@ -11,6 +11,8 @@ export class SocialModel {
     public commentPostID: number = 0  // 指定帖子id
     public commentIDs: number[] = [] // 帖子id下的所有点赞过的评论id
 
+    public draftData: any
+
     public static getInstance(): SocialModel {
         if (!this._instance) {
             this._instance = new SocialModel();
@@ -47,6 +49,11 @@ export class SocialModel {
             EventSystem.send("topCommentListData", { list: data.list, postID: data.postID, postAt: data.postAt, topID: data.topID })
         }
         else if (cmd == network.FollowSocialCode.PostCreate) {
+            this.draftData = {
+                content: data?.draft?.Content || "",
+                title: data?.draft?.Title || "",
+                imageUrl: data?.draft?.ImageURL || "",
+            }
             EventSystem.send("followEditBack")
         }
         else if (cmd == network.FollowSocialCode.LikeConfirm && !data?.commentID) {
@@ -72,6 +79,13 @@ export class SocialModel {
         else if (cmd == network.FollowSocialCode.UnLikeConfirm && data?.commentID) {
             this.commentIDs = this.commentIDs.filter((item: any) => item != data.commentID)
             EventSystem.send("commentLikeConfirmBack", { postID: data.postID, commentID: data.commentID })
+        }
+        else if (cmd == network.FollowSocialCode.Draft) {
+            this.draftData = {
+                content: data?.draft?.Content || "",
+                title: data?.draft?.Title || "",
+                imageUrl: data?.draft?.ImageURL || "",
+            }
         }
     }
 }

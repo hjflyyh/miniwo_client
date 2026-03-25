@@ -25,6 +25,7 @@ export module network {
         PostCreate = 4008, // 发布帖子
         LikeConfirm = 4009, // 点赞确认
         UnLikeConfirm = 4010, // 取消点赞确认
+        Draft = 4011, // 草稿
     }
 
     export enum ServerCommandConstants {

@@ -14,7 +14,7 @@ export class FollowEditComment extends Component {
                 postID: param?.postID,
                 postAt: param?.postAt,
                 topID: param?.topID,
-                parentID: param?.commentID,
+                parentID: param?.userID,
                 content: this.commentNode.string,
             })
         }

@@ -1,5 +1,6 @@
 import { _decorator, Component, EditBox, Node } from 'cc';
 import { AppConst } from '../../AppConst';
+import { SocialModel } from '../../Model/SocialModel';
 const { ccclass, property } = _decorator;
 
 @ccclass('FollowEditView')
@@ -12,6 +13,11 @@ export class FollowEditView extends Component {
 
     start() {
         EventSystem.addListent("followEditBack", this.back, this)
+        const draftData = SocialModel.getInstance().draftData
+        if (draftData) {
+            this.titleNode.string = draftData.title || ""
+            this.contentNode.string = draftData.content || ""
+        }
     }
 
     onClickFriend() {
@@ -23,11 +29,15 @@ export class FollowEditView extends Component {
     }
 
     onClickReward() {
-
+       
     }
 
     onClickSave() {
-
+       AppConst.SocialHttpManager.sendPostHttp("updateDraft", {
+            content: this.contentNode.string,
+            title: this.titleNode.string,
+            // imageUrl:  todo 图片url
+        })
     }
 
     onClickPost() {
@@ -38,7 +48,14 @@ export class FollowEditView extends Component {
     }
 
     onClickDelete() {
-
+        this.contentNode.string = ""
+        this.titleNode.string = ""
+        // todo imageUrl
+        AppConst.SocialHttpManager.sendPostHttp("updateDraft", {
+            content:  "",
+            title:  "",
+            imageUrl:  "",
+        })
     }
 
     back() {

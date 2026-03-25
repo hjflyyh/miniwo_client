@@ -97,6 +97,10 @@ export class MainFollowList extends Component {
     }
 
     onClickEditBtn() {
+        if (!SocialModel.getInstance().draftData) {
+            AppConst.SocialHttpManager.sendGetHttp("draft", {})
+        }
+
         AppConst.PanelManager.openView("res/View/Follow/FollowEditView")
     }
 
