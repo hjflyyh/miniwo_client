@@ -1,0 +1,272 @@
+{
+  "1": {
+    "story_item": "背包",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "2": {
+    "story_item": "钱包",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "101_99"
+  },
+  "3": {
+    "story_item": "手机",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "101_10"
+  },
+  "4": {
+    "story_item": "智脑",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "101_66"
+  },
+  "5": {
+    "story_item": "鲜花",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "6": {
+    "story_item": "礼物",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "7": {
+    "story_item": "钥匙",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "101_10"
+  },
+  "8": {
+    "story_item": "令牌",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "9": {
+    "story_item": "邀请函",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "10": {
+    "story_item": "门禁卡",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "11": {
+    "story_item": "房卡",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "12": {
+    "story_item": "船票",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "13": {
+    "story_item": "车票",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "14": {
+    "story_item": "机票",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "15": {
+    "story_item": "门票",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "16": {
+    "story_item": "书本",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "17": {
+    "story_item": "信件",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "18": {
+    "story_item": "手札",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "19": {
+    "story_item": "悬赏令",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "20": {
+    "story_item": "地图",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "21": {
+    "story_item": "照片",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "22": {
+    "story_item": "监控截图",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "23": {
+    "story_item": "U盘",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "24": {
+    "story_item": "戒指",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "25": {
+    "story_item": "项链",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "26": {
+    "story_item": "耳环",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "27": {
+    "story_item": "玉佩",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "28": {
+    "story_item": "吊坠",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "29": {
+    "story_item": "手镯",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "30": {
+    "story_item": "发簪",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "31": {
+    "story_item": "手帕",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "32": {
+    "story_item": "香囊",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "33": {
+    "story_item": "怀表",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "34": {
+    "story_item": "护身符",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "35": {
+    "story_item": "平安符",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "36": {
+    "story_item": "古籍",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "37": {
+    "story_item": "残卷",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "38": {
+    "story_item": "卷轴",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "39": {
+    "story_item": "法器",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "40": {
+    "story_item": "魂器",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "41": {
+    "story_item": "占星图",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "42": {
+    "story_item": "水晶球",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "43": {
+    "story_item": "齿轮",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "44": {
+    "story_item": "徽章",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "45": {
+    "story_item": "沙漏",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "46": {
+    "story_item": "面具",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "47": {
+    "story_item": "印章",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "48": {
+    "story_item": "王冠",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "49": {
+    "story_item": "权杖",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "50": {
+    "story_item": "通缉令",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "51": {
+    "story_item": "病历",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "52": {
+    "story_item": "诊断书",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "53": {
+    "story_item": "体检报告",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  },
+  "54": {
+    "story_item": "录音笔",
+    "world_attribute_limit": "",
+    "return_to_npc_effect": "103_3"
+  }
+}

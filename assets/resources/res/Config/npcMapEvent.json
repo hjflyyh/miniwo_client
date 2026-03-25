@@ -1,0 +1,137 @@
+{
+  "1": {
+    "action_id": "100001",
+    "npc_id": "1",
+    "scene_name": "教室",
+    "scene_id": "10001",
+    "scene_range": "1#50&1#50",
+    "weight": "100",
+    "stay_time_s": "60_600"
+  },
+  "2": {
+    "action_id": null,
+    "npc_id": null,
+    "scene_name": "操场",
+    "scene_id": "10002",
+    "scene_range": "51#100&1#50",
+    "weight": "100",
+    "stay_time_s": "60_600"
+  },
+  "3": {
+    "action_id": null,
+    "npc_id": null,
+    "scene_name": "社团活动室",
+    "scene_id": "10003",
+    "scene_range": "1#50&51#100",
+    "weight": "100",
+    "stay_time_s": "60_600"
+  },
+  "4": {
+    "action_id": null,
+    "npc_id": null,
+    "scene_name": "小卖铺",
+    "scene_id": "10004",
+    "scene_range": "101#150&1#50",
+    "weight": "100",
+    "stay_time_s": "60_600"
+  },
+  "5": {
+    "action_id": null,
+    "npc_id": null,
+    "scene_name": "面包店",
+    "scene_id": "10005",
+    "scene_range": "51#100&51#100",
+    "weight": "100",
+    "stay_time_s": "60_600"
+  },
+  "6": {
+    "action_id": null,
+    "npc_id": null,
+    "scene_name": "宿舍",
+    "scene_id": "10006",
+    "scene_range": "101#150&51#100",
+    "weight": "100",
+    "stay_time_s": "60_600"
+  },
+  "7": {
+    "action_id": null,
+    "npc_id": null,
+    "scene_name": "公园",
+    "scene_id": "10007",
+    "scene_range": "51#100&101#150",
+    "weight": "100",
+    "stay_time_s": "60_600"
+  },
+  "8": {
+    "action_id": null,
+    "npc_id": null,
+    "scene_name": "小吃街",
+    "scene_id": "10008",
+    "scene_range": "101#150&101#150",
+    "weight": "100",
+    "stay_time_s": "60_600"
+  },
+  "9": {
+    "action_id": "100002",
+    "npc_id": "1",
+    "scene_name": "教室",
+    "scene_id": "10001",
+    "scene_range": "1#50&1#50",
+    "weight": "100",
+    "stay_time_s": "60_600"
+  },
+  "10": {
+    "action_id": null,
+    "npc_id": null,
+    "scene_name": "操场",
+    "scene_id": "10002",
+    "scene_range": "51#100&1#50",
+    "weight": "100",
+    "stay_time_s": "60_600"
+  },
+  "11": {
+    "action_id": null,
+    "npc_id": null,
+    "scene_name": "社团活动室",
+    "scene_id": "10003",
+    "scene_range": "1#50&51#100",
+    "weight": "100",
+    "stay_time_s": "60_600"
+  },
+  "12": {
+    "action_id": null,
+    "npc_id": null,
+    "scene_name": "小卖铺",
+    "scene_id": "10004",
+    "scene_range": "101#150&1#50",
+    "weight": "100",
+    "stay_time_s": "60_600"
+  },
+  "13": {
+    "action_id": null,
+    "npc_id": null,
+    "scene_name": "面包店",
+    "scene_id": "10005",
+    "scene_range": "51#100&51#100",
+    "weight": "100",
+    "stay_time_s": "60_600"
+  },
+  "14": {
+    "action_id": null,
+    "npc_id": null,
+    "scene_name": "公园",
+    "scene_id": "10007",
+    "scene_range": "51#100&101#150",
+    "weight": "100",
+    "stay_time_s": "60_600"
+  },
+  "15": {
+    "action_id": null,
+    "npc_id": null,
+    "scene_name": "小吃街",
+    "scene_id": "10008",
+    "scene_range": "101#150&101#150",
+    "weight": "100",
+    "stay_time_s": "60_600"
+  }
+}

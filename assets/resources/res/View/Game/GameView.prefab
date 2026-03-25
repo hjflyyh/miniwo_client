@@ -188,7 +188,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "worldName",
+    "_name": "mapName",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -1534,7 +1534,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 33.69189453125,
+      "x": 41.71923828125,
       "y": 0,
       "z": 0
     },
@@ -1575,7 +1575,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 67.3837890625,
+      "width": 83.4384765625,
       "height": 54.4
     },
     "_anchorPoint": {
@@ -1611,7 +1611,7 @@
       "b": 0,
       "a": 255
     },
-    "_string": "label",
+    "_string": "CHAT",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 30,
@@ -1711,7 +1711,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 87.8837890625,
+      "x": 103.9384765625,
       "y": 0,
       "z": 0
     },
@@ -1838,7 +1838,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 98.3837890625,
+      "width": 114.4384765625,
       "height": 100
     },
     "_anchorPoint": {
@@ -1983,7 +1983,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 2.6469999999999914,
+      "x": 2.647000000000048,
       "y": 2.596499999999992,
       "z": 0
     },
@@ -2024,8 +2024,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 557.2979999999999,
-      "height": -379.4369999999999
+      "width": 580,
+      "height": 380
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2046,7 +2046,7 @@
     "node": {
       "__id__": 79
     },
-    "_enabled": false,
+    "_enabled": true,
     "__prefab": {
       "__id__": 83
     },
@@ -2094,10 +2094,10 @@
     },
     "_alignFlags": 45,
     "_target": null,
-    "_left": 22.498000000000076,
-    "_right": 17.204000000000043,
-    "_top": 397.12199999999996,
-    "_bottom": 402.31499999999994,
+    "_left": 11.147000000000048,
+    "_right": 5.853000000000009,
+    "_top": 17.403500000000008,
+    "_bottom": 22.596499999999992,
     "_horizontalCenter": 0,
     "_verticalCenter": 0,
     "_isAbsLeft": true,
@@ -4061,6 +4061,12 @@
     },
     "editBox": {
       "__id__": 128
+    },
+    "mapName": {
+      "__id__": 7
+    },
+    "followScroll": {
+      "__id__": 82
     },
     "_id": ""
   },

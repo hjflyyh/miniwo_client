@@ -1,0 +1,50 @@
+{
+  "1": {
+    "scene_name": "教室",
+    "scene_id": "10001",
+    "scene_part_name": "黑板",
+    "scene_part_id": "10001001",
+    "weight": "100",
+    "action": "1000100101_100_15#1000100102_100_15"
+  },
+  "2": {
+    "scene_name": "",
+    "scene_id": null,
+    "scene_part_name": "椅子",
+    "scene_part_id": "10001002",
+    "weight": "100",
+    "action": "1000100201_100_10"
+  },
+  "3": {
+    "scene_name": "",
+    "scene_id": null,
+    "scene_part_name": "挂画",
+    "scene_part_id": "10001003",
+    "weight": "100",
+    "action": "1000100301_100_15"
+  },
+  "4": {
+    "scene_name": "",
+    "scene_id": null,
+    "scene_part_name": "窗户",
+    "scene_part_id": "10001004",
+    "weight": "100",
+    "action": "1000100401_100_5"
+  },
+  "5": {
+    "scene_name": "",
+    "scene_id": null,
+    "scene_part_name": "书柜",
+    "scene_part_id": "10001005",
+    "weight": "100",
+    "action": "1000100501_100_10"
+  },
+  "6": {
+    "scene_name": "",
+    "scene_id": null,
+    "scene_part_name": "绿植",
+    "scene_part_id": "10001006",
+    "weight": "100",
+    "action": "1000100601_100_15"
+  }
+}

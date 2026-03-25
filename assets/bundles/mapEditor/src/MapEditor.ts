@@ -795,7 +795,7 @@ export class MapEditor extends Component {
             let displayTitle = tile.addComponent("DisplayTitle") as DisplayTitle;
             displayTitle.sp = sprite
             displayTitle.spframeName = tileData["url"]
-            console.log(tileData["url"])
+            // console.log(tileData["url"])
             
             displayTitle.gridKey = `${newPos.x},${newPos.y}`
             displayTitle.poolNodeSize = _size

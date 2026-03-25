@@ -306,6 +306,8 @@ export class WebSocketManager extends Component {
                             payload
                         }
                         EventSystem.send("OnMatchData" , match_data)
+                    }else if(data.channel_message != null){
+                        EventSystem.send("ChannelMessage" , JSON.parse(data.channel_message.content))
                     }else{
                         console.log(data)
                         log("消息错误")
