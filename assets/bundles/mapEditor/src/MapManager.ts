@@ -46,7 +46,7 @@ export class MapManager extends Component {
     protected onLoad(): void {
         this.checkTileObj()
         MapManager.instance = this;
-        director.addPersistRootNode(this.node);
+        // director.addPersistRootNode(this.node);
     }
 
     start() {

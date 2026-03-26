@@ -54,10 +54,27 @@ export module network {
             return { rpc: { id: "join_map", payload: JSON.stringify({ map_id: map_id }) } };
         }
     }
+    
+    export class leaveMapEequest {
+        toJSON(map_id) {
+            return {
+                rpc: {
+                    id: "leave_map",
+                    payload: JSON.stringify({ map_id: map_id })
+                }
+            }
+        }
+    }
 
     export class MatchJoinEequest {
         toJSON(match_id) {
             return { match_join: { match_id: match_id } };
+        }
+    }
+
+    export class MatchLeaveEequest {
+        toJSON(match_id) {
+            return { match_leave: { match_id: match_id } };
         }
     }
 
