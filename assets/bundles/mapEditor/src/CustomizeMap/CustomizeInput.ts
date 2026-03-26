@@ -10,13 +10,34 @@ export class CustomizeInput extends Component {
     @property(MapEditor)
     mapEditor : MapEditor = null
 
+    private tryBindMapEditor(): boolean {
+        if (this.mapEditor && this.mapEditor.isValid) return true;
+        const mgr = MapManager.GetInstance();
+        if (!mgr) return false;
+        const editor = mgr.getMapEditor() as MapEditor;
+        if (!editor || !editor.isValid) return false;
+        this.mapEditor = editor;
+        return true;
+    }
+
+    private ensureMapEditor(): boolean {
+        const ok = this.tryBindMapEditor();
+        if (!ok) {
+            // 第二次进入场景时如果时序较早，这里会短暂拿不到，后续输入再尝试绑定
+            console.warn('[CustomizeInput] mapEditor not ready yet');
+        }
+        return ok;
+    }
+
     start() {
+        this.tryBindMapEditor();
         if (sys.isMobile) {
             input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
             input.on(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
             input.on(Input.EventType.TOUCH_END, this.onTouchEnd, this);
         } else {
             input.on(Input.EventType.MOUSE_WHEEL , (event : EventMouse)=>{
+                if (!this.ensureMapEditor()) return;
                 const manager = MapManager.GetInstance();
                 if(manager.actionStatus != ActionStatus.Back){
                     return
@@ -27,6 +48,7 @@ export class CustomizeInput extends Component {
                 this.mapEditor.zoomCamera(-dir * this.mapEditor.wheelZoomStep)
             })
             input.on(Input.EventType.MOUSE_MOVE, (event: EventMouse) => {
+                if (!this.ensureMapEditor()) return;
                 const manager = MapManager.GetInstance();
 
                 if (this.mapEditor.isBuildSwitch) {
@@ -85,6 +107,7 @@ export class CustomizeInput extends Component {
             }, this);
 
             input.on(Input.EventType.MOUSE_DOWN, (event: EventMouse) => {
+                if (!this.ensureMapEditor()) return;
                 const manager = MapManager.GetInstance();
 
                 const gridPos = MapModel.getInstance().worldPosToGride(event.getLocation() , this.mapEditor);
@@ -122,6 +145,7 @@ export class CustomizeInput extends Component {
             }, this);
 
             input.on(Input.EventType.MOUSE_UP, (event: EventMouse) => {
+                if (!this.ensureMapEditor()) return;
                 this.mapEditor.mapGraphics.clear()
                 if (!this.mapEditor.isBuildSwitch) {
                     const mouseWorldPoint = this.mapEditor.mainCamera.screenToWorld(new Vec3(event.getLocation().x, event.getLocation().y, 0))
@@ -201,6 +225,7 @@ export class CustomizeInput extends Component {
     private isPinching: boolean = false
     private lastPinchDistance: number = 0
     private onTouchStart(event: EventTouch) {
+        if (!this.ensureMapEditor()) return;
         const manager = MapManager.GetInstance();
         const activeTouches = this.getActiveTouches(event);
         if(activeTouches.length >= 2 && manager.actionStatus == ActionStatus.Back){
@@ -249,6 +274,7 @@ export class CustomizeInput extends Component {
     }
 
     private onTouchMove(event: EventTouch) {
+        if (!this.ensureMapEditor()) return;
         const activeTouches = this.getActiveTouches(event);
         const manager = MapManager.GetInstance();
         if(this.isPinching || activeTouches.length >= 2){
@@ -329,6 +355,7 @@ export class CustomizeInput extends Component {
     }
 
     private onTouchEnd(event: EventTouch) {
+        if (!this.ensureMapEditor()) return;
         const manager = MapManager.GetInstance();
         if(this.isPinching && manager.actionStatus == ActionStatus.Back){
             const activeTouches = this.getActiveTouches(event);

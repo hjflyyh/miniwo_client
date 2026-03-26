@@ -170,8 +170,12 @@ export class CustomizeMapData extends Component {
             AppConst.WebSocketManager.syncServerTimestampMs(serverTs);
         }
         const globalNowMs = this.getServerTimeMs();
+        const payloadMapId = Number(data?.payload?.map_id ?? 0);
+        // 二次进入场景时，map.map_id 可能还没初始化完成，使用 currentMapId 兜底匹配，避免丢掉首包 NPC 初始化数据。
+        const localMapId = Number(this.map?.map_id || MapModel.getInstance().currentMapId || 0);
+
         if(data.opCode == 1){
-            if(data.payload.map_id == this.map.map_id){
+            if(payloadMapId > 0 && payloadMapId == localMapId){
                 this.npcNodes = {}
                 this.npcDebugTiles = {}
                 this.npcTileCoordMode = 'raw';
@@ -213,11 +217,16 @@ export class CustomizeMapData extends Component {
                 this.renderNpcDebugTileOverlay();
             }
         }else if(data.opCode == 2){
-            if(data.payload.map_id == this.map.map_id){
+            if(payloadMapId > 0 && payloadMapId == localMapId){
                 for(let s = 0 ;s < data.payload.npcs.length ; s++){
                     const npcData = data.payload.npcs[s];
                     const npcId = String(npcData.id);
-                    const npc = this.npcNodes[npcId];
+                    let npc = this.npcNodes[npcId];
+                    // 兜底：如果首包没赶上，增量包到达时补创建 NPC，避免“第二次进入 NPC 不见”
+                    if(!npc){
+                        npc = this.AddNpc(npcData.id);
+                        this.npcNodes[npcId] = npc;
+                    }
                     if(npc){
                         const npcLocal = this.parseServerPos(npcData.x, npcData.y);
                         if (!npcLocal) {

@@ -2223,6 +2223,9 @@
     "updateIntervalFrames": 8,
     "coldHideDelayFrames": 12,
     "rescanIntervalFrames": 30,
+    "warmupFrames": 45,
+    "enableDebugLog": false,
+    "debugLogIntervalFrames": 30,
     "_id": "6cnn2wfg1E75+BynUFOejb"
   },
   {

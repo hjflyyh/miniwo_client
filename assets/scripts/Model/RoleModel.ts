@@ -3,6 +3,7 @@ import { network } from "./RequestData";
 import { AppConst } from "../AppConst";
 import { NPCModel } from "./NPCModel";
 import { HttpManager } from "../Manager/HttpManager";
+import { PrivateChatManager } from "../Manager/PrivateChatMessage";
 
 export class RoleModel {
     private static _instance: RoleModel = null;
@@ -16,6 +17,7 @@ export class RoleModel {
     public timeZone: number;
     public clientOs: string;
     public userId: string;
+    public nakamaUserId: string;
     public inviteCode: string;
     public invite: string;
     public address: string;
@@ -79,6 +81,9 @@ export class RoleModel {
             if(payload && payload.success){
                 if(payload.session_id){
                     this.nakamaSessionId = String(payload.session_id);
+                    this.nakamaUserId = String(payload.user_id);
+
+                    PrivateChatManager.getInstance().init(this.nakamaUserId);
                 }
 
                 EventSystem.send("LoginSuccess")
