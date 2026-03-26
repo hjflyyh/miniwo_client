@@ -12,6 +12,7 @@ type ChatMessage = {
   map_id: number;
   ts: number;
   username : string;
+  npc_name ?: string; // 可选，只有 from_type 是 npc 时才有
 };
 
 export class MapChatManager {
@@ -63,17 +64,49 @@ export class MapChatManager {
     this._inited = true;
   }
 
+    /**
+     * 从文本中解析 @名字，与当前地图 mapNpcs 的 name 完全匹配则收集对应 npc id（去重）。
+     * 例：`sfsdfsf  @NPC_6  sfsdf` → 若某 npc.name === "NPC_6" 则 mentions 包含其 id。
+     */
+    private buildMentionsFromText(text: string): string[] {
+        const map = MapModel.getInstance().mapNpcs as Record<string, { name?: string }>;
+        const re = /@\s*([^\s@]+)/g;
+        const seen = new Set<string>();
+        const ids: string[] = [];
+        let m: RegExpExecArray | null;
+        while ((m = re.exec(text)) !== null) {
+            const token = (m[1] ?? '').trim();
+            if (!token) continue;
+            for (const npcId in map) {
+                const npc = map[npcId];
+                if (!npc) continue;
+                const name = npc.name != null ? String(npc.name) : '';
+                if (name === token && !seen.has(npcId)) {
+                    seen.add(npcId);
+                    ids.push(String(npcId));
+                    break;
+                }
+            }
+        }
+        return ids;
+    }
+
      // mapId: 传 <=0 也可以（服务端会用“当前所在地图”）
     public async sendMapChat(text: string, mapId: number = -1) {
         const t = (text ?? '').trim();
         if (!t) return { success: false, message: '消息不能为空' };
         // 服务端限制：<= 200 字（按 rune 计数更稳）
         if ([...t].length > 200) return { success: false, message: '消息内容过长（最多200字）' };
-        const result = await this.rpc('map_chat_send_player', {
+        const payload: Record<string, unknown> = {
           map_id: mapId,
           text: t,
           player_id : RoleModel.getInstance().playerId
-        });
+        };
+        const mentions = this.buildMentionsFromText(t);
+        if (mentions.length > 0) {
+          payload.mentions = mentions;
+        }
+        const result = await this.rpc('map_chat_send_player', payload);
         // 期望：{success:true, message_id:...} 或 {success:false, message:...}
         return result;
     }
@@ -112,13 +145,15 @@ export class MapChatManager {
     }
 
     private OnChannelMessage(data){
+      // let data = data.content
           const msg: ChatMessage = {
-            from_type: data.from_type,
-            from_id: String(data.from_id ?? ""),
-            text: data.text,
-            map_id: Number(data.map_id),
-            ts: Number(data.ts),
-            username : data.nick_name
+            from_type: data.content.from_type,
+            from_id: String(data.content.from_id ?? ""),
+            text: data.content.text,
+            map_id: Number(data.content.map_id),
+            ts: Number(data.content.ts),
+            username : data.content.nick_name,
+            npc_name : data.content.npc_name
           };
           this.msessages.push(msg);
 
@@ -137,13 +172,37 @@ export class MapChatManager {
             text: content.text,
             map_id: Number(content.map_id),
             ts: Number(content.ts),
-            username : payload.messages[m].username
+            username : payload.messages[m].username,
+            npc_name : content.npc_name
           };
           this.msessages.push(msg);
         }
 
         // console.log(this.msessages)
       }
+    }
+
+    /** data.text 可能是普通字符串，也可能是 JSON：{"message":"...","mentions":[]} */
+    public getDisplayText(raw: unknown): string {
+        if (raw == null) return '';
+        if (typeof raw !== 'string') {
+            if(raw["message"]){
+                return String(raw["message"])
+            }
+            return String(raw);
+        }
+        const s = raw.trim();
+        if (s.length === 0) return '';
+        if (s[0] !== '{') return raw;
+        try {
+            const obj = JSON.parse(s) as { message?: unknown; mentions?: unknown };
+            if (obj && typeof obj === 'object' && 'message' in obj && obj.message != null) {
+                return String(obj.message);
+            }
+        } catch {
+            // 不是合法 JSON，按普通文本展示
+        }
+        return raw;
     }
 
 

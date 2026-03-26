@@ -40,6 +40,8 @@ export class MapModel {
         EventSystem.addListent("WebSocketMessage" , this.OnWebSocketMessage , this)
         EventSystem.addListent("LoginSuccess" , this.OnGameLoginSuccess , this)
         EventSystem.addListent("ForceLogout" , this.OnForceLogout , this)
+
+        EventSystem.addListent("OnMatchData" , this.OnMatchData , this)
     }
 
     public GetMapData(index){
@@ -50,11 +52,23 @@ export class MapModel {
         }
     }
 
+    public mapNpcs = {}
+    public OnMatchData(data){
+        if(data.opCode == 1){
+            let npcs = data.payload.npcs
+            for(let n = 0 ;n < npcs.length ; n++){
+                let npcId = data.payload.npcs[n].id
+                this.mapNpcs[npcId] = data.payload.npcs[n] 
+            }
+        }
+    }    
+
     public map_detail = null
     //type 0根据地图列表进入地图，需要去掉所有UI   1进入编辑
     public EnterMap(type , map_detail = null){
         this.map_detail = map_detail
         this.isInMap = true
+        this.mapNpcs = {}
         AppConst.PanelManager.CloseAll()
         this.showEditMapType = type
         AppConst.PanelManager.openView("res/View/Loading/EditMapLoading")

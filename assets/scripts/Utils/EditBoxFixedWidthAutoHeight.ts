@@ -29,6 +29,8 @@ export class EditBoxFixedWidthAutoHeight extends Component {
 
   @property(Label)
   showText : Label = null
+  
+  otherTextStr = ""
 
   onLoad() {
     this.editBox.node.on(EditBox.EventType.TEXT_CHANGED, this._sync, this);
@@ -44,28 +46,28 @@ export class EditBoxFixedWidthAutoHeight extends Component {
     const label = this.editBox.textLabel;
     if (!label) return;
 
-    const labelUt = label.node.getComponent(UITransform)!;
+    // const labelUt = label.node.getComponent(UITransform)!;
 
-    // 宽固定 → 多行换行 → 高由引擎排版决定
-    labelUt.width = this.fixedContentWidth;
-    label.overflow = Label.Overflow.RESIZE_HEIGHT;
-    label.updateRenderData(true);
+    // // 宽固定 → 多行换行 → 高由引擎排版决定
+    // labelUt.width = this.fixedContentWidth;
+    // label.overflow = Label.Overflow.RESIZE_HEIGHT;
+    // label.updateRenderData(true);
 
-    const textH = labelUt.contentSize.height;
-    let h = textH + this.paddingTop + this.paddingBottom;
-    h = Math.max(this.minHeight, Math.min(this.maxHeight, h));
+    // const textH = labelUt.contentSize.height;
+    // let h = textH + this.paddingTop + this.paddingBottom;
+    // h = Math.max(this.minHeight, Math.min(this.maxHeight, h));
 
-    // 背景：宽用你设计上的「外框宽」，若与内容同宽就一致；这里假设外框宽 = 内容宽 + 左右边可自己在 prefab 里定一个常量
-    const bgUt = this.bgNode.getComponent(UITransform)!;
-    const bgW = bgUt.width; // 保持 prefab 里设的固定宽度；若要和 fixedContentWidth 一致可改成 this.fixedContentWidth
-    bgUt.setContentSize(bgW, h);
+    // // 背景：宽用你设计上的「外框宽」，若与内容同宽就一致；这里假设外框宽 = 内容宽 + 左右边可自己在 prefab 里定一个常量
+    // const bgUt = this.bgNode.getComponent(UITransform)!;
+    // const bgW = bgUt.width; // 保持 prefab 里设的固定宽度；若要和 fixedContentWidth 一致可改成 this.fixedContentWidth
+    // bgUt.setContentSize(bgW, h);
 
-    // EditBox 根节点高度也要改，否则点击区域/裁剪可能不对
-    const rootUt = this.editBox.node.getComponent(UITransform)!;
-    rootUt.setContentSize(rootUt.width, h);
+    // // EditBox 根节点高度也要改，否则点击区域/裁剪可能不对
+    // const rootUt = this.editBox.node.getComponent(UITransform)!;
+    // rootUt.setContentSize(rootUt.width, h);
 
     if(this.showText != null){
-        this.showText.string = this.editBox.string
+        this.showText.string = this.otherTextStr + this.editBox.string
     }
   }
 }

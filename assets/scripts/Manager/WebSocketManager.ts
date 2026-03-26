@@ -307,7 +307,26 @@ export class WebSocketManager extends Component {
                         }
                         EventSystem.send("OnMatchData" , match_data)
                     }else if(data.channel_message != null){
-                        EventSystem.send("ChannelMessage" , JSON.parse(data.channel_message.content))
+                        // EventSystem.send("ChannelMessage" , JSON.parse(data.channel_message.content))
+                        const cm = data.channel_message;
+                        let parsedContent: any = {};
+                        try {
+                            parsedContent = typeof cm.content === "string" ? JSON.parse(cm.content) : (cm.content || {});
+                        } catch {
+                            parsedContent = {};
+                        }
+                        EventSystem.send("ChannelMessage", {
+                            message_id: cm.message_id,
+                            channel_id: cm.channel_id,
+                            sender_id: cm.sender_id,
+                            username: cm.username,
+                            create_time: cm.create_time,
+                            update_time: cm.update_time,
+                            persistent: cm.persistent,
+                            content: parsedContent,
+                            raw: cm,
+                        });
+
                     }else{
                         console.log(data)
                         log("消息错误")

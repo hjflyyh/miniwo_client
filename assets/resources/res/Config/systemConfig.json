@@ -66,5 +66,9 @@
   "17": {
     "function": "公屏禁言规则",
     "configuration": "任意NPC对用户的好感度为负"
+  },
+  "18": {
+    "function": "彩蛋相关规则",
+    "configuration": "3_3_1"
   }
 }

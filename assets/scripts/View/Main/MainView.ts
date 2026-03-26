@@ -1,5 +1,6 @@
 import { _decorator, Component, Node } from 'cc';
 import { AppConst } from '../../AppConst';
+import { PrivateChatManager } from '../../Manager/PrivateChatMessage';
 const { ccclass, property } = _decorator;
 
 @ccclass('MainView')
