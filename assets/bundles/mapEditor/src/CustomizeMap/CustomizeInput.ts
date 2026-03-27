@@ -207,6 +207,27 @@ export class CustomizeInput extends Component {
         }
     }
 
+    OnClickUICheckBtn(){
+        if (!this.ensureMapEditor()) return;
+        if (!this.mapEditor.tileMaskNode || !this.mapEditor.mapContainer) return;
+
+        const tileMaskUI = this.mapEditor.tileMaskNode.getComponent(UITransform);
+        if (!tileMaskUI) return;
+
+        const localPos = this.mapEditor.mapContainer.getComponent(UITransform).convertToNodeSpaceAR(this.mapEditor.tileMaskNode.worldPosition);
+        const gridPos = this.mapEditor.getPositionToGrid(new Vec2(localPos.x, localPos.y), tileMaskUI.contentSize);
+        this.mapEditor.buildMap(gridPos);
+    }
+
+    //翻转x轴物品
+    OnClickUIFanzhuan(){
+        if (!this.ensureMapEditor()) return;
+        const previewNode = this.mapEditor["curTileNode"] as Node;
+        if (!previewNode || !previewNode.isValid) return;
+        const curScale = previewNode.getScale();
+        const nextScaleX = curScale.x >= 0 ? -1 : 1;
+        previewNode.setScale(nextScaleX, curScale.y, curScale.z);
+    }
 
     private getActiveTouches(e: EventTouch): any[] {
         const anyEvent = e as any;

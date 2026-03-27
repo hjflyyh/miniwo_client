@@ -23,9 +23,6 @@ export class MapEditorUI extends Component {
     npcDesignDialog: Node = null;
 
     @property(Node)
-    aiStartView: Node = null;
-
-    @property(Node)
     scene_Camera: Node = null;
 
     @property(Node)
@@ -70,6 +67,12 @@ export class MapEditorUI extends Component {
     @property(Canvas)
     public mapCanvas : Canvas
 
+    @property(Label)
+    public gridNumLabel : Label
+
+    @property(Node)
+    public bottomAddNode : Node
+
     private mapToolNode: { tool: Node; switch: Node; }[] = [];
     private tileMenu: Map<string, Node> = new Map;
     private tileContent: Node = null;
@@ -87,6 +90,8 @@ export class MapEditorUI extends Component {
     private isDramaAction: boolean = false; // 是否开拍
 
     protected onLoad(): void {
+        this.bottomAddNode.active = false
+        this.gridNumLabel.string = `${AppConst.UIRoot.MapEditorWidth} x ${AppConst.UIRoot.MapEditorHeight}`;
         MapManager.GetInstance().setMapEditorUI(this);
         
         const content = this.node.getChildByName('toolUI').getChildByName('content');
@@ -113,8 +118,9 @@ export class MapEditorUI extends Component {
             element.tool.active = true;
             if (element.switch) {
                 element.switch.active = false;
-                element.tool.on(Node.EventType.TOUCH_END, this.onClickTool, this);
+                // element.tool.on(Node.EventType.TOUCH_END, this.onClickTool, this);
             }
+            element.tool.on(Node.EventType.TOUCH_END, this.onClickTool, this);
         }
 
         this.buttonStepPack.forEach((child) => {
@@ -126,7 +132,6 @@ export class MapEditorUI extends Component {
 
         this.tileContent.active = false;
         this.saveConfirmDialog.active = false;
-        this.aiStartView.active = false;
 
         this.backBtn.active = false;
         if(MapModel.getInstance().showEditMapType == 0){
@@ -157,7 +162,6 @@ export class MapEditorUI extends Component {
 
     update(deltaTime: number) {
         if (this.isSave && this.saveIndex == 3) {
-            this.sendDramaStart();
             this.saveIndex = 0;
             this.isSave = false;
         }
@@ -168,16 +172,22 @@ export class MapEditorUI extends Component {
 
     OnClickFloorIcon(){
         this.tileContent.active = false;
+
+        this.setBottomNode();
     }
 
     OnClickTileOhterIcon(data){
         this.tileContent.active = false;
+
+        this.setBottomNode();
     }
 
     OnClickTileGroundIcon(data){
         MapManager.GetInstance().tileId = data;
         MapManager.GetInstance().RefreshTileGroundById();
         this.tileContent.active = false;
+
+        this.setBottomNode();
     }
 
     // OnClickTileIcon(data){
@@ -205,6 +215,7 @@ export class MapEditorUI extends Component {
             pt.active = false;
         })
 
+        this.bottomAddNode.active = false;
         this.tileContent.active = true;
         MapManager.GetInstance().restTouch();
 
@@ -214,12 +225,18 @@ export class MapEditorUI extends Component {
             this.tileContent.active = false;
             MapManager.GetInstance().actionStatus = ActionStatus.MOVE;
             MapManager.GetInstance().setMove();
-        } else if (target.name == 'delete') {
-            _index = 1;
-            this.tileContent.active = false;
-            MapManager.GetInstance().actionStatus = ActionStatus.DETELE;
-            MapManager.GetInstance().setDetele();
-        } else if (target.name == 'ground') {
+
+            this.setBottomNode();
+        } 
+        // else if (target.name == 'delete') {
+        //     _index = 1;
+        //     this.tileContent.active = false;
+        //     MapManager.GetInstance().actionStatus = ActionStatus.DETELE;
+        //     MapManager.GetInstance().setDetele();
+
+        //     this.setBottomNode();
+        // } 
+        else if (target.name == 'ground') {
             _index = 2;
             this.tileMenu.get('panel_ground').active = true;
             MapManager.GetInstance().actionStatus = ActionStatus.GROUND;
@@ -251,46 +268,16 @@ export class MapEditorUI extends Component {
             _index = 5;
             this.tileMenu.get('panel_decor').active = true;
             MapManager.GetInstance().actionStatus = ActionStatus.DECOR;
-        } else if (target.name == 'script') {
-            _index = 7;
-            this.tileMenu.get('panel_script').active = true;
-            MapManager.GetInstance().actionStatus = ActionStatus.Script;
-
-            const mapEditor = MapManager.GetInstance().getMapEditor();
-            const content = this.tileMenu.get('panel_script').getChildByPath("content/view/content");
-
-            const dramaName = content.getChildByPath("frame_1/EditBox").getComponent(EditBox);
-            dramaName.string = this.dramaSet.name;
-
-            const dramaScript = content.getChildByPath("frame_2/EditBox").getComponent(EditBox);
-            dramaScript.string = this.dramaSet.script;
-
-            MapManager.GetInstance().getMapEditor().hideTileMask();
-        } else if (target.name == 'video') {
-            _index = 8;
-            MapManager.GetInstance().actionStatus = ActionStatus.Video_Action;
-            MapManager.GetInstance().getMapEditor().hideTileMask();
-
-            this.sendSaveMapData();
-            this.sendDramaConfig();
-
-            this.closeToolBtn();
-            this.isSave = true;
-            this.saveIndex = 0;
-            this.aiStartView.active = true;
-            this.aiStartView.emit("startFakeLoading");
-        } else if (target.name == 'videoStop') {
-            _index = 9;
-            MapManager.GetInstance().actionStatus = ActionStatus.Video_Stop;
-            MapManager.GetInstance().getMapEditor().hideTileMask();
-            this.openToolBtn();
         } else if (target.name == 'save') {
             _index = 10;
             this.onShowSaveDialog();
+
+            this.onClickBack();
         } else if (target.name == 'back') {
             _index = 11;
             MapManager.GetInstance().actionStatus = ActionStatus.Back;
             MapManager.GetInstance().getMapEditor().hideTileMask();
+            this.bottomAddNode.active = false;
         } else if (target.name == 'wallDacoration') {
             _index = 12;
             this.tileMenu.get('panel_wall_decor').active = true;
@@ -303,11 +290,35 @@ export class MapEditorUI extends Component {
             _index = 14;
             this.tileMenu.get('panel_appliance').active = true;
             MapManager.GetInstance().actionStatus = ActionStatus.DECOR;
+        }else if(target.name == "region"){
+            
         }
+
 
         // if (this.mapToolNode[_index].switch) {
         //     this.mapToolNode[_index].switch.active = true;
         // }
+    }
+
+    OnClickDelete(){
+        this.tileContent.active = false;
+        MapManager.GetInstance().actionStatus = ActionStatus.DETELE;
+        MapManager.GetInstance().setDetele();
+
+        this.setBottomNode();
+    }
+
+    @property(Node)
+    confirmBtn: Node = null;
+
+    @property(Node)
+    fanzhuangBtn: Node = null;
+
+    setBottomNode(){
+        this.confirmBtn.active = MapManager.GetInstance().actionStatus == ActionStatus.DECOR || MapManager.GetInstance().actionStatus == ActionStatus.PLANT
+        this.fanzhuangBtn.active = MapManager.GetInstance().actionStatus == ActionStatus.DECOR  || MapManager.GetInstance().actionStatus == ActionStatus.PLANT
+
+        this.bottomAddNode.active = MapManager.GetInstance().actionStatus != ActionStatus.MOVE && MapManager.GetInstance().actionStatus != ActionStatus.Back
     }
 
     onClickSwitchTileMenu(event: EventTouch) {
@@ -408,85 +419,6 @@ export class MapEditorUI extends Component {
         });        
     }
 
-    // 发送剧场信息
-    sendDramaConfig() {
-        const editor = MapManager.GetInstance().getMapEditor();
-        const house = editor.getAllHouseData();
-
-        this.dramaSet.intro = [];
-        house.forEach((pt) => {
-            if (pt.npc) {
-                this.dramaSet.intro.push({ npcId: pt.npc.id, npcName: pt.npc.design.npcName });
-            }
-        })
-        log(this.dramaSet.intro)
-
-        const _frame = CaptureUtils.capture(find("Canvas"), { x: 0, y: 0, width: 972, height: 250 });
-        CaptureUtils.captureAndUpload(_frame.texture as RenderTexture, (base64Image) => {
-            // let json = new network.GetAllNPCRequest();
-            // json.command = 10128;
-            // json.type = 1;
-            // json["data"] = {};
-            // json["data"]["id"] = GlobalConfig.instance.dramaiId;
-            // json["data"]["name"] = this.dramaSet.name;
-            // json["data"]["dramaScript"] = this.dramaSet.script;
-            // json["data"]["intro"] = this.dramaSet.intro;
-            // json["data"]["img"] = base64Image;
-            // socket.sendWebSocketBinary(json);
-        })
-
-        director.loadScene("GameScene", (error: Error) => {
-            if (error) {
-                console.error('卸载场景失败:', error);
-            } else {
-                console.log('场景卸载成功');
-                MapAssetsManager.GetInstance().clearAllEditAsset()
-            }
-        });
-    }
-
-    onBtnVoteStatus_1() {
-        // if(this._voteInfo){
-        //     let myVoteCount = this._voteInfo.myYesCount + this._voteInfo.myNoCount;
-        //     if(myVoteCount > 0){
-        //         this.voteGiftNode.active = true;
-        //     }
-        //     else{
-        //         this.voteStartNode.active = true;
-        //     }
-        // }
-
-
-        // if (!TwitterViewMgr.canShowBanner()) {
-        //     this.votePopupNode.active = true;
-        //     return;
-        // }
-
-        // if (this.isWaittingEpisodeData) {
-        //     return;
-        // }
-        // let epData = TwitterViewMgr.getEpisodeData(GlobalConfig.instance.chooseScene || 4, TwitterViewMgr.nowVoteEp);
-        // if (epData) {
-        //     EventBus.I.post(EventType.INITTWITTERVIEW, epData);
-        //     this.scheduleOnce(() => {
-        //         EventBus.I.post(EventType.GAME_SWITCH_BANNER_NODE, { isFold: false, showVote: true });
-        //     }, 0.1);
-        // } else {
-        //     this.isWaittingEpisodeData = true;
-        //     TwitterViewMgr.nowChooseEp = TwitterViewMgr.nowVoteEp;
-        //     TwitterViewMgr.requestEpisodeData(GlobalConfig.instance.chooseScene, TwitterViewMgr.nowVoteEp);
-        // }
-    }
-
-    onPlayVideo(param) {
-    }
-
-    onBtnCloseVotePopupNode() {
-    }
-
-    sendDramaStart() {
-    }
-
     onClickBack() {
         this.mapToolNode.forEach((pt) => {
             pt.tool.active = true;
@@ -499,6 +431,7 @@ export class MapEditorUI extends Component {
 
         MapManager.GetInstance().actionStatus = ActionStatus.Back;
         MapManager.GetInstance().getMapEditor().hideTileMask();
+        this.bottomAddNode.active = false;
     }
 
     checkButtonVisible(agin: boolean = false) {
@@ -778,12 +711,6 @@ export class MapEditorUI extends Component {
 
         // 超出九宫格范围
         return null;
-    }
-
-    hideAiStartView() {
-        if (this.aiStartView.active) {
-            this.aiStartView.emit("onLoadComplete");
-        }
     }
 
     onSaveMapDataCallBack(param) {

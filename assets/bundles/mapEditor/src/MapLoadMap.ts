@@ -34,9 +34,19 @@ export class MapLoadMap {
             
             const worldPos = MapModel.getInstance().gridToWorld(pos , size , mapEditor);
             tile.setPosition(worldPos);
+            const flipX = plant.flipX != null ? plant.flipX : (plant as any).scaleX;
+            if (flipX != null && flipX < 0) {
+                const scale = tile.getScale();
+                tile.setScale(-1, scale.y, scale.z);
+            }
             mapEditor.mapContainer.addChild(tile);
 
-            mapEditor.mapItems.set(`${pos.x},${pos.y}`, { id: idAry[0] + "#" + idAry[1], tile: tile, tileType: "Plant" });
+            mapEditor.mapItems.set(`${pos.x},${pos.y}`, {
+                id: idAry[0] + "#" + idAry[1],
+                tile: tile,
+                tileType: "Plant",
+                flipX: flipX != null ? (flipX < 0 ? -1 : 1) : 1
+            });
 
             // 更新网格数据
             for (let x = 0; x < buildingSize.x; x++) {

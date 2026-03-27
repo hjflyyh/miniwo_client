@@ -42,6 +42,7 @@ export class MainBottom extends Component {
 
     OnClickEdit(){
         MapModel.getInstance().EnterMap(1)
+        // AppConst.PanelManager.openView("res/View/CreateMap/MyWorldView")
     }
 }
 

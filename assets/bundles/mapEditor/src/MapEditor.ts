@@ -26,14 +26,14 @@ interface WallSpriteConfig {
 
 export interface MapData {
     Ground: { id: string, _type: string, position: string , cfgId : number}[],
-    Plant: { id: string, _type: string, position: string }[],
+    Plant: { id: string, _type: string, position: string, flipX?: number, scaleX?: number }[],
     Floor: { id: string, _type: string, position: string }[],
     House: {
         houseName?: string,
         Floor: { id: string, _type: string, position: string }[],
         OpenWall: { position: string, doorDecorId?: string }[],
         Wall: { id: string, _type: string, position: string }[],
-        Decor: { id: string, oid: string, _type: string, position: string }[],
+        Decor: { id: string, oid: string, _type: string, position: string, flipX?: number, scaleX?: number }[],
     }[],
     Walkable?: {
         width: number,
@@ -102,7 +102,7 @@ export class MapEditor extends Component {
 
     private buildFloorPoints: Vec2[] = [];
     public houseItems: Map<string, { tile: Node, tileType: string, belong?: string }> = new Map();
-    public mapItems: Map<string, { id: string, tile: Node, tileType: string, belong?: string }> = new Map();
+    public mapItems: Map<string, { id: string, tile: Node, tileType: string, belong?: string, flipX?: number }> = new Map();
     public mapData: number[][] = [];
     public tileSize = 32;
     public mapWidth = 46;
@@ -148,7 +148,7 @@ export class MapEditor extends Component {
         openWall: Vec2[],
         openWallDoorDecorIdMap?: Map<string, string>,
         base: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string }>,
-        decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string }>,
+        decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string, flipX?: number }>,
         npc: { id: string, _node: Node, position: string, design: { npcName: string, npcIntro: string } },
         horWalls: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string }>,
         verWalls: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string }>,
@@ -977,6 +977,10 @@ export class MapEditor extends Component {
                     // 放置建筑
                     const worldPos = MapModel.getInstance().gridToWorld(gridPos , null , this);
                     tile.setPosition(worldPos);
+                    const previewScaleX = this.curTileNode?.getScale()?.x ?? 1;
+                    const flipX = previewScaleX < 0 ? -1 : 1;
+                    const tileScale = tile.getScale();
+                    tile.setScale(flipX, tileScale.y, tileScale.z);
                     this.mapContainer.addChild(tile);
 
                     const house = this.allHouse.get(item.belong);
@@ -990,7 +994,8 @@ export class MapEditor extends Component {
                         width: size.width,
                         height: size.height,
                         belong: item.belong,
-                        position: `${gridPos.x},${gridPos.y}`
+                        position: `${gridPos.x},${gridPos.y}`,
+                        flipX
                     });
 
                     // 更新网格数据
@@ -1234,6 +1239,10 @@ export class MapEditor extends Component {
         const size = tile.getComponent(UITransform).contentSize;
         const worldPos = MapModel.getInstance().gridToWorld(gridPos, null, this);
         tile.setPosition(worldPos);
+        const previewScaleX = this.curTileNode?.getScale()?.x ?? 1;
+        const flipX = previewScaleX < 0 ? -1 : 1;
+        const tileScale = tile.getScale();
+        tile.setScale(flipX, tileScale.y, tileScale.z);
         this.mapContainer.addChild(tile);
 
         const house = this.allHouse.get(belong);
@@ -1243,7 +1252,8 @@ export class MapEditor extends Component {
             width: size.width,
             height: size.height,
             belong: belong,
-            position: `${gridPos.x},${gridPos.y}`
+            position: `${gridPos.x},${gridPos.y}`,
+            flipX
         });
 
         MapManager.GetInstance().getMapEditorUI().checkButtonVisible();
@@ -2807,7 +2817,16 @@ export class MapEditor extends Component {
         // 加入
         if (!this.mapItems.has(`${gridPos.x},${gridPos.y}`)) {
             if (manager.actionStatus == ActionStatus.PLANT) {
-                this.mapItems.set(`${gridPos.x},${gridPos.y}`, { id: this.curTileNode.name + "#" + this.curTileNode["tileType"], tile: tile, tileType: "Plant" });
+                const previewScaleX = this.curTileNode?.getScale()?.x ?? 1;
+                const flipX = previewScaleX < 0 ? -1 : 1;
+                const tileScale = tile.getScale();
+                tile.setScale(flipX, tileScale.y, tileScale.z);
+                this.mapItems.set(`${gridPos.x},${gridPos.y}`, {
+                    id: this.curTileNode.name + "#" + this.curTileNode["tileType"],
+                    tile: tile,
+                    tileType: "Plant",
+                    flipX
+                });
             } else if (manager.actionStatus == ActionStatus.FLOOR) {
                 this.mapItems.set(`${gridPos.x},${gridPos.y}`, { id: tile.name, tile: tile, tileType: "Floor" });
                 this.buildFloorPoints.push(gridPos);
@@ -2902,6 +2921,7 @@ export class MapEditor extends Component {
 
         this.buildIcon.addChild(this.curTileNode);
 
+        this.isBuildSwitch = true
         this.setTileSclect()
     }
 
@@ -4209,6 +4229,11 @@ export class MapEditor extends Component {
                 const decorType = this.isWallDacorationTileType(decorTypeRaw) ? "WallDacoration" : decorTypeRaw;
                 const tile = MapManager.GetInstance().getMapCurTileNode(idAry[0] , decorType);
                 tile.name = idAry[0] + "#" + decorType
+                const flipX = decor.flipX != null ? decor.flipX : (decor as any).scaleX;
+                if (flipX != null && flipX < 0) {
+                    const scale = tile.getScale();
+                    tile.setScale(-1, scale.y, scale.z);
+                }
 
                 const size = tile.getComponent(UITransform).contentSize;
                 const buildingSize = MapModel.getInstance().getBuildingSize(size , this);
@@ -4223,7 +4248,8 @@ export class MapEditor extends Component {
                     width: size.width,
                     height: size.height,
                     belong: _name,
-                    position: `${gridPos.x},${gridPos.y}`
+                    position: `${gridPos.x},${gridPos.y}`,
+                    flipX: flipX != null ? (flipX < 0 ? -1 : 1) : 1
                 });
 
                 if (decorType === "Decor") {

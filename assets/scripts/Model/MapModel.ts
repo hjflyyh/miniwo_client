@@ -317,10 +317,13 @@ export class MapModel {
 
         map.mapItems.forEach((value, key) => {
             if (value.tileType == "Plant") {
+                const tileScaleX = value.tile?.getScale?.().x;
+                const flipX = tileScaleX != null ? (tileScaleX < 0 ? -1 : 1) : (value.flipX != null ? (value.flipX < 0 ? -1 : 1) : 1);
                 map.allMapAssetsData.Plant.push({
                     id: value.id,
                     _type: "Plant",
                     position: key ,
+                    flipX,
                     // cfgId : value
                 })
             }
@@ -368,18 +371,21 @@ export class MapModel {
                 }
             })
 
-            let arr_3: { id: string, oid: string, _type: string, position: string }[] = [];
+            let arr_3: { id: string, oid: string, _type: string, position: string, flipX?: number }[] = [];
             value.decor.forEach((value_4, key_4) => {
                 if (value_4.tileType == "Decor" || value_4.tileType == "WallDacoration" || value_4.tileType == "WallDecor") {
                     const posKey = value_4.position && value_4.position.includes(',')
                         ? value_4.position
                         : (key_4.includes('|') ? key_4.split('|')[0] : key_4);
                     const decorType = value_4.tileType == "WallDecor" ? "WallDacoration" : value_4.tileType;
+                    const tileScaleX = value_4.tile?.getScale?.().x;
+                    const flipX = tileScaleX != null ? (tileScaleX < 0 ? -1 : 1) : (value_4.flipX != null ? (value_4.flipX < 0 ? -1 : 1) : 1);
                     arr_3.push({
                         id: value_4.tile.name,
                         oid: value_4.tile.name.split('_')[1],
                         _type: decorType,
-                        position: posKey
+                        position: posKey,
+                        flipX
                     })
                 }
             })
