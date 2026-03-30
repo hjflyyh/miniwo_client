@@ -10,7 +10,8 @@ import { GroundDataSource } from './UI/GroundDataSource';
 import { MapModel } from '../../../scripts/Model/MapModel';
 import { AppConst } from 'db://assets/scripts/AppConst';
 import { CustomizeInput } from './CustomizeMap/CustomizeInput';
-import { EditHead } from '../../../scripts/View/CreateMap/EditHead';
+import { EditHead } from './EditHead';
+
 const { ccclass, property } = _decorator;
 
 @ccclass('MapEditorUI')

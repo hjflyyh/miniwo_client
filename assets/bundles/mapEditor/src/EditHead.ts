@@ -1,7 +1,8 @@
 import { _decorator, Component, instantiate, Node, UITransform } from 'cc';
-import { MapModel } from '../../Model/MapModel';
-import { EditHeadCell } from './EditHeadCell';
+// import { EditHeadCell } from './EditHeadCell';
 import { MapManager } from '../../../bundles/mapEditor/src/MapManager';
+import { MapModel } from 'db://assets/scripts/Model/MapModel';
+import { EditHeadCell } from './EditHeadCell';
 
 const { ccclass, property } = _decorator;
 
