@@ -39,6 +39,9 @@ export class CustomizeInput extends Component {
             input.on(Input.EventType.MOUSE_WHEEL , (event : EventMouse)=>{
                 if (!this.ensureMapEditor()) return;
                 const manager = MapManager.GetInstance();
+                if(manager.actionStatus == ActionStatus.REGION){
+                    return
+                }
                 if(manager.actionStatus != ActionStatus.Back){
                     return
                 }
@@ -50,6 +53,7 @@ export class CustomizeInput extends Component {
             input.on(Input.EventType.MOUSE_MOVE, (event: EventMouse) => {
                 if (!this.ensureMapEditor()) return;
                 const manager = MapManager.GetInstance();
+                if (manager.actionStatus == ActionStatus.REGION) return;
 
                 if (this.mapEditor.isBuildSwitch) {
                     const gridPos = MapModel.getInstance().worldPosToGride(event.getLocation() , this.mapEditor);
@@ -109,6 +113,7 @@ export class CustomizeInput extends Component {
             input.on(Input.EventType.MOUSE_DOWN, (event: EventMouse) => {
                 if (!this.ensureMapEditor()) return;
                 const manager = MapManager.GetInstance();
+                if (manager.actionStatus == ActionStatus.REGION) return;
 
                 const gridPos = MapModel.getInstance().worldPosToGride(event.getLocation() , this.mapEditor);
                 const localPos = MapModel.getInstance().gridToWorld(gridPos , null , this.mapEditor);
@@ -146,6 +151,8 @@ export class CustomizeInput extends Component {
 
             input.on(Input.EventType.MOUSE_UP, (event: EventMouse) => {
                 if (!this.ensureMapEditor()) return;
+                const manager = MapManager.GetInstance();
+                if (manager.actionStatus == ActionStatus.REGION) return;
                 this.mapEditor.mapGraphics.clear()
                 if (!this.mapEditor.isBuildSwitch) {
                     const mouseWorldPoint = this.mapEditor.mainCamera.screenToWorld(new Vec3(event.getLocation().x, event.getLocation().y, 0))
@@ -153,7 +160,6 @@ export class CustomizeInput extends Component {
                         this.mapEditor.isBuildSwitch = true;
                     }
                 } else {
-                    const manager = MapManager.GetInstance();
                     if (manager.actionStatus != ActionStatus.MOVE) {
                         const dis = Vec2.distance(event.getLocation(), this.mapEditor.startMousePosition);
                         if (dis > 10) {
@@ -208,7 +214,19 @@ export class CustomizeInput extends Component {
     }
 
     OnClickUICheckBtn(){
+        MapManager.GetInstance().getMapEditorUI()?.hideNpcHeadsOnConfirm?.();
         if (!this.ensureMapEditor()) return;
+        const manager = MapManager.GetInstance();
+        if (manager.actionStatus == ActionStatus.REGION) {
+            const mapEditorUI = manager.getMapEditorUI();
+            const npcIds = mapEditorUI?.getPendingRegionNpcIds?.() ?? [];
+            if (!npcIds || npcIds.length <= 0) {
+                EventSystem.send("ShowTips", "区域内需要选定npc");
+                return;
+            }
+            mapEditorUI?.confirmRegionSelection?.();
+            return;
+        }
         if (!this.mapEditor.tileMaskNode || !this.mapEditor.mapContainer) return;
 
         const tileMaskUI = this.mapEditor.tileMaskNode.getComponent(UITransform);
@@ -248,6 +266,7 @@ export class CustomizeInput extends Component {
     private onTouchStart(event: EventTouch) {
         if (!this.ensureMapEditor()) return;
         const manager = MapManager.GetInstance();
+        if (manager.actionStatus == ActionStatus.REGION) return;
         const activeTouches = this.getActiveTouches(event);
         if(activeTouches.length >= 2 && manager.actionStatus == ActionStatus.Back){
             this.isPinching = true
@@ -298,6 +317,7 @@ export class CustomizeInput extends Component {
         if (!this.ensureMapEditor()) return;
         const activeTouches = this.getActiveTouches(event);
         const manager = MapManager.GetInstance();
+        if (manager.actionStatus == ActionStatus.REGION) return;
         if(this.isPinching || activeTouches.length >= 2){
             if(manager.actionStatus == ActionStatus.Back){
                 this.isPinching = true;
@@ -378,6 +398,7 @@ export class CustomizeInput extends Component {
     private onTouchEnd(event: EventTouch) {
         if (!this.ensureMapEditor()) return;
         const manager = MapManager.GetInstance();
+        if (manager.actionStatus == ActionStatus.REGION) return;
         if(this.isPinching && manager.actionStatus == ActionStatus.Back){
             const activeTouches = this.getActiveTouches(event);
             if(activeTouches.length < 2){

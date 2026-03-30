@@ -22,6 +22,9 @@ export enum ActionStatus {
     Video_Stop,
     Back,
     WALL_DECOR,
+    REGION,
+    /** 区域 NPC 头像（实际由 EditHead 调 MapEditor.layoutRegionNpcHeads* 同步；buildMap 仅占位扩展） */
+    REGION_NPC,
 }
 
 @ccclass('MapManager')

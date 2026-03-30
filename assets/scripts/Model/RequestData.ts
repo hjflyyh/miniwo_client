@@ -147,6 +147,40 @@ export module network {
         }
     }
 
+    // 区域绑定NPC（新增）
+    export class MapRegionAddNpcRequest {
+        toJSON(regionId: string, npcIds: string[] | string, mapId?: number) {
+            const list = Array.isArray(npcIds) ? npcIds : [npcIds];
+            return {
+                rpc: {
+                    id: "map_region_add_npc",
+                    payload: JSON.stringify({
+                        region_id: regionId,
+                        npc_ids: list,
+                        map_id: mapId ?? MapModel.getInstance().currentMapId
+                    })
+                }
+            };
+        }
+    }
+
+    // 区域解绑NPC（删除）
+    export class MapRegionRemoveNpcRequest {
+        toJSON(regionId: string, npcIds: string[] | string, mapId?: number) {
+            const list = Array.isArray(npcIds) ? npcIds : [npcIds];
+            return {
+                rpc: {
+                    id: "map_region_remove_npc",
+                    payload: JSON.stringify({
+                        region_id: regionId,
+                        npc_ids: list,
+                        map_id: mapId ?? MapModel.getInstance().currentMapId
+                    })
+                }
+            };
+        }
+    }
+
     export class CombineRequest {
         toJSON(card_id) {
             return { rpc: { id: "card_combine", payload: JSON.stringify({ card_id: card_id }) } };

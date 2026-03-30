@@ -62,6 +62,30 @@ export class MapLoadMap {
             }
         }
 
+        mapEditor.mapRegions = [];
+        const regionList = Array.isArray(mapEditor.allMapAssetsData.Region) ? mapEditor.allMapAssetsData.Region : [];
+        for (let i = 0; i < regionList.length; i++) {
+            const region = regionList[i];
+            mapEditor.mapRegions.push({
+                id: region.id || `region_${i}`,
+                minX: parseInt(String(region.minX)),
+                minY: parseInt(String(region.minY)),
+                maxX: parseInt(String(region.maxX)),
+                maxY: parseInt(String(region.maxY)),
+                npcIds: Array.isArray(region.npcIds) ? [...region.npcIds] : []
+            });
+        }
+        mapEditor.rebuildAllRegionNpcHeadsFromRegions();
+
+        const mapUI = manager.getMapEditorUI();
+        if (mapUI) {
+            const isEditMode = MapModel.getInstance().showEditMapType == 1;
+            mapUI.setRegionHighlightVisible(isEditMode);
+            if (isEditMode) {
+                mapUI.refreshRegionHighlightsFromData();
+            }
+        }
+
         mapEditor.loadHourse();
         mapEditor.renderWalkableDebugOverlay(map?.Walkable?.cells);
     }

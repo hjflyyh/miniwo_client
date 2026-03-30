@@ -52,7 +52,7 @@ export class DisplayTitle extends Component {
         }
     }
 
-
+ 
     // 检测sprite边界是否在摄像机视野内（更精确）
     isSpriteBoundsInView(): boolean {
         if (!this.camera || !this.sp) {

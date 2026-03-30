@@ -9,6 +9,7 @@ import { MapModel } from '../../../scripts/Model/MapModel';
 import { computeSameTypeClosedFillCells } from './RoadClosureFillUtil';
 import { RectangleHouseBuilder } from './RectangleHouseBuilder';
 import { MapLoadMap } from './MapLoadMap';
+import { RegionNpcCellBinder } from './RegionNpcCellBinder';
 import { network } from '../../../scripts/Model/RequestData';
 const { ccclass, property } = _decorator;
 
@@ -27,6 +28,7 @@ interface WallSpriteConfig {
 export interface MapData {
     Ground: { id: string, _type: string, position: string , cfgId : number}[],
     Plant: { id: string, _type: string, position: string, flipX?: number, scaleX?: number }[],
+    Region?: { id: string, minX: number, minY: number, maxX: number, maxY: number, npcIds?: string[] }[],
     Floor: { id: string, _type: string, position: string }[],
     House: {
         houseName?: string,
@@ -82,6 +84,9 @@ export class MapEditor extends Component {
     @property(Prefab)
     wallPrefab: Prefab = null;
 
+    @property({ type: Prefab, displayName: '区域NPC格子预制体', tooltip: '若指定，则区域内每个 npc 格子优先实例化此预制体（可挂 RegionNpcCellBinder）；未指定时仍按 mapEditNpc 的 prefab/tileId 或占位格' })
+    public regionNpcCellPrefab: Prefab = null;
+
     @property([SpriteFrame])
     public outWallSprites: SpriteFrame[] = [];
 
@@ -104,6 +109,7 @@ export class MapEditor extends Component {
     public houseItems: Map<string, { tile: Node, tileType: string, belong?: string }> = new Map();
     public mapItems: Map<string, { id: string, tile: Node, tileType: string, belong?: string, flipX?: number }> = new Map();
     public mapData: number[][] = [];
+    public mapRegions: { id: string, minX: number, minY: number, maxX: number, maxY: number, npcIds: string[] }[] = [];
     public tileSize = 32;
     public mapWidth = 46;
     public mapHeight = 88;
@@ -171,6 +177,7 @@ export class MapEditor extends Component {
     public allMapAssetsData: MapData = {
         Ground: [],
         Plant: [],
+        Region: [],
         Floor: [],
         House: [],
         Walkable: {
@@ -427,6 +434,9 @@ export class MapEditor extends Component {
                 break;
             case ActionStatus.PLANT:
                 this.buildGoods(gridPos);
+                break;
+            case ActionStatus.REGION_NPC:
+                // 区域 NPC 头像由 EditHead 调用 layoutRegionNpcHeadsForPending / layoutRegionNpcHeadsForRegion 同步到地图
                 break;
             case ActionStatus.DECOR:
                 this.buildDecor(gridPos);
@@ -1425,6 +1435,28 @@ export class MapEditor extends Component {
     signDeteleTile(gridPos: Vec2) {
         const manager = MapManager.GetInstance();
         if (manager.actionStatus == ActionStatus.DETELE) {
+            const hitRegion = this.getMapRegionByGrid(gridPos);
+            if (hitRegion) {
+                this.deteleItem = null;
+                const size = new Size(
+                    (hitRegion.maxX - hitRegion.minX + 1) * this.tileSize,
+                    (hitRegion.maxY - hitRegion.minY + 1) * this.tileSize
+                );
+                const centerLocal = new Vec3(
+                    (-this.tileSize * (this.mapWidth - 1) / 2) + ((hitRegion.minX + hitRegion.maxX) / 2) * this.tileSize,
+                    (this.tileSize * (this.mapHeight - 1) / 2) - ((hitRegion.minY + hitRegion.maxY) / 2) * this.tileSize,
+                    0
+                );
+                const centerWorld = this.mapContainer.getComponent(UITransform).convertToWorldSpaceAR(centerLocal);
+                this.tileMaskNode.setWorldPosition(centerWorld);
+                this.buildIcon.getComponent(UITransform).setContentSize(size);
+                this.maskSp.getComponent(UITransform).setContentSize(size.width + 10, size.height + 10);
+                this.tileMaskNode.getComponent(UITransform).setContentSize(size);
+                this.buildControl.frame.setContentSize(size.width + 15, size.height + 15);
+                this.maskSp.color = new Color('#FF00006A');
+                return;
+            }
+
             const target = this.resolveDeleteTarget(gridPos);
             this.deteleItem = target;
 
@@ -2424,6 +2456,13 @@ export class MapEditor extends Component {
 
     // 销毁地块（优先单拆：房门、家具、墙饰；否则拆整屋）
     deteleTile(gridPos: Vec2) {
+        const removedRegionCount = this.removeMapRegionByGrid(gridPos);
+        if (removedRegionCount > 0) {
+            MapManager.GetInstance().getMapEditorUI()?.refreshRegionHighlightsFromData?.();
+            this.deteleItem = null;
+            this.buildControl.detele.play('detele_action');
+            return;
+        }
         const target = this.deteleItem || this.resolveDeleteTarget(gridPos);
         if (target?.tileType === "House" && target?.belong) {
             this.removeWholeHouse(target.belong);
@@ -2501,6 +2540,308 @@ export class MapEditor extends Component {
 
         this.deteleItem = null;
         this.buildControl.detele.play('detele_action');
+    }
+
+    public isGridInMapRegion(gridPos: Vec2): boolean {
+        for (let i = 0; i < this.mapRegions.length; i++) {
+            const region = this.mapRegions[i];
+            if (gridPos.x >= region.minX && gridPos.x <= region.maxX &&
+                gridPos.y >= region.minY && gridPos.y <= region.maxY) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public getMapRegionByGrid(gridPos: Vec2): { id: string, minX: number, minY: number, maxX: number, maxY: number, npcIds: string[] } | null {
+        for (let i = 0; i < this.mapRegions.length; i++) {
+            const region = this.mapRegions[i];
+            if (gridPos.x >= region.minX && gridPos.x <= region.maxX &&
+                gridPos.y >= region.minY && gridPos.y <= region.maxY) {
+                return region;
+            }
+        }
+        return null;
+    }
+
+    public isMapRegionOverlap(minX: number, minY: number, maxX: number, maxY: number): boolean {
+        for (let i = 0; i < this.mapRegions.length; i++) {
+            const region = this.mapRegions[i];
+            const separated = maxX < region.minX || minX > region.maxX || maxY < region.minY || minY > region.maxY;
+            if (!separated) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public addMapRegion(minX: number, minY: number, maxX: number, maxY: number, npcIds: string[] = []): boolean {
+        if (this.isMapRegionOverlap(minX, minY, maxX, maxY)) {
+            return false;
+        }
+        const id = `region_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
+        this.mapRegions.push({
+            id,
+            minX,
+            minY,
+            maxX,
+            maxY,
+            npcIds: Array.isArray(npcIds) ? [...npcIds] : []
+        });
+        return true;
+    }
+
+    public removeMapRegionByGrid(gridPos: Vec2): number {
+        const removedIds: string[] = [];
+        const before = this.mapRegions.length;
+        this.mapRegions = this.mapRegions.filter((region) => {
+            const hit = gridPos.x >= region.minX && gridPos.x <= region.maxX &&
+                gridPos.y >= region.minY && gridPos.y <= region.maxY;
+            if (hit) {
+                removedIds.push(region.id);
+            }
+            return !hit;
+        });
+        for (let i = 0; i < removedIds.length; i++) {
+            this.clearRegionNpcHeadLayer(removedIds[i]);
+        }
+        return before - this.mapRegions.length;
+    }
+
+    public addNpcToRegion(regionId: string, npcId: string): boolean {
+        if (!regionId || !npcId) return false;
+        for (let i = 0; i < this.mapRegions.length; i++) {
+            const region = this.mapRegions[i];
+            if (region.id !== regionId) continue;
+            if (!Array.isArray(region.npcIds)) {
+                region.npcIds = [];
+            }
+            if (region.npcIds.indexOf(npcId) !== -1) {
+                return false;
+            }
+            region.npcIds.push(npcId);
+            return true;
+        }
+        return false;
+    }
+
+    public removeNpcFromRegion(regionId: string, npcId: string): boolean {
+        if (!regionId || !npcId) return false;
+        for (let i = 0; i < this.mapRegions.length; i++) {
+            const region = this.mapRegions[i];
+            if (region.id !== regionId || !Array.isArray(region.npcIds)) continue;
+            const before = region.npcIds.length;
+            region.npcIds = region.npcIds.filter((id) => id !== npcId);
+            return before !== region.npcIds.length;
+        }
+        return false;
+    }
+
+    /** 框选未确认前，地图上用此 key 挂头像节点 */
+    public static readonly PENDING_REGION_NPC_KEY = '__pending_region_npc__';
+
+    private regionNpcHeadLayerMap: Map<string, Node> = new Map();
+
+    public clearRegionNpcHeadLayer(regionKey: string) {
+        const node = this.regionNpcHeadLayerMap.get(regionKey);
+        if (node?.isValid) {
+            node.destroy();
+        }
+        this.regionNpcHeadLayerMap.delete(regionKey);
+    }
+
+    public clearPendingRegionNpcHeads() {
+        this.clearRegionNpcHeadLayer(MapEditor.PENDING_REGION_NPC_KEY);
+    }
+
+    private findMapEditNpcById(npcId: string): any | null {
+        const list = MapModel.getInstance().mapEditNpc as any[];
+        for (let i = 0; i < list.length; i++) {
+            if (String(list[i].id) === npcId) {
+                return list[i];
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 区域格子最终显示用节点：优先 MapEditor.regionNpcCellPrefab；否则 mapEditNpc 的 prefab/tileId；再否则占位格。
+     */
+    public createRegionNpcDisplayNode(npcId: string): Node {
+        const idStr = String(npcId);
+        if (this.regionNpcCellPrefab) {
+            const n = instantiate(this.regionNpcCellPrefab);
+            n.name = `regionNpc_${idStr}`;
+            const binder = n.getComponent(RegionNpcCellBinder);
+            if (binder) {
+                binder.setNpcId(idStr);
+            }
+            return n;
+        }
+        const v = this.instantiateRegionNpcNodeFromMapEditData(idStr);
+        if (v?.isValid) {
+            return v;
+        }
+        return this.createRegionNpcPlaceholderNode(idStr);
+    }
+
+    /**
+     * 按 mapEditNpc 绑定创建节点：优先 prefab 路径（PrefabLoad），否则 tileId 走地图物件预制（getTilePrefab）。
+     * 数据字段示例：prefab / prefabPath / mapPrefab，prefabBundle，tileId / tilePrefabId
+     */
+    public instantiateRegionNpcNodeFromMapEditData(npcId: string): Node | null {
+        const data = this.findMapEditNpcById(String(npcId));
+        if (!data) {
+            return null;
+        }
+        const prefabPath = data.prefab ?? data.prefabPath ?? data.mapPrefab;
+        if (typeof prefabPath === 'string' && prefabPath.length > 0) {
+            const bundle = data.prefabBundle ?? data.bundle ?? 'mapEditor';
+            const n = new Node(`regionNpc_${npcId}`);
+            n.addComponent(UITransform);
+            const pl = n.addComponent(PrefabLoad);
+            pl.bundleName = bundle;
+            pl.url = prefabPath;
+            return n;
+        }
+        const tileKey = data.tileId ?? data.tilePrefabId;
+        if (tileKey != null && String(tileKey).length > 0) {
+            return MapManager.GetInstance().getTilePrefab(String(tileKey));
+        }
+        return null;
+    }
+
+    /** 与 mapContainer 同坐标系，但渲染在 npcLayer 上，避免被地面/装饰盖住 */
+    private getRegionNpcHostParent(): Node {
+        if (this.npcLayer?.isValid) {
+            return this.npcLayer;
+        }
+        return this.mapContainer;
+    }
+
+    /**
+     * 在地图区域格内排布 NPC（与 npcIds 顺序一致）。
+     * 排列规则：以矩形左上角格 (minX, minY) 为第 1 个 NPC；同一行从左到右 (gx 递增)；
+     * 一行排满后换到下一行 (gy = minY+1, minY+2 …)，即先行内「左→右」，再行间「上→下」。
+     * 展示由 mapEditNpc 的 prefab / tileId 决定；若无绑定则画占位格便于确认位置。
+     */
+    private layoutRegionNpcHeads(
+        regionKey: string,
+        rect: { minX: number, minY: number, maxX: number, maxY: number },
+        npcIds: string[]
+    ) {
+        this.clearRegionNpcHeadLayer(regionKey);
+        const host = this.getRegionNpcHostParent();
+        if (!npcIds?.length || !host?.isValid || !this.mapContainer?.isValid) {
+            return;
+        }
+        const gw = rect.maxX - rect.minX + 1;
+        const gh = rect.maxY - rect.minY + 1;
+        const cap = gw * gh;
+        const count = Math.min(npcIds.length, cap);
+        const layer = new Node(`regionNpcHead_${regionKey}`);
+        layer.layer = host.layer;
+        host.addChild(layer);
+        this.regionNpcHeadLayerMap.set(regionKey, layer);
+        layer.setSiblingIndex(host.children.length - 1);
+
+        const tileSz = new Size(this.tileSize, this.tileSize);
+        for (let i = 0; i < count; i++) {
+            // 行优先：第 i 个 → 第 row 行、第 col 列（从区域左上角起）
+            const col = i % gw;
+            const row = Math.floor(i / gw);
+            const gx = rect.minX + col;
+            const gy = rect.minY + row;
+            if (gy > rect.maxY) {
+                break;
+            }
+            const gridPos = new Vec2(gx, gy);
+            const worldPos = MapModel.getInstance().gridToWorld(gridPos, tileSz, this);
+            const idStr = String(npcIds[i]);
+            const visual = this.createRegionNpcDisplayNode(idStr);
+            if (!visual?.isValid) {
+                continue;
+            }
+            visual.layer = host.layer;
+            visual.setPosition(worldPos);
+            layer.addChild(visual);
+        }
+    }
+
+    /** 无 prefab/tileId 绑定时仍显示一格，便于确认排列位置（配置好 mapEditNpc 后可替换为正式预制） */
+    private createRegionNpcPlaceholderNode(idStr: string): Node {
+        const n = new Node(`regionNpc_ph_${idStr}`);
+        const uit = n.addComponent(UITransform);
+        const sz = this.tileSize - 4;
+        uit.setContentSize(sz, sz);
+        uit.setAnchorPoint(0.5, 0.5);
+        const g = n.addComponent(Graphics);
+        g.fillColor = new Color(60, 140, 255, 140);
+        const h = sz * 0.5;
+        g.rect(-h, -h, sz, sz);
+        g.fill();
+        const lbl = n.addComponent(Label);
+        lbl.string = idStr;
+        lbl.fontSize = 11;
+        lbl.lineHeight = 12;
+        lbl.color = new Color(255, 255, 255, 255);
+        lbl.horizontalAlign = Label.HorizontalAlign.CENTER;
+        lbl.verticalAlign = Label.VerticalAlign.CENTER;
+        lbl.overflow = Label.Overflow.SHRINK;
+        return n;
+    }
+
+    public layoutRegionNpcHeadsForPending(
+        rect: { minX: number, minY: number, maxX: number, maxY: number },
+        npcIds: string[]
+    ) {
+        this.layoutRegionNpcHeads(MapEditor.PENDING_REGION_NPC_KEY, rect, npcIds);
+    }
+
+    public layoutRegionNpcHeadsForRegion(
+        regionId: string,
+        rect: { minX: number, minY: number, maxX: number, maxY: number },
+        npcIds: string[]
+    ) {
+        this.layoutRegionNpcHeads(regionId, rect, npcIds);
+    }
+
+    /** 根据 mapRegions 与 npcIds 重建（loadMap 用） */
+    public rebuildAllRegionNpcHeadsFromRegions() {
+        for (const key of this.regionNpcHeadLayerMap.keys()) {
+            const node = this.regionNpcHeadLayerMap.get(key);
+            if (node?.isValid) {
+                node.destroy();
+            }
+        }
+        this.regionNpcHeadLayerMap.clear();
+        for (let i = 0; i < this.mapRegions.length; i++) {
+            const r = this.mapRegions[i];
+            const npcIds = Array.isArray(r.npcIds) ? r.npcIds.map((id) => String(id)) : [];
+            this.layoutRegionNpcHeads(r.id, {
+                minX: r.minX,
+                minY: r.minY,
+                maxX: r.maxX,
+                maxY: r.maxY
+            }, npcIds);
+        }
+    }
+
+    /** 已存在区域数据变更后刷新（如后续支持编辑已确认区域） */
+    public syncRegionNpcLayoutFromData(regionId: string) {
+        for (let i = 0; i < this.mapRegions.length; i++) {
+            const r = this.mapRegions[i];
+            if (r.id === regionId) {
+                const npcIds = Array.isArray(r.npcIds) ? r.npcIds.map((id) => String(id)) : [];
+                this.layoutRegionNpcHeadsForRegion(regionId, {
+                    minX: r.minX,
+                    minY: r.minY,
+                    maxX: r.maxX,
+                    maxY: r.maxY
+                }, npcIds);
+                return;
+            }
+        }
     }
 
     // 重置操作

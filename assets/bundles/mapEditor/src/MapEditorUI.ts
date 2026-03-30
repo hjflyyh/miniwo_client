@@ -1,4 +1,4 @@
-import { _decorator, assetManager, Button, Canvas, Color, Component, director, EditBox, EventHandler, EventTouch, find , Label, log, Node, Prefab, RenderTexture, SceneAsset, ScrollView, Sprite, SpriteFrame, sys, Texture2D, UITransform, Vec2, Vec3, view } from 'cc';
+import { _decorator, assetManager, Button, Canvas, Color, Component, director, EditBox, EventHandler, EventMouse, EventTouch, find , Graphics, Input, input, Label, log, Node, Prefab, RenderTexture, SceneAsset, ScrollView, Sprite, SpriteFrame, sys, Texture2D, UITransform, Vec2, Vec3, view } from 'cc';
 import { CaptureUtils } from './CaptureUtils';
 import { MapManager, ActionStatus } from './MapManager';
 import { MapEditorUIConfig, NpcActionConfigs } from 'db://assets/src/common/MapEditorUIConfig';
@@ -9,6 +9,8 @@ import { InfiniteList } from '../../../plugin/InfiniteList/InfiniteList';
 import { GroundDataSource } from './UI/GroundDataSource';
 import { MapModel } from '../../../scripts/Model/MapModel';
 import { AppConst } from 'db://assets/scripts/AppConst';
+import { CustomizeInput } from './CustomizeMap/CustomizeInput';
+import { EditHead } from '../../../scripts/View/CreateMap/EditHead';
 const { ccclass, property } = _decorator;
 
 @ccclass('MapEditorUI')
@@ -33,6 +35,25 @@ export class MapEditorUI extends Component {
 
     @property(Node)
     npcHeadNode: Node = null;
+
+    @property(Node)
+    npcHeads: Node = null;
+
+    /**
+     * 手指松手位置先转到「世界坐标」，再转到该节点的本地坐标作为依据。
+     * 不拖则用 npcHeads 的父节点；再没有则用 MapEditorUI 根节点（与 editor_test 中 UI 层一致）。
+     */
+    @property(Node)
+    npcHeadsUiCoordinateRoot: Node = null;
+
+    @property({ displayName: 'npcHeads 位置偏移 X', tooltip: '松手换算后的本地坐标再叠加，单位与父节点一致，可微调左右' })
+    npcHeadsPositionOffsetX = 0;
+
+    @property({ displayName: 'npcHeads 位置偏移 Y', tooltip: '松手换算后的本地坐标再叠加，可微调上下' })
+    npcHeadsPositionOffsetY = 0;
+
+    @property({ displayName: 'npcHeads 位置偏移 Z', tooltip: '一般为 0，仅特殊层级需要时再改' })
+    npcHeadsPositionOffsetZ = 0;
 
     @property(Node)
     GameUI: Node = null;
@@ -88,6 +109,20 @@ export class MapEditorUI extends Component {
     private saveIndex: number = 0;
     private isWaittingEpisodeData: boolean = false;
     private isDramaAction: boolean = false; // 是否开拍
+    private regionSelectMode = false;
+    private regionDragging = false;
+    private regionStartGrid: Vec2 | null = null;
+    private regionEndGrid: Vec2 | null = null;
+    private pendingRegionRect: { minX: number, minY: number, maxX: number, maxY: number } | null = null;
+    /** 仅当前「未确认」框选区域绑定的 npc id，与已写入 mapRegions[].npcIds 分离，避免多区域混用 */
+    private pendingRegionNpcIds: string[] = [];
+    private regionGraphicsNode: Node | null = null;
+    private regionGraphics: Graphics | null = null;
+    private customizeInputComp: CustomizeInput | null = null;
+    /** 旧逻辑曾把 npcHeads 挂到 mapContainer，隐藏时还原 */
+    private npcHeadsSavedParent: Node | null = null;
+    private npcHeadsSavedSiblingIndex = 0;
+    private static readonly REGION_MIN_GRID = 3;
 
     protected onLoad(): void {
         this.bottomAddNode.active = false
@@ -133,6 +168,11 @@ export class MapEditorUI extends Component {
         this.tileContent.active = false;
         this.saveConfirmDialog.active = false;
 
+        if (!this.npcHeads) {
+            this.npcHeads = this.node.getChildByName('npcHeads');
+        }
+        this.setNpcHeadsVisible(false);
+
         this.backBtn.active = false;
         if(MapModel.getInstance().showEditMapType == 0){
             this.node.active = false
@@ -142,6 +182,12 @@ export class MapEditorUI extends Component {
     }
 
     protected onDestroy(): void {
+        input.off(Input.EventType.MOUSE_DOWN, this.onRegionMouseDown, this);
+        input.off(Input.EventType.MOUSE_MOVE, this.onRegionMouseMove, this);
+        input.off(Input.EventType.MOUSE_UP, this.onRegionMouseUp, this);
+        input.off(Input.EventType.TOUCH_START, this.onRegionTouchStart, this);
+        input.off(Input.EventType.TOUCH_MOVE, this.onRegionTouchMove, this);
+        input.off(Input.EventType.TOUCH_END, this.onRegionTouchEnd, this);
     }
 
     start() {
@@ -158,6 +204,12 @@ export class MapEditorUI extends Component {
         this.wallDecorList.Init(this.wallDecorList.node.getComponent("GroundDataSource") as GroundDataSource)
         this.decorOrnament.Init(this.decorOrnament.node.getComponent("GroundDataSource") as GroundDataSource)
         this.decorAppliance.Init(this.decorAppliance.node.getComponent("GroundDataSource") as GroundDataSource)
+        input.on(Input.EventType.MOUSE_DOWN, this.onRegionMouseDown, this);
+        input.on(Input.EventType.MOUSE_MOVE, this.onRegionMouseMove, this);
+        input.on(Input.EventType.MOUSE_UP, this.onRegionMouseUp, this);
+        input.on(Input.EventType.TOUCH_START, this.onRegionTouchStart, this);
+        input.on(Input.EventType.TOUCH_MOVE, this.onRegionTouchMove, this);
+        input.on(Input.EventType.TOUCH_END, this.onRegionTouchEnd, this);
     }
 
     update(deltaTime: number) {
@@ -165,9 +217,6 @@ export class MapEditorUI extends Component {
             this.saveIndex = 0;
             this.isSave = false;
         }
-    }
-
-    onInitTwitterView(param) {
     }
 
     OnClickFloorIcon(){
@@ -205,6 +254,9 @@ export class MapEditorUI extends Component {
 
     onClickTool(event: EventTouch) {
         const target = event.target as Node;
+        if (target.name !== "region") {
+            this.disableRegionSelectionMode();
+        }
 
         this.mapToolNode.forEach((pt) => {
             pt.tool.active = true;
@@ -291,21 +343,18 @@ export class MapEditorUI extends Component {
             this.tileMenu.get('panel_appliance').active = true;
             MapManager.GetInstance().actionStatus = ActionStatus.DECOR;
         }else if(target.name == "region"){
-            
+            _index = 15;
+            this.tileContent.active = false;
+            MapManager.GetInstance().actionStatus = ActionStatus.REGION;
+            this.enableRegionSelectionMode();
+
+            this.setBottomNode();
         }
 
 
         // if (this.mapToolNode[_index].switch) {
         //     this.mapToolNode[_index].switch.active = true;
         // }
-    }
-
-    OnClickDelete(){
-        this.tileContent.active = false;
-        MapManager.GetInstance().actionStatus = ActionStatus.DETELE;
-        MapManager.GetInstance().setDetele();
-
-        this.setBottomNode();
     }
 
     @property(Node)
@@ -316,9 +365,447 @@ export class MapEditorUI extends Component {
 
     setBottomNode(){
         this.confirmBtn.active = MapManager.GetInstance().actionStatus == ActionStatus.DECOR || MapManager.GetInstance().actionStatus == ActionStatus.PLANT
+            || MapManager.GetInstance().actionStatus == ActionStatus.REGION
         this.fanzhuangBtn.active = MapManager.GetInstance().actionStatus == ActionStatus.DECOR  || MapManager.GetInstance().actionStatus == ActionStatus.PLANT
 
-        this.bottomAddNode.active = MapManager.GetInstance().actionStatus != ActionStatus.MOVE && MapManager.GetInstance().actionStatus != ActionStatus.Back
+        this.bottomAddNode.active = MapManager.GetInstance().actionStatus != ActionStatus.MOVE
+            && MapManager.GetInstance().actionStatus != ActionStatus.Back
+    }
+
+    private getOrCreateRegionGraphics(editor: any): Graphics | null {
+        if (!editor || !editor.mapContainer) return null;
+        if (this.regionGraphics && this.regionGraphics.isValid) return this.regionGraphics;
+
+        this.regionGraphicsNode = new Node("RegionHighlightOverlay");
+        this.regionGraphics = this.regionGraphicsNode.addComponent(Graphics);
+        this.regionGraphics.lineWidth = 2;
+        editor.mapContainer.addChild(this.regionGraphicsNode);
+        this.regionGraphicsNode.setSiblingIndex(editor.mapContainer.children.length - 1);
+        return this.regionGraphics;
+    }
+
+    private getGridFromScreen(screenPos: Vec2): Vec2 | null {
+        const editor: any = MapManager.GetInstance().getMapEditor();
+        if (!editor) return null;
+        const grid = MapModel.getInstance().worldPosToGride(screenPos, editor);
+        if (!grid) return null;
+        const x = Math.max(0, Math.min(editor.mapWidth - 1, Math.round(grid.x)));
+        const y = Math.max(0, Math.min(editor.mapHeight - 1, Math.round(grid.y)));
+        return new Vec2(x, y);
+    }
+
+    private drawRegionHighlight(start: Vec2, end: Vec2, finalized: boolean) {
+        const minX = Math.min(start.x, end.x);
+        const maxX = Math.max(start.x, end.x);
+        const minY = Math.min(start.y, end.y);
+        const maxY = Math.max(start.y, end.y);
+        this.pendingRegionRect = { minX, minY, maxX, maxY };
+        this.redrawAllRegions(finalized ? 90 : 45);
+    }
+
+    private redrawAllRegions(pendingAlpha: number = 45) {
+        const editor: any = MapManager.GetInstance().getMapEditor();
+        if (!editor) return;
+        const graphics = this.getOrCreateRegionGraphics(editor);
+        if (!graphics) return;
+
+        graphics.clear();
+        const mm = MapModel.getInstance();
+        /** 区域内每个格子画一个仅描边的方块（无底色） */
+        const drawRegionCells = (minX: number, minY: number, maxX: number, maxY: number, strokeAlpha: number) => {
+            graphics.strokeColor = new Color(42, 130, 255, strokeAlpha);
+            const half = editor.tileSize * 0.5;
+            const ts = editor.tileSize;
+            for (let x = minX; x <= maxX; x++) {
+                for (let y = minY; y <= maxY; y++) {
+                    const local = mm.gridToWorld(new Vec2(x, y), null, editor);
+                    graphics.rect(local.x - half, local.y - half, ts, ts);
+                    graphics.stroke();
+                }
+            }
+        };
+
+        const savedRegions = Array.isArray(editor.mapRegions) ? editor.mapRegions : [];
+        for (let i = 0; i < savedRegions.length; i++) {
+            const region = savedRegions[i];
+            drawRegionCells(region.minX, region.minY, region.maxX, region.maxY, 255);
+        }
+        if (this.pendingRegionRect) {
+            drawRegionCells(
+                this.pendingRegionRect.minX,
+                this.pendingRegionRect.minY,
+                this.pendingRegionRect.maxX,
+                this.pendingRegionRect.maxY,
+                pendingAlpha
+            );
+        }
+    }
+
+    private beginRegionSelect(screenPos: Vec2) {
+        if (!this.regionSelectMode) return;
+        const grid = this.getGridFromScreen(screenPos);
+        if (!grid) return;
+        this.clearPendingRegionNpcIds();
+        this.getNpcHeadEditComponent()?.resetRegionNpcUi();
+        this.setNpcHeadsVisible(false);
+        this.regionDragging = true;
+        this.regionStartGrid = grid;
+        this.regionEndGrid = grid.clone();
+        this.drawRegionHighlight(this.regionStartGrid, this.regionEndGrid, false);
+    }
+
+    private updateRegionSelect(screenPos: Vec2) {
+        if (!this.regionSelectMode || !this.regionDragging || !this.regionStartGrid) return;
+        const grid = this.getGridFromScreen(screenPos);
+        if (!grid) return;
+        this.regionEndGrid = grid;
+        this.drawRegionHighlight(this.regionStartGrid, this.regionEndGrid, false);
+    }
+
+    /**
+     * @param screenPos getLocation，给格子用
+     * @param npcHeadsScreenPos 可选：松手点在屏幕/视口内的坐标（触摸建议 getUILocation）；不传则沿用 screenPos
+     */
+    private finishRegionSelect(screenPos: Vec2, npcHeadsScreenPos?: Vec2) {
+        if (!this.regionSelectMode || !this.regionDragging || !this.regionStartGrid) return;
+        const grid = this.getGridFromScreen(screenPos);
+        if (grid) {
+            this.regionEndGrid = grid;
+        }
+        if (this.regionEndGrid && this.regionStartGrid) {
+            const minX = Math.min(this.regionStartGrid.x, this.regionEndGrid.x);
+            const maxX = Math.max(this.regionStartGrid.x, this.regionEndGrid.x);
+            const minY = Math.min(this.regionStartGrid.y, this.regionEndGrid.y);
+            const maxY = Math.max(this.regionStartGrid.y, this.regionEndGrid.y);
+            const editor: any = MapManager.GetInstance().getMapEditor();
+            const gw = maxX - minX + 1;
+            const gh = maxY - minY + 1;
+            if (gw < MapEditorUI.REGION_MIN_GRID || gh < MapEditorUI.REGION_MIN_GRID) {
+                EventSystem.send("ShowTips", "区域至少为 3×3 格，请重新框选");
+                this.pendingRegionRect = null;
+                this.redrawAllRegions(45);
+                this.setNpcHeadsVisible(false);
+                this.clearPendingRegionNpcIds();
+                editor?.clearPendingRegionNpcHeads?.();
+                this.getNpcHeadEditComponent()?.resetRegionNpcUi();
+                this.regionDragging = false;
+                return;
+            }
+            if (editor?.isMapRegionOverlap(minX, minY, maxX, maxY)) {
+                EventSystem.send("ShowTips", "区域与已有范围重叠，请重新框选");
+                this.pendingRegionRect = null;
+                this.redrawAllRegions(45);
+                this.setNpcHeadsVisible(false);
+                this.clearPendingRegionNpcIds();
+                editor?.clearPendingRegionNpcHeads?.();
+                this.getNpcHeadEditComponent()?.resetRegionNpcUi();
+                this.regionDragging = false;
+                return;
+            }
+            this.drawRegionHighlight(this.regionStartGrid, this.regionEndGrid, true);
+            if (this.npcHeads?.isValid) {
+                this.npcHeads.active = true;
+            }
+            this.moveNpcHeadsToFinger(npcHeadsScreenPos ?? screenPos);
+            this.getNpcHeadEditComponent()?.refreshRegionSlotsFromUi();
+        }
+        this.regionDragging = false;
+    }
+
+    /** 坐标系：editor_test 里指定的 UI 节点（或 npcHeads 父 / this.node）的本地空间 */
+    private getNpcHeadsUiCoordinateRoot(): Node | null {
+        if (this.npcHeadsUiCoordinateRoot?.isValid) {
+            return this.npcHeadsUiCoordinateRoot;
+        }
+        if (this.npcHeads?.parent?.isValid) {
+            return this.npcHeads.parent;
+        }
+        return this.node;
+    }
+
+    /**
+     * 不用 Camera：用参考 UITransform 四角的世界坐标 + 视口内归一化 (u,v) 双线性插值得到世界点。
+     * 适用于参考节点铺满或与视口对齐的全屏 UI；参考节点见 npcHeadsUiCoordinateRoot。
+     */
+    private fingerScreenToWorldViaUiQuad(refUi: UITransform, fingerScreen: Vec2): Vec3 | null {
+        if (!fingerScreen || !Number.isFinite(fingerScreen.x) || !Number.isFinite(fingerScreen.y)) {
+            return null;
+        }
+        const w = refUi.contentSize.width;
+        const h = refUi.contentSize.height;
+        const ax = refUi.anchorPoint.x;
+        const ay = refUi.anchorPoint.y;
+        const bl = new Vec3(-ax * w, -ay * h, 0);
+        const br = new Vec3((1 - ax) * w, -ay * h, 0);
+        const tl = new Vec3(-ax * w, (1 - ay) * h, 0);
+        const tr = new Vec3((1 - ax) * w, (1 - ay) * h, 0);
+        const wbl = refUi.convertToWorldSpaceAR(bl);
+        const wbr = refUi.convertToWorldSpaceAR(br);
+        const wtl = refUi.convertToWorldSpaceAR(tl);
+        const wtr = refUi.convertToWorldSpaceAR(tr);
+
+        const vp = view.getViewportRect();
+        if (vp.width <= 0 || vp.height <= 0) {
+            return null;
+        }
+        let u = (fingerScreen.x - vp.x) / vp.width;
+        let v = (fingerScreen.y - vp.y) / vp.height;
+        u = Math.max(0, Math.min(1, u));
+        v = Math.max(0, Math.min(1, v));
+
+        const bottom = new Vec3();
+        const top = new Vec3();
+        const world = new Vec3();
+        Vec3.lerp(bottom, wbl, wbr, u);
+        Vec3.lerp(top, wtl, wtr, u);
+        Vec3.lerp(world, bottom, top, v);
+        return world;
+    }
+
+    /** 松手屏幕点 → 世界点（仅 UITransform）→ npcHeads 父节点本地坐标 */
+    private moveNpcHeadsToFinger(screenPos: Vec2) {
+        const heads = this.npcHeads;
+        const refNode = this.getNpcHeadsUiCoordinateRoot();
+        const refUi = refNode?.getComponent(UITransform);
+        if (!heads?.isValid || !refUi) {
+            return;
+        }
+        const world = this.fingerScreenToWorldViaUiQuad(refUi, screenPos);
+        if (!world) {
+            return;
+        }
+        const parentUi = heads.parent?.getComponent(UITransform);
+        if (!parentUi) {
+            return;
+        }
+        const local = parentUi.convertToNodeSpaceAR(world);
+        heads.setPosition(
+            local.x + this.npcHeadsPositionOffsetX,
+            local.y + this.npcHeadsPositionOffsetY,
+            local.z + this.npcHeadsPositionOffsetZ
+        );
+        heads.active = true;
+    }
+
+    private restoreNpcHeadsParent() {
+        const heads = this.npcHeads;
+        const editor: any = MapManager.GetInstance().getMapEditor();
+        if (!heads?.isValid) {
+            return;
+        }
+
+        if (!editor?.mapContainer || !this.npcHeadsSavedParent) {
+            return;
+        }
+        if (heads.parent !== editor.mapContainer) {
+            return;
+        }
+        heads.setParent(this.npcHeadsSavedParent, false);
+        const idx = Math.min(this.npcHeadsSavedSiblingIndex, Math.max(0, this.npcHeadsSavedParent.children.length - 1));
+        heads.setSiblingIndex(idx);
+    }
+
+    private setNpcHeadsVisible(visible: boolean) {
+        if (!this.npcHeads?.isValid) {
+            return;
+        }
+        if (!visible) {
+            this.restoreNpcHeadsParent();
+        }
+        this.npcHeads.active = visible;
+    }
+
+    /** 每次点击底部确认按钮时调用：先收起头像条 */
+    public hideNpcHeadsOnConfirm() {
+        this.setNpcHeadsVisible(false);
+    }
+
+    public getPendingRegionRect(): { minX: number, minY: number, maxX: number, maxY: number } | null {
+        return this.pendingRegionRect;
+    }
+
+    /**
+     * 框选确认前若需对已存在区域增删 NPC，可返回 region id；当前流程为松手后选 NPC 再确认，默认 null。
+     */
+    public getPendingRegionNpcBindId(): string | null {
+        return null;
+    }
+
+    public getPendingRegionNpcIds(): string[] {
+        return [...this.pendingRegionNpcIds];
+    }
+
+    /** 切换当前待确认区域内的 npc（仅 pending 框选阶段使用） */
+    public togglePendingRegionNpcId(npcId: string): void {
+        const id = String(npcId);
+        const idx = this.pendingRegionNpcIds.indexOf(id);
+        if (idx >= 0) {
+            this.pendingRegionNpcIds.splice(idx, 1);
+            return;
+        }
+        const rect = this.pendingRegionRect;
+        if (rect) {
+            const gw = rect.maxX - rect.minX + 1;
+            const gh = rect.maxY - rect.minY + 1;
+            if (this.pendingRegionNpcIds.length >= gw * gh) {
+                EventSystem.send('ShowTips', '该区域格子已满');
+                return;
+            }
+        }
+        this.pendingRegionNpcIds.push(id);
+    }
+
+    private clearPendingRegionNpcIds() {
+        this.pendingRegionNpcIds.length = 0;
+    }
+
+    private getNpcHeadEditComponent(): EditHead | null {
+        return this.npcHeads?.getComponent(EditHead) ?? null;
+    }
+
+    public confirmRegionSelection(): boolean {
+        if (!this.regionSelectMode || !this.pendingRegionRect) {
+            return false;
+        }
+        const editor: any = MapManager.GetInstance().getMapEditor();
+        if (!editor) return false;
+
+        const rect = this.pendingRegionRect;
+        const gw = rect.maxX - rect.minX + 1;
+        const gh = rect.maxY - rect.minY + 1;
+        if (gw < MapEditorUI.REGION_MIN_GRID || gh < MapEditorUI.REGION_MIN_GRID) {
+            EventSystem.send("ShowTips", "区域至少为 3×3 格");
+            return false;
+        }
+        const npcIdsStr = this.pendingRegionNpcIds.map((id) => String(id));
+        const added = editor.addMapRegion(rect.minX, rect.minY, rect.maxX, rect.maxY, npcIdsStr);
+        if (!added) {
+            EventSystem.send("ShowTips", "区域不可重叠");
+            return false;
+        }
+        const lastRegion = editor.mapRegions?.[editor.mapRegions.length - 1];
+        if (lastRegion?.id && npcIdsStr.length > 0) {
+            MapModel.getInstance().sendMapRegionNpcBind(lastRegion.id, npcIdsStr);
+        }
+        editor.clearPendingRegionNpcHeads?.();
+        if (lastRegion?.id) {
+            editor.layoutRegionNpcHeadsForRegion?.(lastRegion.id, rect, npcIdsStr);
+        }
+        this.clearPendingRegionNpcIds();
+        this.getNpcHeadEditComponent()?.resetRegionNpcUi();
+        this.pendingRegionRect = null;
+        this.redrawAllRegions();
+        return true;
+    }
+
+    public cancelPendingRegionSelection() {
+        this.pendingRegionRect = null;
+        this.clearPendingRegionNpcIds();
+        MapManager.GetInstance().getMapEditor()?.clearPendingRegionNpcHeads?.();
+        this.getNpcHeadEditComponent()?.resetRegionNpcUi();
+        this.redrawAllRegions();
+    }
+
+    public refreshRegionHighlightsFromData() {
+        this.pendingRegionRect = null;
+        this.clearPendingRegionNpcIds();
+        MapManager.GetInstance().getMapEditor()?.clearPendingRegionNpcHeads?.();
+        this.getNpcHeadEditComponent()?.resetRegionNpcUi();
+        this.redrawAllRegions();
+    }
+
+    public setRegionHighlightVisible(visible: boolean) {
+        if (!this.regionGraphicsNode || !this.regionGraphicsNode.isValid) return;
+        this.regionGraphicsNode.active = visible;
+    }
+
+    private onRegionMouseDown(event: EventMouse) {
+        if (!this.regionSelectMode) return;
+        if (event.getButton() !== EventMouse.BUTTON_LEFT) return;
+        this.beginRegionSelect(event.getLocation());
+    }
+
+    private onRegionMouseMove(event: EventMouse) {
+        if (!this.regionSelectMode) return;
+        this.updateRegionSelect(event.getLocation());
+    }
+
+    private onRegionMouseUp(event: EventMouse) {
+        if (!this.regionSelectMode) return;
+        if (event.getButton() !== EventMouse.BUTTON_LEFT) return;
+        const loc = new Vec2();
+        event.getLocation(loc);
+        this.finishRegionSelect(loc);
+    }
+
+    private onRegionTouchStart(event: EventTouch) {
+        if (!this.regionSelectMode) return;
+        this.beginRegionSelect(event.getLocation());
+    }
+
+    private onRegionTouchMove(event: EventTouch) {
+        if (!this.regionSelectMode) return;
+        this.updateRegionSelect(event.getLocation());
+    }
+
+    private onRegionTouchEnd(event: EventTouch) {
+        if (!this.regionSelectMode) return;
+        const loc = new Vec2();
+        const ui = new Vec2();
+        event.getLocation(loc);
+        event.getUILocation(ui);
+        this.finishRegionSelect(loc, ui);
+    }
+
+    private enableRegionSelectionMode() {
+        this.regionSelectMode = true;
+        this.regionDragging = false;
+        this.regionStartGrid = null;
+        this.regionEndGrid = null;
+        this.pendingRegionRect = null;
+        MapManager.GetInstance().actionStatus = ActionStatus.REGION;
+        MapManager.GetInstance().getMapEditor()?.hideTileMask();
+        const editor: any = MapManager.GetInstance().getMapEditor();
+        if (editor) {
+            this.getOrCreateRegionGraphics(editor);
+        }
+        if (!this.customizeInputComp || !this.customizeInputComp.isValid) {
+            this.customizeInputComp = director.getScene().getComponentInChildren(CustomizeInput);
+        }
+        if (this.customizeInputComp && this.customizeInputComp.isValid) {
+            this.customizeInputComp.enabled = false;
+        }
+        this.setNpcHeadsVisible(false);
+        this.clearPendingRegionNpcIds();
+        MapManager.GetInstance().getMapEditor()?.clearPendingRegionNpcHeads?.();
+        this.getNpcHeadEditComponent()?.resetRegionNpcUi();
+    }
+
+    private disableRegionSelectionMode() {
+        if (!this.regionSelectMode && MapManager.GetInstance().actionStatus !== ActionStatus.REGION) {
+            return;
+        }
+        this.regionSelectMode = false;
+        this.regionDragging = false;
+        this.regionStartGrid = null;
+        this.regionEndGrid = null;
+        this.pendingRegionRect = null;
+        if (this.customizeInputComp && this.customizeInputComp.isValid) {
+            this.customizeInputComp.enabled = true;
+        }
+        this.setNpcHeadsVisible(false);
+        this.clearPendingRegionNpcIds();
+        MapManager.GetInstance().getMapEditor()?.clearPendingRegionNpcHeads?.();
+        this.getNpcHeadEditComponent()?.resetRegionNpcUi();
+    }
+
+    OnClickDelete(){
+        this.disableRegionSelectionMode();
+        this.tileContent.active = false;
+        MapManager.GetInstance().actionStatus = ActionStatus.DETELE;
+        MapManager.GetInstance().setDetele();
+
+        this.setBottomNode();
     }
 
     onClickSwitchTileMenu(event: EventTouch) {
@@ -420,6 +907,10 @@ export class MapEditorUI extends Component {
     }
 
     onClickBack() {
+        if (MapManager.GetInstance().actionStatus == ActionStatus.REGION) {
+            this.cancelPendingRegionSelection();
+            this.disableRegionSelectionMode();
+        }
         this.mapToolNode.forEach((pt) => {
             pt.tool.active = true;
             if (pt.switch)
