@@ -33,7 +33,9 @@ export class MapLoadMap {
             const buildingSize = MapModel.getInstance().getBuildingSize(size , mapEditor);
             
             const worldPos = MapModel.getInstance().gridToWorld(pos , size , mapEditor);
-            tile.setPosition(worldPos);
+            const ox = Number((plant as any).offsetX ?? 0) || 0;
+            const oy = Number((plant as any).offsetY ?? 0) || 0;
+            tile.setPosition(worldPos.x + ox, worldPos.y + oy, worldPos.z);
             const flipX = plant.flipX != null ? plant.flipX : (plant as any).scaleX;
             if (flipX != null && flipX < 0) {
                 const scale = tile.getScale();
@@ -45,7 +47,9 @@ export class MapLoadMap {
                 id: idAry[0] + "#" + idAry[1],
                 tile: tile,
                 tileType: "Plant",
-                flipX: flipX != null ? (flipX < 0 ? -1 : 1) : 1
+                flipX: flipX != null ? (flipX < 0 ? -1 : 1) : 1,
+                offsetX: ox,
+                offsetY: oy
             });
 
             // 更新网格数据

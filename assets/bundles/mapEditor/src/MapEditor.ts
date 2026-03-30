@@ -27,7 +27,7 @@ interface WallSpriteConfig {
 
 export interface MapData {
     Ground: { id: string, _type: string, position: string , cfgId : number}[],
-    Plant: { id: string, _type: string, position: string, flipX?: number, scaleX?: number }[],
+    Plant: { id: string, _type: string, position: string, flipX?: number, scaleX?: number, offsetX?: number, offsetY?: number }[],
     Region?: { id: string, minX: number, minY: number, maxX: number, maxY: number, npcIds?: string[] }[],
     Floor: { id: string, _type: string, position: string }[],
     House: {
@@ -35,7 +35,7 @@ export interface MapData {
         Floor: { id: string, _type: string, position: string }[],
         OpenWall: { position: string, doorDecorId?: string }[],
         Wall: { id: string, _type: string, position: string }[],
-        Decor: { id: string, oid: string, _type: string, position: string, flipX?: number, scaleX?: number }[],
+        Decor: { id: string, oid: string, _type: string, position: string, flipX?: number, scaleX?: number, offsetX?: number, offsetY?: number }[],
     }[],
     Walkable?: {
         width: number,
@@ -107,12 +107,14 @@ export class MapEditor extends Component {
 
     private buildFloorPoints: Vec2[] = [];
     public houseItems: Map<string, { tile: Node, tileType: string, belong?: string }> = new Map();
-    public mapItems: Map<string, { id: string, tile: Node, tileType: string, belong?: string, flipX?: number }> = new Map();
+    public mapItems: Map<string, { id: string, tile: Node, tileType: string, belong?: string, flipX?: number, offsetX?: number, offsetY?: number }> = new Map();
     public mapData: number[][] = [];
     public mapRegions: { id: string, minX: number, minY: number, maxX: number, maxY: number, npcIds: string[] }[] = [];
     public tileSize = 32;
     public mapWidth = 46;
     public mapHeight = 88;
+    /** 最近一次鼠标/触摸在 mapContainer 下的本地坐标（用于格子内偏移摆放） */
+    public lastPointerLocalPos: Vec2 | null = null;
     private graphics: Graphics = null;
     private curTileNode: Node = null;
     private maskSp: Sprite = null;
@@ -125,7 +127,7 @@ export class MapEditor extends Component {
         npc_banner1: Node,
     } = { move: null, detele: null, frame: null, sign: null, npc_banner1: null };
 
-    moveItem: { id: string, tile: Node, tileType: string, initGride: Vec2, belong?: string, decorKey?: string } = null;
+    moveItem: { id: string, tile: Node, tileType: string, initGride: Vec2, belong?: string, decorKey?: string, offsetX?: number, offsetY?: number, initOffsetX?: number, initOffsetY?: number, grabOffsetX?: number, grabOffsetY?: number } = null;
     deteleItem: { tile: Node | null, tileType: string, belong?: string, decorKey?: string, doorPos?: Vec2, doorDir?: string } = null;
     moveStatus: number = 0;
 
@@ -154,7 +156,7 @@ export class MapEditor extends Component {
         openWall: Vec2[],
         openWallDoorDecorIdMap?: Map<string, string>,
         base: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string }>,
-        decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string, flipX?: number }>,
+        decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string, flipX?: number, offsetX?: number, offsetY?: number }>,
         npc: { id: string, _node: Node, position: string, design: { npcName: string, npcIntro: string } },
         horWalls: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string }>,
         verWalls: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string }>,
@@ -452,6 +454,16 @@ export class MapEditor extends Component {
 
         this.refreshWalkableDebugOverlayIfNeeded();
         this.sendWebMapInfoIfChanged();
+    }
+
+    /** 计算「指针在格子中的偏移」，用于更精准的触摸/鼠标对齐 */
+    private getPointerOffsetForGrid(gridPos: Vec2, size: Size | null): Vec2 {
+        if (!this.lastPointerLocalPos) {
+            return new Vec2(0, 0);
+        }
+        const base = MapModel.getInstance().gridToWorld(gridPos, size, this);
+        // 不做强制 clamp，保证拖拽时视觉更“跟手”；逻辑占格仍由 gridPos 决定
+        return new Vec2(this.lastPointerLocalPos.x - base.x, this.lastPointerLocalPos.y - base.y);
     }
 
     private refreshWalkableDebugOverlayIfNeeded() {
@@ -985,8 +997,9 @@ export class MapEditor extends Component {
                     const buildingSize = MapModel.getInstance().getBuildingSize(size , this);
 
                     // 放置建筑
-                    const worldPos = MapModel.getInstance().gridToWorld(gridPos , null , this);
-                    tile.setPosition(worldPos);
+                    const worldPos = MapModel.getInstance().gridToWorld(gridPos , size , this);
+                    const offset = this.getPointerOffsetForGrid(gridPos, size);
+                    tile.setPosition(worldPos.x + offset.x, worldPos.y + offset.y, worldPos.z);
                     const previewScaleX = this.curTileNode?.getScale()?.x ?? 1;
                     const flipX = previewScaleX < 0 ? -1 : 1;
                     const tileScale = tile.getScale();
@@ -1005,7 +1018,9 @@ export class MapEditor extends Component {
                         height: size.height,
                         belong: item.belong,
                         position: `${gridPos.x},${gridPos.y}`,
-                        flipX
+                        flipX,
+                        offsetX: offset.x,
+                        offsetY: offset.y
                     });
 
                     // 更新网格数据
@@ -1247,8 +1262,9 @@ export class MapEditor extends Component {
         const tile = MapManager.GetInstance().getMapCurTileNode(this.curTileNode.name, this.curTileNode["tileType"]);
         tile.name = this.curTileNode.name + "#" + this.curTileNode["tileType"];
         const size = tile.getComponent(UITransform).contentSize;
-        const worldPos = MapModel.getInstance().gridToWorld(gridPos, null, this);
-        tile.setPosition(worldPos);
+        const worldPos = MapModel.getInstance().gridToWorld(gridPos, size, this);
+        const offset = this.getPointerOffsetForGrid(gridPos, size);
+        tile.setPosition(worldPos.x + offset.x, worldPos.y + offset.y, worldPos.z);
         const previewScaleX = this.curTileNode?.getScale()?.x ?? 1;
         const flipX = previewScaleX < 0 ? -1 : 1;
         const tileScale = tile.getScale();
@@ -1263,7 +1279,9 @@ export class MapEditor extends Component {
             height: size.height,
             belong: belong,
             position: `${gridPos.x},${gridPos.y}`,
-            flipX
+            flipX,
+            offsetX: offset.x,
+            offsetY: offset.y
         });
 
         MapManager.GetInstance().getMapEditorUI().checkButtonVisible();
@@ -1304,7 +1322,22 @@ export class MapEditor extends Component {
             let size = null;
             if (this.mapItems.has(`${gridPos.x},${gridPos.y}`)) {
                 const item = this.mapItems.get(`${gridPos.x},${gridPos.y}`);
-                this.moveItem = { id: item.id, tile: item.tile, tileType: item.tileType, initGride: gridPos };
+                const ptr = this.lastPointerLocalPos;
+                const tilePos = item.tile?.getPosition?.() ?? new Vec3();
+                const grabOffsetX = ptr ? (ptr.x - tilePos.x) : 0;
+                const grabOffsetY = ptr ? (ptr.y - tilePos.y) : 0;
+                this.moveItem = {
+                    id: item.id,
+                    tile: item.tile,
+                    tileType: item.tileType,
+                    initGride: gridPos,
+                    offsetX: (item as any).offsetX ?? 0,
+                    offsetY: (item as any).offsetY ?? 0,
+                    initOffsetX: (item as any).offsetX ?? 0,
+                    initOffsetY: (item as any).offsetY ?? 0,
+                    grabOffsetX,
+                    grabOffsetY
+                };
                 console.log(`[MOVE_SELECT] id=${this.moveItem.id}, name=${this.moveItem.tile?.name}, type=${this.moveItem.tileType}, grid=${gridPos.x},${gridPos.y}`);
                 size = this.moveItem.tile.getComponent(UITransform).contentSize;
                 this.setArrowSignActive(true);
@@ -1319,13 +1352,23 @@ export class MapEditor extends Component {
                     const topDecor = this.getTopDecorAtGrid(house, gridPos);
                     if (topDecor) {
                         const item = topDecor.value;
+                        const ptr = this.lastPointerLocalPos;
+                        const tilePos = item.tile?.getPosition?.() ?? new Vec3();
+                        const grabOffsetX = ptr ? (ptr.x - tilePos.x) : 0;
+                        const grabOffsetY = ptr ? (ptr.y - tilePos.y) : 0;
                         this.moveItem = {
                             id: item.tile.name,
                             tile: item.tile,
                             tileType: item.tileType,
                             initGride: gridPos,
                             belong: item.belong,
-                            decorKey: topDecor.key
+                            decorKey: topDecor.key,
+                            offsetX: (item as any).offsetX ?? 0,
+                            offsetY: (item as any).offsetY ?? 0,
+                            initOffsetX: (item as any).offsetX ?? 0,
+                            initOffsetY: (item as any).offsetY ?? 0,
+                            grabOffsetX,
+                            grabOffsetY
                         };
                         console.log(`[MOVE_SELECT] id=${this.moveItem.id}, name=${this.moveItem.tile?.name}, type=${this.moveItem.tileType}, grid=${gridPos.x},${gridPos.y}`);
                         size = this.moveItem.tile.getComponent(UITransform).contentSize;
@@ -1649,16 +1692,36 @@ export class MapEditor extends Component {
                 console.log(`[MOVE_START] id=${this.moveItem.id}, name=${this.moveItem.tile?.name}, type=${this.moveItem.tileType}, from=${this.moveItem.initGride.x},${this.moveItem.initGride.y}`);
             } else if (this.moveStatus == 1) {
                 // 移动
-                const worldPos = MapModel.getInstance().gridToWorld(gridPos , null , this);
-                this.moveItem.tile.setPosition(worldPos);
+                const size = this.moveItem.tile.getComponent(UITransform).contentSize;
+                const ptr = this.lastPointerLocalPos;
+                if (ptr) {
+                    const grabX = (this.moveItem as any).grabOffsetX ?? 0;
+                    const grabY = (this.moveItem as any).grabOffsetY ?? 0;
+                    const nextX = ptr.x - grabX;
+                    const nextY = ptr.y - grabY;
+                    this.moveItem.tile.setPosition(nextX, nextY, 0);
+
+                    // 记录当前显示偏移（用于落地保存）；逻辑仍以 gridPos 为准
+                    const base = MapModel.getInstance().gridToWorld(gridPos, size, this);
+                    (this.moveItem as any).offsetX = nextX - base.x;
+                    (this.moveItem as any).offsetY = nextY - base.y;
+                } else {
+                    const worldPos = MapModel.getInstance().gridToWorld(gridPos, size, this);
+                    this.moveItem.tile.setPosition(worldPos);
+                    (this.moveItem as any).offsetX = 0;
+                    (this.moveItem as any).offsetY = 0;
+                }
             } else if (this.moveStatus == 2) {
                 const buildingSize = MapModel.getInstance().getBuildingSize(this.moveItem.tile.getComponent(UITransform).contentSize , this);
 
                 if (this.moveItem.tileType == "Decor") {
                     if (this.checkPlacementDecorValidity(gridPos)) {
                         // 移动
-                        const worldPos = MapModel.getInstance().gridToWorld(gridPos , null , this);
-                        this.moveItem.tile.setPosition(worldPos);
+                        const size = this.moveItem.tile.getComponent(UITransform).contentSize;
+                        const worldPos = MapModel.getInstance().gridToWorld(gridPos, size, this);
+                        const ox = (this.moveItem as any).offsetX ?? 0;
+                        const oy = (this.moveItem as any).offsetY ?? 0;
+                        this.moveItem.tile.setPosition(worldPos.x + ox, worldPos.y + oy, worldPos.z);
 
                         // 更新网格数据
                         for (let x = 0; x < buildingSize.x; x++) {
@@ -1676,13 +1739,20 @@ export class MapEditor extends Component {
                             house.decor.delete(movingDecorKey);
                             const nextKey = this.buildDecorStackKey(gridPos, next.tile.name);
                             next.position = `${gridPos.x},${gridPos.y}`;
+                            next.offsetX = (this.moveItem as any).offsetX ?? 0;
+                            next.offsetY = (this.moveItem as any).offsetY ?? 0;
                             house.decor.set(nextKey, next);
                             this.moveItem.decorKey = nextKey;
                         }
                     } else {
                         // 移动
-                        const worldPos = MapModel.getInstance().gridToWorld(this.moveItem.initGride , null , this);
-                        this.moveItem.tile.setPosition(worldPos);
+                        const size = this.moveItem.tile.getComponent(UITransform).contentSize;
+                        const worldPos = MapModel.getInstance().gridToWorld(this.moveItem.initGride, size, this);
+                        const ox = (this.moveItem as any).initOffsetX ?? 0;
+                        const oy = (this.moveItem as any).initOffsetY ?? 0;
+                        (this.moveItem as any).offsetX = ox;
+                        (this.moveItem as any).offsetY = oy;
+                        this.moveItem.tile.setPosition(worldPos.x + ox, worldPos.y + oy, worldPos.z);
 
                         // 更新网格数据
                         for (let x = 0; x < buildingSize.x; x++) {
@@ -1695,8 +1765,11 @@ export class MapEditor extends Component {
                     }
                 } else if (this.isWallDacorationTileType(this.moveItem.tileType)) {
                     if (this.checkPlacementWallDacorationValidity(gridPos)) {
-                        const worldPos = MapModel.getInstance().gridToWorld(gridPos , null , this);
-                        this.moveItem.tile.setPosition(worldPos);
+                        const size = this.moveItem.tile.getComponent(UITransform).contentSize;
+                        const worldPos = MapModel.getInstance().gridToWorld(gridPos, size, this);
+                        const ox = (this.moveItem as any).offsetX ?? 0;
+                        const oy = (this.moveItem as any).offsetY ?? 0;
+                        this.moveItem.tile.setPosition(worldPos.x + ox, worldPos.y + oy, worldPos.z);
                         const sourceHouse = this.allHouse.get(this.moveItem.belong);
                         const movingDecorKey = this.moveItem.decorKey || '';
                         const next = sourceHouse.decor.get(movingDecorKey);
@@ -1707,18 +1780,28 @@ export class MapEditor extends Component {
                             const targetBelong = this.getWallDacorationBelongByArea(gridPos, buildingSize) || next.belong;
                             next.belong = targetBelong;
                             const targetHouse = this.allHouse.get(targetBelong) || sourceHouse;
+                            next.offsetX = (this.moveItem as any).offsetX ?? 0;
+                            next.offsetY = (this.moveItem as any).offsetY ?? 0;
                             targetHouse.decor.set(nextKey, next);
                             this.moveItem.decorKey = nextKey;
                         }
                     } else {
-                        const worldPos = MapModel.getInstance().gridToWorld(this.moveItem.initGride , null , this);
-                        this.moveItem.tile.setPosition(worldPos);
+                        const size = this.moveItem.tile.getComponent(UITransform).contentSize;
+                        const worldPos = MapModel.getInstance().gridToWorld(this.moveItem.initGride, size, this);
+                        const ox = (this.moveItem as any).initOffsetX ?? 0;
+                        const oy = (this.moveItem as any).initOffsetY ?? 0;
+                        (this.moveItem as any).offsetX = ox;
+                        (this.moveItem as any).offsetY = oy;
+                        this.moveItem.tile.setPosition(worldPos.x + ox, worldPos.y + oy, worldPos.z);
                     }
                 } else {
                     if (this.checkPlacementValidity(gridPos)) {
                         // 移动
-                        const worldPos = MapModel.getInstance().gridToWorld(gridPos , null , this);
-                        this.moveItem.tile.setPosition(worldPos);
+                        const size = this.moveItem.tile.getComponent(UITransform).contentSize;
+                        const worldPos = MapModel.getInstance().gridToWorld(gridPos, size, this);
+                        const ox = (this.moveItem as any).offsetX ?? 0;
+                        const oy = (this.moveItem as any).offsetY ?? 0;
+                        this.moveItem.tile.setPosition(worldPos.x + ox, worldPos.y + oy, worldPos.z);
 
                         // 更新网格数据
                         for (let x = 0; x < buildingSize.x; x++) {
@@ -1731,8 +1814,13 @@ export class MapEditor extends Component {
                         this.mapItems.set(`${gridPos.x},${gridPos.y}`, this.moveItem);
                     } else {
                         // 移动
-                        const worldPos = MapModel.getInstance().gridToWorld(this.moveItem.initGride , null , this);
-                        this.moveItem.tile.setPosition(worldPos);
+                        const size = this.moveItem.tile.getComponent(UITransform).contentSize;
+                        const worldPos = MapModel.getInstance().gridToWorld(this.moveItem.initGride, size, this);
+                        const ox = (this.moveItem as any).initOffsetX ?? 0;
+                        const oy = (this.moveItem as any).initOffsetY ?? 0;
+                        (this.moveItem as any).offsetX = ox;
+                        (this.moveItem as any).offsetY = oy;
+                        this.moveItem.tile.setPosition(worldPos.x + ox, worldPos.y + oy, worldPos.z);
 
                         // 更新网格数据
                         for (let x = 0; x < buildingSize.x; x++) {
@@ -3147,11 +3235,12 @@ export class MapEditor extends Component {
         
         const buildingSize = MapModel.getInstance().getBuildingSize(size , this);
         // 放置建筑
-        const worldPos = MapModel.getInstance().gridToWorld(gridPos , null , this);
+        const worldPos = MapModel.getInstance().gridToWorld(gridPos , size , this);
         // 创建新的图块
         const tile = MapManager.GetInstance().getMapCurTileNode(this.curTileNode.name , this.curTileNode["tileType"]);
 
-        tile.setPosition(worldPos);
+        const offset = manager.actionStatus == ActionStatus.PLANT ? this.getPointerOffsetForGrid(gridPos, size) : new Vec2(0, 0);
+        tile.setPosition(worldPos.x + offset.x, worldPos.y + offset.y, worldPos.z);
         this.mapContainer.addChild(tile);
         // console.log(worldPos)
         // console.log(gridPos)
@@ -3166,7 +3255,9 @@ export class MapEditor extends Component {
                     id: this.curTileNode.name + "#" + this.curTileNode["tileType"],
                     tile: tile,
                     tileType: "Plant",
-                    flipX
+                    flipX,
+                    offsetX: offset.x,
+                    offsetY: offset.y
                 });
             } else if (manager.actionStatus == ActionStatus.FLOOR) {
                 this.mapItems.set(`${gridPos.x},${gridPos.y}`, { id: tile.name, tile: tile, tileType: "Floor" });
@@ -3558,7 +3649,7 @@ export class MapEditor extends Component {
 
     private getTopDecorAtGrid(
         house: {
-            decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string }>
+            decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string, flipX?: number, offsetX?: number, offsetY?: number }>
         },
         gridPos: Vec2
     ): { key: string; value: { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string } } | null {
@@ -3577,7 +3668,7 @@ export class MapEditor extends Component {
 
     private getTopDecorCoveringGrid(
         house: {
-            decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string }>
+            decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string, flipX?: number, offsetX?: number, offsetY?: number }>
         },
         gridPos: Vec2
     ): { key: string; value: { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string } } | null {
@@ -3622,7 +3713,7 @@ export class MapEditor extends Component {
 
     private hasSameDecorAtGrid(
         house: {
-            decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string }>
+            decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string, flipX?: number, offsetX?: number, offsetY?: number }>
         },
         gridPos: Vec2,
         tileName: string
@@ -3639,7 +3730,7 @@ export class MapEditor extends Component {
 
     private hasDecorCoveringCell(
         house: {
-            decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string }>
+            decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string, flipX?: number, offsetX?: number, offsetY?: number }>
         },
         gridX: number,
         gridY: number,
@@ -4580,7 +4671,9 @@ export class MapEditor extends Component {
                 const buildingSize = MapModel.getInstance().getBuildingSize(size , this);
 
                 const worldPos = MapModel.getInstance().gridToWorld(gridPos, size , this);
-                tile.setPosition(worldPos);
+                const ox = Number((decor as any).offsetX ?? 0) || 0;
+                const oy = Number((decor as any).offsetY ?? 0) || 0;
+                tile.setPosition(worldPos.x + ox, worldPos.y + oy, worldPos.z);
                 this.mapContainer.addChild(tile);
 
                 wallHouse.decor.set(this.buildDecorStackKey(gridPos, tile.name), {
@@ -4590,7 +4683,9 @@ export class MapEditor extends Component {
                     height: size.height,
                     belong: _name,
                     position: `${gridPos.x},${gridPos.y}`,
-                    flipX: flipX != null ? (flipX < 0 ? -1 : 1) : 1
+                    flipX: flipX != null ? (flipX < 0 ? -1 : 1) : 1,
+                    offsetX: ox,
+                    offsetY: oy
                 });
 
                 if (decorType === "Decor") {

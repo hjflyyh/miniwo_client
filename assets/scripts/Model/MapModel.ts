@@ -417,6 +417,8 @@ export class MapModel {
                     _type: "Plant",
                     position: key ,
                     flipX,
+                    offsetX: (value as any).offsetX ?? 0,
+                    offsetY: (value as any).offsetY ?? 0,
                     // cfgId : value
                 })
             }
@@ -491,7 +493,9 @@ export class MapModel {
                         oid: value_4.tile.name.split('_')[1],
                         _type: decorType,
                         position: posKey,
-                        flipX
+                        flipX,
+                        offsetX: (value_4 as any).offsetX ?? 0,
+                        offsetY: (value_4 as any).offsetY ?? 0
                     })
                 }
             })
