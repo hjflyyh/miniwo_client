@@ -25,6 +25,9 @@ export class RoleModel {
 
     public token : string;
     public playerId : string
+
+    public tags ;
+
     private nakamaSessionId: string = "";
     private isForceLogoutHandling: boolean = false;
 
@@ -152,6 +155,8 @@ export class RoleModel {
             this.playerId = data.player_id
             this.nakama_token = data.nakama_token
             
+            this.tags = data.tags
+
             AppConst.WebSocketManager.setConfig("ws://" + HttpManager.ipBase + ":7350/ws?token=" + data.nakama_token);
             AppConst.WebSocketManager.connect();
         }

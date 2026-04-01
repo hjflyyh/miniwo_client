@@ -17,6 +17,64 @@ export class MapModel {
     public mapEditAdminToken;
     public mapEditMapId;
     public mapEditData;
+    /**
+     * 编辑态 NPC 列表（配置长什么样就怎样实例化，与「哪个区域选了哪些 npc」无关；区域各自 npc 在 mapRegions[].npcIds）。
+     * 单条绑定：prefab / prefabPath / mapPrefab，prefabBundle，或 tileId / tilePrefabId。
+     */
+    public mapEditNpc = [
+        {"id": 101,"name": "林夏",},
+        {"id": 102,"name": "周启",},
+        {"id": 103,"name": "李明",},
+    ];
+
+// [
+//   {
+//     "id": 101,
+//     "name": "林夏",
+//     "profile": "外冷内热，做事谨慎，遇到关键时刻会挺身而出",
+//     "avatarUrl": "https://cdn.example.com/npc/101/avatar.png",
+//     "spriteUrl": "https://cdn.example.com/npc/101/sprite.png",
+
+//     "portraitUrl": "https://cdn.example.com/npc/101/portrait.png",
+//     "sex": 1,
+//     "gender": "female",
+//     "age": 22,
+//     "mbtiIndex": 6,
+//     "mbti": "INFJ",
+
+//     "characteristics": "理性、细腻、共情力强",
+//     "hobbies": "摄影, 阅读, 夜跑",
+//     "identity": "城市调查记者",
+//     "appearance": "黑色短发，常穿风衣，随身携带录音笔",
+//     "pastExperiences": "曾参与重大事件报道，因事故留下心理阴影",
+//     "backstory": "为追查失踪案来到港城，与主角结识",
+
+//     "isSaved": true
+//   },
+//   {
+//     "id": 102,
+//     "name": "周启",
+//     "profile": "嘴硬心软，行动派，擅长社交破局",
+//     "avatarUrl": "https://cdn.example.com/npc/102/avatar.png",
+//     "spriteUrl": "https://cdn.example.com/npc/102/sprite.png",
+
+//     "portraitUrl": "https://cdn.example.com/npc/102/portrait.png",
+//     "sex": 0,
+//     "gender": "male",
+//     "age": 24,
+//     "mbtiIndex": 0,
+//     "mbti": "INTJ",
+
+//     "characteristics": "果断、好胜、责任感强",
+//     "hobbies": "篮球, 机车, 电玩",
+//     "identity": "创业团队技术负责人",
+//     "appearance": "高个，浅灰夹克，左手腕有旧伤",
+//     "pastExperiences": "大学时创业失败，后来东山再起",
+//     "backstory": "与主角是旧识，因利益冲突再度相遇",
+
+//     "isSaved": true
+//   }
+// ]
 
     //0根据地图列表进入地图，需要去掉所有UI   1进入编辑
     public showEditMapType = 0
@@ -82,6 +140,40 @@ export class MapModel {
         this.isRecoveringAfterReconnect = fromReconnect;
         let joinMapRequest = new network.JoinMapEequest();
         AppConst.WebSocketManager.send(joinMapRequest.toJSON(mapId));
+    }
+
+    // 区域增加NPC：先更新本地区域数据，再发给后端
+    public addNpcToRegion(regionId: string, npcId: string, mapId?: number): boolean {
+        if (!regionId || !npcId) return false;
+        const editor = AppConst.MapManager?.getMapEditor?.();
+        const changed = !!editor?.addNpcToRegion?.(regionId, npcId);
+        const req = new network.MapRegionAddNpcRequest();
+        AppConst.WebSocketManager.send(req.toJSON(regionId, [npcId], mapId));
+        return changed;
+    }
+
+    // 区域删除NPC：先更新本地区域数据，再发给后端
+    public removeNpcFromRegion(regionId: string, npcId: string, mapId?: number): boolean {
+        if (!regionId || !npcId) return false;
+        const editor = AppConst.MapManager?.getMapEditor?.();
+        const changed = !!editor?.removeNpcFromRegion?.(regionId, npcId);
+        const req = new network.MapRegionRemoveNpcRequest();
+        AppConst.WebSocketManager.send(req.toJSON(regionId, [npcId], mapId));
+        return changed;
+    }
+
+    /** 新建区域后本地已写入 npcIds，仅补发一次绑定（不重复改 editor） */
+    public sendMapRegionNpcBind(regionId: string, npcIds: string[], mapId?: number) {
+        if (!regionId || !npcIds?.length) {
+            return;
+        }
+        const req = new network.MapRegionAddNpcRequest();
+        const mid =
+            mapId ??
+            (this.mapEditMapId != null && Number(this.mapEditMapId) > 0
+                ? Number(this.mapEditMapId)
+                : this.currentMapId);
+        AppConst.WebSocketManager.send(req.toJSON(regionId, npcIds, mid));
     }
 
     private sendMatchJoin(matchId: string){
@@ -293,6 +385,7 @@ export class MapModel {
     public saveMapData(map : MapEditor , base64Image) {
         map.allMapAssetsData.Ground = [];
         map.allMapAssetsData.Plant = [];
+        map.allMapAssetsData.Region = [];
         map.allMapAssetsData.Floor = [];
         map.allMapAssetsData.House = [];
         map.allMapAssetsData.mapWidth = map.mapWidth;
@@ -317,14 +410,32 @@ export class MapModel {
 
         map.mapItems.forEach((value, key) => {
             if (value.tileType == "Plant") {
+                const tileScaleX = value.tile?.getScale?.().x;
+                const flipX = tileScaleX != null ? (tileScaleX < 0 ? -1 : 1) : (value.flipX != null ? (value.flipX < 0 ? -1 : 1) : 1);
                 map.allMapAssetsData.Plant.push({
                     id: value.id,
                     _type: "Plant",
                     position: key ,
+                    flipX,
+                    offsetX: (value as any).offsetX ?? 0,
+                    offsetY: (value as any).offsetY ?? 0,
                     // cfgId : value
                 })
             }
         })
+
+        if (Array.isArray(map.mapRegions)) {
+            map.mapRegions.forEach((region) => {
+                map.allMapAssetsData.Region.push({
+                    id: region.id,
+                    minX: region.minX,
+                    minY: region.minY,
+                    maxX: region.maxX,
+                    maxY: region.maxY,
+                    npcIds: Array.isArray(region.npcIds) ? [...region.npcIds] : []
+                })
+            })
+        }
 
         map.houseItems.forEach((value, key) => {
             if (value.tileType == "Floor" && !value.belong) {
@@ -368,18 +479,23 @@ export class MapModel {
                 }
             })
 
-            let arr_3: { id: string, oid: string, _type: string, position: string }[] = [];
+            let arr_3: { id: string, oid: string, _type: string, position: string, flipX?: number }[] = [];
             value.decor.forEach((value_4, key_4) => {
                 if (value_4.tileType == "Decor" || value_4.tileType == "WallDacoration" || value_4.tileType == "WallDecor") {
                     const posKey = value_4.position && value_4.position.includes(',')
                         ? value_4.position
                         : (key_4.includes('|') ? key_4.split('|')[0] : key_4);
                     const decorType = value_4.tileType == "WallDecor" ? "WallDacoration" : value_4.tileType;
+                    const tileScaleX = value_4.tile?.getScale?.().x;
+                    const flipX = tileScaleX != null ? (tileScaleX < 0 ? -1 : 1) : (value_4.flipX != null ? (value_4.flipX < 0 ? -1 : 1) : 1);
                     arr_3.push({
                         id: value_4.tile.name,
                         oid: value_4.tile.name.split('_')[1],
                         _type: decorType,
-                        position: posKey
+                        position: posKey,
+                        flipX,
+                        offsetX: (value_4 as any).offsetX ?? 0,
+                        offsetY: (value_4 as any).offsetY ?? 0
                     })
                 }
             })

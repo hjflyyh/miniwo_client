@@ -33,10 +33,24 @@ export class MapLoadMap {
             const buildingSize = MapModel.getInstance().getBuildingSize(size , mapEditor);
             
             const worldPos = MapModel.getInstance().gridToWorld(pos , size , mapEditor);
-            tile.setPosition(worldPos);
+            const ox = Number((plant as any).offsetX ?? 0) || 0;
+            const oy = Number((plant as any).offsetY ?? 0) || 0;
+            tile.setPosition(worldPos.x + ox, worldPos.y + oy, worldPos.z);
+            const flipX = plant.flipX != null ? plant.flipX : (plant as any).scaleX;
+            if (flipX != null && flipX < 0) {
+                const scale = tile.getScale();
+                tile.setScale(-1, scale.y, scale.z);
+            }
             mapEditor.mapContainer.addChild(tile);
 
-            mapEditor.mapItems.set(`${pos.x},${pos.y}`, { id: idAry[0] + "#" + idAry[1], tile: tile, tileType: "Plant" });
+            mapEditor.mapItems.set(`${pos.x},${pos.y}`, {
+                id: idAry[0] + "#" + idAry[1],
+                tile: tile,
+                tileType: "Plant",
+                flipX: flipX != null ? (flipX < 0 ? -1 : 1) : 1,
+                offsetX: ox,
+                offsetY: oy
+            });
 
             // 更新网格数据
             for (let x = 0; x < buildingSize.x; x++) {
@@ -49,6 +63,30 @@ export class MapLoadMap {
                         mapEditor.mapData[gridX][gridY] = 2;
                     }
                 }
+            }
+        }
+
+        mapEditor.mapRegions = [];
+        const regionList = Array.isArray(mapEditor.allMapAssetsData.Region) ? mapEditor.allMapAssetsData.Region : [];
+        for (let i = 0; i < regionList.length; i++) {
+            const region = regionList[i];
+            mapEditor.mapRegions.push({
+                id: region.id || `region_${i}`,
+                minX: parseInt(String(region.minX)),
+                minY: parseInt(String(region.minY)),
+                maxX: parseInt(String(region.maxX)),
+                maxY: parseInt(String(region.maxY)),
+                npcIds: Array.isArray(region.npcIds) ? [...region.npcIds] : []
+            });
+        }
+        mapEditor.rebuildAllRegionNpcHeadsFromRegions();
+
+        const mapUI = manager.getMapEditorUI();
+        if (mapUI) {
+            const isEditMode = MapModel.getInstance().showEditMapType == 1;
+            mapUI.setRegionHighlightVisible(isEditMode);
+            if (isEditMode) {
+                mapUI.refreshRegionHighlightsFromData();
             }
         }
 

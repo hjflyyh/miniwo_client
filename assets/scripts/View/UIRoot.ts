@@ -62,6 +62,7 @@ export class UIRoot extends Component {
                 MapModel.getInstance().mapEditAdminToken = msg.token
                 MapModel.getInstance().mapEditMapId = msg.mapId
                 MapModel.getInstance().mapEditData = msg.mapData
+                MapModel.getInstance().mapEditNpc = msg.mapEditNpc
 
                 console.log("地图数据：")
                 console.log(msg.mapData)

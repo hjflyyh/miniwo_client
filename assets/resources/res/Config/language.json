@@ -58,5 +58,301 @@
   "115": {
     "name_cn": "推荐",
     "name_en": "RECOMMEND"
+  },
+  "116": {
+    "name_cn": "审核通知",
+    "name_en": "REVIEW NOTICE"
+  },
+  "117": {
+    "name_cn": "审核结果",
+    "name_en": "REVIEW RESULT"
+  },
+  "118": {
+    "name_cn": "已通过",
+    "name_en": "APPROVED"
+  },
+  "119": {
+    "name_cn": "未通过",
+    "name_en": "REJECTED"
+  },
+  "120": {
+    "name_cn": "全部通知",
+    "name_en": "ALL NOTICE"
+  },
+  "121": {
+    "name_cn": "未读通知",
+    "name_en": "UNREAD NOTICE"
+  },
+  "122": {
+    "name_cn": "详情",
+    "name_en": "DETAILS"
+  },
+  "123": {
+    "name_cn": "再次提交",
+    "name_en": "RESUBMIT"
+  },
+  "124": {
+    "name_cn": "保存",
+    "name_en": "SAVE"
+  },
+  "125": {
+    "name_cn": "创建世界",
+    "name_en": "CREATE WORLD"
+  },
+  "126": {
+    "name_cn": "选择世界属性",
+    "name_en": "Select World Attributes"
+  },
+  "127": {
+    "name_cn": "编辑世界观",
+    "name_en": "Edit World Lore"
+  },
+  "128": {
+    "name_cn": "设计世界地图",
+    "name_en": "Design the World Map"
+  },
+  "129": {
+    "name_cn": "创建角色",
+    "name_en": "Create Characters"
+  },
+  "130": {
+    "name_cn": "撰写世界故事",
+    "name_en": "Write the World Story"
+  },
+  "131": {
+    "name_cn": "步骤 1：定义世界的基础设定",
+    "name_en": "Step 1: Define the World's Setup"
+  },
+  "132": {
+    "name_cn": "选择一项世界属性。这将定义你世界的核心基调与风格。",
+    "name_en": "Choose a world attribute. This will define the core tone and style of your world."
+  },
+  "133": {
+    "name_cn": "下一步",
+    "name_en": "NEXT"
+  },
+  "134": {
+    "name_cn": "步骤 2：编辑世界背景设定",
+    "name_en": "Step 2: Edit World Lore"
+  },
+  "135": {
+    "name_cn": "世界观",
+    "name_en": "Worldview"
+  },
+  "136": {
+    "name_cn": "世界名称",
+    "name_en": "World Name"
+  },
+  "137": {
+    "name_cn": "输入你的世界主题名称",
+    "name_en": "Enter your world's theme name"
+  },
+  "138": {
+    "name_cn": "时代背景",
+    "name_en": "Era Background"
+  },
+  "139": {
+    "name_cn": "世界概览",
+    "name_en": "World Overview"
+  },
+  "140": {
+    "name_cn": "描述你世界的历史、文化与社会结构。",
+    "name_en": "Describe the history, culture, and social structure of your world."
+  },
+  "141": {
+    "name_cn": "AI辅助",
+    "name_en": "AI ASSIST"
+  },
+  "142": {
+    "name_cn": "特殊规则与限制",
+    "name_en": "Special Rules & Constraints"
+  },
+  "143": {
+    "name_cn": "列出定义这个世界的任何独特法则、魔法体系或物理限制。",
+    "name_en": "List any unique laws, magical systems, or physical limitations that define this world."
+  },
+  "144": {
+    "name_cn": "上一步",
+    "name_en": "BACK"
+  },
+  "145": {
+    "name_cn": "步骤 3：设计世界地图",
+    "name_en": "Step 3: Design the World Map"
+  },
+  "146": {
+    "name_cn": "素材库",
+    "name_en": "Asset Library"
+  },
+  "147": {
+    "name_cn": "地图大小",
+    "name_en": "MAP SCALE"
+  },
+  "148": {
+    "name_cn": "分类",
+    "name_en": "CLASS"
+  },
+  "149": {
+    "name_cn": "步骤 4：创建角色",
+    "name_en": "Step 4: Create Characters"
+  },
+  "150": {
+    "name_cn": "当前世界最多可创建10个角色",
+    "name_en": "The current world allows for the creation of 10 characters"
+  },
+  "151": {
+    "name_cn": "已创建角色",
+    "name_en": "Created Characters"
+  },
+  "152": {
+    "name_cn": "需要添加角色…",
+    "name_en": "Need to add characters..."
+  },
+  "153": {
+    "name_cn": "添加角色",
+    "name_en": "Add a character"
+  },
+  "154": {
+    "name_cn": "编辑角色",
+    "name_en": "Edit Characters"
+  },
+  "155": {
+    "name_cn": "创建编辑角色",
+    "name_en": "Create a character to edit"
+  },
+  "156": {
+    "name_cn": "请给ta起个名字",
+    "name_en": "Please give them a name"
+  },
+  "157": {
+    "name_cn": "输入文本…",
+    "name_en": "enter the text..."
+  },
+  "158": {
+    "name_cn": "下一步",
+    "name_en": "continue"
+  },
+  "159": {
+    "name_cn": "编辑基础信息",
+    "name_en": "Edit Basic Information"
+  },
+  "160": {
+    "name_cn": "选择要编辑的角色",
+    "name_en": "Select the character to be edited"
+  },
+  "161": {
+    "name_cn": "MBTI（选填）",
+    "name_en": "MBTI (Optional)"
+  },
+  "162": {
+    "name_cn": "性别",
+    "name_en": "Gender"
+  },
+  "163": {
+    "name_cn": "爱好/兴趣（最多3个）",
+    "name_en": "Hobbies/Interests (Most 3)"
+  },
+  "164": {
+    "name_cn": "背景（最多3个）",
+    "name_en": "Background (Most 3)"
+  },
+  "165": {
+    "name_cn": "上传图片",
+    "name_en": "Upload image"
+  },
+  "166": {
+    "name_cn": "上传一张角色图片，AI 将把它转换为像素风格",
+    "name_en": "Upload a character picture and AI will convert it into pixels"
+  },
+  "167": {
+    "name_cn": "标签描述",
+    "name_en": "Tag Description"
+  },
+  "168": {
+    "name_cn": "基于外观标签生成图片",
+    "name_en": "Generate an image based on appearance tags."
+  },
+  "169": {
+    "name_cn": "点击上传/选择图片",
+    "name_en": "Click to upload/select image"
+  },
+  "170": {
+    "name_cn": "支持JPG/PNG格式，最大10MB",
+    "name_en": "Supports JPG/PNG formats, maximum 10MB."
+  },
+  "171": {
+    "name_cn": "点击输入文字，调整生成结果",
+    "name_en": "Click to enter text and adjust the generation result"
+  },
+  "172": {
+    "name_cn": "请填写相应要求",
+    "name_en": "Please fill in the corresponding requirements"
+  },
+  "173": {
+    "name_cn": "细节调整",
+    "name_en": "Detail Adjustment"
+  },
+  "174": {
+    "name_cn": "AI生成",
+    "name_en": "AI Generation"
+  },
+  "175": {
+    "name_cn": "编辑文本",
+    "name_en": "Edit notice"
+  },
+  "176": {
+    "name_cn": "编辑图像",
+    "name_en": "Edit Image"
+  },
+  "177": {
+    "name_cn": "已选标签",
+    "name_en": "Seleted Tags"
+  },
+  "178": {
+    "name_cn": "全部删除",
+    "name_en": "Delete All"
+  },
+  "179": {
+    "name_cn": "姓名",
+    "name_en": "NAME"
+  },
+  "180": {
+    "name_cn": "爱好",
+    "name_en": "Hobits"
+  },
+  "181": {
+    "name_cn": "背景",
+    "name_en": "Background"
+  },
+  "182": {
+    "name_cn": "性格",
+    "name_en": "Personality"
+  },
+  "183": {
+    "name_cn": "经历",
+    "name_en": "Experiences"
+  },
+  "184": {
+    "name_cn": "文本描述……",
+    "name_en": "text description ..."
+  },
+  "185": {
+    "name_cn": "第 5 步：AI撰写世界观故事",
+    "name_en": "Step 5: Write the World Story by AI"
+  },
+  "186": {
+    "name_cn": "选择一个故事主题，AI 将为你补全故事细节。完成此操作后，故事将无法修改。",
+    "name_en": "Select a story theme, and AI will complete the story details for you. After that, the story cannot be modified."
+  },
+  "187": {
+    "name_cn": "查看详情",
+    "name_en": "View details"
+  },
+  "188": {
+    "name_cn": "重新生成推荐",
+    "name_en": "Regenerate recommendations"
+  },
+  "189": {
+    "name_cn": "提交",
+    "name_en": "SUBMIT"
   }
 }

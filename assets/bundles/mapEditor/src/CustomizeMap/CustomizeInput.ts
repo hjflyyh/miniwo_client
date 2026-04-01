@@ -2,6 +2,7 @@ import { _decorator, Component, EventMouse, EventTouch, Input, input, Node, sys,
 import { ActionStatus, MapManager } from '../MapManager';
 import { MapEditor } from '../MapEditor';
 import { MapModel } from '../../../../scripts/Model/MapModel';
+// import { EventSystem } from 'db://assets/scripts/Utils/EventSystem';
 
 const { ccclass, property } = _decorator;
 
@@ -39,6 +40,9 @@ export class CustomizeInput extends Component {
             input.on(Input.EventType.MOUSE_WHEEL , (event : EventMouse)=>{
                 if (!this.ensureMapEditor()) return;
                 const manager = MapManager.GetInstance();
+                if(manager.actionStatus == ActionStatus.REGION){
+                    return
+                }
                 if(manager.actionStatus != ActionStatus.Back){
                     return
                 }
@@ -50,12 +54,30 @@ export class CustomizeInput extends Component {
             input.on(Input.EventType.MOUSE_MOVE, (event: EventMouse) => {
                 if (!this.ensureMapEditor()) return;
                 const manager = MapManager.GetInstance();
+                if (manager.actionStatus == ActionStatus.REGION) return;
+
+                // 仅在需要“格子内偏移”的物品类型/移动时记录指针本地坐标（不影响造房子/铺路原逻辑）
+                if (manager.actionStatus === ActionStatus.MOVE || manager.actionStatus === ActionStatus.PLANT || manager.actionStatus === ActionStatus.DECOR || manager.actionStatus === ActionStatus.WALL_DECOR) {
+                    const loc = event.getLocation();
+                    const w = this.mapEditor.mainCamera.screenToWorld(new Vec3(loc.x, loc.y, 0));
+                    const lp = this.mapEditor.mapContainer.getComponent(UITransform).convertToNodeSpaceAR(new Vec3(w.x, w.y, 0));
+                    this.mapEditor.lastPointerLocalPos = new Vec2(lp.x, lp.y);
+                }
 
                 if (this.mapEditor.isBuildSwitch) {
                     const gridPos = MapModel.getInstance().worldPosToGride(event.getLocation() , this.mapEditor);
                     const localPos = MapModel.getInstance().gridToWorld(gridPos , null , this.mapEditor);
-                    const worldPos = this.mapEditor.mapContainer.getComponent(UITransform).convertToWorldSpaceAR(localPos)
-                    this.mapEditor.tileMaskNode.setWorldPosition(worldPos);
+                    const worldPos = this.mapEditor.mapContainer.getComponent(UITransform).convertToWorldSpaceAR(localPos);
+                    // 树/家具/墙饰/移动：显示跟手指/鼠标，不吸格；但逻辑 gridPos 仍用于碰撞与落地
+                    // 注意：不能直接用 screenToWorld(near plane) 作为 worldPosition，否则会跑到错误平面导致“看不见”
+                    if (manager.actionStatus === ActionStatus.MOVE || manager.actionStatus === ActionStatus.PLANT || manager.actionStatus === ActionStatus.DECOR || manager.actionStatus === ActionStatus.WALL_DECOR) {
+                        const loc = event.getLocation();
+                        const w = this.mapEditor.mainCamera.screenToWorld(new Vec3(loc.x, loc.y, 0));
+                        const lp = this.mapEditor.mapContainer.getComponent(UITransform).convertToNodeSpaceAR(new Vec3(w.x, w.y, 0));
+                        this.mapEditor.tileMaskNode.setPosition(lp.x, lp.y, 0);
+                    } else {
+                        this.mapEditor.tileMaskNode.setWorldPosition(worldPos);
+                    }
 
                     this.mapEditor.showMaskColor(gridPos);
                     if (manager.actionStatus == ActionStatus.MOVE) {
@@ -109,6 +131,7 @@ export class CustomizeInput extends Component {
             input.on(Input.EventType.MOUSE_DOWN, (event: EventMouse) => {
                 if (!this.ensureMapEditor()) return;
                 const manager = MapManager.GetInstance();
+                if (manager.actionStatus == ActionStatus.REGION) return;
 
                 const gridPos = MapModel.getInstance().worldPosToGride(event.getLocation() , this.mapEditor);
                 const localPos = MapModel.getInstance().gridToWorld(gridPos , null , this.mapEditor);
@@ -126,7 +149,12 @@ export class CustomizeInput extends Component {
                         const gridPos = MapModel.getInstance().worldPosToGride(event.getLocation() , this.mapEditor);
                         const localPos = MapModel.getInstance().gridToWorld(gridPos , null , this.mapEditor);
                         const worldPos = this.mapEditor.mapContainer.getComponent(UITransform).convertToWorldSpaceAR(localPos)
-                        this.mapEditor.tileMaskNode.setWorldPosition(worldPos);
+                        if (manager.actionStatus === ActionStatus.MOVE || manager.actionStatus === ActionStatus.PLANT || manager.actionStatus === ActionStatus.DECOR || manager.actionStatus === ActionStatus.WALL_DECOR) {
+                            const lp = this.mapEditor.mapContainer.getComponent(UITransform).convertToNodeSpaceAR(new Vec3(mouseWorldPoint.x, mouseWorldPoint.y, 0));
+                            this.mapEditor.tileMaskNode.setPosition(lp.x, lp.y, 0);
+                        } else {
+                            this.mapEditor.tileMaskNode.setWorldPosition(worldPos);
+                        }
 
                         this.mapEditor.isBuildSwitch = true;
                     } else if (manager.actionStatus == ActionStatus.WALL) {
@@ -146,6 +174,8 @@ export class CustomizeInput extends Component {
 
             input.on(Input.EventType.MOUSE_UP, (event: EventMouse) => {
                 if (!this.ensureMapEditor()) return;
+                const manager = MapManager.GetInstance();
+                if (manager.actionStatus == ActionStatus.REGION) return;
                 this.mapEditor.mapGraphics.clear()
                 if (!this.mapEditor.isBuildSwitch) {
                     const mouseWorldPoint = this.mapEditor.mainCamera.screenToWorld(new Vec3(event.getLocation().x, event.getLocation().y, 0))
@@ -153,7 +183,6 @@ export class CustomizeInput extends Component {
                         this.mapEditor.isBuildSwitch = true;
                     }
                 } else {
-                    const manager = MapManager.GetInstance();
                     if (manager.actionStatus != ActionStatus.MOVE) {
                         const dis = Vec2.distance(event.getLocation(), this.mapEditor.startMousePosition);
                         if (dis > 10) {
@@ -207,6 +236,39 @@ export class CustomizeInput extends Component {
         }
     }
 
+    OnClickUICheckBtn(){
+        MapManager.GetInstance().getMapEditorUI()?.hideNpcHeadsOnConfirm?.();
+        if (!this.ensureMapEditor()) return;
+        const manager = MapManager.GetInstance();
+        if (manager.actionStatus == ActionStatus.REGION) {
+            const mapEditorUI = manager.getMapEditorUI();
+            const npcIds = mapEditorUI?.getPendingRegionNpcIds?.() ?? [];
+            if (!npcIds || npcIds.length <= 0) {
+                EventSystem.send("ShowTips", "区域内需要选定npc");
+                return;
+            }
+            mapEditorUI?.confirmRegionSelection?.();
+            return;
+        }
+        if (!this.mapEditor.tileMaskNode || !this.mapEditor.mapContainer) return;
+
+        const tileMaskUI = this.mapEditor.tileMaskNode.getComponent(UITransform);
+        if (!tileMaskUI) return;
+
+        const localPos = this.mapEditor.mapContainer.getComponent(UITransform).convertToNodeSpaceAR(this.mapEditor.tileMaskNode.worldPosition);
+        const gridPos = this.mapEditor.getPositionToGrid(new Vec2(localPos.x, localPos.y), tileMaskUI.contentSize);
+        this.mapEditor.buildMap(gridPos);
+    }
+
+    //翻转x轴物品
+    OnClickUIFanzhuan(){
+        if (!this.ensureMapEditor()) return;
+        const previewNode = this.mapEditor["curTileNode"] as Node;
+        if (!previewNode || !previewNode.isValid) return;
+        const curScale = previewNode.getScale();
+        const nextScaleX = curScale.x >= 0 ? -1 : 1;
+        previewNode.setScale(nextScaleX, curScale.y, curScale.z);
+    }
 
     private getActiveTouches(e: EventTouch): any[] {
         const anyEvent = e as any;
@@ -227,6 +289,7 @@ export class CustomizeInput extends Component {
     private onTouchStart(event: EventTouch) {
         if (!this.ensureMapEditor()) return;
         const manager = MapManager.GetInstance();
+        if (manager.actionStatus == ActionStatus.REGION) return;
         const activeTouches = this.getActiveTouches(event);
         if(activeTouches.length >= 2 && manager.actionStatus == ActionStatus.Back){
             this.isPinching = true
@@ -277,6 +340,7 @@ export class CustomizeInput extends Component {
         if (!this.ensureMapEditor()) return;
         const activeTouches = this.getActiveTouches(event);
         const manager = MapManager.GetInstance();
+        if (manager.actionStatus == ActionStatus.REGION) return;
         if(this.isPinching || activeTouches.length >= 2){
             if(manager.actionStatus == ActionStatus.Back){
                 this.isPinching = true;
@@ -299,11 +363,27 @@ export class CustomizeInput extends Component {
         if(activeTouches.length >= 2){
             return
         }
+
+        // 仅在需要“格子内偏移”的物品类型/移动时记录指针本地坐标（不影响造房子/铺路原逻辑）
+        if (manager.actionStatus === ActionStatus.MOVE || manager.actionStatus === ActionStatus.PLANT || manager.actionStatus === ActionStatus.DECOR || manager.actionStatus === ActionStatus.WALL_DECOR) {
+            const loc = event.getLocation();
+            const w = this.mapEditor.mainCamera.screenToWorld(new Vec3(loc.x, loc.y, 0));
+            const lp = this.mapEditor.mapContainer.getComponent(UITransform).convertToNodeSpaceAR(new Vec3(w.x, w.y, 0));
+            this.mapEditor.lastPointerLocalPos = new Vec2(lp.x, lp.y);
+        }
+
         if (this.mapEditor.isBuildSwitch) {
             const gridPos = MapModel.getInstance().worldPosToGride(event.getLocation() , this.mapEditor);
             const localPos = MapModel.getInstance().gridToWorld(gridPos , null , this.mapEditor);
             const worldPos = this.mapEditor.mapContainer.getComponent(UITransform).convertToWorldSpaceAR(localPos)
-            this.mapEditor.tileMaskNode.setWorldPosition(worldPos);
+            if (manager.actionStatus === ActionStatus.MOVE || manager.actionStatus === ActionStatus.PLANT || manager.actionStatus === ActionStatus.DECOR || manager.actionStatus === ActionStatus.WALL_DECOR) {
+                const loc = event.getLocation();
+                const w = this.mapEditor.mainCamera.screenToWorld(new Vec3(loc.x, loc.y, 0));
+                const lp = this.mapEditor.mapContainer.getComponent(UITransform).convertToNodeSpaceAR(new Vec3(w.x, w.y, 0));
+                this.mapEditor.tileMaskNode.setPosition(lp.x, lp.y, 0);
+            } else {
+                this.mapEditor.tileMaskNode.setWorldPosition(worldPos);
+            }
 
             this.mapEditor.showMaskColor(gridPos);
 
@@ -357,6 +437,7 @@ export class CustomizeInput extends Component {
     private onTouchEnd(event: EventTouch) {
         if (!this.ensureMapEditor()) return;
         const manager = MapManager.GetInstance();
+        if (manager.actionStatus == ActionStatus.REGION) return;
         if(this.isPinching && manager.actionStatus == ActionStatus.Back){
             const activeTouches = this.getActiveTouches(event);
             if(activeTouches.length < 2){

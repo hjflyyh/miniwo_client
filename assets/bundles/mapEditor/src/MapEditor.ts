@@ -9,6 +9,7 @@ import { MapModel } from '../../../scripts/Model/MapModel';
 import { computeSameTypeClosedFillCells } from './RoadClosureFillUtil';
 import { RectangleHouseBuilder } from './RectangleHouseBuilder';
 import { MapLoadMap } from './MapLoadMap';
+import { RegionNpcCellBinder } from './RegionNpcCellBinder';
 import { network } from '../../../scripts/Model/RequestData';
 const { ccclass, property } = _decorator;
 
@@ -26,14 +27,15 @@ interface WallSpriteConfig {
 
 export interface MapData {
     Ground: { id: string, _type: string, position: string , cfgId : number}[],
-    Plant: { id: string, _type: string, position: string }[],
+    Plant: { id: string, _type: string, position: string, flipX?: number, scaleX?: number, offsetX?: number, offsetY?: number }[],
+    Region?: { id: string, minX: number, minY: number, maxX: number, maxY: number, npcIds?: string[] }[],
     Floor: { id: string, _type: string, position: string }[],
     House: {
         houseName?: string,
         Floor: { id: string, _type: string, position: string }[],
         OpenWall: { position: string, doorDecorId?: string }[],
         Wall: { id: string, _type: string, position: string }[],
-        Decor: { id: string, oid: string, _type: string, position: string }[],
+        Decor: { id: string, oid: string, _type: string, position: string, flipX?: number, scaleX?: number, offsetX?: number, offsetY?: number }[],
     }[],
     Walkable?: {
         width: number,
@@ -82,6 +84,9 @@ export class MapEditor extends Component {
     @property(Prefab)
     wallPrefab: Prefab = null;
 
+    @property({ type: Prefab, displayName: '区域NPC格子预制体', tooltip: '若指定，则区域内每个 npc 格子优先实例化此预制体（可挂 RegionNpcCellBinder）；未指定时仍按 mapEditNpc 的 prefab/tileId 或占位格' })
+    public regionNpcCellPrefab: Prefab = null;
+
     @property([SpriteFrame])
     public outWallSprites: SpriteFrame[] = [];
 
@@ -102,11 +107,14 @@ export class MapEditor extends Component {
 
     private buildFloorPoints: Vec2[] = [];
     public houseItems: Map<string, { tile: Node, tileType: string, belong?: string }> = new Map();
-    public mapItems: Map<string, { id: string, tile: Node, tileType: string, belong?: string }> = new Map();
+    public mapItems: Map<string, { id: string, tile: Node, tileType: string, belong?: string, flipX?: number, offsetX?: number, offsetY?: number }> = new Map();
     public mapData: number[][] = [];
+    public mapRegions: { id: string, minX: number, minY: number, maxX: number, maxY: number, npcIds: string[] }[] = [];
     public tileSize = 32;
     public mapWidth = 46;
     public mapHeight = 88;
+    /** 最近一次鼠标/触摸在 mapContainer 下的本地坐标（用于格子内偏移摆放） */
+    public lastPointerLocalPos: Vec2 | null = null;
     private graphics: Graphics = null;
     private curTileNode: Node = null;
     private maskSp: Sprite = null;
@@ -119,7 +127,7 @@ export class MapEditor extends Component {
         npc_banner1: Node,
     } = { move: null, detele: null, frame: null, sign: null, npc_banner1: null };
 
-    moveItem: { id: string, tile: Node, tileType: string, initGride: Vec2, belong?: string, decorKey?: string } = null;
+    moveItem: { id: string, tile: Node, tileType: string, initGride: Vec2, belong?: string, decorKey?: string, offsetX?: number, offsetY?: number, initOffsetX?: number, initOffsetY?: number, grabOffsetX?: number, grabOffsetY?: number } = null;
     deteleItem: { tile: Node | null, tileType: string, belong?: string, decorKey?: string, doorPos?: Vec2, doorDir?: string } = null;
     moveStatus: number = 0;
 
@@ -148,7 +156,7 @@ export class MapEditor extends Component {
         openWall: Vec2[],
         openWallDoorDecorIdMap?: Map<string, string>,
         base: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string }>,
-        decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string }>,
+        decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string, flipX?: number, offsetX?: number, offsetY?: number }>,
         npc: { id: string, _node: Node, position: string, design: { npcName: string, npcIntro: string } },
         horWalls: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string }>,
         verWalls: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string }>,
@@ -171,6 +179,7 @@ export class MapEditor extends Component {
     public allMapAssetsData: MapData = {
         Ground: [],
         Plant: [],
+        Region: [],
         Floor: [],
         House: [],
         Walkable: {
@@ -428,6 +437,9 @@ export class MapEditor extends Component {
             case ActionStatus.PLANT:
                 this.buildGoods(gridPos);
                 break;
+            case ActionStatus.REGION_NPC:
+                // 区域 NPC 头像由 EditHead 调用 layoutRegionNpcHeadsForPending / layoutRegionNpcHeadsForRegion 同步到地图
+                break;
             case ActionStatus.DECOR:
                 this.buildDecor(gridPos);
                 break;
@@ -442,6 +454,16 @@ export class MapEditor extends Component {
 
         this.refreshWalkableDebugOverlayIfNeeded();
         this.sendWebMapInfoIfChanged();
+    }
+
+    /** 计算「指针在格子中的偏移」，用于更精准的触摸/鼠标对齐 */
+    private getPointerOffsetForGrid(gridPos: Vec2, size: Size | null): Vec2 {
+        if (!this.lastPointerLocalPos) {
+            return new Vec2(0, 0);
+        }
+        const base = MapModel.getInstance().gridToWorld(gridPos, size, this);
+        // 不做强制 clamp，保证拖拽时视觉更“跟手”；逻辑占格仍由 gridPos 决定
+        return new Vec2(this.lastPointerLocalPos.x - base.x, this.lastPointerLocalPos.y - base.y);
     }
 
     private refreshWalkableDebugOverlayIfNeeded() {
@@ -975,8 +997,13 @@ export class MapEditor extends Component {
                     const buildingSize = MapModel.getInstance().getBuildingSize(size , this);
 
                     // 放置建筑
-                    const worldPos = MapModel.getInstance().gridToWorld(gridPos , null , this);
-                    tile.setPosition(worldPos);
+                    const worldPos = MapModel.getInstance().gridToWorld(gridPos , size , this);
+                    const offset = this.getPointerOffsetForGrid(gridPos, size);
+                    tile.setPosition(worldPos.x + offset.x, worldPos.y + offset.y, worldPos.z);
+                    const previewScaleX = this.curTileNode?.getScale()?.x ?? 1;
+                    const flipX = previewScaleX < 0 ? -1 : 1;
+                    const tileScale = tile.getScale();
+                    tile.setScale(flipX, tileScale.y, tileScale.z);
                     this.mapContainer.addChild(tile);
 
                     const house = this.allHouse.get(item.belong);
@@ -990,7 +1017,10 @@ export class MapEditor extends Component {
                         width: size.width,
                         height: size.height,
                         belong: item.belong,
-                        position: `${gridPos.x},${gridPos.y}`
+                        position: `${gridPos.x},${gridPos.y}`,
+                        flipX,
+                        offsetX: offset.x,
+                        offsetY: offset.y
                     });
 
                     // 更新网格数据
@@ -1232,8 +1262,13 @@ export class MapEditor extends Component {
         const tile = MapManager.GetInstance().getMapCurTileNode(this.curTileNode.name, this.curTileNode["tileType"]);
         tile.name = this.curTileNode.name + "#" + this.curTileNode["tileType"];
         const size = tile.getComponent(UITransform).contentSize;
-        const worldPos = MapModel.getInstance().gridToWorld(gridPos, null, this);
-        tile.setPosition(worldPos);
+        const worldPos = MapModel.getInstance().gridToWorld(gridPos, size, this);
+        const offset = this.getPointerOffsetForGrid(gridPos, size);
+        tile.setPosition(worldPos.x + offset.x, worldPos.y + offset.y, worldPos.z);
+        const previewScaleX = this.curTileNode?.getScale()?.x ?? 1;
+        const flipX = previewScaleX < 0 ? -1 : 1;
+        const tileScale = tile.getScale();
+        tile.setScale(flipX, tileScale.y, tileScale.z);
         this.mapContainer.addChild(tile);
 
         const house = this.allHouse.get(belong);
@@ -1243,7 +1278,10 @@ export class MapEditor extends Component {
             width: size.width,
             height: size.height,
             belong: belong,
-            position: `${gridPos.x},${gridPos.y}`
+            position: `${gridPos.x},${gridPos.y}`,
+            flipX,
+            offsetX: offset.x,
+            offsetY: offset.y
         });
 
         MapManager.GetInstance().getMapEditorUI().checkButtonVisible();
@@ -1284,7 +1322,22 @@ export class MapEditor extends Component {
             let size = null;
             if (this.mapItems.has(`${gridPos.x},${gridPos.y}`)) {
                 const item = this.mapItems.get(`${gridPos.x},${gridPos.y}`);
-                this.moveItem = { id: item.id, tile: item.tile, tileType: item.tileType, initGride: gridPos };
+                const ptr = this.lastPointerLocalPos;
+                const tilePos = item.tile?.getPosition?.() ?? new Vec3();
+                const grabOffsetX = ptr ? (ptr.x - tilePos.x) : 0;
+                const grabOffsetY = ptr ? (ptr.y - tilePos.y) : 0;
+                this.moveItem = {
+                    id: item.id,
+                    tile: item.tile,
+                    tileType: item.tileType,
+                    initGride: gridPos,
+                    offsetX: (item as any).offsetX ?? 0,
+                    offsetY: (item as any).offsetY ?? 0,
+                    initOffsetX: (item as any).offsetX ?? 0,
+                    initOffsetY: (item as any).offsetY ?? 0,
+                    grabOffsetX,
+                    grabOffsetY
+                };
                 console.log(`[MOVE_SELECT] id=${this.moveItem.id}, name=${this.moveItem.tile?.name}, type=${this.moveItem.tileType}, grid=${gridPos.x},${gridPos.y}`);
                 size = this.moveItem.tile.getComponent(UITransform).contentSize;
                 this.setArrowSignActive(true);
@@ -1299,13 +1352,23 @@ export class MapEditor extends Component {
                     const topDecor = this.getTopDecorAtGrid(house, gridPos);
                     if (topDecor) {
                         const item = topDecor.value;
+                        const ptr = this.lastPointerLocalPos;
+                        const tilePos = item.tile?.getPosition?.() ?? new Vec3();
+                        const grabOffsetX = ptr ? (ptr.x - tilePos.x) : 0;
+                        const grabOffsetY = ptr ? (ptr.y - tilePos.y) : 0;
                         this.moveItem = {
                             id: item.tile.name,
                             tile: item.tile,
                             tileType: item.tileType,
                             initGride: gridPos,
                             belong: item.belong,
-                            decorKey: topDecor.key
+                            decorKey: topDecor.key,
+                            offsetX: (item as any).offsetX ?? 0,
+                            offsetY: (item as any).offsetY ?? 0,
+                            initOffsetX: (item as any).offsetX ?? 0,
+                            initOffsetY: (item as any).offsetY ?? 0,
+                            grabOffsetX,
+                            grabOffsetY
                         };
                         console.log(`[MOVE_SELECT] id=${this.moveItem.id}, name=${this.moveItem.tile?.name}, type=${this.moveItem.tileType}, grid=${gridPos.x},${gridPos.y}`);
                         size = this.moveItem.tile.getComponent(UITransform).contentSize;
@@ -1415,6 +1478,28 @@ export class MapEditor extends Component {
     signDeteleTile(gridPos: Vec2) {
         const manager = MapManager.GetInstance();
         if (manager.actionStatus == ActionStatus.DETELE) {
+            const hitRegion = this.getMapRegionByGrid(gridPos);
+            if (hitRegion) {
+                this.deteleItem = null;
+                const size = new Size(
+                    (hitRegion.maxX - hitRegion.minX + 1) * this.tileSize,
+                    (hitRegion.maxY - hitRegion.minY + 1) * this.tileSize
+                );
+                const centerLocal = new Vec3(
+                    (-this.tileSize * (this.mapWidth - 1) / 2) + ((hitRegion.minX + hitRegion.maxX) / 2) * this.tileSize,
+                    (this.tileSize * (this.mapHeight - 1) / 2) - ((hitRegion.minY + hitRegion.maxY) / 2) * this.tileSize,
+                    0
+                );
+                const centerWorld = this.mapContainer.getComponent(UITransform).convertToWorldSpaceAR(centerLocal);
+                this.tileMaskNode.setWorldPosition(centerWorld);
+                this.buildIcon.getComponent(UITransform).setContentSize(size);
+                this.maskSp.getComponent(UITransform).setContentSize(size.width + 10, size.height + 10);
+                this.tileMaskNode.getComponent(UITransform).setContentSize(size);
+                this.buildControl.frame.setContentSize(size.width + 15, size.height + 15);
+                this.maskSp.color = new Color('#FF00006A');
+                return;
+            }
+
             const target = this.resolveDeleteTarget(gridPos);
             this.deteleItem = target;
 
@@ -1607,16 +1692,36 @@ export class MapEditor extends Component {
                 console.log(`[MOVE_START] id=${this.moveItem.id}, name=${this.moveItem.tile?.name}, type=${this.moveItem.tileType}, from=${this.moveItem.initGride.x},${this.moveItem.initGride.y}`);
             } else if (this.moveStatus == 1) {
                 // 移动
-                const worldPos = MapModel.getInstance().gridToWorld(gridPos , null , this);
-                this.moveItem.tile.setPosition(worldPos);
+                const size = this.moveItem.tile.getComponent(UITransform).contentSize;
+                const ptr = this.lastPointerLocalPos;
+                if (ptr) {
+                    const grabX = (this.moveItem as any).grabOffsetX ?? 0;
+                    const grabY = (this.moveItem as any).grabOffsetY ?? 0;
+                    const nextX = ptr.x - grabX;
+                    const nextY = ptr.y - grabY;
+                    this.moveItem.tile.setPosition(nextX, nextY, 0);
+
+                    // 记录当前显示偏移（用于落地保存）；逻辑仍以 gridPos 为准
+                    const base = MapModel.getInstance().gridToWorld(gridPos, size, this);
+                    (this.moveItem as any).offsetX = nextX - base.x;
+                    (this.moveItem as any).offsetY = nextY - base.y;
+                } else {
+                    const worldPos = MapModel.getInstance().gridToWorld(gridPos, size, this);
+                    this.moveItem.tile.setPosition(worldPos);
+                    (this.moveItem as any).offsetX = 0;
+                    (this.moveItem as any).offsetY = 0;
+                }
             } else if (this.moveStatus == 2) {
                 const buildingSize = MapModel.getInstance().getBuildingSize(this.moveItem.tile.getComponent(UITransform).contentSize , this);
 
                 if (this.moveItem.tileType == "Decor") {
                     if (this.checkPlacementDecorValidity(gridPos)) {
                         // 移动
-                        const worldPos = MapModel.getInstance().gridToWorld(gridPos , null , this);
-                        this.moveItem.tile.setPosition(worldPos);
+                        const size = this.moveItem.tile.getComponent(UITransform).contentSize;
+                        const worldPos = MapModel.getInstance().gridToWorld(gridPos, size, this);
+                        const ox = (this.moveItem as any).offsetX ?? 0;
+                        const oy = (this.moveItem as any).offsetY ?? 0;
+                        this.moveItem.tile.setPosition(worldPos.x + ox, worldPos.y + oy, worldPos.z);
 
                         // 更新网格数据
                         for (let x = 0; x < buildingSize.x; x++) {
@@ -1634,13 +1739,20 @@ export class MapEditor extends Component {
                             house.decor.delete(movingDecorKey);
                             const nextKey = this.buildDecorStackKey(gridPos, next.tile.name);
                             next.position = `${gridPos.x},${gridPos.y}`;
+                            next.offsetX = (this.moveItem as any).offsetX ?? 0;
+                            next.offsetY = (this.moveItem as any).offsetY ?? 0;
                             house.decor.set(nextKey, next);
                             this.moveItem.decorKey = nextKey;
                         }
                     } else {
                         // 移动
-                        const worldPos = MapModel.getInstance().gridToWorld(this.moveItem.initGride , null , this);
-                        this.moveItem.tile.setPosition(worldPos);
+                        const size = this.moveItem.tile.getComponent(UITransform).contentSize;
+                        const worldPos = MapModel.getInstance().gridToWorld(this.moveItem.initGride, size, this);
+                        const ox = (this.moveItem as any).initOffsetX ?? 0;
+                        const oy = (this.moveItem as any).initOffsetY ?? 0;
+                        (this.moveItem as any).offsetX = ox;
+                        (this.moveItem as any).offsetY = oy;
+                        this.moveItem.tile.setPosition(worldPos.x + ox, worldPos.y + oy, worldPos.z);
 
                         // 更新网格数据
                         for (let x = 0; x < buildingSize.x; x++) {
@@ -1653,8 +1765,11 @@ export class MapEditor extends Component {
                     }
                 } else if (this.isWallDacorationTileType(this.moveItem.tileType)) {
                     if (this.checkPlacementWallDacorationValidity(gridPos)) {
-                        const worldPos = MapModel.getInstance().gridToWorld(gridPos , null , this);
-                        this.moveItem.tile.setPosition(worldPos);
+                        const size = this.moveItem.tile.getComponent(UITransform).contentSize;
+                        const worldPos = MapModel.getInstance().gridToWorld(gridPos, size, this);
+                        const ox = (this.moveItem as any).offsetX ?? 0;
+                        const oy = (this.moveItem as any).offsetY ?? 0;
+                        this.moveItem.tile.setPosition(worldPos.x + ox, worldPos.y + oy, worldPos.z);
                         const sourceHouse = this.allHouse.get(this.moveItem.belong);
                         const movingDecorKey = this.moveItem.decorKey || '';
                         const next = sourceHouse.decor.get(movingDecorKey);
@@ -1665,18 +1780,28 @@ export class MapEditor extends Component {
                             const targetBelong = this.getWallDacorationBelongByArea(gridPos, buildingSize) || next.belong;
                             next.belong = targetBelong;
                             const targetHouse = this.allHouse.get(targetBelong) || sourceHouse;
+                            next.offsetX = (this.moveItem as any).offsetX ?? 0;
+                            next.offsetY = (this.moveItem as any).offsetY ?? 0;
                             targetHouse.decor.set(nextKey, next);
                             this.moveItem.decorKey = nextKey;
                         }
                     } else {
-                        const worldPos = MapModel.getInstance().gridToWorld(this.moveItem.initGride , null , this);
-                        this.moveItem.tile.setPosition(worldPos);
+                        const size = this.moveItem.tile.getComponent(UITransform).contentSize;
+                        const worldPos = MapModel.getInstance().gridToWorld(this.moveItem.initGride, size, this);
+                        const ox = (this.moveItem as any).initOffsetX ?? 0;
+                        const oy = (this.moveItem as any).initOffsetY ?? 0;
+                        (this.moveItem as any).offsetX = ox;
+                        (this.moveItem as any).offsetY = oy;
+                        this.moveItem.tile.setPosition(worldPos.x + ox, worldPos.y + oy, worldPos.z);
                     }
                 } else {
                     if (this.checkPlacementValidity(gridPos)) {
                         // 移动
-                        const worldPos = MapModel.getInstance().gridToWorld(gridPos , null , this);
-                        this.moveItem.tile.setPosition(worldPos);
+                        const size = this.moveItem.tile.getComponent(UITransform).contentSize;
+                        const worldPos = MapModel.getInstance().gridToWorld(gridPos, size, this);
+                        const ox = (this.moveItem as any).offsetX ?? 0;
+                        const oy = (this.moveItem as any).offsetY ?? 0;
+                        this.moveItem.tile.setPosition(worldPos.x + ox, worldPos.y + oy, worldPos.z);
 
                         // 更新网格数据
                         for (let x = 0; x < buildingSize.x; x++) {
@@ -1689,8 +1814,13 @@ export class MapEditor extends Component {
                         this.mapItems.set(`${gridPos.x},${gridPos.y}`, this.moveItem);
                     } else {
                         // 移动
-                        const worldPos = MapModel.getInstance().gridToWorld(this.moveItem.initGride , null , this);
-                        this.moveItem.tile.setPosition(worldPos);
+                        const size = this.moveItem.tile.getComponent(UITransform).contentSize;
+                        const worldPos = MapModel.getInstance().gridToWorld(this.moveItem.initGride, size, this);
+                        const ox = (this.moveItem as any).initOffsetX ?? 0;
+                        const oy = (this.moveItem as any).initOffsetY ?? 0;
+                        (this.moveItem as any).offsetX = ox;
+                        (this.moveItem as any).offsetY = oy;
+                        this.moveItem.tile.setPosition(worldPos.x + ox, worldPos.y + oy, worldPos.z);
 
                         // 更新网格数据
                         for (let x = 0; x < buildingSize.x; x++) {
@@ -2414,6 +2544,13 @@ export class MapEditor extends Component {
 
     // 销毁地块（优先单拆：房门、家具、墙饰；否则拆整屋）
     deteleTile(gridPos: Vec2) {
+        const removedRegionCount = this.removeMapRegionByGrid(gridPos);
+        if (removedRegionCount > 0) {
+            MapManager.GetInstance().getMapEditorUI()?.refreshRegionHighlightsFromData?.();
+            this.deteleItem = null;
+            this.buildControl.detele.play('detele_action');
+            return;
+        }
         const target = this.deteleItem || this.resolveDeleteTarget(gridPos);
         if (target?.tileType === "House" && target?.belong) {
             this.removeWholeHouse(target.belong);
@@ -2491,6 +2628,308 @@ export class MapEditor extends Component {
 
         this.deteleItem = null;
         this.buildControl.detele.play('detele_action');
+    }
+
+    public isGridInMapRegion(gridPos: Vec2): boolean {
+        for (let i = 0; i < this.mapRegions.length; i++) {
+            const region = this.mapRegions[i];
+            if (gridPos.x >= region.minX && gridPos.x <= region.maxX &&
+                gridPos.y >= region.minY && gridPos.y <= region.maxY) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public getMapRegionByGrid(gridPos: Vec2): { id: string, minX: number, minY: number, maxX: number, maxY: number, npcIds: string[] } | null {
+        for (let i = 0; i < this.mapRegions.length; i++) {
+            const region = this.mapRegions[i];
+            if (gridPos.x >= region.minX && gridPos.x <= region.maxX &&
+                gridPos.y >= region.minY && gridPos.y <= region.maxY) {
+                return region;
+            }
+        }
+        return null;
+    }
+
+    public isMapRegionOverlap(minX: number, minY: number, maxX: number, maxY: number): boolean {
+        for (let i = 0; i < this.mapRegions.length; i++) {
+            const region = this.mapRegions[i];
+            const separated = maxX < region.minX || minX > region.maxX || maxY < region.minY || minY > region.maxY;
+            if (!separated) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public addMapRegion(minX: number, minY: number, maxX: number, maxY: number, npcIds: string[] = []): boolean {
+        if (this.isMapRegionOverlap(minX, minY, maxX, maxY)) {
+            return false;
+        }
+        const id = `region_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
+        this.mapRegions.push({
+            id,
+            minX,
+            minY,
+            maxX,
+            maxY,
+            npcIds: Array.isArray(npcIds) ? [...npcIds] : []
+        });
+        return true;
+    }
+
+    public removeMapRegionByGrid(gridPos: Vec2): number {
+        const removedIds: string[] = [];
+        const before = this.mapRegions.length;
+        this.mapRegions = this.mapRegions.filter((region) => {
+            const hit = gridPos.x >= region.minX && gridPos.x <= region.maxX &&
+                gridPos.y >= region.minY && gridPos.y <= region.maxY;
+            if (hit) {
+                removedIds.push(region.id);
+            }
+            return !hit;
+        });
+        for (let i = 0; i < removedIds.length; i++) {
+            this.clearRegionNpcHeadLayer(removedIds[i]);
+        }
+        return before - this.mapRegions.length;
+    }
+
+    public addNpcToRegion(regionId: string, npcId: string): boolean {
+        if (!regionId || !npcId) return false;
+        for (let i = 0; i < this.mapRegions.length; i++) {
+            const region = this.mapRegions[i];
+            if (region.id !== regionId) continue;
+            if (!Array.isArray(region.npcIds)) {
+                region.npcIds = [];
+            }
+            if (region.npcIds.indexOf(npcId) !== -1) {
+                return false;
+            }
+            region.npcIds.push(npcId);
+            return true;
+        }
+        return false;
+    }
+
+    public removeNpcFromRegion(regionId: string, npcId: string): boolean {
+        if (!regionId || !npcId) return false;
+        for (let i = 0; i < this.mapRegions.length; i++) {
+            const region = this.mapRegions[i];
+            if (region.id !== regionId || !Array.isArray(region.npcIds)) continue;
+            const before = region.npcIds.length;
+            region.npcIds = region.npcIds.filter((id) => id !== npcId);
+            return before !== region.npcIds.length;
+        }
+        return false;
+    }
+
+    /** 框选未确认前，地图上用此 key 挂头像节点 */
+    public static readonly PENDING_REGION_NPC_KEY = '__pending_region_npc__';
+
+    private regionNpcHeadLayerMap: Map<string, Node> = new Map();
+
+    public clearRegionNpcHeadLayer(regionKey: string) {
+        const node = this.regionNpcHeadLayerMap.get(regionKey);
+        if (node?.isValid) {
+            node.destroy();
+        }
+        this.regionNpcHeadLayerMap.delete(regionKey);
+    }
+
+    public clearPendingRegionNpcHeads() {
+        this.clearRegionNpcHeadLayer(MapEditor.PENDING_REGION_NPC_KEY);
+    }
+
+    private findMapEditNpcById(npcId: string): any | null {
+        const list = MapModel.getInstance().mapEditNpc as any[];
+        for (let i = 0; i < list.length; i++) {
+            if (String(list[i].id) === npcId) {
+                return list[i];
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 区域格子最终显示用节点：优先 MapEditor.regionNpcCellPrefab；否则 mapEditNpc 的 prefab/tileId；再否则占位格。
+     */
+    public createRegionNpcDisplayNode(npcId: string): Node {
+        const idStr = String(npcId);
+        if (this.regionNpcCellPrefab) {
+            const n = instantiate(this.regionNpcCellPrefab);
+            n.name = `regionNpc_${idStr}`;
+            const binder = n.getComponent(RegionNpcCellBinder);
+            if (binder) {
+                binder.setNpcId(idStr);
+            }
+            return n;
+        }
+        const v = this.instantiateRegionNpcNodeFromMapEditData(idStr);
+        if (v?.isValid) {
+            return v;
+        }
+        return this.createRegionNpcPlaceholderNode(idStr);
+    }
+
+    /**
+     * 按 mapEditNpc 绑定创建节点：优先 prefab 路径（PrefabLoad），否则 tileId 走地图物件预制（getTilePrefab）。
+     * 数据字段示例：prefab / prefabPath / mapPrefab，prefabBundle，tileId / tilePrefabId
+     */
+    public instantiateRegionNpcNodeFromMapEditData(npcId: string): Node | null {
+        const data = this.findMapEditNpcById(String(npcId));
+        if (!data) {
+            return null;
+        }
+        const prefabPath = data.prefab ?? data.prefabPath ?? data.mapPrefab;
+        if (typeof prefabPath === 'string' && prefabPath.length > 0) {
+            const bundle = data.prefabBundle ?? data.bundle ?? 'mapEditor';
+            const n = new Node(`regionNpc_${npcId}`);
+            n.addComponent(UITransform);
+            const pl = n.addComponent(PrefabLoad);
+            pl.bundleName = bundle;
+            pl.url = prefabPath;
+            return n;
+        }
+        const tileKey = data.tileId ?? data.tilePrefabId;
+        if (tileKey != null && String(tileKey).length > 0) {
+            return MapManager.GetInstance().getTilePrefab(String(tileKey));
+        }
+        return null;
+    }
+
+    /** 与 mapContainer 同坐标系，但渲染在 npcLayer 上，避免被地面/装饰盖住 */
+    private getRegionNpcHostParent(): Node {
+        if (this.npcLayer?.isValid) {
+            return this.npcLayer;
+        }
+        return this.mapContainer;
+    }
+
+    /**
+     * 在地图区域格内排布 NPC（与 npcIds 顺序一致）。
+     * 排列规则：以矩形左上角格 (minX, minY) 为第 1 个 NPC；同一行从左到右 (gx 递增)；
+     * 一行排满后换到下一行 (gy = minY+1, minY+2 …)，即先行内「左→右」，再行间「上→下」。
+     * 展示由 mapEditNpc 的 prefab / tileId 决定；若无绑定则画占位格便于确认位置。
+     */
+    private layoutRegionNpcHeads(
+        regionKey: string,
+        rect: { minX: number, minY: number, maxX: number, maxY: number },
+        npcIds: string[]
+    ) {
+        this.clearRegionNpcHeadLayer(regionKey);
+        const host = this.getRegionNpcHostParent();
+        if (!npcIds?.length || !host?.isValid || !this.mapContainer?.isValid) {
+            return;
+        }
+        const gw = rect.maxX - rect.minX + 1;
+        const gh = rect.maxY - rect.minY + 1;
+        const cap = gw * gh;
+        const count = Math.min(npcIds.length, cap);
+        const layer = new Node(`regionNpcHead_${regionKey}`);
+        layer.layer = host.layer;
+        host.addChild(layer);
+        this.regionNpcHeadLayerMap.set(regionKey, layer);
+        layer.setSiblingIndex(host.children.length - 1);
+
+        const tileSz = new Size(this.tileSize, this.tileSize);
+        for (let i = 0; i < count; i++) {
+            // 行优先：第 i 个 → 第 row 行、第 col 列（从区域左上角起）
+            const col = i % gw;
+            const row = Math.floor(i / gw);
+            const gx = rect.minX + col;
+            const gy = rect.minY + row;
+            if (gy > rect.maxY) {
+                break;
+            }
+            const gridPos = new Vec2(gx, gy);
+            const worldPos = MapModel.getInstance().gridToWorld(gridPos, tileSz, this);
+            const idStr = String(npcIds[i]);
+            const visual = this.createRegionNpcDisplayNode(idStr);
+            if (!visual?.isValid) {
+                continue;
+            }
+            visual.layer = host.layer;
+            visual.setPosition(worldPos);
+            layer.addChild(visual);
+        }
+    }
+
+    /** 无 prefab/tileId 绑定时仍显示一格，便于确认排列位置（配置好 mapEditNpc 后可替换为正式预制） */
+    private createRegionNpcPlaceholderNode(idStr: string): Node {
+        const n = new Node(`regionNpc_ph_${idStr}`);
+        const uit = n.addComponent(UITransform);
+        const sz = this.tileSize - 4;
+        uit.setContentSize(sz, sz);
+        uit.setAnchorPoint(0.5, 0.5);
+        const g = n.addComponent(Graphics);
+        g.fillColor = new Color(60, 140, 255, 140);
+        const h = sz * 0.5;
+        g.rect(-h, -h, sz, sz);
+        g.fill();
+        const lbl = n.addComponent(Label);
+        lbl.string = idStr;
+        lbl.fontSize = 11;
+        lbl.lineHeight = 12;
+        lbl.color = new Color(255, 255, 255, 255);
+        lbl.horizontalAlign = Label.HorizontalAlign.CENTER;
+        lbl.verticalAlign = Label.VerticalAlign.CENTER;
+        lbl.overflow = Label.Overflow.SHRINK;
+        return n;
+    }
+
+    public layoutRegionNpcHeadsForPending(
+        rect: { minX: number, minY: number, maxX: number, maxY: number },
+        npcIds: string[]
+    ) {
+        this.layoutRegionNpcHeads(MapEditor.PENDING_REGION_NPC_KEY, rect, npcIds);
+    }
+
+    public layoutRegionNpcHeadsForRegion(
+        regionId: string,
+        rect: { minX: number, minY: number, maxX: number, maxY: number },
+        npcIds: string[]
+    ) {
+        this.layoutRegionNpcHeads(regionId, rect, npcIds);
+    }
+
+    /** 根据 mapRegions 与 npcIds 重建（loadMap 用） */
+    public rebuildAllRegionNpcHeadsFromRegions() {
+        for (const key of this.regionNpcHeadLayerMap.keys()) {
+            const node = this.regionNpcHeadLayerMap.get(key);
+            if (node?.isValid) {
+                node.destroy();
+            }
+        }
+        this.regionNpcHeadLayerMap.clear();
+        for (let i = 0; i < this.mapRegions.length; i++) {
+            const r = this.mapRegions[i];
+            const npcIds = Array.isArray(r.npcIds) ? r.npcIds.map((id) => String(id)) : [];
+            this.layoutRegionNpcHeads(r.id, {
+                minX: r.minX,
+                minY: r.minY,
+                maxX: r.maxX,
+                maxY: r.maxY
+            }, npcIds);
+        }
+    }
+
+    /** 已存在区域数据变更后刷新（如后续支持编辑已确认区域） */
+    public syncRegionNpcLayoutFromData(regionId: string) {
+        for (let i = 0; i < this.mapRegions.length; i++) {
+            const r = this.mapRegions[i];
+            if (r.id === regionId) {
+                const npcIds = Array.isArray(r.npcIds) ? r.npcIds.map((id) => String(id)) : [];
+                this.layoutRegionNpcHeadsForRegion(regionId, {
+                    minX: r.minX,
+                    minY: r.minY,
+                    maxX: r.maxX,
+                    maxY: r.maxY
+                }, npcIds);
+                return;
+            }
+        }
     }
 
     // 重置操作
@@ -2796,18 +3235,30 @@ export class MapEditor extends Component {
         
         const buildingSize = MapModel.getInstance().getBuildingSize(size , this);
         // 放置建筑
-        const worldPos = MapModel.getInstance().gridToWorld(gridPos , null , this);
+        const worldPos = MapModel.getInstance().gridToWorld(gridPos , size , this);
         // 创建新的图块
         const tile = MapManager.GetInstance().getMapCurTileNode(this.curTileNode.name , this.curTileNode["tileType"]);
 
-        tile.setPosition(worldPos);
+        const offset = manager.actionStatus == ActionStatus.PLANT ? this.getPointerOffsetForGrid(gridPos, size) : new Vec2(0, 0);
+        tile.setPosition(worldPos.x + offset.x, worldPos.y + offset.y, worldPos.z);
         this.mapContainer.addChild(tile);
         // console.log(worldPos)
         // console.log(gridPos)
         // 加入
         if (!this.mapItems.has(`${gridPos.x},${gridPos.y}`)) {
             if (manager.actionStatus == ActionStatus.PLANT) {
-                this.mapItems.set(`${gridPos.x},${gridPos.y}`, { id: this.curTileNode.name + "#" + this.curTileNode["tileType"], tile: tile, tileType: "Plant" });
+                const previewScaleX = this.curTileNode?.getScale()?.x ?? 1;
+                const flipX = previewScaleX < 0 ? -1 : 1;
+                const tileScale = tile.getScale();
+                tile.setScale(flipX, tileScale.y, tileScale.z);
+                this.mapItems.set(`${gridPos.x},${gridPos.y}`, {
+                    id: this.curTileNode.name + "#" + this.curTileNode["tileType"],
+                    tile: tile,
+                    tileType: "Plant",
+                    flipX,
+                    offsetX: offset.x,
+                    offsetY: offset.y
+                });
             } else if (manager.actionStatus == ActionStatus.FLOOR) {
                 this.mapItems.set(`${gridPos.x},${gridPos.y}`, { id: tile.name, tile: tile, tileType: "Floor" });
                 this.buildFloorPoints.push(gridPos);
@@ -2902,6 +3353,7 @@ export class MapEditor extends Component {
 
         this.buildIcon.addChild(this.curTileNode);
 
+        this.isBuildSwitch = true
         this.setTileSclect()
     }
 
@@ -3197,7 +3649,7 @@ export class MapEditor extends Component {
 
     private getTopDecorAtGrid(
         house: {
-            decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string }>
+            decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string, flipX?: number, offsetX?: number, offsetY?: number }>
         },
         gridPos: Vec2
     ): { key: string; value: { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string } } | null {
@@ -3216,7 +3668,7 @@ export class MapEditor extends Component {
 
     private getTopDecorCoveringGrid(
         house: {
-            decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string }>
+            decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string, flipX?: number, offsetX?: number, offsetY?: number }>
         },
         gridPos: Vec2
     ): { key: string; value: { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string } } | null {
@@ -3261,7 +3713,7 @@ export class MapEditor extends Component {
 
     private hasSameDecorAtGrid(
         house: {
-            decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string }>
+            decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string, flipX?: number, offsetX?: number, offsetY?: number }>
         },
         gridPos: Vec2,
         tileName: string
@@ -3278,7 +3730,7 @@ export class MapEditor extends Component {
 
     private hasDecorCoveringCell(
         house: {
-            decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string }>
+            decor: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, position?: string, flipX?: number, offsetX?: number, offsetY?: number }>
         },
         gridX: number,
         gridY: number,
@@ -4209,12 +4661,19 @@ export class MapEditor extends Component {
                 const decorType = this.isWallDacorationTileType(decorTypeRaw) ? "WallDacoration" : decorTypeRaw;
                 const tile = MapManager.GetInstance().getMapCurTileNode(idAry[0] , decorType);
                 tile.name = idAry[0] + "#" + decorType
+                const flipX = decor.flipX != null ? decor.flipX : (decor as any).scaleX;
+                if (flipX != null && flipX < 0) {
+                    const scale = tile.getScale();
+                    tile.setScale(-1, scale.y, scale.z);
+                }
 
                 const size = tile.getComponent(UITransform).contentSize;
                 const buildingSize = MapModel.getInstance().getBuildingSize(size , this);
 
                 const worldPos = MapModel.getInstance().gridToWorld(gridPos, size , this);
-                tile.setPosition(worldPos);
+                const ox = Number((decor as any).offsetX ?? 0) || 0;
+                const oy = Number((decor as any).offsetY ?? 0) || 0;
+                tile.setPosition(worldPos.x + ox, worldPos.y + oy, worldPos.z);
                 this.mapContainer.addChild(tile);
 
                 wallHouse.decor.set(this.buildDecorStackKey(gridPos, tile.name), {
@@ -4223,7 +4682,10 @@ export class MapEditor extends Component {
                     width: size.width,
                     height: size.height,
                     belong: _name,
-                    position: `${gridPos.x},${gridPos.y}`
+                    position: `${gridPos.x},${gridPos.y}`,
+                    flipX: flipX != null ? (flipX < 0 ? -1 : 1) : 1,
+                    offsetX: ox,
+                    offsetY: oy
                 });
 
                 if (decorType === "Decor") {
