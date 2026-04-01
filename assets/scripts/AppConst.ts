@@ -1,4 +1,5 @@
 import { HttpManager } from "./Manager/HttpManager";
+import { JournalManager } from "./Manager/JournalManager";
 import { JSONManager } from "./Manager/JSONManager";
 import { LanguageManager } from "./Manager/LanguageManager";
 import { PanelManager } from "./Manager/PanelManager";
@@ -18,4 +19,5 @@ export class AppConst{
     public static SDKManager : SDKManager;
     public static HttpManager : HttpManager;
     public static SocialHttpManager : SocialHttpManager;
+    public static JournalManager : JournalManager;
 }

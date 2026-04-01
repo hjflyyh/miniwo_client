@@ -2143,10 +2143,7 @@
       "__uuid__": "8859bfdc-d61d-4cde-9d01-7c2116c2a185",
       "__expectedType__": "cc.Prefab"
     },
-    "regionNpcCellPrefab": {
-      "__uuid__": "6ac19407-6cf7-400c-b6a8-4c805ef530eb",
-      "__expectedType__": "cc.Prefab"
-    },
+    "regionNpcCellPrefab": null,
     "outWallSprites": [
       {
         "__uuid__": "819b0c11-93f3-45ab-8fae-8d2c6ec19e49@f9941",
@@ -24440,14 +24437,10 @@
     "npcHeadNode": {
       "__id__": 59
     },
-    "npcHeads": {
-      "__id__": 662
-    },
-    "npcHeadsUiCoordinateRoot": {
-      "__id__": 67
-    },
-    "npcHeadsPositionOffsetX": -180,
-    "npcHeadsPositionOffsetY": -200,
+    "npcHeads": null,
+    "npcHeadsUiCoordinateRoot": null,
+    "npcHeadsPositionOffsetX": 0,
+    "npcHeadsPositionOffsetY": 0,
     "npcHeadsPositionOffsetZ": 0,
     "GameUI": {
       "__id__": 677
@@ -24490,18 +24483,8 @@
     "mapCanvas": {
       "__id__": 680
     },
-    "gridNumLabel": {
-      "__id__": 80
-    },
-    "bottomAddNode": {
-      "__id__": 638
-    },
-    "confirmBtn": {
-      "__id__": 639
-    },
-    "fanzhuangBtn": {
-      "__id__": 653
-    },
+    "confirmBtn": null,
+    "fanzhuangBtn": null,
     "_id": "91I9SrC3hII7+OeQv3D0rH"
   },
   {
