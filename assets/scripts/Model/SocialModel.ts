@@ -13,6 +13,8 @@ export class SocialModel {
 
     public draftData: any
 
+    public itemsCache: {} = {}
+
     public static getInstance(): SocialModel {
         if (!this._instance) {
             this._instance = new SocialModel();
@@ -43,7 +45,7 @@ export class SocialModel {
         else if (cmd == network.FollowSocialCode.CommentData && data?.list) {
             this.commentIDs = data?.commentIDs || []
             this.commentPostID = data?.postID
-            EventSystem.send("commentListData", { list: data.list, postID: data.postID, postAt: data.postAt })
+            EventSystem.send("commentListData", { list: data.list, postID: data.postID, postAt: data.postAt, egg: data?.egg})
         }
         else if (cmd == network.FollowSocialCode.TopCommentData && data?.list) {
             EventSystem.send("topCommentListData", { list: data.list, postID: data.postID, postAt: data.postAt, topID: data.topID })

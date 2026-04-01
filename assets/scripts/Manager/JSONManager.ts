@@ -4,7 +4,7 @@ const { ccclass, property } = _decorator;
 
 @ccclass('JSONManager')
 export class JSONManager extends Component {
-    public configs = ["language" , "cardCombine" , "mapGround" , "mapOutsideRenovation" , "mapFloor" , "mapDecor" ,"mapWallDecor"]
+    public configs = ["language" , "cardCombine" , "mapGround" , "mapOutsideRenovation" , "mapFloor" , "mapDecor" ,"mapWallDecor", "item", "cardStar", "socialEasterEgg", "systemConfig"]
     public jsonMap = {}
 
     private loadSuccessNum = 0

@@ -70,5 +70,69 @@
   "18": {
     "function": "彩蛋相关规则",
     "configuration": "3_3_1"
+  },
+  "19": {
+    "function": "世界名称字数限制",
+    "configuration": "10#50"
+  },
+  "20": {
+    "function": "世界观描述字数限制",
+    "configuration": "2000#3000"
+  },
+  "21": {
+    "function": "特殊规则与限制字数限制",
+    "configuration": "500#1000"
+  },
+  "22": {
+    "function": "NPC数量创建",
+    "configuration": "1_1_6#2_1_7#3_1_8#4_1_9#5_1_10"
+  },
+  "23": {
+    "function": "故事循环天数",
+    "configuration": "1_1_7#2_1_8#3_1_10#4_1_12#5_1_14"
+  },
+  "24": {
+    "function": "故事碎片（节点）数",
+    "configuration": "1_2_48#2_2_60#3_2_72#4_2_96#5_2_96"
+  },
+  "25": {
+    "function": "背包相关规则",
+    "configuration": "20#999#99"
+  },
+  "27": {
+    "function": "公屏发言单次最大文本量",
+    "configuration": "100#200"
+  },
+  "28": {
+    "function": "私聊NPC&用户单次发送最大文本量",
+    "configuration": "100#200_500#1000"
+  },
+  "29": {
+    "function": "好友上限&关注上限",
+    "configuration": "100#100"
+  },
+  "30": {
+    "function": "每日可发送帖子上限&单条帖子可发图文上限",
+    "configuration": "99#9#5000_8000"
+  },
+  "31": {
+    "function": "每日点赞、收藏、留言上限",
+    "configuration": "999#999#300"
+  },
+  "32": {
+    "function": "单条留言文本上限",
+    "configuration": "300#500"
+  },
+  "33": {
+    "function": "每日私聊的NPC数量上限",
+    "configuration": "99"
+  },
+  "34": {
+    "function": "每日私聊陌生人人数上限&24小时内发送消息条数上限",
+    "configuration": "99#1"
+  },
+  "35": {
+    "function": "每日屏蔽&举报用户上限",
+    "configuration": "999#99"
   }
 }

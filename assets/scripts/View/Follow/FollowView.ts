@@ -3,6 +3,7 @@ import { AppConst } from '../../AppConst';
 import { SocialModel } from '../../Model/SocialModel';
 import { FollowComment } from '../Main/Follow/FollowComment';
 import { Utils } from '../../Utils/Utils';
+import { RoleModel } from '../../Model/RoleModel';
 const { ccclass, property } = _decorator;
 
 @ccclass('FollowView')
@@ -31,6 +32,9 @@ export class FollowView extends Component {
     @property(Node)
     public offLike: Node = null
 
+    @property(Node)
+    public eggRewardBtn: Node = null
+
     @property(EditBox)
     commentNode: EditBox = null
 
@@ -45,6 +49,7 @@ export class FollowView extends Component {
 
     private postID: number
     private postAt: string
+    private eggID:number
 
     private followCommentList: {} = {}
 
@@ -59,12 +64,15 @@ export class FollowView extends Component {
             console.log("postID or postAt is empty")
             return
         }
+        let otherPostList = SocialModel.getInstance().otherPostList
+        let post = otherPostList.find(item => item.ID == this.postID)
+        this.eggID = post?.EggID || 0
         AppConst.SocialHttpManager.sendGetHttp("firstCommentList", {
             postID: this.postID,
             postAt: this.postAt,
+            eggID: this.eggID,
         })
-        let otherPostList = SocialModel.getInstance().otherPostList
-        let post = otherPostList.find(item => item.ID == this.postID)
+
         this.contentNode.string = post?.Content || ""
         this.titleNode.string = post?.Title || ""
         this.postAtLable.string = Utils.getDateFromStr(post?.CreatedAt || "")
@@ -93,11 +101,12 @@ export class FollowView extends Component {
         });
     }
 
-    commentListData({ list, postID, postAt }) {
+    commentListData({ list, postID, postAt, egg }) {
         if (postID != this.postID || postAt != this.postAt) {
             console.log("commentListData: postID or postAt is not match")
             return
         }
+        this.eggRewardBtn.active = egg == true
         this.addList(list)
         this.refreshCommentList()
     }
@@ -129,6 +138,14 @@ export class FollowView extends Component {
         AppConst.SocialHttpManager.sendPostHttp(this.isLike ? "unlikeTimeline" : "likeTimeline", {
             postID: this.postID,
             postAt: this.postAt,
+        })
+    }
+
+    OnClickEggReward() {
+        this.eggRewardBtn.active = false
+        AppConst.SocialHttpManager.sendPostHttp("receiveGlobalEgg", {
+            token: RoleModel.getInstance().nakama_token,
+            eggID: this.eggID,
         })
     }
 
