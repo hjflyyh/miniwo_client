@@ -41,12 +41,9 @@ export class FollowComment extends Component {
             this.showMoreBtn.active = data.find((item: any) => item.ID == this.topID)?.CommentCount || 0 > 1
         }
 
-         console.log("FollowComment this.commentList ", this.commentList)
         for (let comment of data) {
             let next = this.commentList[comment.ID]
-            console.log("FollowComment ", comment.ID)
             if (!next) {
-                console.log("FollowComment next ", comment.ID)
                 next = instantiate(this.commentRender)
                 next.active = true
                 this.headRender.addChild(next)
