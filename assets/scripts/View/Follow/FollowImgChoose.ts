@@ -64,7 +64,6 @@ export class FollowImgChoose extends Component {
         this.listComp.layout = layout
     }
 
-
     receivedData() {
         // 更新列表
         this.listComp.reloadData()
