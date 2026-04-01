@@ -1,0 +1,51 @@
+{
+  "1": {
+    "name_cn": "",
+    "icon": "sticker/icon/02_sleeping_cat",
+    "image": "sticker/image/02_sleeping_cat",
+    "image_scaling": "0.1#1",
+    "text_color": "0#1#2#3#4#5#6#7#8#9#10"
+  },
+  "2": {
+    "name_cn": "",
+    "icon": "sticker/icon/03_donut",
+    "image": "sticker/image/03_donut",
+    "image_scaling": "0.1#1",
+    "text_color": ""
+  },
+  "3": {
+    "name_cn": "",
+    "icon": "sticker/icon/04_bear_scarf",
+    "image": "sticker/image/04_bear_scarf",
+    "image_scaling": "0.1#1",
+    "text_color": ""
+  },
+  "4": {
+    "name_cn": "",
+    "icon": "sticker/icon/05_sun",
+    "image": "sticker/image/05_sun",
+    "image_scaling": "0.1#1",
+    "text_color": ""
+  },
+  "5": {
+    "name_cn": "",
+    "icon": "sticker/icon/07_dog",
+    "image": "sticker/image/07_dog",
+    "image_scaling": "0.1#1",
+    "text_color": ""
+  },
+  "6": {
+    "name_cn": "",
+    "icon": "sticker/icon/09_ice_cream",
+    "image": "sticker/image/09_ice_cream",
+    "image_scaling": "0.1#1",
+    "text_color": ""
+  },
+  "7": {
+    "name_cn": "",
+    "icon": "sticker/icon/10_rainbow",
+    "image": "sticker/image/10_rainbow",
+    "image_scaling": "0.1#1",
+    "text_color": ""
+  }
+}
