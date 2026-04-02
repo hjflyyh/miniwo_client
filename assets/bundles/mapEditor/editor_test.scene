@@ -24483,8 +24483,18 @@
     "mapCanvas": {
       "__id__": 680
     },
-    "confirmBtn": null,
-    "fanzhuangBtn": null,
+    "gridNumLabel": {
+      "__id__": 80
+    },
+    "bottomAddNode": {
+      "__id__": 638
+    },
+    "confirmBtn": {
+      "__id__": 639
+    },
+    "fanzhuangBtn": {
+      "__id__": 653
+    },
     "_id": "91I9SrC3hII7+OeQv3D0rH"
   },
   {
