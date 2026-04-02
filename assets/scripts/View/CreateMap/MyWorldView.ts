@@ -4,6 +4,7 @@ import { AppConst } from '../../AppConst';
 import { RoleModel } from '../../Model/RoleModel';
 import { YXMasonryFlowLayout } from 'db://assets/plugin/list-3x/yx-masonry-flow-layout';
 import { MyWorldListCell } from './MyWorldListCell';
+import { UGCModel } from '../../Model/UGCModel';
 const { ccclass, property } = _decorator;
 
 @ccclass('MyWorldView')
@@ -80,7 +81,7 @@ export class MyWorldView extends Component {
     }
 
     OnClickAdd(){
-        AppConst.PanelManager.CloseViewByUrl("res/View/CreateMap/MyWorldView")
+        UGCModel.getInstance().resetMapData();
         AppConst.PanelManager.openView("res/View/CreateMap/CreateView")
     }
 

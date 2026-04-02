@@ -9,7 +9,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": null
   },
   "2": {
     "name_cn": "树2",
@@ -21,7 +22,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": null
   },
   "3": {
     "name_cn": "树3",
@@ -33,7 +35,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": null
   },
   "4": {
     "name_cn": "马路1",
@@ -45,7 +48,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": null
   },
   "5": {
     "name_cn": "足球场",
@@ -57,7 +61,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": null
   },
   "6": {
     "name_cn": "围栏白色",
@@ -69,7 +74,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": null
   },
   "7": {
     "name_cn": "门阶台阶白色",
@@ -81,7 +87,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": null
   },
   "8": {
     "name_cn": "大型灌木紫色",
@@ -93,7 +100,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": null
   },
   "9": {
     "name_cn": "大型灌木绿色",
@@ -105,7 +113,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": null
   },
   "10": {
     "name_cn": "大型灌木蓝色",
@@ -117,6 +126,7 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": null
   }
 }

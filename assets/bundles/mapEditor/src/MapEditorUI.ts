@@ -1008,7 +1008,6 @@ export class MapEditorUI extends Component {
         this.saveConfirmDialog.active = false;
         MapManager.GetInstance().getMapEditor().hideTileMask();
         this.sendSaveMapData();
-        // this.sendDramaConfig();
     }
 
     onClickCancelSave() {

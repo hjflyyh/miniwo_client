@@ -13,7 +13,8 @@
     "place_type": "0#5",
     "decor_type": "5",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "2": {
     "name_cn": "毛绒地毯 圆形图案 白色",
@@ -29,7 +30,8 @@
     "place_type": "0#5",
     "decor_type": "5",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "3": {
     "name_cn": "毛绒地毯 圆形图案 绿色",
@@ -45,7 +47,8 @@
     "place_type": "0#5",
     "decor_type": "5",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "4": {
     "name_cn": "床 黄色",
@@ -61,7 +64,8 @@
     "place_type": "0#5",
     "decor_type": "3",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "5": {
     "name_cn": "白色沙发",
@@ -77,7 +81,8 @@
     "place_type": "0#5",
     "decor_type": "2",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "6": {
     "name_cn": "白色沙发 花朵抱枕",
@@ -93,7 +98,8 @@
     "place_type": "0#5",
     "decor_type": "2",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "7": {
     "name_cn": "实木电视柜",
@@ -109,7 +115,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "8": {
     "name_cn": "实木床头柜",
@@ -125,7 +132,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "9": {
     "name_cn": "实木 异形桌",
@@ -141,7 +149,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "10": {
     "name_cn": "实木高架花架",
@@ -157,7 +166,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "11": {
     "name_cn": "实木高架花架 白色花朵",
@@ -173,7 +183,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "12": {
     "name_cn": "实木高架花架 菊花",
@@ -189,7 +200,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "13": {
     "name_cn": "实木高架花架 仙人掌",
@@ -205,7 +217,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "14": {
     "name_cn": "实木书桌",
@@ -221,7 +234,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "15": {
     "name_cn": "实木靠背椅",
@@ -237,7 +251,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "16": {
     "name_cn": "实木柜子",
@@ -253,7 +268,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "17": {
     "name_cn": "白色小花瓶",
@@ -269,7 +285,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "18": {
     "name_cn": "黄紫色小瓶子",
@@ -285,7 +302,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "19": {
     "name_cn": "白色拖鞋",
@@ -301,7 +319,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "20": {
     "name_cn": "黄色马克杯",
@@ -317,7 +336,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "21": {
     "name_cn": "红色马克杯",
@@ -333,7 +353,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "22": {
     "name_cn": "吉祥物 3",
@@ -349,7 +370,8 @@
     "place_type": "0#1#2#3#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "23": {
     "name_cn": "吉祥物 2",
@@ -365,7 +387,8 @@
     "place_type": "0#1#2#3#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "24": {
     "name_cn": "吉祥物 1",
@@ -381,7 +404,8 @@
     "place_type": "0#1#2#3#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "25": {
     "name_cn": "水晶球",
@@ -397,7 +421,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "26": {
     "name_cn": "苹果风闹钟",
@@ -413,7 +438,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "27": {
     "name_cn": "绿色酒瓶",
@@ -429,7 +455,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "28": {
     "name_cn": "棕色酒瓶",
@@ -445,7 +472,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "29": {
     "name_cn": "白色花瓶",
@@ -461,7 +489,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "30": {
     "name_cn": "玩具坦克",
@@ -477,7 +506,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "31": {
     "name_cn": "红色玩具车",
@@ -493,7 +523,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "32": {
     "name_cn": "黄色茶壶",
@@ -509,7 +540,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "33": {
     "name_cn": "实木纸巾盒",
@@ -525,7 +557,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "34": {
     "name_cn": "实木香薰",
@@ -541,7 +574,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "35": {
     "name_cn": "收音机",
@@ -557,7 +591,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "2",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "36": {
     "name_cn": "实木落地灯",
@@ -573,7 +608,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "2",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "37": {
     "name_cn": "实木床头灯",
@@ -589,7 +625,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "2",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "38": {
     "name_cn": "基础黑门",
@@ -605,7 +642,8 @@
     "place_type": "0#5",
     "decor_type": "6",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "39": {
     "name_cn": "绿底鹿纹门",
@@ -621,7 +659,8 @@
     "place_type": "0#5",
     "decor_type": "6",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "40": {
     "name_cn": "绿底吊灯纹门",
@@ -637,7 +676,8 @@
     "place_type": "0#5",
     "decor_type": "6",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "41": {
     "name_cn": "红底吊灯纹门",
@@ -653,7 +693,8 @@
     "place_type": "0#5",
     "decor_type": "6",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "42": {
     "name_cn": "黄底吊灯纹门",
@@ -669,7 +710,8 @@
     "place_type": "0#5",
     "decor_type": "6",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "43": {
     "name_cn": "桃花心木门",
@@ -685,7 +727,8 @@
     "place_type": "0#5",
     "decor_type": "6",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "44": {
     "name_cn": "实木门",
@@ -701,7 +744,8 @@
     "place_type": "0#5",
     "decor_type": "6",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "45": {
     "name_cn": "竖条格栅木门",
@@ -717,7 +761,8 @@
     "place_type": "0#5",
     "decor_type": "6",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "46": {
     "name_cn": "基础白门",
@@ -733,7 +778,8 @@
     "place_type": "0#5",
     "decor_type": "6",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "47": {
     "name_cn": "书本侧视图绿黄配色",
@@ -749,7 +795,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100106"
   },
   "48": {
     "name_cn": "蓝色椅子侧视图",
@@ -765,7 +812,8 @@
     "place_type": "0#5",
     "decor_type": "1",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100103#1001100104#1001100105"
   },
   "49": {
     "name_cn": "蓝色椅子正视图",
@@ -781,7 +829,8 @@
     "place_type": "0#5",
     "decor_type": "1",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100103#1001100104#1001100105"
   },
   "50": {
     "name_cn": "蓝色椅子后视图",
@@ -797,7 +846,8 @@
     "place_type": "0#5",
     "decor_type": "1",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100103#1001100104#1001100105"
   },
   "51": {
     "name_cn": "蓝色椅子后视图带玩偶",
@@ -813,7 +863,8 @@
     "place_type": "0#5",
     "decor_type": "1",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100103#1001100104#1001100105"
   },
   "52": {
     "name_cn": "养乐多粉色",
@@ -829,7 +880,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100168"
   },
   "53": {
     "name_cn": "养乐多蓝色",
@@ -845,7 +897,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100167"
   },
   "54": {
     "name_cn": "木质椅子后视图",
@@ -861,7 +914,8 @@
     "place_type": "0#5",
     "decor_type": "1",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100166"
   },
   "55": {
     "name_cn": "自动售货机红色",
@@ -877,7 +931,8 @@
     "place_type": "0#5",
     "decor_type": "2",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100135#1001100159"
   },
   "56": {
     "name_cn": "自动售货机蓝色",
@@ -893,7 +948,8 @@
     "place_type": "0#5",
     "decor_type": "2",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100158"
   },
   "57": {
     "name_cn": "电视装饰侧视图",
@@ -909,7 +965,8 @@
     "place_type": "0#5",
     "decor_type": "2",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100157"
   },
   "58": {
     "name_cn": "小报",
@@ -925,7 +982,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100156"
   },
   "59": {
     "name_cn": "储物柜",
@@ -941,7 +999,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100155"
   },
   "60": {
     "name_cn": "储物柜4",
@@ -957,7 +1016,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100155"
   },
   "61": {
     "name_cn": "储物柜3",
@@ -973,7 +1033,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100155"
   },
   "62": {
     "name_cn": "储物柜2",
@@ -989,7 +1050,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100155"
   },
   "63": {
     "name_cn": "储物柜1",
@@ -1005,7 +1067,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100155"
   },
   "64": {
     "name_cn": "收纳包",
@@ -1021,7 +1084,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100154"
   },
   "65": {
     "name_cn": "实木桌侧视图",
@@ -1037,7 +1101,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100152#1001100153"
   },
   "66": {
     "name_cn": "实木桌侧视图带收纳包",
@@ -1053,7 +1118,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100154"
   },
   "67": {
     "name_cn": "骨架框架",
@@ -1069,7 +1135,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100151"
   },
   "68": {
     "name_cn": "兔子摆件",
@@ -1085,7 +1152,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100143"
   },
   "69": {
     "name_cn": "实木黑色讲台正视图",
@@ -1101,7 +1169,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100141"
   },
   "70": {
     "name_cn": "方格羊毛地毯方形",
@@ -1117,7 +1186,8 @@
     "place_type": "0#5",
     "decor_type": "5",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100140"
   },
   "71": {
     "name_cn": "方格羊毛地毯长方形",
@@ -1133,7 +1203,8 @@
     "place_type": "0#5",
     "decor_type": "5",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100139"
   },
   "72": {
     "name_cn": "多功能书桌白色正视图",
@@ -1149,7 +1220,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "73": {
     "name_cn": "移动黑板",
@@ -1165,7 +1237,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100131"
   },
   "74": {
     "name_cn": "移动黑板带装饰",
@@ -1181,7 +1254,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100131#1001100136"
   },
   "75": {
     "name_cn": "迷你自动售货机红色",
@@ -1197,7 +1271,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100135"
   },
   "76": {
     "name_cn": "迷你储物盒",
@@ -1213,7 +1288,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100134"
   },
   "77": {
     "name_cn": "迷你储物盒鸡蛋贴纸",
@@ -1229,7 +1305,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100133"
   },
   "78": {
     "name_cn": "迷你储物盒广告图案",
@@ -1245,7 +1322,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100132"
   },
   "79": {
     "name_cn": "吉祥物抱枕",
@@ -1261,7 +1339,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100130"
   },
   "80": {
     "name_cn": "吉祥物抱枕带帽子",
@@ -1277,7 +1356,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100129"
   },
   "81": {
     "name_cn": "小金像",
@@ -1293,7 +1373,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100128"
   },
   "82": {
     "name_cn": "休闲椅白色",
@@ -1309,7 +1390,8 @@
     "place_type": "0#5",
     "decor_type": "2",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100127"
   },
   "83": {
     "name_cn": "休闲椅白色吉祥物风格",
@@ -1325,7 +1407,8 @@
     "place_type": "0#5",
     "decor_type": "2",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100102#1001100126"
   },
   "84": {
     "name_cn": "休闲椅黑色",
@@ -1341,7 +1424,8 @@
     "place_type": "0#5",
     "decor_type": "2",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100125"
   },
   "85": {
     "name_cn": "宣传单页",
@@ -1357,7 +1441,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100124"
   },
   "86": {
     "name_cn": "大型白色书桌",
@@ -1373,7 +1458,8 @@
     "place_type": "0#5",
     "decor_type": "1",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100123#1001100138"
   },
   "87": {
     "name_cn": "红色帽子",
@@ -1389,7 +1475,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100121"
   },
   "88": {
     "name_cn": "绿色帽子",
@@ -1405,7 +1492,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100120"
   },
   "89": {
     "name_cn": "蓝色帽子",
@@ -1421,7 +1509,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100119"
   },
   "90": {
     "name_cn": "地球仪",
@@ -1437,7 +1526,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100118"
   },
   "91": {
     "name_cn": "足球",
@@ -1453,7 +1543,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100117"
   },
   "92": {
     "name_cn": "空书架棕色",
@@ -1469,7 +1560,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100116"
   },
   "93": {
     "name_cn": "空书架蓝色",
@@ -1485,7 +1577,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100115"
   },
   "94": {
     "name_cn": "粉笔马克笔",
@@ -1501,7 +1594,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "95": {
     "name_cn": "地毯红蓝足球图案",
@@ -1517,7 +1611,8 @@
     "place_type": "0#5",
     "decor_type": "5",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100112"
   },
   "96": {
     "name_cn": "罐装饮料粉色",
@@ -1533,7 +1628,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100111"
   },
   "97": {
     "name_cn": "罐装饮料绿色",
@@ -1549,7 +1645,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100110"
   },
   "98": {
     "name_cn": "罐装饮料蓝色",
@@ -1565,7 +1662,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100109"
   },
   "99": {
     "name_cn": "书架棕色",
@@ -1581,7 +1679,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100108"
   },
   "100": {
     "name_cn": "书架蓝色",
@@ -1597,7 +1696,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": "1001100107"
   },
   "101": {
     "name_cn": "收音机白色正面视角",
@@ -1613,7 +1713,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "2",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "102": {
     "name_cn": "盆栽小型绿树",
@@ -1629,7 +1730,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "103": {
     "name_cn": "塑料地垫蓝色",
@@ -1645,7 +1747,8 @@
     "place_type": "0#5",
     "decor_type": "5",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "104": {
     "name_cn": "懒人沙发棕色",
@@ -1661,7 +1764,8 @@
     "place_type": "0#5",
     "decor_type": "2",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "105": {
     "name_cn": "牛皮纸袋",
@@ -1677,7 +1781,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "106": {
     "name_cn": "卡其色转角柜侧面视角",
@@ -1693,7 +1798,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "107": {
     "name_cn": "一次性咖啡杯",
@@ -1709,7 +1815,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "108": {
     "name_cn": "展示柜实木正面视角",
@@ -1725,7 +1832,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "109": {
     "name_cn": "咖啡菜单",
@@ -1741,7 +1849,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "110": {
     "name_cn": "咖啡机侧面视角",
@@ -1757,7 +1866,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "2",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "111": {
     "name_cn": "咖啡研磨机白色正面视角",
@@ -1773,7 +1883,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "2",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "112": {
     "name_cn": "咖啡袋",
@@ -1789,7 +1900,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "113": {
     "name_cn": "收银机",
@@ -1805,7 +1917,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "2",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "114": {
     "name_cn": "蛋糕展示柜侧面视角",
@@ -1821,7 +1934,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "115": {
     "name_cn": "蛋糕展示柜红色",
@@ -1837,7 +1951,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "116": {
     "name_cn": "蛋糕展示柜蓝色",
@@ -1853,7 +1968,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "117": {
     "name_cn": "蛋糕6",
@@ -1869,7 +1985,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "118": {
     "name_cn": "蛋糕5",
@@ -1885,7 +2002,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "119": {
     "name_cn": "蛋糕4",
@@ -1901,7 +2019,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "120": {
     "name_cn": "蛋糕3",
@@ -1917,7 +2036,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "121": {
     "name_cn": "蛋糕2",
@@ -1933,7 +2053,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "122": {
     "name_cn": "蛋糕1",
@@ -1949,7 +2070,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "123": {
     "name_cn": "书之岛",
@@ -1965,7 +2087,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "124": {
     "name_cn": "书之岛有书",
@@ -1981,7 +2104,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "125": {
     "name_cn": "书23",
@@ -1997,7 +2121,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "126": {
     "name_cn": "书22",
@@ -2013,7 +2138,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "127": {
     "name_cn": "书21",
@@ -2029,7 +2155,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "128": {
     "name_cn": "书20",
@@ -2045,7 +2172,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "129": {
     "name_cn": "书19",
@@ -2061,7 +2189,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "130": {
     "name_cn": "书18",
@@ -2077,7 +2206,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "131": {
     "name_cn": "书17",
@@ -2093,7 +2223,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "132": {
     "name_cn": "书16",
@@ -2109,7 +2240,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "133": {
     "name_cn": "书15",
@@ -2125,7 +2257,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "134": {
     "name_cn": "书14",
@@ -2141,7 +2274,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "135": {
     "name_cn": "书13",
@@ -2157,7 +2291,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "136": {
     "name_cn": "书12",
@@ -2173,7 +2308,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "137": {
     "name_cn": "书11",
@@ -2189,7 +2325,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "138": {
     "name_cn": "书10",
@@ -2205,7 +2342,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "139": {
     "name_cn": "书9",
@@ -2221,7 +2359,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "140": {
     "name_cn": "书8",
@@ -2237,7 +2376,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "141": {
     "name_cn": "书7",
@@ -2253,7 +2393,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "142": {
     "name_cn": "书6",
@@ -2269,7 +2410,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "143": {
     "name_cn": "书5",
@@ -2285,7 +2427,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "144": {
     "name_cn": "书4",
@@ -2301,7 +2444,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "145": {
     "name_cn": "书3",
@@ -2317,7 +2461,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "146": {
     "name_cn": "书2",
@@ -2333,7 +2478,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "147": {
     "name_cn": "书1",
@@ -2349,7 +2495,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "148": {
     "name_cn": "饮料桶粉色",
@@ -2365,7 +2512,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "149": {
     "name_cn": "饮料桶橙色",
@@ -2381,7 +2529,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "150": {
     "name_cn": "饮料桶绿色",
@@ -2397,7 +2546,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "151": {
     "name_cn": "倒置咖啡杯",
@@ -2413,7 +2563,8 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "152": {
     "name_cn": "堆叠咖啡杯",
@@ -2429,7 +2580,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "153": {
     "name_cn": "实木展示柜侧视",
@@ -2445,7 +2597,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "154": {
     "name_cn": "实木转角柜侧视",
@@ -2461,7 +2614,8 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   },
   "155": {
     "name_cn": "小型盆栽绿色",
@@ -2477,6 +2631,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null
+    "sub_type": null,
+    "dialogue_id": null
   }
 }

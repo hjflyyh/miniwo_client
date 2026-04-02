@@ -2,6 +2,7 @@ import { _decorator, Component, Label, Node, Sprite } from 'cc';
 import { Utils } from '../../Utils/Utils';
 import { AppConst } from '../../AppConst';
 import { RoleModel } from '../../Model/RoleModel';
+import { UGCModel } from '../../Model/UGCModel';
 const { ccclass, property } = _decorator;
 
 @ccclass('MyWorldListCell')
@@ -32,8 +33,7 @@ export class MyWorldListCell extends Component {
     }
     
     onClickEdit(){
-        AppConst.PanelManager.CloseViewByUrl("res/View/CreateMap/MyWorldView")
-        AppConst.PanelManager.openView("res/View/CreateMap/CreateView")
+        UGCModel.getInstance().getMap(this.mapData.map_id)
     }
 
     onClickDelete(){

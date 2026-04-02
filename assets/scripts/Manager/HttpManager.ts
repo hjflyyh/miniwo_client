@@ -35,6 +35,34 @@ export class HttpManager extends Component {
         })
     }
 
+    /**
+     * 兼容 AI 透传 JSON：不要求 {success:true,data} 包装，直接把原始响应派发出去。
+     * 仍会优先提示 error/message 字段。
+     */
+    public sendPostHttpAny(functionName: string, data: any) {
+        log(functionName);
+        EventSystem.send("ShowJuhua", "HttpSend");
+        fetch(HttpManager.baseUrl + "/" + functionName, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: data
+        })
+            .then(res => res.json())
+            .then(resp => {
+                console.log("请求回复：", resp);
+                if (resp?.error) {
+                    EventSystem.send("ShowTips", resp.error);
+                    return;
+                }
+                if (resp?.message && resp?.success === false) {
+                    EventSystem.send("ShowTips", resp.message);
+                    return;
+                }
+                // 统一派发：业务侧可按 functionName 区分解析
+                EventSystem.send("HttpMessage", { functionName, raw: resp });
+            });
+    }
+
 }
 
 
