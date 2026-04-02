@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, EditBox, Label, instantiate, Prefab } from 'cc';
+import { _decorator, Component, Node, EditBox, Label, instantiate, Prefab, Sprite, PageView, Layout } from 'cc';
 import { AppConst } from '../../AppConst';
 import { SocialModel } from '../../Model/SocialModel';
 import { FollowComment } from '../Main/Follow/FollowComment';
@@ -38,6 +38,12 @@ export class FollowView extends Component {
     @property(EditBox)
     commentNode: EditBox = null
 
+    @property(PageView)
+    pageView: PageView = null!;
+
+    @property(Node)
+    pagePrefab: Node = null!; // 提前做一个空节点，带 Sprite 组件
+
     private isLike: boolean = false
     private likeCount: number = 0
     // 一级评论列表
@@ -49,7 +55,7 @@ export class FollowView extends Component {
 
     private postID: number
     private postAt: string
-    private eggID:number
+    private eggID: number
 
     private followCommentList: {} = {}
 
@@ -73,6 +79,34 @@ export class FollowView extends Component {
             eggID: this.eggID,
         })
 
+        let imageURL = JSON.parse(post?.ImageURL || "")
+        if (imageURL.length > 0) {
+            const content = this.pageView.content;
+            content.removeAllChildren();
+            for (let i = 0; i < imageURL.length; i++) {
+                let img = imageURL[i]
+                const page = instantiate(this.pagePrefab);
+                content.addChild(page);
+
+                const imgSp = page.getComponent(Sprite);
+                if (imgSp) {
+                    let journalImg = AppConst.JournalManager.journalImgs.find((i) => i.type == "localImg" && i.id == img["id"])
+                    imgSp.spriteFrame = AppConst.JournalManager.imgSprite[journalImg["localImgIndex"]]
+                }
+            }
+            // 你动态生成完所有图片后，加这一段
+            const layout = this.pageView.content.getComponent(Layout);
+            if (layout) {
+                layout.updateLayout();
+            }
+
+            // 强制刷新 PageView
+            this.pageView.enabled = false;
+            this.scheduleOnce(() => {
+                this.pageView.enabled = true;
+            }, 0.03);
+        }
+
         this.contentNode.string = post?.Content || ""
         this.titleNode.string = post?.Title || ""
         this.postAtLable.string = Utils.getDateFromStr(post?.CreatedAt || "")
@@ -82,6 +116,7 @@ export class FollowView extends Component {
         this.isLike = SocialModel.getInstance().postLikeList.indexOf(this.postID) !== -1
         this.setBtnByIsLike()
     }
+
 
     refreshCommentList() {
         this.commentRootList.forEach(topID => {
