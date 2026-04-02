@@ -14,7 +14,7 @@ export class LanguageManager extends Component {
         if(AppConst.JSONManager.getItem("language" , id)){
             return AppConst.JSONManager.getItem("language" , id)["name_"+this.language]
         }
-        return id
+        return ""
     }
 
     public changeLanguage(lang){

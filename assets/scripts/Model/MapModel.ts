@@ -2,6 +2,7 @@ import { Sprite, UITransform , Animation, Vec2, Size, Vec3, sys, RenderTexture, 
 import { AppConst } from "../AppConst";
 import { network } from "./RequestData";
 import { MapEditor } from "../../bundles/mapEditor/src/MapEditor";
+import { UGCModel } from "./UGCModel";
 // import { CaptureUtils } from "../../bundles/mapEditor/src/CaptureUtils";
 
 export class MapModel {
@@ -535,7 +536,6 @@ export class MapModel {
         };
 
         const _data = JSON.stringify(map.allMapAssetsData);
-        sys.localStorage.setItem("MapData", _data);
         console.log(_data);
 
 
@@ -568,6 +568,10 @@ export class MapModel {
                 data : _data,
                 base64Image : base64Image
             }, '*');
+        }else if(UGCModel.getInstance().mapData.id > 0){
+            UGCModel.getInstance().saveMapData(UGCModel.getInstance().mapData.id , _data , base64Image);
+        }else{
+            sys.localStorage.setItem("MapData", _data);
         }
     }
 
