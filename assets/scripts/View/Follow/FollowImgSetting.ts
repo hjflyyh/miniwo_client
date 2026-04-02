@@ -62,26 +62,26 @@ export class FollowImgSetting extends Component {
 
         const imgNodes: Node[] = [];
         this._collectByPrefix(this.node, 'editImg', imgNodes);
-        for (let i = 0; i < imgNodes.length; i++) {
-            const comp = imgNodes[i].getComponent(FollowEditableGroup) ?? imgNodes[i].addComponent(FollowEditableGroup);
-            comp.setDragLimitNode(limitNode);
-            comp.init({
-                type: 'editImg',
-                spriteFrame: frame,
-            });
-        }
+        // for (let i = 0; i < imgNodes.length; i++) {
+        //     const comp = imgNodes[i].getComponent(FollowEditableGroup) ?? imgNodes[i].addComponent(FollowEditableGroup);
+        //     comp.setDragLimitNode(limitNode);
+        //     comp.init({
+        //         type: 'editImg',
+        //         spriteFrame: frame,
+        //     });
+        // }
 
         const boxNodes: Node[] = [];
         this._collectByPrefix(this.node, 'editBox', boxNodes);
-        for (let i = 0; i < boxNodes.length; i++) {
-            const comp = boxNodes[i].getComponent(FollowEditableGroup) ?? boxNodes[i].addComponent(FollowEditableGroup);
-            comp.setDragLimitNode(limitNode);
-            const text = boxNodes[i].getChildByName('tmpEditBox')?.getComponent(EditBox)?.string ?? '';
-            comp.init({
-                type: 'editBox',
-                text,
-            });
-        }
+        // for (let i = 0; i < boxNodes.length; i++) {
+        //     const comp = boxNodes[i].getComponent(FollowEditableGroup) ?? boxNodes[i].addComponent(FollowEditableGroup);
+        //     comp.setDragLimitNode(limitNode);
+        //     const text = boxNodes[i].getChildByName('tmpEditBox')?.getComponent(EditBox)?.string ?? '';
+        //     comp.init({
+        //         type: 'editBox',
+        //         text,
+        //     });
+        // }
     }
 
     onClickBg(){

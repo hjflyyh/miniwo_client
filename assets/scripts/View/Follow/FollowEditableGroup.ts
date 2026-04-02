@@ -91,7 +91,7 @@ export class FollowEditableGroup extends Component {
             this._initEditBox(params.text ?? '');
         }
         // init 默认隐藏控制点，但允许拖拽
-        this._setControlsVisible(false);
+        // this._setControlsVisible(false);
         this._refreshLayout();
         this._clampToEditNodeRange();
     }
@@ -569,7 +569,8 @@ export class FollowEditableGroup extends Component {
     }
 
     public onClickClose(){
-        this._setControlsVisible(false)
+        // this._setControlsVisible(false)
+        this.node.destroy()
     }
 }
 
