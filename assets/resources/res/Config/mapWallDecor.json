@@ -9,7 +9,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": null
   },
   "2": {
     "name_cn": "蓝色女士单肩包",
@@ -21,7 +22,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": null
   },
   "3": {
     "name_cn": "墙面置物架",
@@ -33,7 +35,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": null
   },
   "4": {
     "name_cn": "墙面包架（无配件）",
@@ -45,7 +48,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": null
   },
   "5": {
     "name_cn": "墙面包架（带配件）",
@@ -57,7 +61,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": null
   },
   "6": {
     "name_cn": "实木花格窗",
@@ -69,7 +74,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": null
   },
   "7": {
     "name_cn": "黑色黑板",
@@ -81,7 +87,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": "1001100101"
   },
   "8": {
     "name_cn": "白色白板",
@@ -93,7 +100,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": "1001100163"
   },
   "9": {
     "name_cn": "白色黑板",
@@ -105,7 +113,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": "1001100162"
   },
   "10": {
     "name_cn": "壁挂圆盘黄色",
@@ -117,7 +126,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": "1001100161"
   },
   "11": {
     "name_cn": "壁挂圆盘红色",
@@ -129,7 +139,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": "1001100160"
   },
   "12": {
     "name_cn": "圆形挂坠W",
@@ -141,7 +152,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": "1001100150"
   },
   "13": {
     "name_cn": "圆形挂坠O",
@@ -153,7 +165,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": "1001100149"
   },
   "14": {
     "name_cn": "圆形挂坠M",
@@ -165,7 +178,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": "1001100148"
   },
   "15": {
     "name_cn": "圆形挂坠L",
@@ -177,7 +191,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": "1001100147"
   },
   "16": {
     "name_cn": "圆形挂坠E红色",
@@ -189,7 +204,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": "1001100146"
   },
   "17": {
     "name_cn": "圆形挂坠E紫色",
@@ -201,7 +217,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": "1001100145"
   },
   "18": {
     "name_cn": "圆形挂坠C",
@@ -213,7 +230,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": "1001100144"
   },
   "19": {
     "name_cn": "海报",
@@ -225,7 +243,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": "1001100142"
   },
   "20": {
     "name_cn": "迷你黑板",
@@ -237,7 +256,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": "1001100142"
   },
   "21": {
     "name_cn": "反色海报",
@@ -249,7 +269,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": "1001100122"
   },
   "22": {
     "name_cn": "紧急出口",
@@ -261,7 +282,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": "1001100114"
   },
   "23": {
     "name_cn": "窗户蓝色窗帘",
@@ -273,7 +295,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": "1001100165"
   },
   "24": {
     "name_cn": "窗户黑色窗帘",
@@ -285,7 +308,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": "1001100164"
   },
   "25": {
     "name_cn": "红色帽子",
@@ -297,7 +321,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": null
   },
   "26": {
     "name_cn": "绿色帽子",
@@ -309,7 +334,8 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": null
   },
   "27": {
     "name_cn": "蓝色帽子",
@@ -321,6 +347,7 @@
     "img_pos": "0#0",
     "spine_url": "",
     "spine_size": "1",
-    "spine_pos": "0#0"
+    "spine_pos": "0#0",
+    "dialogue_id": null
   }
 }
