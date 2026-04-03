@@ -56,8 +56,8 @@ export class CustomizeInput extends Component {
                 const manager = MapManager.GetInstance();
                 if (manager.actionStatus == ActionStatus.REGION) return;
 
-                // 仅在需要“格子内偏移”的物品类型/移动时记录指针本地坐标（不影响造房子/铺路原逻辑）
-                if (manager.actionStatus === ActionStatus.MOVE || manager.actionStatus === ActionStatus.PLANT || manager.actionStatus === ActionStatus.DECOR || manager.actionStatus === ActionStatus.WALL_DECOR) {
+                // 仅在开启「格子拖动偏移」且为可偏移模式时记录指针本地坐标
+                if (this.mapEditor.enablePlacementDragOffset && (manager.actionStatus === ActionStatus.MOVE || manager.actionStatus === ActionStatus.PLANT || manager.actionStatus === ActionStatus.DECOR || manager.actionStatus === ActionStatus.WALL_DECOR)) {
                     const loc = event.getLocation();
                     const w = this.mapEditor.mainCamera.screenToWorld(new Vec3(loc.x, loc.y, 0));
                     const lp = this.mapEditor.mapContainer.getComponent(UITransform).convertToNodeSpaceAR(new Vec3(w.x, w.y, 0));
@@ -68,9 +68,10 @@ export class CustomizeInput extends Component {
                     const gridPos = MapModel.getInstance().worldPosToGride(event.getLocation() , this.mapEditor);
                     const localPos = MapModel.getInstance().gridToWorld(gridPos , null , this.mapEditor);
                     const worldPos = this.mapEditor.mapContainer.getComponent(UITransform).convertToWorldSpaceAR(localPos);
-                    // 树/家具/墙饰/移动：显示跟手指/鼠标，不吸格；但逻辑 gridPos 仍用于碰撞与落地
+                    // 树/家具/墙饰/移动：开启偏移时跟手指；关闭时预览吸格心
                     // 注意：不能直接用 screenToWorld(near plane) 作为 worldPosition，否则会跑到错误平面导致“看不见”
-                    if (manager.actionStatus === ActionStatus.MOVE || manager.actionStatus === ActionStatus.PLANT || manager.actionStatus === ActionStatus.DECOR || manager.actionStatus === ActionStatus.WALL_DECOR) {
+                    const dragOffsetModes = manager.actionStatus === ActionStatus.MOVE || manager.actionStatus === ActionStatus.PLANT || manager.actionStatus === ActionStatus.DECOR || manager.actionStatus === ActionStatus.WALL_DECOR;
+                    if (this.mapEditor.enablePlacementDragOffset && dragOffsetModes) {
                         const loc = event.getLocation();
                         const w = this.mapEditor.mainCamera.screenToWorld(new Vec3(loc.x, loc.y, 0));
                         const lp = this.mapEditor.mapContainer.getComponent(UITransform).convertToNodeSpaceAR(new Vec3(w.x, w.y, 0));
@@ -149,7 +150,7 @@ export class CustomizeInput extends Component {
                         const gridPos = MapModel.getInstance().worldPosToGride(event.getLocation() , this.mapEditor);
                         const localPos = MapModel.getInstance().gridToWorld(gridPos , null , this.mapEditor);
                         const worldPos = this.mapEditor.mapContainer.getComponent(UITransform).convertToWorldSpaceAR(localPos)
-                        if (manager.actionStatus === ActionStatus.MOVE || manager.actionStatus === ActionStatus.PLANT || manager.actionStatus === ActionStatus.DECOR || manager.actionStatus === ActionStatus.WALL_DECOR) {
+                        if (this.mapEditor.enablePlacementDragOffset && (manager.actionStatus === ActionStatus.MOVE || manager.actionStatus === ActionStatus.PLANT || manager.actionStatus === ActionStatus.DECOR || manager.actionStatus === ActionStatus.WALL_DECOR)) {
                             const lp = this.mapEditor.mapContainer.getComponent(UITransform).convertToNodeSpaceAR(new Vec3(mouseWorldPoint.x, mouseWorldPoint.y, 0));
                             this.mapEditor.tileMaskNode.setPosition(lp.x, lp.y, 0);
                         } else {
@@ -364,8 +365,7 @@ export class CustomizeInput extends Component {
             return
         }
 
-        // 仅在需要“格子内偏移”的物品类型/移动时记录指针本地坐标（不影响造房子/铺路原逻辑）
-        if (manager.actionStatus === ActionStatus.MOVE || manager.actionStatus === ActionStatus.PLANT || manager.actionStatus === ActionStatus.DECOR || manager.actionStatus === ActionStatus.WALL_DECOR) {
+        if (this.mapEditor.enablePlacementDragOffset && (manager.actionStatus === ActionStatus.MOVE || manager.actionStatus === ActionStatus.PLANT || manager.actionStatus === ActionStatus.DECOR || manager.actionStatus === ActionStatus.WALL_DECOR)) {
             const loc = event.getLocation();
             const w = this.mapEditor.mainCamera.screenToWorld(new Vec3(loc.x, loc.y, 0));
             const lp = this.mapEditor.mapContainer.getComponent(UITransform).convertToNodeSpaceAR(new Vec3(w.x, w.y, 0));
@@ -376,7 +376,8 @@ export class CustomizeInput extends Component {
             const gridPos = MapModel.getInstance().worldPosToGride(event.getLocation() , this.mapEditor);
             const localPos = MapModel.getInstance().gridToWorld(gridPos , null , this.mapEditor);
             const worldPos = this.mapEditor.mapContainer.getComponent(UITransform).convertToWorldSpaceAR(localPos)
-            if (manager.actionStatus === ActionStatus.MOVE || manager.actionStatus === ActionStatus.PLANT || manager.actionStatus === ActionStatus.DECOR || manager.actionStatus === ActionStatus.WALL_DECOR) {
+            const dragOffsetModes = manager.actionStatus === ActionStatus.MOVE || manager.actionStatus === ActionStatus.PLANT || manager.actionStatus === ActionStatus.DECOR || manager.actionStatus === ActionStatus.WALL_DECOR;
+            if (this.mapEditor.enablePlacementDragOffset && dragOffsetModes) {
                 const loc = event.getLocation();
                 const w = this.mapEditor.mainCamera.screenToWorld(new Vec3(loc.x, loc.y, 0));
                 const lp = this.mapEditor.mapContainer.getComponent(UITransform).convertToNodeSpaceAR(new Vec3(w.x, w.y, 0));

@@ -1,4 +1,4 @@
-import { _decorator, Animation, Camera, CCInteger, Color, Component, director, EventMouse, EventTouch, find, Graphics, Input, input, instantiate, Label, Layers, log, math, Node, Prefab, RenderTexture, size, Size, Sprite, SpriteFrame, sys, Texture2D, tween, UITransform, v2, Vec2, Vec3, view } from 'cc';
+import { _decorator, Animation, Camera, CCBoolean, CCInteger, Color, Component, director, EventMouse, EventTouch, find, Graphics, Input, input, instantiate, Label, Layers, log, math, Node, Prefab, RenderTexture, size, Size, Sprite, SpriteFrame, sys, Texture2D, tween, UITransform, v2, Vec2, Vec3, view } from 'cc';
 import { TileObjectData } from './TileItem';
 import { ActionStatus, MapManager } from './MapManager';
 import {DisplayTitle} from "db://assets/scripts/View/Utils/DisplayTitle";
@@ -113,6 +113,10 @@ export class MapEditor extends Component {
     public tileSize = 32;
     public mapWidth = 46;
     public mapHeight = 88;
+
+    @property({ type: CCBoolean, displayName: '启用格子拖动偏移', tooltip: '关闭时预览与摆放严格按格子中心；开启后手指/鼠标可带偏移（与逻辑占格无关）' })
+    public enablePlacementDragOffset = false;
+
     /** 最近一次鼠标/触摸在 mapContainer 下的本地坐标（用于格子内偏移摆放） */
     public lastPointerLocalPos: Vec2 | null = null;
     private graphics: Graphics = null;
@@ -458,12 +462,20 @@ export class MapEditor extends Component {
 
     /** 计算「指针在格子中的偏移」，用于更精准的触摸/鼠标对齐 */
     private getPointerOffsetForGrid(gridPos: Vec2, size: Size | null): Vec2 {
+        if (!this.enablePlacementDragOffset) {
+            return new Vec2(0, 0);
+        }
         if (!this.lastPointerLocalPos) {
             return new Vec2(0, 0);
         }
         const base = MapModel.getInstance().gridToWorld(gridPos, size, this);
         // 不做强制 clamp，保证拖拽时视觉更“跟手”；逻辑占格仍由 gridPos 决定
         return new Vec2(this.lastPointerLocalPos.x - base.x, this.lastPointerLocalPos.y - base.y);
+    }
+
+    /** 调试用：单格中心，不受 tileMask 当前尺寸影响（避免 gridToWorld(..., null) 随预览家具尺寸整体偏移） */
+    private gridCellCenterForDebug(gridPos: Vec2): Vec3 {
+        return MapModel.getInstance().gridToWorld(gridPos, new Size(this.tileSize, this.tileSize), this);
     }
 
     private refreshWalkableDebugOverlayIfNeeded() {
@@ -864,6 +876,9 @@ export class MapEditor extends Component {
             return;
         }
         this.ensureWalkableDebugLayer();
+        if (this.mapContainer && this.walkableDebugNode?.isValid) {
+            this.walkableDebugNode.setPosition(this.mapContainer.position);
+        }
         if (!this.walkableDebugGraphics) return;
 
         this.walkableDebugGraphics.clear();
@@ -872,7 +887,7 @@ export class MapEditor extends Component {
         this.walkableDebugGraphics.fillColor = new Color(255, 0, 0, 110);
         for (let x = 0; x < this.mapWidth; x++) {
             for (let y = 0; y < this.mapHeight; y++) {
-                const center = MapModel.getInstance().gridToWorld(new Vec2(x, y), null, this);
+                const center = this.gridCellCenterForDebug(new Vec2(x, y));
                 const half = this.tileSize * 0.5;
                 this.walkableDebugGraphics.rect(center.x - half, center.y - half, this.tileSize, this.tileSize);
             }
@@ -895,7 +910,7 @@ export class MapEditor extends Component {
             if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
             if (x < 0 || y < 0 || x >= this.mapWidth || y >= this.mapHeight) continue;
 
-            const center = MapModel.getInstance().gridToWorld(new Vec2(x, y), null, this);
+            const center = this.gridCellCenterForDebug(new Vec2(x, y));
             const half = this.tileSize * 0.5;
             this.walkableDebugGraphics.rect(center.x - half, center.y - half, this.tileSize, this.tileSize);
         }
@@ -939,6 +954,9 @@ export class MapEditor extends Component {
             return;
         }
         this.ensureNpcTileDebugLayer();
+        if (this.mapContainer && this.npcTileDebugNode?.isValid) {
+            this.npcTileDebugNode.setPosition(this.mapContainer.position);
+        }
         if (!this.npcTileDebugGraphics) return;
 
         this.npcTileDebugGraphics.clear();
@@ -963,7 +981,7 @@ export class MapEditor extends Component {
                 if (drawKeys.has(key)) continue;
                 drawKeys.add(key);
 
-                const center = MapModel.getInstance().gridToWorld(new Vec2(x, y), null, this);
+                const center = this.gridCellCenterForDebug(new Vec2(x, y));
                 const half = this.tileSize * 0.5;
                 this.npcTileDebugGraphics.rect(center.x - half, center.y - half, this.tileSize, this.tileSize);
             }
@@ -1324,8 +1342,8 @@ export class MapEditor extends Component {
                 const item = this.mapItems.get(`${gridPos.x},${gridPos.y}`);
                 const ptr = this.lastPointerLocalPos;
                 const tilePos = item.tile?.getPosition?.() ?? new Vec3();
-                const grabOffsetX = ptr ? (ptr.x - tilePos.x) : 0;
-                const grabOffsetY = ptr ? (ptr.y - tilePos.y) : 0;
+                const grabOffsetX = this.enablePlacementDragOffset && ptr ? (ptr.x - tilePos.x) : 0;
+                const grabOffsetY = this.enablePlacementDragOffset && ptr ? (ptr.y - tilePos.y) : 0;
                 this.moveItem = {
                     id: item.id,
                     tile: item.tile,
@@ -1354,8 +1372,8 @@ export class MapEditor extends Component {
                         const item = topDecor.value;
                         const ptr = this.lastPointerLocalPos;
                         const tilePos = item.tile?.getPosition?.() ?? new Vec3();
-                        const grabOffsetX = ptr ? (ptr.x - tilePos.x) : 0;
-                        const grabOffsetY = ptr ? (ptr.y - tilePos.y) : 0;
+                        const grabOffsetX = this.enablePlacementDragOffset && ptr ? (ptr.x - tilePos.x) : 0;
+                        const grabOffsetY = this.enablePlacementDragOffset && ptr ? (ptr.y - tilePos.y) : 0;
                         this.moveItem = {
                             id: item.tile.name,
                             tile: item.tile,
@@ -1694,7 +1712,7 @@ export class MapEditor extends Component {
                 // 移动
                 const size = this.moveItem.tile.getComponent(UITransform).contentSize;
                 const ptr = this.lastPointerLocalPos;
-                if (ptr) {
+                if (this.enablePlacementDragOffset && ptr) {
                     const grabX = (this.moveItem as any).grabOffsetX ?? 0;
                     const grabY = (this.moveItem as any).grabOffsetY ?? 0;
                     const nextX = ptr.x - grabX;
