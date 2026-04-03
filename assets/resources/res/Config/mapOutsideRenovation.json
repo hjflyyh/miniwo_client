@@ -49,7 +49,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100180"
   },
   "5": {
     "name_cn": "灌木丛_2",
@@ -62,7 +62,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100181"
   },
   "6": {
     "name_cn": "灌木丛_3",
@@ -75,7 +75,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100182"
   },
   "7": {
     "name_cn": "灌木丛_4",
@@ -88,7 +88,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100183"
   },
   "8": {
     "name_cn": "灌木丛_5",
@@ -101,7 +101,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100184"
   },
   "9": {
     "name_cn": "灌木丛_6",
@@ -114,7 +114,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100185"
   },
   "10": {
     "name_cn": "灌木丛_7",
@@ -127,7 +127,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100186"
   },
   "11": {
     "name_cn": "灌木丛_8",
@@ -140,7 +140,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100187"
   },
   "12": {
     "name_cn": "可乐",
@@ -153,7 +153,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100169"
   },
   "13": {
     "name_cn": "足球球门_1",
@@ -166,7 +166,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100196"
   },
   "14": {
     "name_cn": "足球球门_2",
@@ -179,7 +179,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100197"
   },
   "15": {
     "name_cn": "铁栅栏",
@@ -192,7 +192,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100198"
   },
   "16": {
     "name_cn": "铁丝网围栏",
@@ -205,7 +205,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100199"
   },
   "17": {
     "name_cn": "铁丝网围栏门",
@@ -218,7 +218,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100200"
   },
   "18": {
     "name_cn": "操场",
@@ -231,7 +231,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100170"
   },
   "19": {
     "name_cn": "蓝色爆米花",
@@ -244,7 +244,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100189"
   },
   "20": {
     "name_cn": "红色爆米花",
@@ -257,7 +257,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100188"
   },
   "21": {
     "name_cn": "实木花池侧边",
@@ -270,7 +270,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100195"
   },
   "22": {
     "name_cn": "立式座椅_1",
@@ -283,7 +283,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100191"
   },
   "23": {
     "name_cn": "立式座椅_2",
@@ -296,7 +296,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100192"
   },
   "24": {
     "name_cn": "立式座椅_3",
@@ -309,7 +309,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100193"
   },
   "25": {
     "name_cn": "立式座椅_4",
@@ -322,7 +322,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100194"
   },
   "26": {
     "name_cn": "看台",
@@ -335,7 +335,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100190"
   },
   "27": {
     "name_cn": "落叶树_1",
@@ -348,7 +348,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100171"
   },
   "28": {
     "name_cn": "落叶树_2",
@@ -361,7 +361,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100172"
   },
   "29": {
     "name_cn": "落叶树_3",
@@ -374,7 +374,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100173"
   },
   "30": {
     "name_cn": "落叶树_4",
@@ -387,7 +387,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100174"
   },
   "31": {
     "name_cn": "落叶树_5",
@@ -400,7 +400,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100175"
   },
   "32": {
     "name_cn": "落叶树_6",
@@ -413,7 +413,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100176"
   },
   "33": {
     "name_cn": "落叶树_7",
@@ -426,7 +426,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100177"
   },
   "34": {
     "name_cn": "落叶树_8",
@@ -439,7 +439,7 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100178"
   },
   "35": {
     "name_cn": "落叶树_9",
@@ -452,6 +452,6 @@
     "spine_url": "",
     "spine_size": "1",
     "spine_pos": "0#0",
-    "dialogue_id": null
+    "dialogue_id": "1001100179"
   }
 }
