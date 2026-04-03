@@ -1,4 +1,4 @@
-import { _decorator, Component, Label, Node } from 'cc';
+import { _decorator, Component, Label, Node, PageView, Sprite } from 'cc';
 import { AppConst } from '../../../AppConst';
 import { SocialModel } from '../../../Model/SocialModel';
 const { ccclass, property } = _decorator;
@@ -17,7 +17,8 @@ export class MainFollowListCell extends Component {
     public onLike: Node = null
     @property(Node)
     public offLike: Node = null
-
+    @property(Sprite)
+    public imgSp: Sprite;
 
     private postAt
     private postID
@@ -36,6 +37,15 @@ export class MainFollowListCell extends Component {
         this.postAt = data?.CreatedAt
         this.postID = data?.ID
         this.isLike = SocialModel.getInstance().postLikeList.indexOf(this.postID) !== -1
+        this.imgSp.spriteFrame = null
+        let imageUrl = data?.ImageURL && JSON.parse(data?.ImageURL || "[]")
+        if (imageUrl && imageUrl.length > 0) {
+            let journalImg = AppConst.JournalManager.journalImgs.find((i) => i.type == "localImg" && i.id == imageUrl[0]["id"])
+            if (journalImg) {
+                this.imgSp.spriteFrame = AppConst.JournalManager.imgSprite[journalImg["localImgIndex"]]
+            }
+        }
+
         this.setBtnByIsLike()
     }
 

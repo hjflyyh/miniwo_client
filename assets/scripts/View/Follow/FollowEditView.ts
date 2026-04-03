@@ -1,9 +1,10 @@
-import { _decorator, Component, EditBox, Node, instantiate } from 'cc';
+import { _decorator, Component, EditBox, Node, instantiate, Sprite } from 'cc';
 import { AppConst } from '../../AppConst';
 import { SocialModel } from '../../Model/SocialModel';
 import { RoleModel } from '../../Model/RoleModel';
 import { BagModel } from '../../Model/BagModel';
 import { FollowEditViewCell } from './FollowEditViewCell';
+import { FollowImgCell } from './FollowImgCell';
 const { ccclass, property } = _decorator;
 
 @ccclass('FollowEditView')
@@ -18,16 +19,25 @@ export class FollowEditView extends Component {
     imgsAdd: Node
 
     @property(Node)
+    imgsRender: Node
+
+    @property(Node)
     bagAdd: Node
 
     @property(Node)
     bagRender: Node
 
     private bagRenderList: {} = {}
+    private imgsRenderList: {} = {}
+    private openData: any[] = []
 
     start() {
         EventSystem.addListent("followEditBack", this.back, this)
+        EventSystem.addListent("OnRefreshFollowImgChoose", this.setChooseNodeList, this)
+        this.openData = []
         this.imgsAdd.active = true
+        this.imgsRender.active = false
+
         this.bagAdd.active = false
         const draftData = SocialModel.getInstance().draftData
         if (draftData) {
@@ -36,12 +46,39 @@ export class FollowEditView extends Component {
         }
     }
 
+    setChooseNodeList(data) {
+        for (let itemID in this.imgsRenderList) {
+            let next = this.imgsRenderList[itemID]
+            next.active = false
+        }
+        this.openData = data
+        this.openData.forEach((item) => {
+            let next = this.imgsRenderList[item.id]
+            if (!next) {
+                next = instantiate(this.imgsRender)
+                this.imgsAdd.addChild(next)
+                this.imgsRenderList[item.id] = next
+
+                let journalImg = AppConst.JournalManager.journalImgs.find((i) => i.type == item.type && i.id == item.id)
+                if (journalImg) {
+                    next.getComponent(Sprite).spriteFrame = AppConst.JournalManager.imgSprite[journalImg["localImgIndex"]]
+                }
+            }
+            next.active = true
+        })
+    }
+
     onClickFriend() {
         AppConst.PanelManager.openView("res/View/Follow/FollowFriendChoose")
     }
 
     onClickImg() {
-        AppConst.PanelManager.openView("res/View/Follow/FollowImgChoose")
+        this.imgsAdd.active = true
+        this.bagAdd.active = false
+    }
+
+    onClickAddImg() {
+        AppConst.PanelManager.openView("res/View/Follow/FollowImgChoose", this.openData)
     }
 
     onClickReward() {
@@ -76,7 +113,7 @@ export class FollowEditView extends Component {
         AppConst.SocialHttpManager.sendPostHttp("updateDraft", {
             content: this.contentNode.string,
             title: this.titleNode.string,
-            // imageUrl:  todo 图片url
+            imageUrl: JSON.stringify(this.openData)
         })
     }
 
@@ -89,6 +126,7 @@ export class FollowEditView extends Component {
             content: this.contentNode.string,
             title: this.titleNode.string,
             items: items,
+            imageUrl: JSON.stringify(this.openData),
             token: RoleModel.getInstance().nakama_token
         })
     }

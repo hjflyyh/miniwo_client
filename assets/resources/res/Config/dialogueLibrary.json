@@ -9518,5 +9518,4485 @@
     "english_text": "This is a fulfilling place.",
     "weight": "10",
     "duration_s": "10"
+  },
+  "1361": {
+    "dialogue_id": "1001100169",
+    "chinese_text": "天哪，一杯冰凉的可乐！正是夏日最棒的解渴良药！",
+    "english_text": "Heavens, an ice-cold cola! The ultimate summer thirst-quencher!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1362": {
+    "dialogue_id": "1001100169",
+    "chinese_text": "看起来好好喝……那黑褐色的液体在杯中荡漾，泡沫还在嘶嘶作响！",
+    "english_text": "It looks delicious... the dark brown liquid ripples in the glass, and the bubbles are still fizzing!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1363": {
+    "dialogue_id": "1001100169",
+    "chinese_text": "不管是吃火锅、烧烤还是汉堡，一杯可乐都是绝佳的搭配！",
+    "english_text": "Whether it's hot pot, BBQ, or burgers, a cola is the perfect match!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1364": {
+    "dialogue_id": "1001100169",
+    "chinese_text": "听着那气泡在舌尖炸裂的声音，简直太满足了！",
+    "english_text": "Listening to the sound of bubbles bursting on the tip of my tongue is pure bliss!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1365": {
+    "dialogue_id": "1001100169",
+    "chinese_text": "这款可乐的包装设计太经典了，那醒目的红色Logo让人一眼就能认出来！",
+    "english_text": "The packaging is so classic; that striking red logo is instantly recognizable!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1366": {
+    "dialogue_id": "1001100169",
+    "chinese_text": "我记得小时候每次喝到可乐都像是在过节一样开心！",
+    "english_text": "I remember as a kid, every sip of cola felt like a holiday celebration!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1367": {
+    "dialogue_id": "1001100169",
+    "chinese_text": "天哪，我怎么能错过这杯加了冰块的可乐？它在向我招手呢！",
+    "english_text": "Gosh, how could I miss this iced cola? It’s practically waving at me!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1368": {
+    "dialogue_id": "1001100169",
+    "chinese_text": "说实话，虽然它不那么健康，但我真的无法抗拒它的诱惑……",
+    "english_text": "To be honest, even though it's not healthy, I really can't resist the temptation...",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1369": {
+    "dialogue_id": "1001100169",
+    "chinese_text": "这款可乐的味道总是那么纯正，不管喝多少次都不会腻！",
+    "english_text": "This cola always tastes so authentic; I never get tired of it!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1370": {
+    "dialogue_id": "1001100169",
+    "chinese_text": "看着杯子里冒出的气泡，我的心情也跟着变得欢快起来了！",
+    "english_text": "Watching the bubbles rise in the glass makes my mood brighten up too!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1371": {
+    "dialogue_id": "1001100169",
+    "chinese_text": "喝下一大口可乐，让那股冰凉的快感从喉咙一直蔓延到全身，太爽了！",
+    "english_text": "Taking a huge gulp and letting that icy rush spread from my throat to my whole body feels amazing!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1372": {
+    "dialogue_id": "1001100169",
+    "chinese_text": "虽然我知道它含糖量很高，但我还是忍不住想要来一口……",
+    "english_text": "I know it's high in sugar, but I still can't help wanting a sip...",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1373": {
+    "dialogue_id": "1001100169",
+    "chinese_text": "这款可乐是不是有魔法？每一次喝它都能让我感到快乐！",
+    "english_text": "Does this cola have magic? It makes me happy every single time!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1374": {
+    "dialogue_id": "1001100169",
+    "chinese_text": "不管快乐还是难过，一杯可乐似乎总能给我带来慰藉……",
+    "english_text": "Whether happy or sad, a cola always seems to offer some comfort...",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1375": {
+    "dialogue_id": "1001100169",
+    "chinese_text": "如果这个世界上没有可乐，那我的生活将会失去多少乐趣啊！",
+    "english_text": "If there were no cola in this world, life would lose so much of its joy!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1376": {
+    "dialogue_id": "1001100169",
+    "chinese_text": "这杯可乐看起来这么完美，我甚至舍不得把它喝掉！",
+    "english_text": "This cola looks so perfect, I'm almost hesitant to drink it!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1377": {
+    "dialogue_id": "1001100169",
+    "chinese_text": "快快快，我要大口大口地喝个痛快，让所有烦恼都随着气泡烟消云散！",
+    "english_text": "Quick, let me take big gulps and let all my troubles vanish with the bubbles!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1378": {
+    "dialogue_id": "1001100169",
+    "chinese_text": "这个牌子的可乐总是能够保持一贯的高水准，从未让我失望过！",
+    "english_text": "This brand of cola always maintains its high standard; it never disappoints!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1379": {
+    "dialogue_id": "1001100169",
+    "chinese_text": "噢，可乐！你就是那个能让我瞬间充满活力的神秘药水！",
+    "english_text": "Oh, cola! You're the secret potion that fills me with instant energy!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1380": {
+    "dialogue_id": "1001100169",
+    "chinese_text": "感谢发明可乐的人，你给了我这个世界上最美妙的味觉体验！",
+    "english_text": "Thanks to the person who invented cola; you've given me the world's most wonderful taste experience!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1381": {
+    "dialogue_id": "1001100170",
+    "chinese_text": "又是美好的一天，该在这跑两圈了",
+    "english_text": "Another beautiful day, time to run a couple of laps here.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1382": {
+    "dialogue_id": "1001100170",
+    "chinese_text": "这个塑胶跑道手感真不错",
+    "english_text": "This synthetic track feels really good under my feet.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1383": {
+    "dialogue_id": "1001100170",
+    "chinese_text": "足球场上的草绿油油的，真想躺上去",
+    "english_text": "The grass on the football field is so green, I really want to lie down on it.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1384": {
+    "dialogue_id": "1001100170",
+    "chinese_text": "哎呀，今天怎么这么多人，我都挤不进去了",
+    "english_text": "Oh boy, why are there so many people today? I can't even squeeze in.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1385": {
+    "dialogue_id": "1001100170",
+    "chinese_text": "这里是以前学校的操场吗？好怀念",
+    "english_text": "Is this the playground from my old school? So nostalgic.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1386": {
+    "dialogue_id": "1001100170",
+    "chinese_text": "这个围栏是为了防止有人跑出去吗？",
+    "english_text": "Is this fence here to stop people from running out?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1387": {
+    "dialogue_id": "1001100170",
+    "chinese_text": "好想在这里踢场足球，可惜我不会",
+    "english_text": "I’d love to play a football match here, too bad I don't know how.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1388": {
+    "dialogue_id": "1001100170",
+    "chinese_text": "这个操场看起来挺大的，要跑多久才能绕一圈",
+    "english_text": "This playground looks quite big; I wonder how long it takes to run a lap.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1389": {
+    "dialogue_id": "1001100170",
+    "chinese_text": "这里的风吹得真舒服，最适合运动了",
+    "english_text": "The breeze here is so pleasant, perfect for exercising.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1390": {
+    "dialogue_id": "1001100170",
+    "chinese_text": "今天天气这么好，不来跑两圈真可惜",
+    "english_text": "It’s a pity not to run a few laps on such a beautiful day.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1391": {
+    "dialogue_id": "1001100170",
+    "chinese_text": "这里是专门给学生运动的地方吗？真幸福",
+    "english_text": "Is this a dedicated sports area for students? How lucky they are.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1392": {
+    "dialogue_id": "1001100170",
+    "chinese_text": "为什么这里没有篮球场？好奇怪",
+    "english_text": "Why isn't there a basketball court here? That's strange.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1393": {
+    "dialogue_id": "1001100170",
+    "chinese_text": "这个操场看起来有点旧了，该翻新了吧",
+    "english_text": "This playground looks a bit old; it might be time for a renovation.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1394": {
+    "dialogue_id": "1001100170",
+    "chinese_text": "我要是能在这个操场上跑一辈子就好了",
+    "english_text": "I wish I could run on this playground for the rest of my life.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1395": {
+    "dialogue_id": "1001100170",
+    "chinese_text": "这里有没有藏着什么秘密通道？",
+    "english_text": "Are there any secret passages hidden around here?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1396": {
+    "dialogue_id": "1001100170",
+    "chinese_text": "这个围栏看起来挺结实的，应该爬不上去吧",
+    "english_text": "This fence looks pretty sturdy; I doubt I could climb over it.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1397": {
+    "dialogue_id": "1001100170",
+    "chinese_text": "这里是不是以前发生过什么有趣的事情？",
+    "english_text": "Did something interesting happen here in the past?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1398": {
+    "dialogue_id": "1001100170",
+    "chinese_text": "我感觉我能在这个操场上跑得飞快",
+    "english_text": "I feel like I could run incredibly fast on this track.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1399": {
+    "dialogue_id": "1001100170",
+    "chinese_text": "这里是全学校最热闹的地方吗？",
+    "english_text": "Is this the liveliest spot in the whole school?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1400": {
+    "dialogue_id": "1001100170",
+    "chinese_text": "这里的草坪看起来挺软的，好想踩踩",
+    "english_text": "The lawn looks quite soft, I really want to step on it.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1401": {
+    "dialogue_id": "1001100171",
+    "chinese_text": "这棵树看起来好奇怪啊，叶子居然是蓝绿色的。",
+    "english_text": "This tree looks so strange; the leaves are actually blue-green.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1402": {
+    "dialogue_id": "1001100171",
+    "chinese_text": "这棵树长得真高大，我得抬头看才能看到顶。",
+    "english_text": "This tree is so tall; I have to look way up to see the top.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1403": {
+    "dialogue_id": "1001100171",
+    "chinese_text": "听说这棵树是这里的守护神，真的吗？",
+    "english_text": "I heard this tree is the guardian deity of this place, is that true?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1404": {
+    "dialogue_id": "1001100171",
+    "chinese_text": "这里怎么只有一棵树？其他植物去哪里了？",
+    "english_text": "Why is there only one tree here? Where did the other plants go?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1405": {
+    "dialogue_id": "1001100171",
+    "chinese_text": "我能在这棵树下休息一会儿吗？这里的空气好像特别清新。",
+    "english_text": "Can I rest under this tree for a bit? The air here feels exceptionally fresh.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1406": {
+    "dialogue_id": "1001100171",
+    "chinese_text": "这棵树的叶子看起来很柔软，我想摸摸。",
+    "english_text": "The leaves of this tree look very soft; I want to touch them.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1407": {
+    "dialogue_id": "1001100171",
+    "chinese_text": "它的树干看起来很结实，应该可以用来做船或者家具吧？",
+    "english_text": "Its trunk looks very sturdy; maybe it could be used to build a boat or furniture?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1408": {
+    "dialogue_id": "1001100171",
+    "chinese_text": "我能在这棵树上刻上我的名字吗？这样我就能永远记住这里了。",
+    "english_text": "Can I carve my name into this tree? That way I'll remember this place forever.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1409": {
+    "dialogue_id": "1001100171",
+    "chinese_text": "这棵树好像有很多秘密，我想深入了解。",
+    "english_text": "This tree seems to hold many secrets; I want to know more.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1410": {
+    "dialogue_id": "1001100171",
+    "chinese_text": "这棵树是不是传说中的智慧之树？",
+    "english_text": "Could this be the legendary Tree of Wisdom?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1411": {
+    "dialogue_id": "1001100171",
+    "chinese_text": "这里好像没有任何动物，这棵树是唯一的生命吗？",
+    "english_text": "There seem to be no animals here; is this tree the only life form?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1412": {
+    "dialogue_id": "1001100171",
+    "chinese_text": "这棵树的根部露在外面，看起来很有趣。",
+    "english_text": "The roots of this tree are exposed, which looks quite interesting.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1413": {
+    "dialogue_id": "1001100171",
+    "chinese_text": "这棵树看起来很有年份，它经历了多少风雨?",
+    "english_text": "This tree looks very old; I wonder how many storms it has weathered.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1414": {
+    "dialogue_id": "1001100171",
+    "chinese_text": "这里的景色真美，这棵树是这里的焦点。",
+    "english_text": "The scenery is beautiful, and this tree is the centerpiece.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1415": {
+    "dialogue_id": "1001100171",
+    "chinese_text": "这棵树的树冠很大，可以为我遮阳。",
+    "english_text": "The canopy is huge; it can provide some shade for me.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1416": {
+    "dialogue_id": "1001100171",
+    "chinese_text": "它的树干是棕色的，跟叶子的颜色很搭配。",
+    "english_text": "Its trunk is brown, which complements the color of the leaves perfectly.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1417": {
+    "dialogue_id": "1001100171",
+    "chinese_text": "这棵树是唯一的吗？我在其他地方都没见过这样的树。",
+    "english_text": "Is this tree one of a kind? I’ve never seen anything like it elsewhere.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1418": {
+    "dialogue_id": "1001100171",
+    "chinese_text": "我能把它的叶子带走吗？我可以用它做药或者装饰。",
+    "english_text": "Can I take a leaf? I could use it for medicine or decoration.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1419": {
+    "dialogue_id": "1001100171",
+    "chinese_text": "这棵树看起来很有灵气，我能在这里祈祷吗？",
+    "english_text": "This tree looks very spiritual; can I pray here?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1420": {
+    "dialogue_id": "1001100171",
+    "chinese_text": "这棵树是我的朋友，我每次来都会跟它说话。",
+    "english_text": "This tree is my friend; I talk to it every time I visit.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1421": {
+    "dialogue_id": "1001100172",
+    "chinese_text": "这棵树看起来很精神啊，叶子郁郁葱葱的。",
+    "english_text": "This tree looks very lively; its leaves are so lush.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1422": {
+    "dialogue_id": "1001100172",
+    "chinese_text": "呼，在树荫下休息一会儿，真凉快。",
+    "english_text": "Phew, resting in the shade for a bit is so refreshing.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1423": {
+    "dialogue_id": "1001100172",
+    "chinese_text": "如果我是一只鸟，我会在这棵树上筑巢。",
+    "english_text": "If I were a bird, I would build my nest in this tree.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1424": {
+    "dialogue_id": "1001100172",
+    "chinese_text": "这棵树的木材应该很不错，可以用来做家具。",
+    "english_text": "The wood from this tree should be quite good for making furniture.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1425": {
+    "dialogue_id": "1001100172",
+    "chinese_text": "有人在树干上刻了字？我也想刻一个。",
+    "english_text": "Someone carved words into the trunk? I want to carve something too.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1426": {
+    "dialogue_id": "1001100172",
+    "chinese_text": "这里适合野餐，如果我带了食物的话。",
+    "english_text": "This is a great spot for a picnic, if only I had brought food.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1427": {
+    "dialogue_id": "1001100172",
+    "chinese_text": "每天看着这棵树，心情都会变好。",
+    "english_text": "Looking at this tree every day always improves my mood.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1428": {
+    "dialogue_id": "1001100172",
+    "chinese_text": "哎呀，这树皮摸起来很粗糙，但我喜欢。",
+    "english_text": "Oh, the bark feels quite rough, but I like it.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1429": {
+    "dialogue_id": "1001100172",
+    "chinese_text": "这个高度正好，我要爬上去看看风景。",
+    "english_text": "This height is perfect; I'm going to climb up and see the view.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1430": {
+    "dialogue_id": "1001100172",
+    "chinese_text": "这棵树能活多久？一定比我活得长。",
+    "english_text": "How long can this tree live? Surely longer than me.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1431": {
+    "dialogue_id": "1001100172",
+    "chinese_text": "我可以在这棵树旁边种一些花，让它看起来更漂亮。",
+    "english_text": "I could plant some flowers next to this tree to make it look even prettier.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1432": {
+    "dialogue_id": "1001100172",
+    "chinese_text": "好大的树啊，可以挡风避雨。",
+    "english_text": "What a massive tree; it can shield me from wind and rain.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1433": {
+    "dialogue_id": "1001100172",
+    "chinese_text": "如果有人在树下埋了宝藏，那该多好。",
+    "english_text": "Wouldn't it be great if someone buried treasure under this tree?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1434": {
+    "dialogue_id": "1001100172",
+    "chinese_text": "这棵树的颜色真特别，我很喜欢。",
+    "english_text": "The color of this tree is so unique; I really like it.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1435": {
+    "dialogue_id": "1001100172",
+    "chinese_text": "我想在这棵树下睡个午觉，如果我有时间的话。",
+    "english_text": "I'd love to take a nap under this tree if I had the time.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1436": {
+    "dialogue_id": "1001100172",
+    "chinese_text": "这里真安静，只有我和这棵树。",
+    "english_text": "It’s so quiet here, just me and this tree.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1437": {
+    "dialogue_id": "1001100172",
+    "chinese_text": "这棵树一定见过很多故事，我真想听听。",
+    "english_text": "This tree must have witnessed many stories; I wish I could hear them.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1438": {
+    "dialogue_id": "1001100172",
+    "chinese_text": "有人在树枝上挂了许愿牌？我也想挂一个。",
+    "english_text": "Someone hung a wish plaque on a branch? I want to hang one too.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1439": {
+    "dialogue_id": "1001100172",
+    "chinese_text": "这棵树的根一定扎得很快，我也想在这里安家。",
+    "english_text": "This tree’s roots must be deep; I kind of want to make my home here too.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1440": {
+    "dialogue_id": "1001100172",
+    "chinese_text": "这棵树让我想起了我的家乡，那个也有很多树的地方。",
+    "english_text": "This tree reminds me of my hometown, a place with many trees.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1441": {
+    "dialogue_id": "1001100173",
+    "chinese_text": "这棵树看起来有点年头了，它的根扎得很深。",
+    "english_text": "This tree looks quite old; its roots are buried very deep.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1442": {
+    "dialogue_id": "1001100173",
+    "chinese_text": "我好像能听到这棵树在风中低语。",
+    "english_text": "I feel like I can hear the tree whispering in the wind.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1443": {
+    "dialogue_id": "1001100173",
+    "chinese_text": "这里的空气因为这棵树而变得更加清新。",
+    "english_text": "The air here is fresher because of this tree.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1444": {
+    "dialogue_id": "1001100173",
+    "chinese_text": "它的树皮摸起来很粗糙，但我喜欢这种质感。",
+    "english_text": "Its bark feels rough, but I like the texture.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1445": {
+    "dialogue_id": "1001100173",
+    "chinese_text": "我想在这棵树下睡个午觉。",
+    "english_text": "I’d like to take a nap under this tree.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1446": {
+    "dialogue_id": "1001100173",
+    "chinese_text": "这棵树是这个森林中最美丽的。",
+    "english_text": "This tree is the most beautiful one in the entire forest.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1447": {
+    "dialogue_id": "1001100173",
+    "chinese_text": "它的叶子在阳光下闪闪发光。",
+    "english_text": "Its leaves are shimmering in the sunlight.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1448": {
+    "dialogue_id": "1001100173",
+    "chinese_text": "我经常在这里和这棵树聊天。",
+    "english_text": "I often come here to chat with this tree.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1449": {
+    "dialogue_id": "1001100173",
+    "chinese_text": "这棵树见证了这个森林的许多故事。",
+    "english_text": "This tree has witnessed many stories of this forest.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1450": {
+    "dialogue_id": "1001100173",
+    "chinese_text": "这棵树的果实非常美味。",
+    "english_text": "The fruit of this tree is absolutely delicious.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1451": {
+    "dialogue_id": "1001100173",
+    "chinese_text": "我希望能保护这棵树，让它继续生长。",
+    "english_text": "I hope to protect this tree so it can keep growing.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1452": {
+    "dialogue_id": "1001100173",
+    "chinese_text": "这棵树的根好像有某种神秘的力量。",
+    "english_text": "The roots of this tree seem to possess some mysterious power.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1453": {
+    "dialogue_id": "1001100173",
+    "chinese_text": "它的树枝在天空中伸展，好像在向神祈祷。",
+    "english_text": "Its branches stretch toward the sky, as if praying to the gods.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1454": {
+    "dialogue_id": "1001100173",
+    "chinese_text": "我能感觉到这棵树蕴含着一股强大的生命力。",
+    "english_text": "I can feel a powerful life force within this tree.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1455": {
+    "dialogue_id": "1001100173",
+    "chinese_text": "这里是我的秘密基地，只有我和这棵树知道。",
+    "english_text": "This is my secret base; only the tree and I know about it.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1456": {
+    "dialogue_id": "1001100173",
+    "chinese_text": "这棵树的叶子在秋天会变成美丽的黄色。",
+    "english_text": "The leaves of this tree turn a beautiful yellow in autumn.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1457": {
+    "dialogue_id": "1001100173",
+    "chinese_text": "这棵树在冬天会变得更加光秃秃，但它依然很美。",
+    "english_text": "The tree becomes bare in winter, but it's still beautiful.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1458": {
+    "dialogue_id": "1001100173",
+    "chinese_text": "这棵树是我在这个森林中最好的朋友。",
+    "english_text": "This tree is my best friend in the forest.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1459": {
+    "dialogue_id": "1001100173",
+    "chinese_text": "这棵树的叶子在春天会变成美丽的绿色。",
+    "english_text": "The leaves turn a beautiful green in the spring.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1460": {
+    "dialogue_id": "1001100173",
+    "chinese_text": "这棵树的果实在夏天会变成美丽的红色。",
+    "english_text": "The fruit turns a beautiful red in the summer.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1461": {
+    "dialogue_id": "1001100174",
+    "chinese_text": "这棵树看起来很健康，叶子很绿",
+    "english_text": "This tree looks very healthy, the leaves are so green.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1462": {
+    "dialogue_id": "1001100174",
+    "chinese_text": "我记得这棵树在这里很久了",
+    "english_text": "I remember this tree being here for a long time.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1463": {
+    "dialogue_id": "1001100174",
+    "chinese_text": "树根很结实，一直延伸到地下",
+    "english_text": "The roots are very strong, reaching deep into the ground.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1464": {
+    "dialogue_id": "1001100174",
+    "chinese_text": "这里的空气真清新，多亏了这些树",
+    "english_text": "The air is so fresh here, thanks to these trees.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1465": {
+    "dialogue_id": "1001100174",
+    "chinese_text": "这棵树适合休息",
+    "english_text": "This tree is a good spot to take a rest.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1466": {
+    "dialogue_id": "1001100174",
+    "chinese_text": "这棵树的木材应该不错",
+    "english_text": "The wood from this tree should be of good quality.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1467": {
+    "dialogue_id": "1001100174",
+    "chinese_text": "这棵树的叶子在阳光下闪闪发光",
+    "english_text": "The leaves of this tree are glistening in the sun.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1468": {
+    "dialogue_id": "1001100174",
+    "chinese_text": "我喜欢在这里听鸟叫",
+    "english_text": "I enjoy listening to the birds chirping here.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1469": {
+    "dialogue_id": "1001100174",
+    "chinese_text": "这棵树的树皮很粗糙",
+    "english_text": "The bark of this tree is quite rough.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1470": {
+    "dialogue_id": "1001100174",
+    "chinese_text": "这棵树的影子很大，可以遮阳",
+    "english_text": "The tree casts a large shadow, perfect for shade.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1471": {
+    "dialogue_id": "1001100174",
+    "chinese_text": "我在这里感觉很平静",
+    "english_text": "I feel very peaceful here.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1472": {
+    "dialogue_id": "1001100174",
+    "chinese_text": "这棵树的叶子看起来很茂盛",
+    "english_text": "The leaves of this tree look very lush.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1473": {
+    "dialogue_id": "1001100174",
+    "chinese_text": "我在这里感觉很安全",
+    "english_text": "I feel very safe here.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1474": {
+    "dialogue_id": "1001100174",
+    "chinese_text": "这棵树的颜色很丰富",
+    "english_text": "The colors of this tree are very rich.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1475": {
+    "dialogue_id": "1001100174",
+    "chinese_text": "我喜欢这里的氛围",
+    "english_text": "I love the atmosphere here.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1476": {
+    "dialogue_id": "1001100174",
+    "chinese_text": "这棵树的形状很特别",
+    "english_text": "The shape of this tree is very unique.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1477": {
+    "dialogue_id": "1001100174",
+    "chinese_text": "我在这里感觉很放松",
+    "english_text": "I feel very relaxed here.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1478": {
+    "dialogue_id": "1001100174",
+    "chinese_text": "这棵树的叶子看起来很柔软",
+    "english_text": "The leaves of this tree look very soft.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1479": {
+    "dialogue_id": "1001100174",
+    "chinese_text": "我在这里感觉很舒适",
+    "english_text": "I feel very comfortable here.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1480": {
+    "dialogue_id": "1001100174",
+    "chinese_text": "这棵树的生命力很强",
+    "english_text": "This tree has very strong vitality.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1481": {
+    "dialogue_id": "1001100175",
+    "chinese_text": "这棵树看起来病恹恹的，叶子全黄了。",
+    "english_text": "This tree looks sickly; all its leaves have turned yellow.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1482": {
+    "dialogue_id": "1001100175",
+    "chinese_text": "即使生病了，它依然屹立不倒。",
+    "english_text": "Even though it's sick, it still stands tall.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1483": {
+    "dialogue_id": "1001100175",
+    "chinese_text": "如果我能治好它，也许能得到什么奖励。",
+    "english_text": "If I can cure it, maybe I'll get some kind of reward.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1484": {
+    "dialogue_id": "1001100175",
+    "chinese_text": "我想知道它为什么会生病。",
+    "english_text": "I wonder why it fell ill.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1485": {
+    "dialogue_id": "1001100175",
+    "chinese_text": "或许是因为土壤污染，或者是因为水源问题。",
+    "english_text": "Maybe it's soil pollution, or perhaps a problem with the water source.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1486": {
+    "dialogue_id": "1001100175",
+    "chinese_text": "我应该去找一些解药或治疗方法。",
+    "english_text": "I should go find some antidote or a way to treat it.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1487": {
+    "dialogue_id": "1001100175",
+    "chinese_text": "它的叶子正在一片片掉落。",
+    "english_text": "Its leaves are falling off one by one.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1488": {
+    "dialogue_id": "1001100175",
+    "chinese_text": "它的生命正在慢慢消逝。",
+    "english_text": "Its life is slowly fading away.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1489": {
+    "dialogue_id": "1001100175",
+    "chinese_text": "我感到很悲伤，看着它这样。",
+    "english_text": "It makes me sad to see it like this.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1490": {
+    "dialogue_id": "1001100175",
+    "chinese_text": "我希望它能快点好起来。",
+    "english_text": "I hope it gets better soon.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1491": {
+    "dialogue_id": "1001100175",
+    "chinese_text": "或许我可以用我的魔法治好它。",
+    "english_text": "Maybe I can cure it with my magic.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1492": {
+    "dialogue_id": "1001100175",
+    "chinese_text": "或者我可以请一位德鲁伊帮忙。",
+    "english_text": "Or I could ask a Druid for help.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1493": {
+    "dialogue_id": "1001100175",
+    "chinese_text": "这棵树对这个地区很重要，不能让它死掉。",
+    "english_text": "This tree is important to this area; we can't let it die.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1494": {
+    "dialogue_id": "1001100175",
+    "chinese_text": "我会尽一切努力治好它。",
+    "english_text": "I will do everything I can to cure it.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1495": {
+    "dialogue_id": "1001100175",
+    "chinese_text": "虽然它的叶子全黄了，但它的根还很强壮。",
+    "english_text": "Although its leaves are all yellow, its roots are still strong.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1496": {
+    "dialogue_id": "1001100175",
+    "chinese_text": "这给我了一点希望。",
+    "english_text": "This gives me a little bit of hope.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1497": {
+    "dialogue_id": "1001100175",
+    "chinese_text": "我会找到原因，并治好它。",
+    "english_text": "I will find the cause and fix it.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1498": {
+    "dialogue_id": "1001100175",
+    "chinese_text": "等它好起来，它的叶子会再次变绿。",
+    "english_text": "When it recovers, its leaves will turn green again.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1499": {
+    "dialogue_id": "1001100175",
+    "chinese_text": "它会重新焕发生机。",
+    "english_text": "It will burst with life once more.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1500": {
+    "dialogue_id": "1001100175",
+    "chinese_text": "这就是我的使命，保护大自然。",
+    "english_text": "This is my mission: to protect nature.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1501": {
+    "dialogue_id": "1001100176",
+    "chinese_text": "这棵树的叶子已经全黄了，秋天真的到了。",
+    "english_text": "The leaves are all yellow; autumn has truly arrived.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1502": {
+    "dialogue_id": "1001100176",
+    "chinese_text": "看起来是一棵很古老的树，树干真粗。",
+    "english_text": "It looks like a very ancient tree; the trunk is so thick.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1503": {
+    "dialogue_id": "1001100176",
+    "chinese_text": "不知道这棵树在这里矗立了多少年。",
+    "english_text": "I wonder how many years this tree has stood here.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1504": {
+    "dialogue_id": "1001100176",
+    "chinese_text": "这里的景色真不错，适合休息一下。",
+    "english_text": "The scenery here is quite nice, perfect for a short break.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1505": {
+    "dialogue_id": "1001100176",
+    "chinese_text": "这棵树的颜色真漂亮，金黄金黄的。",
+    "english_text": "The color of this tree is beautiful—golden yellow.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1506": {
+    "dialogue_id": "1001100176",
+    "chinese_text": "我喜欢这棵树的像素风格，很有趣。",
+    "english_text": "I like the pixel style of this tree; it's very interesting.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1507": {
+    "dialogue_id": "1001100176",
+    "chinese_text": "这棵树下好像很凉快，真想在这睡一觉。",
+    "english_text": "It seems cool under this tree; I'd love to take a nap here.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1508": {
+    "dialogue_id": "1001100176",
+    "chinese_text": "树根那里好像有些小草，生命力真顽强。",
+    "english_text": "There’s some grass by the roots; what resilient life.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1509": {
+    "dialogue_id": "1001100176",
+    "chinese_text": "这里的空气真清新，都是大自然的味道。",
+    "english_text": "The air is so fresh here, filled with the scent of nature.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1510": {
+    "dialogue_id": "1001100176",
+    "chinese_text": "这棵树是这个场景的焦点，非常引人注目。",
+    "english_text": "This tree is the focus of this scene, very eye-catching.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1511": {
+    "dialogue_id": "1001100176",
+    "chinese_text": "这里的像素艺术真精美，连树叶的纹理都看得清楚。",
+    "english_text": "The pixel art here is exquisite; you can even see the texture of the leaves.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1512": {
+    "dialogue_id": "1001100176",
+    "chinese_text": "这棵树让我想起了我的家乡，那里也有很多这样的树。",
+    "english_text": "This tree reminds me of my hometown; there were many trees like this there.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1513": {
+    "dialogue_id": "1001100176",
+    "chinese_text": "这棵树下也许藏着什么秘密，我要仔细找找。",
+    "english_text": "Maybe there's a secret hidden under this tree; I should look carefully.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1514": {
+    "dialogue_id": "1001100176",
+    "chinese_text": "这里的颜色搭配真和谐，让人感觉很舒服。",
+    "english_text": "The color coordination here is so harmonious; it feels very comfortable.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1515": {
+    "dialogue_id": "1001100176",
+    "chinese_text": "这棵树的形状真奇特，像一个巨大的蘑菇。",
+    "english_text": "The shape of this tree is peculiar, like a giant mushroom.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1516": {
+    "dialogue_id": "1001100176",
+    "chinese_text": "这里的像素风格让我想起了小时候玩的游戏。",
+    "english_text": "The pixel style reminds me of the games I played as a kid.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1517": {
+    "dialogue_id": "1001100176",
+    "chinese_text": "这棵树下真安静，只有风吹过树叶的声音。",
+    "english_text": "It's so quiet under this tree, only the sound of the wind through the leaves.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1518": {
+    "dialogue_id": "1001100176",
+    "chinese_text": "这棵树真高，我要抬头才能看到树顶。",
+    "english_text": "This tree is so tall; I have to look up to see the top.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1519": {
+    "dialogue_id": "1001100176",
+    "chinese_text": "这里的景色真美，我要把它拍下来。",
+    "english_text": "The scenery is beautiful; I want to take a picture of it.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1520": {
+    "dialogue_id": "1001100176",
+    "chinese_text": "这棵树让我想起了很多美好的回忆。",
+    "english_text": "This tree brings back many wonderful memories.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1521": {
+    "dialogue_id": "1001100177",
+    "chinese_text": "这棵树看起来很精神啊！",
+    "english_text": "This tree looks very energetic!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1522": {
+    "dialogue_id": "1001100177",
+    "chinese_text": "真是一棵强壮的大树，比我都高。",
+    "english_text": "What a strong tree, it’s taller than me.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1523": {
+    "dialogue_id": "1001100177",
+    "chinese_text": "夏天在这里乘凉一定很舒服。",
+    "english_text": "It must be very comfortable to enjoy the shade here in summer.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1524": {
+    "dialogue_id": "1001100177",
+    "chinese_text": "这里的树木都长得很好，多亏了领主的治理。",
+    "english_text": "The trees here grow well, thanks to the lord's management.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1525": {
+    "dialogue_id": "1001100177",
+    "chinese_text": "我能感觉到这棵树里流动着生命力。",
+    "english_text": "I can feel the life force flowing within this tree.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1526": {
+    "dialogue_id": "1001100177",
+    "chinese_text": "这棵树的木材看起来不错，可以做成好家具。",
+    "english_text": "The wood from this tree looks good; it could make fine furniture.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1527": {
+    "dialogue_id": "1001100177",
+    "chinese_text": "嗯，我要在这里刻个记号，免得迷路。",
+    "english_text": "Hmm, I'll carve a mark here so I don't get lost.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1528": {
+    "dialogue_id": "1001100177",
+    "chinese_text": "哎，这树皮太硬了，刻不动。",
+    "english_text": "Sigh, the bark is too hard; I can't carve into it.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1529": {
+    "dialogue_id": "1001100177",
+    "chinese_text": "这树枝上的叶子真绿啊，看得我心情好多了。",
+    "english_text": "The leaves on these branches are so green, they really cheer me up.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1530": {
+    "dialogue_id": "1001100177",
+    "chinese_text": "这棵树看起来有些年头了。",
+    "english_text": "This tree looks like it’s been around for quite a few years.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1531": {
+    "dialogue_id": "1001100177",
+    "chinese_text": "这里风景真好，有山有水还有树。",
+    "english_text": "The scenery is great here, with mountains, water, and trees.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1532": {
+    "dialogue_id": "1001100177",
+    "chinese_text": "感觉这棵树在看着我……是我错觉吗？",
+    "english_text": "I feel like this tree is watching me... is it just my imagination?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1533": {
+    "dialogue_id": "1001100177",
+    "chinese_text": "这里的空气真清新，多亏了这些树。",
+    "english_text": "The air is so fresh here, thanks to all these trees.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1534": {
+    "dialogue_id": "1001100177",
+    "chinese_text": "这棵树的根部真粗壮，一定抓地很牢。",
+    "english_text": "The roots are so thick; they must have a very firm grip on the ground.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1535": {
+    "dialogue_id": "1001100177",
+    "chinese_text": "如果我能爬上去，就能看得更远了。",
+    "english_text": "If I could climb up, I’d be able to see much further.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1536": {
+    "dialogue_id": "1001100177",
+    "chinese_text": "唉，我太胖了，爬不上去。",
+    "english_text": "Alas, I'm too heavy to climb up.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1537": {
+    "dialogue_id": "1001100177",
+    "chinese_text": "这棵树的叶子沙沙作响，像在唱歌。",
+    "english_text": "The leaves are rustling, sounding like they’re singing.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1538": {
+    "dialogue_id": "1001100177",
+    "chinese_text": "有没有人在树下藏了宝贝？让我找找。",
+    "english_text": "Did anyone hide treasure under the tree? Let me look.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1539": {
+    "dialogue_id": "1001100177",
+    "chinese_text": "嗯，只有些蚂蚁，真失望。",
+    "english_text": "Hmm, just some ants, how disappointing.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1540": {
+    "dialogue_id": "1001100177",
+    "chinese_text": "走啦走啦，还要继续冒险呢。",
+    "english_text": "Time to go, the adventure must continue.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1541": {
+    "dialogue_id": "1001100178",
+    "chinese_text": "这棵树真高啊！我也想长得这么高。",
+    "english_text": "This tree is so tall! I wish I could grow that tall too.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1542": {
+    "dialogue_id": "1001100178",
+    "chinese_text": "风吹过树叶沙沙作响，听起来像是在唱歌。",
+    "english_text": "The wind rustling through the leaves sounds like singing.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1543": {
+    "dialogue_id": "1001100178",
+    "chinese_text": "夏天在这里乘凉真不错。",
+    "english_text": "Resting in the shade here during summer is wonderful.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1544": {
+    "dialogue_id": "1001100178",
+    "chinese_text": "树皮摸起来很粗糙。",
+    "english_text": "The bark feels very rough to the touch.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1545": {
+    "dialogue_id": "1001100178",
+    "chinese_text": "这树根都露在外面了，小心别绊倒。",
+    "english_text": "The roots are exposed; be careful not to trip.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1546": {
+    "dialogue_id": "1001100178",
+    "chinese_text": "这棵树看起来很有精神，叶子很绿。",
+    "english_text": "This tree looks very vibrant with such green leaves.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1547": {
+    "dialogue_id": "1001100178",
+    "chinese_text": "秋天的时候，树叶会变黄吗？",
+    "english_text": "Will the leaves turn yellow when autumn comes?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1548": {
+    "dialogue_id": "1001100178",
+    "chinese_text": "我能在这棵树上搭个树屋吗？",
+    "english_text": "Can I build a treehouse on this tree?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1549": {
+    "dialogue_id": "1001100178",
+    "chinese_text": "树上有没有鸟窝？",
+    "english_text": "Are there any bird nests in the tree?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1550": {
+    "dialogue_id": "1001100178",
+    "chinese_text": "这棵树在这里站了很久了吧。",
+    "english_text": "This tree must have stood here for a long time.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1551": {
+    "dialogue_id": "1001100178",
+    "chinese_text": "这里的光线被树叶挡住了，有点暗。",
+    "english_text": "The light is blocked by the leaves; it's a bit dark here.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1552": {
+    "dialogue_id": "1001100178",
+    "chinese_text": "这棵树好像比我还要高两倍。",
+    "english_text": "This tree seems to be twice as tall as I am.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1553": {
+    "dialogue_id": "1001100178",
+    "chinese_text": "我能爬上去吗？看起来有点难。",
+    "english_text": "Can I climb up? It looks a bit difficult.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1554": {
+    "dialogue_id": "1001100178",
+    "chinese_text": "这棵树的颜色真漂亮。",
+    "english_text": "The color of this tree is really beautiful.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1555": {
+    "dialogue_id": "1001100178",
+    "chinese_text": "树叶的像素点好清晰。",
+    "english_text": "The pixels of the leaves are so clear.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1556": {
+    "dialogue_id": "1001100178",
+    "chinese_text": "这里有一股清新的木头味。",
+    "english_text": "There’s a fresh scent of wood here.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1557": {
+    "dialogue_id": "1001100178",
+    "chinese_text": "这棵树是游戏里的装饰吗？",
+    "english_text": "Is this tree just a decoration in the game?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1558": {
+    "dialogue_id": "1001100178",
+    "chinese_text": "我觉得这棵树可能藏着什么秘密。",
+    "english_text": "I feel like this tree might be hiding a secret.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1559": {
+    "dialogue_id": "1001100178",
+    "chinese_text": "这棵树站在这里，就像一个守护者。",
+    "english_text": "Standing here, this tree looks like a guardian.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1560": {
+    "dialogue_id": "1001100178",
+    "chinese_text": "它的树干很粗，看来是一棵老树了。",
+    "english_text": "Its trunk is very thick; it must be an old tree.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1561": {
+    "dialogue_id": "1001100179",
+    "chinese_text": "这棵树真茂盛，是个乘凉的好地方",
+    "english_text": "This tree is so lush, a great place for shade.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1562": {
+    "dialogue_id": "1001100179",
+    "chinese_text": "不知道这棵树活了多久了",
+    "english_text": "I wonder how long this tree has lived.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1563": {
+    "dialogue_id": "1001100179",
+    "chinese_text": "树根居然长在岩石上，生命力真顽强",
+    "english_text": "The roots actually grow on rock; what resilient vitality.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1564": {
+    "dialogue_id": "1001100179",
+    "chinese_text": "风吹过树叶的声音真好听",
+    "english_text": "The sound of the wind through the leaves is lovely.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1565": {
+    "dialogue_id": "1001100179",
+    "chinese_text": "这里居然有棵这么大的树，以前没注意过",
+    "english_text": "I never noticed such a large tree here before.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1566": {
+    "dialogue_id": "1001100179",
+    "chinese_text": "这树皮摸起来很粗糙",
+    "english_text": "The bark feels very rough.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1567": {
+    "dialogue_id": "1001100179",
+    "chinese_text": "树荫下感觉凉快多了",
+    "english_text": "It feels much cooler in the shade of the tree.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1568": {
+    "dialogue_id": "1001100179",
+    "chinese_text": "如果我有把斧头...算了，还是别破坏环境了",
+    "english_text": "If I had an axe... never mind, better not damage the environment.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1569": {
+    "dialogue_id": "1001100179",
+    "chinese_text": "这棵树看起来很健康，充满了活力",
+    "english_text": "This tree looks very healthy and full of life.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1570": {
+    "dialogue_id": "1001100179",
+    "chinese_text": "这让我想起了小时候家门口的那棵树",
+    "english_text": "This reminds me of the tree in front of my house when I was a kid.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1571": {
+    "dialogue_id": "1001100179",
+    "chinese_text": "这里真是个休息的好地方",
+    "english_text": "This is truly a great spot to rest.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1572": {
+    "dialogue_id": "1001100179",
+    "chinese_text": "树上会有鸟巢吗？",
+    "english_text": "I wonder if there are bird nests in the tree?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1573": {
+    "dialogue_id": "1001100179",
+    "chinese_text": "这棵树的像素风格挺特别的",
+    "english_text": "The pixel style of this tree is quite unique.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1574": {
+    "dialogue_id": "1001100179",
+    "chinese_text": "希望这棵树能一直长在这里",
+    "english_text": "I hope this tree can keep growing here forever.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1575": {
+    "dialogue_id": "1001100179",
+    "chinese_text": "感觉这棵树是有灵性的",
+    "english_text": "I feel like this tree has a soul.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1576": {
+    "dialogue_id": "1001100179",
+    "chinese_text": "不知道这棵树下有没有埋着什么宝藏",
+    "english_text": "I wonder if there's any treasure buried under this tree.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1577": {
+    "dialogue_id": "1001100179",
+    "chinese_text": "这里的空气因为这棵树变得更清新了",
+    "english_text": "The air has become fresher because of this tree.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1578": {
+    "dialogue_id": "1001100179",
+    "chinese_text": "这棵树长得真直",
+    "english_text": "This tree has grown so straight.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1579": {
+    "dialogue_id": "1001100179",
+    "chinese_text": "这里真安静，只有我和这棵树",
+    "english_text": "It's so quiet here, just me and this tree.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1580": {
+    "dialogue_id": "1001100179",
+    "chinese_text": "该继续赶路了，再见，老朋友",
+    "english_text": "Time to keep moving. Goodbye, old friend.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1581": {
+    "dialogue_id": "1001100180",
+    "chinese_text": "这片灌木丛看起来很茂密，也许里面藏着什么好东西？",
+    "english_text": "This bush looks very dense; maybe there’s something good hidden inside?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1582": {
+    "dialogue_id": "1001100180",
+    "chinese_text": "注意脚下！灌木丛可能有刺，别被划伤了。",
+    "english_text": "Watch your step! The bushes might have thorns, don't get scratched.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1583": {
+    "dialogue_id": "1001100180",
+    "chinese_text": "这些绿叶在微风中摇曳，景色真不错。",
+    "english_text": "These green leaves swaying in the breeze—it’s a nice view.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1584": {
+    "dialogue_id": "1001100180",
+    "chinese_text": "哎呀，我的衣角被这片灌木丛挂住了！",
+    "english_text": "Oh no, my hem got caught on the bush!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1585": {
+    "dialogue_id": "1001100180",
+    "chinese_text": "灌木丛后面隐约能看到一条小路，我们要不要去探索一下？",
+    "english_text": "I can vaguely see a path behind the bushes, shall we explore?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1586": {
+    "dialogue_id": "1001100180",
+    "chinese_text": "这里的灌木丛生长得真是肆无忌惮，几乎要把路堵死了。",
+    "english_text": "The bushes here grow so recklessly, they’ve almost blocked the road.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1587": {
+    "dialogue_id": "1001100180",
+    "chinese_text": "小心！有些神奇生物喜欢在灌木丛里筑巢。",
+    "english_text": "Careful! Some magical creatures like to nest in bushes.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1588": {
+    "dialogue_id": "1001100180",
+    "chinese_text": "这些灌木丛是天然的屏障，可以用来躲避敌人的视线。",
+    "english_text": "These bushes are a natural barrier, perfect for staying out of enemy sight.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1589": {
+    "dialogue_id": "1001100180",
+    "chinese_text": "哇，这片灌木丛里开满了不知名的小花，真漂亮。",
+    "english_text": "Wow, this bush is full of unknown little flowers, so pretty.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1590": {
+    "dialogue_id": "1001100180",
+    "chinese_text": "这里的灌木丛似乎比其他地方的要暗淡一些，也许有什么异样？",
+    "english_text": "The bushes here seem duller than elsewhere; maybe something is wrong?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1591": {
+    "dialogue_id": "1001100180",
+    "chinese_text": "我们需要一把锋利的剪刀来修剪这些挡路的灌木丛。",
+    "english_text": "We need sharp shears to trim these obstructing bushes.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1592": {
+    "dialogue_id": "1001100180",
+    "chinese_text": "灌木丛中传来沙沙的响声，是什么在移动？",
+    "english_text": "A rustling sound is coming from the bushes—what's moving?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1593": {
+    "dialogue_id": "1001100180",
+    "chinese_text": "这片灌木丛真是一个捉迷藏的好地方！",
+    "english_text": "This bush is a perfect spot for hide-and-seek!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1594": {
+    "dialogue_id": "1001100180",
+    "chinese_text": "注意观察灌木丛的形状，有时它们会给出一些线索。",
+    "english_text": "Pay attention to the shape of the bushes; sometimes they provide clues.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1595": {
+    "dialogue_id": "1001100180",
+    "chinese_text": "这些灌木丛的叶子看起来有些枯萎，是不是缺水了？",
+    "english_text": "The leaves on these bushes look a bit withered; is it lacking water?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1596": {
+    "dialogue_id": "1001100180",
+    "chinese_text": "在野外，灌木丛可以为我们提供一些荫蔽，免受烈日暴晒。",
+    "english_text": "In the wild, bushes can provide some shade from the scorching sun.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1597": {
+    "dialogue_id": "1001100180",
+    "chinese_text": "小心！有些灌木丛是带有剧毒的，千万不要误食。",
+    "english_text": "Careful! Some bushes are poisonous, don't eat anything by mistake.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1598": {
+    "dialogue_id": "1001100180",
+    "chinese_text": "这些灌木丛是这片森林的守护者，见证了无数故事。",
+    "english_text": "These bushes are the guardians of this forest, witnessing countless stories.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1599": {
+    "dialogue_id": "1001100180",
+    "chinese_text": "我们可以在灌木丛旁边生火，但要注意火况，别把灌木丛引燃了。",
+    "english_text": "We can build a fire near the bushes, but be careful not to ignite them.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1600": {
+    "dialogue_id": "1001100180",
+    "chinese_text": "这片灌木丛真是太美了，我要把它的样子画下来！",
+    "english_text": "This bush is so beautiful, I want to draw it!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1601": {
+    "dialogue_id": "1001100181",
+    "chinese_text": "这棵灌木看起来好鲜艳，粉红粉红的。",
+    "english_text": "This shrub looks so vibrant, all pink and pretty.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1602": {
+    "dialogue_id": "1001100181",
+    "chinese_text": "它是怎么长成这个样子的？",
+    "english_text": "How did it grow to look like this?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1603": {
+    "dialogue_id": "1001100181",
+    "chinese_text": "这里的空气真好，连灌木也长得这么有活力。",
+    "english_text": "The air is so good here, even the shrubs grow with such vitality.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1604": {
+    "dialogue_id": "1001100181",
+    "chinese_text": "我想采摘一些粉红色的叶子，装饰我的家。",
+    "english_text": "I want to pick some pink leaves to decorate my home.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1605": {
+    "dialogue_id": "1001100181",
+    "chinese_text": "这棵灌木会不会是魔法灌木？",
+    "english_text": "Could this be a magical shrub?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1606": {
+    "dialogue_id": "1001100181",
+    "chinese_text": "我喜欢这棵灌木的颜色，真特别。",
+    "english_text": "I love the color of this shrub; it's very unique.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1607": {
+    "dialogue_id": "1001100181",
+    "chinese_text": "它是这里的独特风景。",
+    "english_text": "it's a unique part of the scenery here.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1608": {
+    "dialogue_id": "1001100181",
+    "chinese_text": "我想把它移植到我的花园里。",
+    "english_text": "I’d like to transplant it into my garden.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1609": {
+    "dialogue_id": "1001100181",
+    "chinese_text": "这棵灌木的形状有点奇怪，像个小怪物。",
+    "english_text": "The shape of this shrub is a bit odd, like a little monster.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1610": {
+    "dialogue_id": "1001100181",
+    "chinese_text": "这里的水和土壤一定很特别，才能养活这棵灌木。",
+    "english_text": "The water and soil here must be special to sustain this shrub.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1611": {
+    "dialogue_id": "1001100181",
+    "chinese_text": "这棵灌木是不是有剧毒？我还是别碰它。",
+    "english_text": "Is this shrub poisonous? I'd better not touch it.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1612": {
+    "dialogue_id": "1001100181",
+    "chinese_text": "这里的风景真美，连灌木也长得这么好看。",
+    "english_text": "The scenery is so beautiful; even the shrubs look lovely.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1613": {
+    "dialogue_id": "1001100181",
+    "chinese_text": "我想在这里野餐，看着这棵灌木。",
+    "english_text": "I want to have a picnic here while looking at this shrub.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1614": {
+    "dialogue_id": "1001100181",
+    "chinese_text": "这棵灌木的颜色让我想起了春天。",
+    "english_text": "The color of this shrub reminds me of springtime.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1615": {
+    "dialogue_id": "1001100181",
+    "chinese_text": "这里的鸟儿一定很喜欢这棵灌木。",
+    "english_text": "The birds here must really like this shrub.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1616": {
+    "dialogue_id": "1001100181",
+    "chinese_text": "这棵灌木的叶子摸起来一定很柔软。",
+    "english_text": "The leaves of this shrub must feel very soft to the touch.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1617": {
+    "dialogue_id": "1001100181",
+    "chinese_text": "我想在这里画画，记录下这棵灌木。",
+    "english_text": "I want to paint here and record this shrub.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1618": {
+    "dialogue_id": "1001100181",
+    "chinese_text": "这棵灌木的香味一定很迷人。",
+    "english_text": "The scent of this shrub must be quite enchanting.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1619": {
+    "dialogue_id": "1001100181",
+    "chinese_text": "这里真是一个神奇的地方，连灌木也这么特别。",
+    "english_text": "This is truly a magical place where even the shrubs are so special.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1620": {
+    "dialogue_id": "1001100181",
+    "chinese_text": "我会把这棵灌木推荐给我的朋友们。",
+    "english_text": "I will recommend this shrub to my friends.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1621": {
+    "dialogue_id": "1001100182",
+    "chinese_text": "这灌木丛颜色真怪，是蓝紫色的，很少见呢。",
+    "english_text": "The color of this bush is so strange—blue-violet, quite rare.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1622": {
+    "dialogue_id": "1001100182",
+    "chinese_text": "这颜色太不自然了，感觉有点儿瘆人……",
+    "english_text": "This color is so unnatural, it feels a bit creepy...",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1623": {
+    "dialogue_id": "1001100182",
+    "chinese_text": "颜色这么深，里面会不会藏着什么危险的东西？",
+    "english_text": "It's so dark; could there be something dangerous hidden inside?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1624": {
+    "dialogue_id": "1001100182",
+    "chinese_text": "这里面，是不是有什么东西在盯着我看？",
+    "english_text": "Is there something in there staring at me?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1625": {
+    "dialogue_id": "1001100182",
+    "chinese_text": "每次经过这里，我都觉得心神不宁，怪可怕的。",
+    "english_text": "Every time I pass by, I feel uneasy; it's quite scary.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1626": {
+    "dialogue_id": "1001100182",
+    "chinese_text": "这灌木……它好像在微微颤动？是我眼花了吗？",
+    "english_text": "This bush... is it trembling slightly? Or am I seeing things?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1627": {
+    "dialogue_id": "1001100182",
+    "chinese_text": "这上面好像有什么紫色的纹路……还是符号？看不清楚。",
+    "english_text": "There seem to be some purple patterns on it... or symbols? I can't see clearly.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1628": {
+    "dialogue_id": "1001100182",
+    "chinese_text": "这种颜色，该不会是中毒了吧？我还是离远点儿。",
+    "english_text": "Could this color mean it's poisoned? I'd better stay away.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1629": {
+    "dialogue_id": "1001100182",
+    "chinese_text": "这灌木看起来怪怪的，总觉得它不是普通的植物。",
+    "english_text": "This bush looks weird; I feel like it's no ordinary plant.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1630": {
+    "dialogue_id": "1001100182",
+    "chinese_text": "或许我可以用我的剑砍砍看？万一有什么发现呢。",
+    "english_text": "Maybe I should try hacking at it with my sword? I might find something.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1631": {
+    "dialogue_id": "1001100182",
+    "chinese_text": "唔，要是它能掉点什么稀有的东西就好了，比如这种颜色的叶子。",
+    "english_text": "Hmm, it’d be great if it dropped something rare, like these colored leaves.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1632": {
+    "dialogue_id": "1001100182",
+    "chinese_text": "颜色越深，毒性越强……这在森林里可是常识。",
+    "english_text": "The darker the color, the stronger the toxin... that's common knowledge in the forest.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1633": {
+    "dialogue_id": "1001100182",
+    "chinese_text": "它看起来好孤独啊，在这里只有它一个是这种颜色。",
+    "english_text": "It looks so lonely; it's the only one here with this color.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1634": {
+    "dialogue_id": "1001100182",
+    "chinese_text": "这紫色和蓝色的渐变，倒是挺好看的，就是感觉不太祥和。",
+    "english_text": "This purple and blue gradient is actually quite nice, but it doesn't feel peaceful.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1635": {
+    "dialogue_id": "1001100182",
+    "chinese_text": "或许我可以带点样本回去，给炼金术士看看。",
+    "english_text": "Maybe I could take a sample back for the alchemist to look at.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1636": {
+    "dialogue_id": "1001100182",
+    "chinese_text": "这上面的紫色环状物，像是一个个小眼睛一样。",
+    "english_text": "Those purple rings look like a bunch of little eyes.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1637": {
+    "dialogue_id": "1001100182",
+    "chinese_text": "这灌木长在这里，该不会是有什么风水讲究吧？",
+    "english_text": "Could the placement of this bush have something to do with Feng Shui?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1638": {
+    "dialogue_id": "1001100182",
+    "chinese_text": "还是快点离开这里吧，这地方让我浑身难受。",
+    "english_text": "Let's get out of here; this place makes my skin crawl.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1639": {
+    "dialogue_id": "1001100182",
+    "chinese_text": "看起来没什么特别的，就是颜色有点儿不一样。",
+    "english_text": "It doesn't seem like much, just the color is a bit different.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1640": {
+    "dialogue_id": "1001100182",
+    "chinese_text": "这灌木丛，一定藏着什么我不懂的秘密。",
+    "english_text": "This bush must be hiding a secret I don't understand.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1641": {
+    "dialogue_id": "1001100183",
+    "chinese_text": "这丛灌木长得可真茂盛，把路都快遮住了。",
+    "english_text": "This shrub has grown so lush, it’s almost covering the path.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1642": {
+    "dialogue_id": "1001100183",
+    "chinese_text": "嗯……闻起来有一股泥土和清新的草木味。",
+    "english_text": "Hmm... it smells like earth and fresh greenery.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1643": {
+    "dialogue_id": "1001100183",
+    "chinese_text": "哎呀，小心，这上面有些刺，可别扎到了。",
+    "english_text": "Oh, watch out, there are some thorns on this, don't get pricked.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1644": {
+    "dialogue_id": "1001100183",
+    "chinese_text": "这片绿意看着真让人心情舒畅。",
+    "english_text": "This greenery is really refreshing to look at.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1645": {
+    "dialogue_id": "1001100183",
+    "chinese_text": "每次经过这里，都感觉空气特别好。",
+    "english_text": "Every time I pass by here, the air feels especially good.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1646": {
+    "dialogue_id": "1001100183",
+    "chinese_text": "这里面是不是藏着什么小动物？",
+    "english_text": "Is there some small animal hiding inside?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1647": {
+    "dialogue_id": "1001100183",
+    "chinese_text": "这些叶子的颜色层次感很丰富嘛。",
+    "english_text": "The layers of color in these leaves are quite rich.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1648": {
+    "dialogue_id": "1001100183",
+    "chinese_text": "听说这种灌木的果实可以酿酒，不知道是不是真的。",
+    "english_text": "I heard the fruit of this shrub can be used for making wine; I wonder if it’s true.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1649": {
+    "dialogue_id": "1001100183",
+    "chinese_text": "哇，好大一团灌木，简直像个小迷宫。",
+    "english_text": "Wow, what a huge bunch of shrubs, it’s almost like a little maze.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1650": {
+    "dialogue_id": "1001100183",
+    "chinese_text": "夏天在它旁边乘凉肯定很不错。",
+    "english_text": "Resting in the shade next to it in summer would be great.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1651": {
+    "dialogue_id": "1001100183",
+    "chinese_text": "这灌木看起来很健康，生命力真顽强。",
+    "english_text": "This shrub looks very healthy, such strong vitality.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1652": {
+    "dialogue_id": "1001100183",
+    "chinese_text": "这里以前好像没这么大一丛，长得真快。",
+    "english_text": "It didn’t seem this big before; it sure grows fast.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1653": {
+    "dialogue_id": "1001100183",
+    "chinese_text": "如果我是一只兔子，我就住在里面。",
+    "english_text": "If I were a rabbit, I’d live inside it.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1654": {
+    "dialogue_id": "1001100183",
+    "chinese_text": "这灌木的形状……嗯，有点像个大绿球。",
+    "english_text": "The shape of this shrub... hmm, a bit like a big green ball.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1655": {
+    "dialogue_id": "1001100183",
+    "chinese_text": "这些小叶子在风中摇曳的样子挺可爱的。",
+    "english_text": "These little leaves swaying in the wind are quite cute.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1656": {
+    "dialogue_id": "1001100183",
+    "chinese_text": "这里面会不会有掉落的硬币？我来找找看。",
+    "english_text": "Could there be any dropped coins inside? Let me look.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1657": {
+    "dialogue_id": "1001100183",
+    "chinese_text": "这里的叶子好像比别处的更绿一些。",
+    "english_text": "The leaves here seem greener than in other places.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1658": {
+    "dialogue_id": "1001100183",
+    "chinese_text": "这丛灌木是这个花园的一大景观。",
+    "english_text": "This patch of shrubs is a major feature of this garden.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1659": {
+    "dialogue_id": "1001100183",
+    "chinese_text": "走近一看，里面的树枝错综复杂。",
+    "english_text": "Looking closely, the branches inside are quite intricate.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1660": {
+    "dialogue_id": "1001100183",
+    "chinese_text": "阳光洒在上面，叶子都在闪闪发光呢。",
+    "english_text": "With the sun shining on it, the leaves are all shimmering.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1661": {
+    "dialogue_id": "1001100184",
+    "chinese_text": "这丛灌木长得可真茂盛，都快把路给挡住了。",
+    "english_text": "This bush is growing so lushly; it’s almost blocking the path.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1662": {
+    "dialogue_id": "1001100184",
+    "chinese_text": "里面是不是藏了什么东西？总觉得有视线……",
+    "english_text": "Is something hidden inside? I feel like I'm being watched...",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1663": {
+    "dialogue_id": "1001100184",
+    "chinese_text": "颜色好奇怪的灌木，上半部分是青色，下半部分是深蓝色。",
+    "english_text": "What a strange color for a bush—cyan on top and deep blue on the bottom.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1664": {
+    "dialogue_id": "1001100184",
+    "chinese_text": "哎呀，小心别被树枝挂到了。",
+    "english_text": "Oops, be careful not to get snagged by the branches.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1665": {
+    "dialogue_id": "1001100184",
+    "chinese_text": "这味道……有点提神，又有点奇怪。",
+    "english_text": "This scent... it's a bit refreshing but also a little strange.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1666": {
+    "dialogue_id": "1001100184",
+    "chinese_text": "这丛灌木好像是新搬来的，以前没见过。",
+    "english_text": "This bush seems new; I haven't seen it before.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1667": {
+    "dialogue_id": "1001100184",
+    "chinese_text": "这里面会不会有野兔什么的？",
+    "english_text": "Could there be wild rabbits or something in there?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1668": {
+    "dialogue_id": "1001100184",
+    "chinese_text": "真想放把火烧了它，看着就碍眼。",
+    "english_text": "I really want to set it on fire; it's such an eyesore.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1669": {
+    "dialogue_id": "1001100184",
+    "chinese_text": "这种颜色的植物，在别的地图可没见过。",
+    "english_text": "I’ve never seen a plant of this color on other maps.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1670": {
+    "dialogue_id": "1001100184",
+    "chinese_text": "这颜色，是不是被魔法影响了？",
+    "english_text": "Could this color be due to magical influence?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1671": {
+    "dialogue_id": "1001100184",
+    "chinese_text": "这里面肯定藏着什么不可告人的秘密。",
+    "english_text": "There must be some unspeakable secret hidden in here.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1672": {
+    "dialogue_id": "1001100184",
+    "chinese_text": "哎呀，我的金币是不是掉这附近了？",
+    "english_text": "Oh, did I drop my gold coins near here?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1673": {
+    "dialogue_id": "1001100184",
+    "chinese_text": "这灌木丛，看着就像是个天然的屏障。",
+    "english_text": "This bush looks like a natural barrier.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1674": {
+    "dialogue_id": "1001100184",
+    "chinese_text": "这颜色，让我想起了家乡的那条河。",
+    "english_text": "This color reminds me of the river back in my hometown.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1675": {
+    "dialogue_id": "1001100184",
+    "chinese_text": "这里面是不是有魔兽？",
+    "english_text": "Are there magical beasts inside?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1676": {
+    "dialogue_id": "1001100184",
+    "chinese_text": "这里面肯定藏着什么宝贝！",
+    "english_text": "There must be some treasure hidden in there!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1677": {
+    "dialogue_id": "1001100184",
+    "chinese_text": "这颜色，看着就像是被诅咒了。",
+    "english_text": "This color makes it look like it's been cursed.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1678": {
+    "dialogue_id": "1001100184",
+    "chinese_text": "这灌木丛，看着就像是个迷宫。",
+    "english_text": "This bush looks like a maze.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1679": {
+    "dialogue_id": "1001100184",
+    "chinese_text": "这里面肯定藏着什么陷阱！",
+    "english_text": "There must be some traps hidden inside!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1680": {
+    "dialogue_id": "1001100184",
+    "chinese_text": "这颜色，看着就像是个神秘的入口。",
+    "english_text": "This color makes it look like a mysterious entrance.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1681": {
+    "dialogue_id": "1001100185",
+    "chinese_text": "这团粉红色的植物好生奇怪，怎么感觉像一大坨棉花糖扎在泥巴里？",
+    "english_text": "This bunch of pink plants is so strange; why does it look like a giant marshmallow stuck in the mud?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1682": {
+    "dialogue_id": "1001100185",
+    "chinese_text": "这里的泥土颜色这么深，想必这棵植物是从很远的地方移植过来的吧。",
+    "english_text": "The soil here is so dark; this plant must have been transplanted from somewhere far away.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1683": {
+    "dialogue_id": "1001100185",
+    "chinese_text": "居然是像素风格的植物，看来我是真的生活在一个电子游戏里了。",
+    "english_text": "Pixelated plants? It seems I really am living in a video game.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1684": {
+    "dialogue_id": "1001100185",
+    "chinese_text": "这么完美的圆形，是人工修剪的，还是有什么魔法的影响？",
+    "english_text": "Such a perfect circle—is it manually trimmed, or is it under some magical influence?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1685": {
+    "dialogue_id": "1001100185",
+    "chinese_text": "这棵植物的根部黑乎乎的，看起来不太健康，也许我应该给它施点肥。",
+    "english_text": "The roots are all black and look unhealthy; maybe I should give it some fertilizer.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1686": {
+    "dialogue_id": "1001100185",
+    "chinese_text": "粉红色的树冠，如果是春天，那一定美极了，可惜现在是夏天。",
+    "english_text": "A pink canopy would be stunning in spring, but too bad it’s summer now.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1687": {
+    "dialogue_id": "1001100185",
+    "chinese_text": "这种植物的果实能吃吗？还是只是用来观赏的？",
+    "english_text": "Are the fruits of this plant edible, or is it just for show?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1688": {
+    "dialogue_id": "1001100185",
+    "chinese_text": "泥土上有个阴影，看来这棵植物已经在这里站了很久了。",
+    "english_text": "There's a shadow on the mud; looks like this plant has been here for a long time.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1689": {
+    "dialogue_id": "1001100185",
+    "chinese_text": "这颜色真鲜艳，在这一片灰蒙蒙的像素世界里真是太显眼了。",
+    "english_text": "The color is so vibrant; it really stands out in this grey pixelated world.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1690": {
+    "dialogue_id": "1001100185",
+    "chinese_text": "它看起来有点孤独，也许我应该在旁边再种一棵。",
+    "english_text": "It looks a bit lonely; maybe I should plant another one nearby.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1691": {
+    "dialogue_id": "1001100185",
+    "chinese_text": "这棵植物的像素颗粒感真重，我的眼睛都要看花了。",
+    "english_text": "The pixelation on this plant is so heavy, my eyes are starting to blur.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1692": {
+    "dialogue_id": "1001100185",
+    "chinese_text": "这让我想起了我小时候玩的那款老游戏，那里的植物也是这个样子的。",
+    "english_text": "This reminds me of an old game I played as a kid; the plants there looked just like this.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1693": {
+    "dialogue_id": "1001100185",
+    "chinese_text": "也许这是一个隐藏的道具，只要我用力摇一摇，就会有金币掉出来。",
+    "english_text": "Maybe it's a hidden item; if I shake it hard enough, will gold coins fall out?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1694": {
+    "dialogue_id": "1001100185",
+    "chinese_text": "这泥土的颜色和背景真不搭，看来是制作组偷懒了。",
+    "english_text": "The mud color doesn't match the background; looks like the devs got lazy.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1695": {
+    "dialogue_id": "1001100185",
+    "chinese_text": "这么小的一棵植物，居然能长出这么大的树冠，真是奇迹。",
+    "english_text": "Such a small plant growing such a large canopy is truly a miracle.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1696": {
+    "dialogue_id": "1001100185",
+    "chinese_text": "如果我能把这棵植物带回家，那我的花园一定会增色不少。",
+    "english_text": "If I could take this plant home, my garden would certainly look much better.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1697": {
+    "dialogue_id": "1001100185",
+    "chinese_text": "这棵植物的像素边缘太粗糙了，看来我该去升级一下显卡了。",
+    "english_text": "The pixel edges are too rough; looks like I need to upgrade my graphics card.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1698": {
+    "dialogue_id": "1001100185",
+    "chinese_text": "看着这棵植物，我突然有种想去画画的冲动，可是我不会画画。",
+    "english_text": "Looking at this plant gives me a sudden urge to paint, but I don’t know how.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1699": {
+    "dialogue_id": "1001100185",
+    "chinese_text": "也许这棵植物是一个迷宫的入口，我要是能找到进去的方法就好了。",
+    "english_text": "Maybe this plant is a maze entrance; if only I could find a way in.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1700": {
+    "dialogue_id": "1001100185",
+    "chinese_text": "这粉红色的树冠，怎么越看越像是一个人的脑袋，真是太可怕了。",
+    "english_text": "The more I look at this pink canopy, the more it looks like a human head—how terrifying.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1701": {
+    "dialogue_id": "1001100186",
+    "chinese_text": "这片灌木丛看起来好青翠，充满了生机。",
+    "english_text": "This patch of bushes looks so lush and full of life.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1702": {
+    "dialogue_id": "1001100186",
+    "chinese_text": "不知道这茂密的枝叶里有没有藏着什么秘密？",
+    "english_text": "I wonder if there are any secrets hidden within these thick leaves?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1703": {
+    "dialogue_id": "1001100186",
+    "chinese_text": "夏天在这里乘凉应该很不错，肯定很阴凉。",
+    "english_text": "It would be great to enjoy the shade here in summer; it must be very cool.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1704": {
+    "dialogue_id": "1001100186",
+    "chinese_text": "风吹过，树叶沙沙作响，仿佛在低语。",
+    "english_text": "The wind blows, and the leaves rustle as if they are whispering.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1705": {
+    "dialogue_id": "1001100186",
+    "chinese_text": "这些灌木长得可真快，没几天就长这么大了。",
+    "english_text": "These bushes grow so fast; they’ve gotten this big in just a few days.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1706": {
+    "dialogue_id": "1001100186",
+    "chinese_text": "我得小心，别被这些尖锐的枝条刮伤了。",
+    "english_text": "I have to be careful not to get scratched by these sharp twigs.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1707": {
+    "dialogue_id": "1001100186",
+    "chinese_text": "看看这些叶子，每一片都有独特的纹理。",
+    "english_text": "Look at these leaves; every single one has a unique texture.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1708": {
+    "dialogue_id": "1001100186",
+    "chinese_text": "也许我能在树叶下找到一些奇特的昆虫。",
+    "english_text": "Maybe I can find some peculiar insects under the leaves.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1709": {
+    "dialogue_id": "1001100186",
+    "chinese_text": "这块区域的灌木丛比其他地方都要茂盛得多。",
+    "english_text": "The bushes in this area are much more lush than anywhere else.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1710": {
+    "dialogue_id": "1001100186",
+    "chinese_text": "感觉这里是个捉迷藏的好地方，不容易被发现。",
+    "english_text": "This feels like a great spot for hide-and-seek, not easy to be found.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1711": {
+    "dialogue_id": "1001100186",
+    "chinese_text": "这些花朵雖然小，但点缀在绿叶间格外美丽。",
+    "english_text": "Though the flowers are small, they look exceptionally beautiful nestled among the green leaves.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1712": {
+    "dialogue_id": "1001100186",
+    "chinese_text": "这片灌木丛好像需要修剪一下了，有些乱。",
+    "english_text": "This patch of bushes seems to need a bit of trimming; it's a bit messy.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1713": {
+    "dialogue_id": "1001100186",
+    "chinese_text": "如果我是一只小鸟，我一定会把窝筑在这里。",
+    "english_text": "If I were a little bird, I would definitely build my nest here.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1714": {
+    "dialogue_id": "1001100186",
+    "chinese_text": "不知道这些灌木是不是有人专门种植的？",
+    "english_text": "I wonder if these bushes were specifically planted by someone?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1715": {
+    "dialogue_id": "1001100186",
+    "chinese_text": "清晨的露珠停留在叶面上，晶莹剔透。",
+    "english_text": "The morning dew rests on the leaves, crystal clear.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1716": {
+    "dialogue_id": "1001100186",
+    "chinese_text": "这里不仅美丽，而且给人一种宁静的感觉。",
+    "english_text": "It’s not just beautiful here; it also gives off a sense of tranquility.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1717": {
+    "dialogue_id": "1001100186",
+    "chinese_text": "我能闻到淡淡的青草和泥土的芬芳。",
+    "english_text": "I can smell the faint fragrance of grass and earth.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1718": {
+    "dialogue_id": "1001100186",
+    "chinese_text": "这些灌木丛是野生动物的天然庇护所。",
+    "english_text": "These bushes are a natural sanctuary for wildlife.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1719": {
+    "dialogue_id": "1001100186",
+    "chinese_text": "看着它们茁壮成长，心情也会变好。",
+    "english_text": "Watching them grow vigorously really improves my mood.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1720": {
+    "dialogue_id": "1001100186",
+    "chinese_text": "这不仅仅是植物，它们也是这个世界的一部分。",
+    "english_text": "These aren't just plants; they are a part of this world.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1721": {
+    "dialogue_id": "1001100187",
+    "chinese_text": "这堆枯草堵在这里真碍事，得找个法子清理掉。",
+    "english_text": "This pile of dead grass is such an obstacle; I need to find a way to clear it.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1722": {
+    "dialogue_id": "1001100187",
+    "chinese_text": "看起来干巴巴的，一点生机都没有，是缺水了吗？",
+    "english_text": "It looks so dry and lifeless; is it lacking water?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1723": {
+    "dialogue_id": "1001100187",
+    "chinese_text": "哎呀，小心别被这些尖尖的枯枝扎到了。",
+    "english_text": "Oops, be careful not to get pricked by these sharp dead branches.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1724": {
+    "dialogue_id": "1001100187",
+    "chinese_text": "这里的草怎么都是金黄色的，是因为秋天到了吗？",
+    "english_text": "Why is the grass all golden here? Is it because autumn has arrived?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1725": {
+    "dialogue_id": "1001100187",
+    "chinese_text": "这团灌木丛长得可真结实，像个小堡垒似的。",
+    "english_text": "This cluster of bushes has grown so dense, it's like a little fortress.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1726": {
+    "dialogue_id": "1001100187",
+    "chinese_text": "闻起来有一股淡淡的干草香味，还挺好闻的。",
+    "english_text": "It has a faint scent of dry hay; it’s actually quite nice.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1727": {
+    "dialogue_id": "1001100187",
+    "chinese_text": "里面会不会藏着什么宝贝或者小动物呢？真想掏掏看。",
+    "english_text": "Could there be some treasure or small animals inside? I really want to dig around.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1728": {
+    "dialogue_id": "1001100187",
+    "chinese_text": "这颜色，在这一片绿意中显得格外显眼啊。",
+    "english_text": "This color really stands out amidst all the greenery.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1729": {
+    "dialogue_id": "1001100187",
+    "chinese_text": "感觉这就是个天然的藏身处，躲在后面肯定没人能发现。",
+    "english_text": "This feels like a natural hiding spot; no one would find me back there.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1730": {
+    "dialogue_id": "1001100187",
+    "chinese_text": "唉，这如果是金子做的灌木该多好啊。",
+    "english_text": "Ah, if only this were a bush made of gold.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1731": {
+    "dialogue_id": "1001100187",
+    "chinese_text": "这灌木丛看着死气沉沉的，是不是生病了？",
+    "english_text": "This bush looks lifeless; could it be diseased?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1732": {
+    "dialogue_id": "1001100187",
+    "chinese_text": "这么大一坨，要是能一把火烧了肯定很壮观（还是算了吧）。",
+    "english_text": "Such a big mass; it would be quite a sight if I set it on fire (better not, though).",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1733": {
+    "dialogue_id": "1001100187",
+    "chinese_text": "这玩意儿挡住了我欣赏风景的视线。",
+    "english_text": "This thing is blocking my view of the scenery.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1734": {
+    "dialogue_id": "1001100187",
+    "chinese_text": "看起来像个巨大的刺猬，碰都碰不得。",
+    "english_text": "It looks like a giant hedgehog; I shouldn't even touch it.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1735": {
+    "dialogue_id": "1001100187",
+    "chinese_text": "阳光照在上面，闪闪发光的，还挺好看。",
+    "english_text": "With the sunlight on it, it’s all shimmering—looks pretty good.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1736": {
+    "dialogue_id": "1001100187",
+    "chinese_text": "这里以前是不是发生过什么，才让这灌木长成这样？",
+    "english_text": "Did something happen here in the past to make this bush grow like this?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1737": {
+    "dialogue_id": "1001100187",
+    "chinese_text": "这么大一个，得有多少根枯枝编织在一起啊。",
+    "english_text": "It's so huge; I wonder how many dead branches are woven together.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1738": {
+    "dialogue_id": "1001100187",
+    "chinese_text": "感觉这草丛里有什么东西在动，错觉吗？",
+    "english_text": "I feel like something is moving in the grass—is it just my imagination?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1739": {
+    "dialogue_id": "1001100187",
+    "chinese_text": "哎，要是能把这颜色染回绿色就好了。",
+    "english_text": "Ah, if only I could dye this back to green.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1740": {
+    "dialogue_id": "1001100187",
+    "chinese_text": "这就是一个普通的枯草堆，没什么特别的，走吧。",
+    "english_text": "It’s just an ordinary pile of dead grass; nothing special, let’s go.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1741": {
+    "dialogue_id": "1001100188",
+    "chinese_text": "哎呀，好香的爆米花味儿！",
+    "english_text": "Oh, the smell of popcorn is so good!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1742": {
+    "dialogue_id": "1001100188",
+    "chinese_text": "这个红色的桶真显眼啊。",
+    "english_text": "This red bucket is really eye-catching.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1743": {
+    "dialogue_id": "1001100188",
+    "chinese_text": "爆米花！我的最爱！",
+    "english_text": "Popcorn! My absolute favorite!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1744": {
+    "dialogue_id": "1001100188",
+    "chinese_text": "闻到这个味道我就走不动路了。",
+    "english_text": "I can't move once I catch a whiff of this scent.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1745": {
+    "dialogue_id": "1001100188",
+    "chinese_text": "这桶爆米花看起来满满当当的。",
+    "english_text": "This bucket of popcorn looks like it’s filled to the brim.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1746": {
+    "dialogue_id": "1001100188",
+    "chinese_text": "我打赌这里的爆米花是甜的。",
+    "english_text": "I bet the popcorn here is sweet.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1747": {
+    "dialogue_id": "1001100188",
+    "chinese_text": "好想来上一大口。",
+    "english_text": "I really want to take a huge bite.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1748": {
+    "dialogue_id": "1001100188",
+    "chinese_text": "这个红白条纹的桶让我想起了马戏团。",
+    "english_text": "This red and white striped bucket reminds me of the circus.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1749": {
+    "dialogue_id": "1001100188",
+    "chinese_text": "这种桶装的爆米花最适合看电影了。",
+    "english_text": "This kind of bucketed popcorn is perfect for watching movies.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1750": {
+    "dialogue_id": "1001100188",
+    "chinese_text": "这颜色，看着就让人开心。",
+    "english_text": "This color just makes people feel happy.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1751": {
+    "dialogue_id": "1001100188",
+    "chinese_text": "这里怎么会有一桶爆米花？",
+    "english_text": "Why is there a bucket of popcorn here?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1752": {
+    "dialogue_id": "1001100188",
+    "chinese_text": "它是热的吗？我想伸手摸摸。",
+    "english_text": "Is it hot? I want to reach out and touch it.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1753": {
+    "dialogue_id": "1001100188",
+    "chinese_text": "这爆米花看起来真脆。",
+    "english_text": "This popcorn looks really crunchy.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1754": {
+    "dialogue_id": "1001100188",
+    "chinese_text": "这么一大桶，我一个人吃不完吧。",
+    "english_text": "Such a huge bucket, I probably can't finish it alone.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1755": {
+    "dialogue_id": "1001100188",
+    "chinese_text": "这个红桶真是经典。",
+    "english_text": "This red bucket is a real classic.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1756": {
+    "dialogue_id": "1001100188",
+    "chinese_text": "不知道这爆米花有没有加黄油。",
+    "english_text": "I wonder if this popcorn has butter added.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1757": {
+    "dialogue_id": "1001100188",
+    "chinese_text": "爆米花真是伟大的发明。",
+    "english_text": "Popcorn is truly a great invention.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1758": {
+    "dialogue_id": "1001100188",
+    "chinese_text": "一看到这个，我就想起了快乐的时光。",
+    "english_text": "Seeing this reminds me of happy times.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1759": {
+    "dialogue_id": "1001100188",
+    "chinese_text": "嗯...这味道真是太诱人了。",
+    "english_text": "Hmm... this scent is just so tempting.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1760": {
+    "dialogue_id": "1001100188",
+    "chinese_text": "这一桶爆米花，足够我吃好久了。",
+    "english_text": "This bucket of popcorn will last me a long time.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1761": {
+    "dialogue_id": "1001100189",
+    "chinese_text": "哎呀，好香的味道，是刚出锅的爆米花！",
+    "english_text": "Oh, what a delicious smell, it's fresh popcorn!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1762": {
+    "dialogue_id": "1001100189",
+    "chinese_text": "这个蓝色的纸袋子，看起来好复古啊。",
+    "english_text": "This blue paper bag looks so retro.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1763": {
+    "dialogue_id": "1001100189",
+    "chinese_text": "红蓝条纹，这配色让我想起了老电影院。",
+    "english_text": "Red and blue stripes, this color scheme reminds me of old cinemas.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1764": {
+    "dialogue_id": "1001100189",
+    "chinese_text": "满满的一袋子，看起来很实惠。",
+    "english_text": "A full bag, it looks like a great deal.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1765": {
+    "dialogue_id": "1001100189",
+    "chinese_text": "里面的爆米花金灿灿的，一定很酥脆。",
+    "english_text": "The popcorn inside is golden and must be very crunchy.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1766": {
+    "dialogue_id": "1001100189",
+    "chinese_text": "闻着这股奶油味，肚子都咕咕叫了。",
+    "english_text": "Smelling this buttery scent makes my stomach growl.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1767": {
+    "dialogue_id": "1001100189",
+    "chinese_text": "不知道是甜的还是咸的？或者是焦糖的？",
+    "english_text": "I wonder if it’s sweet or salty? Or maybe caramel?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1768": {
+    "dialogue_id": "1001100189",
+    "chinese_text": "这种颗粒状的感觉，真是像素风的极致体现。",
+    "english_text": "This grainy texture is the ultimate expression of pixel art.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1769": {
+    "dialogue_id": "1001100189",
+    "chinese_text": "带上一袋去冒险，路上肯定不会无聊。",
+    "english_text": "Taking a bag on an adventure means it definitely won't be boring.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1770": {
+    "dialogue_id": "1001100189",
+    "chinese_text": "这是看戏时的标配啊，怎么这里也有？",
+    "english_text": "This is standard for watching a show, why is it here too?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1771": {
+    "dialogue_id": "1001100189",
+    "chinese_text": "感觉这就是那个神秘商人卖的货。",
+    "english_text": "It feels like something the mysterious merchant would sell.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1772": {
+    "dialogue_id": "1001100189",
+    "chinese_text": "这么一大袋，我一个人肯定吃不完。",
+    "english_text": "Such a big bag, I definitely can't eat it all by myself.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1773": {
+    "dialogue_id": "1001100189",
+    "chinese_text": "里面的爆米花好像都在闪闪发光呢。",
+    "english_text": "The popcorn inside seems to be shimmering.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1774": {
+    "dialogue_id": "1001100189",
+    "chinese_text": "看着这个袋子，就想起了小时候的事情。",
+    "english_text": "Looking at this bag brings back childhood memories.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1775": {
+    "dialogue_id": "1001100189",
+    "chinese_text": "价格应该不便宜吧，毕竟是高级货。",
+    "english_text": "It probably isn't cheap, after all, it's a premium item.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1776": {
+    "dialogue_id": "1001100189",
+    "chinese_text": "这里面会不会藏着什么特别的道具？",
+    "english_text": "Could there be some special item hidden inside?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1777": {
+    "dialogue_id": "1001100189",
+    "chinese_text": "爆米花这种东西，怎么看都很诱人。",
+    "english_text": "Popcorn just looks tempting no matter how you look at it.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1778": {
+    "dialogue_id": "1001100189",
+    "chinese_text": "这个蓝色的袋子，真是越看越顺眼。",
+    "english_text": "This blue bag is starting to look better and better the more I see it.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1779": {
+    "dialogue_id": "1001100189",
+    "chinese_text": "要是能加点巧克力酱就更完美了。",
+    "english_text": "It would be even more perfect if some chocolate sauce could be added.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1780": {
+    "dialogue_id": "1001100189",
+    "chinese_text": "算了，还是先不买，等会儿再回来看看。",
+    "english_text": "Never mind, I'll hold off for now and check back later.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1781": {
+    "dialogue_id": "1001100190",
+    "chinese_text": "这个看台虽然看起来有点旧，但坐在上面视野还是挺不错的。",
+    "english_text": "This stand might look a bit old, but the view from it is actually quite good.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1782": {
+    "dialogue_id": "1001100190",
+    "chinese_text": "我记得上次比赛的时候，整个看台都坐满了人，大家都非常激动。",
+    "english_text": "I remember during the last match, the whole stand was packed, and everyone was so excited.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1783": {
+    "dialogue_id": "1001100190",
+    "chinese_text": "比赛快开始了，得赶紧找个好位置坐下来。",
+    "english_text": "The match is about to start; better find a good seat quickly.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1784": {
+    "dialogue_id": "1001100190",
+    "chinese_text": "这些五颜六色的座椅，让整个看台看起来都很有活力。",
+    "english_text": "These colorful seats make the entire stand look very vibrant.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1785": {
+    "dialogue_id": "1001100190",
+    "chinese_text": "这个看台的设计非常实用，可以让观众看清楚比赛的每一个细节。",
+    "english_text": "The design of this stand is very practical, allowing spectators to see every detail of the match.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1786": {
+    "dialogue_id": "1001100190",
+    "chinese_text": "我喜欢坐在最上面一排，这样可以俯瞰整个赛场。",
+    "english_text": "I like sitting in the top row so I can overlook the entire field.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1787": {
+    "dialogue_id": "1001100190",
+    "chinese_text": "虽然看台有点高，但我觉得还是挺安全的。",
+    "english_text": "Although the stand is a bit high, I think it’s quite safe.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1788": {
+    "dialogue_id": "1001100190",
+    "chinese_text": "这些座椅看起来很舒适，应该可以坐很久。",
+    "english_text": "These seats look comfortable; I should be able to sit for a long time.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1789": {
+    "dialogue_id": "1001100190",
+    "chinese_text": "比赛结束了，大家都依依不舍地离开了看台。",
+    "english_text": "The match is over, and everyone is reluctantly leaving the stand.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1790": {
+    "dialogue_id": "1001100190",
+    "chinese_text": "这个看台是整个体育场的重要组成部分，它见证了无数精彩的比赛。",
+    "english_text": "This stand is an essential part of the stadium, witnessing countless brilliant matches.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1791": {
+    "dialogue_id": "1001100190",
+    "chinese_text": "我记得有一场比赛，看台上的观众为他们的队伍加油助威，声音非常大。",
+    "english_text": "I remember a match where the fans in the stands cheered for their team so loudly.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1792": {
+    "dialogue_id": "1001100190",
+    "chinese_text": "看台上的气氛总是非常热烈，让人感到兴奋。",
+    "english_text": "The atmosphere in the stands is always very intense and exciting.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1793": {
+    "dialogue_id": "1001100190",
+    "chinese_text": "虽然这个看台不是最新的，但我觉得它还是很有魅力的。",
+    "english_text": "Even though this stand isn't the newest, I still find it quite charming.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1794": {
+    "dialogue_id": "1001100190",
+    "chinese_text": "比赛中，看台上的观众会为每一个精彩的瞬间而欢呼。",
+    "english_text": "During the match, the audience in the stands cheers for every brilliant moment.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1795": {
+    "dialogue_id": "1001100190",
+    "chinese_text": "这个看台的位置非常好，可以让观众看清楚比赛。",
+    "english_text": "This stand is positioned perfectly, giving spectators a clear view of the match.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1796": {
+    "dialogue_id": "1001100190",
+    "chinese_text": "这些五颜六色的座椅，让看台看起来非常有活力。",
+    "english_text": "These colorful seats make the stand look full of energy.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1797": {
+    "dialogue_id": "1001100190",
+    "chinese_text": "比赛中，看台上的观众会为他们的队伍加油助威。",
+    "english_text": "Spectators in the stands will be cheering for their teams during the match.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1798": {
+    "dialogue_id": "1001100190",
+    "chinese_text": "这个看台虽然看起来有点旧，但坐在上面视野还是挺不错的。",
+    "english_text": "This stand might be a bit old, but the view from it is still quite good.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1799": {
+    "dialogue_id": "1001100190",
+    "chinese_text": "我记得上次比赛的时候，整个看台都坐满了人，大家都非常激动。",
+    "english_text": "I remember the last match when the stands were full and everyone was so thrilled.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1800": {
+    "dialogue_id": "1001100190",
+    "chinese_text": "这个看台的设计非常实用，可以让观众看清楚比赛的每一个细节。",
+    "english_text": "The practical design of this stand ensures spectators can catch every detail of the match.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1801": {
+    "dialogue_id": "1001100191",
+    "chinese_text": "这椅子太硬了，坐久了屁股肯定痛",
+    "english_text": "This chair is too hard; my butt is definitely going to hurt if I sit for too long.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1802": {
+    "dialogue_id": "1001100191",
+    "chinese_text": "这个位置视野不错，正对着场地中央",
+    "english_text": "This spot has a good view, right in front of the center of the field.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1803": {
+    "dialogue_id": "1001100191",
+    "chinese_text": "又是只有一把椅子？总觉得哪里怪怪的",
+    "english_text": "Just one chair again? Something feels off about this.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1804": {
+    "dialogue_id": "1001100191",
+    "chinese_text": "这绿油油的颜色，和看台的风格不太搭啊",
+    "english_text": "This bright green color doesn't really match the style of the stands.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1805": {
+    "dialogue_id": "1001100191",
+    "chinese_text": "看这磨损程度，肯定是有人经常坐在这里",
+    "english_text": "Judging by the wear and tear, someone must sit here often.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1806": {
+    "dialogue_id": "1001100191",
+    "chinese_text": "为什么这椅子不能移动？好想要一把能搬动的椅子",
+    "english_text": "Why is this chair fixed? I really wish I had one I could move.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1807": {
+    "dialogue_id": "1001100191",
+    "chinese_text": "下次一定要带个垫子来，不然这椅子根本没法坐",
+    "english_text": "Definitely need to bring a cushion next time, otherwise this chair is unbearable.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1808": {
+    "dialogue_id": "1001100191",
+    "chinese_text": "旁边要是再多几把椅子就好了，这样大家就能一起坐了",
+    "english_text": "It would be nice if there were more chairs around so everyone could sit together.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1809": {
+    "dialogue_id": "1001100191",
+    "chinese_text": "这把椅子的靠背好像有点矮，靠着不舒服",
+    "english_text": "The backrest of this chair seems a bit low; it's not very comfortable.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1810": {
+    "dialogue_id": "1001100191",
+    "chinese_text": "这是专门为 VIP 准备的座位吗？看起来比其他的要好一点",
+    "english_text": "Is this a seat reserved for VIPs? It looks a bit better than the others.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1811": {
+    "dialogue_id": "1001100191",
+    "chinese_text": "怎么只有这一把椅子是这个颜色的？太显眼了吧",
+    "english_text": "Why is only this one chair this color? It’s way too striking.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1812": {
+    "dialogue_id": "1001100191",
+    "chinese_text": "坐在这里看比赛，一定很刺激！",
+    "english_text": "Watching a match from here must be really exciting!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1813": {
+    "dialogue_id": "1001100191",
+    "chinese_text": "这椅子的材质感觉很廉价，塑料感满满",
+    "english_text": "The material of this chair feels cheap, very plasticky.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1814": {
+    "dialogue_id": "1001100191",
+    "chinese_text": "不知道这把椅子能承受多少重量",
+    "english_text": "I wonder how much weight this chair can hold.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1815": {
+    "dialogue_id": "1001100191",
+    "chinese_text": "要是这把椅子能折叠就好了，这样就能节省空间",
+    "english_text": "If only this chair could fold; that would save so much space.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1816": {
+    "dialogue_id": "1001100191",
+    "chinese_text": "这里视野虽然好，但是离赛场太远了",
+    "english_text": "The view is good here, but it's too far from the action.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1817": {
+    "dialogue_id": "1001100191",
+    "chinese_text": "为什么这把椅子看起来这么孤独？",
+    "english_text": "Why does this chair look so lonely?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1818": {
+    "dialogue_id": "1001100191",
+    "chinese_text": "这把椅子放在这里，真的有人会去坐吗？",
+    "english_text": "This chair is placed here, but will anyone actually sit in it?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1819": {
+    "dialogue_id": "1001100191",
+    "chinese_text": "看起来挺干净的，应该刚有人擦过",
+    "english_text": "It looks pretty clean; someone must have just wiped it.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1820": {
+    "dialogue_id": "1001100191",
+    "chinese_text": "这椅子好像没什么特别的，就是普通看台椅子",
+    "english_text": "This chair doesn't seem like anything special, just an ordinary stadium seat.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1821": {
+    "dialogue_id": "1001100192",
+    "chinese_text": "这红椅子真显眼，看来是比赛的好位置。",
+    "english_text": "This red chair is so eye-catching; looks like a prime spot for the match.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1822": {
+    "dialogue_id": "1001100192",
+    "chinese_text": "呼，站累了，在这儿坐一会儿没人看见吧。",
+    "english_text": "Phew, I'm tired of standing; no one will notice if I sit here for a bit, right?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1823": {
+    "dialogue_id": "1001100192",
+    "chinese_text": "听说决赛那天，只有大人物才能坐这把椅子。",
+    "english_text": "I heard only VIPs get to sit in this chair on the day of the finals.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1824": {
+    "dialogue_id": "1001100192",
+    "chinese_text": "这里视野不错，正好能看到整个竞技场。",
+    "english_text": "The view is great here, you can see the entire arena perfectly.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1825": {
+    "dialogue_id": "1001100192",
+    "chinese_text": "每次看到空椅子，就想起那些没能回来的勇士。",
+    "english_text": "Every time I see an empty chair, it reminds me of the heroes who didn't make it back.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1826": {
+    "dialogue_id": "1001100192",
+    "chinese_text": "这椅子好像擦得挺干净，不像那边的。",
+    "english_text": "This chair seems to be wiped clean, unlike the ones over there.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1827": {
+    "dialogue_id": "1001100192",
+    "chinese_text": "等比赛开始了，这里肯定坐满了人。",
+    "english_text": "Once the match starts, this place will definitely be packed.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1828": {
+    "dialogue_id": "1001100192",
+    "chinese_text": "上次有个人在这里激动的把椅子都喊裂了。",
+    "english_text": "Last time, someone was so excited they shouted until the chair cracked.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1829": {
+    "dialogue_id": "1001100192",
+    "chinese_text": "真想就在这儿睡一觉，风真舒服。",
+    "english_text": "I really just want to take a nap here; the breeze is so pleasant.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1830": {
+    "dialogue_id": "1001100192",
+    "chinese_text": "这是留给勇者你的位置，请坐吧。",
+    "english_text": "This seat is reserved for you, Brave One. Please, take a seat.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1831": {
+    "dialogue_id": "1001100192",
+    "chinese_text": "这里不收费，随便坐，只要比赛还没开始。",
+    "english_text": "There’s no charge here; feel free to sit as long as the match hasn't started.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1832": {
+    "dialogue_id": "1001100192",
+    "chinese_text": "坐在家里和坐在看台，感觉完全不同啊。",
+    "english_text": "Sitting at home and sitting in the stands—it's a completely different feeling.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1833": {
+    "dialogue_id": "1001100192",
+    "chinese_text": "有没有人注意，我在这把椅子下藏了个铜币？",
+    "english_text": "Did anyone notice I hid a copper coin under this chair?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1834": {
+    "dialogue_id": "1001100192",
+    "chinese_text": "唉，这看台真硬，坐久了屁股疼。",
+    "english_text": "Ugh, these stands are so hard; my butt hurts after sitting too long.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1835": {
+    "dialogue_id": "1001100192",
+    "chinese_text": "阳光正好晒在椅子的靠背上，暖洋洋的。",
+    "english_text": "The sun is shining right on the back of the chair, so warm and cozy.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1836": {
+    "dialogue_id": "1001100192",
+    "chinese_text": "这看台上的椅子，见证了多少胜负。",
+    "english_text": "The chairs in these stands have witnessed so many victories and defeats.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1837": {
+    "dialogue_id": "1001100192",
+    "chinese_text": "小心点坐，这椅子看起来不太稳当。",
+    "english_text": "Sit carefully; this chair doesn't look very stable.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1838": {
+    "dialogue_id": "1001100192",
+    "chinese_text": "等会儿要把这整排椅子都擦一遍，真是个苦差事。",
+    "english_text": "Having to wipe down this whole row of chairs later is going to be such a chore.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1839": {
+    "dialogue_id": "1001100192",
+    "chinese_text": "站在这里看比赛，不如坐下来享受。",
+    "english_text": "Rather than standing to watch the match, better to sit and enjoy.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1840": {
+    "dialogue_id": "1001100192",
+    "chinese_text": "这红色，真像是胜利者的鲜血啊。",
+    "english_text": "This red color... it really looks like the blood of a victor.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1841": {
+    "dialogue_id": "1001100193",
+    "chinese_text": "哎呀，这里的看台椅子看起来可不太舒服。",
+    "english_text": "Oh boy, these stadium seats don't look very comfortable.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1842": {
+    "dialogue_id": "1001100193",
+    "chinese_text": "这看台上的椅子，颜色真鲜艳，像块糖果。",
+    "english_text": "The chairs in these stands are so brightly colored, like pieces of candy.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1843": {
+    "dialogue_id": "1001100193",
+    "chinese_text": "不知道坐在上面能不能看到精彩的比赛。",
+    "english_text": "I wonder if sitting here will give a good view of the match.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1844": {
+    "dialogue_id": "1001100193",
+    "chinese_text": "这种塑料椅子，夏天坐上去一定烫屁股。",
+    "english_text": "These plastic chairs are bound to be burning hot in the summer.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1845": {
+    "dialogue_id": "1001100193",
+    "chinese_text": "这椅子看起来有些年头了，说不定有什么故事。",
+    "english_text": "This chair looks quite old; maybe it has a story to tell.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1846": {
+    "dialogue_id": "1001100193",
+    "chinese_text": "为什么这里的看台椅子都是蓝色的？",
+    "english_text": "Why are all the stadium seats here blue?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1847": {
+    "dialogue_id": "1001100193",
+    "chinese_text": "这看台椅子，让我想起了小时候在操场上的时候。",
+    "english_text": "These seats remind me of my time on the school playground as a kid.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1848": {
+    "dialogue_id": "1001100193",
+    "chinese_text": "如果能在这里看一场足球赛，感觉一定不错。",
+    "english_text": "It would probably feel great to watch a football match from here.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1849": {
+    "dialogue_id": "1001100193",
+    "chinese_text": "这椅子看起来不太结实，我还是别坐了。",
+    "english_text": "This chair doesn't look very sturdy; I think I'll skip sitting in it.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1850": {
+    "dialogue_id": "1001100193",
+    "chinese_text": "这排看台椅子，整整齐齐地排列着。",
+    "english_text": "This row of stadium seats is arranged so neatly.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1851": {
+    "dialogue_id": "1001100193",
+    "chinese_text": "这里的看台椅子，好像是专门为观众准备的。",
+    "english_text": "The seats here seem to be specifically prepared for the spectators.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1852": {
+    "dialogue_id": "1001100193",
+    "chinese_text": "这看台椅子，虽然普通，但却承载了无数人的欢乐。",
+    "english_text": "Though ordinary, these seats have held the joy of countless people.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1853": {
+    "dialogue_id": "1001100193",
+    "chinese_text": "我要是能带走一把就好了，家里正好缺把椅子。",
+    "english_text": "I wish I could take one with me; my place is short of a chair.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1854": {
+    "dialogue_id": "1001100193",
+    "chinese_text": "这椅子下面，是不是藏着什么秘密？",
+    "english_text": "Is there something secret hidden under this chair?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1855": {
+    "dialogue_id": "1001100193",
+    "chinese_text": "看这椅子，我就能想象出以前热闹的场景。",
+    "english_text": "Just looking at these chairs, I can imagine the lively scenes of the past.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1856": {
+    "dialogue_id": "1001100193",
+    "chinese_text": "这看台椅子，被风吹雨打，已经有些褪色了。",
+    "english_text": "Weathered by wind and rain, these stadium seats have faded a bit.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1857": {
+    "dialogue_id": "1001100193",
+    "chinese_text": "虽然看起来不起眼，但也是不可或缺的一部分。",
+    "english_text": "Though seemingly insignificant, they are an indispensable part.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1858": {
+    "dialogue_id": "1001100193",
+    "chinese_text": "这椅子让我想起了青春，那个时候我也在这里坐过。",
+    "english_text": "This chair reminds me of my youth; I used to sit here back then, too.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1859": {
+    "dialogue_id": "1001100193",
+    "chinese_text": "不知道下次这里有什么活动。",
+    "english_text": "I wonder what event will be held here next.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1860": {
+    "dialogue_id": "1001100193",
+    "chinese_text": "这看台椅子，就像一个静静的观察者。",
+    "english_text": "These stadium seats are like silent observers.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1861": {
+    "dialogue_id": "1001100194",
+    "chinese_text": "这椅子看起来还挺干净的，比起别的强多了。",
+    "english_text": "This chair looks pretty clean, much better than the others.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1862": {
+    "dialogue_id": "1001100194",
+    "chinese_text": "这看台，平时也没几个人，摆这么多椅子干嘛。",
+    "english_text": "There’s hardly anyone here usually; why bother with so many chairs?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1863": {
+    "dialogue_id": "1001100194",
+    "chinese_text": "颜色倒挺鲜艳，像个新鲜的橘子。",
+    "english_text": "The color is quite vibrant, like a fresh orange.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1864": {
+    "dialogue_id": "1001100194",
+    "chinese_text": "这种椅子坐久了，屁股肯定疼得要命。",
+    "english_text": "Sitting in this kind of chair for long will definitely make your butt hurt like crazy.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1865": {
+    "dialogue_id": "1001100194",
+    "chinese_text": "坐在这里视野倒是不错，能看清整个赛场。",
+    "english_text": "Sitting here gives a decent view; you can see the whole field clearly.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1866": {
+    "dialogue_id": "1001100194",
+    "chinese_text": "这椅子稳当吗？感觉随时都会散架一样。",
+    "english_text": "Is this chair stable? It feels like it could fall apart at any moment.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1867": {
+    "dialogue_id": "1001100194",
+    "chinese_text": "这里以前是不是坐过什么重要人物啊？",
+    "english_text": "Did someone important sit here in the past?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1868": {
+    "dialogue_id": "1001100194",
+    "chinese_text": "真希望它能变成那种带靠垫的豪华真皮座椅。",
+    "english_text": "I really wish it could turn into one of those luxury leather seats with cushions.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1869": {
+    "dialogue_id": "1001100194",
+    "chinese_text": "这种硬塑料椅子最讨厌了，夏天烫屁股，冬天冰屁股。",
+    "english_text": "These hard plastic chairs are the worst—burning hot in summer, freezing in winter.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1870": {
+    "dialogue_id": "1001100194",
+    "chinese_text": "这是专门给VIP预留的吗？怎么没人坐。",
+    "english_text": "Is this reserved for VIPs? Why is no one sitting here?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1871": {
+    "dialogue_id": "1001100194",
+    "chinese_text": "这里的灰尘也太重了吧，谁来打扫一下啊。",
+    "english_text": "The dust here is way too thick; can someone come and clean it?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1872": {
+    "dialogue_id": "1001100194",
+    "chinese_text": "这椅子下面是不是藏了什么秘密信息？",
+    "english_text": "Is there some secret message hidden under this chair?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1873": {
+    "dialogue_id": "1001100194",
+    "chinese_text": "每次看到这种椅子，我就想起以前看比赛的日子。",
+    "english_text": "Every time I see a chair like this, I think back to the days of watching matches.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1874": {
+    "dialogue_id": "1001100194",
+    "chinese_text": "这椅子是谁设计的，真是一点人体工学都不讲。",
+    "english_text": "Who designed this chair? It shows absolutely no regard for ergonomics.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1875": {
+    "dialogue_id": "1001100194",
+    "chinese_text": "要是这椅子能自动调整高度就好了。",
+    "english_text": "It would be great if this chair could automatically adjust its height.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1876": {
+    "dialogue_id": "1001100194",
+    "chinese_text": "这里是全场最佳观赛点吗？感觉不出来。",
+    "english_text": "Is this the best viewing spot in the house? I don't really feel it.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1877": {
+    "dialogue_id": "1001100194",
+    "chinese_text": "这椅子的颜色真是太扎眼了，离老远就能看见。",
+    "english_text": "The color of this chair is so eye-piercing; you can see it from a mile away.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1878": {
+    "dialogue_id": "1001100194",
+    "chinese_text": "这个位置，要是下雨，估计要被淋成落汤鸡。",
+    "english_text": "If it rains here, you'll probably end up soaked like a drowned rat.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1879": {
+    "dialogue_id": "1001100194",
+    "chinese_text": "看来这里是为那些不喜欢热闹的人准备的。",
+    "english_text": "Looks like this spot is for those who don't like crowds.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1880": {
+    "dialogue_id": "1001100194",
+    "chinese_text": "这椅子，真的是让人一点坐下的欲望都没有。",
+    "english_text": "This chair really gives you absolutely no desire to sit down.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1881": {
+    "dialogue_id": "1001100195",
+    "chinese_text": "这花坛里的土看着好干，得赶紧浇水了",
+    "english_text": "The soil in this planter looks so dry; it needs watering immediately.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1882": {
+    "dialogue_id": "1001100195",
+    "chinese_text": "实木的花坛，这木头纹理还挺别致",
+    "english_text": "A solid wood planter—the wood grain is actually quite unique.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1883": {
+    "dialogue_id": "1001100195",
+    "chinese_text": "如果把这个花坛放在我家门前，肯定很漂亮",
+    "english_text": "This planter would look beautiful right in front of my house.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1884": {
+    "dialogue_id": "1001100195",
+    "chinese_text": "这个花坛的侧面看着挺扎实",
+    "english_text": "The side of this planter looks quite solid.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1885": {
+    "dialogue_id": "1001100195",
+    "chinese_text": "这个高度正适合种些矮牵牛",
+    "english_text": "This height is perfect for planting some petunias.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1886": {
+    "dialogue_id": "1001100195",
+    "chinese_text": "不知道这土里有没有藏着什么宝贝",
+    "english_text": "I wonder if there's any treasure hidden in this soil.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1887": {
+    "dialogue_id": "1001100195",
+    "chinese_text": "每天照顾这些花花草草，心情都变好了",
+    "english_text": "Taking care of these plants every day really brightens my mood.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1888": {
+    "dialogue_id": "1001100195",
+    "chinese_text": "哎，这木头有点裂了，得修补一下",
+    "english_text": "Ah, the wood is starting to crack; it needs some repairs.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1889": {
+    "dialogue_id": "1001100195",
+    "chinese_text": "这个实木花坛做工还真精细",
+    "english_text": "The craftsmanship of this solid wood planter is truly delicate.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1890": {
+    "dialogue_id": "1001100195",
+    "chinese_text": "这花坛里的土还真深，能种不少东西",
+    "english_text": "The soil in this planter is quite deep; it could grow a lot of things.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1891": {
+    "dialogue_id": "1001100195",
+    "chinese_text": "看起来可以种些草药，比如薰衣草或迷迭香",
+    "english_text": "Looks like I could plant some herbs, like lavender or rosemary.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1892": {
+    "dialogue_id": "1001100195",
+    "chinese_text": "实木的味道真好闻，让人感到很放松",
+    "english_text": "The scent of solid wood is so pleasant and relaxing.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1893": {
+    "dialogue_id": "1001100195",
+    "chinese_text": "这花坛的造型不错，很有设计感",
+    "english_text": "The shape of this planter is nice; it has a real sense of design.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1894": {
+    "dialogue_id": "1001100195",
+    "chinese_text": "不知道这土是不是专门配制的营养土",
+    "english_text": "I wonder if this soil is a specially formulated potting mix.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1895": {
+    "dialogue_id": "1001100195",
+    "chinese_text": "把这个花坛放在院子里，肯定能增添不少生机",
+    "english_text": "Putting this planter in the yard would definitely add a lot of life.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1896": {
+    "dialogue_id": "1001100195",
+    "chinese_text": "这里面可以种些可以驱虫的植物",
+    "english_text": "You could plant some insect-repelling plants in here.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1897": {
+    "dialogue_id": "1001100195",
+    "chinese_text": "这里的土质看起来不错，应该适合大多数植物",
+    "english_text": "The soil quality here looks good, probably suitable for most plants.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1898": {
+    "dialogue_id": "1001100195",
+    "chinese_text": "这花坛虽然小，但功能还挺齐全",
+    "english_text": "Though small, this planter is quite functional.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1899": {
+    "dialogue_id": "1001100195",
+    "chinese_text": "这木头不知道防水吗，得小心点",
+    "english_text": "I’m not sure if this wood is waterproof; better be careful.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1900": {
+    "dialogue_id": "1001100195",
+    "chinese_text": "每天在这里散散步，看着这些花草，感觉整个人都年轻了",
+    "english_text": "Strolling here every day and looking at these plants makes me feel younger.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1901": {
+    "dialogue_id": "1001100196",
+    "chinese_text": "这就是那座传说中的足球门吗？看起来真壮观啊！",
+    "english_text": "Is this the legendary football goal? It looks truly magnificent!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1902": {
+    "dialogue_id": "1001100196",
+    "chinese_text": "这里曾是无数英雄挥洒汗水的地方吧。",
+    "english_text": "This must be where countless heroes shed their sweat.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1903": {
+    "dialogue_id": "1001100196",
+    "chinese_text": "如果我能在这里踢一场球，那该多好啊。",
+    "english_text": "How wonderful it would be if I could play a match here.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1904": {
+    "dialogue_id": "1001100196",
+    "chinese_text": "这个球门看起来很坚固，一定能承受得住猛烈的射门。",
+    "english_text": "This goal looks very sturdy; it can surely withstand powerful shots.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1905": {
+    "dialogue_id": "1001100196",
+    "chinese_text": "每次看到这个球门，我都忍不住想拿起球大干一场。",
+    "english_text": "Every time I see this goal, I can’t help but want to grab a ball and start playing.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1906": {
+    "dialogue_id": "1001100196",
+    "chinese_text": "这个球门见证了无数精彩的进球瞬间，真是太棒了！",
+    "english_text": "This goal has witnessed countless brilliant scoring moments; it’s amazing!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1907": {
+    "dialogue_id": "1001100196",
+    "chinese_text": "这就是梦想开始的地方，也是汗水凝聚的地方。",
+    "english_text": "This is where dreams begin and where sweat culminates.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1908": {
+    "dialogue_id": "1001100196",
+    "chinese_text": "这个球门不仅仅是一个运动设施，它更是荣耀的象征。",
+    "english_text": "This goal is more than just a sports facility; it’s a symbol of glory.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1909": {
+    "dialogue_id": "1001100196",
+    "chinese_text": "每次站在这个球门前，我都能感受到一股力量在涌动。",
+    "english_text": "Every time I stand before this goal, I can feel a surge of power within me.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1910": {
+    "dialogue_id": "1001100196",
+    "chinese_text": "这个球门是球场上的终极目标，也是胜利的象征。",
+    "english_text": "This goal is the ultimate objective on the field and a sign of victory.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1911": {
+    "dialogue_id": "1001100196",
+    "chinese_text": "这个球门见证了无数个激动人心的时刻，它永远闪耀着光芒。",
+    "english_text": "This goal has witnessed countless exciting moments; it will always shine bright.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1912": {
+    "dialogue_id": "1001100196",
+    "chinese_text": "这里不仅仅是足球运动员的梦想，也是每一个爱球之人的梦想。",
+    "english_text": "This isn’t just a dream for football players, but for every football lover too.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1913": {
+    "dialogue_id": "1001100196",
+    "chinese_text": "这个球门不仅代表着胜利，更代表着团队合作的精神。",
+    "english_text": "This goal represents more than victory; it embodies the spirit of teamwork.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1914": {
+    "dialogue_id": "1001100196",
+    "chinese_text": "这里的草坪、这里的球门，都是我一生的追求。",
+    "english_text": "This turf and this goal—they are what I’ve been pursuing all my life.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1915": {
+    "dialogue_id": "1001100196",
+    "chinese_text": "每次站在这个球门前，我都感到一种无法言喻的自豪感。",
+    "english_text": "Every time I stand before this goal, I feel an indescribable sense of pride.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1916": {
+    "dialogue_id": "1001100196",
+    "chinese_text": "这里不仅是足球场上的终点，更是梦想起航的起点。",
+    "english_text": "This is not just the finish line on the field, but the starting point of dreams.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1917": {
+    "dialogue_id": "1001100196",
+    "chinese_text": "这个球门不仅代表着荣耀，更代表着汗水 and 付出。",
+    "english_text": "This goal stands for more than glory; it represents sweat and dedication.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1918": {
+    "dialogue_id": "1001100196",
+    "chinese_text": "每次看到这个球门，我都忍不住想起那些曾经在球场上奋斗的日子。",
+    "english_text": "Seeing this goal always makes me look back on the days of struggling on the pitch.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1919": {
+    "dialogue_id": "1001100196",
+    "chinese_text": "这个球门见证了无数个伟大的时刻，它永远是我们心中的一座丰碑。",
+    "english_text": "This goal has witnessed countless great moments; it will always be a monument in our hearts.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1920": {
+    "dialogue_id": "1001100196",
+    "chinese_text": "这里的足球门不仅仅是一个运动设施，它更是我们心中的信仰和荣耀。",
+    "english_text": "This football goal is more than a sports fixture; it is our faith and our glory.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1921": {
+    "dialogue_id": "1001100197",
+    "chinese_text": "这里的球门见证了传奇的诞生！或者只是我一直丢球的地方……",
+    "english_text": "This is the goal where legends are made! Or just where I keep losing balls...",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1922": {
+    "dialogue_id": "1001100197",
+    "chinese_text": "那像素风格的结构看起来很坚固，准备好挡住任何射门了！",
+    "english_text": "That pixelated structure looks sturdy, ready to stop any shot!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1923": {
+    "dialogue_id": "1001100197",
+    "chinese_text": "球网已经挂好，看起来比赛就要开始了。",
+    "english_text": "The nets are up, looks like a match is about to start.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1924": {
+    "dialogue_id": "1001100197",
+    "chinese_text": "总有一天，我会像贝克汉姆一样把球踢进那个网窝！",
+    "english_text": "One day, I'll bend it like Beckham right into that net!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1925": {
+    "dialogue_id": "1001100197",
+    "chinese_text": "站在这个球门前，我已经能听到人群的欢呼声了！",
+    "english_text": "Standing in front of this goal, I can already hear the roar of the crowd!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1926": {
+    "dialogue_id": "1001100197",
+    "chinese_text": "那个红色的框架……是标准配备，还是什么特别的东西？",
+    "english_text": "That red frame... Is it standard issue, or something special?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1927": {
+    "dialogue_id": "1001100197",
+    "chinese_text": "就在这儿，一个经典的守门员噩梦。",
+    "english_text": "A classic goalkeeper's nightmare, right here.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1928": {
+    "dialogue_id": "1001100197",
+    "chinese_text": "练习点球的完美场所。咱们去找个足球吧！",
+    "english_text": "Perfect for practicing penalties. Let's find a football!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1929": {
+    "dialogue_id": "1001100197",
+    "chinese_text": "这个球门经历过更好的时光，球网看起来有点像素化了！",
+    "english_text": "This goal has seen better days, the net is looking a bit pixelated!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1930": {
+    "dialogue_id": "1001100197",
+    "chinese_text": "白红相间的设计虽然简单，却是标志性的。",
+    "english_text": "The white-and-red design is simple but iconic.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1931": {
+    "dialogue_id": "1001100197",
+    "chinese_text": "如果我能从这里踢进去，那我在哪儿都能得分！",
+    "english_text": "If I can kick it from here, I can score anywhere!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1932": {
+    "dialogue_id": "1001100197",
+    "chinese_text": "球员们都在哪儿？这个球门看起来好孤独。",
+    "english_text": "Where are the players? This goal looks lonely.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1933": {
+    "dialogue_id": "1001100197",
+    "chinese_text": "那球网看起来好像会被强力射门给撕裂！",
+    "english_text": "That netting looks like it might rip with a powerful shot!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1934": {
+    "dialogue_id": "1001100197",
+    "chinese_text": "该轮到我当守门员了。我的手套在哪儿？",
+    "english_text": "Time to play goalkeeper. Where's my gloves?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1935": {
+    "dialogue_id": "1001100197",
+    "chinese_text": "我想知道最后一个在这个球门得分的球员是谁。",
+    "english_text": "I wonder who was the last player to score in this very goal.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1936": {
+    "dialogue_id": "1001100197",
+    "chinese_text": "仅仅看着这个球门就让我热血沸腾！",
+    "english_text": "Just watching this goal gives me football fever!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1937": {
+    "dialogue_id": "1001100197",
+    "chinese_text": "我真希望有个球来测试一下这个守门员的防御！",
+    "english_text": "I wish I had a ball to test this keeper's defense!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1938": {
+    "dialogue_id": "1001100197",
+    "chinese_text": "它可能很简单，但对于任何足球场来说都是必不可少的！",
+    "english_text": "It might be simple, but it's essential for any football pitch!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1939": {
+    "dialogue_id": "1001100197",
+    "chinese_text": "看着这个球门，我想看一场像素艺术风格的体育比赛！",
+    "english_text": "Looking at this goal makes me want to watch a pixel art sports tournament!",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1940": {
+    "dialogue_id": "1001100197",
+    "chinese_text": "我可以在这里待上一整天，就在想象中不停地进球。",
+    "english_text": "I could spend all day here, just shooting goals in my imagination.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1941": {
+    "dialogue_id": "1001100198",
+    "chinese_text": "这栏杆真结实，看来这里关着什么重要的东西。",
+    "english_text": "This fence is so sturdy; it looks like something important is being kept in here.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1942": {
+    "dialogue_id": "1001100198",
+    "chinese_text": "铁栅栏把路挡住了，得找个别的办法过去。",
+    "english_text": "The iron fence is blocking the path; I’ll have to find another way around.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1943": {
+    "dialogue_id": "1001100198",
+    "chinese_text": "又是这该死的栏杆，总是出现在不该出现的地方。",
+    "english_text": "These damn bars again, always popping up where they shouldn't be.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1944": {
+    "dialogue_id": "1001100198",
+    "chinese_text": "我能听到栅栏后面有什么声音，但我不想过去看。",
+    "english_text": "I can hear some noise behind the fence, but I don't really want to check it out.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1945": {
+    "dialogue_id": "1001100198",
+    "chinese_text": "这个栅栏看起来很古老，也许它以前是保护什么的。",
+    "english_text": "This fence looks quite ancient; maybe it used to protect something.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1946": {
+    "dialogue_id": "1001100198",
+    "chinese_text": "为什么这里会有铁栅栏？这里有什么秘密吗？",
+    "english_text": "Why is there an iron fence here? Is there some secret?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1947": {
+    "dialogue_id": "1001100198",
+    "chinese_text": "铁栅栏上沾满了灰尘，看来已经很久没人维护了。",
+    "english_text": "The bars are covered in dust; it hasn't been maintained for a long time.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1948": {
+    "dialogue_id": "1001100198",
+    "chinese_text": "我想知道如果没有这栏杆，我会去哪里。",
+    "english_text": "I wonder where I’d go if these bars weren't here.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1949": {
+    "dialogue_id": "1001100198",
+    "chinese_text": "这个铁栅栏真的很妨碍我，我要找工具把它拆了。",
+    "english_text": "This iron fence is really getting in my way; I need tools to tear it down.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1950": {
+    "dialogue_id": "1001100198",
+    "chinese_text": "栅栏后面的世界看起来和这边一样，没有什么区别。",
+    "english_text": "The world behind the fence looks just like this side—no difference at all.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1951": {
+    "dialogue_id": "1001100198",
+    "chinese_text": "这铁栅栏提醒我，有些东西是不能触碰的。",
+    "english_text": "This iron fence reminds me that some things are just off-limits.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1952": {
+    "dialogue_id": "1001100198",
+    "chinese_text": "为什么有人会想在家里装铁栅栏？这太奇怪了。",
+    "english_text": "Why would anyone want an iron fence in their home? That's so weird.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1953": {
+    "dialogue_id": "1001100198",
+    "chinese_text": "我觉得我可以用我的技能把这栏杆撬开。",
+    "english_text": "I think I can use my skills to pry these bars open.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1954": {
+    "dialogue_id": "1001100198",
+    "chinese_text": "这铁栅栏真碍眼，它把这么好的风景都挡住了。",
+    "english_text": "This iron fence is such an eyesore; it's blocking such a great view.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1955": {
+    "dialogue_id": "1001100198",
+    "chinese_text": "我能感觉到铁栅栏上传来的寒意，我不喜欢这里。",
+    "english_text": "I can feel a chill coming from the iron fence; I don't like it here.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1956": {
+    "dialogue_id": "1001100198",
+    "chinese_text": "这铁栅栏太高了，我爬不过去，只能另想办法。",
+    "english_text": "This fence is too high to climb over; I’ll have to find another solution.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1957": {
+    "dialogue_id": "1001100198",
+    "chinese_text": "为什么这里有铁栅栏？难道这里有什么危险的东西吗？",
+    "english_text": "Why is there a fence here? Is there something dangerous around?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1958": {
+    "dialogue_id": "1001100198",
+    "chinese_text": "我希望这铁栅栏只是个装饰，而不是真正的阻碍。",
+    "english_text": "I hope this iron fence is just for decoration and not a real obstacle.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1959": {
+    "dialogue_id": "1001100198",
+    "chinese_text": "这铁栅栏真是一个麻烦，它让我感到很烦躁。",
+    "english_text": "This iron fence is such a nuisance; it’s really getting on my nerves.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1960": {
+    "dialogue_id": "1001100198",
+    "chinese_text": "铁栅栏让我想起了一些不好的回忆。",
+    "english_text": "The iron fence brings back some unpleasant memories.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1961": {
+    "dialogue_id": "1001100199",
+    "chinese_text": "这道铁网栅栏，是为了挡住我也好，还是为了把我挡在里面也好，对我来说，都是一样的。",
+    "english_text": "Whether this chain-link fence is meant to keep me out or lock me in, it's all the same to me.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1962": {
+    "dialogue_id": "1001100199",
+    "chinese_text": "这栅栏，像一个永远没有出口的迷宫。",
+    "english_text": "This fence is like a maze with no exit.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1963": {
+    "dialogue_id": "1001100199",
+    "chinese_text": "我常在这里思考，这栅栏是真实存在的，还是我内心深处的映射？",
+    "english_text": "I often wonder here: is this fence real, or just a reflection of my inner self?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1964": {
+    "dialogue_id": "1001100199",
+    "chinese_text": "每当我看着这栅栏，我就感到一种无法言喻的悲伤。",
+    "english_text": "Whenever I look at this fence, I feel an indescribable sadness.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1965": {
+    "dialogue_id": "1001100199",
+    "chinese_text": "这栅栏，像一个永远无法逾越的鸿沟，将我与世界隔绝。",
+    "english_text": "This fence is like an insurmountable chasm, isolating me from the world.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1966": {
+    "dialogue_id": "1001100199",
+    "chinese_text": "我不明白，为什么我要站在这里，看着这栅栏。",
+    "english_text": "I don't understand why I'm standing here, staring at this fence.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1967": {
+    "dialogue_id": "1001100199",
+    "chinese_text": "这栅栏，像一个永远没有答案的谜题。",
+    "english_text": "This fence is like a riddle that will never have an answer.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1968": {
+    "dialogue_id": "1001100199",
+    "chinese_text": "我常在想，如果我能跨过这栅栏，我会看到什么？",
+    "english_text": "I often think: if I could cross this fence, what would I see?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1969": {
+    "dialogue_id": "1001100199",
+    "chinese_text": "这栅栏，像一个永远无法被打破的魔咒。",
+    "english_text": "This fence is like a curse that can never be broken.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1970": {
+    "dialogue_id": "1001100199",
+    "chinese_text": "我站在这里，看着这栅栏，感到一种无法言喻的孤独。",
+    "english_text": "Standing here, looking at this fence, I feel an unspeakable loneliness.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1971": {
+    "dialogue_id": "1001100199",
+    "chinese_text": "这栅栏，像一个永远没有尽头的噩梦。",
+    "english_text": "This fence is like a nightmare that never ends.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1972": {
+    "dialogue_id": "1001100199",
+    "chinese_text": "我常在想，这栅栏是为了保护我，还是为了困住我？",
+    "english_text": "I often wonder: is this fence here to protect me or to imprison me?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1973": {
+    "dialogue_id": "1001100199",
+    "chinese_text": "这栅栏，像一个永远无法被修补的伤口。",
+    "english_text": "This fence is like a wound that can never be healed.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1974": {
+    "dialogue_id": "1001100199",
+    "chinese_text": "我站在这里，看着这栅栏，感到一种无法言喻的绝望。",
+    "english_text": "Standing here, looking at this fence, I feel an indescribable despair.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1975": {
+    "dialogue_id": "1001100199",
+    "chinese_text": "这栅栏，像一个永远没有希望的未来。",
+    "english_text": "This fence is like a future without any hope.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1976": {
+    "dialogue_id": "1001100199",
+    "chinese_text": "我常在想，如果我能摧毁这栅栏，我会得到什么？",
+    "english_text": "I often wonder: if I could destroy this fence, what would I gain?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1977": {
+    "dialogue_id": "1001100199",
+    "chinese_text": "这栅栏，像一个永远无法被遗忘的记忆。",
+    "english_text": "This fence is like a memory that can never be forgotten.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1978": {
+    "dialogue_id": "1001100199",
+    "chinese_text": "我站在这里，看着这栅栏，感到一种无法言喻的痛苦。",
+    "english_text": "Standing here, looking at this fence, I feel an unspeakable pain.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1979": {
+    "dialogue_id": "1001100199",
+    "chinese_text": "这栅栏，像一个永远没有自由的囚笼。",
+    "english_text": "This fence is like a cage where there is no freedom.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1980": {
+    "dialogue_id": "1001100199",
+    "chinese_text": "我站在这里，看着这栅栏，感到一种无法言喻的愤怒。",
+    "english_text": "Standing here, looking at this fence, I feel an indescribable anger.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1981": {
+    "dialogue_id": "1001100200",
+    "chinese_text": "这扇门看起来像是一个限制区域的入口。",
+    "english_text": "This gate looks like an entrance to a restricted area.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1982": {
+    "dialogue_id": "1001100200",
+    "chinese_text": "即使是像素化的，这种设计也足够让人知道这里是禁止通行的。",
+    "english_text": "Even if it's pixelated, the design makes it clear that entry is forbidden.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1983": {
+    "dialogue_id": "1001100200",
+    "chinese_text": "锁孔似乎生锈了，可能很久没被打开过。",
+    "english_text": "The keyhole seems rusted; it probably hasn't been opened in a long time.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1984": {
+    "dialogue_id": "1001100200",
+    "chinese_text": "如果我能从格子的缝隙看过去……",
+    "english_text": "If only I could peek through the gaps in the mesh...",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1985": {
+    "dialogue_id": "1001100200",
+    "chinese_text": "门上的连接点看起来很坚固。",
+    "english_text": "The connection points on the gate look very sturdy.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1986": {
+    "dialogue_id": "1001100200",
+    "chinese_text": "这就像是一个不透气的障碍物。",
+    "english_text": "It feels like an airtight barrier.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1987": {
+    "dialogue_id": "1001100200",
+    "chinese_text": "这种风格的铁丝网在这个世界里很常见，通常用来标志边界。",
+    "english_text": "This style of chain-link is common in this world, usually used to mark boundaries.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1988": {
+    "dialogue_id": "1001100200",
+    "chinese_text": "门后面一定藏着什么秘密，对吧？",
+    "english_text": "There must be a secret hidden behind this gate, right?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1989": {
+    "dialogue_id": "1001100200",
+    "chinese_text": "这扇门似乎没有钥匙，可能需要特殊的方法打开。",
+    "english_text": "This gate doesn't seem to have a key; it might need a special way to open.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1990": {
+    "dialogue_id": "1001100200",
+    "chinese_text": "这让我想起了我曾经玩过的一个关于逃脱的游戏。",
+    "english_text": "This reminds me of an escape game I once played.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1991": {
+    "dialogue_id": "1001100200",
+    "chinese_text": "这里的设计师真懂得如何利用最简单的元素制造障碍。",
+    "english_text": "The designer here really knows how to use simple elements to create obstacles.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1992": {
+    "dialogue_id": "1001100200",
+    "chinese_text": "这扇门让我想起了许多关于边界和限制的故事。",
+    "english_text": "This gate brings to mind many stories about boundaries and limits.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1993": {
+    "dialogue_id": "1001100200",
+    "chinese_text": "这可能是某个谜题的一部分，我得好好想想。",
+    "english_text": "This could be part of a puzzle; I need to give it some thought.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1994": {
+    "dialogue_id": "1001100200",
+    "chinese_text": "我能不能试着从这里爬过去？虽然看起来不太可能。",
+    "english_text": "Can I try to climb over? Although it doesn't look very likely.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1995": {
+    "dialogue_id": "1001100200",
+    "chinese_text": "这里的像素艺术风格让这扇门看起来很有趣。",
+    "english_text": "The pixel art style makes this gate look quite interesting.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1996": {
+    "dialogue_id": "1001100200",
+    "chinese_text": "这扇门就像是一个提示，告诉我还有更广阔的世界等着我去探索。",
+    "english_text": "This gate is like a hint, telling me there's a wider world out there to explore.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1997": {
+    "dialogue_id": "1001100200",
+    "chinese_text": "或许我可以用什么东西来撬开它？",
+    "english_text": "Maybe I could use something to pry it open?",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1998": {
+    "dialogue_id": "1001100200",
+    "chinese_text": "这让我想起了那些被锁住的记忆和秘密。",
+    "english_text": "This reminds me of those locked memories and secrets.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "1999": {
+    "dialogue_id": "1001100200",
+    "chinese_text": "看起来我需要找到另一条路，或者找到一种打开它的方法。",
+    "english_text": "Looks like I need to find another way, or figure out how to open it.",
+    "weight": "10",
+    "duration_s": "10"
+  },
+  "2000": {
+    "dialogue_id": "1001100200",
+    "chinese_text": "门后可能充满了未知的危险，但我准备好了。",
+    "english_text": "The area behind the gate might be full of unknown dangers, but I'm ready.",
+    "weight": "10",
+    "duration_s": "10"
   }
 }
