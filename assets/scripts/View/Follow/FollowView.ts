@@ -79,8 +79,8 @@ export class FollowView extends Component {
             eggID: this.eggID,
         })
 
-        let imageURL = JSON.parse(post?.ImageURL || "")
-        if (imageURL.length > 0) {
+        let imageURL = post?.ImageURL && JSON.parse(post?.ImageURL || "[]")
+        if (imageURL && imageURL.length > 0) {
             const content = this.pageView.content;
             content.removeAllChildren();
             for (let i = 0; i < imageURL.length; i++) {
@@ -91,20 +91,11 @@ export class FollowView extends Component {
                 const imgSp = page.getComponent(Sprite);
                 if (imgSp) {
                     let journalImg = AppConst.JournalManager.journalImgs.find((i) => i.type == "localImg" && i.id == img["id"])
-                    imgSp.spriteFrame = AppConst.JournalManager.imgSprite[journalImg["localImgIndex"]]
+                    if (journalImg) {
+                        imgSp.spriteFrame = AppConst.JournalManager.imgSprite[journalImg["localImgIndex"]]
+                    }
                 }
             }
-            // 你动态生成完所有图片后，加这一段
-            const layout = this.pageView.content.getComponent(Layout);
-            if (layout) {
-                layout.updateLayout();
-            }
-
-            // 强制刷新 PageView
-            this.pageView.enabled = false;
-            this.scheduleOnce(() => {
-                this.pageView.enabled = true;
-            }, 0.03);
         }
 
         this.contentNode.string = post?.Content || ""
