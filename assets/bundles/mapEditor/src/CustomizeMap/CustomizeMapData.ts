@@ -17,10 +17,12 @@ export class CustomizeMapData extends Component {
     private npcTileCoordMode: 'raw' | 'flipY' | 'oneBased' | 'oneBasedFlipY' = 'raw';
 
     protected onLoad(): void {
-        EventSystem.addListent("OnMatchData" , this.OnMatchData , this)
     }
 
-    start() {}
+    start() {
+        
+        EventSystem.addListent("OnMatchData" , this.OnMatchData , this)
+    }
 
     public getServerTimeMs(): number {
         if (AppConst.WebSocketManager && AppConst.WebSocketManager.getServerTimestampMs) {
@@ -67,6 +69,7 @@ export class CustomizeMapData extends Component {
         return npcLocal as Vec3
     }
 
+    private addNpcs = {}
     AddNpc(npcId){
         let newNpc = instantiate(AppConst.UIRoot.npc)
         this.map.npcLayer.addChild(newNpc)
@@ -176,43 +179,40 @@ export class CustomizeMapData extends Component {
 
         if(data.opCode == 1){
             if(payloadMapId > 0 && payloadMapId == localMapId){
-                this.npcNodes = {}
-                this.npcDebugTiles = {}
+                // this.npcNodes = {}
+                // this.npcDebugTiles = {}
                 this.npcTileCoordMode = 'raw';
                 let npcs = data.payload.npcs
                 for(let n = 0 ;n < npcs.length ; n++){
                     let npcId = data.payload.npcs[n].id
-                    // let newNpc = instantiate(AppConst.UIRoot.npc)
-                    // this.map.npcLayer.addChild(newNpc)
+                    
+                    // if(!this.npcNodes[npcId]){
+                    //     let mapNpc = this.AddNpc(npcId)
 
-                    // let mapNpc = newNpc.addComponent(MapNpc)
-                    // mapNpc.npcId = npcId
-                    // mapNpc.map = this.map
-                    // mapNpc.customizeMapData = this
-                    let mapNpc = this.AddNpc(npcId)
+                    //     let x = data.payload.npcs[n].x
+                    //     let y = data.payload.npcs[n].y
+                    //     const npcLocal = this.parseServerPos(x ,y)
+                    //     if (!npcLocal) {
+                    //         continue;
+                    //     }
+                    //     this.updateNpcDebugTileCache(npcs[n], npcLocal);
+    
+                    //     mapNpc.node.x = npcLocal.x
+                    //     mapNpc.node.y = npcLocal.y
+    
+                    //     mapNpc.onServerMove({
+                    //         x: npcLocal.x,
+                    //         y: npcLocal.y,
+                    //         tile_x: Number(npcs[n].tile_x),
+                    //         tile_y: Number(npcs[n].tile_y),
+                    //         target_tile_x: Number(npcs[n].target_tile_x),
+                    //         target_tile_y: Number(npcs[n].target_tile_y),
+                    //         timestamp: Number(npcs[n].timestamp ?? npcs[n].ts ?? data.payload.timestamp ?? serverTs ?? globalNowMs),
+                    //     });
+    
+                    //     this.npcNodes[npcId] = mapNpc
+                    // }
 
-                    let x = data.payload.npcs[n].x
-                    let y = data.payload.npcs[n].y
-                    const npcLocal = this.parseServerPos(x ,y)
-                    if (!npcLocal) {
-                        continue;
-                    }
-                    this.updateNpcDebugTileCache(npcs[n], npcLocal);
-
-                    mapNpc.node.x = npcLocal.x
-                    mapNpc.node.y = npcLocal.y
-
-                    mapNpc.onServerMove({
-                        x: npcLocal.x,
-                        y: npcLocal.y,
-                        tile_x: Number(npcs[n].tile_x),
-                        tile_y: Number(npcs[n].tile_y),
-                        target_tile_x: Number(npcs[n].target_tile_x),
-                        target_tile_y: Number(npcs[n].target_tile_y),
-                        timestamp: Number(npcs[n].timestamp ?? npcs[n].ts ?? data.payload.timestamp ?? serverTs ?? globalNowMs),
-                    });
-
-                    this.npcNodes[String(npcs[n].id)] = mapNpc
                 }
                 this.renderNpcDebugTileOverlay();
             }
@@ -220,12 +220,12 @@ export class CustomizeMapData extends Component {
             if(payloadMapId > 0 && payloadMapId == localMapId){
                 for(let s = 0 ;s < data.payload.npcs.length ; s++){
                     const npcData = data.payload.npcs[s];
-                    const npcId = String(npcData.id);
-                    let npc = this.npcNodes[npcId];
+                    // const npcId = npcData.id;
+                    let npc = this.npcNodes[npcData.id];
                     // 兜底：如果首包没赶上，增量包到达时补创建 NPC，避免“第二次进入 NPC 不见”
                     if(!npc){
                         npc = this.AddNpc(npcData.id);
-                        this.npcNodes[npcId] = npc;
+                        this.npcNodes[npcData.id] = npc;
                     }
                     if(npc){
                         const npcLocal = this.parseServerPos(npcData.x, npcData.y);
@@ -234,15 +234,30 @@ export class CustomizeMapData extends Component {
                         }
                         this.updateNpcDebugTileCache(npcData, npcLocal);
 
-                        npc.onServerMove({
-                            x: npcLocal.x,
-                            y: npcLocal.y,
-                            tile_x: Number(npcData.tile_x),
-                            tile_y: Number(npcData.tile_y),
-                            target_tile_x: Number(npcData.target_tile_x),
-                            target_tile_y: Number(npcData.target_tile_y),
-                            timestamp: Number(npcData.timestamp ?? npcData.ts ?? data.payload.timestamp ?? serverTs ?? globalNowMs),
-                        })
+                        if(npcData.state == 1){
+                            npc.onServerMove({
+                                x: npcLocal.x,
+                                y: npcLocal.y,
+                                tile_x: Number(npcData.tile_x),
+                                tile_y: Number(npcData.tile_y),
+                                target_tile_x: Number(npcData.target_tile_x),
+                                target_tile_y: Number(npcData.target_tile_y),
+                                timestamp: Number(npcData.timestamp ?? npcData.ts ?? data.payload.timestamp ?? serverTs ?? globalNowMs),
+                            })
+                        }else if(npcData.state == 2){
+                            if(!npc.inited){
+                                npc.onServerMove({
+                                    x: npcLocal.x,
+                                    y: npcLocal.y,
+                                    tile_x: Number(npcData.tile_x),
+                                    tile_y: Number(npcData.tile_y),
+                                    target_tile_x: Number(npcData.target_tile_x),
+                                    target_tile_y: Number(npcData.target_tile_y),
+                                    timestamp: Number(npcData.timestamp ?? npcData.ts ?? data.payload.timestamp ?? serverTs ?? globalNowMs),
+                                })
+                            }
+                            npc.onServerDialog(npcData)
+                        }
                     }
                 }
                 this.renderNpcDebugTileOverlay();

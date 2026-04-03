@@ -22,6 +22,17 @@ export class LanguageManager extends Component {
         sys.localStorage.setItem("language" , lang)
         EventSystem.send("languageRep")
     }
+
+    public getDialogString(id){
+        let dialogCfg = AppConst.JSONManager.getItem("dialogueLibrary" , id)
+        if(!dialogCfg){
+            return ""
+        }
+        if(this.language == "cn"){
+            return dialogCfg["chinese_text"]
+        }
+        return dialogCfg["english_text"]
+    }
 }
 
 

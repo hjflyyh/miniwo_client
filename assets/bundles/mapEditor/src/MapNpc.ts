@@ -1,7 +1,8 @@
-import { _decorator, Component, Node, sp, UITransform, Vec2, Vec3 } from 'cc';
+import { _decorator, Component, Label, Node, sp, UITransform, Vec2, Vec3 } from 'cc';
 import { MapEditor } from './MapEditor';
 import { CustomizeMapData } from './CustomizeMap/CustomizeMapData';
 import { AppConst } from '../../../scripts/AppConst';
+import { JSONManager } from '../../../scripts/Manager/JSONManager';
 
 const { ccclass, property } = _decorator;
 
@@ -118,11 +119,17 @@ export class MapNpc extends Component {
     @property
     public frameMoveAnimEpsPx = 0.05;
 
+    @property(Label)
+    dialogueLabel : Label
+
+    @property(Node)
+    dialogueNode : Node
+
     private spineNode: Node = null!;
     private spine: sp.Skeleton = null!;
 
     private state: NpcState = NpcState.Idle;
-    private inited = false;
+    public inited = false;
 
     private curTile = new Vec2(0, 0);
     private targetTile = new Vec2(0, 0);
@@ -140,6 +147,10 @@ export class MapNpc extends Component {
 
     start() {
         this.spineNode = this.node.getChildByName('spine')!;
+        this.dialogueNode = this.node.getChildByName('dialogueNode')
+        this.dialogueLabel = this.dialogueNode.getChildByName('dialogueLabel').getComponent(Label)
+        this.dialogueNode.active = false
+
         this.spine = this.spineNode?.getComponent(sp.Skeleton)!;
         this.setState(NpcState.Idle, true);
     }
@@ -154,10 +165,19 @@ export class MapNpc extends Component {
         this.samplePositionByTime(renderMs, dt);
     }
 
+    public onServerDialog(data){
+        this.dialogueNode.active = true
+        console.log(data)
+        console.log("dialog")
+        // let dialogCfg = AppConst.JSONManager.getItem("dialogueLibrary" , data.dialogue_idle["id"])
+        this.dialogueLabel.string = AppConst.LanguageManager.getDialogString(data.dialogue_idle["id"])
+    }
+
     /**
      * 服务器回包入口：每次收到移动数据调用
      */
     public onServerMove(data: NpcMovePacket) {
+        this.dialogueNode.active = false
         if (data == null || data.x == null || data.y == null) return;
 
         const serverPos = this.serverToNpcLayerPos(data.x, data.y);
@@ -517,7 +537,8 @@ export class MapNpc extends Component {
         if (horizontal) {
             // c walk 默认朝左，右移时做镜像
             this.facingScaleX = dx >= 0 ? -1 : 1;
-            this.node.setScale(this.facingScaleX, 1, 1);
+            this.node.setScale(1, 1, 1);
+            this.spineNode.setScale(this.facingScaleX * 0.2, 0.2, 1);
         } else {
             this.node.setScale(1, 1, 1);
         }
