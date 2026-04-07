@@ -33,8 +33,11 @@ export class CreateView extends Component {
     @property(EditBox)
     public mapNameEditBox: EditBox = null;
 
-        @property(EditBox)
+    @property(EditBox)
     public npcNameEditBox: EditBox = null;
+
+    @property(EditBox)
+    public npcAgeEditBox: EditBox = null;
 
     @property(Label)
     public stepInfoLabel: Label = null;
@@ -133,6 +136,11 @@ export class CreateView extends Component {
             EventSystem.send("ShowTips" , "请输入NPC名称")
             return
         }
+        const age = this.npcAgeEditBox.string ? this.npcAgeEditBox.string.trim() : "";
+        if(age == "" || isNaN(Number(age))){
+            EventSystem.send("ShowTips" , "请输入NPC年龄，必须为数字")
+            return
+        }
         if(UGCModel.getInstance().npcList.length >= 10){
             EventSystem.send("ShowTips" , "NPC数量不能超过10个")
             return
@@ -148,7 +156,7 @@ export class CreateView extends Component {
             return;
         }
 
-        ugc.creatorNpc(ugc.mapData.id , name);
+        ugc.creatorNpc(ugc.mapData.id , name , Number(age));
         this.createNpcNode.active = false;
     }
 

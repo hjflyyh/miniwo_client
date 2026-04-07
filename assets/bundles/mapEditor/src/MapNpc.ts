@@ -167,8 +167,8 @@ export class MapNpc extends Component {
 
     public onServerDialog(data){
         this.dialogueNode.active = true
-        console.log(data)
-        console.log("dialog")
+        // console.log(data)
+        // console.log("dialog")
         // let dialogCfg = AppConst.JSONManager.getItem("dialogueLibrary" , data.dialogue_idle["id"])
         this.dialogueLabel.string = AppConst.LanguageManager.getDialogString(data.dialogue_idle["id"])
     }

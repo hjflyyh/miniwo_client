@@ -66,6 +66,23 @@ export class UGCModel {
         EventSystem.addListent("HttpMessage", this.OnHttpMessage, this);
     }
 
+    public setNpcMBTI(npcId , mbti){
+        for(let i = 0 ; i < this.npcList.length ; i++){
+            if(this.npcList[i].id == npcId){
+                this.npcList[i].mbti = mbti;
+            }
+        }
+    }
+
+    public getNpcMBTI(npcId){
+        for(let i = 0 ; i < this.npcList.length ; i++){
+            if(this.npcList[i].id == npcId){
+                return this.npcList[i].mbti;
+            }
+        }
+        return 0
+    }
+
     /** 用服务端返回的 map 对象合并到 mapData（浅合并已知字段） */
     public applyMapFromServer(partial: Partial<UGCMapSnapshot> | Record<string, unknown>) {
         if (!partial || typeof partial !== "object") {
@@ -273,13 +290,14 @@ export class UGCModel {
     }
 
     //### Step 3：NPC 增删改查 + AI 生成人设
-    public creatorNpc(mapId , name){
+    public creatorNpc(mapId , name , age){
         AppConst.HttpManager.sendPostHttp(
             "creatorNpc",
               JSON.stringify({
                 "token": this.token(),
                 mapId: Number(mapId),
-                name: name
+                name: name,
+                age: age
             })
         )
     }

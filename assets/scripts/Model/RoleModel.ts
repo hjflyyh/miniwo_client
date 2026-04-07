@@ -75,10 +75,10 @@ export class RoleModel {
             return;
         }
         const payload = this.parseRpcPayload(data["payload"]);
-        if(payload && payload.success === false && payload.code === "SESSION_REPLACED"){
-            this.handleForceLogout(payload.message || "账号已在其他设备登录");
-            return;
-        }
+
+        // 不在此处对「任意 RPC」的 SESSION_REPLACED 做异地强退：
+        // 重连/Join 等场景下服务端可能对旧会话返回 SESSION_REPLACED，误伤当前新会话。
+        // 真·异地踢下线仅通过 OnWSNotification（code=199, force_logout + target_session_id）处理。
 
         if(data["id"] == "game_login"){
             if(payload && payload.success){
@@ -93,7 +93,10 @@ export class RoleModel {
                 return;
             }
             if(payload && payload.success === false){
-                const msg = payload.message || "游戏登录失败";
+                let msg = payload.message || "游戏登录失败";
+                if(payload.code === "SESSION_REPLACED"){
+                    msg = "会话已失效，请重新登录";
+                }
                 EventSystem.send("ShowTips" , msg);
                 return
             }
