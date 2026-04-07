@@ -349,5 +349,70 @@
     "spine_size": "1",
     "spine_pos": "0#0",
     "dialogue_id": null
+  },
+  "28": {
+    "name_cn": "峡谷挂画",
+    "icon": "WallDecor/icon/canyon_wall_art",
+    "image": "WallDecor/image/canyon_wall_art",
+    "tags": "",
+    "map_size": "38#37",
+    "img_size": "0.35",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "dialogue_id": null
+  },
+  "29": {
+    "name_cn": "山水挂画",
+    "icon": "WallDecor/icon/landscape_painting",
+    "image": "WallDecor/image/landscape_painting",
+    "tags": "",
+    "map_size": "38#37",
+    "img_size": "0.35",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "dialogue_id": null
+  },
+  "30": {
+    "name_cn": "吉祥物挂画",
+    "icon": "WallDecor/icon/mascot_wall_art",
+    "image": "WallDecor/image/mascot_wall_art",
+    "tags": "",
+    "map_size": "38#37",
+    "img_size": "0.35",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "dialogue_id": null
+  },
+  "31": {
+    "name_cn": "木质墙框",
+    "icon": "WallDecor/icon/wood_frame",
+    "image": "WallDecor/image/wood_frame",
+    "tags": "",
+    "map_size": "150#51",
+    "img_size": "0.35",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "dialogue_id": null
+  },
+  "32": {
+    "name_cn": "木质置物架",
+    "icon": "WallDecor/icon/wooden_decor_shelf",
+    "image": "WallDecor/image/wooden_decor_shelf",
+    "tags": "",
+    "map_size": "105#35",
+    "img_size": "0.35",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "dialogue_id": null
   }
 }
