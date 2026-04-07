@@ -41,8 +41,8 @@ export class MainBottom extends Component {
     }
 
     OnClickEdit(){
-        MapModel.getInstance().EnterMap(1)
-        // AppConst.PanelManager.openView("res/View/CreateMap/MyWorldView")
+        // MapModel.getInstance().EnterMap(1)
+        AppConst.PanelManager.openView("res/View/CreateMap/MyWorldView")
         // AppConst.PanelManager.openView("res/View/Follow/FollowImgChoose")
         // AppConst.PanelManager.openView("res/View/Follow/FollowImgSetting" , {
         //     id : 1,type : "localImg"

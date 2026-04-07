@@ -2187,8 +2187,8 @@
     "mapGraphics": {
       "__id__": 54
     },
-    "debugShowWalkable": true,
-    "map_data_test": true,
+    "debugShowWalkable": false,
+    "map_data_test": false,
     "minOrthoSize": 210,
     "maxOrthoSize": 550,
     "_id": "abq+rSUgpJcoQNEssTNPU6"
