@@ -40,7 +40,7 @@ export class CardListCell extends Component {
             let player_suipian_number = CardModel.getInstance().getCardSuipianNum(this.cardData)
             this.suipianNum.string = player_suipian_number + "/" + suipian_number
             this.suipianPorg.progress = player_suipian_number / suipian_number
-        } else{
+        } else {
             this.suipianPorg.node.active = false
             this.suipianNum.node.active = false
         }

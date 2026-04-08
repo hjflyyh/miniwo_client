@@ -21,6 +21,10 @@ export class UserCenter extends Component {
     OnClickCard(){
         AppConst.PanelManager.openView("res/View/Card/CardList" , null , null , "res/View/UserCenter/UserCenter")
     }
+
+    OnClickBag(){
+        AppConst.PanelManager.openView("res/View/Bag/BagList" , null , null , "res/View/UserCenter/UserCenter")
+    }
 }
 
 

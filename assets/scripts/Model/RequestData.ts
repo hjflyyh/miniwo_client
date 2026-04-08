@@ -17,7 +17,7 @@ export module network {
     export enum FollowSocialCode {
         FollowData = 4001, // 关注数据
         // TimelineData = 4002, // 朋友圈数据
-        PostData = 403,// 帖子数据
+        PostData = 4003,// 帖子数据
         OtherPostData = 4004,// other帖子数据
         CommentData = 4005,// 评论数据
         TopCommentData = 4006, // 一级评论数据
