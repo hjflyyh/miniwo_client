@@ -11,21 +11,23 @@ export class MTBICell extends Component {
     public chooseNode : Node = null;
 
     private npcId = 0;
-    private mbtiIndex = 0;
+    private mbtiId = 0;
     start() {
 
     }
 
-    setNpcId(npcId , mbti , mbtiIndex){
+    setNpcId(npcId , mbti , mbtiId){
         this.npcId = npcId;
-        this.mbtiIndex = mbtiIndex;
+        this.mbtiId = mbtiId;
         this.mbtiLabel.string = mbti;
         let npcMBTI = UGCModel.getInstance().getNpcMBTI(this.npcId);
-        this.chooseNode.active = npcMBTI + 1 == mbtiIndex;
+        this.chooseNode.active = npcMBTI == mbtiId;
     }
 
     onClickMBTI(){
-        EventSystem.send("MTBICell" , {npcId : this.npcId , mbtiIndex : this.mbtiIndex})
+        UGCModel.getInstance().setNpcMBTI(this.npcId , this.mbtiId);
+        UGCModel.getInstance().syncNpcToServerById(this.npcId);
+        EventSystem.send("NPCRefreshCell" , {npcId : this.npcId , mbtiId : this.mbtiId})
     }
 }
 

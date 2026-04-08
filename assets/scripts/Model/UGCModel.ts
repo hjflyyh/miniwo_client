@@ -66,6 +66,113 @@ export class UGCModel {
         EventSystem.addListent("HttpMessage", this.OnHttpMessage, this);
     }
 
+
+
+    public addNpcRenshe(npcId , rensheId){
+        let renshe = this.getNpcRenshe(npcId);
+        if(renshe.length >= 3){ 
+            EventSystem.send("ShowTips" , "最多3个人设");
+            return false;
+        }
+        renshe.push(rensheId);
+        this.setNpcRenshe(npcId , renshe)
+        return true;
+    }
+
+    public removeNpcRenshe(npcId , rensheId){
+        let renshe = this.getNpcRenshe(npcId);
+        for(let i = 0 ; i < renshe.length ; i++){   
+            if(renshe[i] == rensheId){  
+                renshe.splice(i , 1);
+            }
+        }
+        this.setNpcRenshe(npcId , renshe)
+    }
+
+    public setNpcRenshe(npcId , renshe){    
+        for(let i = 0 ; i < this.npcList.length ; i++){
+            if(this.npcList[i].id == npcId){
+                this.npcList[i].characteristics = renshe
+            }
+        }
+    }
+
+    public getNpcRenshe(npcId){
+        for(let i = 0 ; i < this.npcList.length ; i++){
+            if(this.npcList[i].id == npcId){
+                if(this.npcList[i].characteristics == ""){
+                    return [];
+                }
+                return this.npcList[i].characteristics;
+            }
+        }
+        return []
+    }
+
+    public setNpcSex(npcId , sex){
+        for(let i = 0 ; i < this.npcList.length ; i++){
+            if(this.npcList[i].id == npcId){
+                this.npcList[i].sex = sex;
+            }
+        }
+    }
+
+    public setNpcBackground(npcId , background){    
+        for(let i = 0 ; i < this.npcList.length ; i++){
+            if(this.npcList[i].id == npcId){
+                this.npcList[i].identity = background;
+            }
+        }        
+    }
+
+    public getNpcBackground(npcId){ 
+        for(let i = 0 ; i < this.npcList.length ; i++){
+            if(this.npcList[i].id == npcId){
+                return this.npcList[i].identity;
+            }
+        }
+        return "";
+    }
+
+    public getNpcSex(npcId){
+        for(let i = 0 ; i < this.npcList.length ; i++){
+            if(this.npcList[i].id == npcId){
+                return this.npcList[i].sex;
+            }
+        }
+        return 0;
+    }
+
+    public getMBTIList(){
+        let list = []
+        for(let i = 0 ; i < RoleModel.getInstance().tags.length ; i++){
+            if(RoleModel.getInstance().tags[i].tag_type == 5){
+                list.push(RoleModel.getInstance().tags[i])
+            }
+        }        
+        return list;
+    }
+
+    public getRensheList(){
+        let list = []
+        for(let i = 0 ; i < RoleModel.getInstance().tags.length ; i++){
+            if(RoleModel.getInstance().tags[i].tag_type == 2){
+                list.push(RoleModel.getInstance().tags[i])
+            }
+        }        
+        return list;
+    }
+
+    public getBackgroundList(){
+        let list = []
+        for(let i = 0 ; i < RoleModel.getInstance().tags.length ; i++){
+            if(RoleModel.getInstance().tags[i].tag_type == 6){
+                list.push(RoleModel.getInstance().tags[i])
+            }
+        }        
+        return list;
+    }
+
     public setNpcMBTI(npcId , mbti){
         for(let i = 0 ; i < this.npcList.length ; i++){
             if(this.npcList[i].id == npcId){
@@ -314,16 +421,53 @@ export class UGCModel {
     }
 
     //#### updateNpcById
-    public updateNpcById(mapId , npcId , name){
+    public updateNpcById(mapId , npcId , name , sex , mbti , renshe , background){
         AppConst.HttpManager.sendPostHttp(
             "updateNpcById",
               JSON.stringify({
                 "token": this.token(),
                 mapId: Number(mapId),
                 npcId: Number(npcId),
-                name: name
-            })
+                name: name, 
+                sex: sex,
+                mbti: mbti,
+                characteristics: renshe,
+                identity: background
+              })
         )
+    }
+
+    /**
+     * 将内存中该 NPC 的当前字段同步到服务器（在本地 set/add/remove 之后调用）。
+     * characteristics 为数组时会序列化为 JSON 字符串以符合接口 string 类型。
+     */
+    public syncNpcToServerById(npcId: number) {
+        const mapId = this.mapData?.id;
+        if (mapId == null || Number(mapId) <= 0) {
+            return;
+        }
+        const idNum = Number(npcId);
+        const npc = this.npcList.find((n: any) => {
+            const nid = n && (n.id != null ? n.id : n.npc_id);
+            return Number(nid) === idNum;
+        });
+        if (!npc) {
+            return;
+        }
+        const name = String(npc.name ?? npc.npc_name ?? "");
+        const sex = npc.sex;
+        const mbti = npc.mbti;
+        let characteristics: string;
+        const ch = npc.characteristics;
+        if (Array.isArray(ch)) {
+            characteristics = JSON.stringify(ch);
+        } else if (ch == null || ch === "") {
+            characteristics = "";
+        } else {
+            characteristics = String(ch);
+        }
+        const identity = String(npc.identity ?? "");
+        this.updateNpcById(mapId, idNum, name, sex, mbti, characteristics, identity);
     }
 
     public delNpcById(mapId , npcId){
