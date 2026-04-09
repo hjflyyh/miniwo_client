@@ -512,6 +512,15 @@ public markSessionRead(peerUid: string) {
     const channelId = data?.channel_id;
     if (!channelId) return;
 
+    // 过滤：地图群聊（ROOM）也会走 channel_message，这里只处理私聊内容，避免串台
+    // MapChatManager 的 content 结构：{ from_type, from_id, text, map_id, ts, ... }
+    const c = data?.content;
+    if (c && typeof c === "object") {
+      if ((c as any).map_id != null || (c as any).from_type != null) {
+        return;
+      }
+    }
+
     try {
       chatLog("[pm] onChannelMessage", {
         channelId,

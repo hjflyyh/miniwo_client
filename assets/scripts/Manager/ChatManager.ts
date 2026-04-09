@@ -8,7 +8,7 @@ import { HttpManager } from "./HttpManager";
 type ChatMessage = {
   from_type: string; // "player" / "npc"
   from_id: string;   // user id 或 npc id
-  text: string;
+  text: unknown;
   map_id: number;
   ts: number;
   username : string;
@@ -145,19 +145,28 @@ export class MapChatManager {
     }
 
     private OnChannelMessage(data){
-      // let data = data.content
-          const msg: ChatMessage = {
-            from_type: data.content.from_type,
-            from_id: String(data.content.from_id ?? ""),
-            text: data.content.text,
-            map_id: Number(data.content.map_id),
-            ts: Number(data.content.ts),
-            username : data.content.nick_name,
-            npc_name : data.content.npc_name
-          };
-          this.msessages.push(msg);
+        const c = data?.content;
+        // 过滤：地图群聊只消费带 map_id/from_type 的消息；私聊等其它 channel_message 直接忽略
+        if (!c || typeof c !== "object") return;
+        if (c.map_id == null || c.from_type == null) return;
 
-          EventSystem.send("EventRefreshChat")
+        const mapId = Number(c.map_id);
+        if (Number.isFinite(this._currentMapId) && this._currentMapId > 0 && mapId !== this._currentMapId) {
+            return;
+        }
+        const msg: ChatMessage = {
+            from_type: String(c.from_type || ""),
+            from_id: String(c.from_id ?? ""),
+            // 保留原始类型（可能是 string 或 {message,mentions} 对象），交给 getDisplayText 解析展示
+            text: (c as any).text ?? "",
+            map_id: mapId,
+            ts: Number(c.ts ?? Date.now()),
+            username: String(c.nick_name ?? data?.username ?? ""),
+            npc_name: c.npc_name != null ? String(c.npc_name) : undefined,
+        };
+        this.msessages.push(msg);
+
+        EventSystem.send("EventRefreshChat")
     }
 
     private OnWebSocketMessage(data){
