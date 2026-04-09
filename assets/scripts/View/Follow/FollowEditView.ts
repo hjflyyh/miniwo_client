@@ -34,6 +34,7 @@ export class FollowEditView extends Component {
     start() {
         EventSystem.addListent("followEditBack", this.back, this)
         EventSystem.addListent("OnRefreshFollowImgChoose", this.setChooseNodeList, this)
+        EventSystem.addListent("OnSaveFollowSettingImg", this.saveFollowSettingImg, this)
         this.openData = []
         this.imgsAdd.active = true
         this.imgsRender.active = false
@@ -43,6 +44,13 @@ export class FollowEditView extends Component {
         if (draftData) {
             this.titleNode.string = draftData.title || ""
             this.contentNode.string = draftData.content || ""
+        }
+    }
+
+    saveFollowSettingImg(data) {
+        let index = this.openData.findIndex((item) => item.id == data.id && item.type == data.type)
+        if (index != -1) {
+            this.openData[index] = data
         }
     }
 
