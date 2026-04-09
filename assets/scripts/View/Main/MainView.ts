@@ -1,6 +1,5 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component } from 'cc';
 import { AppConst } from '../../AppConst';
-import { PrivateChatManager } from '../../Manager/PrivateChatMessage';
 const { ccclass, property } = _decorator;
 
 @ccclass('MainView')
@@ -11,5 +10,4 @@ export class MainView extends Component {
     }
 
 }
-
 

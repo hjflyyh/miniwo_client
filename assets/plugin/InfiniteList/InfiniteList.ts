@@ -130,7 +130,7 @@ export class InfiniteList extends Component {
     ////////////////////////////////////////////////////////////
 
     private _debug = false;
-    private _scrollView: ScrollView | null = null;
+    public _scrollView: ScrollView | null = null;
 
     @property(Node)
     content : Node
@@ -241,8 +241,12 @@ export class InfiniteList extends Component {
         this._activeCellIndexRange = new Vec2(-1, -1);
         if (!keepPos) {
             this._scrollPosition = 0;
-            this._content!.getPosition().x = 0;
-            this._content!.getPosition().y = 0;
+            // 注意：getPosition() 返回的是拷贝，直接改 x/y 不会生效，必须 setPosition
+            if (this._content) {
+                this._content.setPosition(0, 0, 0);
+            }
+            // 同步 scrollView 的 offset，避免内容残留偏移导致 cell 显示位置异常
+            this._scrollView?.scrollToTop?.(0);
         }
     }
 

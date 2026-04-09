@@ -2,6 +2,8 @@ import { _decorator, Component, Label, Node, Sprite } from 'cc';
 import InfiniteCell from '../../../../plugin/InfiniteList/InfiniteCell';
 import { MapModel } from '../../../Model/MapModel';
 import { Utils } from '../../../Utils/Utils';
+import { AppConst } from '../../../AppConst';
+import { RoleModel } from '../../../Model/RoleModel';
 const { ccclass, property } = _decorator;
 
 @ccclass('MapListItem')
@@ -19,6 +21,12 @@ export class MapListItem extends Component implements InfiniteCell{
     @property(Sprite)
     banner : Sprite
 
+    @property(Label)
+    likeNumber : Label
+
+    @property(Node)
+    isLike : Node
+
     mapData
     start() {
 
@@ -29,6 +37,8 @@ export class MapListItem extends Component implements InfiniteCell{
         this.mapData = mapData
         this.mapName.string = mapData.map_name
         this.mapInfo.string = mapData.map_worldview
+        this.likeNumber.string = mapData.map_like_count
+        this.isLike.active = mapData.liked
 
         Utils.loadCover(mapData["map_cover_url"], this.banner , 850 , 1420);
     }
@@ -37,6 +47,19 @@ export class MapListItem extends Component implements InfiniteCell{
         console.log("进入地图")
         console.log(this.mapData)
         MapModel.getInstance().requestJoinMap(Number(this.mapData["id"]));
+    }
+
+    OnClickLike(){
+        const mapId = Number(this.mapData["id"]);
+        if (MapModel.getInstance().IsUserLikedMap(mapId)) {
+            MapModel.getInstance().RemoveMapLike(mapId);
+            AppConst.HttpManager.sendPostHttp("unlikeMap" , JSON.stringify({ "token": RoleModel.getInstance().token, mapId }));
+        } else {
+            MapModel.getInstance().AddMapLike(mapId);
+            AppConst.HttpManager.sendPostHttp("likeMap" , JSON.stringify({ "token": RoleModel.getInstance().token, mapId }));
+        }
+        this.isLike.active = MapModel.getInstance().IsUserLikedMap(mapId);
+        this.likeNumber.string = String(MapModel.getInstance().GetMapLikeCount(mapId));
     }
 }
 

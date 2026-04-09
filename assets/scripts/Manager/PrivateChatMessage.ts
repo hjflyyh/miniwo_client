@@ -1,10 +1,18 @@
 // PrivateChatManager.ts
 // import { EventSystem } from "../EventSystem"; // 按你项目路径改
 // import { AppConst } from "../AppConst";       // 按你项目路径改
-import { sys } from "cc";
+import { sys, log } from "cc";
 import { AppConst } from "../AppConst";
 
 type Role = "self" | "peer";
+
+function chatLog(...args: any[]) {
+  try {
+    (log as any)?.apply?.(null, args);
+    return;
+  } catch {}
+  try { console.log(...args); } catch {}
+}
 
 export interface PrivateMsg {
   messageId: string;
@@ -49,11 +57,24 @@ export class PrivateChatManager {
   private msgsByChannel = new Map<string, PrivateMsg[]>();
   private localSessionsByPeer = new Map<string, LocalChatSessionItem>();
 
+  // NPC 私聊：避免“上一条回复延迟到下一条才出现”的错觉，做一个轻量 pending 锁。
+  private npcPendingByPeer = new Map<string, { lastSendTs: number; startedAt: number }>();
+  private npcPendingUnlockTimerByPeer = new Map<string, number>();
+
   private readonly storagePrefix = "private_chat_v1";
   private readonly maxMsgPerChannel = 300;
 
   private readonly sessionListKey = "private_chat_v1:sessions";
+  /** npcId -> peerUid 的本地缓存，避免打开 NPC 私聊必须先等 RPC 才能显示本地记录 */
+  private readonly npcUidMapKey = "private_chat_v1:npc_uid_map";
 
+  /** Nakama RT 请求 cid（与应答 echo 一致；用简单递增字符串，避免服务端回显数字 1/2 与自定义 cj_ 前缀不一致导致永远匹配不上） */
+  private _rtCidSeq = 0;
+
+  private nextRtCid(): string {
+    this._rtCidSeq += 1;
+    return String(this._rtCidSeq);
+  }
 
   private constructor() {}
 
@@ -106,11 +127,107 @@ public markSessionRead(peerUid: string) {
 
   // ------------------- 会话打开 -------------------
 
+  /**
+   * 仅用本地缓存打开会话（不 join channel），用于进入 ChatView 先渲染本地聊天记录。
+   * 返回 null 表示本地没有对应会话缓存。
+   */
+  public tryOpenLocalSession(peerUid: string): ChatSession | null {
+    const uid = String(peerUid || "");
+    if (!uid) return null;
+
+    const cached = this.sessionsByPeer.get(uid);
+    if (cached) return cached;
+
+    const local = this.localSessionsByPeer.get(uid);
+    if (!local || !local.channelId) return null;
+
+    const s: ChatSession = {
+      peerUid: uid,
+      peerName: local.peerName ?? null,
+      peerAvatar: local.peerAvatar ?? null,
+      isNPC: !!local.isNPC,
+      channelId: String(local.channelId),
+      openedAt: Date.now(),
+    };
+    this.sessionsByPeer.set(uid, s);
+    this.sessionsByChannel.set(s.channelId, s);
+    this.msgsByChannel.set(s.channelId, this.loadLocalMsgs(s.channelId));
+    return s;
+  }
+
+  /** 仅本地读取消息（不要求 sessionByPeer 已打开） */
+  public getLocalMessagesByPeer(peerUid: string): PrivateMsg[] {
+    const uid = String(peerUid || "");
+    const local = this.localSessionsByPeer.get(uid);
+    if (!local || !local.channelId) return [];
+    return this.loadLocalMsgs(String(local.channelId));
+  }
+
+  private loadNpcUidMap(): Record<string, string> {
+    const raw = sys.localStorage.getItem(this.npcUidMapKey);
+    if (!raw) return {};
+    try {
+      const o = JSON.parse(raw);
+      if (o && typeof o === "object") return o;
+    } catch {}
+    return {};
+  }
+
+  private saveNpcUidMap(map: Record<string, string>) {
+    try {
+      sys.localStorage.setItem(this.npcUidMapKey, JSON.stringify(map || {}));
+    } catch {}
+  }
+
+  /** 根据 Nakama UID 反查本地缓存的 npcId（无则 null） */
+  public getNpcIdByPeerUid(peerUid: string): number | null {
+    const uid = String(peerUid || "");
+    if (!uid) return null;
+    const m = this.loadNpcUidMap();
+    for (const key of Object.keys(m)) {
+      if (String(m[key]) === uid) {
+        const n = Number(key);
+        return Number.isFinite(n) && n > 0 ? n : null;
+      }
+    }
+    return null;
+  }
+
+  private getCachedNpcPeerUid(npcId: number): string | null {
+    const id = Number(npcId);
+    if (!Number.isFinite(id) || id <= 0) return null;
+    const m = this.loadNpcUidMap();
+    const uid = m[String(id)];
+    return uid ? String(uid) : null;
+  }
+
+  private cacheNpcPeerUid(npcId: number, peerUid: string) {
+    const id = Number(npcId);
+    const uid = String(peerUid || "");
+    if (!Number.isFinite(id) || id <= 0 || !uid) return;
+    const m = this.loadNpcUidMap();
+    m[String(id)] = uid;
+    this.saveNpcUidMap(m);
+  }
+
   /** 打开 NPC 私聊 */
   async openNpcSession(npcId: number): Promise<ChatSession> {
+    try { chatLog("[openNpcSession]", { npcId }); } catch {}
+    const cachedUid = this.getCachedNpcPeerUid(npcId);
+    if (cachedUid) {
+      this.tryOpenLocalSession(cachedUid);
+      return this.openSessionByUid(
+        cachedUid,
+        true,
+        this.localSessionsByPeer.get(cachedUid)?.peerName ?? null,
+        this.localSessionsByPeer.get(cachedUid)?.peerAvatar ?? null
+      );
+    }
     const r = await this.rpc("get_npc_chat_id", { npc_id: npcId });
     if (!r?.success || !r.nakama_uid) throw new Error(r?.message || "get_npc_chat_id failed");
 
+    this.cacheNpcPeerUid(npcId, String(r.nakama_uid));
+    try { chatLog("[openNpcSession] got uid", { npcId, peerUid: String(r.nakama_uid) }); } catch {}
     return this.openSessionByUid(r.nakama_uid, true, r.name ?? null, r.avatar ?? null);
   }
 
@@ -119,17 +236,60 @@ public markSessionRead(peerUid: string) {
     return this.openSessionByUid(peerUid, false, peerName ?? null, null);
   }
 
+  /** 会话列表等：已知 NPC 的 Nakama UID、本地无 npcId 映射时打开 */
+  async openNpcSessionByPeerUid(peerUid: string, peerName?: string | null): Promise<ChatSession> {
+    const uid = String(peerUid || "");
+    if (!uid) throw new Error("peerUid 无效");
+    return this.openSessionByUid(uid, true, peerName ?? null, null);
+  }
+
   private async openSessionByUid(
     peerUid: string,
     isNPC: boolean,
     peerName: string | null,
     peerAvatar: string | null
   ): Promise<ChatSession> {
+    try { chatLog("[openSessionByUid] enter", { peerUid, isNPC }); } catch {}
     const cached = this.sessionsByPeer.get(peerUid);
-    if (cached) return cached;
+    if (cached) {
+      // 注意：tryOpenLocalSession 会提前塞一个“本地缓存 session”，如果这里直接 return，
+      // 就永远不会 join realtime channel，导致收不到后端主动推送的 channel_message。
+      await this.loadDmHistory(cached).catch(() => {});
+      // 无论是否命中缓存，都确保建立 realtime 订阅（后台修正 channelId 映射）。
+      try {
+        chatLog("[openSessionByUid] cached -> ensure joinChat", { peerUid });
+        const ch = await this.joinChat(peerUid);
+        chatLog("[openSessionByUid] cached joinChat ok", { peerUid, channel: ch });
+        if (ch?.id && typeof ch.id === "string" && ch.id !== cached.channelId) {
+          this.migrateSessionChannelId(cached, ch.id);
+        }
+      } catch (e) {
+        try { chatLog("[openSessionByUid] cached joinChat failed", { peerUid, err: String((e as any)?.message || e) }); } catch {}
+      }
+      return cached;
+    }
 
-    const ws = AppConst.WebSocketManager;
-    const channel = await this.joinChat(peerUid); // DM type=2
+    // 进入界面时优先用本地缓存（若存在），让 ChatView 先渲染本地记录；随后再 join 实时 channel
+    const localRow = this.localSessionsByPeer.get(peerUid);
+    if (localRow?.channelId) {
+      const s0: ChatSession = {
+        peerUid,
+        peerName: peerName ?? localRow.peerName ?? null,
+        peerAvatar: peerAvatar ?? localRow.peerAvatar ?? null,
+        isNPC,
+        channelId: String(localRow.channelId),
+        openedAt: Date.now(),
+      };
+      this.sessionsByPeer.set(peerUid, s0);
+      this.sessionsByChannel.set(s0.channelId, s0);
+      this.msgsByChannel.set(s0.channelId, this.loadLocalMsgs(s0.channelId));
+      // 不 await：本地先用，服务端 history 后续再合并
+      this.loadDmHistory(s0).catch(() => {});
+    }
+
+    try { chatLog("[openSessionByUid] calling joinChat", { peerUid }); } catch {}
+    const channel = await this.joinChat(peerUid); // DM type=2（实时）
+    try { chatLog("[openSessionByUid] joinChat ok", { peerUid, channel }); } catch {}
 
     const s: ChatSession = {
       peerUid,
@@ -159,7 +319,94 @@ public markSessionRead(peerUid: string) {
       unread: this.localSessionsByPeer.get(s.peerUid)?.unread || 0,
     });
 
+    await this.loadDmHistory(s).catch(() => {});
+
     return s;
+  }
+
+  /** 从服务端拉取 DM 最近消息（含 NPC 回复），合并进本地并刷新 UI */
+  private async loadDmHistory(session: ChatSession): Promise<void> {
+    const r = await this.rpc("private_chat_history", {
+      target_uid: session.peerUid,
+      limit: 50,
+    });
+    if (!r?.success || !Array.isArray(r.messages) || r.messages.length === 0) {
+      return;
+    }
+    const channelId = session.channelId;
+    const list = [...(this.msgsByChannel.get(channelId) || [])];
+    const seen = new Set(list.filter((m) => m.messageId).map((m) => m.messageId as string));
+    for (const row of r.messages) {
+      const mid = String(row.message_id || "");
+      const text = String(row.text || "").trim();
+      if (!text) continue;
+      if (mid && seen.has(mid)) continue;
+      const ts =
+        typeof row.create_time_ms === "number" ? row.create_time_ms : Date.now();
+      // 对账：历史里出现“自己刚发的消息”，若本地已存在 local-*，则升级而不是插入新的一条
+      const isSelf = String(row.sender_id || "") === String(this.selfUid || "");
+      if (isSelf) {
+        const idx = list.findIndex((x) => {
+          if (!x) return false;
+          if (x.role !== "self") return false;
+          if ((String(x.text || "").trim()) !== (String(text || "").trim())) return false;
+          const dt = Math.abs((x.ts || 0) - (ts || 0));
+          if (dt > 10000) return false;
+          const midLocal = String(x.messageId || "");
+          return midLocal.startsWith("local-");
+        });
+        if (idx >= 0) {
+          const local = list[idx];
+          if (mid) {
+            local.messageId = mid;
+            seen.add(mid);
+          }
+          if (Number.isFinite(ts) && ts > 0) {
+            local.ts = ts;
+          }
+          continue;
+        }
+      }
+      const msg: PrivateMsg = {
+        messageId: mid || `hist-${ts}-${row.sender_id || ""}`,
+        channelId,
+        senderId: String(row.sender_id || ""),
+        username: row.username || "",
+        text,
+        ts,
+        role: isSelf ? "self" : "peer",
+      };
+      if (mid) seen.add(mid);
+      list.push(msg);
+    }
+    list.sort(
+      (a, b) =>
+        (a.ts - b.ts) || (a.messageId || "").localeCompare(b.messageId || "")
+    );
+    this.msgsByChannel.set(channelId, list.slice(-this.maxMsgPerChannel));
+    this.persist(channelId);
+    const last = list.length > 0 ? list[list.length - 1] : null;
+    this.upsertLocalSession({
+      peerUid: session.peerUid,
+      peerName: session.peerName,
+      peerAvatar: session.peerAvatar,
+      isNPC: session.isNPC,
+      channelId: session.channelId,
+      lastMsg: last?.text || "",
+      lastTs: last?.ts || session.openedAt,
+      unread: this.localSessionsByPeer.get(session.peerUid)?.unread || 0,
+    });
+    // 若正在等 NPC 回复，只要历史里出现新 peer 消息就解除 pending
+    if (session.isNPC) {
+      const pending = this.npcPendingByPeer.get(session.peerUid);
+      if (pending) {
+        const hasNewPeer = list.some((m) => m.role === "peer" && (m.ts || 0) > pending.lastSendTs);
+        if (hasNewPeer) {
+          this.npcPendingByPeer.delete(session.peerUid);
+        }
+      }
+    }
+    EventSystem.send("PrivateChatMessage", { session, message: undefined });
   }
 
   // ------------------- 发送 -------------------
@@ -176,6 +423,13 @@ public markSessionRead(peerUid: string) {
     const pure = (text || "").trim();
     if (!pure) return;
 
+    if (s.isNPC) {
+      const pending = this.npcPendingByPeer.get(peerUid);
+      if (pending) {
+        throw new Error("请等待NPC回复");
+      }
+    }
+
     const r = await this.rpc("private_chat_send", {
       target_uid: peerUid,
       text: pure,
@@ -185,27 +439,63 @@ public markSessionRead(peerUid: string) {
       throw new Error(r?.message || "send failed");
     }
 
-    // 本地先插入一条，避免等回推
-    const msg: PrivateMsg = {
-      messageId: r.message_id || `local-${Date.now()}`,
-      channelId: s.channelId,
-      senderId: this.selfUid,
-      text: pure,
-      ts: Date.now(),
-      role: "self",
-    };
-    this.insertMsg(msg);
-    this.persist(s.channelId);
-    this.upsertLocalSession({
-      peerUid: s.peerUid,
-      peerName: s.peerName,
-      peerAvatar: s.peerAvatar,
-      isNPC: s.isNPC,
-      channelId: s.channelId,
-      lastMsg: msg.text,
-      lastTs: msg.ts,
-      unread: 0,
-    });
+    // 与 RPC 返回的 channel_id 对齐（避免 join 与 ChannelIdBuild 在边界情况下不一致导致收不到 channel_message）
+    if (typeof r.channel_id === "string" && r.channel_id && r.channel_id !== s.channelId) {
+      this.migrateSessionChannelId(s, r.channel_id);
+    }
+
+    // 发送成功不在本地插入消息，以 WebSocket channel_message 回推为准
+    const serverTsRaw = Number((r as any)?.ts);
+    const serverTsMs =
+      Number.isFinite(serverTsRaw) && serverTsRaw > 0
+        ? (serverTsRaw > 1e12 ? serverTsRaw : serverTsRaw * 1000)
+        : 0;
+    const sentTs = serverTsMs > 0 ? serverTsMs : Date.now();
+
+    // NPC 回复异步写入；若 WS 推丢失，短时拉历史补全
+    if (s.isNPC) {
+      // 标记 pending，直到收到 NPC 新消息（ts > sentTs）或超时自动解除
+      this.npcPendingByPeer.set(peerUid, { lastSendTs: sentTs, startedAt: Date.now() });
+      // 彻底关闭“发送后轮询拉历史”：只依赖后端主动推送（channel_message）。
+      // 为避免永远卡住，给一个超时解锁（不拉历史、不主动补消息）。
+      this.startNpcPendingUnlock(peerUid);
+    }
+  }
+
+  private startNpcPendingUnlock(peerUid: string) {
+    const old = this.npcPendingUnlockTimerByPeer.get(peerUid);
+    if (old) {
+      clearTimeout(old);
+      this.npcPendingUnlockTimerByPeer.delete(peerUid);
+    }
+    const t = setTimeout(() => {
+      // 超时解锁：仅用于防止卡死，消息是否到达完全依赖后端推送。
+      this.npcPendingByPeer.delete(peerUid);
+      this.npcPendingUnlockTimerByPeer.delete(peerUid);
+    }, 12000) as unknown as number;
+    this.npcPendingUnlockTimerByPeer.set(peerUid, t);
+  }
+
+  /** 将会话与本地消息从旧 channelId 迁到 RPC 返回的 channelId */
+  private migrateSessionChannelId(session: ChatSession, newChannelId: string) {
+    const oldId = session.channelId;
+    if (!oldId || oldId === newChannelId) return;
+    const msgs = this.msgsByChannel.get(oldId) || [];
+    this.msgsByChannel.delete(oldId);
+    this.sessionsByChannel.delete(oldId);
+    session.channelId = newChannelId;
+    for (const m of msgs) {
+      m.channelId = newChannelId;
+    }
+    this.msgsByChannel.set(newChannelId, msgs);
+    this.sessionsByChannel.set(newChannelId, session);
+    this.persist(newChannelId);
+    const row = this.localSessionsByPeer.get(session.peerUid);
+    if (row) {
+      row.channelId = newChannelId;
+      this.localSessionsByPeer.set(session.peerUid, row);
+      this.persistLocalSessions();
+    }
   }
 
   // ------------------- 读取 -------------------
@@ -222,6 +512,16 @@ public markSessionRead(peerUid: string) {
     const channelId = data?.channel_id;
     if (!channelId) return;
 
+    try {
+      chatLog("[pm] onChannelMessage", {
+        channelId,
+        senderId: data?.sender_id,
+        username: data?.username,
+        create_time: data?.create_time,
+        content: data?.content,
+      });
+    } catch {}
+
     let session = this.sessionsByChannel.get(channelId);
     if (!session) {
       // 未打开会话也尽量补一份最小会话，避免列表漏消息
@@ -229,16 +529,26 @@ public markSessionRead(peerUid: string) {
       if (!senderId) return;
       const peerUid = senderId === this.selfUid ? "" : senderId;
       if (!peerUid) return;
-      session = {
-        peerUid,
-        peerName: data?.username || null,
-        peerAvatar: null,
-        isNPC: false,
-        channelId,
-        openedAt: Date.now(),
-      };
-      this.sessionsByPeer.set(peerUid, session);
-      this.sessionsByChannel.set(channelId, session);
+      // 如果这个 peerUid 已经有会话，但 channelId 不一致（很常见：join 返回的 channel.id 与服务端推送里的 channel_id 不同格式），
+      // 则把会话迁移到新的 channelId，确保 ChatView 通过 peerUid 取消息时不会“取错桶”。
+      const existing = this.sessionsByPeer.get(peerUid);
+      if (existing) {
+        if (existing.channelId !== channelId) {
+          this.migrateSessionChannelId(existing, channelId);
+        }
+        session = existing;
+      } else {
+        session = {
+          peerUid,
+          peerName: data?.username || null,
+          peerAvatar: null,
+          isNPC: false,
+          channelId,
+          openedAt: Date.now(),
+        };
+        this.sessionsByPeer.set(peerUid, session);
+        this.sessionsByChannel.set(channelId, session);
+      }
       if (!this.msgsByChannel.has(channelId)) {
         this.msgsByChannel.set(channelId, this.loadLocalMsgs(channelId));
       }
@@ -260,10 +570,73 @@ public markSessionRead(peerUid: string) {
 
     // 去重
     const list = this.msgsByChannel.get(channelId) || [];
+    // 1) 优先按 messageId 去重
     if (msg.messageId && list.some((x) => x.messageId === msg.messageId)) return;
+    // 1.5) 自发消息对账：
+    // - 本地发送时用 local-* id
+    // - 回推到达时把本地那条升级为服务端 message_id（若有）
+    if (msg.role === "self" && msg.text) {
+      const idx = list.findIndex((x) => {
+        if (!x) return false;
+        if (x.role !== "self") return false;
+        if ((String(x.text || "").trim()) !== (String(msg.text || "").trim())) return false;
+        const dt = Math.abs((x.ts || 0) - (msg.ts || 0));
+        if (dt > 10000) return false;
+        // 优先升级“本地临时 id”的消息；也兼容 rpcMessageId 对账
+        const mid = String(x.messageId || "");
+        const rpcMid = String((x as any)?.rpcMessageId || "");
+        if (mid.startsWith("local-")) return true;
+        if (rpcMid && msg.messageId && rpcMid === String(msg.messageId)) return true;
+        return false;
+      });
+      if (idx >= 0) {
+        const local = list[idx];
+        // 用服务端 message_id 覆盖本地 id（若服务端没给则保持 local-*）
+        if (msg.messageId) {
+          local.messageId = msg.messageId;
+        }
+        local.ts = msg.ts || local.ts;
+        // senderId/role 不变
+        this.msgsByChannel.set(channelId, [...list]);
+        this.persist(channelId);
+        // 会话列表 lastMsg/lastTs 也保持一致（不再重复插入）
+        const last = list.length > 0 ? list[list.length - 1] : null;
+        this.upsertLocalSession({
+          peerUid: session.peerUid,
+          peerName: session.peerName,
+          peerAvatar: session.peerAvatar,
+          isNPC: session.isNPC,
+          channelId: session.channelId,
+          lastMsg: last?.text || "",
+          lastTs: last?.ts || session.openedAt,
+          unread: this.localSessionsByPeer.get(session.peerUid)?.unread || 0,
+        });
+        EventSystem.send("PrivateChatMessage", { session, message: local });
+        return;
+      }
+    }
+    // 2) 某些网关/回包可能缺 message_id：对“自己发送的回推”做软去重，避免 UI 出现两条相同发送内容
+    if (!msg.messageId && msg.role === "self") {
+      const same = list.some((x) => {
+        if (!x) return false;
+        if (x.role !== "self") return false;
+        if ((String(x.text || "").trim()) !== (String(msg.text || "").trim())) return false;
+        const dt = Math.abs((x.ts || 0) - (msg.ts || 0));
+        return dt <= 10000; // 10 秒内同文案视为同一条
+      });
+      if (same) return;
+    }
 
     this.insertMsg(msg);
     this.persist(channelId);
+
+    // 收到 NPC 的新消息：解除 pending 锁
+    if (session.isNPC && msg.role === "peer") {
+      const pending = this.npcPendingByPeer.get(session.peerUid);
+      if (pending && (msg.ts || 0) > pending.lastSendTs) {
+        this.npcPendingByPeer.delete(session.peerUid);
+      }
+    }
 
     const prevUnread = this.localSessionsByPeer.get(session.peerUid)?.unread || 0;
     this.upsertLocalSession({
@@ -277,6 +650,17 @@ public markSessionRead(peerUid: string) {
       unread: msg.role === "peer" ? (prevUnread + 1) : prevUnread,
     });
 
+    try {
+      const listNow = this.msgsByChannel.get(session.channelId) || [];
+      chatLog("[pm] emit PrivateChatMessage", {
+        peerUid: session.peerUid,
+        sessionChannelId: session.channelId,
+        incomingChannelId: channelId,
+        msgId: msg.messageId,
+        ts: msg.ts,
+        total: listNow.length,
+      });
+    } catch {}
     EventSystem.send("PrivateChatMessage", { session, message: msg });
   }
 
@@ -323,8 +707,9 @@ public markSessionRead(peerUid: string) {
           lastTs: last?.ts || s.openedAt,
           unread: this.localSessionsByPeer.get(s.peerUid)?.unread || 0,
         });
+        await this.loadDmHistory(s).catch(() => {});
       } catch (e) {
-        console.warn("rejoin chat failed:", s.peerUid, e);
+        // 重连后单会话 rejoin 失败：静默，避免刷屏；需要时可在此打日志
       }
     }
 
@@ -334,12 +719,28 @@ public markSessionRead(peerUid: string) {
   // ------------------- 工具 -------------------
 
   private async joinChat(targetUid: string): Promise<any> {
-    // 你当前 ws send 是裸 JSON，可封装一个 Promise 版 RPC/请求匹配
-    // 这里假设你有 ws 封装函数，示例用 Promise 包装：
     return new Promise((resolve, reject) => {
+      const listenerToken: Record<string, unknown> = {};
+      let settled = false;
+      const cid = this.nextRtCid();
+      let timeout: ReturnType<typeof setTimeout> | undefined;
+
+      const finish = (err: Error | null, channel?: any) => {
+        if (settled) return;
+        settled = true;
+        if (timeout !== undefined) clearTimeout(timeout);
+        EventSystem.remove(listenerToken);
+        if (err) reject(err);
+        else resolve(channel);
+      };
+
       try {
-        // Nakama RT: { channel_join: { target, type, persistence, hidden } }
+        // Nakama RT：根节点带 cid，应答里带回同一 cid，避免并发多次 channel_join 错配
+        // Nakama RT channel_join type：1=ROOM, 2=DIRECT, 3=GROUP。这里必须用 2（私聊）。
+        // 注意：channel_id 字符串前缀（你们看到的 "4."）不是这里的 type。
+        try { chatLog("[joinChat] send", { cid, target: targetUid, type: 2 }); } catch {}
         const ok = AppConst.WebSocketManager.send({
+          cid,
           channel_join: {
             target: targetUid,
             type: 2,
@@ -347,24 +748,52 @@ public markSessionRead(peerUid: string) {
             hidden: false,
           },
         });
-        if (!ok) return reject(new Error("channel_join send failed"));
+        if (!ok) {
+          return reject(new Error("channel_join send failed"));
+        }
 
-        // 你项目里建议加 cid 做请求-响应匹配；这里给简化版
-        const timeout = setTimeout(() => {
-          EventSystem.remove(this);
-          reject(new Error("joinChat timeout"));
-        }, 5000);
+        timeout = setTimeout(() => {
+          finish(new Error("joinChat timeout"));
+        }, 8000);
 
-        const onMsg = (msg: any) => {
-          // 按你项目实际 RT 回包结构调整
-          if (msg?.channel?.id && msg.channel?.type === 2) {
-            clearTimeout(timeout);
-            EventSystem.remove(this);
-            resolve(msg.channel);
+        const onRt = (data: any) => {
+          if (data == null) return;
+          try { chatLog("[joinChat] rt", data); } catch {}
+          // 仅当「请求与应答都带 cid」时才严格匹配；避免一端为数字一端为字符串导致误判
+          if (data.cid != null && cid != null) {
+            const a = String(data.cid).trim();
+            const b = String(cid).trim();
+            if (a !== b && a !== "" && b !== "") {
+              return;
+            }
+          }
+
+          if (data.error != null) {
+            const msg =
+              typeof data.error === "string"
+                ? data.error
+                : data.error.message || data.error.msg || JSON.stringify(data.error);
+            finish(new Error(msg || "channel_join failed"));
+            return;
+          }
+
+          const ch = data.channel;
+          if (!ch?.id) return;
+          // DM=2；部分网关可能省略 type 或给字符串
+          const t = ch.type;
+          const isDm =
+            t === 2 ||
+            t === "2" ||
+            t === undefined ||
+            t === null ||
+            Number(t) === 2;
+          if (isDm) {
+            finish(null, ch);
           }
         };
-        EventSystem.addListent("WebSocketMessage", onMsg, this);
+        EventSystem.addListent("WebSocketRT", onRt, listenerToken);
       } catch (e) {
+        EventSystem.remove(listenerToken);
         reject(e);
       }
     });
@@ -372,36 +801,69 @@ public markSessionRead(peerUid: string) {
 
   private async rpc(id: string, payloadObj: any): Promise<any> {
     return new Promise((resolve, reject) => {
+      const listenerToken: Record<string, unknown> = {};
+      let settled = false;
+      let timeout: ReturnType<typeof setTimeout> | undefined;
+
+      const finish = (err: Error | null, parsed?: any) => {
+        if (settled) return;
+        settled = true;
+        if (timeout !== undefined) clearTimeout(timeout);
+        EventSystem.remove(listenerToken);
+        if (err) reject(err);
+        else resolve(parsed);
+      };
+
       const req = { rpc: { id, payload: JSON.stringify(payloadObj) } };
       const ok = AppConst.WebSocketManager.send(req);
       if (!ok) return reject(new Error("rpc send failed"));
 
-      const timeout = setTimeout(() => {
-        EventSystem.remove(this);
-        reject(new Error(`rpc timeout: ${id}`));
+      timeout = setTimeout(() => {
+        finish(new Error(`rpc timeout: ${id}`));
       }, 8000);
 
       const onRpc = (rpcData: any) => {
         if (rpcData?.id !== id) return;
-        clearTimeout(timeout);
-        EventSystem.remove(this);
-
         try {
           const parsed = typeof rpcData.payload === "string" ? JSON.parse(rpcData.payload) : rpcData.payload;
-          resolve(parsed);
+          finish(null, parsed);
         } catch (e) {
-          reject(e);
+          finish(e instanceof Error ? e : new Error(String(e)));
         }
       };
 
-      EventSystem.addListent("WebSocketMessage", onRpc, this);
+      EventSystem.addListent("WebSocketMessage", onRpc, listenerToken);
     });
   }
 
   private extractText(content: any): string {
-    if (!content) return "";
-    if (typeof content.text === "string") return content.text.trim();
-    if (content.text && typeof content.text.message === "string") return content.text.message.trim();
+    if (content == null) return "";
+    if (typeof content === "string") {
+      const t = content.trim();
+      if (!t) return "";
+      try {
+        return this.extractText(JSON.parse(t));
+      } catch {
+        return t;
+      }
+    }
+    if (typeof content.text === "string") {
+      const s = content.text.trim();
+      if (!s) return "";
+      if (s.startsWith("{") || s.startsWith("[")) {
+        try {
+          return this.extractText(JSON.parse(s));
+        } catch {
+          return s;
+        }
+      }
+      return s;
+    }
+    if (content.text && typeof content.text === "object") {
+      const o = content.text as Record<string, unknown>;
+      if (typeof o.message === "string") return o.message.trim();
+      if (typeof o.text === "string") return o.text.trim();
+    }
     return "";
   }
 
@@ -420,6 +882,18 @@ public markSessionRead(peerUid: string) {
     arr.push(msg);
     arr.sort((a, b) => (a.ts - b.ts) || (a.messageId || "").localeCompare(b.messageId || ""));
     this.msgsByChannel.set(msg.channelId, arr.slice(-this.maxMsgPerChannel));
+    try {
+      const last = arr[arr.length - 1];
+      chatLog("[pm] insertMsg", {
+        channelId: msg.channelId,
+        role: msg.role,
+        ts: msg.ts,
+        messageId: msg.messageId,
+        len: arr.length,
+        lastTs: last?.ts,
+        lastText: (last?.text || "").slice(0, 40),
+      });
+    } catch {}
   }
 
   private persist(channelId: string) {

@@ -101,6 +101,77 @@ export class MapModel {
         EventSystem.addListent("ForceLogout" , this.OnForceLogout , this)
 
         EventSystem.addListent("OnMatchData" , this.OnMatchData , this)
+
+        EventSystem.addListent("HttpMessage" , this.OnHttpMessage , this)
+    }
+
+    private findSceneMapById(mapId: number): any | null {
+        const id = Number(mapId);
+        if (!Number.isFinite(id) || id <= 0) {
+            return null;
+        }
+        const list = this.sceneMaps as any[];
+        for (let i = 0; i < list.length; i++) {
+            const m = list[i];
+            if (m != null && Number(m.id) === id) {
+                return m;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 本地增加点赞：点赞数 +1，并标记当前用户已赞。
+     * @returns 是否发生变更（已赞过则 false，不重复加次数）
+     */
+    public AddMapLike(mapId: number): boolean {
+        const m = this.findSceneMapById(mapId);
+        if (!m) {
+            return false;
+        }
+        if (m.liked === true) {
+            return false;
+        }
+        m.liked = true;
+        const n = Number(m.map_like_count);
+        const base = Number.isFinite(n) ? n : 0;
+        m.map_like_count = base + 1;
+        return true;
+    }
+
+    /**
+     * 本地取消点赞：点赞数 -1（不小于 0），并取消已赞标记。
+     * @returns 是否发生变更（未赞过则 false）
+     */
+    public RemoveMapLike(mapId: number): boolean {
+        const m = this.findSceneMapById(mapId);
+        if (!m) {
+            return false;
+        }
+        if (!m.liked) {
+            return false;
+        }
+        m.liked = false;
+        const n = Number(m.map_like_count);
+        const base = Number.isFinite(n) ? n : 0;
+        m.map_like_count = Math.max(0, base - 1);
+        return true;
+    }
+
+    /** 当前用户是否已对该地图点过赞 */
+    public IsUserLikedMap(mapId: number): boolean {
+        const m = this.findSceneMapById(mapId);
+        return !!(m && m.liked === true);
+    }
+
+    /** 当前列表里该地图的点赞总数（无记录则 0） */
+    public GetMapLikeCount(mapId: number): number {
+        const m = this.findSceneMapById(mapId);
+        if (!m) {
+            return 0;
+        }
+        const n = Number(m.map_like_count);
+        return Number.isFinite(n) ? Math.max(0, n) : 0;
     }
 
     public GetMapData(index){
@@ -121,6 +192,10 @@ export class MapModel {
             }
         }
     }    
+
+    public OnHttpMessage(data){
+        console.log(data)
+    }
 
     public map_detail = null
     //type 0根据地图列表进入地图，需要去掉所有UI   1进入编辑

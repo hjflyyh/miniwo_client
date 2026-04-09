@@ -235,6 +235,7 @@ export class GameView extends Component {
         let npcCell = a.target.getComponent("GameViewNpcCell") as GameViewNpcCell
 
         console.log("点击了NPC", npcCell["npcData"])
+        AppConst.PanelManager.openView("res/View/Chat/ChatView", { chatType: 2, npcId: npcCell["npcData"].id })
     }
 
     public onClickCloseScene(){
