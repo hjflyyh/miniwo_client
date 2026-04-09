@@ -30,6 +30,8 @@ export class RoleModel {
 
     private nakamaSessionId: string = "";
     private isForceLogoutHandling: boolean = false;
+    /** 最近一次 game_login 成功的时间，用于避免重连/并发登录时序误伤 */
+    private lastLoginSuccessAtMs: number = 0;
 
     /**
      * 获取单例实例
@@ -48,6 +50,10 @@ export class RoleModel {
     }
 
     public onWebSocketConnected(){
+        // 重要：重连窗口期内可能会收到服务端对“旧会话”的 force_logout 通知。
+        // 若此时仍保留旧 nakamaSessionId，会误判为当前会话并强退。
+        // 因此在发起 game_login 前先清空，待 game_login success 再写入新的 session_id。
+        this.nakamaSessionId = "";
         this.loginWS();
     }
 
@@ -85,6 +91,7 @@ export class RoleModel {
                 if(payload.session_id){
                     this.nakamaSessionId = String(payload.session_id);
                     this.nakamaUserId = String(payload.user_id);
+                    this.lastLoginSuccessAtMs = Date.now();
 
                     PrivateChatManager.getInstance().init(this.nakamaUserId);
                 }
@@ -118,6 +125,19 @@ export class RoleModel {
         // 2) 客户端尚未拿到本端 session_id（game_login success 前），先忽略
         // 3) 目标会话与当前会话不一致，忽略
         if (!targetSessionID || !this.nakamaSessionId || targetSessionID !== this.nakamaSessionId) {
+            return;
+        }
+        // 防误伤：在刚完成登录的极短窗口内，可能收到针对“旧会话”的清理通知（时序/推送延迟），
+        // 但 session_id 可能短暂复用/刷新导致误命中当前会话；此时先忽略，不立即强退。
+        // 真正的异地登录踢下线通常发生在稳定在线期间（不在这个窗口）。
+        if (this.lastLoginSuccessAtMs > 0 && (Date.now() - this.lastLoginSuccessAtMs) < 3000) {
+            try {
+                console.log("[force_logout] ignored in login window", {
+                    targetSessionID,
+                    currentSessionID: this.nakamaSessionId,
+                    message: content.message,
+                });
+            } catch {}
             return;
         }
         const message = content.message || "账号已在其他设备登录";

@@ -12,6 +12,7 @@ export module network {
         CodeMailNew = 103, //新邮件通知
         CodeCardList = 104, //卡牌列表
         CodeMapList = 105, //地图列表
+        CodePlayerNpcAffinity = 106, //玩家->好感度
     }
 
     export enum FollowSocialCode {
