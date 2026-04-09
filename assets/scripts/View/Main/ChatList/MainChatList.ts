@@ -1,4 +1,4 @@
-import { _decorator, Component, math } from 'cc';
+import { _decorator, Component, EditBox, math } from 'cc';
 import { YXCollectionView } from '../../../../plugin/list-3x/yx-collection-view';
 import { CustomGridFlowLayout } from '../../../../plugin/list-3x/custom-grid-flow-layout';
 import { LocalChatSessionItem, PrivateChatManager } from '../../../Manager/PrivateChatMessage';
@@ -10,6 +10,9 @@ export class MainChatList extends Component {
 
     @property(YXCollectionView)
     listComp: YXCollectionView = null;
+
+    @property(EditBox)
+    searchEditBox : EditBox
 
     /** 本地私聊会话（每人一行） */
     private privateSessionRows: LocalChatSessionItem[] = [];
@@ -43,9 +46,25 @@ export class MainChatList extends Component {
         }
     }
 
-    /** 从本地缓存拉取按人聚合的私聊会话列表（最近活跃在前） */
+    /** EditBox 结束编辑时：按搜索词刷新列表 */
+    public onEditEnd() {
+        this.refreshPrivateSessionList();
+    }
+
+    /** 从本地拉取会话并按搜索框关键字筛选（匹配昵称、对方 id、最近一条消息） */
     private refreshPrivateSessionList() {
-        this.privateSessionRows = PrivateChatManager.getInstance().getSessionList();
+        const all = PrivateChatManager.getInstance().getSessionList();
+        const kw = (this.searchEditBox?.string ?? '').trim().toLowerCase();
+        if (!kw) {
+            this.privateSessionRows = all;
+        } else {
+            this.privateSessionRows = all.filter((row) => {
+                const name = String(row.peerName || '').toLowerCase();
+                const uid = String(row.peerUid || '').toLowerCase();
+                const last = String(row.lastMsg || '').toLowerCase();
+                return name.includes(kw) || uid.includes(kw) || last.includes(kw);
+            });
+        }
         if (this.listComp) {
             this.listComp.reloadData();
         }
