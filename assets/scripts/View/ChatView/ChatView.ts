@@ -1,6 +1,9 @@
 import { _decorator, Component, EditBox, Label, Node, Prefab, resources, UITransform, instantiate } from 'cc';
 import { PrivateChatManager, PrivateMsg } from '../../Manager/PrivateChatMessage';
 import { ChatScroll } from './ChatScroll';
+import { AffinitieModel } from '../../Model/AffinitieModel';
+import { HttpManager } from '../../Manager/HttpManager';
+import { RoleModel } from '../../Model/RoleModel';
 const { ccclass, property } = _decorator;
 
 /** 与 NPC 私聊打开后自动发送的测试文案（仅 chatType===2） */
@@ -18,7 +21,7 @@ export class ChatView extends Component {
     targetWorld: Label //npc聊天显示地图
 
     @property([Node])
-    likes : Node[] = [] //和npc好感度
+    likes : Node[] = [] //根据和npc好感度得到lv，显示星星
     
 
     @property(EditBox)
@@ -29,6 +32,8 @@ export class ChatView extends Component {
 
     /** 当前会话对方 Nakama UID（与 PrivateChatManager 内一致） */
     private peerUid: string | null = null;
+    private chatType: number = 0;
+    private npcId: number = 0;
 
     /** 扁平化后的列表行：日期头 + 消息交错 */
     private rows: ChatRow[] = [];
@@ -51,6 +56,7 @@ export class ChatView extends Component {
         const userId = open.userId;
 
         const pm = PrivateChatManager.getInstance();
+        this.chatType = Number(chatType) || 0;
         try {
             if (chatType === 1) {
                 const uid = userId != null ? String(userId) : '';
@@ -66,6 +72,7 @@ export class ChatView extends Component {
             } else if (chatType === 2) {
                 const nid = Number(npcId);
                 if (Number.isFinite(nid) && nid > 0) {
+                    this.npcId = nid;
                     const session = await pm.openNpcSession(nid);
                     this.peerUid = session.peerUid;
                 } else {
@@ -76,6 +83,8 @@ export class ChatView extends Component {
                     pm.tryOpenLocalSession(puid);
                     this.peerUid = puid;
                     this.rebuildRows();
+                    // 尝试从本地 npc 映射反查 npcId（若无则保持 0）
+                    this.npcId = pm.getNpcIdByPeerUid?.(puid) ?? 0;
                     const session = await pm.openNpcSessionByPeerUid(puid, open.userName);
                     this.peerUid = session.peerUid;
                 }
@@ -89,9 +98,16 @@ export class ChatView extends Component {
                 return;
             }
 
+            if (chatType === 1) {
+                this.refreshUserHeader(open);
+            } else if (chatType === 2) {
+                this.clearNpcHeader();
+                await this.loadNpcInfoFromServer();
+            }
             pm.markSessionRead(this.peerUid);
             this.rebuildRows();
             EventSystem.addListent('PrivateChatMessage', this.onPrivateChatMessage, this);
+            EventSystem.addListent('NpcAffinityUpdated', this.onNpcAffinityUpdated, this);
             
 
             // 打开后短时间轮询刷新，确保 NPC 回复到达必显示
@@ -102,6 +118,90 @@ export class ChatView extends Component {
             EventSystem.send('ShowTips', String(e?.message || e));
         }
     }    
+
+    /** 真人私聊：直接显示标题 */
+    private refreshUserHeader(openParam: any) {
+        const pm = PrivateChatManager.getInstance();
+        const name =
+            (openParam?.userName != null ? String(openParam.userName) : '').trim() ||
+            (this.peerUid ? (pm as any).getLocalSessionList?.()?.find?.((x: any) => x?.peerUid === this.peerUid)?.peerName : '') ||
+            (this.peerUid ?? '');
+        if (this.targetName) this.targetName.string = name;
+        if (this.targetWorld) {
+            this.targetWorld.string = '';
+            this.targetWorld.node.active = false;
+        }
+        this.refreshLikesUI();
+    }
+
+    /** NPC 私聊：进入时先不显示名字与地图，等 getNpcInfo 返回后再填 */
+    private clearNpcHeader() {
+        if (this.targetName) this.targetName.string = '';
+        if (this.targetWorld) {
+            this.targetWorld.string = '';
+            this.targetWorld.node.active = false;
+        }
+    }
+
+    private async loadNpcInfoFromServer() {
+        if (this.npcId <= 0) {
+            EventSystem.send('ShowTips', '缺少 npcId，无法拉取 NPC 信息');
+            this.refreshLikesUI();
+            return;
+        }
+        const token = RoleModel.getInstance().token;
+        if (!token) {
+            EventSystem.send('ShowTips', '未登录');
+            this.refreshLikesUI();
+            return;
+        }
+        try {
+            const res = await fetch(`${HttpManager.baseUrl}/getNpcInfo`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token, npcId: this.npcId }),
+            });
+            const json = await res.json();
+            if (!json?.success || !json?.data) {
+                const err = json?.error || json?.message || '获取 NPC 信息失败';
+                EventSystem.send('ShowTips', String(err));
+                this.refreshLikesUI();
+                return;
+            }
+            const d = json.data;
+            if (this.targetName) this.targetName.string = d.npc_name != null ? String(d.npc_name) : '';
+            if (this.targetWorld) {
+                this.targetWorld.string = d.map_name != null ? String(d.map_name) : '';
+                this.targetWorld.node.active = true;
+            }
+            this.refreshLikesUI();
+        } catch (e: any) {
+            EventSystem.send('ShowTips', String(e?.message || e || '网络错误'));
+            this.refreshLikesUI();
+        }
+    }
+
+    private refreshLikesUI() {
+        if (!this.likes || this.likes.length <= 0) return;
+        const isNpc = this.chatType === 2;
+        if (!isNpc || !(this.npcId > 0)) {
+            for (const n of this.likes) {
+                if (n) n.active = false;
+            }
+            return;
+        }
+        const lv = AffinitieModel.getInstance().getAffinityLevel(this.npcId);
+        const onCount = Math.max(0, Math.min(this.likes.length, Number(lv) || 0));
+        for (let i = 0; i < this.likes.length; i++) {
+            const n = this.likes[i];
+            if (n) n.active = i < onCount;
+        }
+    }
+
+    private onNpcAffinityUpdated() {
+        // NPC 好感度更新后刷新星星显示
+        this.refreshLikesUI();
+    }
 
 
     onClickSend(){
