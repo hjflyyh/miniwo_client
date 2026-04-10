@@ -12,8 +12,13 @@ export class RoleModel {
     public name: string;
     public password: string;
     public nickName: string;
-    public avatar: number;
-    public sex: number;
+    public avatar: string;
+    public gender: number;
+    public birth: number;
+    public age: number;
+    public mbti: string;
+    public bio: string;
+
     public timeZone: number;
     public clientOs: string;
     public userId: string;
@@ -171,14 +176,26 @@ export class RoleModel {
 
     private OnHttpMessage(data){
         if(data.cmd == network.ServerHttpCommand.COMMON_LOGIN){
+            console.log("-----------data:", data)
+            
             this.isForceLogoutHandling = false;
             this.nakamaSessionId = "";
             this.token = data.token
             this.nickName = data.nick_name
+            this.avatar = data.avatar
             this.playerId = data.player_id
             this.nakama_token = data.nakama_token
             
             this.tags = data.tags
+
+            if(data.info){
+                const userInfo = JSON.parse(data.info)
+                this.gender = userInfo?.gender || 0
+                this.birth = userInfo?.birth || 0
+                this.age = userInfo?.age || 0
+                this.mbti = userInfo?.mbti || ""
+                this.bio = userInfo?.bio || ""
+            }
 
             AppConst.WebSocketManager.setConfig("ws://" + HttpManager.ipBase + ":7350/ws?token=" + data.nakama_token);
             AppConst.WebSocketManager.connect();
