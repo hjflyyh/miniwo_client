@@ -12,6 +12,12 @@ export class MainTop extends Component {
     public tabLabel_2:Label[] = []
 
     @property(Node)
+    tab1:Node
+
+    @property(Node)
+    tab2:Node
+
+    @property(Node)
     tabNode : Node
 
     @property(Node)
@@ -44,7 +50,8 @@ export class MainTop extends Component {
         //社交  推荐
         [{language:114 , view : "res/View/Main/Follow/MainFollowList"} , {language:115 , view : ""}],
         //聊天  wechat
-        [{language:112 , view : "res/View/Main/chat/MainChatList"} , {language:113 , view : ""}],
+        // [{language:112 , view : "res/View/Main/chat/MainChatList"} , {language:113 , view : ""}],
+        [{language:112 , view : "res/View/Main/chat/MainChatList"}],
         [{view : "res/View/UserCenter/UserCenter"}]
     ]
 
@@ -105,16 +112,21 @@ export class MainTop extends Component {
             this.tabNode.active = false
             return
         }
-        else if(this.funcs[this.bottomIndex].length == 1){
+        else if(this.funcs[this.bottomIndex].length == 1 && !this.funcs[this.bottomIndex][0]["language"]){
             this.tabNode.active = false
         }else{
             this.tabNode.active = true
 
-            this.tabLabel_1[0].string = AppConst.LanguageManager.getTextByConfig(this.funcs[this.bottomIndex][0].language)
-            this.tabLabel_1[1].string = AppConst.LanguageManager.getTextByConfig(this.funcs[this.bottomIndex][0].language)
+            this.tabLabel_1[0].string = AppConst.LanguageManager.getTextByConfig(this.funcs[this.bottomIndex][0]["language"])
+            this.tabLabel_1[1].string = AppConst.LanguageManager.getTextByConfig(this.funcs[this.bottomIndex][0]["language"])
 
-            this.tabLabel_2[0].string = AppConst.LanguageManager.getTextByConfig(this.funcs[this.bottomIndex][1].language)
-            this.tabLabel_2[1].string = AppConst.LanguageManager.getTextByConfig(this.funcs[this.bottomIndex][1].language)
+            if(this.funcs[this.bottomIndex][1] && this.funcs[this.bottomIndex][1]["language"]){
+                this.tab2.active = true
+                this.tabLabel_2[0].string = AppConst.LanguageManager.getTextByConfig(this.funcs[this.bottomIndex][1]["language"])
+                this.tabLabel_2[1].string = AppConst.LanguageManager.getTextByConfig(this.funcs[this.bottomIndex][1]["language"])
+            }else{
+                this.tab2.active = false
+            }
         }
 
         let newUrl = this.funcs[this.bottomIndex][this.tabIndex].view

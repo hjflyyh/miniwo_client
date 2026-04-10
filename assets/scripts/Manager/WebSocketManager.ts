@@ -309,12 +309,37 @@ export class WebSocketManager extends Component {
                     }else if(data.channel_message != null){
                         // EventSystem.send("ChannelMessage" , JSON.parse(data.channel_message.content))
                         const cm = data.channel_message;
+                        try {
+                            log("[ws] channel_message raw", JSON.stringify(cm));
+                        } catch (e) {
+                            try { log("[ws] channel_message raw stringify failed", String(e)); } catch {}
+                        }
                         let parsedContent: any = {};
                         try {
-                            parsedContent = typeof cm.content === "string" ? JSON.parse(cm.content) : (cm.content || {});
+                            if (typeof cm.content === "string") {
+                                const raw = cm.content.trim();
+                                if (raw.startsWith("{") || raw.startsWith("[")) {
+                                    parsedContent = JSON.parse(cm.content);
+                                } else if (raw) {
+                                    parsedContent = { text: raw };
+                                }
+                            } else {
+                                parsedContent = cm.content || {};
+                            }
                         } catch {
-                            parsedContent = {};
+                            const raw = typeof cm.content === "string" ? cm.content.trim() : "";
+                            parsedContent = raw ? { text: raw } : {};
                         }
+                        try {
+                            log("[ws] channel_message parsed", JSON.stringify({
+                                message_id: cm.message_id,
+                                channel_id: cm.channel_id,
+                                sender_id: cm.sender_id,
+                                username: cm.username,
+                                create_time: cm.create_time,
+                                content: parsedContent,
+                            }));
+                        } catch {}
                         EventSystem.send("ChannelMessage", {
                             message_id: cm.message_id,
                             channel_id: cm.channel_id,
@@ -326,7 +351,11 @@ export class WebSocketManager extends Component {
                             content: parsedContent,
                             raw: cm,
                         });
+                        try { log("[ws] emit ChannelMessage done"); } catch {}
 
+                    }else if (data.channel != null || data.error != null || data.cid != null || data.channel_presence != null || data.channel_leave != null) {
+                        // Nakama RT：channel_join 成功返回 channel；失败可能带 error/cid；与 data.rpc 分离，避免 joinChat 永远收不到
+                        EventSystem.send("WebSocketRT", data);
                     }else{
                         console.log(data)
                         log("消息错误")

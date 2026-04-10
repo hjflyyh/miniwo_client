@@ -11,6 +11,7 @@ import { GameViewChatCell } from './GameViewChatCell';
 import { GameViewNpcCell } from './GameViewNpcCell';
 import { EditBoxFixedWidthAutoHeight } from '../../Utils/EditBoxFixedWidthAutoHeight';
 import { YXMasonryFlowLayout } from 'db://assets/plugin/list-3x/yx-masonry-flow-layout';
+import { GameMapChatScroll } from './GameMapChatScroll';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameView')
@@ -24,8 +25,10 @@ export class GameView extends Component {
     @property(Label)
     mapName: Label = null!;
 
-    @property(YXCollectionView)
-    followScroll: YXCollectionView = null
+    @property(GameMapChatScroll)
+    chatScroll : GameMapChatScroll
+    // @property(YXCollectionView)
+    // followScroll: YXCollectionView = null
 
     @property(Node)
     atNpc: Node = null
@@ -72,37 +75,37 @@ export class GameView extends Component {
     /**
      * 用输入框旁的 showText（Label）按固定宽度排版，测量正文实际高度，再加预留得到整格高度。
      */
-    private measureChatCellHeight(displayText: string): number {
-        const showText = this.editBoxFixedWidthAutoHeight?.showText;
-        if (!showText) {
-            return this.chatCellMinHeight;
-        }
-        const label = showText;
-        const ut = label.node.getComponent(UITransform);
-        if (!ut) {
-            return this.chatCellMinHeight;
-        }
+    // private measureChatCellHeight(displayText: string): number {
+    //     const showText = this.editBoxFixedWidthAutoHeight?.showText;
+    //     if (!showText) {
+    //         return this.chatCellMinHeight;
+    //     }
+    //     const label = showText;
+    //     const ut = label.node.getComponent(UITransform);
+    //     if (!ut) {
+    //         return this.chatCellMinHeight;
+    //     }
 
-        const savedString = label.string;
-        const savedOverflow = label.overflow;
-        const savedW = ut.width;
-        const savedH = ut.height;
+    //     const savedString = label.string;
+    //     const savedOverflow = label.overflow;
+    //     const savedW = ut.width;
+    //     const savedH = ut.height;
 
-        label.string = displayText || '';
-        label.overflow = Label.Overflow.RESIZE_HEIGHT;
-        ut.width = this.chatCellContentWidth;
-        label.updateRenderData(true);
+    //     label.string = displayText || '';
+    //     label.overflow = Label.Overflow.RESIZE_HEIGHT;
+    //     ut.width = this.chatCellContentWidth;
+    //     label.updateRenderData(true);
 
-        const textH = ut.contentSize.height;
+    //     const textH = ut.contentSize.height;
 
-        label.string = savedString;
-        label.overflow = savedOverflow;
-        ut.setContentSize(savedW, savedH);
-        label.updateRenderData(true);
+    //     label.string = savedString;
+    //     label.overflow = savedOverflow;
+    //     ut.setContentSize(savedW, savedH);
+    //     label.updateRenderData(true);
 
-        const h = Math.ceil(this.chatCellHeaderReserve + textH);
-        return Math.max(this.chatCellMinHeight, h);
-    }
+    //     const h = Math.ceil(this.chatCellHeaderReserve + textH);
+    //     return Math.max(this.chatCellMinHeight, h);
+    // }
 
     start() {
         this.atNpc.active = false
@@ -120,31 +123,31 @@ export class GameView extends Component {
         this.mapName.string = MapModel.getInstance().showMatchPayLoad["map_name"]
 
         this.scheduleOnce(()=>{
-            this.followScroll.numberOfItems = () => {
-                console.log("消息数量", MapChatManager.instance.msessages.length)
-                return MapChatManager.instance.msessages.length
-            };
+        //     this.followScroll.numberOfItems = () => {
+        //         console.log("消息数量", MapChatManager.instance.msessages.length)
+        //         return MapChatManager.instance.msessages.length
+        //     };
 
-            this.followScroll.cellForItemAt = (indexPath, collectionView) => {
-                // 通过下标可以获取到对应的数据
-                const data = MapChatManager.instance.msessages[indexPath.item]
+        //     this.followScroll.cellForItemAt = (indexPath, collectionView) => {
+        //         // 通过下标可以获取到对应的数据
+        //         const data = MapChatManager.instance.msessages[indexPath.item]
 
-                // 通过标识符获取重用池内的节点
-                const cell = collectionView.dequeueReusableCell(`cell`)
+        //         // 通过标识符获取重用池内的节点
+        //         const cell = collectionView.dequeueReusableCell(`cell`)
 
-                // 更新数据显示
-                const comp : GameViewChatCell = cell.getComponent("GameViewChatCell") as GameViewChatCell;
-                comp.refreshData(data)
+        //         // 更新数据显示
+        //         const comp : GameViewChatCell = cell.getComponent("GameViewChatCell") as GameViewChatCell;
+        //         comp.refreshData(data)
 
-                return cell // 返回这个节点给列表显示
-            }
+        //         return cell // 返回这个节点给列表显示
+        //     }
 
-            this.updateFlowLayout()
+        //     this.updateFlowLayout()
 
             this.receivedData()
-        } , 0.1)
+        } , 0.2)
 
-        EventSystem.addListent("EventRefreshChat", function(){this.receivedData()} , this)
+        EventSystem.addListent("EventRefreshChat", this.receivedData , this)
         EventSystem.addListent("WebSocketMessage" , this.OnWebSocketMessage , this)
 
         this.onEditEnd()
@@ -235,6 +238,7 @@ export class GameView extends Component {
         let npcCell = a.target.getComponent("GameViewNpcCell") as GameViewNpcCell
 
         console.log("点击了NPC", npcCell["npcData"])
+        AppConst.PanelManager.openView("res/View/Chat/ChatView", { chatType: 2, npcId: npcCell["npcData"].id })
     }
 
     public onClickCloseScene(){
@@ -262,29 +266,30 @@ export class GameView extends Component {
         this.editBox.node.setPosition(pos.x, this.editBoxBaseY + offsetY - 15, pos.z)
     }
 
-    updateFlowLayout(column: number = this.column, alignment: number = this.alignment) {
-        let layout = new YXMasonryFlowLayout()
-        layout.extraVisibleCount = 10
-        layout.horizontalSpacing = 10
-        layout.verticalSpacing = 15
-        layout.divide = column
-        layout.itemSize = (indexPath) => {
-            const data = MapChatManager.instance.msessages[indexPath.item]
-            const text = data["text"]
-            const displayText = MapChatManager.instance.getDisplayText(text)
-            const h = this.measureChatCellHeight(displayText) + 30
-            return new math.Size(this.chatCellContentWidth, h)
-        }
-        this.followScroll.layout = layout
-    }   
+    // updateFlowLayout(column: number = this.column, alignment: number = this.alignment) {
+    //     let layout = new YXMasonryFlowLayout()
+    //     layout.extraVisibleCount = 10
+    //     layout.horizontalSpacing = 10
+    //     layout.verticalSpacing = 15
+    //     layout.divide = column
+    //     layout.itemSize = (indexPath) => {
+    //         const data = MapChatManager.instance.msessages[indexPath.item]
+    //         const text = data["text"]
+    //         const displayText = MapChatManager.instance.getDisplayText(text)
+    //         const h = this.measureChatCellHeight(displayText) + 30
+    //         return new math.Size(this.chatCellContentWidth, h)
+    //     }
+    //     this.followScroll.layout = layout
+    // }   
     
     receivedData() {
         const n = MapChatManager.instance.msessages.length;
         if(n == 0) return;
-        this.followScroll.reloadData()
-        this.scheduleOnce(() => {
-            this.followScroll.scrollTo(new YXIndexPath(0, n - 1), 0, false);
-        }, 0);
+        // this.followScroll.reloadData()
+        // this.scheduleOnce(() => {
+        //     this.followScroll.scrollTo(new YXIndexPath(0, n - 1), 0, false);
+        // }, 0);
+        this.chatScroll.refreshChat(MapChatManager.instance.msessages)
     }
 }
 

@@ -22,10 +22,14 @@ export class HttpManager extends Component {
         .then(res => res.json())
         .then(data => {
             console.log("请求回复：",data)
-            if(data.success && data.data){
+            if(data.success){
+                if(data.data == null){
+                    data.data = {}
+                }
                 if(data.data["functionName"] == null){
                     data.data["functionName"] = functionName
                 }
+                
                 EventSystem.send("HttpMessage" , data.data)
             }else{
                 if(data.error){

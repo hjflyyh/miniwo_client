@@ -1,10 +1,14 @@
 import { _decorator, Component, Label, Node } from 'cc';
 import { RoleModel } from '../../Model/RoleModel';
 import { MapChatManager } from '../../Manager/ChatManager';
+import InfiniteCell from 'db://assets/plugin/InfiniteList/InfiniteCell';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameViewChatCell')
-export class GameViewChatCell extends Component {
+export class GameViewChatCell extends Component implements InfiniteCell{
+    public cellIdentifier: string;
+    public dataIndex: number;
+
     @property(Label)
     sendName : Label = null
 
@@ -26,6 +30,10 @@ export class GameViewChatCell extends Component {
 
     start() {
 
+    }
+
+    UpdateContent(data: any): void {
+        this.refreshData(data)
     }
 
     refreshData(data) {
