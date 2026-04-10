@@ -8,6 +8,7 @@ import { SocialModel } from '../Model/SocialModel';
 import { MapChatManager } from './ChatManager';
 import { BagModel } from '../Model/BagModel';
 import { UGCModel } from '../Model/UGCModel';
+import { AffinitieModel } from '../Model/AffinitieModel';
 const { ccclass, property } = _decorator;
 
 @ccclass('UtilsManager')
@@ -23,6 +24,7 @@ export class UtilsManager extends Component {
         SocialModel.getInstance().init()
         MapChatManager.instance.init()
         UGCModel.getInstance().init()
+        AffinitieModel.getInstance().init()
     }
 
     start() {

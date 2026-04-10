@@ -11,6 +11,16 @@ type ChatRow =
 
 @ccclass('ChatView')
 export class ChatView extends Component {
+    @property(Label)
+    targetName : Label //聊天对象
+
+    @property(Label)
+    targetWorld: Label //npc聊天显示地图
+
+    @property([Node])
+    likes : Node[] = [] //和npc好感度
+    
+
     @property(EditBox)
     inputBox: EditBox = null;
 
