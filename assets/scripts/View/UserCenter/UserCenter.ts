@@ -8,6 +8,13 @@ export class UserCenter extends Component {
     @property(Label)
     userName : Label
 
+    @property(Label)
+    userId : Label
+
+    @property(Label)
+    info : Label
+
+
     start() {
         EventSystem.send("OnSetNowShowPanel" , this.node["__url"])
 
@@ -16,6 +23,8 @@ export class UserCenter extends Component {
     
     setUser(){
         this.userName.string = RoleModel.getInstance().nickName
+        this.userId.string = RoleModel.getInstance().playerId
+        this.info.string =  RoleModel.getInstance().bio
     }
 
     OnClickCard(){
