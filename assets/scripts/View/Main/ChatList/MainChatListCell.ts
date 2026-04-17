@@ -34,9 +34,11 @@ export class MainChatListCell extends Component {
             EventSystem.send('ShowTips', '无法打开会话');
             return;
         }
-        if (item.isNPC) {
-            const pm = PrivateChatManager.getInstance();
-            const npcId = pm.getNpcIdByPeerUid(item.peerUid);
+        const pm = PrivateChatManager.getInstance();
+        const npcIdFromMap = pm.getNpcIdByPeerUid(item.peerUid);
+        const treatAsNpc = item.isNPC || npcIdFromMap != null;
+        if (treatAsNpc) {
+            const npcId = npcIdFromMap;
             if (npcId != null) {
                 AppConst.PanelManager.openView('res/View/Chat/ChatView', {
                     chatType: 2,

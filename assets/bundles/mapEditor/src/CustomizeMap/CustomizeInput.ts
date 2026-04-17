@@ -72,10 +72,7 @@ export class CustomizeInput extends Component {
                     // 注意：不能直接用 screenToWorld(near plane) 作为 worldPosition，否则会跑到错误平面导致“看不见”
                     const dragOffsetModes = manager.actionStatus === ActionStatus.MOVE || manager.actionStatus === ActionStatus.PLANT || manager.actionStatus === ActionStatus.DECOR || manager.actionStatus === ActionStatus.WALL_DECOR;
                     if (this.mapEditor.enablePlacementDragOffset && dragOffsetModes) {
-                        const loc = event.getLocation();
-                        const w = this.mapEditor.mainCamera.screenToWorld(new Vec3(loc.x, loc.y, 0));
-                        const lp = this.mapEditor.mapContainer.getComponent(UITransform).convertToNodeSpaceAR(new Vec3(w.x, w.y, 0));
-                        this.mapEditor.tileMaskNode.setPosition(lp.x, lp.y, 0);
+                        this.mapEditor.applyTileMaskPreviewWorldPosition(gridPos, event.getLocation());
                     } else {
                         this.mapEditor.tileMaskNode.setWorldPosition(worldPos);
                     }
@@ -151,8 +148,7 @@ export class CustomizeInput extends Component {
                         const localPos = MapModel.getInstance().gridToWorld(gridPos , null , this.mapEditor);
                         const worldPos = this.mapEditor.mapContainer.getComponent(UITransform).convertToWorldSpaceAR(localPos)
                         if (this.mapEditor.enablePlacementDragOffset && (manager.actionStatus === ActionStatus.MOVE || manager.actionStatus === ActionStatus.PLANT || manager.actionStatus === ActionStatus.DECOR || manager.actionStatus === ActionStatus.WALL_DECOR)) {
-                            const lp = this.mapEditor.mapContainer.getComponent(UITransform).convertToNodeSpaceAR(new Vec3(mouseWorldPoint.x, mouseWorldPoint.y, 0));
-                            this.mapEditor.tileMaskNode.setPosition(lp.x, lp.y, 0);
+                            this.mapEditor.applyTileMaskPreviewWorldPosition(gridPos, event.getLocation());
                         } else {
                             this.mapEditor.tileMaskNode.setWorldPosition(worldPos);
                         }
@@ -378,10 +374,7 @@ export class CustomizeInput extends Component {
             const worldPos = this.mapEditor.mapContainer.getComponent(UITransform).convertToWorldSpaceAR(localPos)
             const dragOffsetModes = manager.actionStatus === ActionStatus.MOVE || manager.actionStatus === ActionStatus.PLANT || manager.actionStatus === ActionStatus.DECOR || manager.actionStatus === ActionStatus.WALL_DECOR;
             if (this.mapEditor.enablePlacementDragOffset && dragOffsetModes) {
-                const loc = event.getLocation();
-                const w = this.mapEditor.mainCamera.screenToWorld(new Vec3(loc.x, loc.y, 0));
-                const lp = this.mapEditor.mapContainer.getComponent(UITransform).convertToNodeSpaceAR(new Vec3(w.x, w.y, 0));
-                this.mapEditor.tileMaskNode.setPosition(lp.x, lp.y, 0);
+                this.mapEditor.applyTileMaskPreviewWorldPosition(gridPos, event.getLocation());
             } else {
                 this.mapEditor.tileMaskNode.setWorldPosition(worldPos);
             }

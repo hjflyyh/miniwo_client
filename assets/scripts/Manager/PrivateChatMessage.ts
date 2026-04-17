@@ -14,6 +14,22 @@ function chatLog(...args: any[]) {
   try { console.log(...args); } catch {}
 }
 
+/** 调试：会话列表一行写入/落盘时的摘要（便于对照后端字段与 peerName 来源） */
+function logSessionRow(tag: string, row: LocalChatSessionItem) {
+  try {
+    chatLog(`[pm][sessionList][${tag}]`, {
+      peerUid: row.peerUid,
+      peerName: row.peerName,
+      peerAvatar: row.peerAvatar,
+      isNPC: row.isNPC,
+      channelId: row.channelId,
+      lastMsg: typeof row.lastMsg === "string" ? row.lastMsg.slice(0, 80) : row.lastMsg,
+      lastTs: row.lastTs,
+      unread: row.unread,
+    });
+  } catch {}
+}
+
 export interface PrivateMsg {
   messageId: string;
   channelId: string;
@@ -95,7 +111,19 @@ export class PrivateChatManager {
     
   }
 
-  /** 会话列表（按用户聚合，按最近消息时间倒序） */
+  /**
+   * 会话列表（按用户聚合，按最近消息时间倒序）。
+   *
+   * 数据来源（非后端直接一条接口返回整张表）：
+   * - 内存 Map `localSessionsByPeer`，启动时由 `loadLocalSessions()` 从 `localStorage` key `private_chat_v1:sessions` 读入；
+   * - 之后每次 `upsertLocalSession` / `markSessionRead` 会 `persistLocalSessions()` 写回磁盘。
+   *
+   * `peerName` 可能来自：
+   * - `get_npc_chat_id` RPC 的 `name`（见 `openNpcSession` → `openSessionByUid`）；
+   * - 打开真人会话时传入的 `userName` / `openUserSession`；
+   * - `channel_message` 里 Nakama 带的 `username`（补会话时 `data.username`，易与“显示昵称”混淆，不一定是业务上的 NPC 名）；
+   * - 本地合并时保留上一次的 `peerName`。
+   */
   public getSessionList(): LocalChatSessionItem[] {
     const list = Array.from(this.localSessionsByPeer.values());
     list.sort((a, b) => (b.lastTs || 0) - (a.lastTs || 0));
@@ -108,11 +136,21 @@ export class PrivateChatManager {
   }
 
   private upsertLocalSession(item: LocalChatSessionItem) {
-    const prev = this.localSessionsByPeer.get(item.peerUid);
+    const uid = String(item.peerUid || "");
+    const inferredNpc = uid ? this.isKnownNpcPeerUid(uid) : false;
+    const merged: LocalChatSessionItem = {
+      ...item,
+      isNPC: !!item.isNPC || inferredNpc,
+    };
+    const prev = this.localSessionsByPeer.get(merged.peerUid);
     if (prev) {
-      this.localSessionsByPeer.set(item.peerUid, { ...prev, ...item });
+      this.localSessionsByPeer.set(merged.peerUid, { ...prev, ...merged });
     } else {
-      this.localSessionsByPeer.set(item.peerUid, { ...item });
+      this.localSessionsByPeer.set(merged.peerUid, { ...merged });
+    }
+    const saved = this.localSessionsByPeer.get(merged.peerUid);
+    if (saved) {
+      logSessionRow("upsertLocalSession(merge后)", saved);
     }
     this.persistLocalSessions();
   }
@@ -145,7 +183,7 @@ public markSessionRead(peerUid: string) {
       peerUid: uid,
       peerName: local.peerName ?? null,
       peerAvatar: local.peerAvatar ?? null,
-      isNPC: !!local.isNPC,
+      isNPC: !!local.isNPC || this.isKnownNpcPeerUid(uid),
       channelId: String(local.channelId),
       openedAt: Date.now(),
     };
@@ -193,6 +231,11 @@ public markSessionRead(peerUid: string) {
     return null;
   }
 
+  /** 是否在本地 npc 映射中（用于纠正仅靠 channel_message 建会话时误标 isNPC=false） */
+  private isKnownNpcPeerUid(peerUid: string): boolean {
+    return this.getNpcIdByPeerUid(peerUid) != null;
+  }
+
   private getCachedNpcPeerUid(npcId: number): string | null {
     const id = Number(npcId);
     if (!Number.isFinite(id) || id <= 0) return null;
@@ -224,6 +267,9 @@ public markSessionRead(peerUid: string) {
       );
     }
     const r = await this.rpc("get_npc_chat_id", { npc_id: npcId });
+    try {
+      chatLog("[pm] get_npc_chat_id RPC 原始返回（用于核对 name/avatar 等字段）", r);
+    } catch {}
     if (!r?.success || !r.nakama_uid) throw new Error(r?.message || "get_npc_chat_id failed");
 
     this.cacheNpcPeerUid(npcId, String(r.nakama_uid));
@@ -508,18 +554,41 @@ public markSessionRead(peerUid: string) {
 
   // ------------------- 实时接收 -------------------
 
+  /** channel_message.content 可能是对象或 JSON 字符串 */
+  private normalizeChannelContent(raw: any): any {
+    if (raw == null) return {};
+    if (typeof raw === "string") {
+      const t = raw.trim();
+      if (!t) return {};
+      try {
+        return JSON.parse(t);
+      } catch {
+        return { text: raw };
+      }
+    }
+    return raw;
+  }
+
   private onChannelMessage(data: any) {
     const channelId = data?.channel_id;
     if (!channelId) return;
 
+    const content = this.normalizeChannelContent(data?.content);
+
     // 过滤：地图群聊（ROOM）也会走 channel_message，这里只处理私聊内容，避免串台
     // MapChatManager 的 content 结构：{ from_type, from_id, text, map_id, ts, ... }
-    const c = data?.content;
-    if (c && typeof c === "object") {
-      if ((c as any).map_id != null || (c as any).from_type != null) {
-        return;
-      }
+    if (content.map_id != null || content.from_type != null) {
+      return;
     }
+
+    const npcNameRaw =
+      typeof content.npc_name === "string" && content.npc_name.trim()
+        ? content.npc_name.trim()
+        : null;
+    const sendNameRaw =
+      typeof content.send_name === "string" && content.send_name.trim()
+        ? content.send_name.trim()
+        : null;
 
     try {
       chatLog("[pm] onChannelMessage", {
@@ -527,7 +596,8 @@ public markSessionRead(peerUid: string) {
         senderId: data?.sender_id,
         username: data?.username,
         create_time: data?.create_time,
-        content: data?.content,
+        content,
+        npc_name: npcNameRaw,
       });
     } catch {}
 
@@ -549,9 +619,9 @@ public markSessionRead(peerUid: string) {
       } else {
         session = {
           peerUid,
-          peerName: data?.username || null,
+          peerName: npcNameRaw || data?.username || null,
           peerAvatar: null,
-          isNPC: false,
+          isNPC: this.isKnownNpcPeerUid(peerUid),
           channelId,
           openedAt: Date.now(),
         };
@@ -563,18 +633,31 @@ public markSessionRead(peerUid: string) {
       }
     }
 
-    const content = data.content || {};
+    if (session && !session.isNPC && this.isKnownNpcPeerUid(session.peerUid)) {
+      session.isNPC = true;
+    }
+
+    // 后端 NPC 私聊 content：{ npc_name, send_name, text, ts } —— 用 npc_name 作为展示名并写入会话
+    if (session && npcNameRaw) {
+      session.peerName = npcNameRaw;
+    }
+
     const text = this.extractText(content);
     if (!text) return;
+
+    const isSelf = data.sender_id === this.selfUid;
+    const displayName = isSelf
+      ? sendNameRaw || data.username || ""
+      : npcNameRaw || data.username || "";
 
     const msg: PrivateMsg = {
       messageId: data.message_id || "",
       channelId,
       senderId: data.sender_id || "",
-      username: data.username || "",
+      username: displayName,
       text,
       ts: this.extractTs(content, data.create_time),
-      role: data.sender_id === this.selfUid ? "self" : "peer",
+      role: isSelf ? "self" : "peer",
     };
 
     // 去重
@@ -935,17 +1018,23 @@ public markSessionRead(peerUid: string) {
       for (let i = 0; i < arr.length; i++) {
         const s = arr[i] as LocalChatSessionItem;
         if (!s || !s.peerUid) continue;
-        this.localSessionsByPeer.set(String(s.peerUid), {
-          peerUid: String(s.peerUid),
+        const uid = String(s.peerUid);
+        const inferredNpc = this.isKnownNpcPeerUid(uid);
+        this.localSessionsByPeer.set(uid, {
+          peerUid: uid,
           peerName: s.peerName ?? null,
           peerAvatar: s.peerAvatar ?? null,
-          isNPC: !!s.isNPC,
+          isNPC: !!s.isNPC || inferredNpc,
           channelId: String(s.channelId || ""),
           lastMsg: String(s.lastMsg || ""),
           lastTs: Number(s.lastTs || 0),
           unread: Number(s.unread || 0),
         });
       }
+      try {
+        chatLog("[pm] loadLocalSessions 从磁盘读入条数", this.localSessionsByPeer.size);
+      } catch {}
+      this.persistLocalSessions();
     } catch {
       // ignore
     }
@@ -953,6 +1042,20 @@ public markSessionRead(peerUid: string) {
 
   private persistLocalSessions() {
     const list = this.getSessionList();
+    try {
+      chatLog("[pm] persistLocalSessions 写入 localStorage", {
+        key: this.sessionListKey,
+        count: list.length,
+        rows: list.map((x) => ({
+          peerUid: x.peerUid,
+          peerName: x.peerName,
+          isNPC: x.isNPC,
+          channelId: x.channelId,
+          lastTs: x.lastTs,
+          lastMsgPreview: (x.lastMsg || "").slice(0, 60),
+        })),
+      });
+    } catch {}
     sys.localStorage.setItem(this.sessionListKey, JSON.stringify(list));
   }
 }

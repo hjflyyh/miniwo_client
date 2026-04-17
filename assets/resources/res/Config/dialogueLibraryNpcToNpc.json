@@ -1,0 +1,3066 @@
+{
+  "1": {
+    "dialogue_id": "10011001001",
+    "chinese_text": "又是你？为什么每次上学都能碰到你这种人。#彼此彼此，我也不想看见你那张让人不爽的脸。#你再说一遍？信不信我让你今天没法顺利进教室。#来啊，谁怕谁，反正我也没打算给你好脸色。",
+    "english_text": "Why is it always you? Why do I run into people like you every time I go to school?#Same to you. I don’t want to see your annoying face either.#Say that again? Believe it or not, I’ll make sure you can’t get into the classroom smoothly today.#Bring it on. I’m not scared. I wasn’t gonna be nice to you anyway.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "2": {
+    "dialogue_id": "10011001001",
+    "chinese_text": "喂，你挡我路了，赶紧让开。#我就不，有本事你自己绕过去啊。#你故意的是吧？",
+    "english_text": "Hey, you’re in my way. Move now.#I won’t. Walk around if you’re tough enough.#You’re doing this on purpose, aren’t you?",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "3": {
+    "dialogue_id": "10011001001",
+    "chinese_text": "拿着你的东西离我远点。#你以为我愿意靠近你？要不是顺路，我多看你一眼都嫌烦。#顺路？算我倒霉，今天就不该走这条道。",
+    "english_text": "Take your stuff and stay away from me.#You think I want to be near you? If we weren’t going the same way, I wouldn’t even look at you.#Same way? Just my luck. I shouldn’t have taken this road today.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "4": {
+    "dialogue_id": "10011001001",
+    "chinese_text": "听说你又在背后说我坏话？#我说的是事实，难道还不让人说了？#你有种就当着我的面说，躲在背后算什么本事。#我就不说，急死你，怎么样？",
+    "english_text": "Heard you were talking trash about me behind my back again?#I was telling the truth. Am I not allowed to?#Say it to my face if you have the guts. Hiding is cowardly.#I won’t. Mad about it?",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "5": {
+    "dialogue_id": "10011001001",
+    "chinese_text": "你的校服怎么这么脏？怕不是故意蹭到我旁边的吧。#谁要蹭你，是你自己靠过来的，别倒打一耙。#我倒打一耙？你也不看看自己那副邋遢样。",
+    "english_text": "Why is your school uniform so dirty? Did you rub against me on purpose?#As if I would. You came over to me. Don’t blame me for it.#Blame you? Look at how messy you are.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "6": {
+    "dialogue_id": "10011001001",
+    "chinese_text": "上课别跟我坐一排，我嫌你影响我听课。#谁想跟你坐一起？要不是老师安排，我恨不得离你十万八千里。#最好是这样，别暗地里搞小动作。",
+    "english_text": "Don’t sit next to me in class. You’re distracting me.#Who wants to sit with you? If the teacher didn’t arrange it, I’d be miles away from you.#Good. Don’t pull any tricks behind my back.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "7": {
+    "dialogue_id": "10011001001",
+    "chinese_text": "你昨天是不是故意把我的课本藏起来了？#是又怎么样？谁让你之前故意弄坏我的笔。#你幼稚不幼稚，就这点小事也记仇。#跟你比起来，我已经很成熟了。",
+    "english_text": "Did you hide my textbook on purpose yesterday?#So what if I did? You broke my pen on purpose before.#Are you immature? Holding a grudge over such a small thing.#I’m way more mature than you.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "8": {
+    "dialogue_id": "10011001001",
+    "chinese_text": "喂，别抢我的早餐，这是我特意买的。#谁抢了？是你自己没拿稳，我只是顺手捡了而已，不想给就直说。#你分明就是故意的，赶紧还给我！",
+    "english_text": "Hey, stop stealing my breakfast. I bought it specially.#Steal? You dropped it. I just picked it up. Just say you don’t want to share.#You did it on purpose! Give it back now!",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "9": {
+    "dialogue_id": "10011001001",
+    "chinese_text": "你走路能不能看着点？差点撞到我了。#是你自己站在路中间发呆，关我什么事。#我站在哪跟你没关系，你不会绕行吗？#我就不绕，有本事你撞回来啊。",
+    "english_text": "Can you watch where you’re going? You almost hit me.#You were standing in the middle of the road spacing out. Not my problem.#Where I stand is none of your business. Can’t you walk around?#I won’t. Hit me if you dare.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "10": {
+    "dialogue_id": "10011001001",
+    "chinese_text": "别跟我说话，我现在不想理你。#谁想跟你说话？要不是你挡着我，我根本不会开口。#那你赶紧走，别在我眼前晃悠。",
+    "english_text": "Don’t talk to me. I don’t want to deal with you right now.#Who wants to talk to you? I wouldn’t have said a word if you weren’t in my way.#Then leave. Stop hanging around in front of me.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "11": {
+    "dialogue_id": "10011001001",
+    "chinese_text": "听说你这次考试又考砸了？果然跟我想的一样，没什么本事。#要你管？我考得好不好跟你没关系，总比你靠作弊强。#你胡说八道什么！我什么时候作弊了？",
+    "english_text": "Heard you failed the exam again? Just like I thought. You’re useless.#None of your business. My grades have nothing to do with you. At least I don’t cheat like you.#What are you talking about? When did I cheat?",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "12": {
+    "dialogue_id": "10011001001",
+    "chinese_text": "你能不能别在我旁边嚼口香糖？声音吵死了。#我嚼我的，碍着你了？不想听就捂住耳朵啊。#你故意跟我作对是吧？",
+    "english_text": "Can you stop chewing gum so loud next to me? It’s so annoying.#I’m chewing my gum. Does it bother you? Cover your ears.#You’re picking a fight with me on purpose, aren’t you?",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "13": {
+    "dialogue_id": "10011001001",
+    "chinese_text": "把你的书包拿开，别占着我的位置。#这位置又不是你的，凭什么让我拿开？#这是我每天都坐的位置，你眼瞎吗？#我就坐这，你有本事把我赶走。",
+    "english_text": "Move your bag. Don’t take my seat.#This seat isn’t yours. Why should I move it?#I sit here every day. Are you blind?#I’m staying here. Kick me out if you can.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "14": {
+    "dialogue_id": "10011001001",
+    "chinese_text": "你昨天体育课故意绊我，是不是？#是又怎么样？谁让你跑步的时候故意挤我。#我那是不小心，你就是故意报复。#不小心？我看你是故意的还差不多。",
+    "english_text": "Did you trip me on purpose in PE yesterday?#So what if I did? You shoved me on purpose when we were running.#I did that by accident. You’re just taking revenge.#Accident? I think you did it on purpose.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "15": {
+    "dialogue_id": "10011001001",
+    "chinese_text": "别碰我的文具，我嫌你手脏。#哈？你以为你是谁？你的文具又不是什么宝贝，谁稀罕碰。#就算不是宝贝，也比被你碰过强。",
+    "english_text": "Don’t touch my stationery. Your hands are dirty.#Huh? Who do you think you are? Your stuff isn’t valuable. I don’t care to touch it.#Even if it’s not valuable, I’d rather you didn’t touch it.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "16": {
+    "dialogue_id": "10011001001",
+    "chinese_text": "上课别传纸条，影响我就算了，还影响别人。#我传我的纸条，跟你有什么关系？多管闲事。#你要是再传，我就告诉老师。#你去啊，谁怕谁，我正好也想告你上课睡觉。",
+    "english_text": "Stop passing notes in class. You’re disturbing me and others.#I’ll pass notes if I want. What’s it to you? Mind your own business.#If you do it again, I’m telling the teacher.#Go ahead. I’m not scared. I was gonna report you for sleeping in class too.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "17": {
+    "dialogue_id": "10011001001",
+    "chinese_text": "你吃的什么东西？味道难闻死了，赶紧收起来。#我吃什么是我的自由，你管不着。#在教室里吃这么难闻的东西，你有没有公德心？#公德心？跟你这种人谈公德心，简直是浪费时间。",
+    "english_text": "What are you eating? It smells terrible. Put it away.#What I eat is my freedom. You can’t control me.#Eating something smelly in the classroom. Do you have any decency?#Decency? Waste of time talking to someone like you.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "18": {
+    "dialogue_id": "10011001001",
+    "chinese_text": "你为什么总跟我作对？我又没惹你。#我就是看你不顺眼，怎么样？从第一次见你就觉得你很讨厌。#你简直不可理喻！#彼此彼此。",
+    "english_text": "Why do you always pick on me? I never did anything to you.#I just don’t like you. So what? I’ve thought you were annoying since the first day we met.#You’re impossible!#Same to you.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "19": {
+    "dialogue_id": "10011001001",
+    "chinese_text": "别模仿我说话，你模仿得真难听。#我就模仿，你能把我怎么样？谁让你说话那么装。#我装？总比你没教养强。",
+    "english_text": "Stop copying me. You sound terrible when you imitate me.#I’ll copy you all I want. What can you do? You talk so pretentiously.#Pretentious? At least I have better manners than you.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "20": {
+    "dialogue_id": "10011001002",
+    "chinese_text": "别跟我坐一张桌子吃饭，我嫌你影响我的胃口。#谁想跟你坐一起？要不是食堂没位置了，我根本不会靠近你。#那你赶紧去找别的位置，别在我这碍眼。",
+    "english_text": "Don’t eat at the same table with me. You’re ruining my appetite.#Who wants to sit with you? I wouldn’t come near you if there were seats in the canteen.#Then go find another seat right now and stop getting in my way.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "21": {
+    "dialogue_id": "10011001002",
+    "chinese_text": "你点的餐怎么这么难吃？也就你能吃得下去。#我爱吃什么吃什么，跟你没关系，总比你点的那些贵又难吃的东西强。#我点的再难吃，也比你这廉价货强。",
+    "english_text": "How can your food taste so bad? Only you can eat it.#I’ll eat whatever I like. It’s none of your business. At least it’s better than your expensive and disgusting food.#Even if mine tastes bad, it’s still better than your cheap stuff.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "22": {
+    "dialogue_id": "10011001002",
+    "chinese_text": "喂，你是不是偷拿了我的筷子？#谁偷你筷子了？这是我自己的，你眼睛不好使就去配眼镜。#我明明放在这的，除了你没人动过。#那是你自己弄丢了，别赖在我身上。",
+    "english_text": "Hey, did you steal my chopsticks?#Steal your chopsticks? These are mine. Go get glasses if your eyes are bad.#I put them right here. No one else would have touched them.#You lost them yourself. Don’t blame it on me.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "23": {
+    "dialogue_id": "10011001002",
+    "chinese_text": "别在我旁边大声说话，我想安静吃个饭都不行。#我说话声音大怎么了？食堂又不是你家，凭什么不让我说话。#你就是故意跟我作对，是不是？",
+    "english_text": "Don’t talk so loud next to me. I just want to eat in peace.#So what if I’m loud? The canteen isn’t your home. Why can’t I talk?#You’re picking a fight with me on purpose, aren’t you?",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "24": {
+    "dialogue_id": "10011001002",
+    "chinese_text": "你喝汤能不能小声点？溅得到处都是，真恶心。#我乐意，你管不着。有本事你别在我旁边坐啊。#要不是没位置，我才不会跟你坐一起。",
+    "english_text": "Can you drink your soup more quietly? You’re splashing it everywhere. It’s disgusting.#I do what I want. You can’t stop me. Don’t sit next to me if you dare.#I wouldn’t be here if there were any other seats.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "25": {
+    "dialogue_id": "10011001002",
+    "chinese_text": "你怎么把菜汤洒到我衣服上了？故意的吧！#不小心而已，至于这么大惊小怪吗？大不了我赔你一件。#你赔得起吗？这是我妈妈给我买的新衣服。#不就是一件衣服，装什么装。",
+    "english_text": "Why did you spill soup on my clothes? You did that on purpose!#It was just an accident. No need to make a fuss. I’ll buy you a new one if you want.#Can you even afford it? This is a new one my mom bought me.#It’s just a piece of clothing. Stop acting all high and mighty.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "26": {
+    "dialogue_id": "10011001002",
+    "chinese_text": "别抢我的水果，这是我妈妈给我带的。#谁抢了？我就是尝一口，你至于这么小气吗？#我就是小气，不想给你尝，赶紧还给我。#尝都尝了，怎么还给你？有本事你再要回去。",
+    "english_text": "Don’t take my fruit. My mom packed it for me.#Take it? I just wanted a taste. You’re being so stingy.#I am stingy. I don’t want to share. Give it back now.#I already tasted it. How can I give it back? Come and get it if you can.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "27": {
+    "dialogue_id": "10011001002",
+    "chinese_text": "你能不能别把垃圾扔在我旁边？赶紧捡起来。#我就扔这，又没扔在你身上，多管闲事。#这是公共区域，你能不能有点公德心？#公德心跟你没关系，少来教训我。",
+    "english_text": "Don’t throw your trash next to me. Pick it up at once.#I’ll leave it here. It didn’t land on you. Mind your own business.#This is a public area. Can you show some public morality?#It’s none of your business. Stop lecturing me.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "28": {
+    "dialogue_id": "10011001002",
+    "chinese_text": "午休的时候别说话，我要睡觉。#我就说话，你管不着。谁让你昨天晚上吵得我没睡好。#我什么时候吵你了？你别倒打一耙。#就是你，我说是就是。",
+    "english_text": "Don’t talk during lunch break. I’m trying to sleep.#I’ll talk if I want to. You can’t stop me. You kept me awake last night.#When did I disturb you? Stop twisting the truth.#You did. I said so, so it’s true.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "29": {
+    "dialogue_id": "10011001002",
+    "chinese_text": "你为什么总跟我抢食堂的最后一份套餐？故意的吧。#谁抢了？先到先得，是你自己来晚了，怪谁？#我就晚了一步，你明明可以让给我。#我凭什么让给你？你又不是我的谁。",
+    "english_text": "Why do you always grab the last set meal from me? You did it on purpose, right?#Grab? First come, first served. You were late. Don’t blame anyone else.#I was only one step behind. You could have let me have it.#Why should I? You mean nothing to me.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "30": {
+    "dialogue_id": "10011001002",
+    "chinese_text": "你吃的东西掉在地上了，还捡起来吃？真脏。#我捡不捡是我的事，跟你没关系，总比你浪费粮食强。#浪费也比吃脏东西强，小心拉肚子。#不用你管，我身体好得很。",
+    "english_text": "You dropped your food on the floor and you’re still eating it? That’s so dirty.#Whether I pick it up is my own business. At least I don’t waste food.#Wasting is better than eating dirty things. You’ll get a stomachache.#None of your concern. I’m perfectly healthy.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "31": {
+    "dialogue_id": "10011001002",
+    "chinese_text": "别靠我这么近，你身上有股汗味，难闻死了。#你身上才难闻呢，一股香水味，呛得我难受。#我这是香水味，比你那汗味强多了。#强个屁，难闻死了。",
+    "english_text": "Don’t sit so close to me. You smell like sweat. It’s terrible.#You smell worse with that perfume. It’s choking me.#This is perfume. Way better than your sweat.#Better my ass. It stinks.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "32": {
+    "dialogue_id": "10011001002",
+    "chinese_text": "你能不能别在我旁边晃来晃去？我根本没法好好吃饭。#我晃我的，碍着你了？不想看就闭上眼睛。#你简直不可理喻！#彼此彼此。",
+    "english_text": "Can you stop wandering around next to me? I can’t even eat properly.#I’ll move around as I like. Does it bother you? Close your eyes then.#You’re completely unreasonable!#Same to you.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "33": {
+    "dialogue_id": "10011001002",
+    "chinese_text": "听说你把我带的便当给打翻了？是不是故意的？#是又怎么样？谁让你之前把我的牛奶碰洒了。#我那是不小心，你就是故意报复。#不小心？我看你是故意的。",
+    "english_text": "I heard you knocked over my bento. Did you do it on purpose?#So what if I did? You spilled my milk earlier.#It was an accident. You’re just taking revenge.#Accident? I think you did it on purpose.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "34": {
+    "dialogue_id": "10011001002",
+    "chinese_text": "别跟我借纸巾，我没有。#谁要跟你借？我就是问问，你以为我稀罕？#最好是这样，别再来烦我。",
+    "english_text": "Don’t ask me for tissues. I don’t have any.#Ask for them? I was just asking. Like I’d care to borrow yours.#Good. Don’t bother me again.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "35": {
+    "dialogue_id": "10011001002",
+    "chinese_text": "你午休能不能别趴在桌子上打呼噜？声音吵死了。#我打呼噜怎么了？我控制不住，有本事你别在我旁边睡。#这是教室，又不是你家，能不能注意点？#我就不注意，你能把我怎么样？",
+    "english_text": "Can you stop snoring at your desk during lunch break? It’s so loud.#So what if I snore? I can’t help it. Don’t sleep next to me if you can’t stand it.#This is the classroom, not your home. Can you behave yourself?#I won’t. What are you gonna do about it?",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "36": {
+    "dialogue_id": "10011001002",
+    "chinese_text": "你吃不完的菜别往我这边推，我不想吃你的剩菜。#谁让你之前把剩菜倒在我旁边的？这是报复。#我那是不小心，你就是小心眼。#我小心眼？总比你没良心强。",
+    "english_text": "Don’t push your leftovers toward me. I don’t want your leftover food.#You dumped your leftovers next to me before. This is payback.#It was an accident. You’re just being petty.#Petty? At least I’m not heartless.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "37": {
+    "dialogue_id": "10011001002",
+    "chinese_text": "别在我旁边玩手机，声音开那么大，影响我。#我玩手机跟你没关系，你不想听就捂住耳朵。#你就是故意跟我作对，是不是？#是又怎么样？",
+    "english_text": "Don’t play on your phone next to me with the volume up. You’re disturbing me.#My phone is none of your business. Cover your ears if you don’t like the noise.#You’re picking a fight with me, aren’t you?#So what if I am?",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "38": {
+    "dialogue_id": "10011001002",
+    "chinese_text": "你为什么总在午休的时候找我麻烦？我想好好休息都不行。#我就是看你不顺眼，想找你麻烦，怎么样？#你简直太过分了！#我过分？你之前比我更过分。",
+    "english_text": "Why do you always bother me during lunch break? I can’t even rest properly.#I just don’t like you. I like annoying you. How about that?#You’re way too much!#Too much? You were worse.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "39": {
+    "dialogue_id": "10011001002",
+    "chinese_text": "你能不能把你的饭盒收起来？占着地方，我都没法放我的东西了。#我就不收，有本事你把我的饭盒扔了。#你以为我不敢？#你扔一个试试，我跟你没完。",
+    "english_text": "Can you put your lunch box away? It’s taking up too much space and I can’t put my things down.#I won’t put it away. Throw it away if you dare.#You think I won’t?#Try it. I won’t let you get away with it.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "40": {
+    "dialogue_id": "10011001003",
+    "chinese_text": "下午的实验课，别跟我一组，我嫌你笨手笨脚的。#谁想跟你一组？要不是老师分组，我根本不会跟你合作。#最好是这样，别到时候拖我后腿。",
+    "english_text": "Don’t be in my group for the lab class this afternoon. You’re clumsy.#Who wants to be with you? I’d never work with you if the teacher didn’t assign the groups.#Good. Don’t hold me back later.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "41": {
+    "dialogue_id": "10011001003",
+    "chinese_text": "你上课能不能别走神？老师提问你都答不上来，真丢人。#要你管？我走神跟你没关系，总比你上课偷偷玩手机强。#我什么时候玩手机了？你别胡说八道。",
+    "english_text": "Can you stop zoning out in class? You can’t even answer the teacher’s questions. It’s embarrassing.#None of your business. My zoning out has nothing to do with you. At least I don’t play with my phone secretly like you.#When did I play with my phone? Stop talking nonsense.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "42": {
+    "dialogue_id": "10011001003",
+    "chinese_text": "喂，借我一下你的笔记本，我刚才没记全。#不借，谁让你上课不认真听，现在才想起借笔记。#你故意的是吧？上次你借我的课本，我都借给你了。#那是上次，这次我就不借。",
+    "english_text": "Hey, lend me your notebook. I didn’t finish taking notes just now.#No way. You should’ve paid attention in class instead of asking for notes now.#You’re doing this on purpose, right? I lent you my textbook last time.#That was last time. I’m not lending it to you now.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "43": {
+    "dialogue_id": "10011001003",
+    "chinese_text": "你为什么总在老师面前打我的小报告？我招你惹你了。#我就是看你不顺眼，想让老师批评你，怎么样？#你太幼稚了，有本事跟我正面较量。#我就幼稚，你能把我怎么样？",
+    "english_text": "Why do you always snitch on me to the teacher? What did I do to you?#I just don’t like you and want the teacher to criticize you. So what?#You’re so childish. Fight me fairly if you dare.#I am childish. What are you gonna do about it?",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "44": {
+    "dialogue_id": "10011001003",
+    "chinese_text": "下午的体育课，别跟我一组打篮球，我嫌你打得差。#谁想跟你一组？你打得也不怎么样，还装高手。#我至少比你强，你连运球都运不好。#你等着，我一定会赢你的。",
+    "english_text": "Don’t be on my team for basketball in PE this afternoon. You’re terrible.#Who wants to be on your team? You’re not good either but act like a pro.#I’m at least better than you. You can’t even dribble properly.#Just wait. I’ll definitely beat you.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "45": {
+    "dialogue_id": "10011001003",
+    "chinese_text": "你能不能别在我旁边唱歌？五音不全，难听死了。#我唱歌关你什么事？我乐意唱，你不想听就捂住耳朵。#你就是故意跟我作对，是不是？",
+    "english_text": "Can you stop singing next to me? You’re tone-deaf and it sounds awful.#My singing is none of your business. I’ll sing if I want to. Cover your ears if you don’t like it.#You’re picking a fight with me on purpose, aren’t you?",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "46": {
+    "dialogue_id": "10011001003",
+    "chinese_text": "你昨天的作业是不是抄的？跟我同桌的答案一模一样。#我没有抄，是巧合而已，你别冤枉我。#巧合？哪有这么巧的事，你就是抄的。#我没有，你有本事拿出证据。",
+    "english_text": "Did you copy your homework yesterday? It’s exactly the same as my deskmate’s.#I didn’t copy. It’s just a coincidence. Don’t wrong me.#Coincidence? How could that be possible? You definitely copied.#I didn’t. Prove it if you can.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "47": {
+    "dialogue_id": "10011001003",
+    "chinese_text": "别碰我的实验器材，弄坏了你赔不起。#哈？你以为你的器材很贵重吗？我才不想碰，就算弄坏了，我也赔得起。#你最好别碰，不然我跟你没完。",
+    "english_text": "Don’t touch my lab equipment. You can’t afford to break it.#Huh? You think your equipment is that valuable? I don’t even want to touch it. And I can afford it if I do break it.#Better not touch it, or I won’t let you get away with it.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "48": {
+    "dialogue_id": "10011001003",
+    "chinese_text": "上课别跟我说话，我要认真听课。#我就跟你说话，你管不着。谁让你之前上课跟别人说话，影响我。#我那是跟别人讨论题目，跟你不一样。#我不管，我就是要跟你说话。",
+    "english_text": "Don’t talk to me in class. I’m trying to listen carefully.#I will talk to you anyway. You can’t stop me. You talked to others in class before and distracted me.#I was discussing questions with them. It’s not the same as you.#I don’t care. I’m just gonna talk to you.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "49": {
+    "dialogue_id": "10011001003",
+    "chinese_text": "你为什么总抢我的座位？这是我每天都坐的位置。#这位置又不是你的，谁先到谁坐，你来晚了就活该。#我就晚了一步，你明明可以让给我。#我凭什么让给你？",
+    "english_text": "Why do you always take my seat? I sit here every day.#This seat isn’t yours. First come, first served. You deserve it for being late.#I was only one step late. You could’ve let me have it.#Why should I?",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "50": {
+    "dialogue_id": "10011001003",
+    "chinese_text": "你下午的画画课，别模仿我的画，我嫌你画得丑。#我就模仿，你能把我怎么样？谁让你画得那么好看，我就是要模仿。#你简直不可理喻，模仿也模仿不像。#我慢慢学，总会比你画得好。",
+    "english_text": "Don’t copy my painting in art class this afternoon. Your paintings are ugly.#I will copy you. What can you do? Your painting is so good that I just have to copy it.#You’re completely unreasonable. You can’t even copy it well.#I’ll keep learning. I’ll paint better than you someday.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "51": {
+    "dialogue_id": "10011001003",
+    "chinese_text": "别在我旁边嚼槟榔，味道难闻死了，还影响健康。#我嚼我的，跟你没关系，你少来教训我。#我这是为你好，你别不知好歹。#我用你为我好？多管闲事。",
+    "english_text": "Stop chewing betel nut next to me. It smells terrible and is bad for your health.#I’ll chew what I want. It’s none of your business. Don’t lecture me.#I’m doing this for your own good. Don’t be ungrateful.#I don’t need your kindness. Mind your own business.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "52": {
+    "dialogue_id": "10011001003",
+    "chinese_text": "你能不能别把你的书本堆在我桌子上？占着我的地方。#我就堆这，有本事你把我的书本挪走。#你以为我不敢？#你挪一个试试，我跟你没完。",
+    "english_text": "Can you stop piling your books on my desk? You’re taking up my space.#I’ll leave them right here. Move them if you dare.#You think I won’t?#Try moving them. I won’t let you get away with it.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "53": {
+    "dialogue_id": "10011001003",
+    "chinese_text": "听说你这次的手工课作品，是抄别人的？#我没有抄，是我自己做的，你别冤枉我。#我都看见了，跟网上的一模一样，还敢说没抄。#我就是参考了一下，不算抄。",
+    "english_text": "I heard you copied someone else’s handicraft work for class.#I didn’t copy it. I made it myself. Don’t accuse me.#I saw it. It’s exactly the same as one online. How dare you say you didn’t copy.#I only used it for reference. It doesn’t count as copying.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "54": {
+    "dialogue_id": "10011001003",
+    "chinese_text": "课后别跟我一起走，我不想跟你待在一起。#谁想跟你一起走？要不是顺路，我根本不会跟你走在一起。#那你赶紧走别的路，别跟我顺路。",
+    "english_text": "Don’t walk with me after class. I don’t want to stay with you.#Who wants to walk with you? I wouldn’t be with you if we weren’t going the same way.#Then take another road. Don’t follow me.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "55": {
+    "dialogue_id": "10011001003",
+    "chinese_text": "你能不能别在我旁边打闹？万一撞到我怎么办？#我打闹关你什么事？你自己站远点不就行了。#这是走廊，又不是你家，能不能注意点？#我就不注意，你能把我怎么样？",
+    "english_text": "Can you stop fooling around next to me? What if you hit me?#My fooling around is none of your business. Just stand further away.#This is the hallway, not your home. Can you behave yourself?#I won’t. What are you gonna do about it?",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "56": {
+    "dialogue_id": "10011001003",
+    "chinese_text": "你为什么总在背后说我坏话？有本事当着我的面说。#我就不说，急死你，怎么样？谁让你之前说我的坏话。#我什么时候说你坏话了？你别倒打一耙。#你就是说了，我说是就是。",
+    "english_text": "Why do you always talk bad about me behind my back? Say it to my face if you dare.#I won’t. Make yourself mad. So what? You talked about me first.#When did I talk about you? Stop twisting the truth.#You did. I said so, so it’s true.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "57": {
+    "dialogue_id": "10011001003",
+    "chinese_text": "课后别问我题目，我不想教你。#谁要问你？我就是问问别人，你以为我稀罕问你？#最好是这样，别再来烦我。",
+    "english_text": "Don’t ask me questions after class. I don’t want to teach you.#Who’s asking you? I was just asking someone else. Like I’d beg to ask you.#Good. Don’t bother me again.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "58": {
+    "dialogue_id": "10011001003",
+    "chinese_text": "你能不能别把你的水杯放在我桌子上？万一洒了怎么办？#我就放在这，有本事你把我的水杯拿走。#你简直太过分了！#我过分？你之前比我更过分。",
+    "english_text": "Can you stop putting your water bottle on my desk? What if it spills?#I’ll put it right here. Take it if you dare.#You’re way too much!#Too much? You were worse before.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "59": {
+    "dialogue_id": "10011001003",
+    "chinese_text": "下午的班会，别跟我一组发言，我嫌你说话没逻辑。#谁想跟你一组？要不是老师安排，我根本不会跟你一组。#最好是这样，别到时候拖我后腿。",
+    "english_text": "Don’t be in my group for the speech in the class meeting this afternoon. You’re illogical when you speak.#Who wants to be with you? I’d never team up with you if the teacher didn’t arrange it.#Good. Don’t hold me back.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "60": {
+    "dialogue_id": "10011001004",
+    "chinese_text": "放学别跟我走一条路，我嫌你晦气。#彼此彼此，我也不想跟你走一条路，要不是顺路，我早就绕路了。#那你赶紧绕路，别跟我一起。",
+    "english_text": "Don’t walk the same way as me after school. You’re bad luck.#Same to you. I don’t want to either. I’d have taken another route if we weren’t going the same way.#Then go around now. Stop walking with me.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "61": {
+    "dialogue_id": "10011001004",
+    "chinese_text": "你为什么总在放学的时候堵我？我招你惹你了。#我就是看你不顺眼，想堵你，怎么样？#你太过分了，再堵我，我就告诉老师。#你去啊，谁怕谁，我正好也想告你。",
+    "english_text": "Why do you always block me after school? What did I ever do to you?#I just don’t like you. I wanna block you. So what?#You’re going too far. Do it again and I’ll tell the teacher.#Go ahead. I’m not scared. I was gonna report you anyway.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "62": {
+    "dialogue_id": "10011001004",
+    "chinese_text": "你能不能别抢我的自行车？这是我的车。#谁抢你自行车了？我就是骑一下，你至于这么小气吗？#这是我的车，我不想让你骑，赶紧还给我。#我就不还，你有本事来拿。",
+    "english_text": "Can you stop grabbing my bike? It’s mine.#Grabbing it? I’m just riding it for a bit. You’re being so stingy.#It’s my bike. I don’t want you riding it. Give it back now.#I won’t. Come and get it if you dare.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "63": {
+    "dialogue_id": "10011001004",
+    "chinese_text": "你放学能不能别跟在我后面？像个跟屁虫一样，真烦。#我就跟在你后面，你管不着。谁让你之前跟在我后面，我这是报复。#我那是不小心跟错路了，你别小心眼。#我小心眼？总比你没良心强。",
+    "english_text": "Stop following me after school. You’re like a pest. It’s so annoying.#I’ll follow you if I want. You can’t stop me. You followed me before, so this is payback.#I just took the wrong road by accident. You’re being petty.#Petty? At least I’m not heartless.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "64": {
+    "dialogue_id": "10011001004",
+    "chinese_text": "你为什么总把垃圾扔在我家楼下？故意的吧。#我就扔在这，又没扔在你家里，多管闲事。#这是我家楼下，影响我家环境，你赶紧捡起来。#我就不捡，你能把我怎么样？",
+    "english_text": "Why do you always throw trash downstairs by my house? On purpose, right?#I’ll throw it here. It’s not even in your house. Mind your own business.#This is outside my home. It ruins the environment. Pick it up now.#I won’t. What are you gonna do about it?",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "65": {
+    "dialogue_id": "10011001004",
+    "chinese_text": "放学别跟我抢公交车，我赶时间。#谁抢你公交车了？先到先得，是你自己来晚了，怪谁？#我就晚了一步，你明明可以让我先上。#我凭什么让你？你又不是我的谁。",
+    "english_text": "Don’t fight me for the bus after school. I’m in a hurry.#Fight you? First come, first served. You were late. Don’t blame me.#I was only one step behind. You could’ve let me get on first.#Why should I? You mean nothing to me.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "66": {
+    "dialogue_id": "10011001004",
+    "chinese_text": "你身上怎么这么脏？是不是故意蹭到我身上的？#谁故意蹭你了？是你自己靠过来的，别倒打一耙。#我才没有靠过来，是你故意蹭我的。#我没有，你有本事拿出证据。",
+    "english_text": "Why are you so dirty? Did you rub against me on purpose?#As if I would. You’re the one who came close. Don’t blame me.#I didn’t come near you. You did it on purpose.#I didn’t. Prove it if you can.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "67": {
+    "dialogue_id": "10011001004",
+    "chinese_text": "别在我旁边吃路边摊，味道难闻死了，还不卫生。#我吃我的路边摊，跟你没关系，你不想闻就走远点。#你就是故意跟我作对，是不是？#是又怎么样？",
+    "english_text": "Don’t eat street food next to me. It smells terrible and is unsanitary.#I’ll eat what I want. It’s none of your business. Walk away if you don’t like the smell.#You’re picking a fight with me on purpose, aren’t you?#So what if I am?",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "68": {
+    "dialogue_id": "10011001004",
+    "chinese_text": "你为什么总在放学的时候说我的坏话？让别人都误会我。#我就是要说，谁让你之前说我的坏话，让别人误会我。#我没有说你的坏话，你别冤枉我。#我不管，我就是要说。",
+    "english_text": "Why do you always talk bad about me after school? Letting everyone misunderstand me.#I’ll keep talking. You said bad things about me first and made people misunderstand me.#I never did. Don’t accuse me.#I don’t care. I’m still gonna talk.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "69": {
+    "dialogue_id": "10011001004",
+    "chinese_text": "别跟我借雨伞，我没有多余的。#谁要跟你借？我就是问问，你以为我稀罕？#最好是这样，别再来烦我。",
+    "english_text": "Don’t ask me for an umbrella. I don’t have a spare.#Ask for it? I was just asking. Like I’d care to borrow yours.#Good. Don’t bother me again.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "70": {
+    "dialogue_id": "10011001004",
+    "chinese_text": "你放学能不能别大声喧哗？影响别人休息。#我大声喧哗关你什么事？我乐意，你不想听就捂住耳朵。#这是小区里，又不是你家，能不能注意点？#我就不注意，你能把我怎么样？",
+    "english_text": "Can you stop shouting after school? You’re disturbing people.#My shouting is none of your business. I’ll do what I want. Cover your ears if you don’t like it.#This is a neighborhood, not your home. Can you behave?#I won’t. What are you gonna do about it?",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "71": {
+    "dialogue_id": "10011001004",
+    "chinese_text": "你为什么总抢我的零食？这是我妈妈给我买的。#谁抢你零食了？我就是尝一口，你至于这么小气吗？#我就是小气，不想给你尝，赶紧还给我。#尝都尝了，怎么还给你？",
+    "english_text": "Why do you always steal my snacks? My mom bought them for me.#Steal them? I just wanted a taste. You’re so stingy.#I am stingy. I don’t want to share. Give them back.#I already tasted them. How am I supposed to give them back?",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "72": {
+    "dialogue_id": "10011001004",
+    "chinese_text": "别在我旁边玩滑板，万一撞到我怎么办？#我玩滑板关你什么事？你自己站远点不就行了。#这是人行道，又不是你玩滑板的地方，能不能注意点？#我就不注意，你能把我怎么样？",
+    "english_text": "Don’t skateboard next to me. What if you hit me?#My skateboarding is none of your business. Just stand further away.#This is a sidewalk, not a skate park. Can you be careful?#I won’t. What are you gonna do about it?",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "73": {
+    "dialogue_id": "10011001004",
+    "chinese_text": "你放学能不能别跟我一起去便利店？我不想跟你待在一起。#谁想跟你一起去？要不是便利店顺路，我根本不会跟你一起。#那你赶紧去别的便利店，别跟我一起。",
+    "english_text": "Don’t go to the convenience store with me after school. I don’t want to be around you.#Who wants to? I wouldn’t come if it wasn’t on my way.#Then go to a different one. Stop following me.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "74": {
+    "dialogue_id": "10011001004",
+    "chinese_text": "你为什么总在我背后推我？差点把我推倒了。#我就是推你了，怎么样？谁让你之前推我。#我那是不小心，你就是故意报复。#不小心？我看你是故意的。",
+    "english_text": "Why do you always push me from behind after school? You almost made me fall.#I pushed you. So what? You pushed me before.#I did it by accident. You’re just getting revenge.#Accident? I think you did it on purpose.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "75": {
+    "dialogue_id": "10011001004",
+    "chinese_text": "你能不能别把你的书包扔在我旁边？占着地方。#我就扔这，有本事你把我的书包挪走。#你以为我不敢？#你挪一个试试，我跟你没完。",
+    "english_text": "Stop leaving your bag next to me. It’s in the way.#I’ll leave it here. Move it if you dare.#You think I won’t?#Try it. I won’t let you get away with it.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "76": {
+    "dialogue_id": "10011001004",
+    "chinese_text": "放学别跟我讨论作业，我不想跟你说话。#谁想跟你讨论作业？我就是问问别人，你以为我稀罕跟你讨论？#最好是这样，别再来烦我。",
+    "english_text": "Don’t talk about homework with me after school. I don’t want to speak to you.#Who wants to? I was asking someone else. Like I’d care to talk to you.#Good. Don’t bother me again.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "77": {
+    "dialogue_id": "10011001004",
+    "chinese_text": "你为什么总在放学的时候故意踩我的鞋？#我就是踩你鞋了，怎么样？谁让你之前踩我的鞋。#我那是不小心，你就是故意报复。#我不管，我就是要踩。",
+    "english_text": "Why do you always step on my shoes on purpose after school?#I stepped on them. So what? You stepped on mine before.#I did it by accident. You’re doing this on purpose.#I don’t care. I’m still gonna step on them.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "78": {
+    "dialogue_id": "10011001004",
+    "chinese_text": "别在我旁边打电话，声音开那么大，影响我。#我打电话跟你没关系，你不想听就走远点。#你就是故意跟我作对，是不是？#是又怎么样？",
+    "english_text": "Don’t talk on the phone next to me so loud. You’re annoying me.#My call is none of your business. Walk away if you don’t like it.#You’re picking a fight with me, aren’t you?#So what if I am?",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "79": {
+    "dialogue_id": "10011001004",
+    "chinese_text": "放学别跟我走一条路，我不想被别人误会我们关系好。#谁想跟你关系好？要不是顺路，我早就绕路了。#那你赶紧绕路，别跟我一起。",
+    "english_text": "Don’t walk the same way as me after school. I don’t want people thinking we’re friends.#Who wants to be your friend? I’d have gone another way if we weren’t going the same route.#Then go around. Stop walking with me.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "80": {
+    "dialogue_id": "10011001005",
+    "chinese_text": "你能不能别在我家楼下大声唱歌？都晚上了，影响别人休息。#我唱歌关你什么事？我乐意唱，你不想听就捂住耳朵。#这是晚上，大家都要休息，你能不能有点公德心？#公德心跟你没关系，少来教训我。",
+    "english_text": "Can you stop singing loudly downstairs my house? It’s nighttime, and you’re disturbing people’s rest.#What’s my singing to you? I’ll sing if I want to. Cover your ears if you don’t like it.#It’s night; everyone needs to rest. Can you show some decency?#Decency is none of your business. Don’t lecture me.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "81": {
+    "dialogue_id": "10011001005",
+    "chinese_text": "你为什么总在晚上给我发骚扰信息？故意的吧。#我就发，你能把我怎么样？谁让你之前不回我信息。#我不想回你信息，你别再来烦我。#我就烦你，怎么样？",
+    "english_text": "Why do you keep sending me annoying messages at night? On purpose, right?#I’ll send them. What can you do? You didn’t reply to me before.#I don’t want to reply. Stop bothering me.#I’ll bother you. So what?",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "82": {
+    "dialogue_id": "10011001005",
+    "chinese_text": "别在我旁边玩游戏，声音开那么大，吵得我没法学习。#我玩游戏跟你没关系，你不想听就捂住耳朵。#你就是故意跟我作对，是不是？#是又怎么样？",
+    "english_text": "Don’t play games next to me with the volume up. I can’t study with all that noise.#My game is none of your business. Cover your ears if you don’t like it.#You’re picking a fight with me on purpose, aren’t you?#So what if I am?",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "83": {
+    "dialogue_id": "10011001005",
+    "chinese_text": "你能不能别把垃圾扔在楼道里？影响大家通行。#我就扔在这，又没扔在你家里，多管闲事。#这是楼道，是公共区域，你能不能注意点？#我就不注意，你能把我怎么样？",
+    "english_text": "Can you stop throwing trash in the hallway? It’s blocking everyone’s way.#I’ll leave it here. It’s not in your house. Mind your own business.#This is a public hallway. Can you be more considerate?#I won’t. What are you gonna do about it?",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "84": {
+    "dialogue_id": "10011001005",
+    "chinese_text": "晚上别跟我一起去公园，我不想跟你待在一起。#谁想跟你一起去？要不是公园顺路，我根本不会跟你一起。#那你赶紧去别的公园，别跟我一起。",
+    "english_text": "Don’t go to the park with me at night. I don’t want to be around you.#Who wants to? I wouldn’t come if the park wasn’t on my way.#Then go to another park. Stop following me.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "85": {
+    "dialogue_id": "10011001005",
+    "chinese_text": "你为什么总在晚上故意敲我家的门？#我就敲，你能把我怎么样？谁让你之前敲我家的门，影响我休息。#我那是不小心敲错了，你别小心眼。#我小心眼？总比你没良心强。",
+    "english_text": "Why do you always knock on my door on purpose at night?#I’ll knock. What can you do? You knocked on my door before and disturbed me.#I knocked on the wrong door by accident. You’re being petty.#Petty? At least I’m not heartless.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "86": {
+    "dialogue_id": "10011001005",
+    "chinese_text": "别在我旁边吃夜宵，味道难闻死了，还影响我。#我吃我的夜宵，跟你没关系，你不想闻就走远点。#你就是故意跟我作对，是不是？#是又怎么样？",
+    "english_text": "Don’t eat late-night snacks next to me. It smells terrible and annoys me.#I’ll eat what I want. It’s none of your business. Walk away if you don’t like the smell.#You’re picking a fight with me on purpose, aren’t you?#So what if I am?",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "87": {
+    "dialogue_id": "10011001005",
+    "chinese_text": "你能不能别在晚上玩手机，灯光太亮，影响我睡觉。#我玩手机跟你没关系，你不想看就闭上眼睛。#这是宿舍，又不是你家，能不能注意点？#我就不注意，你能把我怎么样？",
+    "english_text": "Can you stop using your phone at night? The light is too bright and keeps me awake.#My phone is none of your business. Close your eyes if you don’t like it.#This is a dorm, not your home. Can you behave?#I won’t. What are you gonna do about it?",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "88": {
+    "dialogue_id": "10011001005",
+    "chinese_text": "你为什么总在晚上说我的坏话？让别人都误会我。#我就是要说，谁让你之前说我的坏话，让别人误会我。#我没有说你的坏话，你别冤枉我。#我不管，我就是要说。",
+    "english_text": "Why do you always talk bad about me at night? Making everyone misunderstand me.#I’ll keep talking. You said bad things about me first and made people misunderstand me.#I never did. Don’t accuse me.#I don’t care. I’m still gonna talk.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "89": {
+    "dialogue_id": "10011001005",
+    "chinese_text": "别跟我借充电器，我自己还要用。#谁要跟你借？我就是问问，你以为我稀罕？#最好是这样，别再来烦我。",
+    "english_text": "Don’t ask me for a charger. I need it myself.#Ask for it? I was just asking. Like I’d care to borrow yours.#Good. Don’t bother me again.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "90": {
+    "dialogue_id": "10011001005",
+    "chinese_text": "你能不能别在晚上打闹？吵得大家都没法休息。#我打闹关你什么事？我乐意，你不想听就捂住耳朵。#这是小区里，又不是你家，能不能注意点？#我就不注意，你能把我怎么样？",
+    "english_text": "Can you stop fooling around at night? You’re keeping everyone awake.#My messing around is none of your business. I’ll do what I want. Cover your ears if you don’t like it.#This is a neighborhood, not your home. Can you show some respect?#I won’t. What are you gonna do about it?",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "91": {
+    "dialogue_id": "10011001005",
+    "chinese_text": "你为什么总在晚上抢我的零食？这是我晚上的宵夜。#谁抢你零食了？我就是尝一口，你至于这么小气吗？#我就是小气，不想给你尝，赶紧还给我。#尝都尝了，怎么还给你？",
+    "english_text": "Why do you always steal my snacks at night? They’re my late-night food.#Steal them? I just wanted a taste. You’re so stingy.#I am stingy. I don’t want to share. Give them back.#I already tasted them. How am I supposed to give them back?",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "92": {
+    "dialogue_id": "10011001005",
+    "chinese_text": "别在我旁边看电影，声音开那么大，影响我。#我看电影跟你没关系，你不想听就捂住耳朵。#你就是故意跟我作对，是不是？#是又怎么样？",
+    "english_text": "Don’t watch movies next to me with the volume up. You’re disturbing me.#My movie is none of your business. Cover your ears if you don’t like it.#You’re picking a fight with me on purpose, aren’t you?#So what if I am?",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "93": {
+    "dialogue_id": "10011001005",
+    "chinese_text": "你能不能别把你的衣服晾在我家的晾衣绳上？占着我的地方。#我就晾在这，有本事你把我的衣服拿下来。#你以为我不敢？#你拿一个试试，我跟你没完。",
+    "english_text": "Can you stop hanging your clothes on my clothesline? You’re taking my space.#I’ll hang them here. Take them down if you dare.#You think I won’t?#Try it. I won’t let you get away with it.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "94": {
+    "dialogue_id": "10011001005",
+    "chinese_text": "晚上别跟我一起去便利店，我不想跟你待在一起。#谁想跟你一起去？要不是便利店顺路，我根本不会跟你一起。#那你赶紧去别的便利店，别跟我一起。",
+    "english_text": "Don’t go to the convenience store with me at night. I don’t want to be around you.#Who wants to? I wouldn’t come if it wasn’t on my way.#Then go to a different store. Stop following me.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "95": {
+    "dialogue_id": "10011001005",
+    "chinese_text": "你为什么总在晚上故意碰掉我的东西？#我就是碰掉了，怎么样？谁让你之前碰掉我的东西。#我那是不小心，你就是故意报复。#我不管，我就是要碰掉。",
+    "english_text": "Why do you always knock my things over on purpose at night?#I knocked them over. So what? You knocked over mine before.#I did it by accident. You’re just taking revenge.#I don’t care. I’m still gonna knock them over.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "96": {
+    "dialogue_id": "10011001005",
+    "chinese_text": "别在我旁边抽烟，味道难闻死了，还影响健康。#我抽烟关你什么事？我乐意抽，你不想闻就走远点。#我这是为你好，你别不知好歹。#我用你为我好？多管闲事。",
+    "english_text": "Don’t smoke next to me. It smells terrible and is bad for health.#My smoking is none of your business. I’ll smoke if I want. Walk away if you don’t like it.#I’m looking out for you. Don’t be ungrateful.#I don’t need your concern. Mind your own business.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "97": {
+    "dialogue_id": "10011001005",
+    "chinese_text": "你能不能别在晚上大声说话？影响别人休息。#我大声说话关你什么事？我乐意，你不想听就捂住耳朵。#这是晚上，大家都要休息，你能不能有点公德心？#公德心跟你没关系，少来教训我。",
+    "english_text": "Can you stop talking loudly at night? You’re disturbing others.#My talking is none of your business. I’ll talk as loud as I want. Cover your ears if you don’t like it.#It’s night; everyone needs to rest. Can you have some public decency?#Decency is none of your business. Don’t lecture me.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "98": {
+    "dialogue_id": "10011001005",
+    "chinese_text": "你为什么总在晚上给我打电话？我都睡了。#我就给你打电话，你能把我怎么样？谁让你之前不接我的电话。#我睡着了，怎么接你电话？你别无理取闹。#我就无理取闹，怎么样？",
+    "english_text": "Why do you keep calling me at night? I’m already asleep.#I’ll call you. What can you do? You didn’t answer my calls before.#I was asleep. How could I answer? Stop being unreasonable.#I’ll be unreasonable. So what?",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "99": {
+    "dialogue_id": "10011001005",
+    "chinese_text": "别在我旁边放音乐，声音开那么大，吵得我没法学习。#我放音乐跟你没关系，你不想听就捂住耳朵。#你就是故意跟我作对，是不是？#是又怎么样？有本事你也放，看谁吵得过谁。",
+    "english_text": "Don’t play music next to me with the volume up. I can’t study with all that noise.#My music is none of your business. Cover your ears if you don’t like it.#You’re picking a fight with me on purpose, aren’t you?#So what if I am? Play your own music if you dare. Let’s see who’s louder.",
+    "weight": "10",
+    "restriction": "0_-500_-200#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "100": {
+    "dialogue_id": "10011001006",
+    "chinese_text": "早啊，没想到今天能碰到你。#早，我刚好也走这条道。#是吗？那刚好顺路一段。",
+    "english_text": "Morning! Didn’t expect to run into you today.#Morning, I just happen to take this road.#Really? Guess we’re going the same way for a bit.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "101": {
+    "dialogue_id": "10011001006",
+    "chinese_text": "你的书包看起来好沉，装了很多书吗？#嗯，今天有好几节理科课，要带练习册。#难怪，辛苦啦。",
+    "english_text": "Your backpack looks really heavy. Did you pack a lot of books?#Yeah, I have several science classes today and need my workbooks.#No wonder. Tough day.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "102": {
+    "dialogue_id": "10011001006",
+    "chinese_text": "等一下，你的校徽歪了。#啊？谢谢提醒，我马上弄好。#不客气，快走吧，要迟到了。",
+    "english_text": "Wait, your school badge is crooked.#Oh? Thanks for telling me, I’ll fix it right away.#No problem. Hurry up, or we’ll be late.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "103": {
+    "dialogue_id": "10011001006",
+    "chinese_text": "昨天的数学作业，你最后一道题做出来了吗？#没有，卡住了，打算今天问老师。#我也是，看来那道题确实难。",
+    "english_text": "Did you finish the last math problem in yesterday’s homework?#No, I got stuck. I’m going to ask the teacher today.#Same here. Guess it really was hard.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "104": {
+    "dialogue_id": "10011001006",
+    "chinese_text": "你今天怎么没戴围巾？早上有点凉。#啊，忘了，出门太急了。#还好不算特别冷，课间记得去医务室借一条吧。",
+    "english_text": "Why aren’t you wearing a scarf today? It’s a bit cold this morning.#Oh, I forgot. I left in such a hurry.#It’s not too bad, though. Remember to borrow one from the nurse during break.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "105": {
+    "dialogue_id": "10011001006",
+    "chinese_text": "早自习要默写单词，你复习了吗？#大概过了一遍，应该能及格。#那还好，我昨天熬夜复习了，就怕写错。",
+    "english_text": "We have to memorize words for morning self-study. Did you review?#I went through them once. Should pass.#Good. I stayed up late last night scared of writing them wrong.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "106": {
+    "dialogue_id": "10011001006",
+    "chinese_text": "你走路能不能慢一点？我快跟不上了。#抱歉抱歉，习惯走快了，我放慢点。#谢谢啦。",
+    "english_text": "Can you walk a bit slower? I can barely keep up.#Sorry, sorry. I’m used to walking fast. I’ll slow down.#Thanks.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "107": {
+    "dialogue_id": "10011001006",
+    "chinese_text": "你手里拿的是新开的那家面包店的三明治吗？#对，早上路过买的，味道还不错。#看起来挺好的，下次我也去试试。",
+    "english_text": "Is that a sandwich from the new bakery?#Yeah, I bought it on the way here. It’s pretty good.#Looks nice. I’ll try it next time.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "108": {
+    "dialogue_id": "10011001006",
+    "chinese_text": "今天的早会好像要宣布运动会的事。#是吗？我还不知道，希望别安排在周末。#我也这么觉得，周末想好好休息。",
+    "english_text": "I think they’re announcing something about the sports meeting at the morning assembly.#Really? I didn’t know. Hope it’s not on the weekend.#Me too. I want to rest on weekends.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "109": {
+    "dialogue_id": "10011001006",
+    "chinese_text": "你的笔借我用一下可以吗？我的笔没水了。#可以，给你，记得下课还我。#好的，谢谢。",
+    "english_text": "Can I borrow your pen? Mine ran out of ink.#Sure, here. Remember to give it back after class.#Okay, thanks.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "110": {
+    "dialogue_id": "10011001006",
+    "chinese_text": "早啊，你今天气色不太好，没睡好吗？#嗯，昨天复习到太晚了。#那课间记得补个觉，别影响上课。",
+    "english_text": "Morning. You look a bit tired. Didn’t sleep well?#Yeah, I studied too late last night.#Then take a nap during break so you don’t zone out in class.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "111": {
+    "dialogue_id": "10011001006",
+    "chinese_text": "校门口的樱花开了，你看到了吗？#看到了，挺好看的，等放学可以拍张照。#我也是这么想的。",
+    "english_text": "The cherry blossoms by the school gate are blooming. Did you see them?#Yeah, they’re really pretty. Maybe we can take photos after school.#That’s what I was thinking.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "112": {
+    "dialogue_id": "10011001006",
+    "chinese_text": "今天的值日生是你吗？看起来很认真啊。#嗯，应该的，要把黑板擦干净才行。#辛苦你了，等下我帮你搬下粉笔吧。",
+    "english_text": "Are you on duty today? You look really focused.#Yeah, I have to be. Gotta clean the blackboard properly.#Thanks for your hard work. I’ll help you carry the chalk later.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "113": {
+    "dialogue_id": "10011001006",
+    "chinese_text": "你知道今天第一节是什么课吗？我忘了看课表。#是语文课，要讲新课文。#谢谢提醒，我赶紧把语文书拿出来。",
+    "english_text": "Do you know what the first class is? I forgot to check the schedule.#Chinese class. We’re starting a new text.#Thanks for reminding me. I’ll get my Chinese book right away.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "114": {
+    "dialogue_id": "10011001006",
+    "chinese_text": "早上的风有点大，你的头发乱了。#啊，是吗？我整理一下。#好了，这样就整齐多了。",
+    "english_text": "It’s windy this morning. Your hair is messy.#Oh, really? Let me fix it.#There we go, looks neat now.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "115": {
+    "dialogue_id": "10011001006",
+    "chinese_text": "你昨天去图书馆了吗？我好像看到你了。#去了，借了几本参考书。#我也经常去，下次可以一起拼桌。",
+    "english_text": "Did you go to the library yesterday? I think I saw you.#Yeah, I borrowed some reference books.#I go there often too. We can study together next time.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "116": {
+    "dialogue_id": "10011001006",
+    "chinese_text": "你的运动鞋是新款吗？看起来很舒服。#对，我妈给我买的，跑步很轻便。#挺好的，我也想换一双。",
+    "english_text": "Are those new sneakers? They look really comfortable.#Yeah, my mom bought them. They’re light for running.#Nice. I want to get a new pair too.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "117": {
+    "dialogue_id": "10011001006",
+    "chinese_text": "快上课了，我们赶紧进教室吧。#好，等我把这个东西收起来就走。#别着急，还有两分钟。",
+    "english_text": "Class is starting soon. Let’s hurry to the classroom.#Okay, just let me put this away first.#Take your time, we still have two minutes.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "118": {
+    "dialogue_id": "10011001006",
+    "chinese_text": "你喜欢早自习读英语吗？我觉得有点枯燥。#还好，慢慢读就习惯了，对听力有帮助。#或许吧，我也试着坚持看看。",
+    "english_text": "Do you like reading English during morning self-study? I find it a bit boring.#It’s okay. I got used to it, and it helps with listening.#Maybe. I’ll try to keep at it too.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "119": {
+    "dialogue_id": "10011001006",
+    "chinese_text": "你的笔记本好精致，在哪里买的？#在学校附近的文具店，挺便宜的。#谢谢，下课我也去看看。",
+    "english_text": "Your notebook is so nice. Where did you get it?#From the stationery shop near school. It wasn’t expensive.#Thanks. I’ll check it out after class.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "120": {
+    "dialogue_id": "10011001007",
+    "chinese_text": "食堂今天的套餐是什么？我还没去看。#好像是咖喱饭和炸鸡块，我打算买咖喱饭。#那我也买咖喱饭吧，省得纠结。",
+    "english_text": "What's the set meal in the canteen today? I haven't checked yet.#It seems to be curry rice and fried chicken nuggets. I'm going to get curry rice.#Then I'll get curry rice too, so I don't have to hesitate.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "121": {
+    "dialogue_id": "10011001007",
+    "chinese_text": "你要不要坐这里？这边还有空位。#好啊，谢谢，刚好没地方坐了。#不客气，一起吃吧。",
+    "english_text": "Do you want to sit here? There's an empty seat.#Sure, thanks. I just couldn't find anywhere to sit.#No problem. Let's eat together.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "122": {
+    "dialogue_id": "10011001007",
+    "chinese_text": "你的汤有点烫，小心点喝。#谢谢提醒，我刚盛的，还没来得及凉。#慢慢喝，不着急。",
+    "english_text": "Your soup is a bit hot. Drink it carefully.#Thanks for the reminder. I just got it, and it hasn't cooled down yet.#Drink slowly, no rush.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "123": {
+    "dialogue_id": "10011001007",
+    "chinese_text": "你今天带了便当啊？看起来好好吃。#谢谢，我妈妈做的，你要不要尝一口？#不用啦，谢谢你的好意。",
+    "english_text": "You brought a bento today? It looks really delicious.#Thanks, my mom made it. Do you want a bite?#No, thanks for the offer.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "124": {
+    "dialogue_id": "10011001007",
+    "chinese_text": "午休你打算做什么？是睡觉还是写作业？#写会儿作业吧，下午有数学小测。#那我也写作业，一起加油。",
+    "english_text": "What are you going to do at lunch break? Sleep or do homework?#I'll do some homework. There's a math quiz this afternoon.#Then I'll do homework too. Let's do our best.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "125": {
+    "dialogue_id": "10011001007",
+    "chinese_text": "你知道食堂的纸巾在哪里拿吗？我忘了带。#在收银台旁边，我帮你拿一张吧。#太谢谢你了。",
+    "english_text": "Do you know where to get tissues in the canteen? I forgot to bring some.#They're next to the cashier. I'll get one for you.#Thank you so much.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "126": {
+    "dialogue_id": "10011001007",
+    "chinese_text": "这个菜有点咸，你觉得吗？#确实有点，我喝了好多水。#早知道就买另一个套餐了。",
+    "english_text": "This dish is a bit salty, don't you think?#It really is. I've drunk a lot of water.#I wish I'd gotten the other set meal instead.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "127": {
+    "dialogue_id": "10011001007",
+    "chinese_text": "午休结束后要交作业，你写完了吗？#写完了，早上课间赶完的。#还好，我还差一点，得抓紧时间。",
+    "english_text": "We have to hand in our homework after lunch break. Did you finish it?#Yeah, I finished it during the break this morning.#Good. I'm almost done, I need to hurry.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "128": {
+    "dialogue_id": "10011001007",
+    "chinese_text": "你要不要吃我的水果？我带多了。#可以吗？那谢谢啦。#不客气，反正我也吃不完。",
+    "english_text": "Do you want some of my fruit? I brought too much.#Really? Thanks a lot.#You're welcome. I can't finish it anyway.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "129": {
+    "dialogue_id": "10011001007",
+    "chinese_text": "食堂人好多啊，排队排了好久。#是啊，今天好像比平时人多，可能是因为套餐好吃。#有可能，还好终于排到了。",
+    "english_text": "The canteen is so crowded. I waited in line forever.#Yeah, there are more people than usual today. Probably because the set meal is good.#Maybe. Glad we finally got our food.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "130": {
+    "dialogue_id": "10011001007",
+    "chinese_text": "你午休的时候会听歌吗？#偶尔会，听点轻音乐，放松一下。#我也是，不过要戴耳机，别影响别人。",
+    "english_text": "Do you listen to music during lunch break?#Sometimes. I listen to soft music to relax.#Me too, but we have to use headphones so we don't disturb others.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "131": {
+    "dialogue_id": "10011001007",
+    "chinese_text": "你的饭盒好可爱，是卡通图案的。#哈哈，我妹妹送我的，她觉得很适合我。#确实很适合，很可爱。",
+    "english_text": "Your lunch box is so cute. It has a cartoon pattern.#Haha, my sister gave it to me. She thought it suited me.#It really does suit you. It's lovely.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "132": {
+    "dialogue_id": "10011001007",
+    "chinese_text": "我不小心把饭洒了一点，你有纸巾吗？#有，给你，小心点，别弄脏衣服。#谢谢，太不好意思了。",
+    "english_text": "I spilled a little rice by accident. Do you have any tissues?#Yeah, here you go. Be careful not to get your clothes dirty.#Thanks, I'm so sorry about that.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "133": {
+    "dialogue_id": "10011001007",
+    "chinese_text": "下午的体育课要跑八百米，你准备好了吗？#没有，我最不擅长跑步了，肯定会很累。#我也是，一起加油吧。",
+    "english_text": "We have to run 800 meters in PE class this afternoon. Are you ready?#Not at all. I'm terrible at running. It's gonna be exhausting.#Me too. Let's cheer each other on.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "134": {
+    "dialogue_id": "10011001007",
+    "chinese_text": "你午休睡多久？我一般睡二十分钟。#我也是，睡太久会头疼，二十分钟刚好。#对，我也觉得。",
+    "english_text": "How long do you sleep at lunch break? I usually sleep for twenty minutes.#Same here. Sleeping too long gives me a headache. Twenty minutes is perfect.#Yeah, I think so too.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "135": {
+    "dialogue_id": "10011001007",
+    "chinese_text": "你买的饮料是什么口味的？看起来很好喝。#是柠檬味的，很清爽，你要不要尝一口？#不用啦，谢谢，我自己有。",
+    "english_text": "What flavor is your drink? It looks really good.#It's lemon flavor. It's really refreshing. Do you want a sip?#No, thanks. I have my own.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "136": {
+    "dialogue_id": "10011001007",
+    "chinese_text": "食堂的筷子有点短，用着不太习惯。#是啊，我也觉得，下次还是自己带筷子吧。#我也是这么想的。",
+    "english_text": "The canteen chopsticks are a bit short. I'm not used to them.#Yeah, I think so too. I'll bring my own chopsticks next time.#That's what I was thinking.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "137": {
+    "dialogue_id": "10011001007",
+    "chinese_text": "你吃完了吗？我们一起去扔垃圾吧。#好，等我把饭盒收起来。#不急，我等你。",
+    "english_text": "Are you finished? Let's go throw the trash together.#Okay, just let me put my lunch box away.#Take your time. I'll wait for you.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "138": {
+    "dialogue_id": "10011001007",
+    "chinese_text": "午休的时候别趴在桌子上太久，对颈椎不好。#谢谢提醒，我会注意的。#不客气，我之前也总趴着，后来脖子疼。",
+    "english_text": "Don't lie on your desk for too long during lunch break. It's bad for your neck.#Thanks for the reminder. I'll be careful.#You're welcome. I used to do that too, and my neck hurt later.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "139": {
+    "dialogue_id": "10011001007",
+    "chinese_text": "你今天的午餐吃得好少，是不是不舒服？#没有，就是早上吃多了，不太饿。#那就好，别饿着就行。",
+    "english_text": "You ate so little for lunch today. Are you feeling unwell?#No, I just ate too much this morning. I'm not hungry.#Good to hear. Just don't go hungry.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "140": {
+    "dialogue_id": "10011001008",
+    "chinese_text": "下午的物理课好难，我都听不懂。#我也有点懵，打算下课问老师。#那我跟你一起去问吧，好多地方都不懂。",
+    "english_text": "Physics class this afternoon was so hard. I couldn’t understand anything.#I was confused too. I’m going to ask the teacher after class.#Then I’ll go with you. I didn’t get a lot of parts.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "141": {
+    "dialogue_id": "10011001008",
+    "chinese_text": "你的实验报告写完了吗？老师说下节课要交。#写完了，昨天晚上熬夜写的。#厉害，我还没写完，得抓紧时间。",
+    "english_text": "Have you finished your lab report? The teacher said we have to hand it in next class.#Yeah, I stayed up late last night to finish it.#Wow, that’s impressive. I haven’t started yet, I need to hurry.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "142": {
+    "dialogue_id": "10011001008",
+    "chinese_text": "你借我的笔记，我看完了，还给你。#好，谢谢你，没弄脏吧？#没有，很小心地看了，谢谢借我。",
+    "english_text": "I finished reading the notes you lent me. Here you are.#Okay, thanks. Did you keep them clean?#Yeah, I was really careful. Thanks for lending them to me.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "143": {
+    "dialogue_id": "10011001008",
+    "chinese_text": "下午的美术课，你打算画什么？#还没想好，可能画校门口的樱花。#挺好的，樱花很适合画。",
+    "english_text": "What are you going to draw in art class this afternoon?#Haven’t decided yet. Maybe the cherry blossoms at the school gate.#That sounds nice. Cherry blossoms are perfect for drawing.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "144": {
+    "dialogue_id": "10011001008",
+    "chinese_text": "你上课的时候有没有走神？我差点睡着了。#有一点，下午太困了，还好老师没发现。#我也是，下次得喝点水提神。",
+    "english_text": "Did you zone out in class? I almost fell asleep.#A little. I was so sleepy this afternoon. Luckily the teacher didn’t notice.#Me too. I should drink some water to stay awake next time.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "145": {
+    "dialogue_id": "10011001008",
+    "chinese_text": "你的画笔借我用一下可以吗？我的画笔坏了。#可以，给你，别弄坏了哦。#好的，谢谢，我会小心的。",
+    "english_text": "Can I borrow your paintbrush? Mine broke.#Sure, here you go. Just don’t break it.#Okay, thanks. I’ll be careful.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "146": {
+    "dialogue_id": "10011001008",
+    "chinese_text": "老师刚才讲的知识点，你记下来了吗？我没跟上。#记下来了，下课我借你抄一下。#太谢谢你了，真是帮了我大忙。",
+    "english_text": "Did you write down the point the teacher just explained? I couldn’t keep up.#I did. I’ll let you copy it after class.#Thank you so much. You really saved me.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "147": {
+    "dialogue_id": "10011001008",
+    "chinese_text": "课后你要去操场吗？我想去散散步。#不了，我要去图书馆写作业。#好吧，那下次再一起。",
+    "english_text": "Do you want to go to the playground after class? I want to take a walk.#No, I’m going to the library to do homework.#Alright, maybe next time.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "148": {
+    "dialogue_id": "10011001008",
+    "chinese_text": "你知道下节课是什么课吗？我课表忘带了。#是生物课，要去实验室。#谢谢提醒，我赶紧去拿实验服。",
+    "english_text": "Do you know what the next class is? I forgot my schedule.#Biology class. We have to go to the lab.#Thanks for reminding me. I’ll go get my lab coat right away.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "149": {
+    "dialogue_id": "10011001008",
+    "chinese_text": "你的生物实验做得好快，能不能教教我？#可以啊，其实很简单，你看这样操作就行。#谢谢，我终于学会了。",
+    "english_text": "You finished your biology experiment really fast. Can you teach me?#Sure, it’s actually pretty simple. Just do it like this.#Thanks, I finally get it now.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "150": {
+    "dialogue_id": "10011001008",
+    "chinese_text": "课后要不要一起去文具店？我要买点笔。#好啊，我也想去买点笔记本，一起去吧。#太好了，下课就走。",
+    "english_text": "Do you want to go to the stationery store after class? I need to buy some pens.#Sure, I want to get some notebooks too. Let’s go together.#Great, we can leave right after class.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "151": {
+    "dialogue_id": "10011001008",
+    "chinese_text": "你今天的发型很好看，是新做的吗？#谢谢，没有，就是换了个扎法。#很适合你，显得很清爽。",
+    "english_text": "Your hairstyle looks really nice today. Did you do it new?#Thanks, no. I just tied it differently.#It suits you really well. Looks fresh and clean.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "152": {
+    "dialogue_id": "10011001008",
+    "chinese_text": "老师布置的作业好多，你能写完吗？#应该可以，分时间段写，慢慢就写完了。#有道理，我也试试。",
+    "english_text": "The teacher assigned so much homework. Do you think you can finish it?#Probably. I’ll do it in parts and get it done slowly.#That makes sense. I’ll try that too.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "153": {
+    "dialogue_id": "10011001008",
+    "chinese_text": "你有没有多余的草稿纸？我用完了。#有，给你一叠，应该够你用了。#谢谢，太及时了。",
+    "english_text": "Do you have any extra scratch paper? I ran out.#Yeah, here’s a stack. Should be enough for you.#Thanks, just in time.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "154": {
+    "dialogue_id": "10011001008",
+    "chinese_text": "下午的阳光好晒，你要不要戴帽子？#谢谢提醒，我忘了带，不过还好快上课了。#也是，进教室就不晒了。",
+    "english_text": "The sun is really strong this afternoon. Do you want to wear a hat?#Thanks for reminding me. I forgot mine, but class is starting soon.#True, it won’t be sunny once we’re inside.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "155": {
+    "dialogue_id": "10011001008",
+    "chinese_text": "你喜欢下午的课吗？我觉得比早上的课轻松一点。#还好，只要不是数学和物理，我都觉得还行。#我也是，数学和物理太难了。",
+    "english_text": "Do you like afternoon classes? I think they’re easier than morning ones.#It’s okay. As long as it’s not math or physics, I don’t mind.#Same here. Math and physics are way too hard.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "156": {
+    "dialogue_id": "10011001008",
+    "chinese_text": "你的书包拉链坏了，要不要我帮你修一下？#可以吗？太谢谢你了，我自己修不好。#不客气，很简单的。",
+    "english_text": "Your backpack zipper is broken. Do you want me to fix it for you?#Really? Thank you so much. I can’t fix it myself.#No problem. It’s pretty easy.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "157": {
+    "dialogue_id": "10011001008",
+    "chinese_text": "课后你要回家吗？还是去别的地方？#回家，我妈妈让我早点回去。#好，那明天见。",
+    "english_text": "Are you going home after class? Or somewhere else?#I’m going home. My mom wants me back early.#Okay, see you tomorrow.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "158": {
+    "dialogue_id": "10011001008",
+    "chinese_text": "你今天的作业写得好认真，字也好漂亮。#谢谢夸奖，我就是慢慢写，认真一点而已。#我也要向你学习。",
+    "english_text": "You did your homework really carefully today. Your handwriting is beautiful too.#Thanks. I just take my time and do it properly.#I need to learn from you.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "159": {
+    "dialogue_id": "10011001008",
+    "chinese_text": "下午的班会，老师会说什么啊？你知道吗？#不知道，可能是说运动会的安排吧。#希望别太麻烦。",
+    "english_text": "What’s the teacher going to talk about in the class meeting this afternoon? Do you know?#No idea. Maybe the sports meeting arrangements.#Hope it’s not too much trouble.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "160": {
+    "dialogue_id": "10011001009",
+    "chinese_text": "放学了，你今天走哪条路回家？#我走樱花大道那边，比较近。#哦，我走另一条路，那明天见。",
+    "english_text": "School’s over. Which way are you going home today?#I’m taking Cherry Blossom Avenue; it’s shorter.#Oh, I’m taking another way. See you tomorrow.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "161": {
+    "dialogue_id": "10011001009",
+    "chinese_text": "你要不要一起去便利店买瓶水？我有点渴。#好啊，刚好我也想买点零食。#那我们一起去吧。",
+    "english_text": "Do you want to go to the convenience store for a bottle of water? I’m kind of thirsty.#Sure, I also want to buy some snacks.#Let’s go together then.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "162": {
+    "dialogue_id": "10011001009",
+    "chinese_text": "今天放学好早，你打算去做什么？#去公园散散步，放松一下。#挺好的，我也要回家写作业了。",
+    "english_text": "School ended so early today. What are you going to do?#I’m going for a walk in the park to relax.#Sounds nice. I have to go home and do homework.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "163": {
+    "dialogue_id": "10011001009",
+    "chinese_text": "你的自行车借我骑一下可以吗？我的车坏了。#可以，不过要小心一点，别弄坏了。#好的，谢谢，明天一定还你。",
+    "english_text": "Can I borrow your bike for a while? Mine is broken.#Sure, but be careful not to break it.#Okay, thanks. I’ll definitely return it tomorrow.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "164": {
+    "dialogue_id": "10011001009",
+    "chinese_text": "傍晚的风好舒服，你有没有觉得？#有啊，比中午凉快多了，很适合散步。#我也这么觉得。",
+    "english_text": "The evening wind is so nice, don’t you think?#Yeah, it’s much cooler than noon. Perfect for a walk.#I think so too.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "165": {
+    "dialogue_id": "10011001009",
+    "chinese_text": "你知道吗？学校附近新开了一家甜品店。#不知道，什么时候开的？#昨天开的，听说味道很好，下次可以一起去。",
+    "english_text": "You know what? A new dessert shop opened near the school.#Really? When did it open?#Yesterday. I heard it’s really good. We can go together next time.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "166": {
+    "dialogue_id": "10011001009",
+    "chinese_text": "你今天带伞了吗？好像要下雨了。#带了，你没带吗？我可以送你一段。#谢谢，不用啦，我家离得近。",
+    "english_text": "Did you bring an umbrella today? It looks like it’s going to rain.#I did. Didn’t you bring one? I can walk you part of the way.#Thanks, but no need. My home is close.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "167": {
+    "dialogue_id": "10011001009",
+    "chinese_text": "放学的时候人好多，挤死我了。#是啊，每天放学都这样，慢慢走就好了。#也对，着急也没用。",
+    "english_text": "So many people after school. I was squeezed to death.#Yeah, it’s like this every day. Just walk slowly.#Right, no use rushing.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "168": {
+    "dialogue_id": "10011001009",
+    "chinese_text": "你买的这个笔记本，我也有一本，颜色不一样。#是吗？我觉得这个笔记本很好用，很厚实。#对，我也觉得，写作业很合适。",
+    "english_text": "I have the same notebook as yours, just a different color.#Really? I think this notebook is great; it’s thick.#Yeah, me too. It’s perfect for homework.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "169": {
+    "dialogue_id": "10011001009",
+    "chinese_text": "你要去菜市场吗？我妈妈让我去买些菜。#不去，我要回家写作业，祝你顺利。#谢谢，明天见。",
+    "english_text": "Are you going to the market? My mom told me to buy some vegetables.#No, I’m going home to do homework. Good luck.#Thanks. See you tomorrow.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "170": {
+    "dialogue_id": "10011001009",
+    "chinese_text": "傍晚的夕阳好漂亮，你看到了吗？#看到了，刚才在操场看到的，特别美。#是啊，可惜没来得及拍照。",
+    "english_text": "The sunset is so beautiful this evening. Did you see it?#Yeah, I saw it from the playground. It’s amazing.#Too bad I didn’t have time to take a photo.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "171": {
+    "dialogue_id": "10011001009",
+    "chinese_text": "你今天的书包好轻，是不是没带多少书？#对，今天下午的课比较轻松，没带太多书。#真好，我今天的书包还是很重。",
+    "english_text": "Your backpack is so light today. Didn’t you bring many books?#Yeah, classes were easier this afternoon. I didn’t take much.#Lucky you. My backpack is still really heavy today.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "172": {
+    "dialogue_id": "10011001009",
+    "chinese_text": "你要不要一起去公交站？我也要坐公交。#好啊，刚好顺路，一起走吧。#太好了，不用一个人等公交了。",
+    "english_text": "Do you want to go to the bus stop together? I’m taking the bus too.#Sure, we’re going the same way. Let’s go together.#Great, I don’t have to wait for the bus alone.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "173": {
+    "dialogue_id": "10011001009",
+    "chinese_text": "你知道明天要带什么东西吗？我怕忘了。#要带练习册和实验报告，老师昨天强调过。#谢谢提醒，我赶紧记下来。",
+    "english_text": "Do you know what we need to bring tomorrow? I’m afraid I’ll forget.#Workbooks and lab reports. The teacher emphasized it yesterday.#Thanks for reminding me. I’ll write it down right away.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "174": {
+    "dialogue_id": "10011001009",
+    "chinese_text": "放学回家别玩太晚，记得写作业。#知道啦，你也是，别熬夜。#好的，明天见。",
+    "english_text": "Don’t stay out too late after school. Remember your homework.#Got it. You too, don’t stay up late.#Okay, see you tomorrow.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "175": {
+    "dialogue_id": "10011001009",
+    "chinese_text": "你买的零食是什么口味的？看起来很好吃。#是草莓味的，你要不要尝一个？#不用啦，谢谢，我不爱吃草莓。",
+    "english_text": "What flavor is your snack? It looks delicious.#Strawberry. Do you want one?#No thanks, I don’t like strawberry.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "176": {
+    "dialogue_id": "10011001009",
+    "chinese_text": "你走路的时候小心点，地上有积水。#谢谢提醒，差点就踩上去了。#不客气，小心点就好。",
+    "english_text": "Watch your step. There’s water on the ground.#Thanks for warning me. I almost stepped in it.#No problem. Just be careful.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "177": {
+    "dialogue_id": "10011001009",
+    "chinese_text": "你今天放学要去补习班吗？#不去，今天休息一天。#真好，我还要去补习班，太惨了。",
+    "english_text": "Do you have to go to cram school after school today?#No, I’m taking a break today.#Lucky you. I still have to go. It’s terrible.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "178": {
+    "dialogue_id": "10011001009",
+    "chinese_text": "你的钥匙掉了，快捡起来。#啊？谢谢，还好你看到了，不然就麻烦了。#不客气，下次小心点。",
+    "english_text": "You dropped your keys. Pick them up.#Oh? Thanks. Good thing you saw, or it would’ve been a mess.#No problem. Be more careful next time.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "179": {
+    "dialogue_id": "10011001009",
+    "chinese_text": "傍晚的街道好热闹，好多人啊。#是啊，大家都放学下班了，很热闹。#我喜欢这种热闹的感觉。",
+    "english_text": "The street is so busy this evening. So many people.#Yeah, everyone’s getting home from school and work. It’s lively.#I love this busy feeling.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "180": {
+    "dialogue_id": "10011001010",
+    "chinese_text": "晚上好，你也来公园散步啊？#晚上好，是啊，饭后出来走走。#挺好的，我也是，消化一下。",
+    "english_text": "Good evening. You’re here for a walk in the park too?#Good evening. Yeah, just out for a walk after dinner.#Nice. Me too, to digest a little.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "181": {
+    "dialogue_id": "10011001010",
+    "chinese_text": "你在看什么书？看起来很认真。#一本小说，挺好看的，你要不要看看？#不了，谢谢，我还要回家写作业。",
+    "english_text": "What book are you reading? You look so focused.#A novel. It’s pretty good. Do you want to read it?#No, thanks. I have to go home and do my homework.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "182": {
+    "dialogue_id": "10011001010",
+    "chinese_text": "晚上的风有点凉，你怎么不穿外套？#啊，忘了，出来太急了。#赶紧回家吧，别感冒了。",
+    "english_text": "It’s a bit cool in the evening wind. Why aren’t you wearing a coat?#Oh, I forgot. I left in a hurry.#Hurry home then, don’t catch a cold.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "183": {
+    "dialogue_id": "10011001010",
+    "chinese_text": "你在便利店买什么？我要买瓶牛奶。#买些零食，晚上写作业的时候吃。#挺好的，补充点能量。",
+    "english_text": "What are you buying at the convenience store? I’m getting some milk.#Some snacks to eat while I do homework tonight.#Nice, for some extra energy.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "184": {
+    "dialogue_id": "10011001010",
+    "chinese_text": "晚上你会写作业到几点？我一般写到十点。#我也是，写完作业就睡觉，不熬夜。#对，熬夜对身体不好。",
+    "english_text": "How late do you do homework at night? I usually finish at ten.#Same here. I go to bed right after, no staying up late.#Right, staying up late is bad for you.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "185": {
+    "dialogue_id": "10011001010",
+    "chinese_text": "你家附近的路灯亮了吗？我家那边的路灯坏了，有点黑。#亮了，你要是害怕，可以绕我家这边走。#谢谢，不用啦，我家离得近。",
+    "english_text": "Are the streetlights near your place on? Mine are broken, it’s a bit dark.#Yes, they are. If you’re scared, you can walk past my house.#Thanks, but no need. My home is close.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "186": {
+    "dialogue_id": "10011001010",
+    "chinese_text": "你在听什么歌？声音很好听。#一首轻音乐，写作业的时候听，很放松。#能告诉我歌名吗？我也想听听。",
+    "english_text": "What song are you listening to? It sounds nice.#Some soft music. It helps me relax while studying.#Can you tell me the name? I’d like to listen too.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "187": {
+    "dialogue_id": "10011001010",
+    "chinese_text": "晚上你会看电视吗？我写完作业会看一会儿。#偶尔会看，不过不会看太久，怕耽误休息。#我也是，看一会儿就睡觉。",
+    "english_text": "Do you watch TV at night? I watch a little after homework.#Occasionally, but not too long. I don’t want to lose sleep.#Same here. I watch a bit then go to bed.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "188": {
+    "dialogue_id": "10011001010",
+    "chinese_text": "你买的夜宵是什么？看起来好香。#是关东煮，晚上有点饿，吃点垫垫。#挺好的，我也有点饿了，下次也买。",
+    "english_text": "What late-night snack did you get? It smells good.#Oden. I was a bit hungry, so something small.#Sounds good. I’m kind of hungry too, I’ll get some next time.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "189": {
+    "dialogue_id": "10011001010",
+    "chinese_text": "晚上的星星好亮，你看到了吗？#看到了，今天天气很好，星星特别多。#是啊，真漂亮。",
+    "english_text": "The stars are so bright tonight. Did you see them?#Yes, the weather’s great today. Lots of stars.#Yeah, they’re beautiful.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "190": {
+    "dialogue_id": "10011001010",
+    "chinese_text": "你在写作业吗？要不要休息一会儿？#快写完了，写完就休息，谢谢你。#不客气，别太累了。",
+    "english_text": "Are you doing homework? Want to take a break?#Almost done. I’ll rest soon, thanks.#You’re welcome. Don’t push yourself too hard.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "191": {
+    "dialogue_id": "10011001010",
+    "chinese_text": "你家的狗狗好可爱，是柴犬吗？#对，是柴犬，很调皮。#真可爱，我也想养一只。",
+    "english_text": "Your dog is so cute. Is it a Shiba Inu?#Yes, it is. He’s very naughty.#So lovely. I want one too.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "192": {
+    "dialogue_id": "10011001010",
+    "chinese_text": "晚上你会去楼下的便利店吗？我忘买笔记本了。#不去，我已经在家了，你自己去吧，小心点。#好的，谢谢提醒。",
+    "english_text": "Are you going to the convenience store downstairs later? I forgot to buy a notebook.#No, I’m already home. Go by yourself, and be careful.#Okay, thanks for the reminder.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "193": {
+    "dialogue_id": "10011001010",
+    "chinese_text": "你今天的作业写完了吗？我还有一点没写完。#写完了，你加油，很快就写完了。#谢谢，我会抓紧时间的。",
+    "english_text": "Did you finish your homework tonight? I still have a little left.#Yes, I did. Keep going, you’ll finish soon.#Thanks, I’ll hurry.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "194": {
+    "dialogue_id": "10011001010",
+    "chinese_text": "晚上别玩太久手机，对眼睛不好。#知道啦，你也是，早点休息。#好的，晚安。",
+    "english_text": "Don’t play on your phone too late at night, it’s bad for your eyes.#Got it. You too, rest early.#Okay, good night.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "195": {
+    "dialogue_id": "10011001010",
+    "chinese_text": "你在煮什么？味道好香。#煮点面条，晚上有点饿。#看起来很好吃，我也想煮点。",
+    "english_text": "What are you cooking? It smells delicious.#Just some noodles. I’m hungry tonight.#Looks tasty. I might make some too.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "196": {
+    "dialogue_id": "10011001010",
+    "chinese_text": "晚上的小区好安静，很适合休息。#是啊，大家都休息了，很安静。#我喜欢这种安静的感觉。",
+    "english_text": "The neighborhood is so quiet at night. Perfect for relaxing.#Yeah, everyone’s resting. It’s peaceful.#I love this quiet feeling.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "197": {
+    "dialogue_id": "10011001010",
+    "chinese_text": "你借我的书，我看完了，明天还给你。#好，谢谢你，看得怎么样？#很好看，谢谢你推荐。",
+    "english_text": "I finished the book you lent me. I’ll give it back tomorrow.#Okay, thanks. How did you like it?#It was great. Thanks for recommending it.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "198": {
+    "dialogue_id": "10011001010",
+    "chinese_text": "晚上你会复习今天的知识点吗？#会的，复习一下，明天上课更容易听懂。#有道理，我也去复习。",
+    "english_text": "Do you review what you learned today at night?#Yes, I go over it so it’s easier to follow in class tomorrow.#Makes sense. I’ll review too.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "199": {
+    "dialogue_id": "10011001010",
+    "chinese_text": "晚安，早点休息，明天见。#晚安，你也一样，明天见。",
+    "english_text": "Good night. Rest early, see you tomorrow.#Good night, you too. See you tomorrow.",
+    "weight": "10",
+    "restriction": "0_-199_199#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "200": {
+    "dialogue_id": "10011001011",
+    "chinese_text": "喂喂，等等我啊！你走那么快干嘛？#谁让你又起晚了，再慢就要迟到了！#知道啦知道啦，等等我，我跑还不行吗？#真是服你了，每天都要我等。",
+    "english_text": "Hey, wait for me! Why are you walking so fast?#Because you overslept again! We’ll be late if you’re any slower!#Alright alright, wait up, I’ll run!#You’re unbelievable, making me wait every single day.",
+    "weight": "10",
+    "restriction": "0_200_399#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "201": {
+    "dialogue_id": "10011001011",
+    "chinese_text": "你今天怎么又没吃早餐？又熬夜打游戏了吧？#哎呀，被你发现了，昨天玩到太晚忘了准备。#诺，给你个面包，我多带了一个，下次再这样我可不帮你了。#太爱你啦！下次一定记得吃。",
+    "english_text": "How come you didn’t eat breakfast again? Stayed up playing games again, didn’t you?#Oops, you got me. I played too late yesterday and forgot to get ready.#Here, have a bun. I brought an extra one. I won’t help you next time.#You’re the best! I’ll definitely remember to eat tomorrow.",
+    "weight": "10",
+    "restriction": "0_200_399#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "202": {
+    "dialogue_id": "10011001011",
+    "chinese_text": "早自习要默写的单词，你复习了吗？我昨天忘复习了。#哈哈哈，就知道你会忘，我给你画重点了，快趁现在记记。#救命恩人啊！等放学请你喝奶茶。#说话算话，可别耍赖。",
+    "english_text": "Did you review the words for morning self-study dictation? I forgot to last night.#Hahaha, knew you would. I marked the key points for you, cram them now.#You’re my lifesaver! I’ll buy you milk tea after school.#Promise you won’t back out.",
+    "weight": "10",
+    "restriction": "0_200_399#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "203": {
+    "dialogue_id": "10011001011",
+    "chinese_text": "你的校徽又歪了，每次都要我提醒你。#嘿嘿，习惯了嘛，你帮我弄一下呗。#真是上辈子欠你的，过来，别动。#谢谢我的宝！",
+    "english_text": "Your school badge is crooked again. I always have to remind you.#Hehe, I’m used to it. Can you fix it for me?#I must’ve owed you in my last life. Come here, stay still.#Thanks, babe!",
+    "weight": "10",
+    "restriction": "0_200_399#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "204": {
+    "dialogue_id": "10011001011",
+    "chinese_text": "昨天的数学作业最后一道题，你做出来了吗？我卡了好久。#做出来了，其实很简单，我给你讲一遍思路。#太好了，我琢磨了半天都没头绪，快说说。",
+    "english_text": "Did you solve the last math problem from yesterday’s homework? I was stuck for ages.#Yeah, it’s actually easy. I’ll walk you through the idea.#Thank goodness, I’ve been staring at it forever. Hurry up.",
+    "weight": "10",
+    "restriction": "0_200_399#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "205": {
+    "dialogue_id": "10011001011",
+    "chinese_text": "今天早上好冷啊，你怎么不穿围巾？#我把围巾落在家里了，想着忍一忍就过去了。#过来，我围巾分你一半，别冻感冒了，到时候又要请假。#太贴心啦，爱你爱你！",
+    "english_text": "It’s freezing this morning. Why aren’t you wearing a scarf?#I left it at home. Thought I’d just tough it out.#Come here, I’ll share mine. Don’t catch a cold and miss class.#You’re so sweet! Love you!",
+    "weight": "10",
+    "restriction": "0_200_399#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "206": {
+    "dialogue_id": "10011001011",
+    "chinese_text": "校门口的樱花全开了，等放学我们去拍张照吧？#好啊好啊！我早就想拍了，记得带手机。#放心，肯定带，还要帮你拍好看点。#一言为定！",
+    "english_text": "The cherry blossoms at the gate are all in full bloom. Let’s take photos after school?#Yes! I’ve been wanting to take some. Don’t forget your phone.#Relax, I’ll bring it. I’ll take nice ones for you.#Deal!",
+    "weight": "10",
+    "restriction": "0_200_399#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "207": {
+    "dialogue_id": "10011001011",
+    "chinese_text": "你走路能不能慢点，我都跟不上你了，腿都快断了。#谁让你平时不运动，这点路就喊累。#哼，我不管，你必须放慢速度，不然我就不走了。#好好好，服了你了，放慢还不行吗。",
+    "english_text": "Can you walk slower? I can’t keep up, my legs are dying.#That’s what you get for not exercising. Tired already from this little walk?#Hmph, I don’t care. You have to slow down, or I’m not moving.#Fine fine, I give up. I’ll slow down.",
+    "weight": "10",
+    "restriction": "0_200_399#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "208": {
+    "dialogue_id": "10011001011",
+    "chinese_text": "你手里拿的是新开的那家面包店的三明治吗？好吃吗？#好吃！我早上特意去排队买的，给你尝一口。#哇，真的好好吃，下次我跟你一起去排队。#可以啊，明天早上叫你。",
+    "english_text": "Is that a sandwich from the new bakery? Is it good?#So good! I lined up early just to get it. Have a bite.#Wow, it’s amazing. I’ll line up with you tomorrow.#Sure, I’ll wake you up.",
+    "weight": "10",
+    "restriction": "0_200_399#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "209": {
+    "dialogue_id": "10011001011",
+    "chinese_text": "今天的早会要宣布运动会的事，你打算报什么项目？#我报跑步，你呢？#我报跳绳，跑步我可不行，跑两步就喘。#没事，到时候我去给你加油。",
+    "english_text": "They’re announcing the sports meeting at the assembly. What event are you signing up for?#I’m doing running. You?#Skipping rope. I’m terrible at running, out of breath in two steps.#No worries, I’ll cheer for you.",
+    "weight": "10",
+    "restriction": "0_200_399#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "210": {
+    "dialogue_id": "10011001011",
+    "chinese_text": "我的笔又没水了，借我一支，下次一定还你。#拿去拿去，你都借我多少次了，也没见你还过。#哎呀，下次一定，这次真的忘了买。#就知道找借口，赶紧拿去用吧。",
+    "english_text": "My pen ran out again. Lend me one, I promise to pay you back.#Here. How many times have you borrowed mine and never returned them?#Ugh, I will this time! I really forgot to buy new ones.#Always making excuses. Just take it.",
+    "weight": "10",
+    "restriction": "0_200_399#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "211": {
+    "dialogue_id": "10011001011",
+    "chinese_text": "你今天气色不太好，是不是又熬夜复习了？#嗯，昨天复习到一点多，太困了。#课间赶紧补个觉，我帮你看着老师，不会被发现的。#太谢谢你了，还是你对我好。",
+    "english_text": "You look tired. Did you stay up reviewing again?#Yeah, till past one. So sleepy.#Take a nap during break. I’ll keep an eye out for the teacher.#Thank you so much, you’re the best.",
+    "weight": "10",
+    "restriction": "0_200_399#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "212": {
+    "dialogue_id": "10011001011",
+    "chinese_text": "今天的值日生是你啊，我来帮你擦黑板吧。#太好了，正愁擦不完呢，谢谢你啦。#跟我客气什么，快点弄完，要上课了。#好嘞，马上就好。",
+    "english_text": "You’re on duty today? Let me help you clean the blackboard.#Perfect, I was worried I wouldn’t finish. Thanks!#No need to be polite. Hurry up, class is starting.#Got it, almost done.",
+    "weight": "10",
+    "restriction": "0_200_399#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "213": {
+    "dialogue_id": "10011001011",
+    "chinese_text": "你知道今天第一节是什么课吗？我课表忘带了，脑子乱糟糟的。#是语文课啊，你昨天还说要预习新课文呢，又忘了？#啊！完了完了，我根本没预习，惨了。#哈哈哈，活该，谁让你记性那么差。",
+    "english_text": "Do you know what the first class is? I forgot my timetable, my mind’s a mess.#Chinese class! You said you’d preview the new text yesterday, remember?#Oh no! I totally didn’t preview. I’m screwed.#Hahaha, serves you right for having such a bad memory.",
+    "weight": "10",
+    "restriction": "0_200_399#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "214": {
+    "dialogue_id": "10011001011",
+    "chinese_text": "你的头发乱了，我帮你整理一下。#好啊，每次都要麻烦你。#谁让我们是好朋友呢，整理好啦，又变好看了。#哈哈哈，借你吉言。",
+    "english_text": "Your hair’s messy. Let me fix it for you.#Sure, always bothering you.#We’re best friends, what else? There, fixed. You look pretty again.#Hahaha, thanks for the compliment.",
+    "weight": "10",
+    "restriction": "0_200_399#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "215": {
+    "dialogue_id": "10011001011",
+    "chinese_text": "昨天我去图书馆，看到你也在，你借了什么书？#借了几本漫画，还有一本参考书。#漫画？快给我看看，我也想看。#没问题，放学给你，记得别弄脏了。",
+    "english_text": "I saw you at the library yesterday. What books did you borrow?#Some comics and a reference book.#Comics? Let me see, I want to read them too.#Sure, I’ll give them to you after school. Don’t get them dirty.",
+    "weight": "10",
+    "restriction": "0_200_399#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "216": {
+    "dialogue_id": "10011001011",
+    "chinese_text": "你的运动鞋是新款吧？看起来好好看，在哪里买的？#在学校附近的文具店旁边，很便宜，我带你去买？#好啊好啊，放学就去，太谢谢你了。#小事一桩。",
+    "english_text": "Are these new sneakers? They look awesome. Where did you get them?#Next to the stationery shop near school. They’re cheap. I’ll take you there?#Yes yes! Let’s go after school. Thank you so much.#No big deal.",
+    "weight": "10",
+    "restriction": "0_200_399#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "217": {
+    "dialogue_id": "10011001011",
+    "chinese_text": "快上课了，我们赶紧进教室，不然又要被老师说。#等等我，我把这个东西收起来，马上就好。#快点快点，就剩一分钟了，别磨蹭。#来了来了，别急。",
+    "english_text": "Class is starting, let’s hurry or the teacher will yell at us.#Wait for me, I just need to put this away.#Hurry hurry, only one minute left. Don’t drag your feet.#Coming coming, calm down.",
+    "weight": "10",
+    "restriction": "0_200_399#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "218": {
+    "dialogue_id": "10011001011",
+    "chinese_text": "早自习读英语太枯燥了，我都快睡着了。#我也是，不过再坚持一下，下自习就可以休息了。#好吧，那我们一起读，互相监督。#好啊，开始吧。",
+    "english_text": "Reading English in the morning is so boring, I’m about to fall asleep.#Me too. Just hold on a little longer, we can rest after self-study.#Fine. Let’s read together and keep each other awake.#Okay, let’s start.",
+    "weight": "10",
+    "restriction": "0_200_399#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "219": {
+    "dialogue_id": "10011001011",
+    "chinese_text": "你的笔记本好精致，在哪里买的？我也想买一个。#在网上买的，我发链接给你，很便宜。#太好了，谢谢你，爱你！#哈哈哈，不用谢。",
+    "english_text": "Your notebook is so pretty. Where did you buy it? I want one too.#I got it online. I’ll send you the link, it’s cheap.#Awesome, thank you! Love you!#Hahaha, you’re welcome.",
+    "weight": "10",
+    "restriction": "0_200_399#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "220": {
+    "dialogue_id": "10011001012",
+    "chinese_text": "食堂今天的套餐是什么？我懒得去看，你帮我看看呗。#是咖喱饭和炸鸡块，我打算买咖喱饭，你要吃什么？#我也买咖喱饭，帮我带一份，钱下午给你。#没问题，记得别忘给钱哦。",
+    "english_text": "What’s the canteen set meal today? I’m too lazy to check. Can you go see for me?#Curry rice and fried chicken nuggets. I’m getting curry rice. What about you?#I’ll have the same. Get me one too, I’ll pay you back this afternoon.#Sure, don’t forget the money.",
+    "weight": "10",
+    "restriction": "0_200_399#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "221": {
+    "dialogue_id": "10011001012",
+    "chinese_text": "这里有空位，我们坐这里吧，离窗口近，吃完好扔垃圾。#好啊好啊，就坐这里，我先去买饭，你帮我占位置。#放心吧，保证占好，快去快回。",
+    "english_text": "There’s a free seat here. Let’s sit here—it’s close to the window so we can throw trash easily after eating.#Sounds good! I’ll go get the food first, save me a seat.#Don’t worry, I’ll hold it. Hurry back.",
+    "weight": "10",
+    "restriction": "0_200_399#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "222": {
+    "dialogue_id": "10011001012",
+    "chinese_text": "你的汤太烫了，我帮你吹吹吧，小心烫到嘴。#好啊，谢谢你，每次都这么贴心。#嘿嘿，谁让我们是好朋友呢，吹好了，快喝吧。#嗯，真好喝。",
+    "english_text": "Your soup is really hot. Let me cool it down for you, don’t burn your mouth.#Okay, thank you. You’re always so sweet.#Hehe, what are best friends for? It’s cool now, drink up.#Mmm, it’s delicious.",
+    "weight": "10",
+    "restriction": "0_200_399#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "223": {
+    "dialogue_id": "10011001012",
+    "chinese_text": "你今天带了便当啊？看起来好好吃，给我尝一口呗。#拿去拿去，早就给你留了一块，我妈妈特意多做了一份。#太感动了，你妈妈做的饭也太好吃了。#哈哈哈，喜欢就多吃点。",
+    "english_text": "You brought a bento today? It looks amazing. Let me have a bite, please.#Go on, I saved you a piece. My mom made extra on purpose.#This is the best! Your mom’s cooking is incredible.#Hahaha, have as much as you want.",
+    "weight": "10",
+    "restriction": "0_200_399#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "224": {
+    "dialogue_id": "10011001012",
+    "chinese_text": "午休你打算做什么？是睡觉还是写作业？#写会儿作业吧，下午有数学小测，我还没复习好。#我也是，那我们一起写，有不会的互相问。#好啊，一起加油。",
+    "english_text": "What are you doing during lunch break? Sleeping or doing homework?#I’ll do some homework. We have a math quiz this afternoon and I haven’t reviewed.#Me too. Let’s work together and help each other if we get stuck.#Okay, let’s do our best!",
+    "weight": "10",
+    "restriction": "0_200_399#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "225": {
+    "dialogue_id": "10011001012",
+    "chinese_text": "我忘了带纸巾，你有吗？借我一张。#有有有，给你一叠，别跟我客气。#太谢谢你了，不然我都没法擦嘴了。#小事一桩，下次记得带。",
+    "english_text": "I forgot my tissues. Do you have any? Lend me one.#Sure, here’s a whole pack. Don’t be shy.#Thank you so much, I couldn’t wipe my mouth without them.#No big deal. Remember to bring some next time.",
+    "weight": "10",
+    "restriction": "0_200_399#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "226": {
+    "dialogue_id": "10011001012",
+    "chinese_text": "这个菜好咸啊，我都快咸死了，你觉得吗？#确实有点咸，我这里有矿泉水，给你喝一口。#太及时了，谢谢你，救我一命。#哈哈哈，以后少吃点这个菜。",
+    "english_text": "This dish is so salty! I’m dying over here. You think so?#Yeah, it’s pretty salty. I have mineral water, have a sip.#You saved me! Thank you so much.#Hahaha, don’t order this one again.",
+    "weight": "10",
+    "restriction": "0_200_399#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "227": {
+    "dialogue_id": "10011001012",
+    "chinese_text": "午休结束后要交作业，你写完了吗？我还差一点，急死我了。#别着急，我写完了，你哪里不会，我帮你看看。#太好了，就是这道题，我不会做。#来，我给你讲一遍。",
+    "english_text": "We have to hand in homework after lunch break. Did you finish? I’m almost done and panicking.#Calm down, I finished mine. Which part are you stuck on? I’ll help.#Thank goodness! This problem right here, I can’t figure it out.#Come on, I’ll walk you through it.",
+    "weight": "10",
+    "restriction": "0_200_399#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "228": {
+    "dialogue_id": "10011001012",
+    "chinese_text": "我带多了水果，给你一个，这个苹果特别甜。#好啊，谢谢，我正好想吃水果。#不客气，快吃吧，别浪费了。#嗯，真的好甜。",
+    "english_text": "I brought too much fruit. Have an apple—it’s really sweet.#Sure, thanks! I was just craving something fresh.#No problem, eat up, don’t let it go to waste.#Mmm, it’s actually super sweet.",
+    "weight": "10",
+    "restriction": "0_200_399#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "229": {
+    "dialogue_id": "10011001012",
+    "chinese_text": "食堂人好多啊，排队排了好久，我都快饿晕了。#哈哈哈，谁让你磨磨蹭蹭的，我都排到了，给你，你的咖喱饭。#太爱你了，救我一命，等下请你喝饮料。#说话算话哦。",
+    "english_text": "The canteen is packed! I waited in line forever and I’m starving.#Hahaha, that’s what you get for dawdling. I got yours already—here’s your curry rice.#You’re my hero! I’ll buy you a drink later.#Promise?",
+    "weight": "10",
+    "restriction": "0_200_399#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "230": {
+    "dialogue_id": "10011001012",
+    "chinese_text": "午休的时候听歌吧，我给你分享一首好听的歌。#好啊，我正好也想听歌，放松一下。#你听，这首歌超好听，我循环了好多遍。#哇，真的好好听，给我发个链接。",
+    "english_text": "Let’s listen to music during break. I’ll share a really good song with you.#Yes! I was about to suggest that, just to relax.#Listen to this one, I’ve had it on repeat.#Wow, it’s awesome! Send me the link.",
+    "weight": "10",
+    "restriction": "0_200_399#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "231": {
+    "dialogue_id": "10011001012",
+    "chinese_text": "你的饭盒好可爱，是你妹妹送你的吗？#哈哈哈，被你发现了，我妹妹特意给我选的。#太可爱了，我也想要一个，让我妹妹也给我买。#可以啊，让你妹妹照着我的买。",
+    "english_text": "Your lunch box is so cute! Did your sister get it for you?#Hahaha, you guessed it. She picked it out specially for me.#It’s adorable! I want one too. I’ll ask my sister to buy me one.#Sure, tell her to get the same as mine.",
+    "weight": "10",
+    "restriction": "0_200_399#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "232": {
+    "dialogue_id": "10011001012",
+    "chinese_text": "哎呀，我不小心把饭洒了，怎么办啊？#别慌别慌，我这里有纸巾，我帮你擦，再去打一份吧。#可是食堂人好多，我不想再排队了。#没事，我陪你一起去。",
+    "english_text": "Oh no, I spilled my rice! What do I do?#Don’t panic! I have tissues, I’ll help you clean up. Let’s get another serving.#But the line is so long, I don’t want to wait again.#It’s okay, I’ll go with you.",
+    "weight": "10",
+    "restriction": "0_200_399#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "233": {
+    "dialogue_id": "10011001012",
+    "chinese_text": "下午的体育课要跑八百米，我肯定跑不动，怎么办啊？#没事，我陪你一起跑，慢慢跑，肯定能跑完。#太好了，有你在我就放心了。#放心吧，不会丢下你的。",
+    "english_text": "We have to run 800 meters in PE this afternoon. I’ll never make it!#Don’t worry, I’ll run with you. Take it slow and we’ll finish together.#Perfect, I feel so much better with you there.#I won’t leave you behind, promise.",
+    "weight": "10",
+    "restriction": "0_200_399#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "234": {
+    "dialogue_id": "10011001012",
+    "chinese_text": "午休我睡二十分钟，你帮我看着点时间，别让我睡过头了。#好嘞，放心吧，到点我叫你。#太谢谢你了，爱你。#哈哈哈，快去睡吧。",
+    "english_text": "I’m gonna nap for twenty minutes. Can you wake me up on time so I don’t oversleep?#Got it, relax. I’ll call you when it’s time.#Thank you so much, love you.#Hahaha, go sleep.",
+    "weight": "10",
+    "restriction": "0_200_399#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "235": {
+    "dialogue_id": "10011001012",
+    "chinese_text": "你买的饮料是什么口味的？看起来很好喝，给我尝一口。#拿去拿去，柠檬味的，很清爽。#哇，真的好好喝，我也去买一瓶。#去吧去吧，就在食堂门口。",
+    "english_text": "What flavor is your drink? It looks good. Let me try a sip.#Here you go—it’s lemon, really refreshing.#Wow, this is great! I’m gonna buy one too.#Go ahead, it’s right outside the canteen.",
+    "weight": "10",
+    "restriction": "0_200_399#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "236": {
+    "dialogue_id": "10011001012",
+    "chinese_text": "食堂的筷子好短，用着太不方便了，下次我自己带筷子。#我也是，我已经准备好了，下次带两双，给你一双。#太谢谢你了，还是你对我好。#小事一桩。",
+    "english_text": "The canteen chopsticks are so short, they’re so awkward to use. I’ll bring my own next time.#Me too! I already prepared a pair. I’ll bring an extra one for you.#You’re the best! Thank you so much.#No big deal.",
+    "weight": "10",
+    "restriction": "0_200_399#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "237": {
+    "dialogue_id": "10011001012",
+    "chinese_text": "我吃完了，我们一起去扔垃圾吧，顺便去操场散散步。#好啊，正好我也吃完了，走，一起去。#太好了，久坐对身体不好，散散步正好。",
+    "english_text": "I’m finished. Let’s throw away the trash and take a walk on the playground.#Okay, I’m done too. Let’s go.#Great, sitting too long is bad for us. A walk is perfect.",
+    "weight": "10",
+    "restriction": "0_200_399#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "238": {
+    "dialogue_id": "10011001012",
+    "chinese_text": "你别趴在桌子上睡觉了，对颈椎不好，起来活动活动。#哎呀，我太困了，不想动。#来，我拉你起来，活动两分钟再睡。#好吧好吧，听你的。",
+    "english_text": "Don’t sleep with your head on the desk—it’s bad for your neck. Stand up and stretch.#But I’m so tired, I don’t wanna move.#Come on, I’ll pull you up. Stretch for two minutes then sleep.#Fine, you win.",
+    "weight": "10",
+    "restriction": "0_200_399#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "239": {
+    "dialogue_id": "10011001012",
+    "chinese_text": "你今天午餐吃得好少，是不是不舒服？#没有，就是早上吃多了，不太饿。#那也得吃点，不然下午上课会饿的，把这个面包吃了。#好嘞，听你的。",
+    "english_text": "You barely ate lunch. Are you feeling okay?#No, I just ate too much this morning, I’m not hungry.#You still need to eat something or you’ll be hungry in class. Have this bun.#Okay, I’ll listen to you.",
+    "weight": "10",
+    "restriction": "0_200_399#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "240": {
+    "dialogue_id": "10011001013",
+    "chinese_text": "下午的物理课好难啊，我都听不懂，老师讲的什么啊？#哈哈哈，我也有点懵，不过我记了笔记，下课给你看，帮你讲解。#太好了，救我一命，不然我下次肯定考不及格。#放心吧，有我在。",
+    "english_text": "Physics class this afternoon was so hard. I couldn’t understand anything the teacher was saying.#Hahaha, I was confused too, but I took notes. I’ll show you after class and explain it.#Thank goodness, you saved me. I’d definitely fail the test otherwise.#Don’t worry, I’ve got your back.",
+    "weight": "10",
+    "restriction": "0_200_399#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "241": {
+    "dialogue_id": "10011001013",
+    "chinese_text": "你的实验报告写完了吗？老师说下节课要交，我还没写完。#写完了，我昨天晚上写完的，你哪里不会，我帮你写。#太谢谢你了，就是这个部分，我不会写。#来，我教你。",
+    "english_text": "Have you finished your lab report? The teacher said it’s due next class, and I haven’t even started.#I finished it last night. Which part are you stuck on? I’ll help you.#Thank you so much! It’s this section I don’t get.#Come on, I’ll teach you.",
+    "weight": "10",
+    "restriction": "0_200_399#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "242": {
+    "dialogue_id": "10011001013",
+    "chinese_text": "你借我的笔记，我看完了，还给你，写得太详细了，谢谢你。#不客气，能帮到你就好，下次有需要再借你。#好的好的，太感谢你了。#跟我客气什么。",
+    "english_text": "I’ve finished reading the notes you lent me. Here you are. They’re so detailed, thank you.#No problem. Glad I could help. You can borrow them again anytime.#Okay, thank you so much.#No need to be so polite with me.",
+    "weight": "10",
+    "restriction": "0_200_399#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "243": {
+    "dialogue_id": "10011001013",
+    "chinese_text": "下午的美术课，你打算画什么？我还没想好。#我打算画校门口的樱花，你跟我一起画吧，我教你。#好啊好啊，我画画特别差，就靠你了。#放心吧，保证教你画得好看。",
+    "english_text": "What are you going to draw in art class this afternoon? I haven’t decided yet.#I’m going to draw the cherry blossoms at the school gate. Draw with me, I’ll teach you.#Yes please! I’m terrible at drawing, I’m counting on you.#Relax, I’ll make sure yours looks great.",
+    "weight": "10",
+    "restriction": "0_200_399#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "244": {
+    "dialogue_id": "10011001013",
+    "chinese_text": "下午太困了，我上课差点睡着了，还好老师没发现。#哈哈哈，我也是，我偷偷掐了自己一下才清醒。#太惨了，下次中午一定要睡一会儿。#是啊，不然下午真的撑不住。",
+    "english_text": "I was so sleepy this afternoon I almost fell asleep in class. Luckily the teacher didn’t notice.#Hahaha, me too. I pinched myself to stay awake.#That was rough. I definitely need to nap at noon tomorrow.#Yeah, otherwise we can’t make it through the afternoon.",
+    "weight": "10",
+    "restriction": "0_200_399#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "245": {
+    "dialogue_id": "10011001013",
+    "chinese_text": "我的画笔坏了，借我一支，你的画笔那么多，借我用用。#拿去拿去，随便用，别弄坏了就行。#放心吧，肯定不会弄坏的，太谢谢你了。#不客气。",
+    "english_text": "My paintbrush broke. Lend me one — you have so many.#Here, use any of them. Just don’t break it.#I promise I won’t. Thank you so much.#You’re welcome.",
+    "weight": "10",
+    "restriction": "0_200_399#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "246": {
+    "dialogue_id": "10011001013",
+    "chinese_text": "老师刚才讲的知识点，我没跟上，你记下来了吗？借我抄一下。#记下来了，给你，快点抄，下节课还要用。#太谢谢你了，真是帮了我大忙。#快点抄吧，别耽误时间。",
+    "english_text": "I couldn’t keep up with the point the teacher just explained. Did you write it down? Let me copy it.#I did. Here you go, hurry up — we’ll need it for next class.#Thank you so much, you’re a lifesaver.#Hurry up and copy it, don’t waste time.",
+    "weight": "10",
+    "restriction": "0_200_399#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "247": {
+    "dialogue_id": "10011001013",
+    "chinese_text": "课后你要去操场吗？我想去散散步，放松一下。#好啊，我也想去，正好写完作业了，一起去吧。#太好了，我们一起去，顺便聊聊天。#好嘞，下课就走。",
+    "english_text": "Are you going to the playground after class? I want to take a walk and relax.#Sure, I want to go too. I just finished my homework, let’s go together.#Great! We can hang out and chat.#Alright, let’s leave right after class.",
+    "weight": "10",
+    "restriction": "0_200_399#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "248": {
+    "dialogue_id": "10011001013",
+    "chinese_text": "你知道下节课是什么课吗？我课表忘带了，脑子乱糟糟的。#是生物课，要去实验室，快去拿实验服，不然要迟到了。#啊！完了完了，我差点忘了，谢谢你提醒我。#哈哈哈，快点去吧。",
+    "english_text": "Do you know what the next class is? I forgot my timetable and my mind’s blank.#Biology class, and we have to go to the lab. Go get your lab coat or we’ll be late.#Oh no! I almost forgot. Thanks for reminding me.#Hahaha, hurry up.",
+    "weight": "10",
+    "restriction": "0_200_399#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "249": {
+    "dialogue_id": "10011001013",
+    "chinese_text": "你的生物实验做得好快，教教我呗，我总是做不好。#好啊，其实很简单，你看这样操作，很容易就做好了。#哇，真的做好了，太谢谢你了，你太厉害啦。#哈哈哈，小事一桩。",
+    "english_text": "You finished your biology experiment so fast. Teach me, please? I always mess up.#Sure, it’s actually easy. Watch how I do it — simple as that.#Wow, it worked! Thank you so much, you’re amazing.#Hahaha, no big deal.",
+    "weight": "10",
+    "restriction": "0_200_399#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "250": {
+    "dialogue_id": "10011001013",
+    "chinese_text": "课后我们一起去文具店吧？我要买点笔，你也一起去。#好啊，我也想去买点笔记本，正好一起。#太好了，下课就走，别耽误时间。#好嘞。",
+    "english_text": "Let’s go to the stationery store after class. I need to buy some pens, you should come too.#Okay, I want to get some notebooks too. Perfect timing.#Great! Let’s go right after class, don’t delay.#Alright.",
+    "weight": "10",
+    "restriction": "0_200_399#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "251": {
+    "dialogue_id": "10011001013",
+    "chinese_text": "你今天的发型好好看，是新扎的吗？教教我呗。#哈哈哈，是啊，很简单，我教你，下次你也可以扎。#太好了，我早就想扎这种发型了，快教教我。#好啊，课间教你。",
+    "english_text": "Your hairstyle looks so nice today! Did you do it new? Teach me.#Hahaha, yeah. It’s easy, I’ll show you. You can do it too.#I’ve been wanting to try this style for ages. Hurry and teach me.#Okay, I’ll show you during the break.",
+    "weight": "10",
+    "restriction": "0_200_399#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "252": {
+    "dialogue_id": "10011001013",
+    "chinese_text": "老师布置的作业好多啊，我肯定写不完了，怎么办？#别着急，我们一起写，分工合作，很快就写完了。#太好了，有你在我就放心了。#放心吧，一起加油。",
+    "english_text": "The teacher gave so much homework. I’ll never finish it! What do I do?#Don’t panic. We’ll do it together, split the work. It’ll be done in no time.#Perfect, I feel so much better with you here.#Don’t worry, let’s do our best.",
+    "weight": "10",
+    "restriction": "0_200_399#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "253": {
+    "dialogue_id": "10011001013",
+    "chinese_text": "我用完草稿纸了，你有多余的吗？借我一叠。#有有有，给你，多拿点，别不够用。#太谢谢你了，真是太及时了。#跟我客气什么。",
+    "english_text": "I ran out of scratch paper. Do you have any extra? Lend me a stack.#Yeah, here you go. Take extra in case you need more.#Thank you so much, that was perfect timing.#No need to thank me.",
+    "weight": "10",
+    "restriction": "0_200_399#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "254": {
+    "dialogue_id": "10011001013",
+    "chinese_text": "下午的阳光好晒，我都快被晒黑了，你怎么不戴帽子？#我戴了帽子，给你也戴一会儿，别晒黑了。#太谢谢你了，还是你对我好。#哈哈哈，别晒黑了，不然就不好看了。",
+    "english_text": "The sun is so strong this afternoon, I’m gonna get tanned. Why aren’t you wearing a hat?#I have one. Here, wear it for a while so you don’t get dark.#Thank you so much, you’re the best.#Hahaha, don’t get tanned or you won’t look as pretty.",
+    "weight": "10",
+    "restriction": "0_200_399#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "255": {
+    "dialogue_id": "10011001013",
+    "chinese_text": "下午的课比早上的轻松一点，你觉得吗？#是啊，尤其是美术课，特别轻松，还能画画。#我也觉得，要是每天都有美术课就好了。#哈哈哈，想的美。",
+    "english_text": "Afternoon classes feel easier than morning ones, don’t you think?#Yeah, especially art class. It’s so relaxing and we get to draw.#I think so too. I wish we had art every day.#Hahaha, nice dream.",
+    "weight": "10",
+    "restriction": "0_200_399#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "256": {
+    "dialogue_id": "10011001013",
+    "chinese_text": "你的书包拉链坏了，我帮你修一下吧，我以前修过。#真的吗？太好了，我自己修不好，谢谢你。#小事一桩，很快就修好了，你等着。#好嘞，辛苦你了。",
+    "english_text": "Your backpack zipper is broken. Let me fix it — I’ve done this before.#Really? That’d be great. I can’t fix it myself. Thank you.#No problem, it’ll be done in a second. Just wait.#Alright, thanks for your help.",
+    "weight": "10",
+    "restriction": "0_200_399#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "257": {
+    "dialogue_id": "10011001013",
+    "chinese_text": "课后你要回家吗？还是去别的地方？#回家，我妈妈让我早点回去，你呢？#我也回家，我们一起走，顺路。#好啊，一起走，路上有个伴。",
+    "english_text": "Are you going home after class? Or somewhere else?#Home. My mom wants me back early. You?#I’m going home too. We can walk together, we’re on the same way.#Sure, it’s nice to have company.",
+    "weight": "10",
+    "restriction": "0_200_399#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "258": {
+    "dialogue_id": "10011001013",
+    "chinese_text": "你今天的作业写得好认真，字也好漂亮，太厉害了。#哈哈哈，还好啦，就是慢慢写，认真一点而已。#我也要向你学习，认真写作业。#好啊，一起进步。",
+    "english_text": "You did your homework so carefully today, and your handwriting is beautiful. You’re awesome.#Hahaha, it’s nothing. I just took my time and focused.#I need to learn from you and do my homework seriously.#Yeah, let’s improve together.",
+    "weight": "10",
+    "restriction": "0_200_399#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "259": {
+    "dialogue_id": "10011001013",
+    "chinese_text": "下午的班会，老师会说什么啊？你知道吗？#不知道，可能是说运动会的安排，我希望别安排在周末。#我也这么觉得，周末想好好休息，一起祈祷吧。#好啊，祈祷别安排在周末。",
+    "english_text": "What do you think the teacher will talk about in the class meeting? Any idea?#No clue. Probably sports meeting arrangements. I hope it’s not on the weekend.#Me too. I want to rest on the weekend. Let’s hope for the best.#Okay, fingers crossed.",
+    "weight": "10",
+    "restriction": "0_200_399#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "260": {
+    "dialogue_id": "10011001014",
+    "chinese_text": "放学了，我们一起走樱花大道吧，那边的樱花开得特别好看。#好啊好啊，我早就想去了，还能拍张照。#太好了，我们慢慢走，好好欣赏一下。#好嘞，走！",
+    "english_text": "School’s over! Let’s walk along Cherry Blossom Avenue — the flowers are in full bloom.#Yes! I’ve been wanting to go, and we can take photos.#Great, let’s take it slow and enjoy the view.#Alright, let’s go!",
+    "weight": "10",
+    "restriction": "0_200_399#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "261": {
+    "dialogue_id": "10011001014",
+    "chinese_text": "我们一起去便利店买瓶水吧，我有点渴，顺便买些零食。#好啊，我也有点渴，还想吃点零食，一起去吧。#太好了，走，去便利店。",
+    "english_text": "Let’s go to the convenience store for some water. I’m thirsty, and we can grab snacks too.#Sure, I’m thirsty too and feel like snacking. Let’s go.#Perfect, let’s head to the store.",
+    "weight": "10",
+    "restriction": "0_200_399#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "262": {
+    "dialogue_id": "10011001014",
+    "chinese_text": "今天放学好早，我们去公园散散步吧，放松一下。#好啊，正好我也不想太早回家，一起去。#太好了，我们去公园喂鸽子吧。#好嘞，走！",
+    "english_text": "School ended so early today. Let’s go to the park and relax.#Okay, I don’t feel like going home early either. Let’s go.#Awesome! Let’s feed the pigeons there.#Sure, let’s go!",
+    "weight": "10",
+    "restriction": "0_200_399#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "263": {
+    "dialogue_id": "10011001014",
+    "chinese_text": "我的自行车坏了，借我骑一下你的呗，明天一定还你。#拿去拿去，随便骑，小心点，别弄坏了。#太谢谢你了，真是帮了我大忙，明天一定还你。#放心吧，不用急。",
+    "english_text": "My bike broke. Can I borrow yours? I’ll definitely give it back tomorrow.#Here you go, ride it carefully and don’t break it.#Thank you so much! You saved me. I’ll return it tomorrow.#Don’t worry, take your time.",
+    "weight": "10",
+    "restriction": "0_200_399#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "264": {
+    "dialogue_id": "10011001014",
+    "chinese_text": "傍晚的风好舒服，我们慢慢走，别着急回家。#好啊，我也觉得，吹着风特别舒服，心情都变好了。#是啊，每天放学能这样走一走，太幸福了。#哈哈哈，是啊。",
+    "english_text": "The evening breeze is so nice. Let’s walk slowly and not rush home.#I agree. The wind feels great and it cheers me up.#Yeah, it’s such a happy feeling to walk like this after school.#Hahaha, right.",
+    "weight": "10",
+    "restriction": "0_200_399#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "265": {
+    "dialogue_id": "10011001014",
+    "chinese_text": "学校附近新开了一家甜品店，听说味道很好，我们去尝尝吧？#好啊好啊，我早就想去了，正好今天放学早。#太好了，我们一起去，我请你吃。#太爱你啦！",
+    "english_text": "A new dessert shop opened near school. I heard it’s good — let’s try it!#Yes! I’ve been wanting to go, and we get out early today.#Great, I’ll treat you.#You’re the best!",
+    "weight": "10",
+    "restriction": "0_200_399#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "266": {
+    "dialogue_id": "10011001014",
+    "chinese_text": "好像要下雨了，你带伞了吗？我带了，我们一起撑伞吧。#太好了，我没带伞，正愁怎么回家呢，谢谢你。#跟我客气什么，一起撑伞，送你回家。#太贴心啦。",
+    "english_text": "It looks like rain. Did you bring an umbrella? I have one, we can share.#Thank goodness! I didn’t bring one and had no idea how to get home. Thanks.#Don’t be silly. I’ll walk you home under my umbrella.#You’re so sweet.",
+    "weight": "10",
+    "restriction": "0_200_399#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "267": {
+    "dialogue_id": "10011001014",
+    "chinese_text": "放学的时候人好多，挤死我了，差点被挤散了。#哈哈哈，谁让你长得那么矮，容易被挤散。#哼，你别嘲笑我，下次我一定跟紧你。#好好好，下次我牵着你，不让你被挤散。",
+    "english_text": "So many people after school! I got squeezed and almost lost you.#Hahaha, that’s what happens when you’re short and easy to lose.#Hmph, stop making fun of me. I’ll stick close to you next time.#Okay okay, I’ll hold your hand so you don’t get lost.",
+    "weight": "10",
+    "restriction": "0_200_399#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "268": {
+    "dialogue_id": "10011001014",
+    "chinese_text": "你买的这个笔记本，我也有一本，颜色不一样，都很好看。#是啊，这个笔记本特别好用，很厚实，写作业很合适。#对，我也觉得，我们真是太有默契了。#哈哈哈，是啊。",
+    "english_text": "I have the same notebook as yours, just a different color. Both are cute.#I know! It’s really sturdy and perfect for homework.#Yeah, we’re totally on the same page.#Hahaha, yeah.",
+    "weight": "10",
+    "restriction": "0_200_399#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "269": {
+    "dialogue_id": "10011001014",
+    "chinese_text": "你要去菜市场吗？我妈妈让我去买些菜，一起去吧。#好啊，我也想去买点水果，一起去，路上有个伴。#太好了，走，一起去。",
+    "english_text": "Are you going to the market? My mom wants me to buy veggies. Let’s go together.#Sure, I need to get fruit too. Company is nice.#Great, let’s go.",
+    "weight": "10",
+    "restriction": "0_200_399#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "270": {
+    "dialogue_id": "10011001014",
+    "chinese_text": "傍晚的夕阳好漂亮，我们拍张照吧，留个纪念。#好啊好啊，快拍快拍，夕阳真的太好看了。#好了，拍好了，你看，拍得真好看。#哇，真的好好看，发我一张。",
+    "english_text": "The sunset is gorgeous. Let’s take a photo for memory.#Yes yes! Hurry, it’s so beautiful.#Done, look how nice it came out.#Wow, it’s amazing! Send me a copy.",
+    "weight": "10",
+    "restriction": "0_200_399#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "271": {
+    "dialogue_id": "10011001014",
+    "chinese_text": "你今天的书包好轻，是不是没带多少书？#对，今天下午的课比较轻松，没带太多书，你要不要把你的书放我这里一点？#太好了，太谢谢你了，我的书包快重死了。#哈哈哈，小事一桩。",
+    "english_text": "Your bag is so light today. Didn’t bring many books?#Nope, classes were easy this afternoon. Want me to hold some of yours?#Yes please! My bag is so heavy.#Hahaha, no problem.",
+    "weight": "10",
+    "restriction": "0_200_399#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "272": {
+    "dialogue_id": "10011001014",
+    "chinese_text": "我们一起去公交站吧，我也要坐公交，一起等公交。#好啊，正好顺路，一起去，不用一个人等公交了。#太好了，有你在，等公交也不无聊了。#哈哈哈，是啊。",
+    "english_text": "Let’s go to the bus stop together. I’m taking the bus too.#Perfect, we’re going the same way. No more waiting alone.#Great, waiting is fun with you.#Hahaha, yeah.",
+    "weight": "10",
+    "restriction": "0_200_399#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "273": {
+    "dialogue_id": "10011001014",
+    "chinese_text": "你知道明天要带什么东西吗？我怕忘了，你提醒我一下。#要带练习册和实验报告，老师昨天强调过，别再忘了。#好的好的，谢谢你提醒我，不然我肯定会忘。#哈哈哈，就知道你会忘。",
+    "english_text": "Do you know what we need to bring tomorrow? Remind me so I don’t forget.#Workbooks and lab reports. The teacher stressed it yesterday. Don’t forget again.#Okay, thanks! I definitely would’ve forgotten.#Hahaha, knew it.",
+    "weight": "10",
+    "restriction": "0_200_399#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "274": {
+    "dialogue_id": "10011001014",
+    "chinese_text": "放学回家别玩太晚，记得写作业，别熬夜。#知道啦，你也是，别总熬夜打游戏，对身体不好。#放心吧，我会注意的，明天见。#明天见。",
+    "english_text": "Don’t stay out too late after school. Remember your homework and don’t stay up.#Got it. You too, stop gaming late — it’s bad for you.#I will. See you tomorrow.#See you.",
+    "weight": "10",
+    "restriction": "0_200_399#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "275": {
+    "dialogue_id": "10011001014",
+    "chinese_text": "你买的零食是什么口味的？看起来很好吃，给我尝一个。#拿去拿去，草莓味的，很好吃，多尝几个。#太谢谢你了，真的好好吃。#哈哈哈，喜欢就多吃点。",
+    "english_text": "What flavor are your snacks? They look good. Let me try one.#Here, strawberry. Have a few.#Thanks, they’re delicious.#Hahaha, enjoy.",
+    "weight": "10",
+    "restriction": "0_200_399#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "276": {
+    "dialogue_id": "10011001014",
+    "chinese_text": "地上有积水，你小心点，别踩上去了，会弄脏鞋子的。#好谢谢你提醒我，差点就踩上去了，还好有你。#不客气，小心点就好，我们慢慢走。#好嘞。",
+    "english_text": "There’s a puddle. Watch your step so you don’t get your shoes dirty.#Thanks! I almost stepped in it. Good thing you saw me.#No problem. Let’s walk slowly.#Okay.",
+    "weight": "10",
+    "restriction": "0_200_399#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "277": {
+    "dialogue_id": "10011001014",
+    "chinese_text": "你今天放学要去补习班吗？我也要去，我们一起走。#好啊，正好我也不想一个人去，一起走，路上有个伴。#太好了，我们一起去，互相鼓励。#好嘞。",
+    "english_text": "Do you have cram school today? Me too, let’s go together.#Sure, I don’t want to go alone. Company makes it better.#Great, we can encourage each other.#Alright.",
+    "weight": "10",
+    "restriction": "0_200_399#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "278": {
+    "dialogue_id": "10011001014",
+    "chinese_text": "你的钥匙掉了，快捡起来，不然就麻烦了。#啊！谢谢谢谢，还好你看到了，不然我就惨了，回家都进不去。#不客气，下次小心点，别再掉了。#知道啦，以后一定小心。",
+    "english_text": "You dropped your keys! Pick them up quick, it’d be a disaster.#Oh! Thank you so much. I would’ve been locked out. You saved me.#No problem. Be more careful next time.#I will, promise.",
+    "weight": "10",
+    "restriction": "0_200_399#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "279": {
+    "dialogue_id": "10011001014",
+    "chinese_text": "傍晚的街道好热闹，好多人啊，我们慢慢走，看看热闹。#好啊，我也喜欢这种热闹的感觉，一起慢慢走。#太好了，我们看看这边的小摊，好像很有意思。#好嘞，走！",
+    "english_text": "The street is so lively tonight. Let’s walk slow and enjoy it.#Okay, I love this busy feeling.#Awesome! Let’s check out the stalls, they look fun.#Let’s go!",
+    "weight": "10",
+    "restriction": "0_200_399#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "280": {
+    "dialogue_id": "10011001015",
+    "chinese_text": "晚上好，你也来公园散步啊？我饭后出来走走，没想到碰到你了。#晚上好，是啊，我也来散步，太巧了，我们一起走呗。#好啊，太好了，一起走，聊聊天。#好嘞。",
+    "english_text": "Good evening! You’re here for a walk in the park too? I came out after dinner, didn’t expect to run into you.#Good evening! Yeah, me too. What a coincidence, let’s walk together.#Sure, that’d be nice. Let’s chat while we walk.#Alright.",
+    "weight": "10",
+    "restriction": "0_200_399#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "281": {
+    "dialogue_id": "10011001015",
+    "chinese_text": "你在看什么书？看起来很认真，给我看看呗。#一本小说，挺好看的，你要不要看？我看完借给你。#好啊好啊，太谢谢你了，我正愁没书看呢。#不客气，看完给你。",
+    "english_text": "What book are you reading? You look so focused. Let me see.#A novel. It’s pretty good. Do you want to read it? I can lend it to you when I’m done.#Yes please! Thank you so much, I was just looking for something to read.#No problem, I’ll give it to you later.",
+    "weight": "10",
+    "restriction": "0_200_399#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "282": {
+    "dialogue_id": "10011001015",
+    "chinese_text": "晚上的风有点凉，你怎么不穿外套？快穿上，别感冒了。#啊，忘了，出来太急了，没穿外套。#诺，给你我的外套，你先穿上，我不冷。#太谢谢你了，还是你对我好。",
+    "english_text": "The evening wind is a bit cold. Why aren’t you wearing a coat? Put it on before you catch a cold.#Oh, I forgot. I left in a hurry and didn’t grab it.#Here, take my coat. I’m not cold.#Thank you so much, you’re always so good to me.",
+    "weight": "10",
+    "restriction": "0_200_399#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "283": {
+    "dialogue_id": "10011001015",
+    "chinese_text": "你在便利店买什么？我要买瓶牛奶，顺便买些零食。#我也买些零食，晚上写作业的时候吃，我们一起买吧。#好啊，一起买，还能凑个伴。#好嘞。",
+    "english_text": "What are you buying at the convenience store? I’m getting some milk and snacks.#I’m getting snacks too, for when I do homework tonight. Let’s go together.#Sure, it’s more fun with company.#Alright.",
+    "weight": "10",
+    "restriction": "0_200_399#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "284": {
+    "dialogue_id": "10011001015",
+    "chinese_text": "晚上你会写作业到几点？我一般写到十点，写完就睡觉。#我也是，写完作业就睡觉，不熬夜，我们互相监督呗。#好啊，太好了，一起监督，不熬夜。#好嘞。",
+    "english_text": "How late do you do homework at night? I usually finish at ten and go straight to bed.#Same here. No staying up late. Let’s hold each other accountable.#Great idea! Let’s make sure we don’t stay up late.#Okay.",
+    "weight": "10",
+    "restriction": "0_200_399#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "285": {
+    "dialogue_id": "10011001015",
+    "chinese_text": "我家那边的路灯坏了，有点黑，我不敢一个人走，你陪我一段呗。#好啊，没问题，我陪你走到你家楼下，别害怕。#太谢谢你了，有你在我就放心了。#放心吧，有我呢。",
+    "english_text": "The streetlights near my place are broken, it’s really dark. I’m scared to walk alone. Can you walk with me for a bit?#Sure, no problem. I’ll go all the way to your building. Don’t be afraid.#Thank you so much, I feel much safer with you.#Don’t worry, I’m here.",
+    "weight": "10",
+    "restriction": "0_200_399#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "286": {
+    "dialogue_id": "10011001015",
+    "chinese_text": "你在听什么歌？声音很好听，给我分享一下呗。#一首轻音乐，写作业的时候听，很放松，我发链接给你。#太好了，谢谢你，我也想听听，放松一下。#不客气，马上发你。",
+    "english_text": "What song are you listening to? It sounds nice. Share it with me.#Some soft music, it helps me relax while studying. I’ll send you the link.#Perfect, thank you! I want to listen and unwind too.#No problem, I’ll send it right now.",
+    "weight": "10",
+    "restriction": "0_200_399#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "287": {
+    "dialogue_id": "10011001015",
+    "chinese_text": "晚上你会看电视吗？我写完作业会看一会儿，放松一下。#偶尔会看，不过不会看太久，怕耽误休息，我们一起看呗。#好啊，太好了，一起看更有意思。#好嘞。",
+    "english_text": "Do you watch TV at night? I watch a little after homework to relax.#Occasionally, but not too long, I don’t want to lose sleep. We can watch together sometime.#Yes! That’d be way more fun.#Alright.",
+    "weight": "10",
+    "restriction": "0_200_399#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "288": {
+    "dialogue_id": "10011001015",
+    "chinese_text": "你买的夜宵是什么？看起来好香，给我尝一口呗。#关东煮，晚上有点饿，吃点垫垫，给你尝一个，很好吃。#哇，真的好好吃，我也去买一份。#去吧去吧，就在楼下便利店。",
+    "english_text": "What late-night snack did you get? It smells delicious. Let me try a bite.#Oden. I was hungry, so I got a little something. Here, taste one.#Wow, this is so good! I’m gonna go buy some too.#Go ahead, it’s at the convenience store downstairs.",
+    "weight": "10",
+    "restriction": "0_200_399#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "289": {
+    "dialogue_id": "10011001015",
+    "chinese_text": "晚上的星星好亮，你看到了吗？真的太漂亮了。#看到了，今天天气很好，星星特别多，我们一起看看吧。#好啊，太好了，一起看星星，聊聊天。#好嘞。",
+    "english_text": "The stars are so bright tonight! Did you see them? They’re gorgeous.#Yes, the weather’s perfect today, lots of stars. Let’s watch them together.#Great! Let’s stargaze and chat.#Alright.",
+    "weight": "10",
+    "restriction": "0_200_399#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "290": {
+    "dialogue_id": "10011001015",
+    "chinese_text": "你在写作业吗？别太累了，休息一会儿，喝口水。#好啊，谢谢你，我正好有点累了，休息一会儿再写。#不客气，别太拼了，身体最重要。#知道啦，谢谢你。",
+    "english_text": "Are you doing homework? Don’t push yourself too hard. Take a break and drink some water.#Okay, thanks. I was getting a bit tired anyway. I’ll rest a while then continue.#You’re welcome. Don’t overwork yourself, health comes first.#Got it, thank you.",
+    "weight": "10",
+    "restriction": "0_200_399#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "291": {
+    "dialogue_id": "10011001015",
+    "chinese_text": "你家的狗狗好可爱，是柴犬吗？太萌了，让我摸摸呗。#对，是柴犬，很调皮，你摸摸吧，它不咬人。#太可爱了，好想养一只，太萌了。#哈哈哈，喜欢就常来摸。",
+    "english_text": "Your dog is so cute! Is it a Shiba Inu? It’s adorable, can I pet it?#Yes, it’s a Shiba. He’s very naughty, but he doesn’t bite. Go ahead.#He’s so cute! I want one too.#Hahaha, come over anytime to pet him.",
+    "weight": "10",
+    "restriction": "0_200_399#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "292": {
+    "dialogue_id": "10011001015",
+    "chinese_text": "我忘买笔记本了，你能陪我去楼下便利店买一下吗？我不敢一个人去。#好啊，没问题，我陪你去，正好我也想出去走走。#太谢谢你了，真是帮了我大忙。#小事一桩，走。",
+    "english_text": "I forgot to buy a notebook. Can you come with me to the convenience store downstairs? I’m scared to go alone.#Sure, no problem. I’ll go with you, I feel like going out for a walk anyway.#Thank you so much, you really saved me.#It’s nothing. Let’s go.",
+    "weight": "10",
+    "restriction": "0_200_399#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "293": {
+    "dialogue_id": "10011001015",
+    "chinese_text": "我还有一点作业没写完，有点难，你能帮我看看吗？#好啊，拿来我看看，我帮你讲解一下，很快就写完了。#太谢谢你了，有你在我就放心了。#放心吧，交给我。",
+    "english_text": "I still have a little homework left, it’s kind of hard. Can you help me?#Sure, let me see. I’ll explain it to you, you’ll finish in no time.#Thank you so much, I feel so much better with you here.#Don’t worry, I’ve got this.",
+    "weight": "10",
+    "restriction": "0_200_399#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "294": {
+    "dialogue_id": "10011001015",
+    "chinese_text": "晚上别玩太久手机，对眼睛不好，早点休息。#知道啦，你也是，别总熬夜复习，注意身体。#好的好的，我们一起早点休息，明天见。#明天见，晚安。",
+    "english_text": "Don’t play on your phone too late at night, it’s bad for your eyes. Go to bed early.#Got it. You too, don’t stay up reviewing. Take care of yourself.#Okay, let’s both rest early. See you tomorrow.#See you tomorrow. Good night.",
+    "weight": "10",
+    "restriction": "0_200_399#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "295": {
+    "dialogue_id": "10011001015",
+    "chinese_text": "你在煮什么？味道好香，是不是面条？#哈哈哈，被你发现了，我煮点面条，晚上有点饿，给你也煮一碗？#太好了，太谢谢你了，我也有点饿了。#好嘞，马上就好。",
+    "english_text": "What are you cooking? It smells amazing. Is it noodles?#Hahaha, you guessed it. I’m making noodles, I’m hungry. Want a bowl?#Yes please! Thank you so much, I’m hungry too.#Alright, it’ll be ready soon.",
+    "weight": "10",
+    "restriction": "0_200_399#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "296": {
+    "dialogue_id": "10011001015",
+    "chinese_text": "晚上的小区好安静，很适合休息，我们慢慢走，聊聊天。#好啊，我也喜欢这种安静的感觉，一起慢慢走，聊聊天。#太好了，我们聊聊今天在学校的事吧。#好嘞。",
+    "english_text": "The neighborhood is so quiet at night, perfect for relaxing. Let’s walk slowly and chat.#Okay, I love this peaceful vibe. Let’s take our time and talk.#Great! Let’s talk about what happened at school today.#Alright.",
+    "weight": "10",
+    "restriction": "0_200_399#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "297": {
+    "dialogue_id": "10011001015",
+    "chinese_text": "你借我的书，我看完了，太好看了，还给你，谢谢你推荐。#不客气，喜欢就好，我这里还有很多，下次再借你。#太好了，太谢谢你了，你真是我的宝藏朋友。#哈哈哈，彼此彼此。",
+    "english_text": "I finished the book you lent me. It was amazing! Here you are. Thanks for recommending it.#You’re welcome. I’m glad you liked it. I have more, I can lend you some next time.#Awesome! Thank you so much, you’re the best friend ever.#Hahaha, right back at you.",
+    "weight": "10",
+    "restriction": "0_200_399#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "298": {
+    "dialogue_id": "10011001015",
+    "chinese_text": "晚上你会复习今天的知识点吗？我打算复习一下，明天上课更容易听懂。#会的，我也打算复习，我们一起复习，互相提问呗。#好啊，太好了，一起复习，效率更高。#好嘞，开始吧。",
+    "english_text": "Are you going to review today’s lessons tonight? I plan to, so it’s easier to follow in class tomorrow.#Yes, me too. Let’s review together and quiz each other.#Perfect! We’ll be way more efficient this way.#Alright, let’s start.",
+    "weight": "10",
+    "restriction": "0_200_399#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "299": {
+    "dialogue_id": "10011001015",
+    "chinese_text": "晚安，早点休息，别熬夜，明天还要上学呢。#晚安，你也一样，早点休息，明天见，记得请我喝奶茶哦。#放心吧，肯定请你，晚安。#晚安。",
+    "english_text": "Good night. Rest early, don’t stay up late. We have school tomorrow.#Good night, you too. Sleep early. See you tomorrow. And remember to buy me milk tea.#Don’t worry, I will. Good night.#Good night.",
+    "weight": "10",
+    "restriction": "0_200_399#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "300": {
+    "dialogue_id": "10011001016",
+    "chinese_text": "早上好！今天你也搭乘早班电车来的吗？#嗯，是啊，刚好和你同一路线呢。#这样啊，下次要是碰到，我们可以一起走到学校。#好呀，那样也不会太无聊。",
+    "english_text": "Morning! Did you also take the early train today?#Yeah, we’re on the same line.#I see. If we run into each other next time, we can walk to school together.#Sure, it won’t be so boring that way.",
+    "weight": "10",
+    "restriction": "0_400_500#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "301": {
+    "dialogue_id": "10011001016",
+    "chinese_text": "抱歉，打扰一下，你知道三年二班的教室怎么走吗？我是转学生，有点迷路了。#哦，没问题，我正好也要去那边，我带你过去吧。#太感谢你了，麻烦你了。#不麻烦，顺路而已。",
+    "english_text": "Excuse me, do you know how to get to Class 2, Grade 3? I’m a transfer student and I’m a bit lost.#Oh, no problem. I’m heading that way too, I’ll show you.#Thank you so much, sorry to trouble you.#It’s fine, we’re going the same way.",
+    "weight": "10",
+    "restriction": "0_400_500#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "302": {
+    "dialogue_id": "10011001016",
+    "chinese_text": "你的制服领口歪了哦，可能是早上匆忙没整理好。#啊，真的吗？谢谢你提醒，我马上整理。#没事，很容易忽略的，整理好就很整齐啦。",
+    "english_text": "Your uniform collar is a bit crooked. You probably rushed this morning and didn’t fix it.#Oh, really? Thanks for telling me, I’ll straighten it right away.#It’s easy to miss. Looks neat now.",
+    "weight": "10",
+    "restriction": "0_400_500#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "303": {
+    "dialogue_id": "10011001016",
+    "chinese_text": "你手里拿的是社团的招募传单吗？看起来很有意思呢。#对哦，是吹奏部的，你要是感兴趣，放学后可以去活动室看看。#好呀，我正好想加入一个社团，谢谢你告诉我。",
+    "english_text": "Is that a club recruitment flyer? It looks interesting.#Yeah, it’s for the wind band. If you’re interested, you can stop by the activity room after school.#Sure, I’ve been wanting to join a club. Thanks for letting me know.",
+    "weight": "10",
+    "restriction": "0_400_500#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "304": {
+    "dialogue_id": "10011001016",
+    "chinese_text": "早会之前的自由时间，你一般都会做什么呀？#大多是看看漫画，或者整理一下课桌上的东西。#原来如此，我有时候会背背单词，偶尔也会看漫画。",
+    "english_text": "What do you usually do during the free time before the morning assembly?#Mostly read manga or tidy up my desk.#I see. I sometimes memorize words, and occasionally read manga too.",
+    "weight": "10",
+    "restriction": "0_400_500#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "305": {
+    "dialogue_id": "10011001016",
+    "chinese_text": "昨天的学园祭筹备会，你也参加了吧？我好像看到你了。#嗯，我负责帮忙布置场地，你也是来帮忙的吗？#不是哦，我是来看看进度，不过要是需要帮忙，我也可以搭把手。#那太感谢啦。",
+    "english_text": "You were at the school festival preparation meeting yesterday, right? I think I saw you.#Yeah, I helped set up the venue. Were you there to help too?#No, I just came to check the progress, but I can lend a hand if you need.#That’d be a big help.",
+    "weight": "10",
+    "restriction": "0_400_500#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "306": {
+    "dialogue_id": "10011001016",
+    "chinese_text": "你的便当盒看起来很精致呢，是家里人帮你准备的吗？#对呀，是妈妈早上做的，你也带了便当吗？#嗯，不过我的比较简单，不像你的看起来那么好吃。#下次可以让你妈妈试试这种做法哦。",
+    "english_text": "Your bento box looks really nice. Did your family make it for you?#Yeah, my mom made it this morning. Did you bring a bento too?#Yeah, but mine’s pretty simple. Not as delicious-looking as yours.#I can tell your mom how to make it like this sometime.",
+    "weight": "10",
+    "restriction": "0_400_500#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "307": {
+    "dialogue_id": "10011001016",
+    "chinese_text": "抱歉，我不小心撞到你了，没事吧？有没有伤到哪里？#没事没事，不碍事的，你也小心点，走廊人有点多。#好的，真的很抱歉。",
+    "english_text": "Sorry, I bumped into you by accident. Are you okay? Did you get hurt?#It’s fine, really. Be careful though, the hallway is crowded.#Okay, I’m really sorry.",
+    "weight": "10",
+    "restriction": "0_400_500#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "308": {
+    "dialogue_id": "10011001016",
+    "chinese_text": "你知道吗？今天的朝会，校长好像要宣布新的社团规定。#哦？是吗？我还不知道呢，谢谢你告诉我。#不客气，我也是昨天听学生会的人说的。",
+    "english_text": "You know what? The principal is announcing new club rules at the morning assembly today.#Oh, really? I had no idea. Thanks for telling me.#No problem. I heard it from the student council yesterday.",
+    "weight": "10",
+    "restriction": "0_400_500#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "309": {
+    "dialogue_id": "10011001016",
+    "chinese_text": "你的发饰很可爱呢，是在车站前的饰品店买的吗？#对哦，就是那家新开的店，你也觉得好看吗？#嗯，特别好看，下次我也去看看。#好呀，那家店还有很多款式呢。",
+    "english_text": "Your hair clip is so cute. Did you get it at the accessory shop in front of the station?#Yeah, the new one. Do you like it?#Yeah, it’s really nice. I’ll go check it out sometime.#Okay, they have lots of styles.",
+    "weight": "10",
+    "restriction": "0_400_500#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "310": {
+    "dialogue_id": "10011001016",
+    "chinese_text": "早自习的自由朗读，你一般会读什么？#大多是轻小说，有时候也会读诗集。#哇，诗集吗？感觉很有格调呢，我也想试试。#可以呀，我有几本闲置的，下次带给你。",
+    "english_text": "What do you usually read during free reading in morning self-study?#Mostly light novels, sometimes poetry.#Wow, poetry? That’s so classy. I want to try it too.#Sure, I have a few extra ones. I’ll bring them for you next time.",
+    "weight": "10",
+    "restriction": "0_400_500#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "311": {
+    "dialogue_id": "10011001016",
+    "chinese_text": "今天的天气好像有点凉，你怎么没穿针织衫？#啊，我忘了放在包里了，还好不是特别冷。#我这里有备用的薄外套，你要是冷可以先穿上。#太谢谢你了，不用啦，我能坚持。",
+    "english_text": "It’s a bit cold today. Why aren’t you wearing a cardigan?#Oh, I forgot to put it in my bag. Luckily it’s not too cold.#I have a spare thin coat if you want to borrow it.#Thanks, but I’ll be okay.",
+    "weight": "10",
+    "restriction": "0_400_500#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "312": {
+    "dialogue_id": "10011001016",
+    "chinese_text": "你走路的时候慢一点，前面的台阶有点滑，昨天我差点摔倒。#好的，谢谢你提醒，你也小心点。#嗯，一起慢慢走就好。",
+    "english_text": "Walk a bit slower. The steps ahead are slippery—I almost fell yesterday.#Okay, thanks for warning me. You be careful too.#Yeah, let’s just walk slowly together.",
+    "weight": "10",
+    "restriction": "0_400_500#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "313": {
+    "dialogue_id": "10011001016",
+    "chinese_text": "你也是美术部的吗？我好像在美术室见过你。#对哦，我是美术部的，负责画宣传海报，你也是吗？#不是，我是路过的时候看到你画画，觉得画得很好看。#谢谢夸奖，你要是感兴趣，可以来美术室参观。",
+    "english_text": "Are you in the art club too? I think I’ve seen you in the art room.#Yeah, I’m in the art club. I draw the posters. Are you in it too?#No, I saw you drawing when I passed by. Your work is really good.#Thanks. You can come visit the art room if you want.",
+    "weight": "10",
+    "restriction": "0_400_500#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "314": {
+    "dialogue_id": "10011001016",
+    "chinese_text": "早会结束后，你要去小卖部买东西吗？我想去买瓶果汁。#好呀，我也想去买块面包，我们一起去吧。#太好了，这样就不用一个人去了。",
+    "english_text": "After the assembly, are you going to the convenience store? I want to get some juice.#Sure, I’m gonna get a bread. Let’s go together.#Great, I won’t have to go alone.",
+    "weight": "10",
+    "restriction": "0_400_500#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "315": {
+    "dialogue_id": "10011001016",
+    "chinese_text": "你的笔记本封面好特别，是动漫联名款吗？#对呀，是我很喜欢的动漫，你也看这部动漫吗？#嗯，我也很喜欢，没想到我们有一样的喜好。#哈哈，真的吗？太巧了。",
+    "english_text": "Your notebook cover is so special. Is it an anime collaboration?#Yeah, it’s my favorite anime. Do you watch it too?#Yeah, I love it too. Didn’t know we had the same taste.#Haha, really? What a coincidence.",
+    "weight": "10",
+    "restriction": "0_400_500#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "316": {
+    "dialogue_id": "10011001016",
+    "chinese_text": "抱歉，麻烦你帮我递一下那边的课本，我够不到。#好的，给你，下次可以把课本放在顺手的地方哦。#谢谢你，我知道啦，下次会注意的。",
+    "english_text": "Sorry, could you pass me the textbook over there? I can’t reach it.#Sure, here you go. Maybe keep your textbooks within reach next time.#Thanks, I will.",
+    "weight": "10",
+    "restriction": "0_400_500#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "317": {
+    "dialogue_id": "10011001016",
+    "chinese_text": "今天的早间广播，播放的歌曲很好听呢，你知道歌名吗？#知道哦，是最近很火的动漫主题曲，我把歌名发给你吧。#太感谢了，麻烦你了。#不麻烦，很简单的。",
+    "english_text": "The song on the morning broadcast was really nice. Do you know the name?#Yeah, it’s the popular new anime theme song. I’ll send you the title.#Thank you so much.#No trouble at all.",
+    "weight": "10",
+    "restriction": "0_400_500#1_8:00_11:00",
+    "duration_s": "5"
+  },
+  "318": {
+    "dialogue_id": "10011001017",
+    "chinese_text": "午休时间，你要去屋顶吃便当吗？那里人少，还能晒太阳。#好呀，听起来不错，我正愁食堂人太多呢。#那我们一起去吧，我知道屋顶有个很舒服的位置。",
+    "english_text": "Lunch break! Wanna eat your bento on the rooftop? It’s quiet there and we can sunbathe.#Sure, sounds perfect. I was worrying about how crowded the cafeteria is.#Let’s go together. I know a really nice spot up there.",
+    "weight": "10",
+    "restriction": "0_400_500#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "319": {
+    "dialogue_id": "10011001017",
+    "chinese_text": "你的便当里有玉子烧吗？看起来好好吃，我也好想吃。#有哦，我妈妈做了很多，分你一块吧。#太谢谢你了，麻烦你了，味道一定很好。#不客气，你尝尝看。",
+    "english_text": "Do you have tamagoyaki in your bento? It looks so good, I want some too.#I do! My mom made a lot. Have a piece.#Thank you so much. It must taste delicious.#You’re welcome, go ahead and try.",
+    "weight": "10",
+    "restriction": "0_400_500#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "320": {
+    "dialogue_id": "10011001017",
+    "chinese_text": "食堂今天的每日套餐是咖喱饭，你要去买吗？我正要去。#好呀，我也想吃咖喱饭，我们一起去吧，还能一起占个位置。#没问题，那我们赶紧去，不然要排队了。",
+    "english_text": "Today’s cafeteria special is curry rice. Wanna go get some? I’m heading there now.#Yeah, I feel like curry too. Let’s go together and save seats.#Sure, let’s hurry so we don’t have to wait in line.",
+    "weight": "10",
+    "restriction": "0_400_500#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "321": {
+    "dialogue_id": "10011001017",
+    "chinese_text": "午休的时候，你要不要一起去操场散散步？一直坐着有点闷。#好呀，我也想活动活动，顺便去看看社团的练习。#太好了，我们一起走，慢慢逛。",
+    "english_text": "Wanna walk around the field during lunch break? I feel stuffy sitting still.#Sure, I need to stretch my legs too. We can check out club practice as well.#Great, let’s go and take it slow.",
+    "weight": "10",
+    "restriction": "0_400_500#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "322": {
+    "dialogue_id": "10011001017",
+    "chinese_text": "我忘带纸巾了，你有多余的吗？借我一张，吃完便当要擦嘴。#有，给你一叠，不用急着还，下次记得带就好。#太感谢了，帮了我大忙。",
+    "english_text": "I forgot my tissues. Do you have an extra? I need to wipe my mouth after eating.#Here you go, take a handful. No need to hurry returning them. Just remember next time.#Thanks a lot, you saved me.",
+    "weight": "10",
+    "restriction": "0_400_500#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "323": {
+    "dialogue_id": "10011001017",
+    "chinese_text": "你吃完便当后，要去图书馆吗？我想去借本轻小说。#好呀，我也想去图书馆自习，我们一起去吧。#太好了，有个伴也不会太无聊。",
+    "english_text": "After you finish your bento, are you going to the library? I want to borrow a light novel.#Yeah, I’m going there to study too. Let’s go together.#Nice, it won’t be boring with company.",
+    "weight": "10",
+    "restriction": "0_400_500#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "324": {
+    "dialogue_id": "10011001017",
+    "chinese_text": "你的便当盒是保温的吗？这么久了还是热的。#对哦，是妈妈给我买的保温便当盒，很实用。#哇，真好，我也想换一个这样的，在哪里买的呀？#在车站前的杂货店，很便宜哦。",
+    "english_text": "Is your bento box insulated? It’s still warm after so long.#Yeah, my mom bought me an insulated one. It’s really handy.#Wow, that’s nice. I want to get one too. Where did you buy it?#At the general store in front of the station. It wasn’t expensive.",
+    "weight": "10",
+    "restriction": "0_400_500#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "325": {
+    "dialogue_id": "10011001017",
+    "chinese_text": "午休的时候，我们一起听音乐吧？我有一副备用耳机。#好呀，太谢谢你了，我正好也想听听音乐放松一下。#不客气，我们一起听，我给你分享几首好听的歌。",
+    "english_text": "Let’s listen to music during lunch break, okay? I have an extra pair of earphones.#Sure, thank you so much. I was just wanting to relax to some music too.#No problem. We can listen together, I’ll share some good songs.",
+    "weight": "10",
+    "restriction": "0_400_500#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "326": {
+    "dialogue_id": "10011001017",
+    "chinese_text": "食堂的味增汤有点咸，你觉得吗？#嗯，确实有点，我这里有矿泉水，你要是觉得咸可以喝一口。#太谢谢你了，正好我有点渴。",
+    "english_text": "The miso soup in the cafeteria is a bit salty, don’t you think?#Yeah, it is. I have some water here, you can drink some if you want.#Thanks a lot, I’m actually a bit thirsty.",
+    "weight": "10",
+    "restriction": "0_400_500#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "327": {
+    "dialogue_id": "10011001017",
+    "chinese_text": "你午休的时候，一般会睡午觉吗？我有时候会趴在桌子上睡一会儿。#会呀，睡一会儿下午上课才不会困，你要是想睡，我帮你看着老师。#太感谢了，麻烦你了。",
+    "english_text": "Do you usually take a nap during lunch break? I sometimes sleep on my desk for a bit.#Yeah, I do. It keeps me awake in class. If you want to sleep, I’ll watch out for the teacher.#Thank you so much, I really appreciate it.",
+    "weight": "10",
+    "restriction": "0_400_500#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "328": {
+    "dialogue_id": "10011001017",
+    "chinese_text": "我带了草莓大福，分你一个，是车站前甜品店买的，很好吃。#太谢谢你了，我正好想吃甜食，你也尝尝我的铜锣烧。#好呀，互相交换着吃，太幸福了。",
+    "english_text": "I brought strawberry daifuku. Have one — it’s from the new dessert shop by the station.#Thanks! I was craving something sweet. You can try my dorayaki too.#Sure, swapping snacks is the best.#Hahaha, totally.",
+    "weight": "10",
+    "restriction": "0_400_500#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "329": {
+    "dialogue_id": "10011001017",
+    "chinese_text": "午休结束后，社团有练习吗？我看到你们社团的人在操场集合了。#对哦，有练习，我马上就要过去，你要是感兴趣，可以来看看。#好呀，我下课了就去看。",
+    "english_text": "Do you have club practice after lunch break? I saw your members gathering on the field.#Yeah, we do. I’m heading over soon. You can come watch if you want.#Okay, I’ll come after class.",
+    "weight": "10",
+    "restriction": "0_400_500#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "330": {
+    "dialogue_id": "10011001017",
+    "chinese_text": "你不小心把便当洒了一点，我这里有湿巾，帮你擦一下吧。#啊，太谢谢你了，真是不好意思，麻烦你了。#没事，举手之劳，赶紧擦干净吧。",
+    "english_text": "You spilled a little of your bento. I have wet wipes, let me help you clean up.#Oh, thank you so much. I’m so sorry for the trouble.#It’s fine, no big deal. Let’s clean it up quickly.",
+    "weight": "10",
+    "restriction": "0_400_500#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "331": {
+    "dialogue_id": "10011001017",
+    "chinese_text": "午休的时候，我们一起玩猜拳吧？输的人请喝果汁。#好呀，没问题，我肯定能赢你。#哈哈哈，不一定哦，我们试试看。",
+    "english_text": "Let’s play rock-paper-scissors during lunch break! Loser buys juice.#Sure, I’m definitely gonna win.#Hahaha, we’ll see about that.",
+    "weight": "10",
+    "restriction": "0_400_500#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "332": {
+    "dialogue_id": "10011001017",
+    "chinese_text": "你知道吗？车站前新开了一家饭团店，听说味道很好。#哦？是吗？我还不知道呢，下次午休我们一起去尝尝吧。#好呀，就这么定了。",
+    "english_text": "You know what? A new onigiri shop opened by the station. I heard it’s really good.#Oh, really? I didn’t know that. Let’s go try it next lunch break.#Deal!",
+    "weight": "10",
+    "restriction": "0_400_500#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "333": {
+    "dialogue_id": "10011001017",
+    "chinese_text": "我有点困了，想趴在桌子上睡一会儿，你帮我留意一下时间，别让我睡过头了。#好的，放心吧，到点我叫你，不会让你迟到的。#太感谢了，麻烦你了。",
+    "english_text": "I’m a bit sleepy. I wanna nap on my desk. Can you wake me up on time so I don’t oversleep?#Okay, don’t worry. I’ll call you when it’s time. You won’t be late.#Thank you so much.",
+    "weight": "10",
+    "restriction": "0_400_500#1_11:00_13:00",
+    "duration_s": "5"
+  },
+  "334": {
+    "dialogue_id": "10011001018",
+    "chinese_text": "下午的社团活动，你要去参加吗？我听说今天有新的练习内容。#嗯，要去的，你也是我们社团的吗？#不是哦，我是来给你们加油的，上次看你们练习很精彩。#太谢谢你了，那欢迎你来活动室参观。",
+    "english_text": "Are you going to the club activity this afternoon? I heard there’s new practice material.#Yeah, I’m going. Are you in our club too?#No, I just came to cheer you on. Your practice last time was amazing.#Thanks! Feel free to come to the activity room and watch.",
+    "weight": "10",
+    "restriction": "0_400_500#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "335": {
+    "dialogue_id": "10011001018",
+    "chinese_text": "刚才老师讲的内容，我有点没听懂，你能再给我讲一遍吗？#好呀，其实很简单，我再给你梳理一遍重点，你肯定能听懂。#太感谢了，麻烦你了。",
+    "english_text": "I didn’t really understand what the teacher just said. Could you explain it again?#Sure, it’s actually simple. I’ll go over the key points with you — you’ll get it.#Thank you so much.",
+    "weight": "10",
+    "restriction": "0_400_500#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "336": {
+    "dialogue_id": "10011001018",
+    "chinese_text": "课后你要去文具店吗？我想去买本新的笔记本，用来记社团的事情。#好呀，我也想去买支新的画笔，我们一起去吧。#太好了，一起去更有意思。",
+    "english_text": "Are you going to the stationery store after class? I need a new notebook for club stuff.#Yeah, I want to buy a new paintbrush too. Let’s go together.#Great, it’ll be more fun.",
+    "weight": "10",
+    "restriction": "0_400_500#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "337": {
+    "dialogue_id": "10011001018",
+    "chinese_text": "你的书包上挂了很多动漫挂件呢，都很可爱。#谢谢夸奖，都是我很喜欢的动漫角色，你也喜欢动漫吗？#嗯，我也很喜欢，尤其是治愈系的。#哈哈，我们果然很合得来。",
+    "english_text": "You have so many anime charms on your bag. They’re really cute.#Thanks! They’re all my favorite characters. Do you like anime too?#Yeah, especially the healing-type ones.#Haha, we really get along.",
+    "weight": "10",
+    "restriction": "0_400_500#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "338": {
+    "dialogue_id": "10011001018",
+    "chinese_text": "下午的课有点无聊，我都快睡着了，你还好吗？#我也有点困，不过再坚持一下，下节课就结束了。#嗯，一起坚持一下，放学后去买杯咖啡提神。",
+    "english_text": "This afternoon’s class was kind of boring. I almost fell asleep. How about you?#I’m sleepy too, but let’s hold on — just one more class.#Okay. Let’s get coffee after school to wake up.",
+    "weight": "10",
+    "restriction": "0_400_500#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "339": {
+    "dialogue_id": "10011001018",
+    "chinese_text": "你知道吗？下周五要举办学园祭，我们班要开女仆咖啡馆，你要来吗？#真的吗？太好了，我肯定会去的，到时候麻烦你多关照啦。#哈哈，没问题，一定让你满意。",
+    "english_text": "You know what? The school festival is next Friday. Our class is doing a maid café. Wanna come?#Really? Awesome! I’ll definitely be there. Please look after me then.#Haha, no problem. I’ll make sure you have a good time.",
+    "weight": "10",
+    "restriction": "0_400_500#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "340": {
+    "dialogue_id": "10011001018",
+    "chinese_text": "我的雨伞忘在教室了，下午好像要下雨，你能借我一把吗？#好呀，我有两把，给你一把，明天记得还我就好。#太感谢了，帮了我大忙，不然我就要被雨淋了。",
+    "english_text": "I left my umbrella in the classroom, and it might rain this afternoon. Can I borrow one?#Sure, I have two. Here you go. Just give it back tomorrow.#Thank you so much! You saved me from getting soaked.",
+    "weight": "10",
+    "restriction": "0_400_500#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "341": {
+    "dialogue_id": "10011001018",
+    "chinese_text": "课后我们一起去操场打羽毛球吧？我新买了一副球拍。#好呀，我很久没打羽毛球了，正好陪你玩玩。#太好了，那我们下课就去，别耽误时间。",
+    "english_text": "Let’s play badminton on the field after class. I just bought a new racket.#Okay, I haven’t played in ages. I’d love to join.#Great, we’ll go right after class.",
+    "weight": "10",
+    "restriction": "0_400_500#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "342": {
+    "dialogue_id": "10011001018",
+    "chinese_text": "你是学生会的成员吗？我看到你佩戴了学生会的徽章。#对哦，我是学生会的，负责检查社团活动，你有什么事吗？#没有，就是觉得很厉害，想跟你打个招呼。#哈哈，谢谢你的夸奖。",
+    "english_text": "Are you on the student council? I saw you wearing the badge.#Yeah, I’m in charge of checking club activities. Did you need something?#No, I just think it’s cool and wanted to say hi.#Haha, thanks.",
+    "weight": "10",
+    "restriction": "0_400_500#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "343": {
+    "dialogue_id": "10011001018",
+    "chinese_text": "我不小心把社团的道具弄坏了，有点着急，你能帮我看看怎么修吗？#好呀，我来看看，应该不难修，我们一起试试。#太感谢了，有你帮忙我就放心了。",
+    "english_text": "I accidentally broke a club prop. I’m kind of worried. Can you help me fix it?#Sure, let me look. It shouldn’t be too hard. Let’s try together.#Thank you so much. I feel better already.",
+    "weight": "10",
+    "restriction": "0_400_500#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "344": {
+    "dialogue_id": "10011001018",
+    "chinese_text": "下午的自由活动时间，你要去屋顶看书吗？我想去那里安静地看会儿漫画。#好呀，我也想去屋顶放松一下，我们一起去吧。#太好了，一起去屋顶吹吹风，看看风景。",
+    "english_text": "Do you want to read on the rooftop during free period this afternoon? I wanna read manga quietly.#Yeah, I want to relax up there too. Let’s go together.#Perfect. We can enjoy the wind and the view.",
+    "weight": "10",
+    "restriction": "0_400_500#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "345": {
+    "dialogue_id": "10011001018",
+    "chinese_text": "你的手绘很厉害呢，上次看到你画的动漫角色，特别好看。#谢谢夸奖，你要是感兴趣，我可以教你一些简单的画法。#真的吗？太感谢了，我一直想学手绘。",
+    "english_text": "Your drawings are amazing. I saw the anime character you did last time — it was great.#Thanks! If you want, I can teach you some simple drawing skills.#Really? Thank you so much. I’ve always wanted to learn.",
+    "weight": "10",
+    "restriction": "0_400_500#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "346": {
+    "dialogue_id": "10011001018",
+    "chinese_text": "课后你要回家吗？还是去社团练习？#我要去社团练习，你呢？#我要回家，不过我们顺路，一起走到车站吧。#好呀，一起走，路上有个伴。",
+    "english_text": "Are you going home after class, or to club practice?#Club practice. You?#I’m going home, but we’re going the same way. Let’s walk to the station together.#Sure, it’s nice having company.",
+    "weight": "10",
+    "restriction": "0_400_500#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "347": {
+    "dialogue_id": "10011001018",
+    "chinese_text": "我忘带社团的练习册了，你能借我抄一下重点吗？明天就还你。#好呀，给你，你赶紧抄，别耽误了练习。#太感谢了，麻烦你了。",
+    "english_text": "I forgot my club practice notebook. Can I copy your notes? I’ll give them back tomorrow.#Yeah, here you go. Hurry so you don’t miss practice.#Thank you so much.",
+    "weight": "10",
+    "restriction": "0_400_500#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "348": {
+    "dialogue_id": "10011001018",
+    "chinese_text": "下午的阳光有点晒，你怎么不戴帽子？#啊，我忘了带了，还好不是特别晒。#我这里有备用的遮阳帽，你要是觉得晒可以戴上。#太谢谢你了，不用啦，我能坚持。",
+    "english_text": "The sun is pretty strong this afternoon. Why aren’t you wearing a hat?#Oh, I forgot. It’s not too bad though.#I have an extra sunhat if you want it.#Thanks, but I’ll be okay.",
+    "weight": "10",
+    "restriction": "0_400_500#1_13:00_17:00",
+    "duration_s": "5"
+  },
+  "349": {
+    "dialogue_id": "10011001019",
+    "chinese_text": "放学啦！你要搭乘哪一路电车回家？#我要坐JR线，你呢？#我也是，我们一起去车站吧，路上聊聊天。#好呀，一起走。",
+    "english_text": "School’s out! Which train are you taking home?#I’m taking the JR line. You?#Same here! Let’s walk to the station together and chat.#Sure, let’s go.",
+    "weight": "10",
+    "restriction": "0_400_500#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "350": {
+    "dialogue_id": "10011001019",
+    "chinese_text": "车站前的便利店，今天有限定的草莓牛奶，我们一起去买吧。#好呀，我早就想喝了，我们赶紧去，不然就卖完了。#没问题，一起去。",
+    "english_text": "The convenience store in front of the station has limited-edition strawberry milk today. Let’s go get some.#Yes! I’ve been wanting to try it. Hurry before they sell out.#Okay, let’s go.",
+    "weight": "10",
+    "restriction": "0_400_500#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "351": {
+    "dialogue_id": "10011001019",
+    "chinese_text": "傍晚的夕阳好漂亮，你看到了吗？在操场那边，特别美。#看到了，真的好好看，我刚才还拍了照片。#哇，能给我看看吗？#当然可以，你看，拍得还不错吧。",
+    "english_text": "The sunset is so beautiful this evening! Did you see it over the playground?#Yeah, it’s amazing. I took a photo just now.#Wow, can I see?#Sure, look. Not bad, right?",
+    "weight": "10",
+    "restriction": "0_400_500#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "352": {
+    "dialogue_id": "10011001019",
+    "chinese_text": "你今天要去打工吗？我看到你背着打工的包。#对哦，我要去车站前的便利店打工，你呢？#我要回家，不过我们顺路，我送你到便利店门口吧。#太谢谢你了，麻烦你了。",
+    "english_text": "Are you going to work part-time today? I saw your work bag.#Yeah, I’m working at the convenience store by the station. You?#I’m going home, but we’re on the way. I’ll walk you there.#Thanks a lot, I appreciate it.",
+    "weight": "10",
+    "restriction": "0_400_500#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "353": {
+    "dialogue_id": "10011001019",
+    "chinese_text": "学校附近的樱花树，傍晚的时候特别好看，我们去拍张照吧。#好呀，正好我也想拍，我们一起去，互相帮忙拍。#太好了，赶紧去，夕阳还没下山。",
+    "english_text": "The cherry blossom trees near school look extra pretty at dusk. Let’s take a picture.#Sure, I wanted to too. Let’s go and take photos for each other.#Great, hurry before the sun sets.",
+    "weight": "10",
+    "restriction": "0_400_500#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "354": {
+    "dialogue_id": "10011001019",
+    "chinese_text": "我妈妈让我去超市买东西，你要一起去吗？超市就在车站旁边。#好呀，我也想去买些零食，我们一起去，互相帮忙拎东西。#太好了，一起去更方便。",
+    "english_text": "My mom wants me to go shopping at the supermarket. Wanna come? It’s right by the station.#Okay, I need to buy some snacks too. Let’s go together and help each other carry things.#Perfect, it’ll be easier.",
+    "weight": "10",
+    "restriction": "0_400_500#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "355": {
+    "dialogue_id": "10011001019",
+    "chinese_text": "傍晚的风好舒服，我们慢慢走，别着急去车站，聊聊天吧。#好呀，我也不想太早回家，我们慢慢走，说说今天在学校的事情。#嗯，这样也很惬意。",
+    "english_text": "The evening breeze is so nice. Let’s walk slowly to the station and chat.#Sure, I don’t want to go home early either. Let’s talk about school today.#Yeah, this is really relaxing.",
+    "weight": "10",
+    "restriction": "0_400_500#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "356": {
+    "dialogue_id": "10011001019",
+    "chinese_text": "你知道吗？车站前的甜品店，今天有限定的芒果班戟，很好吃。#哦？是吗？我还不知道呢，我们一起去尝尝吧。#好呀，就这么定了，一起去。",
+    "english_text": "You know what? The dessert shop by the station has limited mango pancakes today. They’re delicious.#Oh, really? I didn’t know. Let’s go try them.#Okay, it’s a deal.",
+    "weight": "10",
+    "restriction": "0_400_500#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "357": {
+    "dialogue_id": "10011001019",
+    "chinese_text": "我不小心把电车卡弄丢了，有点着急，你能陪我去车站的服务台问问吗？#当然可以，别着急，我们一起去问问，应该能找到。#太感谢了，有你在我就放心了。",
+    "english_text": "I lost my train card. I’m really worried. Can you come with me to the station information desk?#Of course. Don’t panic, let’s go ask. We might find it.#Thank you so much. I feel better with you here.",
+    "weight": "10",
+    "restriction": "0_400_500#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "358": {
+    "dialogue_id": "10011001019",
+    "chinese_text": "你今天的社团练习累不累？看你好像有点疲惫。#还好，就是练习了很久，有点累。#那你赶紧回家休息，别太累了，明天还有课呢。#谢谢你的关心，我会的。",
+    "english_text": "Was club practice tiring today? You look a bit worn out.#It was okay, just a long session. I’m a bit tired.#Then go home and rest soon. Don’t push yourself — we have class tomorrow.#Thanks for caring. I will.",
+    "weight": "10",
+    "restriction": "0_400_500#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "359": {
+    "dialogue_id": "10011001019",
+    "chinese_text": "我们一起去公园散散步吧？傍晚的公园很安静，很适合放松。#好呀，我也想去散散步，放松一下，我们一起去。#太好了，一起走。",
+    "english_text": "Let’s take a walk in the park? It’s quiet and perfect for relaxing at dusk.#Sure, I need to unwind too. Let’s go.#Great, let’s go.",
+    "weight": "10",
+    "restriction": "0_400_500#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "360": {
+    "dialogue_id": "10011001019",
+    "chinese_text": "你买的这个动漫周边，是最近新出的吗？看起来很特别。#对哦，是昨天刚出的，你也喜欢这个角色吗？#嗯，我很喜欢，在哪里买的呀？#在车站前的动漫店，还有很多款式呢。",
+    "english_text": "Is that new anime merchandise you bought? It looks special.#Yeah, it just came out yesterday. Do you like this character too?#Yeah, I love him! Where did you get it?#At the anime shop in front of the station. They have lots of designs.",
+    "weight": "10",
+    "restriction": "0_400_500#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "361": {
+    "dialogue_id": "10011001019",
+    "chinese_text": "傍晚的街道很热闹，好多小摊，我们去看看好不好？#好呀，我最喜欢逛小摊了，我们一起去，尝尝那边的章鱼小丸子。#太好了，一起去。",
+    "english_text": "The street is really lively this evening, with lots of stalls. Let’s check them out.#Sure, I love browsing stalls! Let’s go try the takoyaki over there.#Awesome, let’s go.",
+    "weight": "10",
+    "restriction": "0_400_500#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "362": {
+    "dialogue_id": "10011001019",
+    "chinese_text": "我要去住宅区的便利店买东西，你顺路吗？一起走。#好呀，我正好也要回家，顺路，我们一起走。#太好了，路上有个伴。",
+    "english_text": "I’m going to the convenience store in the neighborhood. Are we going the same way? Let’s walk together.#Yeah, I’m heading home too. We’re on the same route.#Great, having company is nice.",
+    "weight": "10",
+    "restriction": "0_400_500#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "363": {
+    "dialogue_id": "10011001019",
+    "chinese_text": "放学回家别玩太晚，记得早点休息，明天还要上学呢。#知道啦，你也是，别熬夜看漫画，早点休息。#放心吧，我会的，明天见。#明天见。",
+    "english_text": "Don’t stay out too late after school. Remember to rest early — we have school tomorrow.#Got it. You too, don’t stay up reading manga. Sleep early.#I will. See you tomorrow.#See you.",
+    "weight": "10",
+    "restriction": "0_400_500#1_17:00_19:00",
+    "duration_s": "5"
+  },
+  "364": {
+    "dialogue_id": "10011001020",
+    "chinese_text": "晚上好！你也来公园散步吗？我饭后出来走走。#晚上好！是啊，我也来散步，吹吹晚风，很舒服。#嗯，傍晚的风确实很舒服，我们一起走一会儿吧。#好呀。",
+    "english_text": "Good evening! Are you here for a walk in the park too? I came out after dinner.#Good evening! Yeah, I’m here to walk and enjoy the evening breeze. It’s so nice.#Yeah, the wind is really pleasant. Let’s walk together for a while.#Sure.",
+    "weight": "10",
+    "restriction": "0_400_500#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "365": {
+    "dialogue_id": "10011001020",
+    "chinese_text": "我在看新出的动漫，超好看的，你看过吗？#还没有呢，是什么类型的？#是校园治愈系的，很温暖，我推荐你看看。#好呀，等我写完作业就去看，谢谢你推荐。",
+    "english_text": "I’m watching the new anime, it’s so good. Have you seen it?#Not yet. What genre is it?#It’s a heartwarming school slice-of-life. Really cozy. I recommend it.#Okay, I’ll watch it after homework. Thanks for the suggestion.",
+    "weight": "10",
+    "restriction": "0_400_500#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "366": {
+    "dialogue_id": "10011001020",
+    "chinese_text": "晚上的星星好亮，你看到了吗？今天的天气真好。#看到了，真的很亮，好久没看到这么多星星了。#嗯，我们一起看看星星，聊聊天吧。#好呀，很惬意。",
+    "english_text": "The stars are so bright tonight! The weather is perfect.#I know, they’re really shining. Haven’t seen this many stars in ages.#Yeah, let’s stargaze and chat.#Sounds nice and relaxing.",
+    "weight": "10",
+    "restriction": "0_400_500#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "367": {
+    "dialogue_id": "10011001020",
+    "chinese_text": "我有点饿了，想煮点拉面，你要不要来我家一起吃？我煮的拉面很好吃。#太谢谢你了，不过我已经吃过晚饭了，下次吧。#好呀，下次有机会再一起吃。",
+    "english_text": "I’m a bit hungry, gonna make some ramen. Wanna come over and eat with me? Mine’s really good.#Thanks so much, but I already had dinner. Maybe next time.#Alright, we can eat together another time.",
+    "weight": "10",
+    "restriction": "0_400_500#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "368": {
+    "dialogue_id": "10011001020",
+    "chinese_text": "我在便利店买了些零食，分你一些，是你喜欢的口味。#太谢谢你了，你还记得我喜欢的口味，太贴心了。#不客气，我们关系这么好，肯定记得。",
+    "english_text": "I bought some snacks at the convenience store. Have some — it’s your favorite flavor.#Thank you! You remembered what I like. That’s so sweet.#No problem. We’re close, of course I remember.",
+    "weight": "10",
+    "restriction": "0_400_500#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "369": {
+    "dialogue_id": "10011001020",
+    "chinese_text": "晚上你要复习吗？我打算复习一下今天在学校学的内容。#嗯，我也要复习，我们可以互相抽查，一起进步。#好呀，那我们视频连线，一起复习。#好主意，马上就来。",
+    "english_text": "Are you gonna study tonight? I plan to review what we learned today.#Yeah, me too. We can quiz each other and improve together.#Great! Let’s video call and study together.#Good idea, coming right up.",
+    "weight": "10",
+    "restriction": "0_400_500#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "370": {
+    "dialogue_id": "10011001020",
+    "chinese_text": "我家的猫有点调皮，一直闹，你能陪我聊聊天，分散一下注意力吗？#当然可以，你家的猫很可爱吧？给我看看照片呗。#好呀，我给你发照片，它真的很调皮。",
+    "english_text": "My cat is being so naughty and hyper. Can you chat with me to distract me?#Of course! Your cat must be cute. Show me a photo.#Okay, I’ll send it. She’s really mischievous.",
+    "weight": "10",
+    "restriction": "0_400_500#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "371": {
+    "dialogue_id": "10011001020",
+    "chinese_text": "晚上的便利店，有新出的冰淇淋，你要不要去买？我陪你一起去。#好呀，我正好想吃冰淇淋，我们一起去。#太好了，一起去，顺便聊聊天。",
+    "english_text": "They have new ice cream at the convenience store tonight. Wanna go get some? I’ll go with you.#Sure, I was craving ice cream anyway. Let’s go.#Perfect, we can talk while we’re at it.",
+    "weight": "10",
+    "restriction": "0_400_500#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "372": {
+    "dialogue_id": "10011001020",
+    "chinese_text": "我在听动漫主题曲，超好听的，分享给你，你听听看。#好呀，我马上听，哇，真的很好听，给我发个链接吧。#好嘞，马上发你，我们一起听。",
+    "english_text": "I’m listening to an anime theme song, it’s amazing. I’ll share it with you.#Okay, I’ll listen right now… Wow, it’s really good. Send me the link.#Sure, sending it now. Let’s listen together.",
+    "weight": "10",
+    "restriction": "0_400_500#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "373": {
+    "dialogue_id": "10011001020",
+    "chinese_text": "明天要带的东西，你都准备好吗？我差点忘了带社团的练习册。#我都准备好啦，你要是忘了，明天可以借我的用一下。#太谢谢你了，我现在就去准备。",
+    "english_text": "Did you pack everything for tomorrow? I almost forgot my club practice notebook.#I’m all set. If you forget, you can borrow mine tomorrow.#Thank you so much. I’ll go pack it right now.",
+    "weight": "10",
+    "restriction": "0_400_500#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "374": {
+    "dialogue_id": "10011001020",
+    "chinese_text": "晚上别玩太久手机，对眼睛不好，早点休息。#知道啦，你也是，别熬夜复习，注意身体。#放心吧，我会的，晚安。#晚安。",
+    "english_text": "Don’t use your phone too late at night, it’s bad for your eyes. Go to bed early.#Got it. You too, don’t stay up studying. Take care of yourself.#I will. Good night.#Good night.",
+    "weight": "10",
+    "restriction": "0_400_500#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "375": {
+    "dialogue_id": "10011001020",
+    "chinese_text": "我新拼好了一个动漫模型，超好看的，你要不要来我家看看？#好呀，我早就想看了，马上就来，麻烦你等我一下。#不麻烦，我等你，快来吧。",
+    "english_text": "I just finished building a new anime model, it looks awesome. Wanna come over and see?#Sure, I’ve been wanting to see it. I’ll be right there, just wait a sec.#No trouble at all. I’ll be waiting, hurry over.",
+    "weight": "10",
+    "restriction": "0_400_500#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "376": {
+    "dialogue_id": "10011001020",
+    "chinese_text": "我有点害怕打雷，你能陪我聊聊天吗？直到雷声停。#当然可以，别害怕，我一直陪着你，给你讲笑话，让你不害怕。#太谢谢你了，有你在我就不害怕了。",
+    "english_text": "I’m scared of thunder. Can you stay and chat with me until it stops?#Of course. Don’t be afraid, I’m here with you. I’ll tell you jokes to distract you.#Thank you so much. I feel safe with you.",
+    "weight": "10",
+    "restriction": "0_400_500#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "377": {
+    "dialogue_id": "10011001020",
+    "chinese_text": "我妈妈做了铜锣烧，给你留了一份，我送过去给你吧。#太谢谢你了，你和你妈妈都太好了，麻烦你了。#不麻烦，顺路而已，马上就到。",
+    "english_text": "My mom made dorayaki, and I saved you some. I’ll bring them over.#Thank you both so much. Sorry to trouble you.#It’s no bother, I’m on my way.",
+    "weight": "10",
+    "restriction": "0_400_500#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "378": {
+    "dialogue_id": "10011001020",
+    "chinese_text": "晚上我们一起玩线上游戏吧？我新下载了一个，超好玩的。#好呀，我正无聊呢，一起玩，我们组队肯定能赢。#太好了，马上上线，等你。",
+    "english_text": "Let’s play online games tonight! I just downloaded a really fun one.#Sure, I’m bored anyway. Let’s team up — we’ll definitely win.#Awesome, logging on now. Waiting for you.",
+    "weight": "10",
+    "restriction": "0_400_500#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "379": {
+    "dialogue_id": "10011001020",
+    "chinese_text": "我在整理社团的照片，看到上次学园祭的照片，很怀念。#是吗？我也想看看，你发给我吧，一起回忆一下。#好呀，马上发给你，是不是很怀念？#嗯，真的很怀念。",
+    "english_text": "I’m sorting club photos and found ones from the school festival. Makes me nostalgic.#Really? I wanna see too. Send them to me so we can reminisce.#Okay, sending now. Don’t you miss it?#Yeah, I really do.",
+    "weight": "10",
+    "restriction": "0_400_500#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "380": {
+    "dialogue_id": "10011001020",
+    "chinese_text": "晚上的住宅区很安静，很适合看书，你在看什么书？#我在看轻小说，很治愈，你要是感兴趣，下次借给你。#好呀，太谢谢你了，我正好想找本轻小说看。",
+    "english_text": "The neighborhood is so quiet at night, perfect for reading. What are you reading?#A light novel. It’s really heartwarming. I can lend it to you if you want.#Yes please! I’ve been looking for a good one.",
+    "weight": "10",
+    "restriction": "0_400_500#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "381": {
+    "dialogue_id": "10011001020",
+    "chinese_text": "我不小心把水杯打碎了，有点着急，你能陪我聊聊天吗？#别着急，碎碎平安，下次再买一个就好，我陪你聊聊天，别难过。#太谢谢你了，有你真好。",
+    "english_text": "I accidentally broke my water cup. I’m a bit upset. Can you chat with me?#Don’t worry, broken things mean good luck is coming. Just buy a new one. I’ll stay and cheer you up.#Thank you so much. You’re the best.",
+    "weight": "10",
+    "restriction": "0_400_500#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "382": {
+    "dialogue_id": "10011001020",
+    "chinese_text": "明天我们一起去车站前的动漫店吧？听说有新的周边发售。#好呀，我早就想去了，我们明天早点去，不然就卖完了。#太好了，一言为定，明天见。#明天见。",
+    "english_text": "Let’s go to the anime shop in front of the station tomorrow. They’re releasing new merchandise.#Yes! I’ve been wanting to go. Let’s get there early before they sell out.#Perfect, it’s a deal. See you tomorrow.#See you.",
+    "weight": "10",
+    "restriction": "0_400_500#1_19:00_24:00",
+    "duration_s": "5"
+  },
+  "383": {
+    "dialogue_id": "10011001020",
+    "chinese_text": "今天真的很开心，和你一起上学、一起吃饭、一起放学，谢谢你。#我也很开心，能和你做朋友，真的很好，以后我们也要经常一起。#嗯，一定，我们要一直保持这样的关系。#好呀。",
+    "english_text": "I had such a great day today — going to school, eating, and leaving with you. Thank you.#I had a great time too. I’m really glad we’re friends. Let’s hang out often.#Yeah, definitely. Let’s stay like this always.#Sure.",
+    "weight": "10",
+    "restriction": "0_400_500#1_19:00_24:00",
+    "duration_s": "5"
+  }
+}

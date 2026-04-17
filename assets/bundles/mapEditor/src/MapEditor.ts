@@ -117,6 +117,9 @@ export class MapEditor extends Component {
     @property({ type: CCBoolean, displayName: '启用格子拖动偏移', tooltip: '关闭时预览与摆放严格按格子中心；开启后手指/鼠标可带偏移（与逻辑占格无关）' })
     public enablePlacementDragOffset = false;
 
+    @property({ type: CCBoolean, displayName: '允许道具堆叠摆放', tooltip: '勾选后可在合法地板格上叠放家具，可摆放判断放宽（不再要求 place_type 与下层家具 decor_type 一一匹配）。不勾选则沿用原有不可堆叠与类型匹配规则。' })
+    public enableDecorStackPlacement = false;
+
     /** 最近一次鼠标/触摸在 mapContainer 下的本地坐标（用于格子内偏移摆放） */
     public lastPointerLocalPos: Vec2 | null = null;
     private graphics: Graphics = null;
@@ -460,17 +463,55 @@ export class MapEditor extends Component {
         this.sendWebMapInfoIfChanged();
     }
 
-    /** 计算「指针在格子中的偏移」，用于更精准的触摸/鼠标对齐 */
-    private getPointerOffsetForGrid(gridPos: Vec2, size: Size | null): Vec2 {
+    /**
+     * 指针在「锚点格」内的偏移（相对单格中心），再叠到 gridToWorld(建筑尺寸) 上。
+     * 多格家具时不会让整张图的几何中心贴在手指上；1×1 时与「相对建筑中心」等价。逻辑占格仍只由 gridPos 决定。
+     */
+    private getPointerOffsetForGrid(gridPos: Vec2, _size: Size | null): Vec2 {
         if (!this.enablePlacementDragOffset) {
             return new Vec2(0, 0);
         }
         if (!this.lastPointerLocalPos) {
             return new Vec2(0, 0);
         }
+        const ptr = this.lastPointerLocalPos;
+        const cellCenter = MapModel.getInstance().gridToWorld(gridPos, new Size(this.tileSize, this.tileSize), this);
+        return new Vec2(ptr.x - cellCenter.x, ptr.y - cellCenter.y);
+    }
+
+    /**
+     * 预览遮罩：尺寸优先与 curTileNode 一致（与 placeBuilding/buildDecor 同源）。
+     * 开启拖动偏移时：建筑锚点 + 相对单格中心的偏移，与 getPointerOffsetForGrid 一致。
+     */
+    public applyTileMaskPreviewWorldPosition(gridPos: Vec2, screenPos?: Vec2) {
+        const mapUi = this.mapContainer?.getComponent(UITransform);
+        if (!mapUi || !this.tileMaskNode) {
+            return;
+        }
+        const maskUi = this.tileMaskNode.getComponent(UITransform);
+        if (!maskUi) {
+            return;
+        }
+        const previewUi = this.curTileNode?.getComponent(UITransform);
+        const size = previewUi?.contentSize ?? maskUi.contentSize;
+
+        if (this.enablePlacementDragOffset) {
+            if (screenPos) {
+                const w = this.mainCamera.screenToWorld(new Vec3(screenPos.x, screenPos.y, 0));
+                const lp = mapUi.convertToNodeSpaceAR(new Vec3(w.x, w.y, 0));
+                this.lastPointerLocalPos = new Vec2(lp.x, lp.y);
+            }
+            if (this.lastPointerLocalPos) {
+                const off = this.getPointerOffsetForGrid(gridPos, size);
+                const base = MapModel.getInstance().gridToWorld(gridPos, size, this);
+                const local = new Vec3(base.x + off.x, base.y + off.y, base.z);
+                this.tileMaskNode.setWorldPosition(mapUi.convertToWorldSpaceAR(local));
+                return;
+            }
+        }
+
         const base = MapModel.getInstance().gridToWorld(gridPos, size, this);
-        // 不做强制 clamp，保证拖拽时视觉更“跟手”；逻辑占格仍由 gridPos 决定
-        return new Vec2(this.lastPointerLocalPos.x - base.x, this.lastPointerLocalPos.y - base.y);
+        this.tileMaskNode.setWorldPosition(mapUi.convertToWorldSpaceAR(base));
     }
 
     /** 调试用：单格中心，不受 tileMask 当前尺寸影响（避免 gridToWorld(..., null) 随预览家具尺寸整体偏移） */
@@ -648,20 +689,18 @@ export class MapEditor extends Component {
                 }
                 return;
             }
+            const floorBelong = this.getDecorPlacementFloorBelong(gridPos);
             const hoverItem = this.houseItems.get(`${gridPos.x},${gridPos.y}`);
-            this.logDecorHoverDebug(gridPos, hoverItem?.belong);
+            this.logDecorHoverDebug(gridPos, hoverItem?.belong ?? floorBelong);
             if (this.checkPlacementDecorValidity(gridPos)) {
-                if (this.houseItems.has(`${gridPos.x},${gridPos.y}`)) {
-                    const item = this.houseItems.get(`${gridPos.x},${gridPos.y}`);
-                    if (item.tileType == "Floor" && item.belong) {
-                        const islike = this.isCanPlaceDecor(item.belong);
-                        if (islike) {
-                            this.maskSp.color = new Color('#00FF296A');
-                            this.curGride = gridPos;
-                        } else {
-                            if (this.curGride.x != gridPos.x || this.curGride.y != gridPos.y) {
-                                this.maskSp.color = new Color('#FF00006A');
-                            }
+                if (floorBelong) {
+                    const islike = this.enableDecorStackPlacement || this.isCanPlaceDecor(floorBelong);
+                    if (islike) {
+                        this.maskSp.color = new Color('#00FF296A');
+                        this.curGride = gridPos;
+                    } else {
+                        if (this.curGride.x != gridPos.x || this.curGride.y != gridPos.y) {
+                            this.maskSp.color = new Color('#FF00006A');
                         }
                     }
                 }
@@ -989,6 +1028,33 @@ export class MapEditor extends Component {
         this.npcTileDebugGraphics.fill();
     }
 
+    /** 落地家具所属房间：锚点格为地板时直接取 belong；堆叠模式下占区任一格压在带 belong 的地板上即可 */
+    private getDecorPlacementFloorBelong(gridPos: Vec2): string | null {
+        const ui = this.curTileNode?.getComponent(UITransform) ?? this.tileMaskNode?.getComponent(UITransform);
+        if (!ui) {
+            return null;
+        }
+        const buildingSize = MapModel.getInstance().getBuildingSize(ui.contentSize, this);
+        const atAnchor = this.houseItems.get(`${gridPos.x},${gridPos.y}`);
+        if (atAnchor && atAnchor.tileType === "Floor" && atAnchor.belong) {
+            return atAnchor.belong;
+        }
+        if (!this.enableDecorStackPlacement) {
+            return null;
+        }
+        for (let x = 0; x < buildingSize.x; x++) {
+            for (let y = 0; y < buildingSize.y; y++) {
+                const cx = gridPos.x + x;
+                const cy = gridPos.y - y;
+                const it = this.houseItems.get(`${cx},${cy}`);
+                if (it && it.tileType === "Floor" && it.belong) {
+                    return it.belong;
+                }
+            }
+        }
+        return null;
+    }
+
     // 构建家具
     buildDecor(gridPos: Vec2) {
         if (this.isCurrentHouseDoorDecor()) {
@@ -1000,60 +1066,51 @@ export class MapEditor extends Component {
             return;
         }
 
-        if (this.houseItems.has(`${gridPos.x},${gridPos.y}`)) {
-            const item = this.houseItems.get(`${gridPos.x},${gridPos.y}`);
-            if (item.tileType == "Floor" && item.belong) {
-                if (this.checkPlacementDecorValidity(gridPos) && this.isCanPlaceDecor(item.belong)) {
-                    const manager = MapManager.GetInstance();
-                    // const size = manager.getDecorSize(this.curTileNode.name);
-                    // const buildingSize = MapModel.getInstance().getBuildingSize(size , this);
-                    // 创建新的图块
-                    const tile = MapManager.GetInstance().getMapCurTileNode(this.curTileNode.name , this.curTileNode["tileType"]);
-                    tile.name = this.curTileNode.name + "#" + this.curTileNode["tileType"]
-                    const UIT = tile.getComponent(UITransform)
-                    const size = UIT.contentSize
-                    const buildingSize = MapModel.getInstance().getBuildingSize(size , this);
+        const floorBelong = this.getDecorPlacementFloorBelong(gridPos);
+        if (!floorBelong) {
+            return;
+        }
 
-                    // 放置建筑
-                    const worldPos = MapModel.getInstance().gridToWorld(gridPos , size , this);
-                    const offset = this.getPointerOffsetForGrid(gridPos, size);
-                    tile.setPosition(worldPos.x + offset.x, worldPos.y + offset.y, worldPos.z);
-                    const previewScaleX = this.curTileNode?.getScale()?.x ?? 1;
-                    const flipX = previewScaleX < 0 ? -1 : 1;
-                    const tileScale = tile.getScale();
-                    tile.setScale(flipX, tileScale.y, tileScale.z);
-                    this.mapContainer.addChild(tile);
+        if (this.checkPlacementDecorValidity(gridPos) && (this.enableDecorStackPlacement || this.isCanPlaceDecor(floorBelong))) {
+            const manager = MapManager.GetInstance();
+            const tile = MapManager.GetInstance().getMapCurTileNode(this.curTileNode.name , this.curTileNode["tileType"]);
+            tile.name = this.curTileNode.name + "#" + this.curTileNode["tileType"]
+            const UIT = tile.getComponent(UITransform)
+            const size = UIT.contentSize
+            const buildingSize = MapModel.getInstance().getBuildingSize(size , this);
 
-                    const house = this.allHouse.get(item.belong);
-                    if (this.hasSameDecorAtGrid(house, gridPos, tile.name)) {
-                        tile.destroy();
-                        return;
-                    }
-                    house.decor.set(this.buildDecorStackKey(gridPos, tile.name), {
-                        tile: tile,
-                        tileType: "Decor",
-                        width: size.width,
-                        height: size.height,
-                        belong: item.belong,
-                        position: `${gridPos.x},${gridPos.y}`,
-                        flipX,
-                        offsetX: offset.x,
-                        offsetY: offset.y
-                    });
+            // 放置建筑
+            const worldPos = MapModel.getInstance().gridToWorld(gridPos , size , this);
+            const offset = this.getPointerOffsetForGrid(gridPos, size);
+            tile.setPosition(worldPos.x + offset.x, worldPos.y + offset.y, worldPos.z);
+            const previewScaleX = this.curTileNode?.getScale()?.x ?? 1;
+            const flipX = previewScaleX < 0 ? -1 : 1;
+            const tileScale = tile.getScale();
+            tile.setScale(flipX, tileScale.y, tileScale.z);
+            this.mapContainer.addChild(tile);
 
-                    // 更新网格数据
-                    for (let x = 0; x < buildingSize.x; x++) {
-                        for (let y = 0; y < buildingSize.y; y++) {
-                            const gridX = gridPos.x + x;
-                            const gridY = gridPos.y - y;
-                            this.mapData[gridX][gridY] = 3;
-                        }
-                    }
-
-                    // 检查按钮的显隐
-                    manager.getMapEditorUI().checkButtonVisible();
-                }
+            const house = this.allHouse.get(floorBelong);
+            if (!this.enableDecorStackPlacement && this.hasSameDecorAtGrid(house, gridPos, tile.name)) {
+                tile.destroy();
+                return;
             }
+            house.decor.set(this.buildDecorStackKey(gridPos, tile.name), {
+                tile: tile,
+                tileType: "Decor",
+                width: size.width,
+                height: size.height,
+                belong: floorBelong,
+                position: `${gridPos.x},${gridPos.y}`,
+                flipX,
+                offsetX: offset.x,
+                offsetY: offset.y
+            });
+
+            // 更新网格数据
+            this.markDecorFootprintMapData(gridPos, buildingSize);
+
+            // 检查按钮的显隐
+            manager.getMapEditorUI().checkButtonVisible();
         }
     }
 
@@ -1742,13 +1799,7 @@ export class MapEditor extends Component {
                         this.moveItem.tile.setPosition(worldPos.x + ox, worldPos.y + oy, worldPos.z);
 
                         // 更新网格数据
-                        for (let x = 0; x < buildingSize.x; x++) {
-                            for (let y = 0; y < buildingSize.y; y++) {
-                                const gridX = gridPos.x + x;
-                                const gridY = gridPos.y - y;
-                                this.mapData[gridX][gridY] = 3;
-                            }
-                        }
+                        this.markDecorFootprintMapData(gridPos, buildingSize);
 
                         const house = this.allHouse.get(this.moveItem.belong);
                         const movingDecorKey = this.moveItem.decorKey || '';
@@ -3140,23 +3191,50 @@ export class MapEditor extends Component {
 
         let pack: Vec2[] = [];
         let hasDecorCollision = false;
+        let hasAnyPlaceableFloor = false;
         for (let x = 0; x < buildingSize.x; x++) {
             for (let y = 0; y < buildingSize.y; y++) {
                 const checkX1 = gridPos.x + x;
                 const checkY1 = gridPos.y - y;
 
                 pack.push(new Vec2(checkX1, checkY1));
-                if (this.mapData[checkX1][checkY1] !== 1 && this.mapData[checkX1][checkY1] !== 3) {
-                    return false;
+                const cell = this.mapData[checkX1][checkY1];
+                if (cell === 1 || cell === 3) {
+                    hasAnyPlaceableFloor = true;
                 }
-                if (this.mapData[checkX1][checkY1] === 3) {
+                if (cell === 3) {
                     hasDecorCollision = true;
+                }
+                if (!this.enableDecorStackPlacement) {
+                    if (cell !== 1 && cell !== 3) {
+                        return false;
+                    }
                 }
             }
         }
 
+        const currentDecorId = this.getCurrentDecorConfigId();
+        const currentDecorCfg = AppConst.JSONManager.getItem("mapDecor", currentDecorId);
+        const placeTypes = this.parseDecorTypeSet(currentDecorCfg?.place_type);
+
+        const hasPlaceTypeConfig = currentDecorCfg?.place_type != null && String(currentDecorCfg.place_type).trim() !== '';
+
+        // 允许堆叠：占格至少有一格落在可摆放区（地板/已有家具层）即可；不要求整只占满室内地板
+        if (this.enableDecorStackPlacement) {
+            if (!hasAnyPlaceableFloor) {
+                return false;
+            }
+            if (!hasDecorCollision) {
+                if (hasPlaceTypeConfig) {
+                    return placeTypes.has('0');
+                }
+                return true;
+            }
+            return true;
+        }
+
         let isResult = false;
-        let gr: Vec2[] = [new Vec2(0, -1), new Vec2(0, 1), new Vec2(-1, 0), new Vec2(1, 0)]
+        const gr: Vec2[] = [new Vec2(0, -1), new Vec2(0, 1), new Vec2(-1, 0), new Vec2(1, 0)];
         pack.forEach((child) => {
             for (let i = 0; i < gr.length; i++) {
                 const element = gr[i];
@@ -3169,17 +3247,11 @@ export class MapEditor extends Component {
             if (isResult) {
                 return;
             }
-        })
+        });
 
         if (isResult) {
             return false;
         }
-
-        const currentDecorId = this.getCurrentDecorConfigId();
-        const currentDecorCfg = AppConst.JSONManager.getItem("mapDecor", currentDecorId);
-        const placeTypes = this.parseDecorTypeSet(currentDecorCfg?.place_type);
-
-        const hasPlaceTypeConfig = currentDecorCfg?.place_type != null && String(currentDecorCfg.place_type).trim() !== '';
 
         // 没发生碰撞：有 place_type 时必须包含 0 才能落地；无 place_type 走旧逻辑（可落地）
         if (!hasDecorCollision) {
@@ -3219,6 +3291,24 @@ export class MapEditor extends Component {
         }
 
         return true;
+    }
+
+    /** 家具占格写入 mapData：堆叠模式下仅覆盖原为地板(1)或家具层(3)的格，避免室外等格被误标为占用 */
+    private markDecorFootprintMapData(gridPos: Vec2, buildingSize: Vec2) {
+        for (let x = 0; x < buildingSize.x; x++) {
+            for (let y = 0; y < buildingSize.y; y++) {
+                const gridX = gridPos.x + x;
+                const gridY = gridPos.y - y;
+                if (this.enableDecorStackPlacement) {
+                    const v = this.mapData[gridX][gridY];
+                    if (v === 1 || v === 3) {
+                        this.mapData[gridX][gridY] = 3;
+                    }
+                } else {
+                    this.mapData[gridX][gridY] = 3;
+                }
+            }
+        }
     }
 
     private checkPlacementFloorValidity(gridPos: Vec2): boolean {
@@ -4707,14 +4797,7 @@ export class MapEditor extends Component {
                 });
 
                 if (decorType === "Decor") {
-                    // 更新网格数据
-                    for (let x = 0; x < buildingSize.x; x++) {
-                        for (let y = 0; y < buildingSize.y; y++) {
-                            const gridX = gridPos.x + x;
-                            const gridY = gridPos.y - y;
-                            this.mapData[gridX][gridY] = 3;
-                        }
-                    }
+                    this.markDecorFootprintMapData(gridPos, buildingSize);
                 }
             }
         }
