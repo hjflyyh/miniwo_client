@@ -2,7 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "29e40c2a-e3a1-45b3-a9f0-0a20c452aeff",
+  "uuid": "5fd5fef5-bcbf-40a2-9ef3-0f03dcfd73ed",
   "files": [
     ".json",
     ".png"
@@ -10,14 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "29e40c2a-e3a1-45b3-a9f0-0a20c452aeff@6c48a",
-      "displayName": "pixel_clock",
+      "uuid": "5fd5fef5-bcbf-40a2-9ef3-0f03dcfd73ed@6c48a",
+      "displayName": "clock_blue",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "29e40c2a-e3a1-45b3-a9f0-0a20c452aeff",
+        "imageUuidOrDatabaseUri": "5fd5fef5-bcbf-40a2-9ef3-0f03dcfd73ed",
         "isUuid": true,
         "visible": false,
         "minfilter": "linear",
@@ -34,8 +34,8 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "29e40c2a-e3a1-45b3-a9f0-0a20c452aeff@f9941",
-      "displayName": "pixel_clock",
+      "uuid": "5fd5fef5-bcbf-40a2-9ef3-0f03dcfd73ed@f9941",
+      "displayName": "clock_blue",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
@@ -113,7 +113,7 @@
           ]
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "29e40c2a-e3a1-45b3-a9f0-0a20c452aeff@6c48a",
+        "imageUuidOrDatabaseUri": "5fd5fef5-bcbf-40a2-9ef3-0f03dcfd73ed@6c48a",
         "atlasUuid": "",
         "trimType": "auto"
       },
@@ -129,6 +129,6 @@
     "type": "sprite-frame",
     "fixAlphaTransparencyArtifacts": false,
     "hasAlpha": true,
-    "redirect": "29e40c2a-e3a1-45b3-a9f0-0a20c452aeff@6c48a"
+    "redirect": "5fd5fef5-bcbf-40a2-9ef3-0f03dcfd73ed@6c48a"
   }
 }

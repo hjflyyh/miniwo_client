@@ -11,7 +11,7 @@
     "6c48a": {
       "importer": "texture",
       "uuid": "c2ebf3cc-5000-4df2-a54d-d81ea3df0dc6@6c48a",
-      "displayName": "Radio",
+      "displayName": "radio",
       "id": "6c48a",
       "name": "texture",
       "userData": {
@@ -35,7 +35,7 @@
     "f9941": {
       "importer": "sprite-frame",
       "uuid": "c2ebf3cc-5000-4df2-a54d-d81ea3df0dc6@f9941",
-      "displayName": "Radio",
+      "displayName": "radio",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {

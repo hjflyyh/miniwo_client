@@ -2,7 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "6aff186a-7e36-48ac-b88f-c1807bf3c5a1",
+  "uuid": "370dcb1c-0993-4ecf-b865-2f5be1877b47",
   "files": [
     ".json",
     ".png"
@@ -10,14 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "6aff186a-7e36-48ac-b88f-c1807bf3c5a1@6c48a",
-      "displayName": "wooden_coffee_cup",
+      "uuid": "370dcb1c-0993-4ecf-b865-2f5be1877b47@6c48a",
+      "displayName": "wooden_coffee_cup_yellow",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "6aff186a-7e36-48ac-b88f-c1807bf3c5a1",
+        "imageUuidOrDatabaseUri": "370dcb1c-0993-4ecf-b865-2f5be1877b47",
         "isUuid": true,
         "visible": false,
         "minfilter": "linear",
@@ -34,8 +34,8 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "6aff186a-7e36-48ac-b88f-c1807bf3c5a1@f9941",
-      "displayName": "wooden_coffee_cup",
+      "uuid": "370dcb1c-0993-4ecf-b865-2f5be1877b47@f9941",
+      "displayName": "wooden_coffee_cup_yellow",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
@@ -113,7 +113,7 @@
           ]
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "6aff186a-7e36-48ac-b88f-c1807bf3c5a1@6c48a",
+        "imageUuidOrDatabaseUri": "370dcb1c-0993-4ecf-b865-2f5be1877b47@6c48a",
         "atlasUuid": "",
         "trimType": "auto"
       },
@@ -129,6 +129,6 @@
     "type": "sprite-frame",
     "fixAlphaTransparencyArtifacts": false,
     "hasAlpha": true,
-    "redirect": "6aff186a-7e36-48ac-b88f-c1807bf3c5a1@6c48a"
+    "redirect": "370dcb1c-0993-4ecf-b865-2f5be1877b47@6c48a"
   }
 }

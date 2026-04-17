@@ -13,7 +13,7 @@
     "place_type": "0#5",
     "decor_type": "5",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "0",
     "dialogue_id": null
   },
   "2": {
@@ -30,7 +30,7 @@
     "place_type": "0#5",
     "decor_type": "5",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "0",
     "dialogue_id": null
   },
   "3": {
@@ -47,7 +47,7 @@
     "place_type": "0#5",
     "decor_type": "5",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "0",
     "dialogue_id": null
   },
   "4": {
@@ -64,7 +64,7 @@
     "place_type": "0#5",
     "decor_type": "3",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "1",
     "dialogue_id": null
   },
   "5": {
@@ -81,7 +81,7 @@
     "place_type": "0#5",
     "decor_type": "2",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": null
   },
   "6": {
@@ -98,7 +98,7 @@
     "place_type": "0#5",
     "decor_type": "2",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": null
   },
   "7": {
@@ -115,7 +115,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": null
   },
   "8": {
@@ -132,7 +132,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": null
   },
   "9": {
@@ -149,7 +149,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "10": {
@@ -166,7 +166,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "6",
     "dialogue_id": null
   },
   "11": {
@@ -183,7 +183,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "6",
     "dialogue_id": null
   },
   "12": {
@@ -200,7 +200,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "6",
     "dialogue_id": null
   },
   "13": {
@@ -217,7 +217,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "6",
     "dialogue_id": null
   },
   "14": {
@@ -234,7 +234,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "15": {
@@ -251,7 +251,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": null
   },
   "16": {
@@ -268,7 +268,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": null
   },
   "17": {
@@ -285,7 +285,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "6",
     "dialogue_id": null
   },
   "18": {
@@ -302,7 +302,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "7",
     "dialogue_id": null
   },
   "19": {
@@ -319,7 +319,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "20": {
@@ -336,7 +336,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "21": {
@@ -353,7 +353,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "22": {
@@ -370,7 +370,7 @@
     "place_type": "0#1#2#3#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "23": {
@@ -387,7 +387,7 @@
     "place_type": "0#1#2#3#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "24": {
@@ -404,7 +404,7 @@
     "place_type": "0#1#2#3#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "25": {
@@ -421,7 +421,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "26": {
@@ -438,7 +438,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "27": {
@@ -455,7 +455,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "7",
     "dialogue_id": null
   },
   "28": {
@@ -472,7 +472,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "7",
     "dialogue_id": null
   },
   "29": {
@@ -489,7 +489,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "7",
     "dialogue_id": null
   },
   "30": {
@@ -506,7 +506,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "9",
     "dialogue_id": null
   },
   "31": {
@@ -523,7 +523,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "9",
     "dialogue_id": null
   },
   "32": {
@@ -540,7 +540,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "33": {
@@ -557,7 +557,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "34": {
@@ -574,7 +574,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "35": {
@@ -642,7 +642,7 @@
     "place_type": "0#5",
     "decor_type": "6",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "11",
     "dialogue_id": null
   },
   "39": {
@@ -659,7 +659,7 @@
     "place_type": "0#5",
     "decor_type": "6",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "11",
     "dialogue_id": null
   },
   "40": {
@@ -676,7 +676,7 @@
     "place_type": "0#5",
     "decor_type": "6",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "11",
     "dialogue_id": null
   },
   "41": {
@@ -693,7 +693,7 @@
     "place_type": "0#5",
     "decor_type": "6",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "11",
     "dialogue_id": null
   },
   "42": {
@@ -710,7 +710,7 @@
     "place_type": "0#5",
     "decor_type": "6",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "11",
     "dialogue_id": null
   },
   "43": {
@@ -727,7 +727,7 @@
     "place_type": "0#5",
     "decor_type": "6",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "11",
     "dialogue_id": null
   },
   "44": {
@@ -744,7 +744,7 @@
     "place_type": "0#5",
     "decor_type": "6",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "11",
     "dialogue_id": null
   },
   "45": {
@@ -761,7 +761,7 @@
     "place_type": "0#5",
     "decor_type": "6",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "11",
     "dialogue_id": null
   },
   "46": {
@@ -778,7 +778,7 @@
     "place_type": "0#5",
     "decor_type": "6",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "11",
     "dialogue_id": null
   },
   "47": {
@@ -795,7 +795,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "8",
     "dialogue_id": "1001100106"
   },
   "48": {
@@ -812,7 +812,7 @@
     "place_type": "0#5",
     "decor_type": "1",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": "1001100103#1001100104#1001100105"
   },
   "49": {
@@ -829,7 +829,7 @@
     "place_type": "0#5",
     "decor_type": "1",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": "1001100103#1001100104#1001100105"
   },
   "50": {
@@ -846,7 +846,7 @@
     "place_type": "0#5",
     "decor_type": "1",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": "1001100103#1001100104#1001100105"
   },
   "51": {
@@ -863,7 +863,7 @@
     "place_type": "0#5",
     "decor_type": "1",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": "1001100103#1001100104#1001100105"
   },
   "52": {
@@ -880,7 +880,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "7",
     "dialogue_id": "1001100168"
   },
   "53": {
@@ -897,7 +897,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "7",
     "dialogue_id": "1001100167"
   },
   "54": {
@@ -914,7 +914,7 @@
     "place_type": "0#5",
     "decor_type": "1",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": "1001100166"
   },
   "55": {
@@ -930,7 +930,7 @@
     "spine_pos": "0#0",
     "place_type": "0#5",
     "decor_type": "2",
-    "type": "0",
+    "type": "2",
     "sub_type": null,
     "dialogue_id": "1001100135#1001100159"
   },
@@ -947,7 +947,7 @@
     "spine_pos": "0#0",
     "place_type": "0#5",
     "decor_type": "2",
-    "type": "0",
+    "type": "2",
     "sub_type": null,
     "dialogue_id": "1001100158"
   },
@@ -965,7 +965,7 @@
     "place_type": "0#5",
     "decor_type": "2",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": "1001100157"
   },
   "58": {
@@ -982,7 +982,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": "1001100156"
   },
   "59": {
@@ -999,7 +999,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": "1001100155"
   },
   "60": {
@@ -1016,7 +1016,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": "1001100155"
   },
   "61": {
@@ -1033,7 +1033,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": "1001100155"
   },
   "62": {
@@ -1050,7 +1050,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": "1001100155"
   },
   "63": {
@@ -1067,7 +1067,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": "1001100155"
   },
   "64": {
@@ -1084,7 +1084,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": "1001100154"
   },
   "65": {
@@ -1101,7 +1101,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": "1001100152#1001100153"
   },
   "66": {
@@ -1118,7 +1118,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": "1001100154"
   },
   "67": {
@@ -1135,7 +1135,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": "1001100151"
   },
   "68": {
@@ -1152,7 +1152,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "9",
     "dialogue_id": "1001100143"
   },
   "69": {
@@ -1169,7 +1169,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": "1001100141"
   },
   "70": {
@@ -1186,7 +1186,7 @@
     "place_type": "0#5",
     "decor_type": "5",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "0",
     "dialogue_id": "1001100140"
   },
   "71": {
@@ -1203,7 +1203,7 @@
     "place_type": "0#5",
     "decor_type": "5",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "0",
     "dialogue_id": "1001100139"
   },
   "72": {
@@ -1220,7 +1220,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "73": {
@@ -1237,7 +1237,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": "1001100131"
   },
   "74": {
@@ -1254,7 +1254,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": "1001100131#1001100136"
   },
   "75": {
@@ -1270,7 +1270,7 @@
     "spine_pos": "0#0",
     "place_type": "0#5",
     "decor_type": "0",
-    "type": "0",
+    "type": "2",
     "sub_type": null,
     "dialogue_id": "1001100135"
   },
@@ -1288,7 +1288,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": "1001100134"
   },
   "77": {
@@ -1305,7 +1305,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": "1001100133"
   },
   "78": {
@@ -1322,7 +1322,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": "1001100132"
   },
   "79": {
@@ -1339,7 +1339,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "9",
     "dialogue_id": "1001100130"
   },
   "80": {
@@ -1356,7 +1356,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "9",
     "dialogue_id": "1001100129"
   },
   "81": {
@@ -1373,7 +1373,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "9",
     "dialogue_id": "1001100128"
   },
   "82": {
@@ -1390,7 +1390,7 @@
     "place_type": "0#5",
     "decor_type": "2",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": "1001100127"
   },
   "83": {
@@ -1407,7 +1407,7 @@
     "place_type": "0#5",
     "decor_type": "2",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": "1001100102#1001100126"
   },
   "84": {
@@ -1424,7 +1424,7 @@
     "place_type": "0#5",
     "decor_type": "2",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": "1001100125"
   },
   "85": {
@@ -1441,7 +1441,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": "1001100124"
   },
   "86": {
@@ -1458,7 +1458,7 @@
     "place_type": "0#5",
     "decor_type": "1",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": "1001100123#1001100138"
   },
   "87": {
@@ -1475,7 +1475,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": "1001100121"
   },
   "88": {
@@ -1492,7 +1492,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": "1001100120"
   },
   "89": {
@@ -1509,7 +1509,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": "1001100119"
   },
   "90": {
@@ -1526,7 +1526,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": "1001100118"
   },
   "91": {
@@ -1543,7 +1543,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": "1001100117"
   },
   "92": {
@@ -1560,7 +1560,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "5",
     "dialogue_id": "1001100116"
   },
   "93": {
@@ -1577,7 +1577,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "5",
     "dialogue_id": "1001100115"
   },
   "94": {
@@ -1594,7 +1594,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "95": {
@@ -1611,7 +1611,7 @@
     "place_type": "0#5",
     "decor_type": "5",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "0",
     "dialogue_id": "1001100112"
   },
   "96": {
@@ -1628,7 +1628,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "7",
     "dialogue_id": "1001100111"
   },
   "97": {
@@ -1645,7 +1645,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "7",
     "dialogue_id": "1001100110"
   },
   "98": {
@@ -1662,7 +1662,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "7",
     "dialogue_id": "1001100109"
   },
   "99": {
@@ -1679,7 +1679,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "5",
     "dialogue_id": "1001100108"
   },
   "100": {
@@ -1696,7 +1696,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "5",
     "dialogue_id": "1001100107"
   },
   "101": {
@@ -1730,7 +1730,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "6",
     "dialogue_id": null
   },
   "103": {
@@ -1747,7 +1747,7 @@
     "place_type": "0#5",
     "decor_type": "5",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "0",
     "dialogue_id": null
   },
   "104": {
@@ -1764,7 +1764,7 @@
     "place_type": "0#5",
     "decor_type": "2",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": null
   },
   "105": {
@@ -1781,7 +1781,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "106": {
@@ -1798,7 +1798,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": null
   },
   "107": {
@@ -1815,7 +1815,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "108": {
@@ -1832,7 +1832,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": null
   },
   "109": {
@@ -1849,7 +1849,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "110": {
@@ -1900,7 +1900,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "113": {
@@ -1934,7 +1934,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": null
   },
   "115": {
@@ -1951,7 +1951,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": null
   },
   "116": {
@@ -1968,7 +1968,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": null
   },
   "117": {
@@ -1985,7 +1985,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "118": {
@@ -2002,7 +2002,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "119": {
@@ -2019,7 +2019,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "120": {
@@ -2036,7 +2036,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "121": {
@@ -2053,7 +2053,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "122": {
@@ -2070,7 +2070,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "123": {
@@ -2087,7 +2087,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": null
   },
   "124": {
@@ -2104,7 +2104,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": null
   },
   "125": {
@@ -2121,7 +2121,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "8",
     "dialogue_id": null
   },
   "126": {
@@ -2138,7 +2138,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "8",
     "dialogue_id": null
   },
   "127": {
@@ -2155,7 +2155,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "8",
     "dialogue_id": null
   },
   "128": {
@@ -2172,7 +2172,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "8",
     "dialogue_id": null
   },
   "129": {
@@ -2189,7 +2189,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "8",
     "dialogue_id": null
   },
   "130": {
@@ -2206,7 +2206,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "8",
     "dialogue_id": null
   },
   "131": {
@@ -2223,7 +2223,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "8",
     "dialogue_id": null
   },
   "132": {
@@ -2240,7 +2240,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "8",
     "dialogue_id": null
   },
   "133": {
@@ -2257,7 +2257,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "8",
     "dialogue_id": null
   },
   "134": {
@@ -2274,7 +2274,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "8",
     "dialogue_id": null
   },
   "135": {
@@ -2291,7 +2291,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "8",
     "dialogue_id": null
   },
   "136": {
@@ -2308,7 +2308,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "8",
     "dialogue_id": null
   },
   "137": {
@@ -2325,7 +2325,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "8",
     "dialogue_id": null
   },
   "138": {
@@ -2342,7 +2342,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "8",
     "dialogue_id": null
   },
   "139": {
@@ -2359,7 +2359,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "8",
     "dialogue_id": null
   },
   "140": {
@@ -2376,7 +2376,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "8",
     "dialogue_id": null
   },
   "141": {
@@ -2393,7 +2393,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "8",
     "dialogue_id": null
   },
   "142": {
@@ -2410,7 +2410,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "8",
     "dialogue_id": null
   },
   "143": {
@@ -2427,7 +2427,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "8",
     "dialogue_id": null
   },
   "144": {
@@ -2444,7 +2444,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "8",
     "dialogue_id": null
   },
   "145": {
@@ -2461,7 +2461,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "8",
     "dialogue_id": null
   },
   "146": {
@@ -2478,7 +2478,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "8",
     "dialogue_id": null
   },
   "147": {
@@ -2495,7 +2495,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "8",
     "dialogue_id": null
   },
   "148": {
@@ -2512,7 +2512,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "149": {
@@ -2529,7 +2529,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "150": {
@@ -2546,7 +2546,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "151": {
@@ -2563,7 +2563,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "152": {
@@ -2580,7 +2580,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "153": {
@@ -2597,7 +2597,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": null
   },
   "154": {
@@ -2614,7 +2614,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": null
   },
   "155": {
@@ -2631,7 +2631,7 @@
     "place_type": "0#1#5",
     "decor_type": "0",
     "type": "1",
-    "sub_type": null,
+    "sub_type": "6",
     "dialogue_id": null
   },
   "156": {
@@ -2647,8 +2647,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "0",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "157": {
@@ -2664,8 +2664,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "0",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "158": {
@@ -2681,8 +2681,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "0",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "6",
     "dialogue_id": null
   },
   "159": {
@@ -2698,8 +2698,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "0",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "8",
     "dialogue_id": null
   },
   "160": {
@@ -2715,8 +2715,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "0",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "8",
     "dialogue_id": null
   },
   "161": {
@@ -2732,8 +2732,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "0",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "8",
     "dialogue_id": null
   },
   "162": {
@@ -2749,8 +2749,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "0",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "8",
     "dialogue_id": null
   },
   "163": {
@@ -2766,8 +2766,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "0",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "8",
     "dialogue_id": null
   },
   "164": {
@@ -2783,8 +2783,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "0",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "8",
     "dialogue_id": null
   },
   "165": {
@@ -2800,8 +2800,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "0",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "8",
     "dialogue_id": null
   },
   "166": {
@@ -2817,8 +2817,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "0",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "8",
     "dialogue_id": null
   },
   "167": {
@@ -2834,8 +2834,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "0",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "8",
     "dialogue_id": null
   },
   "168": {
@@ -2851,8 +2851,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "0",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "9",
     "dialogue_id": null
   },
   "169": {
@@ -2868,8 +2868,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "0",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "9",
     "dialogue_id": null
   },
   "170": {
@@ -2885,8 +2885,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "0",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "6",
     "dialogue_id": null
   },
   "171": {
@@ -2902,8 +2902,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "0",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "6",
     "dialogue_id": null
   },
   "172": {
@@ -2919,8 +2919,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "0",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "173": {
@@ -2936,8 +2936,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "0",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "8",
     "dialogue_id": null
   },
   "174": {
@@ -2953,8 +2953,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "0",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "8",
     "dialogue_id": null
   },
   "175": {
@@ -2970,8 +2970,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "0",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "8",
     "dialogue_id": null
   },
   "176": {
@@ -2987,8 +2987,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "0",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "9",
     "dialogue_id": null
   },
   "177": {
@@ -3004,8 +3004,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "0",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "178": {
@@ -3021,8 +3021,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "0",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "9",
     "dialogue_id": null
   },
   "179": {
@@ -3038,8 +3038,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "0",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "180": {
@@ -3175,7 +3175,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "188": {
@@ -3192,7 +3192,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "189": {
@@ -3209,7 +3209,7 @@
     "place_type": "0#5",
     "decor_type": "2",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": null
   },
   "190": {
@@ -3226,7 +3226,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": null
   },
   "191": {
@@ -3243,7 +3243,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": null
   },
   "192": {
@@ -3260,7 +3260,7 @@
     "place_type": "0#5",
     "decor_type": "5",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "0",
     "dialogue_id": null
   },
   "193": {
@@ -3277,7 +3277,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "194": {
@@ -3294,7 +3294,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": null
   },
   "195": {
@@ -3311,7 +3311,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": null
   },
   "196": {
@@ -3328,7 +3328,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": null
   },
   "197": {
@@ -3345,7 +3345,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "5",
     "dialogue_id": null
   },
   "198": {
@@ -3362,7 +3362,7 @@
     "place_type": "0#5",
     "decor_type": "2",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": null
   },
   "199": {
@@ -3379,7 +3379,7 @@
     "place_type": "0#5",
     "decor_type": "2",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": null
   },
   "200": {
@@ -3396,7 +3396,7 @@
     "place_type": "0#5",
     "decor_type": "2",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": null
   },
   "201": {
@@ -3413,7 +3413,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "202": {
@@ -3430,7 +3430,7 @@
     "place_type": "0#5",
     "decor_type": "2",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "10",
     "dialogue_id": null
   },
   "203": {
@@ -3447,7 +3447,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "204": {
@@ -3464,7 +3464,7 @@
     "place_type": "0#5",
     "decor_type": "2",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": null
   },
   "205": {
@@ -3481,7 +3481,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "206": {
@@ -3498,7 +3498,7 @@
     "place_type": "0#5",
     "decor_type": "5",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "0",
     "dialogue_id": null
   },
   "207": {
@@ -3515,7 +3515,7 @@
     "place_type": "0#5",
     "decor_type": "2",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": null
   },
   "208": {
@@ -3532,7 +3532,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "209": {
@@ -3549,7 +3549,7 @@
     "place_type": "0#5",
     "decor_type": "2",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": null
   },
   "210": {
@@ -3566,7 +3566,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": null
   },
   "211": {
@@ -3583,7 +3583,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "5",
     "dialogue_id": null
   },
   "212": {
@@ -3600,7 +3600,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "5",
     "dialogue_id": null
   },
   "213": {
@@ -3617,7 +3617,7 @@
     "place_type": "0#5",
     "decor_type": "5",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "0",
     "dialogue_id": null
   },
   "214": {
@@ -3634,7 +3634,7 @@
     "place_type": "0#5",
     "decor_type": "5",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "0",
     "dialogue_id": null
   },
   "215": {
@@ -3651,7 +3651,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": null
   },
   "216": {
@@ -3668,7 +3668,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": null
   },
   "217": {
@@ -3685,7 +3685,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "5",
     "dialogue_id": null
   },
   "218": {
@@ -3702,7 +3702,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "5",
     "dialogue_id": null
   },
   "219": {
@@ -3719,7 +3719,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "5",
     "dialogue_id": null
   },
   "220": {
@@ -3736,7 +3736,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "5",
     "dialogue_id": null
   },
   "221": {
@@ -3753,7 +3753,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "5",
     "dialogue_id": null
   },
   "222": {
@@ -3770,7 +3770,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "5",
     "dialogue_id": null
   },
   "223": {
@@ -3787,7 +3787,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "5",
     "dialogue_id": null
   },
   "224": {
@@ -3804,7 +3804,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "5",
     "dialogue_id": null
   },
   "225": {
@@ -3821,7 +3821,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "5",
     "dialogue_id": null
   },
   "226": {
@@ -3838,7 +3838,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": null
   },
   "227": {
@@ -3855,7 +3855,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": null
   },
   "228": {
@@ -3872,7 +3872,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": null
   },
   "229": {
@@ -3889,7 +3889,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "5",
     "dialogue_id": null
   },
   "230": {
@@ -3906,7 +3906,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": null
   },
   "231": {
@@ -3923,7 +3923,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "232": {
@@ -3940,7 +3940,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "233": {
@@ -3957,7 +3957,7 @@
     "place_type": "0#5",
     "decor_type": "5",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "0",
     "dialogue_id": null
   },
   "234": {
@@ -3974,7 +3974,7 @@
     "place_type": "0#5",
     "decor_type": "5",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "0",
     "dialogue_id": null
   },
   "235": {
@@ -3991,7 +3991,7 @@
     "place_type": "0#5",
     "decor_type": "5",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "0",
     "dialogue_id": null
   },
   "236": {
@@ -4008,7 +4008,7 @@
     "place_type": "0#5",
     "decor_type": "5",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "0",
     "dialogue_id": null
   },
   "237": {
@@ -4025,7 +4025,7 @@
     "place_type": "0#5",
     "decor_type": "5",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "0",
     "dialogue_id": null
   },
   "238": {
@@ -4042,7 +4042,7 @@
     "place_type": "0#5",
     "decor_type": "5",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "0",
     "dialogue_id": null
   },
   "239": {
@@ -4059,7 +4059,7 @@
     "place_type": "0#5",
     "decor_type": "5",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "0",
     "dialogue_id": null
   },
   "240": {
@@ -4177,8 +4177,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "247": {
@@ -4194,8 +4194,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "248": {
@@ -4211,8 +4211,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "249": {
@@ -4228,8 +4228,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "250": {
@@ -4245,8 +4245,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "251": {
@@ -4262,8 +4262,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "252": {
@@ -4279,8 +4279,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "253": {
@@ -4296,8 +4296,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "254": {
@@ -4313,8 +4313,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "7",
     "dialogue_id": null
   },
   "255": {
@@ -4330,8 +4330,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "256": {
@@ -4347,8 +4347,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "6",
     "dialogue_id": null
   },
   "257": {
@@ -4364,8 +4364,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "6",
     "dialogue_id": null
   },
   "258": {
@@ -4381,8 +4381,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "259": {
@@ -4398,8 +4398,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "260": {
@@ -4415,8 +4415,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "261": {
@@ -4432,8 +4432,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "262": {
@@ -4449,8 +4449,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "263": {
@@ -4466,8 +4466,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "264": {
@@ -4483,8 +4483,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "265": {
@@ -4500,8 +4500,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "266": {
@@ -4517,8 +4517,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "267": {
@@ -4534,8 +4534,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "268": {
@@ -4551,8 +4551,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "269": {
@@ -4568,8 +4568,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "270": {
@@ -4585,8 +4585,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "271": {
@@ -4602,8 +4602,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "272": {
@@ -4619,8 +4619,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "273": {
@@ -4636,8 +4636,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "274": {
@@ -4653,8 +4653,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "275": {
@@ -4670,8 +4670,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "276": {
@@ -4687,8 +4687,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "277": {
@@ -4704,8 +4704,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "278": {
@@ -4721,8 +4721,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "279": {
@@ -4738,8 +4738,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "280": {
@@ -4755,8 +4755,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "281": {
@@ -4772,8 +4772,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "282": {
@@ -4789,8 +4789,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "283": {
@@ -4806,8 +4806,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "6",
     "dialogue_id": null
   },
   "284": {
@@ -4823,8 +4823,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "5",
     "dialogue_id": null
   },
   "285": {
@@ -4840,8 +4840,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "5",
     "dialogue_id": null
   },
   "286": {
@@ -4857,8 +4857,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "5",
     "dialogue_id": null
   },
   "287": {
@@ -4874,8 +4874,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "7",
     "dialogue_id": null
   },
   "288": {
@@ -4891,8 +4891,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "289": {
@@ -4908,8 +4908,8 @@
     "spine_pos": "0#0",
     "place_type": "0#1#5",
     "decor_type": "0",
-    "type": "2",
-    "sub_type": null,
+    "type": "1",
+    "sub_type": "10",
     "dialogue_id": null
   },
   "290": {
@@ -4926,7 +4926,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "291": {
@@ -4943,7 +4943,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "292": {
@@ -4960,7 +4960,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "293": {
@@ -4977,7 +4977,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "294": {
@@ -4994,7 +4994,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "295": {
@@ -5011,7 +5011,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": null
   },
   "296": {
@@ -5028,7 +5028,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": null
   },
   "297": {
@@ -5045,7 +5045,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": null
   },
   "298": {
@@ -5062,7 +5062,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": null
   },
   "299": {
@@ -5079,7 +5079,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "300": {
@@ -5096,7 +5096,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "301": {
@@ -5113,7 +5113,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "302": {
@@ -5130,7 +5130,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "303": {
@@ -5147,7 +5147,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": null
   },
   "304": {
@@ -5164,7 +5164,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": null
   },
   "305": {
@@ -5181,7 +5181,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": null
   },
   "306": {
@@ -5198,7 +5198,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "307": {
@@ -5215,7 +5215,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "308": {
@@ -5232,7 +5232,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "309": {
@@ -5249,7 +5249,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "310": {
@@ -5266,7 +5266,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": null
   },
   "311": {
@@ -5283,7 +5283,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": null
   },
   "312": {
@@ -5300,7 +5300,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": null
   },
   "313": {
@@ -5317,7 +5317,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "314": {
@@ -5334,7 +5334,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "315": {
@@ -5351,7 +5351,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "316": {
@@ -5368,7 +5368,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "317": {
@@ -5385,7 +5385,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": null
   },
   "318": {
@@ -5402,7 +5402,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": null
   },
   "319": {
@@ -5419,7 +5419,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "4",
     "dialogue_id": null
   },
   "320": {
@@ -5436,7 +5436,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": null
   },
   "321": {
@@ -5453,7 +5453,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": null
   },
   "322": {
@@ -5470,7 +5470,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "3",
     "dialogue_id": null
   },
   "323": {
@@ -5487,7 +5487,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "324": {
@@ -5504,7 +5504,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "325": {
@@ -5521,7 +5521,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "326": {
@@ -5538,7 +5538,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "327": {
@@ -5555,7 +5555,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "328": {
@@ -5572,7 +5572,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "329": {
@@ -5589,7 +5589,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "330": {
@@ -5606,7 +5606,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "331": {
@@ -5623,7 +5623,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "332": {
@@ -5640,7 +5640,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "333": {
@@ -5657,7 +5657,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "334": {
@@ -5674,7 +5674,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "335": {
@@ -5690,7 +5690,7 @@
     "spine_pos": "0#0",
     "place_type": "0#5",
     "decor_type": "0",
-    "type": "0",
+    "type": "2",
     "sub_type": null,
     "dialogue_id": null
   },
@@ -5707,7 +5707,7 @@
     "spine_pos": "0#0",
     "place_type": "0#5",
     "decor_type": "0",
-    "type": "0",
+    "type": "2",
     "sub_type": null,
     "dialogue_id": null
   },
@@ -5724,7 +5724,7 @@
     "spine_pos": "0#0",
     "place_type": "0#5",
     "decor_type": "0",
-    "type": "0",
+    "type": "2",
     "sub_type": null,
     "dialogue_id": null
   },
@@ -5741,7 +5741,7 @@
     "spine_pos": "0#0",
     "place_type": "0#5",
     "decor_type": "0",
-    "type": "0",
+    "type": "2",
     "sub_type": null,
     "dialogue_id": null
   },
@@ -5759,7 +5759,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "340": {
@@ -5776,7 +5776,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "341": {
@@ -5793,7 +5793,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   },
   "342": {
@@ -5810,7 +5810,7 @@
     "place_type": "0#5",
     "decor_type": "0",
     "type": "0",
-    "sub_type": null,
+    "sub_type": "2",
     "dialogue_id": null
   }
 }
