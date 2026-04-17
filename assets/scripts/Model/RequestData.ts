@@ -17,7 +17,7 @@ export module network {
 
     export enum FollowSocialCode {
         FollowData = 4001, // 关注数据
-        // TimelineData = 4002, // 朋友圈数据
+        TimelineData = 4002, // 朋友圈数据
         PostData = 4003,// 帖子数据
         OtherPostData = 4004,// other帖子数据
         CommentData = 4005,// 评论数据
@@ -27,6 +27,10 @@ export module network {
         LikeConfirm = 4009, // 点赞确认
         UnLikeConfirm = 4010, // 取消点赞确认
         Draft = 4011, // 草稿
+        EggData = 4012,// 彩蛋数据
+        RandomPostData = 4013, // 随机帖子数据
+        FollowSuccess = 4014, // 关注成功
+        UnFollowSuccess = 4015, // 取消关注成功
     }
 
     export enum ServerCommandConstants {
@@ -55,7 +59,7 @@ export module network {
             return { rpc: { id: "join_map", payload: JSON.stringify({ map_id: map_id }) } };
         }
     }
-    
+
     export class leaveMapEequest {
         toJSON(map_id) {
             return {
@@ -122,11 +126,13 @@ export module network {
     //进入聊天
     export class MapChatHistory {
         public static toJSON() {
-            return { id : "map_chat_history" , payload: JSON.stringify({
-                map_id: MapModel.getInstance().currentMapId, // 或可省略，用当前地图
-                limit: 50,
-                cursor: ""
-            }) };
+            return {
+                id: "map_chat_history", payload: JSON.stringify({
+                    map_id: MapModel.getInstance().currentMapId, // 或可省略，用当前地图
+                    limit: 50,
+                    cursor: ""
+                })
+            };
         }
     }
 
@@ -196,6 +202,27 @@ export module network {
     export class LevelUpRequest {
         toJSON(card_id, count) {
             return { rpc: { id: "card_lv_up", payload: JSON.stringify({ card_id: card_id, count: count }) } };
+        }
+    }
+
+    export class ChangeNameRequest {
+        toJSON(name) {
+            return { rpc: { id: "change_name", payload: JSON.stringify({ name: name }) } };
+        }
+    }
+    export class ChangeInfoRequest {
+        toJSON(info) {
+            return { rpc: { id: "change_info", payload: JSON.stringify({ info: info }) } };
+        }
+    }
+    export class ShopDataRequest {
+        toJSON() {
+            return { rpc: { id: "shop_data"} };
+        }
+    }
+    export class ShopBuyRequest {
+        toJSON(itemID, count) {
+            return { rpc: { id: "shop_buy", payload: JSON.stringify({ item_id: itemID, count: count }) } };
         }
     }
 }

@@ -48,7 +48,7 @@ export class MainTop extends Component {
         //世界地图列表    角色npc列表
         [{language:109 , view : "res/View/Main/MainMapListView"} , {language:110 , view : "res/View/Main/character/MainCharacterList"}],
         //社交  推荐
-        [{language:114 , view : "res/View/Main/Follow/MainFollowList"} , {language:115 , view : ""}],
+        [{language:114 , view : "res/View/Main/Follow/MainFollowList"} , {language:115 , view : "res/View/Main/Follow/RemmendationFollowList"}],
         //聊天  wechat
         // [{language:112 , view : "res/View/Main/chat/MainChatList"} , {language:113 , view : ""}],
         [{language:112 , view : "res/View/Main/chat/MainChatList"}],

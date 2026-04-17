@@ -13,8 +13,9 @@ export class RoleModel {
     public password: string;
     public nickName: string;
     public avatar: string;
+    public lv: number;
     public gender: number;
-    public birth: number;
+    public birth: string;
     public age: number;
     public mbti: string;
     public bio: string;
@@ -26,12 +27,12 @@ export class RoleModel {
     public inviteCode: string;
     public invite: string;
     public address: string;
-    public nakama_token : string;
+    public nakama_token: string;
 
-    public token : string;
-    public playerId : string
+    public token: string;
+    public playerId: string
 
-    public tags ;
+    public tags;
 
     private nakamaSessionId: string = "";
     private isForceLogoutHandling: boolean = false;
@@ -48,13 +49,13 @@ export class RoleModel {
         return this._instance;
     }
 
-    public init(){
-        EventSystem.addListent("HttpMessage" , this.OnHttpMessage , this)
-        EventSystem.addListent("WebSocketMessage" , this.OnWebSocketMessage , this)
-        EventSystem.addListent("WebSocketNotifications" , this.OnWSNotification , this)
+    public init() {
+        EventSystem.addListent("HttpMessage", this.OnHttpMessage, this)
+        EventSystem.addListent("WebSocketMessage", this.OnWebSocketMessage, this)
+        EventSystem.addListent("WebSocketNotifications", this.OnWSNotification, this)
     }
 
-    public onWebSocketConnected(){
+    public onWebSocketConnected() {
         // 重要：重连窗口期内可能会收到服务端对“旧会话”的 force_logout 通知。
         // 若此时仍保留旧 nakamaSessionId，会误判为当前会话并强退。
         // 因此在发起 game_login 前先清空，待 game_login success 再写入新的 session_id。
@@ -62,7 +63,7 @@ export class RoleModel {
         this.loginWS();
     }
 
-    public loginWS(){
+    public loginWS() {
         let json = new network.LoginRequest(this.playerId);
         AppConst.WebSocketManager.send(json.toJSON());
     }
@@ -81,8 +82,8 @@ export class RoleModel {
         return rawPayload;
     }
 
-    private OnWebSocketMessage(data){
-        if(!data || !data["id"]){
+    private OnWebSocketMessage(data) {
+        if (!data || !data["id"]) {
             return;
         }
         const payload = this.parseRpcPayload(data["payload"]);
@@ -91,9 +92,9 @@ export class RoleModel {
         // 重连/Join 等场景下服务端可能对旧会话返回 SESSION_REPLACED，误伤当前新会话。
         // 真·异地踢下线仅通过 OnWSNotification（code=199, force_logout + target_session_id）处理。
 
-        if(data["id"] == "game_login"){
-            if(payload && payload.success){
-                if(payload.session_id){
+        if (data["id"] == "game_login") {
+            if (payload && payload.success) {
+                if (payload.session_id) {
                     this.nakamaSessionId = String(payload.session_id);
                     this.nakamaUserId = String(payload.user_id);
                     this.lastLoginSuccessAtMs = Date.now();
@@ -104,27 +105,68 @@ export class RoleModel {
                 EventSystem.send("LoginSuccess")
                 return;
             }
-            if(payload && payload.success === false){
+            if (payload && payload.success === false) {
                 let msg = payload.message || "游戏登录失败";
-                if(payload.code === "SESSION_REPLACED"){
+                if (payload.code === "SESSION_REPLACED") {
                     msg = "会话已失效，请重新登录";
                 }
-                EventSystem.send("ShowTips" , msg);
+                EventSystem.send("ShowTips", msg);
                 return
             }
 
         }
     }
 
-    private OnWSNotification(data){
-        if(!data || Number(data.code) !== 199){
+    private OnWSNotification(data) {
+        this.OnWSNotification199(data);
+        this.OnWSNotificationProfile(data);
+
+    }
+
+    private OnWSNotificationProfile(data) {
+        if (data.code == network.ServerCode.CodeProfile) {
+            console.log("更新个人信息")
+
+            let contentData = JSON.parse(data.content || "{}")
+            console.log(contentData)
+            if (contentData.nick_name) {
+                this.nickName = contentData.nick_name
+            }
+            if (contentData.lv) {
+                this.lv = contentData.lv
+            }
+            if (contentData.avatar) {
+                this.avatar = contentData.avatar_url
+            }
+            let info = JSON.parse(contentData.info || "{}")
+            if (info.gender) {
+                this.gender = info.gender
+            }
+            if (info.birth) {
+                this.birth = info.birth
+            }
+            if (info.age) {
+                this.age = info.age
+            }
+            if (info.mbti) {
+                this.mbti = info.mbti
+            }
+            if (info.bio) {
+                this.bio = info.bio
+            }
+        }
+    }
+
+    private OnWSNotification199(data) {
+        if (!data || Number(data.code) !== 199) {
             return;
         }
         const content = this.parseRpcPayload(data.content);
-        if(!content || content.type !== "force_logout"){
+        if (!content || content.type !== "force_logout") {
             return;
         }
         const targetSessionID = content.target_session_id ? String(content.target_session_id) : "";
+
         // 必须精确命中当前会话才执行强退：
         // 1) 服务端若未携带目标会话，直接忽略，避免误伤当前新端
         // 2) 客户端尚未拿到本端 session_id（game_login success 前），先忽略
@@ -142,15 +184,15 @@ export class RoleModel {
                     currentSessionID: this.nakamaSessionId,
                     message: content.message,
                 });
-            } catch {}
+            } catch { }
             return;
         }
         const message = content.message || "账号已在其他设备登录";
         this.handleForceLogout(message);
     }
 
-    private handleForceLogout(message: string){
-        if(this.isForceLogoutHandling){
+    private handleForceLogout(message: string) {
+        if (this.isForceLogoutHandling) {
             return;
         }
         this.isForceLogoutHandling = true;
@@ -160,41 +202,41 @@ export class RoleModel {
         this.nakamaSessionId = "";
         EventSystem.send("ForceLogout");
 
-        if(AppConst.WebSocketManager && AppConst.WebSocketManager.disconnect){
+        if (AppConst.WebSocketManager && AppConst.WebSocketManager.disconnect) {
             AppConst.WebSocketManager.disconnect();
         }
 
         const loginViewUrl = "res/View/Login/LoginView";
-        if(AppConst.PanelManager){
+        if (AppConst.PanelManager) {
             AppConst.PanelManager.CloseAll();
-            if(!AppConst.PanelManager.viewIsOpen(loginViewUrl)){
+            if (!AppConst.PanelManager.viewIsOpen(loginViewUrl)) {
                 AppConst.PanelManager.openView(loginViewUrl);
             }
         }
-        EventSystem.send("ShowTips" , message || "账号已在其他设备登录");
+        EventSystem.send("ShowTips", message || "账号已在其他设备登录");
     }
 
-    private OnHttpMessage(data){
-        if(data.cmd == network.ServerHttpCommand.COMMON_LOGIN){
+    private OnHttpMessage(data) {
+        if (data.cmd == network.ServerHttpCommand.COMMON_LOGIN) {
             console.log("-----------data:", data)
-            
+
             this.isForceLogoutHandling = false;
             this.nakamaSessionId = "";
             this.token = data.token
             this.nickName = data.nick_name
-            this.avatar = data.avatar
+            this.avatar = data.avatar_url
             this.playerId = data.player_id
             this.nakama_token = data.nakama_token
-            
+
             this.tags = data.tags
 
-            if(data.info){
+            if (data.info) {
                 const userInfo = JSON.parse(data.info)
-                this.gender = userInfo?.gender || 0
-                this.birth = userInfo?.birth || 0
-                this.age = userInfo?.age || 0
-                this.mbti = userInfo?.mbti || ""
-                this.bio = userInfo?.bio || ""
+                this.gender = userInfo?.gender
+                this.birth = userInfo?.birth
+                this.age = userInfo?.age
+                this.mbti = userInfo?.mbti
+                this.bio = userInfo?.bio
             }
 
             AppConst.WebSocketManager.setConfig("ws://" + HttpManager.ipBase + ":7350/ws?token=" + data.nakama_token);

@@ -44,6 +44,9 @@ export class FollowView extends Component {
     @property(Node)
     pagePrefab: Node = null!; // 提前做一个空节点，带 Sprite 组件
 
+    @property(Label)
+    public isFollow: Label = null
+
     private isLike: boolean = false
     private likeCount: number = 0
     // 一级评论列表
@@ -56,6 +59,7 @@ export class FollowView extends Component {
     private postID: number
     private postAt: string
     private eggID: number
+    private userID: string
 
     private followCommentList: {} = {}
 
@@ -63,15 +67,29 @@ export class FollowView extends Component {
         EventSystem.addListent("postLikeConfirmBack", this.postLikeConfirmBack, this)
         EventSystem.addListent("commentListData", this.commentListData, this)
         EventSystem.addListent("topCommentListData", this.topCommentListData, this)
+        EventSystem.addListent("followBack", this.setFollow, this)
         let param = this.node["_openParam"]
+
         this.postID = param?.postID
         this.postAt = param?.postAt
         if (!this.postID || !this.postAt) {
             console.log("postID or postAt is empty")
             return
         }
-        let otherPostList = SocialModel.getInstance().otherPostList
+        const otherPostList = SocialModel.getInstance().otherPostList
         let post = otherPostList.find(item => item.ID == this.postID)
+        if (!post) {
+            const randomPostList = SocialModel.getInstance().randomPostList
+            post = randomPostList.find(item => item.ID == this.postID)
+        }
+        if (!post) {
+            console.log("post not found")
+            return
+        }
+
+        this.userID = post?.UserID
+        this.isFollow.string = "myself"
+        this.setFollow()
         this.eggID = post?.EggID || 0
         AppConst.SocialHttpManager.sendGetHttp("firstCommentList", {
             postID: this.postID,
@@ -167,6 +185,15 @@ export class FollowView extends Component {
         })
     }
 
+    OnClickFollow() {
+        if (this.userID == RoleModel.getInstance().playerId) {
+            return
+        }
+        AppConst.SocialHttpManager.sendPostHttp(SocialModel.getInstance().followList.indexOf(this.userID) !== -1 ? "unfollow" : "follow", {
+            followedUserId: this.userID,
+        })
+    }
+
     OnClickEggReward() {
         this.eggRewardBtn.active = false
         AppConst.SocialHttpManager.sendPostHttp("receiveGlobalEgg", {
@@ -193,6 +220,12 @@ export class FollowView extends Component {
         this.isLike = !this.isLike
         this.likeCount = this.isLike ? this.likeCount + 1 : this.likeCount - 1
         this.setBtnByIsLike()
+    }
+
+    setFollow(){
+        if (this.userID != RoleModel.getInstance().playerId) {
+            this.isFollow.string = SocialModel.getInstance().followList.indexOf(this.userID) !== -1 ? "unfollow" : "follow"
+        }
     }
 
     setBtnByIsLike() {

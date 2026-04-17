@@ -116,7 +116,6 @@ export class MainFollowList extends Component {
 
     httpRequest() {
         AppConst.SocialHttpManager.sendGetHttp("myfollows", {})
-        AppConst.SocialHttpManager.sendGetHttp("timelineList", {})
         AppConst.SocialHttpManager.sendGetHttp("followersTimeline", {})
     }
 

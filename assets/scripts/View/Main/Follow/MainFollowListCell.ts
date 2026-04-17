@@ -1,6 +1,7 @@
 import { _decorator, Component, Label, Node, PageView, Sprite } from 'cc';
 import { AppConst } from '../../../AppConst';
 import { SocialModel } from '../../../Model/SocialModel';
+import { RoleModel } from '../../../Model/RoleModel';
 const { ccclass, property } = _decorator;
 
 @ccclass('MainFollowListCell')
@@ -19,17 +20,22 @@ export class MainFollowListCell extends Component {
     public offLike: Node = null
     @property(Sprite)
     public imgSp: Sprite;
+    @property(Label)
+    public isFollow: Label = null
 
     private postAt
     private postID
+    private userID
     private isLike: boolean = false
     private likeCount: number = 0
 
     start() {
         EventSystem.addListent("postLikeConfirmBack", this.postLikeConfirmBack, this)
+        EventSystem.addListent("followBack", this.setFollow, this)
     }
 
     public onRrefresh(data) {
+        this.userID = data?.UserID
         this.content.string = data?.Content
         this.title.string = data?.Title
         this.likeCount = data?.LikeCount || 0
@@ -37,6 +43,9 @@ export class MainFollowListCell extends Component {
         this.postAt = data?.CreatedAt
         this.postID = data?.ID
         this.isLike = SocialModel.getInstance().postLikeList.indexOf(this.postID) !== -1
+        this.isFollow.string = "myself"
+        this.setFollow()
+
         this.imgSp.spriteFrame = null
         let imageUrl = data?.ImageURL && JSON.parse(data?.ImageURL || "[]")
         if (imageUrl && imageUrl.length > 0) {
@@ -70,6 +79,12 @@ export class MainFollowListCell extends Component {
         this.isLike = !this.isLike
         this.likeCount = this.isLike ? this.likeCount + 1 : this.likeCount - 1
         this.setBtnByIsLike()
+    }
+
+    setFollow(){
+        if (this.userID != RoleModel.getInstance().playerId) {
+            this.isFollow.string = SocialModel.getInstance().followList.indexOf(this.userID) !== -1 ? "unfollow" : "follow"
+        }
     }
 
     setBtnByIsLike() {

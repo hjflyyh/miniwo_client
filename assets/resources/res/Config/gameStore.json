@@ -7,7 +7,7 @@
     "count": "10",
     "original_price": null,
     "discount": "",
-    "sale_price": "10；20；40；80；100",
+    "sale_price": "10;20;40;80;100",
     "server_limit": "0",
     "personal_limit_type": "0",
     "personal_limit": "0",
