@@ -140,12 +140,12 @@ export class MainTop extends Component {
 
         this.nowShowView = newUrl
 
-        if(this.bottomIndex == 0 && this.tabIndex == 0){
-            this.topBgTransform.node.active = false
-        }else{
+        // if(this.bottomIndex == 0 && this.tabIndex == 0){
+        //     this.topBgTransform.node.active = false
+        // }else{
 
-            this.topBgTransform.node.active = true
-        }
+        //     this.topBgTransform.node.active = true
+        // }
     }
 }
 
