@@ -40,6 +40,8 @@ export class MainBottom extends Component {
     OnGotoChat(){
         this.selectionComponent.changeIndex = 2
         this.selectionComponent.onChangeIndex()
+
+        this.onClickTab()
     }
 
     OnClickEdit(){
