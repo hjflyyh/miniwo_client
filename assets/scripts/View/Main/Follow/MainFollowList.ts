@@ -72,7 +72,7 @@ export class MainFollowList extends Component {
 
             // 模拟获取数据
             this.receivedData()
-        }, 0.2)
+        }, 0.1)
 
         this.setBtns()
     }
