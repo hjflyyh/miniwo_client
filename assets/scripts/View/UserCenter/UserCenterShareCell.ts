@@ -101,6 +101,7 @@ export class UserCenterShareCell extends InfiniteCell {
             AppConst.PanelManager.openView("res/View/Follow/FollowView", {
                 postID: post.ID,
                 postAt: post.CreatedAt,
+                data: post,
             })
         }
     }
@@ -111,6 +112,7 @@ export class UserCenterShareCell extends InfiniteCell {
             AppConst.PanelManager.openView("res/View/Follow/FollowView", {
                 postID: post.ID,
                 postAt: post.CreatedAt,
+                data: post,
             })
         }
     }

@@ -59,9 +59,15 @@ export class MainFollowListCell extends Component {
     }
 
     OnClickCell() {
+        let post = SocialModel.getInstance().otherPostList.find(item => item.ID == this.postID)
+        if (!post) {
+            const randomPostList = SocialModel.getInstance().randomPostList
+            post = randomPostList.find(item => item.ID == this.postID)
+        }
         AppConst.PanelManager.openView("res/View/Follow/FollowView", {
             postID: this.postID,
             postAt: this.postAt,
+            data: post,
         })
     }
 
@@ -81,7 +87,7 @@ export class MainFollowListCell extends Component {
         this.setBtnByIsLike()
     }
 
-    setFollow(){
+    setFollow() {
         if (this.userID != RoleModel.getInstance().playerId) {
             this.isFollow.string = SocialModel.getInstance().followList.indexOf(this.userID) !== -1 ? "unfollow" : "follow"
         }

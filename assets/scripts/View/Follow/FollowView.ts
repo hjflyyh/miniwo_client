@@ -72,21 +72,11 @@ export class FollowView extends Component {
 
         this.postID = param?.postID
         this.postAt = param?.postAt
-        if (!this.postID || !this.postAt) {
-            console.log("postID or postAt is empty")
+        const post =  param?.data
+        if (!this.postID || !this.postAt || !post) {
+            console.log("postID or postAt or data is empty")
             return
         }
-        const otherPostList = SocialModel.getInstance().otherPostList
-        let post = otherPostList.find(item => item.ID == this.postID)
-        if (!post) {
-            const randomPostList = SocialModel.getInstance().randomPostList
-            post = randomPostList.find(item => item.ID == this.postID)
-        }
-        if (!post) {
-            console.log("post not found")
-            return
-        }
-
         this.userID = post?.UserID
         this.isFollow.string = "myself"
         this.setFollow()

@@ -4,9 +4,11 @@ export class SocialModel {
     private static _instance: SocialModel = null;
 
     public followList: any[] = []
+    
     public postList: any[] = []
     public otherPostList: any[] = []
     public randomPostList: any[] = []
+
     public postLikeList: any[] = [] // 点赞列表 帖子ID
 
     public commentPostID: number = 0  // 指定帖子id
