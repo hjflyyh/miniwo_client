@@ -22,6 +22,8 @@ export class MainFollowListCell extends Component {
     public imgSp: Sprite;
     @property(Label)
     public isFollow: Label = null
+    @property(Label)
+    public nikeName: Label = null
 
     private postAt
     private postID
@@ -32,6 +34,7 @@ export class MainFollowListCell extends Component {
     start() {
         EventSystem.addListent("postLikeConfirmBack", this.postLikeConfirmBack, this)
         EventSystem.addListent("followBack", this.setFollow, this)
+        EventSystem.addListent("userListCache", this.setNikeName, this)
     }
 
     public onRrefresh(data) {
@@ -45,6 +48,7 @@ export class MainFollowListCell extends Component {
         this.isLike = SocialModel.getInstance().postLikeList.indexOf(this.postID) !== -1
         this.isFollow.string = "myself"
         this.setFollow()
+        this.setNikeName()
 
         this.imgSp.spriteFrame = null
         let imageUrl = data?.ImageURL && JSON.parse(data?.ImageURL || "[]")
@@ -97,6 +101,10 @@ export class MainFollowListCell extends Component {
         this.onLike.active = this.isLike
         this.offLike.active = !this.isLike
         this.likeNum.string = Math.max(0, this.likeCount).toString()
+    }
+
+    setNikeName() {
+        this.nikeName.string = SocialModel.getInstance().userListCache[this.userID]?.nick_name
     }
 }
 
