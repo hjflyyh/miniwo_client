@@ -60,7 +60,7 @@ export class MainCharacterList extends Component {
         layout.itemSize = (indexPath) => {
             // 通过下标可以获取到对应的数据
             const data = this.testData[indexPath.item]
-            return new Size(0, data.height)
+            return new Size(0, 596)
         }
         this.listComp.layout = layout
     }
@@ -70,7 +70,7 @@ export class MainCharacterList extends Component {
      */
     receivedData() {
         this.testData = []
-        for (let index = 0; index < 10000; index++) {
+        for (let index = 0; index < 20; index++) {
             this.testData.push(new Data())
         }
 

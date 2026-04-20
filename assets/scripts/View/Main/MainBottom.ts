@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Vec3 } from 'cc';
+import { _decorator, Color, Component, Label, Node, Vec3 } from 'cc';
 import { SelectionComponent } from '../Utils/Sclect/SelectionComponent';
 import { AppConst } from '../../AppConst';
 import { MapModel } from '../../Model/MapModel';
@@ -9,9 +9,11 @@ export class MainBottom extends Component {
     @property(SelectionComponent)
     selectionComponent : SelectionComponent
 
-    @property(Node)
-    centerNode : Node //中间鼓起
+    @property([Node])
+    lines : Node[] = []
 
+    @property([Label])
+    labels : Label[] = []
     start() {
         this.selectionComponent.changeCallBack = this.onClickTab
         this.selectionComponent.changeCallBackTarget = this
@@ -20,24 +22,24 @@ export class MainBottom extends Component {
 
         EventSystem.addListent("OnGotoChat" , this.OnGotoChat , this)
     }
-
-    setCenterNode(){
-        let centerWorldPos = new Vec3()
-        centerWorldPos.x = this.selectionComponent.GetChooseNode().node.worldPosition.x
-        centerWorldPos.y = this.centerNode.worldPosition.y
-        this.centerNode.worldPosition = centerWorldPos
-    }
     
     onClickTab(){
+        for(let i = 0 ; i < 4 ; i++){
+            this.lines[i].active = i == this.selectionComponent.changeIndex
+        }
+        for(let i = 0 ; i < 4 ; i++){
+            if(i == this.selectionComponent.changeIndex){
+                this.labels[i].color = new Color('#0f0f13');
+            }else{
+                this.labels[i].color = new Color('#8585a6');
+            }
+        }
         EventSystem.send("OnClickMainBottom" , this.selectionComponent.changeIndex)
-
-        this.setCenterNode()
     }
 
     OnGotoChat(){
         this.selectionComponent.changeIndex = 2
         this.selectionComponent.onChangeIndex()
-        this.setCenterNode();
     }
 
     OnClickEdit(){
