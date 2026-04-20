@@ -2,7 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "23b03870-9c6b-4249-8664-b45201211de7",
+  "uuid": "ee1279ed-9993-4755-8fc1-d73f8265508e",
   "files": [
     ".json",
     ".png"
@@ -10,14 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "23b03870-9c6b-4249-8664-b45201211de7@6c48a",
-      "displayName": "wooden_coffee_cup",
+      "uuid": "ee1279ed-9993-4755-8fc1-d73f8265508e@6c48a",
+      "displayName": "clock_blue",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "23b03870-9c6b-4249-8664-b45201211de7",
+        "imageUuidOrDatabaseUri": "ee1279ed-9993-4755-8fc1-d73f8265508e",
         "isUuid": true,
         "visible": false,
         "minfilter": "linear",
@@ -34,8 +34,8 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "23b03870-9c6b-4249-8664-b45201211de7@f9941",
-      "displayName": "wooden_coffee_cup",
+      "uuid": "ee1279ed-9993-4755-8fc1-d73f8265508e@f9941",
+      "displayName": "clock_blue",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
@@ -45,10 +45,10 @@
         "offsetY": 0,
         "trimX": 0,
         "trimY": 0,
-        "width": 51,
-        "height": 54,
-        "rawWidth": 51,
-        "rawHeight": 54,
+        "width": 63,
+        "height": 60,
+        "rawWidth": 63,
+        "rawHeight": 60,
         "borderTop": 0,
         "borderBottom": 0,
         "borderLeft": 0,
@@ -60,17 +60,17 @@
         "meshType": 0,
         "vertices": {
           "rawPosition": [
-            -25.5,
-            -27,
+            -31.5,
+            -30,
             0,
-            25.5,
-            -27,
+            31.5,
+            -30,
             0,
-            -25.5,
-            27,
+            -31.5,
+            30,
             0,
-            25.5,
-            27,
+            31.5,
+            30,
             0
           ],
           "indexes": [
@@ -83,12 +83,12 @@
           ],
           "uv": [
             0,
-            54,
-            51,
-            54,
+            60,
+            63,
+            60,
             0,
             0,
-            51,
+            63,
             0
           ],
           "nuv": [
@@ -102,18 +102,18 @@
             1
           ],
           "minPos": [
-            -25.5,
-            -27,
+            -31.5,
+            -30,
             0
           ],
           "maxPos": [
-            25.5,
-            27,
+            31.5,
+            30,
             0
           ]
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "23b03870-9c6b-4249-8664-b45201211de7@6c48a",
+        "imageUuidOrDatabaseUri": "ee1279ed-9993-4755-8fc1-d73f8265508e@6c48a",
         "atlasUuid": "",
         "trimType": "auto"
       },
@@ -129,6 +129,6 @@
     "type": "sprite-frame",
     "fixAlphaTransparencyArtifacts": false,
     "hasAlpha": true,
-    "redirect": "23b03870-9c6b-4249-8664-b45201211de7@6c48a"
+    "redirect": "ee1279ed-9993-4755-8fc1-d73f8265508e@6c48a"
   }
 }

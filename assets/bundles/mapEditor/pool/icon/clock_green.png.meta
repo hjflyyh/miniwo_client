@@ -2,7 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "10a47676-0c55-4745-b0b1-7464a636d71d",
+  "uuid": "1003601b-24a5-4bba-a274-338dacfb7f0d",
   "files": [
     ".json",
     ".png"
@@ -10,14 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "10a47676-0c55-4745-b0b1-7464a636d71d@6c48a",
-      "displayName": "green_clock",
+      "uuid": "1003601b-24a5-4bba-a274-338dacfb7f0d@6c48a",
+      "displayName": "clock_green",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "10a47676-0c55-4745-b0b1-7464a636d71d",
+        "imageUuidOrDatabaseUri": "1003601b-24a5-4bba-a274-338dacfb7f0d",
         "isUuid": true,
         "visible": false,
         "minfilter": "linear",
@@ -34,8 +34,8 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "10a47676-0c55-4745-b0b1-7464a636d71d@f9941",
-      "displayName": "green_clock",
+      "uuid": "1003601b-24a5-4bba-a274-338dacfb7f0d@f9941",
+      "displayName": "clock_green",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
@@ -113,7 +113,7 @@
           ]
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "10a47676-0c55-4745-b0b1-7464a636d71d@6c48a",
+        "imageUuidOrDatabaseUri": "1003601b-24a5-4bba-a274-338dacfb7f0d@6c48a",
         "atlasUuid": "",
         "trimType": "auto"
       },
@@ -129,6 +129,6 @@
     "type": "sprite-frame",
     "fixAlphaTransparencyArtifacts": false,
     "hasAlpha": true,
-    "redirect": "10a47676-0c55-4745-b0b1-7464a636d71d@6c48a"
+    "redirect": "1003601b-24a5-4bba-a274-338dacfb7f0d@6c48a"
   }
 }

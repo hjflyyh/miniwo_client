@@ -2,7 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "d9c360f6-4761-4bc1-8014-21e854806035",
+  "uuid": "0f3114cc-3668-473f-82eb-ad25666f88fc",
   "files": [
     ".json",
     ".png"
@@ -10,14 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "d9c360f6-4761-4bc1-8014-21e854806035@6c48a",
-      "displayName": "gauge",
+      "uuid": "0f3114cc-3668-473f-82eb-ad25666f88fc@6c48a",
+      "displayName": "wooden_coffee_cup_yellow",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "d9c360f6-4761-4bc1-8014-21e854806035",
+        "imageUuidOrDatabaseUri": "0f3114cc-3668-473f-82eb-ad25666f88fc",
         "isUuid": true,
         "visible": false,
         "minfilter": "linear",
@@ -34,8 +34,8 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "d9c360f6-4761-4bc1-8014-21e854806035@f9941",
-      "displayName": "gauge",
+      "uuid": "0f3114cc-3668-473f-82eb-ad25666f88fc@f9941",
+      "displayName": "wooden_coffee_cup_yellow",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
@@ -45,10 +45,10 @@
         "offsetY": 0,
         "trimX": 0,
         "trimY": 0,
-        "width": 63,
-        "height": 60,
-        "rawWidth": 63,
-        "rawHeight": 60,
+        "width": 51,
+        "height": 54,
+        "rawWidth": 51,
+        "rawHeight": 54,
         "borderTop": 0,
         "borderBottom": 0,
         "borderLeft": 0,
@@ -60,17 +60,17 @@
         "meshType": 0,
         "vertices": {
           "rawPosition": [
-            -31.5,
-            -30,
+            -25.5,
+            -27,
             0,
-            31.5,
-            -30,
+            25.5,
+            -27,
             0,
-            -31.5,
-            30,
+            -25.5,
+            27,
             0,
-            31.5,
-            30,
+            25.5,
+            27,
             0
           ],
           "indexes": [
@@ -83,12 +83,12 @@
           ],
           "uv": [
             0,
-            60,
-            63,
-            60,
+            54,
+            51,
+            54,
             0,
             0,
-            63,
+            51,
             0
           ],
           "nuv": [
@@ -102,18 +102,18 @@
             1
           ],
           "minPos": [
-            -31.5,
-            -30,
+            -25.5,
+            -27,
             0
           ],
           "maxPos": [
-            31.5,
-            30,
+            25.5,
+            27,
             0
           ]
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "d9c360f6-4761-4bc1-8014-21e854806035@6c48a",
+        "imageUuidOrDatabaseUri": "0f3114cc-3668-473f-82eb-ad25666f88fc@6c48a",
         "atlasUuid": "",
         "trimType": "auto"
       },
@@ -129,6 +129,6 @@
     "type": "sprite-frame",
     "fixAlphaTransparencyArtifacts": false,
     "hasAlpha": true,
-    "redirect": "d9c360f6-4761-4bc1-8014-21e854806035@6c48a"
+    "redirect": "0f3114cc-3668-473f-82eb-ad25666f88fc@6c48a"
   }
 }

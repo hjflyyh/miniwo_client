@@ -2,7 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "5bdb0f63-7217-48a2-acc5-e2e79a9278d3",
+  "uuid": "caa1d42d-b13c-42f6-aed8-30017856a7d3",
   "files": [
     ".json",
     ".png"
@@ -10,14 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "5bdb0f63-7217-48a2-acc5-e2e79a9278d3@6c48a",
-      "displayName": "pixel_clock",
+      "uuid": "caa1d42d-b13c-42f6-aed8-30017856a7d3@6c48a",
+      "displayName": "clock_green",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "5bdb0f63-7217-48a2-acc5-e2e79a9278d3",
+        "imageUuidOrDatabaseUri": "caa1d42d-b13c-42f6-aed8-30017856a7d3",
         "isUuid": true,
         "visible": false,
         "minfilter": "linear",
@@ -34,8 +34,8 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "5bdb0f63-7217-48a2-acc5-e2e79a9278d3@f9941",
-      "displayName": "pixel_clock",
+      "uuid": "caa1d42d-b13c-42f6-aed8-30017856a7d3@f9941",
+      "displayName": "clock_green",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
@@ -113,7 +113,7 @@
           ]
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "5bdb0f63-7217-48a2-acc5-e2e79a9278d3@6c48a",
+        "imageUuidOrDatabaseUri": "caa1d42d-b13c-42f6-aed8-30017856a7d3@6c48a",
         "atlasUuid": "",
         "trimType": "auto"
       },
@@ -129,6 +129,6 @@
     "type": "sprite-frame",
     "fixAlphaTransparencyArtifacts": false,
     "hasAlpha": true,
-    "redirect": "5bdb0f63-7217-48a2-acc5-e2e79a9278d3@6c48a"
+    "redirect": "caa1d42d-b13c-42f6-aed8-30017856a7d3@6c48a"
   }
 }
