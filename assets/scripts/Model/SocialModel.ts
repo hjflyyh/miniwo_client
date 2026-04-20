@@ -4,7 +4,7 @@ export class SocialModel {
     private static _instance: SocialModel = null;
 
     public followList: any[] = []
-
+    
     public postList: any[] = []
     public otherPostList: any[] = []
     public randomPostList: any[] = []
@@ -18,7 +18,7 @@ export class SocialModel {
 
     public itemsCache: {} = {}
 
-    public userListCache: {} = {}
+    public userListCache: {} = {} // todo
 
     public static getInstance(): SocialModel {
         if (!this._instance) {
@@ -29,26 +29,6 @@ export class SocialModel {
 
     public init() {
         EventSystem.addListent("SocialHttpMessage", this.OnSocialHttpMessage, this)
-        EventSystem.addListent("WebSocketMessage", this.OnWebSocketMessage, this)
-    }
-
-    private OnWebSocketMessage(data) {
-        if (data["id"] == "get_user_by_ids" && data["payload"]) {
-            let payload = JSON.parse(data["payload"]);
-            if (!payload || !payload.success || !payload.data) {
-                return;
-            }
-
-            payload.data.forEach(user => {
-                if (!user.player_id) {
-                    return
-                }
-                user.info = user.info ? JSON.parse(user.info) : {}
-                this.userListCache[user.player_id] = user
-            })
-            console.log("userListCache:", this.userListCache)
-            EventSystem.send("userListCache")
-        }
     }
 
     private OnSocialHttpMessage(data) {
@@ -57,10 +37,9 @@ export class SocialModel {
         if (cmd == network.FollowSocialCode.FollowData) {
             const followList = data.list || []
             this.followList = followList.map((i) => i.FollowedUserID)
-            console.log("followList:", this.followList)
+            console.log("fol lowList:", this.followList)
         }
         else if (cmd == network.FollowSocialCode.PostData) {
-            this.receiveList(data.list || [])
             this.postList = data.list || []
             const postIDs = data.postIDs || []
             if (postIDs.length > 0) {
@@ -69,7 +48,6 @@ export class SocialModel {
             console.log("postList:", this.postList)
         }
         else if (cmd == network.FollowSocialCode.OtherPostData) {
-            this.receiveList(data.list || [])
             this.otherPostList = data.list || []
             const postIDs = data.postIDs || []
             if (postIDs.length > 0) {
@@ -129,7 +107,6 @@ export class SocialModel {
             if (postIDs.length > 0) {
                 this.postLikeList = [...new Set([...this.postLikeList, ...postIDs])]
             }
-            this.receiveList(data.list || [])
             this.randomPostList = data.list || []
             console.log("randomPostList:", this.randomPostList)
         }
@@ -140,14 +117,6 @@ export class SocialModel {
         else if (cmd == network.FollowSocialCode.UnFollowSuccess) {
             this.followList = this.followList.filter((item: any) => item != data.followedUserId)
             EventSystem.send("followBack", data.followedUserId)
-        }
-    }
-
-    private receiveList(list: any[]) {
-        const userIDs = [...new Set(list.filter(item => !this.userListCache[item.UserID]).map(item => Number(item.UserID)))];
-        if (userIDs.length > 0) {
-            let json = new network.GetUserByIDRequest();
-            AppConst.WebSocketManager.send(json.toJSON(userIDs))
         }
     }
 }

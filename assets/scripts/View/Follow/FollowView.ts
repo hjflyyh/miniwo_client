@@ -47,9 +47,6 @@ export class FollowView extends Component {
     @property(Label)
     public isFollow: Label = null
 
-    @property(Label)
-    public nikeName: Label = null
-
     private isLike: boolean = false
     private likeCount: number = 0
     // 一级评论列表
@@ -71,19 +68,17 @@ export class FollowView extends Component {
         EventSystem.addListent("commentListData", this.commentListData, this)
         EventSystem.addListent("topCommentListData", this.topCommentListData, this)
         EventSystem.addListent("followBack", this.setFollow, this)
-        EventSystem.addListent("userListCache", this.setNikeName, this)
         let param = this.node["_openParam"]
 
         this.postID = param?.postID
         this.postAt = param?.postAt
-        const post = param?.data
+        const post =  param?.data
         if (!this.postID || !this.postAt || !post) {
             console.log("postID or postAt or data is empty")
             return
         }
         this.userID = post?.UserID
         this.isFollow.string = "myself"
-        this.setNikeName()
         this.setFollow()
         this.eggID = post?.EggID || 0
         AppConst.SocialHttpManager.sendGetHttp("firstCommentList", {
@@ -217,7 +212,7 @@ export class FollowView extends Component {
         this.setBtnByIsLike()
     }
 
-    setFollow() {
+    setFollow(){
         if (this.userID != RoleModel.getInstance().playerId) {
             this.isFollow.string = SocialModel.getInstance().followList.indexOf(this.userID) !== -1 ? "unfollow" : "follow"
         }
@@ -227,10 +222,6 @@ export class FollowView extends Component {
         this.onLike.active = this.isLike
         this.offLike.active = !this.isLike
         this.postLikeLable.string = Math.max(0, this.likeCount).toString()
-    }
-
-    setNikeName() {
-        this.nikeName.string = SocialModel.getInstance().userListCache[this.userID]?.nick_name 
     }
 
     // 去重push
