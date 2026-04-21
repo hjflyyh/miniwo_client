@@ -110,7 +110,7 @@ export class MainFollowList extends Component {
         layout.verticalSpacing = 10
         layout.alignment = alignment
 
-        layout.itemSize = new math.Size(1000, 1008)
+        layout.itemSize = new math.Size(1000, 1070)
         this.listComp.layout = layout
     }
 
