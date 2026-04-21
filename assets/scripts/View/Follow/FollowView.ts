@@ -96,7 +96,7 @@ export class FollowView extends Component {
                 const page = instantiate(this.pagePrefab);
                 content.addChild(page);
 
-                const imgSp = page.getComponent(Sprite);
+                const imgSp = page.getChildByName("banner").getComponent(Sprite);
                 if (imgSp) {
                     let journalImg = AppConst.JournalManager.journalImgs.find((i) => i.type == "localImg" && i.id == img["id"])
                     if (journalImg) {
