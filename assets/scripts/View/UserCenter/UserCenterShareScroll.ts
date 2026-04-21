@@ -31,7 +31,7 @@ export class UserCenterShareScroll extends Component implements IFDataSource {
     }
     GetCellSize(dataIndex: number): number {
         //不用改
-        return 800
+        return 600
     }
     GetCellView(dataIndex: number, identifier?: string): InfiniteCell {
         const id = identifier || 'cellChat';
