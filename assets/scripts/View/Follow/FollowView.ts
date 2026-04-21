@@ -109,6 +109,8 @@ export class FollowView extends Component {
                     }
                 }
             }
+        }else{
+            this.pageView.node.active = false
         }
 
         this.contentNode.string = post?.Content || ""
