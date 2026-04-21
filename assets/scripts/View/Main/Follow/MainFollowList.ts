@@ -4,6 +4,8 @@ import { CustomGridFlowLayout } from '../../../../plugin/list-3x/custom-grid-flo
 import { AppConst } from '../../../AppConst';
 import { MainFollowListCell } from './MainFollowListCell';
 import { SocialModel } from '../../../Model/SocialModel';
+import { YXMasonryFlowLayout } from '../../../../plugin/list-3x/yx-masonry-flow-layout';
+import { InfiniteList } from '../../../../plugin/InfiniteList/InfiniteList';
 const { ccclass, property } = _decorator;
 
 @ccclass('MainFollowList')
@@ -11,8 +13,8 @@ export class MainFollowList extends Component {
     /**
      * 列表组件
      */
-    @property(YXCollectionView)
-    listComp: YXCollectionView = null
+    // @property(YXCollectionView)
+    // listComp: YXCollectionView = null
 
     @property(Node)
     addBtn: Node = null
@@ -24,14 +26,14 @@ export class MainFollowList extends Component {
     oldBtn: Node = null
 
     isOpenEdit = false
-    /**
-     * 模拟收到数据
-     */
-    receivedData() {
-        this.listComp.numberOfItems = () => SocialModel.getInstance().otherPostList.length
-        // 更新列表
-        this.listComp.reloadData()
-    }
+    // /**
+    //  * 模拟收到数据
+    //  */
+    // receivedData() {
+    //     this.listComp.numberOfItems = () => SocialModel.getInstance().otherPostList.length
+    //     // 更新列表
+    //     this.listComp.reloadData()
+    // }
 
     private column = 1
     private alignment = 1
@@ -45,30 +47,31 @@ export class MainFollowList extends Component {
 
     refreshData() {
         this.scheduleOnce(() => {
-            this.listComp.enabled = true
-            // 确定列表内一共需要显示多少条内容   
-            this.listComp.numberOfItems = () => SocialModel.getInstance().otherPostList.length;
+            // this.listComp.enabled = true
+            // // 确定列表内一共需要显示多少条内容   
+            // this.listComp.numberOfItems = () => SocialModel.getInstance().otherPostList.length;
 
-            this.listComp.cellForItemAt = (indexPath, collectionView) => {
-                // 通过下标可以获取到对应的数据
-                const data = SocialModel.getInstance().otherPostList[indexPath.item]
+            // this.listComp.cellForItemAt = (indexPath, collectionView) => {
+            //     // 通过下标可以获取到对应的数据
+            //     const data = SocialModel.getInstance().otherPostList[indexPath.item]
 
-                // 通过标识符获取重用池内的节点
-                const cell = collectionView.dequeueReusableCell(`cell`)
+            //     // 通过标识符获取重用池内的节点
+            //     const cell = collectionView.dequeueReusableCell(`cell`)
 
-                // 更新数据显示
-                const comp = cell.getComponent("MainFollowListCell") as MainFollowListCell
+            //     // 更新数据显示
+            //     const comp = cell.getComponent("MainFollowListCell") as MainFollowListCell
 
-                comp.onRrefresh(data)
+            //     comp.onRrefresh(data)
 
-                return cell // 返回这个节点给列表显示
-            }
+            //     return cell // 返回这个节点给列表显示
+            // }
 
-            // 配置 layout 布局规则
-            this.updateFlowLayout()
+            // // 配置 layout 布局规则
+            // this.updateFlowLayout()
 
-            // 模拟获取数据
-            this.receivedData()
+            // // 模拟获取数据
+            // this.receivedData()
+
         }, 0.1)
 
         this.setBtns()
@@ -101,15 +104,17 @@ export class MainFollowList extends Component {
         AppConst.PanelManager.openView("res/View/Follow/FollowEditView")
     }
 
-    updateFlowLayout(column: number = this.column, alignment: number = this.alignment) {
-        let layout = new CustomGridFlowLayout()
-        layout.horizontalSpacing = 10
-        layout.verticalSpacing = 10
-        layout.alignment = alignment
+    // updateFlowLayout(column: number = this.column, alignment: number = this.alignment) {
+    //     let layout = new YXMasonryFlowLayout()
+    //     layout.horizontalSpacing = 10
+    //     layout.verticalSpacing = 10
+    //     // layout.alignment = alignment
 
-        layout.itemSize = new math.Size(1000, 1070)
-        this.listComp.layout = layout
-    }
+    //     layout.itemSize = (indexPath) => {
+    //         return new math.Size(1000, 1070)
+    //     }
+    //     this.listComp.layout = layout
+    // }
 
     httpRequest() {
         AppConst.SocialHttpManager.sendGetHttp("myfollows", {})

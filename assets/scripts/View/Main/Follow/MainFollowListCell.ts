@@ -1,11 +1,15 @@
-import { _decorator, Component, Label, Node, PageView, Sprite } from 'cc';
+import { _decorator, Component, Label, Node, PageView, Sprite, UITransform } from 'cc';
 import { AppConst } from '../../../AppConst';
 import { SocialModel } from '../../../Model/SocialModel';
 import { RoleModel } from '../../../Model/RoleModel';
+import InfiniteCell from '../../../../plugin/InfiniteList/InfiniteCell';
 const { ccclass, property } = _decorator;
 
 @ccclass('MainFollowListCell')
-export class MainFollowListCell extends Component {
+export class MainFollowListCell extends InfiniteCell {
+    UpdateContent(data: any): void {
+        this.onRrefresh(data)
+    }
     @property(Label)
     public content: Label = null
     @property(Label)
@@ -30,6 +34,15 @@ export class MainFollowListCell extends Component {
     private userID
     private isLike: boolean = false
     private likeCount: number = 0
+
+    @property(Node)
+    otherNode : Node
+
+    @property(UITransform)
+    bgTransform : UITransform
+
+    @property(Node)
+    imgNode : Node
 
     start() {
         EventSystem.addListent("postLikeConfirmBack", this.postLikeConfirmBack, this)
@@ -56,6 +69,15 @@ export class MainFollowListCell extends Component {
             if (journalImg) {
                 this.imgSp.spriteFrame = AppConst.JournalManager.imgSprite[journalImg["localImgIndex"]]
             }
+
+            this.imgNode.active = true
+            this.otherNode.y = -531.741
+
+            this.bgTransform.height = 1052
+        }else{
+            this.imgNode.active = false
+            this.bgTransform.height = 390
+            this.otherNode.y = 160.675
         }
 
         this.setBtnByIsLike()

@@ -135,7 +135,7 @@ export class MapEditor extends Component {
     } = { move: null, detele: null, frame: null, sign: null, npc_banner1: null };
 
     moveItem: { id: string, tile: Node, tileType: string, initGride: Vec2, belong?: string, decorKey?: string, offsetX?: number, offsetY?: number, initOffsetX?: number, initOffsetY?: number, grabOffsetX?: number, grabOffsetY?: number } = null;
-    deteleItem: { tile: Node | null, tileType: string, belong?: string, decorKey?: string, doorPos?: Vec2, doorDir?: string } = null;
+    deteleItem: { tile: Node | null, tileType: string, belong?: string, decorKey?: string, doorPos?: Vec2, doorDir?: string, anchorPos?: Vec2 } = null;
     moveStatus: number = 0;
 
     public groundType: number = 1;
@@ -1481,7 +1481,7 @@ export class MapEditor extends Component {
         }
     }
 
-    private resolveDeleteTarget(gridPos: Vec2): { tile: Node | null, tileType: string, belong?: string, decorKey?: string, doorPos?: Vec2, doorDir?: string } | null {
+    private resolveDeleteTarget(gridPos: Vec2): { tile: Node | null, tileType: string, belong?: string, decorKey?: string, doorPos?: Vec2, doorDir?: string, anchorPos?: Vec2 } | null {
         const key = `${gridPos.x},${gridPos.y}`;
         const houseCell = this.houseItems.get(key);
         if (houseCell?.belong) {
@@ -1514,7 +1514,34 @@ export class MapEditor extends Component {
 
         const mapItem = this.mapItems.get(key);
         if (mapItem) {
-            return { tile: mapItem.tile || null, tileType: mapItem.tileType };
+            return { tile: mapItem.tile || null, tileType: mapItem.tileType, anchorPos: new Vec2(gridPos.x, gridPos.y) };
+        }
+
+        // 大尺寸非房屋道具：支持点击占地区域任意格子命中删除（不仅限锚点格）
+        for (const [itemKey, item] of this.mapItems.entries()) {
+            if (!item) {
+                continue;
+            }
+            const split = itemKey.split(',');
+            if (split.length !== 2) {
+                continue;
+            }
+            const anchorX = parseInt(split[0], 10);
+            const anchorY = parseInt(split[1], 10);
+            if (!Number.isFinite(anchorX) || !Number.isFinite(anchorY)) {
+                continue;
+            }
+            const gridSize = this.getNodeGridSize(item.tile);
+            const inX = gridPos.x >= anchorX && gridPos.x <= anchorX + gridSize.x - 1;
+            const inY = gridPos.y <= anchorY && gridPos.y >= anchorY - (gridSize.y - 1);
+            if (!inX || !inY) {
+                continue;
+            }
+            return {
+                tile: item.tile || null,
+                tileType: item.tileType,
+                anchorPos: new Vec2(anchorX, anchorY)
+            };
         }
 
         return null;
@@ -2642,27 +2669,31 @@ export class MapEditor extends Component {
             MapManager.GetInstance().getMapEditorUI().checkButtonVisible(true);
             this.buildControl.detele.play('detele_action');
             return;
-        } else if (this.mapItems.has(`${gridPos.x},${gridPos.y}`)) {
-            if (this.mapItems.get(`${gridPos.x},${gridPos.y}`).tileType == "Floor") {
+        } else if (target?.anchorPos && this.mapItems.has(`${target.anchorPos.x},${target.anchorPos.y}`)) {
+            const anchorPos = target.anchorPos;
+            const anchorKey = `${anchorPos.x},${anchorPos.y}`;
+            const mapItem = this.mapItems.get(anchorKey);
+            if (mapItem.tileType == "Floor") {
                 for (let i = 0; i < this.buildFloorPoints.length; i++) {
                     const element = this.buildFloorPoints[i];
-                    if (element.x == gridPos.x && element.y == gridPos.y) {
+                    if (element.x == anchorPos.x && element.y == anchorPos.y) {
                         this.buildFloorPoints.splice(i, 1);
                         break;
                     }
                 }
             }
 
-            const buildingSize = MapModel.getInstance().getBuildingSize(this.tileMaskNode.getComponent(UITransform).contentSize , this);
-            if (this.mapItems.get(`${gridPos.x},${gridPos.y}`).tile)
-                this.mapItems.get(`${gridPos.x},${gridPos.y}`).tile.destroy();
-            this.mapItems.delete(`${gridPos.x},${gridPos.y}`);
+            const buildingSize = this.getNodeGridSize(mapItem.tile);
+            if (mapItem.tile) {
+                mapItem.tile.destroy();
+            }
+            this.mapItems.delete(anchorKey);
 
             // 更新网格数据
             for (let x = 0; x < buildingSize.x; x++) {
                 for (let y = 0; y < buildingSize.y; y++) {
-                    const gridX = gridPos.x + x;
-                    const gridY = gridPos.y - y;
+                    const gridX = anchorPos.x + x;
+                    const gridY = anchorPos.y - y;
                     this.mapData[gridX][gridY] = 0;
                 }
             }
