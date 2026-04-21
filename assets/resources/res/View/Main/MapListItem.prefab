@@ -108,8 +108,8 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 516.59,
-      "y": -723,
+      "x": 361.81,
+      "y": -556.721,
       "z": 0
     },
     "_lrot": {
@@ -339,8 +339,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 850,
-      "height": 1420
+      "width": 588,
+      "height": 1060.996
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -447,8 +447,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 876,
-      "height": 1446
+      "width": 588,
+      "height": 1060.996
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -489,7 +489,7 @@
     },
     "_type": 0,
     "_fillType": 0,
-    "_sizeMode": 1,
+    "_sizeMode": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
       "x": 0,
@@ -614,8 +614,8 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 513.898,
-      "y": -1345.035,
+      "x": 361.81,
+      "y": -926.737,
       "z": 0
     },
     "_lrot": {
@@ -655,8 +655,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 848,
-      "height": 167
+      "width": 588,
+      "height": 311
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -692,7 +692,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "f01f62e2-f4b3-450c-bcfa-d628f83e9e23@f9941",
+      "__uuid__": "a916adf1-9e17-47a0-8376-a932d58c542b@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -750,8 +750,8 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 120.724,
-      "y": -1307.065,
+      "x": 90.672,
+      "y": -981.082,
       "z": 0
     },
     "_lrot": {
@@ -791,7 +791,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 78,
+      "width": 179.546875,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -827,23 +827,20 @@
       "b": 255,
       "a": 255
     },
-    "_string": "地图名",
+    "_string": "TITLE TEXT",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
-    "_actualFontSize": 26,
-    "_fontSize": 26,
+    "_actualFontSize": 32,
+    "_fontSize": 32,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
     "_overflow": 0,
     "_enableWrapText": false,
-    "_font": {
-      "__uuid__": "6459f90e-7101-4c97-87fb-79099e217f09",
-      "__expectedType__": "cc.TTFFont"
-    },
-    "_isSystemFontUsed": false,
+    "_font": null,
+    "_isSystemFontUsed": true,
     "_spacingX": 0,
     "_isItalic": false,
-    "_isBold": false,
+    "_isBold": true,
     "_isUnderline": false,
     "_underlineHeight": 2,
     "_cacheMode": 0,
@@ -912,8 +909,8 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 120.724,
-      "y": -1337.007,
+      "x": 94.784,
+      "y": -1024.591,
       "z": 0
     },
     "_lrot": {
@@ -953,7 +950,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 595.9150000000001,
+      "width": 410.5320000000001,
       "height": 67.8
     },
     "_anchorPoint": {
@@ -992,8 +989,8 @@
     "_string": "地图介绍地图介绍地图介绍地图介绍地图介绍地图介绍地图介绍地图介绍",
     "_horizontalAlign": 0,
     "_verticalAlign": 0,
-    "_actualFontSize": 22,
-    "_fontSize": 22,
+    "_actualFontSize": 20,
+    "_fontSize": 20,
     "_fontFamily": "Arial",
     "_lineHeight": 30,
     "_overflow": 3,
@@ -1081,8 +1078,8 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 896.725,
-      "y": -1302.414,
+      "x": 594.25,
+      "y": -986.957,
       "z": 0
     },
     "_lrot": {
@@ -1117,7 +1114,7 @@
       "__id__": 43
     },
     "_children": [],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 45
@@ -1131,7 +1128,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 0,
+      "x": 0.83,
       "y": 0,
       "z": 0
     },
@@ -1172,8 +1169,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 45,
-      "height": 36
+      "width": 44,
+      "height": 44
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1209,12 +1206,12 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "386ba5e1-8ace-4b1e-bc5d-7bc2f8292ad9@f9941",
+      "__uuid__": "0a3954a1-16dd-4c5f-9e1e-786078e3d097@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
     "_fillType": 0,
-    "_sizeMode": 1,
+    "_sizeMode": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
       "x": 0,
@@ -1258,8 +1255,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 45,
-      "height": 36
+      "width": 44,
+      "height": 44
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1295,12 +1292,12 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "45d815af-adcd-432c-bb85-fa864fc7f7b6@f9941",
+      "__uuid__": "11546303-34a9-4334-9742-2ba87cf71b8b@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
     "_fillType": 0,
-    "_sizeMode": 1,
+    "_sizeMode": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
       "x": 0,
@@ -1370,7 +1367,9 @@
     "_disabledSprite": null,
     "_duration": 0.1,
     "_zoomScale": 1.2,
-    "_target": null,
+    "_target": {
+      "__id__": 43
+    },
     "_id": ""
   },
   {
@@ -1423,8 +1422,8 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 897.106,
-      "y": -1344.471,
+      "x": 594.25,
+      "y": -1029.014,
       "z": 0
     },
     "_lrot": {
@@ -1464,7 +1463,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 56.31103515625,
+      "width": 13.90380859375,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -1500,7 +1499,7 @@
       "b": 255,
       "a": 255
     },
-    "_string": "999+",
+    "_string": "1",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 25,

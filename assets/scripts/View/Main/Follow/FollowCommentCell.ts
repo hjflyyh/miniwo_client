@@ -28,11 +28,16 @@ export class FollowCommentCell extends Component {
     @property(RichText)
     commentContent: RichText = null
 
+    @property(Label)
+    public nikeName: Label = null
+
     private isLike: boolean = false
     private likeCount: number = 0
+    private userID: string
 
     start() {
         EventSystem.addListent("commentLikeConfirmBack", this.commentLikeConfirmBack, this)
+        EventSystem.addListent("userListCache", this.setNikeName, this)
     }
 
     refreshCommentCell() {
@@ -40,10 +45,14 @@ export class FollowCommentCell extends Component {
             console.error("commentData is null")
             return
         }
-        const reply = !!this.commentData?.ParentID ? "reply from userID:" + this.commentData?.ParentID + " " : ""
-        this.commentContent.string = reply  + this.commentData.Content
+       
+        const parentNickName = SocialModel.getInstance().userListCache[this.commentData?.ParentID]?.nick_name || ""
+        const reply = !!this.commentData?.ParentID ? "reply from:" + parentNickName + " " : ""
+        this.commentContent.string = reply + this.commentData.Content
         this.commentAt.string = Utils.getDateFromStr(this.commentData.CreatedAt)
         this.likeCount = this.commentData?.LikeCount || 0
+        this.userID = this.commentData.UserID
+        this.setNikeName()
         if (SocialModel.getInstance().commentPostID == this.postID) {
             this.isLike = SocialModel.getInstance().commentIDs.indexOf(this.commentID) !== -1
             this.setBtnByIsLike()
@@ -77,6 +86,10 @@ export class FollowCommentCell extends Component {
         this.setBtnByIsLike()
     }
 
+    setNikeName() {
+        this.nikeName.string = SocialModel.getInstance().userListCache[this.userID]?.nick_name
+    }
+
     setBtnByIsLike() {
         this.onLike.active = this.isLike
         this.offLike.active = !this.isLike
@@ -84,3 +97,4 @@ export class FollowCommentCell extends Component {
     }
 }
 
+ 

@@ -1,0 +1,194 @@
+{
+  "1": {
+    "interaction_type": "1",
+    "dialogue_cn": "我有你需要的东西，吃点亏和你交换，机不可失时不再来啊！",
+    "dialogue_en": "I have what you need. I’ll take a small loss to trade with you—this opportunity won’t come twice!",
+    "weight": "10"
+  },
+  "2": {
+    "interaction_type": "1",
+    "dialogue_cn": "看你需要这个，我用它还你手里的道具，价格公道，是否接受？",
+    "dialogue_en": "I see you need this. Let me exchange it for your item; it’s a fair price. Will you accept?",
+    "weight": "10"
+  },
+  "3": {
+    "interaction_type": "1",
+    "dialogue_cn": "相遇就是缘，我用珍藏的东西交换你的道具，绝不坑人，要不要成交？",
+    "dialogue_en": "Fate brought us together. I’ll trade my treasured item for yours. No tricks—want to make a deal?",
+    "weight": "10"
+  },
+  "4": {
+    "interaction_type": "1",
+    "dialogue_cn": "嗨，我正想做笔小交易，要不要考虑一下？",
+    "dialogue_en": "Hey, I was just thinking of making a little trade. Care to consider it?",
+    "weight": "10"
+  },
+  "5": {
+    "interaction_type": "1",
+    "dialogue_cn": "遇到我算你今天运气好，我这里因有尽有，可别错过了。",
+    "dialogue_en": "You’re in luck today. I have everything you could want—don’t miss out.",
+    "weight": "10"
+  },
+  "6": {
+    "interaction_type": "1",
+    "dialogue_cn": "我有你缺少的，你有我想要的，来做一笔交易吧，怎么样？",
+    "dialogue_en": "You have what I want, and I have what you lack. Let’s make a deal, shall we?",
+    "weight": "10"
+  },
+  "7": {
+    "interaction_type": "1",
+    "dialogue_cn": "来来来，这儿一定有你想要的东西，走过路过不要错过。",
+    "dialogue_en": "Come one, come all! I’ve got exactly what you’re looking for—don’t pass this by.",
+    "weight": "10"
+  },
+  "8": {
+    "interaction_type": "1",
+    "dialogue_cn": "嘘，别让其他人知道我在这儿，我只和少数人做生意，来看看今天的好东西吧。",
+    "dialogue_en": "Shhh… don’t let anyone else know I’m here. I only do business with a select few. Come see today’s treasures.",
+    "weight": "10"
+  },
+  "9": {
+    "interaction_type": "1",
+    "dialogue_cn": "我亲爱的朋友，做一笔划算的买卖，稳赚不亏，换不换？",
+    "dialogue_en": "My dear friend, let’s make a profitable deal—you can’t lose. Wanna trade?",
+    "weight": "10"
+  },
+  "10": {
+    "interaction_type": "1",
+    "dialogue_cn": "少量的付出就能获得大量的回报，还等什么？来和我交换吧！",
+    "dialogue_en": "A small investment for a huge reward. What are you waiting for? Let’s trade!",
+    "weight": "10"
+  },
+  "11": {
+    "interaction_type": "2",
+    "dialogue_cn": "请搜集地图上的所有{道具}，并交给指定的人物。",
+    "dialogue_en": "Please collect all {} on the map and deliver them to the designated character.",
+    "weight": "10"
+  },
+  "12": {
+    "interaction_type": "2",
+    "dialogue_cn": "{}散落在地图的各个角落，请将它们全部收集起来吧！",
+    "dialogue_en": "{} are scattered across every corner of the map. Gather them all!",
+    "weight": "10"
+  },
+  "13": {
+    "interaction_type": "2",
+    "dialogue_cn": "重要的{}究竟在哪里？请帮忙将它们都找出来。",
+    "dialogue_en": "Where could the important {items} be? Please help find them all!",
+    "weight": "10"
+  },
+  "14": {
+    "interaction_type": "2",
+    "dialogue_cn": "地图上出现了大量的的{}，到底哪一个才是正确的呢？请帮忙找出来！",
+    "dialogue_en": "Many {items} have appeared on the map—but which one is the real one? Please find the correct one!",
+    "weight": "10"
+  },
+  "15": {
+    "interaction_type": "2",
+    "dialogue_cn": "{}似乎想要{}，请和他一起进行搜集吧。",
+    "dialogue_en": "{} seems to want {}. Join them in the search!",
+    "weight": "10"
+  },
+  "16": {
+    "interaction_type": "3",
+    "dialogue_cn": "似乎是个很华丽的宝箱，不知道里面有什么宝贝呢？",
+    "dialogue_en": "It looks like a magnificent treasure chest. Wonder what treasures lie inside?",
+    "weight": "10"
+  },
+  "17": {
+    "interaction_type": "3",
+    "dialogue_cn": "这个宝箱正散发着神秘的能量，要打开吗？",
+    "dialogue_en": "This chest is radiating mysterious energy. Will you open it?",
+    "weight": "10"
+  },
+  "18": {
+    "interaction_type": "3",
+    "dialogue_cn": "宝箱里似乎传来了奇怪的动静，是否要打开一探究竟呢？",
+    "dialogue_en": "Strange noises are coming from inside the chest. Do you want to open it and find out?",
+    "weight": "10"
+  },
+  "19": {
+    "interaction_type": "3",
+    "dialogue_cn": "历经磨难才获得的宝箱，到底会获得什么样的宝物呢？",
+    "dialogue_en": "A chest earned through hardship—what kind of treasure awaits inside?",
+    "weight": "10"
+  },
+  "20": {
+    "interaction_type": "3",
+    "dialogue_cn": "妖怪看守的宝箱，也许里面装着价值不菲的财富？",
+    "dialogue_en": "A chest guarded by monsters… could it hold a fortune inside?",
+    "weight": "10"
+  },
+  "21": {
+    "interaction_type": "3",
+    "dialogue_cn": "不起眼的宝箱，从没有人开启过，你要打开它吗？",
+    "dialogue_en": "An unremarkable chest that no one has ever opened. Will you be the one to unlock it?",
+    "weight": "10"
+  },
+  "22": {
+    "interaction_type": "3",
+    "dialogue_cn": "普普通通的宝箱，或许藏着意想不到的惊喜，你要打开它吗？",
+    "dialogue_en": "Just an ordinary chest, but it might hold an unexpected surprise. Will you open it?",
+    "weight": "10"
+  },
+  "23": {
+    "interaction_type": "3",
+    "dialogue_cn": "破损的宝箱，有什么正在里面发光，究竟会是什么样的财宝呢？",
+    "dialogue_en": "A damaged chest, yet something glows inside. What kind of treasure could it be?",
+    "weight": "10"
+  },
+  "24": {
+    "interaction_type": "3",
+    "dialogue_cn": "黑色的气息笼罩了宝箱，你愿意冒险开启它吗？",
+    "dialogue_en": "The chest is shrouded in dark aura. Will you risk opening it?",
+    "weight": "10"
+  },
+  "25": {
+    "interaction_type": "3",
+    "dialogue_cn": "这个宝箱异常沉重，这里面究竟装了多少财宝呢？",
+    "dialogue_en": "This chest is unusually heavy. Just how much treasure is inside?",
+    "weight": "10"
+  },
+  "26": {
+    "interaction_type": "4",
+    "dialogue_cn": "这似乎是个神奇的挑战，完成后能获得什么奖励呢？",
+    "dialogue_en": "This seems to be a magical challenge. What rewards will you get for completing it?",
+    "weight": "10"
+  },
+  "27": {
+    "interaction_type": "4",
+    "dialogue_cn": "挑战即将开启，请做好准备，出发！",
+    "dialogue_en": "The challenge is about to begin. Get ready and go!",
+    "weight": "10"
+  },
+  "28": {
+    "interaction_type": "4",
+    "dialogue_cn": "简单的挑战，不简单的奖励，快来试试看吧。",
+    "dialogue_en": "A simple challenge with extraordinary rewards—come give it a try!",
+    "weight": "10"
+  },
+  "29": {
+    "interaction_type": "4",
+    "dialogue_cn": "稍微困难一些的任务，能获得更丰厚的奖励，要挑战看看吗？",
+    "dialogue_en": "A slightly difficult quest with even richer rewards. Will you take on the challenge?",
+    "weight": "10"
+  },
+  "30": {
+    "interaction_type": "4",
+    "dialogue_cn": "颇具挑战性的任务，但奖励不会让你失望，准备好开始了吗？",
+    "dialogue_en": "A highly challenging quest, but the reward will not disappoint. Are you ready to begin?",
+    "weight": "10"
+  },
+  "31": {
+    "interaction_type": "4",
+    "dialogue_cn": "终极考验！终极奖励！请准备好再来。",
+    "dialogue_en": "Ultimate test! Ultimate reward! Come back when you’re fully prepared.",
+    "weight": "10"
+  },
+  "32": {
+    "interaction_type": "4",
+    "dialogue_cn": "你开启了一个挑战任务，完成挑战或许能获得意想不到的奖励。",
+    "dialogue_en": "You have started a challenge mission. Completing it may bring you unexpected rewards.",
+    "weight": "10"
+  }
+}

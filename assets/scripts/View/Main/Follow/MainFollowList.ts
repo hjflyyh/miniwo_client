@@ -24,15 +24,11 @@ export class MainFollowList extends Component {
     oldBtn: Node = null
 
     isOpenEdit = false
-
-    otherPostList = []
-
     /**
      * 模拟收到数据
      */
     receivedData() {
-        this.otherPostList = SocialModel.getInstance().otherPostList
-        this.listComp.numberOfItems = () => this.otherPostList.length
+        this.listComp.numberOfItems = () => SocialModel.getInstance().otherPostList.length
         // 更新列表
         this.listComp.reloadData()
     }
@@ -42,6 +38,7 @@ export class MainFollowList extends Component {
 
     start() {
         EventSystem.addListent("followEditBack", this.postBack, this)
+        EventSystem.addListent("otherPostList", this.refreshData, this)
         this.httpRequest()
         this.refreshData()
     }
@@ -50,11 +47,11 @@ export class MainFollowList extends Component {
         this.scheduleOnce(() => {
             this.listComp.enabled = true
             // 确定列表内一共需要显示多少条内容   
-            this.listComp.numberOfItems = () => this.otherPostList.length;
+            this.listComp.numberOfItems = () => SocialModel.getInstance().otherPostList.length;
 
             this.listComp.cellForItemAt = (indexPath, collectionView) => {
                 // 通过下标可以获取到对应的数据
-                const data = this.otherPostList[indexPath.item]
+                const data = SocialModel.getInstance().otherPostList[indexPath.item]
 
                 // 通过标识符获取重用池内的节点
                 const cell = collectionView.dequeueReusableCell(`cell`)
@@ -110,13 +107,12 @@ export class MainFollowList extends Component {
         layout.verticalSpacing = 10
         layout.alignment = alignment
 
-        layout.itemSize = new math.Size(1000, 1008)
+        layout.itemSize = new math.Size(1000, 1070)
         this.listComp.layout = layout
     }
 
     httpRequest() {
         AppConst.SocialHttpManager.sendGetHttp("myfollows", {})
-        AppConst.SocialHttpManager.sendGetHttp("timelineList", {})
         AppConst.SocialHttpManager.sendGetHttp("followersTimeline", {})
     }
 

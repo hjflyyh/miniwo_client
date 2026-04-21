@@ -15,8 +15,8 @@ export class MainCharacterListCell extends Component {
     }
 
     refreshData(data){
-        this.bgTransform.contentSize = new Size(498 , data.height)
-        this.tag.y = data.height / 2
+        // this.bgTransform.contentSize = new Size(345.75 , data.height)
+        // this.tag.y = data.height / 2
     }
 }
 

@@ -4,8 +4,11 @@ export class SocialModel {
     private static _instance: SocialModel = null;
 
     public followList: any[] = []
+
     public postList: any[] = []
     public otherPostList: any[] = []
+    public randomPostList: any[] = []
+
     public postLikeList: any[] = [] // 点赞列表 帖子ID
 
     public commentPostID: number = 0  // 指定帖子id
@@ -14,6 +17,8 @@ export class SocialModel {
     public draftData: any
 
     public itemsCache: {} = {}
+
+    public userListCache: {} = {}
 
     public static getInstance(): SocialModel {
         if (!this._instance) {
@@ -24,28 +29,59 @@ export class SocialModel {
 
     public init() {
         EventSystem.addListent("SocialHttpMessage", this.OnSocialHttpMessage, this)
+        EventSystem.addListent("WebSocketMessage", this.OnWebSocketMessage, this)
+    }
+
+    private OnWebSocketMessage(data) {
+        if (data["id"] == "get_user_by_ids" && data["payload"]) {
+            let payload = JSON.parse(data["payload"]);
+            if (!payload || !payload.success || !payload.data) {
+                return;
+            }
+
+            payload.data.forEach(user => {
+                if (!user.player_id) {
+                    return
+                }
+                user.info = user.info ? JSON.parse(user.info) : {}
+                this.userListCache[user.player_id] = user
+            })
+            console.log("userListCache:", this.userListCache)
+            EventSystem.send("userListCache")
+        }
     }
 
     private OnSocialHttpMessage(data) {
         const cmd = data?.cmd || data?.data?.cmd
         data = data?.data || data
         if (cmd == network.FollowSocialCode.FollowData) {
-            this.followList = data.list || []
+            const followList = data.list || []
+            this.followList = followList.map((i) => i.FollowedUserID)
             console.log("followList:", this.followList)
         }
         else if (cmd == network.FollowSocialCode.PostData) {
+            this.receiveList(data.list || [])
             this.postList = data.list || []
+            const postIDs = data.postIDs || []
+            if (postIDs.length > 0) {
+                this.postLikeList = [...new Set([...this.postLikeList, ...postIDs])]
+            }
             console.log("postList:", this.postList)
         }
         else if (cmd == network.FollowSocialCode.OtherPostData) {
+            this.receiveList(data.list || [])
             this.otherPostList = data.list || []
-            this.postLikeList = data.postIDs || []
+            const postIDs = data.postIDs || []
+            if (postIDs.length > 0) {
+                this.postLikeList = [...new Set([...this.postLikeList, ...postIDs])]
+            }
+            EventSystem.send("otherPostList")
             console.log("OtherPostData data:", data)
         }
         else if (cmd == network.FollowSocialCode.CommentData && data?.list) {
             this.commentIDs = data?.commentIDs || []
             this.commentPostID = data?.postID
-            EventSystem.send("commentListData", { list: data.list, postID: data.postID, postAt: data.postAt, egg: data?.egg})
+            EventSystem.send("commentListData", { list: data.list, postID: data.postID, postAt: data.postAt, egg: data?.egg })
         }
         else if (cmd == network.FollowSocialCode.TopCommentData && data?.list) {
             EventSystem.send("topCommentListData", { list: data.list, postID: data.postID, postAt: data.postAt, topID: data.topID })
@@ -88,6 +124,31 @@ export class SocialModel {
                 title: data?.draft?.Title || "",
                 imageUrl: data?.draft?.ImageURL || "",
             }
+        }
+        else if (cmd == network.FollowSocialCode.RandomPostData && data?.list) {
+            const postIDs = data.postIDs || []
+            if (postIDs.length > 0) {
+                this.postLikeList = [...new Set([...this.postLikeList, ...postIDs])]
+            }
+            this.receiveList(data.list || [])
+            this.randomPostList = data.list || []
+            console.log("randomPostList:", this.randomPostList)
+        }
+        else if (cmd == network.FollowSocialCode.FollowSuccess) {
+            this.followList.push(data.followedUserId)
+            EventSystem.send("followBack", data.followedUserId)
+        }
+        else if (cmd == network.FollowSocialCode.UnFollowSuccess) {
+            this.followList = this.followList.filter((item: any) => item != data.followedUserId)
+            EventSystem.send("followBack", data.followedUserId)
+        }
+    }
+
+    private receiveList(list: any[]) {
+        const userIDs = [...new Set(list.filter(item => !this.userListCache[item.UserID]).map(item => Number(item.UserID)))];
+        if (userIDs.length > 0) {
+            let json = new network.GetUserByIDRequest();
+            AppConst.WebSocketManager.send(json.toJSON(userIDs))
         }
     }
 }
