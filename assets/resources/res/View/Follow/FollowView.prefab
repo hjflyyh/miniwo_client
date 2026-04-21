@@ -1847,7 +1847,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 328.7695,
+      "x": 348.7695,
       "y": 0,
       "z": 0
     },
@@ -2132,7 +2132,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 657.539,
+      "width": 677.539,
       "height": 900
     },
     "_anchorPoint": {
@@ -2166,11 +2166,11 @@
       "height": 40
     },
     "_startAxis": 0,
-    "_paddingLeft": 0,
+    "_paddingLeft": 20,
     "_paddingRight": 0,
     "_paddingTop": 0,
     "_paddingBottom": 0,
-    "_spacingX": 0,
+    "_spacingX": 5,
     "_spacingY": 0,
     "_verticalDirection": 1,
     "_horizontalDirection": 0,
