@@ -53,6 +53,7 @@ export class SocialModel {
             if (postIDs.length > 0) {
                 this.postLikeList = [...new Set([...this.postLikeList, ...postIDs])]
             }
+            EventSystem.send("otherPostList")
             console.log("OtherPostData data:", data)
         }
         else if (cmd == network.FollowSocialCode.CommentData && data?.list) {
