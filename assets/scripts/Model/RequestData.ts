@@ -225,4 +225,9 @@ export module network {
             return { rpc: { id: "shop_buy", payload: JSON.stringify({ item_id: itemID, count: count }) } };
         }
     }
+    export class GetUserByIDRequest {
+        toJSON(userIDs) {
+            return { rpc: { id: "get_user_by_ids", payload: JSON.stringify({ playerIDs: userIDs }) } };
+        }
+    }
 }
