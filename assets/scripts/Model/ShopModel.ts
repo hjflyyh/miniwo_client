@@ -27,8 +27,8 @@ export class ShopModel {
     }
 
     private OnWebSocketMessage(answer) {
-        this.shopList = this.getShopList()
         if (answer["id"] == "shop_data" && answer["payload"]) {
+            this.shopList = this.getShopList()
             let payload = JSON.parse(answer["payload"]);
             if(!payload || !payload.success || !payload.data){
                 return;
@@ -41,7 +41,5 @@ export class ShopModel {
                 }
             });
         }
-        console.log("ShopModel OnWebSocketMessage", this.shopList)
-        
     }
 }
