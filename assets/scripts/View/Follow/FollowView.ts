@@ -26,6 +26,9 @@ export class FollowView extends Component {
     @property(Label)
     postLikeLable: Label = null
 
+    @property(Label)
+    postCommentLable: Label = null
+
     @property(Node)
     public onLike: Node = null
 
@@ -118,6 +121,7 @@ export class FollowView extends Component {
         this.postAtLable.string = Utils.getDateFromStr(post?.CreatedAt || "")
         this.commentRender.active = false
 
+        this.postCommentLable.string = post?.CommentCount
         this.likeCount = post?.LikeCount || 0
         this.isLike = SocialModel.getInstance().postLikeList.indexOf(this.postID) !== -1
         this.setBtnByIsLike()
@@ -150,6 +154,7 @@ export class FollowView extends Component {
         this.eggRewardBtn.active = egg == true
         this.addList(list)
         this.refreshCommentList()
+        this.postCommentLable.string = this.commentRootList.length + ""
     }
 
     topCommentListData({ list, postID, postAt, topID }) {

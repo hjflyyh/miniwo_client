@@ -20,10 +20,11 @@ export class FollowComment extends Component {
     public topID: number
 
     private commentList = {}
-    private isShowMore: boolean = false
+    private isCheckShowMore: boolean = false
 
     start() {
         this.showMoreBtn.setSiblingIndex(1000)
+        this.isCheckShowMore = false
         this.commentRender.active = false
     }
 
@@ -33,13 +34,13 @@ export class FollowComment extends Component {
             postAt: this.postAt,
             topId: this.topID,
         })
-        this.isShowMore = true
         this.showMoreBtn.active = false
     }
 
     onRefresh(data: any) {
-        if (!this.isShowMore) {
-            this.showMoreBtn.active = data.find((item: any) => item.ID == this.topID)?.CommentCount || 0 > 1
+        if (!this.isCheckShowMore) {
+            this.isCheckShowMore = true
+            this.showMoreBtn.active = data.length == 2 && (data[0]?.CommentCount + data[1]?.CommentCount) > 1
         }
 
         for (let comment of data) {

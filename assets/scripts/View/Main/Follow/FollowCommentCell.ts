@@ -24,6 +24,9 @@ export class FollowCommentCell extends Component {
     likeNum: Label = null
 
     @property(Label)
+    commentNum: Label = null
+
+    @property(Label)
     commentAt: Label = null
 
     @property(RichText)
@@ -54,6 +57,7 @@ export class FollowCommentCell extends Component {
         this.likeCount = this.commentData?.LikeCount || 0
         this.userID = this.commentData.UserID
         this.setNikeName()
+        this.commentNum.string = this.commentData?.CommentCount
         if (SocialModel.getInstance().commentPostID == this.postID) {
             this.isLike = SocialModel.getInstance().commentIDs.indexOf(this.commentID) !== -1
             this.setBtnByIsLike()
