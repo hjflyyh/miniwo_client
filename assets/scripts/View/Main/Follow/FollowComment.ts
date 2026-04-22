@@ -59,7 +59,7 @@ export class FollowComment extends Component {
             followcommentCell.commentID = comment.ID
             followcommentCell.commentData = comment
             if (comment.ParentID > 0) {
-                const parentFollowcommentCell = this.commentList[comment.ParentID].getComponent("FollowCommentCell") as FollowCommentCell;
+                const parentFollowcommentCell = this.commentList[comment.ParentID]?.getComponent("FollowCommentCell") as FollowCommentCell;
                 followcommentCell.parentUserID = parentFollowcommentCell?.userID
             }
 

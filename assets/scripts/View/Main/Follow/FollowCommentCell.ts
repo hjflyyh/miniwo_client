@@ -34,7 +34,7 @@ export class FollowCommentCell extends Component {
 
     private isLike: boolean = false
     private likeCount: number = 0
-    private userID: string
+    public userID: string
 
     start() {
         EventSystem.addListent("commentLikeConfirmBack", this.commentLikeConfirmBack, this)
