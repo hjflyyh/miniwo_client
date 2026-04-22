@@ -4,6 +4,7 @@ export class SocialModel {
     private static _instance: SocialModel = null;
 
     public followList: any[] = []
+    public collectList: any[] = []
 
     public postList: any[] = []
     public otherPostList: any[] = []

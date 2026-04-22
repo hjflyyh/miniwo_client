@@ -45,10 +45,11 @@ export class FollowComment extends Component {
             let next = this.commentList[comment.ID]
             if (!next) {
                 next = instantiate(this.commentRender)
+                
                 next.active = true
                 this.headRender.addChild(next)
                 this.commentList[comment.ID] = next
-            }  
+            }
 
             const followcommentCell = next.getComponent("FollowCommentCell") as FollowCommentCell;
             followcommentCell.postID = this.postID
@@ -56,6 +57,11 @@ export class FollowComment extends Component {
             followcommentCell.topID = this.topID
             followcommentCell.commentID = comment.ID
             followcommentCell.commentData = comment
+            if (comment.ParentID > 0) {
+                const parentFollowcommentCell = this.commentList[comment.ParentID].getComponent("FollowCommentCell") as FollowCommentCell;
+                followcommentCell.parentUserID = parentFollowcommentCell?.userID
+            }
+
             followcommentCell.refreshCommentCell()
         }
     }

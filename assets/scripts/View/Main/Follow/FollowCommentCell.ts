@@ -12,6 +12,7 @@ export class FollowCommentCell extends Component {
     public commentID: number
     public topID: number
     public commentData: any
+    public parentUserID: string
 
     @property(Node)
     private onLike: Node = null
@@ -46,8 +47,8 @@ export class FollowCommentCell extends Component {
             return
         }
        
-        const parentNickName = SocialModel.getInstance().userListCache[this.commentData?.ParentID]?.nick_name || ""
-        const reply = !!this.commentData?.ParentID ? "reply from:" + parentNickName + " " : ""
+        const parentNickName = SocialModel.getInstance().userListCache[this.parentUserID]?.nick_name || ""
+        const reply = !!this.parentUserID ? "reply from:" + parentNickName + " " : ""
         this.commentContent.string = reply + this.commentData.Content
         this.commentAt.string = Utils.getDateFromStr(this.commentData.CreatedAt)
         this.likeCount = this.commentData?.LikeCount || 0
@@ -64,8 +65,8 @@ export class FollowCommentCell extends Component {
             postID: this.postID,
             postAt: this.postAt,
             topID: this.topID,
-            // commentID: this.commentID,
-            userID: this.commentData.UserID,
+            commentID: this.commentID,
+            // userID: this.commentData.UserID,
         })
     }
 
