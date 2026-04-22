@@ -23,6 +23,7 @@ export class FollowComment extends Component {
     private isShowMore: boolean = false
 
     start() {
+        this.showMoreBtn.setSiblingIndex(1000)
         this.commentRender.active = false
     }
 
