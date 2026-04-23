@@ -4,6 +4,7 @@ export class SocialModel {
     private static _instance: SocialModel = null;
 
     public followList: any[] = []
+    public collectList: any[] = []
 
     public postList: any[] = []
     public otherPostList: any[] = []
@@ -79,11 +80,13 @@ export class SocialModel {
             console.log("OtherPostData data:", data)
         }
         else if (cmd == network.FollowSocialCode.CommentData && data?.list) {
+            this.receiveList(data.list || [])
             this.commentIDs = data?.commentIDs || []
             this.commentPostID = data?.postID
             EventSystem.send("commentListData", { list: data.list, postID: data.postID, postAt: data.postAt, egg: data?.egg })
         }
         else if (cmd == network.FollowSocialCode.TopCommentData && data?.list) {
+            this.receiveList(data.list || [])
             EventSystem.send("topCommentListData", { list: data.list, postID: data.postID, postAt: data.postAt, topID: data.topID })
         }
         else if (cmd == network.FollowSocialCode.PostCreate) {
