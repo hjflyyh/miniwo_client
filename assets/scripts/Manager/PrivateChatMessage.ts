@@ -589,6 +589,12 @@ public markSessionRead(peerUid: string) {
       typeof content.send_name === "string" && content.send_name.trim()
         ? content.send_name.trim()
         : null;
+    const npcAvatarRaw =
+      typeof content.npc_sprite_url === "string" && content.npc_sprite_url.trim()
+        ? content.npc_sprite_url.trim()
+        : (typeof content.npc_avatar === "string" && content.npc_avatar.trim()
+            ? content.npc_avatar.trim()
+            : null);
 
     try {
       chatLog("[pm] onChannelMessage", {
@@ -598,6 +604,8 @@ public markSessionRead(peerUid: string) {
         create_time: data?.create_time,
         content,
         npc_name: npcNameRaw,
+        npc_sprite_url: typeof content.npc_sprite_url === "string" ? content.npc_sprite_url : null,
+        npc_avatar: npcAvatarRaw,
       });
     } catch {}
 
@@ -620,7 +628,7 @@ public markSessionRead(peerUid: string) {
         session = {
           peerUid,
           peerName: npcNameRaw || data?.username || null,
-          peerAvatar: null,
+          peerAvatar: npcAvatarRaw,
           isNPC: this.isKnownNpcPeerUid(peerUid),
           channelId,
           openedAt: Date.now(),
@@ -640,6 +648,9 @@ public markSessionRead(peerUid: string) {
     // 后端 NPC 私聊 content：{ npc_name, send_name, text, ts } —— 用 npc_name 作为展示名并写入会话
     if (session && npcNameRaw) {
       session.peerName = npcNameRaw;
+    }
+    if (session && npcAvatarRaw) {
+      session.peerAvatar = npcAvatarRaw;
     }
 
     const text = this.extractText(content);

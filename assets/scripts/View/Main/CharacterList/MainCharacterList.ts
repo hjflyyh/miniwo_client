@@ -2,6 +2,7 @@ import { _decorator, Component, Node, randomRangeInt, Size } from 'cc';
 import { YXCollectionView } from '../../../../plugin/list-3x/yx-collection-view';
 import { YXMasonryFlowLayout } from '../../../../plugin/list-3x/yx-masonry-flow-layout';
 import { MainCharacterListCell } from './MainCharacterListCell';
+import { UGCModel } from '../../../Model/UGCModel';
 
 const { ccclass, property } = _decorator;
 
@@ -18,20 +19,18 @@ export class MainCharacterList extends Component {
      */
     @property(YXCollectionView)
     listComp: YXCollectionView = null
-    /**
-     * 测试数据源
-     */
-    testData: Data[] = []
 
     private column = 2
     start() {
         this.scheduleOnce(()=>{
             this.listComp.enabled = true
-            this.listComp.numberOfItems = () => this.testData.length;
+            this.listComp.numberOfItems = () => {
+                return UGCModel.getInstance().dailyHotNpcList.length;
+            };
 
             this.listComp.cellForItemAt = (indexPath, collectionView) => {
                 // 通过下标可以获取到对应的数据
-                const data = this.testData[indexPath.item]
+                const data = UGCModel.getInstance().dailyHotNpcList[indexPath.item]
     
                 // 通过标识符获取重用池内的节点
                 const cell = collectionView.dequeueReusableCell(`cell`)
@@ -59,7 +58,7 @@ export class MainCharacterList extends Component {
         layout.divide = column
         layout.itemSize = (indexPath) => {
             // 通过下标可以获取到对应的数据
-            const data = this.testData[indexPath.item]
+            // const data = this.testData[indexPath.item]
             return new Size(0, 596)
         }
         this.listComp.layout = layout
@@ -69,11 +68,6 @@ export class MainCharacterList extends Component {
      * 模拟收到数据
      */
     receivedData() {
-        this.testData = []
-        for (let index = 0; index < 20; index++) {
-            this.testData.push(new Data())
-        }
-
         // 更新列表
         this.listComp.reloadData()
     }
