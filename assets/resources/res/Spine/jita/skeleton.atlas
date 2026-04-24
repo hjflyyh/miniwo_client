@@ -1,0 +1,132 @@
+
+skeleton.png
+size: 939,132
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+[skin]默认衣服带人/jita
+  rotate: true
+  xy: 400, 26
+  size: 93, 45
+  orig: 93, 45
+  offset: 0, 0
+  index: -1
+[skin]默认衣服带人/侧脸
+  rotate: false
+  xy: 13, 20
+  size: 120, 99
+  orig: 120, 99
+  offset: 0, 0
+  index: -1
+[skin]默认衣服带人/侧面右手
+  rotate: true
+  xy: 659, 77
+  size: 42, 69
+  orig: 42, 69
+  offset: 0, 0
+  index: -1
+[skin]默认衣服带人/侧面右腿
+  rotate: true
+  xy: 771, 25
+  size: 39, 63
+  orig: 39, 63
+  offset: 0, 0
+  index: -1
+[skin]默认衣服带人/侧面左手
+  rotate: true
+  xy: 689, 22
+  size: 42, 69
+  orig: 42, 69
+  offset: 0, 0
+  index: -1
+[skin]默认衣服带人/侧面左腿
+  rotate: true
+  xy: 820, 83
+  size: 36, 63
+  orig: 36, 63
+  offset: 0, 0
+  index: -1
+[skin]默认衣服带人/侧面身躯
+  rotate: true
+  xy: 741, 77
+  size: 42, 66
+  orig: 42, 66
+  offset: 0, 0
+  index: -1
+[skin]默认衣服带人/正脸
+  rotate: false
+  xy: 146, 17
+  size: 114, 102
+  orig: 114, 102
+  offset: 0, 0
+  index: -1
+[skin]默认衣服带人/正面右手
+  rotate: true
+  xy: 580, 74
+  size: 45, 66
+  orig: 45, 66
+  offset: 0, 0
+  index: -1
+[skin]默认衣服带人/正面右腿
+  rotate: true
+  xy: 458, 13
+  size: 30, 63
+  orig: 30, 63
+  offset: 0, 0
+  index: -1
+[skin]默认衣服带人/正面左手
+  rotate: true
+  xy: 610, 16
+  size: 45, 66
+  orig: 45, 66
+  offset: 0, 0
+  index: -1
+[skin]默认衣服带人/正面左腿
+  rotate: true
+  xy: 534, 13
+  size: 30, 63
+  orig: 30, 63
+  offset: 0, 0
+  index: -1
+[skin]默认衣服带人/正面身躯
+  rotate: false
+  xy: 458, 56
+  size: 48, 63
+  orig: 48, 63
+  offset: 0, 0
+  index: -1
+[skin]默认衣服带人/背脸
+  rotate: false
+  xy: 273, 17
+  size: 114, 102
+  orig: 114, 102
+  offset: 0, 0
+  index: -1
+[skin]默认衣服带人/背面右腿
+  rotate: false
+  xy: 896, 56
+  size: 30, 63
+  orig: 30, 63
+  offset: 0, 0
+  index: -1
+[skin]默认衣服带人/背面左腿
+  rotate: true
+  xy: 847, 13
+  size: 30, 63
+  orig: 30, 63
+  offset: 0, 0
+  index: -1
+[skin]默认衣服带人/背面身躯
+  rotate: false
+  xy: 519, 56
+  size: 48, 63
+  orig: 48, 63
+  offset: 0, 0
+  index: -1
+脖子
+  rotate: false
+  xy: 847, 58
+  size: 24, 12
+  orig: 24, 12
+  offset: 0, 0
+  index: -1

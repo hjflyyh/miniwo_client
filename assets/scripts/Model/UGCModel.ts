@@ -61,6 +61,8 @@ export class UGCModel {
 
     /** 当前地图的 NPC 列表：来自 getNpcByMap 的 npc_list 原始数据 */
     public npcList: any[] = [];
+    /** 登录回包里的热门 NPC 列表：data.daily_hot_npc_list */
+    public dailyHotNpcList: any[] = [];
 
     public init() {
         EventSystem.addListent("HttpMessage", this.OnHttpMessage, this);
@@ -256,6 +258,15 @@ export class UGCModel {
 
     private OnHttpMessage(data: any) {
         if (!data) {
+            return;
+        }
+        if (data.cmd == 1) {
+            if (Array.isArray(data.daily_hot_npc_list)) {
+                this.dailyHotNpcList = data.daily_hot_npc_list;
+            } else {
+                this.dailyHotNpcList = [];
+            }
+            EventSystem.send("OnRefreshDailyHotNpcList", this.dailyHotNpcList);
             return;
         }
         //functionName: "createMapWithTitle"

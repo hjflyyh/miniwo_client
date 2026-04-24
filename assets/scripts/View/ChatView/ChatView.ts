@@ -10,7 +10,7 @@ const { ccclass, property } = _decorator;
 const NPC_AUTO_TEST_TEXT = '测试消息';
 
 type ChatRow =
-    | { kind: 'msg'; msg: PrivateMsg };
+    | { kind: 'msg'; msg: PrivateMsg; npc_sprite_url?: string | null; npc_avatar?: string | null };
 
 @ccclass('ChatView')
 export class ChatView extends Component {
@@ -277,7 +277,17 @@ export class ChatView extends Component {
 
     /** 按时间排序后，生成消息行 */
     private buildRowsFromMessages(msgs: PrivateMsg[]): ChatRow[] {
+        const pm = PrivateChatManager.getInstance();
+        const npcAvatar =
+            (this.peerUid
+                ? (pm as any).getLocalSessionList?.()?.find?.((x: any) => x?.peerUid === this.peerUid)?.peerAvatar
+                : null) ?? null;
         const sorted = [...msgs].sort((a, b) => (a.ts || 0) - (b.ts || 0));
-        return sorted.map((m) => ({ kind: 'msg' as const, msg: m }));
+        return sorted.map((m) => ({
+            kind: 'msg' as const,
+            msg: m,
+            npc_sprite_url: npcAvatar,
+            npc_avatar: npcAvatar, // 兼容旧读取
+        }));
     }
 }

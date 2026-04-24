@@ -217,7 +217,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "71c2b2e1-04cd-4350-a841-f2016193a9c1@f9941",
+      "__uuid__": "80ea8808-69c8-400e-b7d7-37990b5e1157@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -483,7 +483,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 398.225,
-      "height": 60.3
+      "height": 68.5
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -564,7 +564,7 @@
     "_paddingLeft": 0,
     "_paddingRight": 0,
     "_paddingTop": 25,
-    "_paddingBottom": -2.5,
+    "_paddingBottom": 5.7,
     "_spacingX": 0,
     "_spacingY": 0,
     "_verticalDirection": 1,
@@ -621,7 +621,7 @@
         "__id__": 31
       }
     ],
-    "_active": true,
+    "_active": false,
     "_components": [],
     "_prefab": {
       "__id__": 45
@@ -1185,8 +1185,15 @@
       "__id__": 49
     },
     "cellIdentifier": "",
-    "myNode": null,
-    "otherNode": null,
+    "myNode": {
+      "__id__": 2
+    },
+    "otherNode": {
+      "__id__": 24
+    },
+    "npcHead": {
+      "__id__": 28
+    },
     "_id": ""
   },
   {

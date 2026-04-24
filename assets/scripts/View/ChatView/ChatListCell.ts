@@ -1,5 +1,6 @@
-import { _decorator, Label, Node, UITransform } from 'cc';
+import { _decorator, Label, Node, Sprite, UITransform } from 'cc';
 import InfiniteCell from 'db://assets/plugin/InfiniteList/InfiniteCell';
+import { Utils } from '../../Utils/Utils';
 const { ccclass, property } = _decorator;
 
 @ccclass('ChatListCell')
@@ -12,6 +13,9 @@ export class ChatListCell extends InfiniteCell {
 
     private myBaseY = 0;
     private otherBaseY = 0;
+
+    @property(Sprite)
+    private npcHead : Sprite;
 
     onLoad() {
         this.myNode = this.myNode || this.node.getChildByName('my');
@@ -64,6 +68,17 @@ export class ChatListCell extends InfiniteCell {
         const isSelf = msg?.role === 'self';
         const text = msg?.text != null ? String(msg.text) : '';
         this.setMessageText(text, isSelf);
+
+        const avatar = data?.npc_sprite_url != null
+            ? String(data.npc_sprite_url)
+            : (data?.npc_avatar != null ? String(data.npc_avatar) : '');
+        if (!this.npcHead) return;
+        // 列表复用时先清空，避免头像串到其它 cell
+        if (isSelf || !avatar) {
+            this.npcHead.spriteFrame = null;
+            return;
+        }
+        Utils.loadCover(avatar, this.npcHead , 78 , 78);
     }
 }
 
