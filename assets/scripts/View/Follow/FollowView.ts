@@ -134,7 +134,7 @@ export class FollowView extends Component {
         this.postCommentLable.string = post?.CommentCount
 
         this.collectCount = post?.FavoriteCount
-        this.setBtnByIsFavorite()
+        this.setBtnByIsFavorite(SocialModel.getInstance().isFavorite)
 
         this.likeCount = post?.LikeCount || 0
         this.isLike = SocialModel.getInstance().postLikeList.indexOf(this.postID) !== -1
@@ -236,21 +236,21 @@ export class FollowView extends Component {
         }
     }
 
-    postLikeConfirmBack(postID) {
+    postLikeConfirmBack({ postID, isLike, changeCount }) {
         if (postID != this.postID) {
             return
         }
-        this.isLike = !this.isLike
-        this.likeCount = this.isLike ? this.likeCount + 1 : this.likeCount - 1
+        this.isLike = isLike
+        this.likeCount = this.likeCount + changeCount
         this.setBtnByIsLike()
     }
 
-    postCollectConfirmBack(postID) {
+    postCollectConfirmBack({ postID, isFavorite, changeCount }) {
         if (postID != this.postID) {
             return
         }
-        this.collectCount = SocialModel.getInstance().isFavorite ? this.collectCount + 1 : this.collectCount - 1
-        this.setBtnByIsFavorite()
+        this.collectCount = this.collectCount + changeCount
+        this.setBtnByIsFavorite(isFavorite)
     }
 
     setNikeName() {
@@ -270,9 +270,9 @@ export class FollowView extends Component {
         this.postLikeLable.string = Math.max(0, this.likeCount).toString()
     }
 
-    setBtnByIsFavorite() {
-        this.onCollect.active = SocialModel.getInstance().isFavorite
-        this.offCollect.active = !SocialModel.getInstance().isFavorite
+    setBtnByIsFavorite(isFavorite: boolean) {
+        this.onCollect.active = isFavorite
+        this.offCollect.active = !isFavorite
         this.collectNumLable.string = Math.max(0, this.collectCount).toString()
     }
 

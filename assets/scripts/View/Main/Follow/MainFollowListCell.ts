@@ -103,12 +103,12 @@ export class MainFollowListCell extends InfiniteCell {
         })
     }
 
-    postLikeConfirmBack(postID) {
+     postLikeConfirmBack({ postID, isLike, changeCount }) {
         if (postID != this.postID) {
             return
         }
-        this.isLike = !this.isLike
-        this.likeCount = this.isLike ? this.likeCount + 1 : this.likeCount - 1
+        this.isLike = isLike    
+        this.likeCount = this.likeCount + changeCount
         this.setBtnByIsLike()
     }
 

@@ -86,6 +86,7 @@ export class SocialModel {
             this.commentPostID = data?.postID
             this.isFavorite = data?.isFavorite
             EventSystem.send("commentListData", { list: data.list, postID: data.postID, postAt: data.postAt, egg: data?.egg })
+            EventSystem.send("postCollectConfirmBack", { postID: data.postID, isFavorite: this.isFavorite, changeCount: 0 })
         }
         else if (cmd == network.FollowSocialCode.TopCommentData && data?.list) {
             this.receiveList(data.list || [])
@@ -104,22 +105,22 @@ export class SocialModel {
             if (this.postData[data.postID] && this.postData[data.postID].LikeCount >= 0) {
                 this.postData[data.postID].LikeCount = this.postData[data.postID].LikeCount + 1
             }
-            EventSystem.send("postLikeConfirmBack", data.postID)
+            EventSystem.send("postLikeConfirmBack", { postID: data.postID, isLike: true, changeCount: 1 })
         }
         else if (cmd == network.FollowSocialCode.UnLikeConfirm && !data?.commentID) {
             this.postLikeList = this.postLikeList.filter((item: any) => item != data.postID)
             if (this.postData[data.postID] && this.postData[data.postID].LikeCount > 0) {
                 this.postData[data.postID].LikeCount = this.postData[data.postID].LikeCount - 1
             }
-            EventSystem.send("postLikeConfirmBack", data.postID)
+            EventSystem.send("postLikeConfirmBack", { postID: data.postID, isLike: false, changeCount: -1 })
         }
         else if (cmd == network.FollowSocialCode.LikeConfirm && data?.commentID) {
             this.commentIDs.push(data.commentID)
-            EventSystem.send("commentLikeConfirmBack", { postID: data.postID, commentID: data.commentID })
+            EventSystem.send("commentLikeConfirmBack", { postID: data.postID, commentID: data.commentID, isLike: true, changeCount: 1 })
         }
         else if (cmd == network.FollowSocialCode.UnLikeConfirm && data?.commentID) {
             this.commentIDs = this.commentIDs.filter((item: any) => item != data.commentID)
-            EventSystem.send("commentLikeConfirmBack", { postID: data.postID, commentID: data.commentID })
+            EventSystem.send("commentLikeConfirmBack", { postID: data.postID, commentID: data.commentID, isLike: false, changeCount: -1 })
         }
         else if (cmd == network.FollowSocialCode.Draft) {
             this.draftData = {
@@ -150,14 +151,14 @@ export class SocialModel {
             if (this.postData[data.postID] && this.postData[data.postID].FavoriteCount >= 0) {
                 this.postData[data.postID].FavoriteCount = this.postData[data.postID].FavoriteCount + 1
             }
-            EventSystem.send("postCollectConfirmBack", data.postID)
+            EventSystem.send("postCollectConfirmBack", { postID: data.postID, isFavorite: this.isFavorite, changeCount: 1 })
         }
         else if (cmd == network.FollowSocialCode.FavoriteCancel) {
             this.isFavorite = false
             if (this.postData[data.postID] && this.postData[data.postID].FavoriteCount > 0) {
                 this.postData[data.postID].FavoriteCount = this.postData[data.postID].FavoriteCount - 1
             }
-            EventSystem.send("postCollectConfirmBack", data.postID)
+            EventSystem.send("postCollectConfirmBack", { postID: data.postID, isFavorite: this.isFavorite, changeCount: -1 })
         }
     }
 
