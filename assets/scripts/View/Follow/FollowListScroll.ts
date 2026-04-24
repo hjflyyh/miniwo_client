@@ -1,4 +1,4 @@
-import { _decorator, Component, instantiate, Node, Prefab } from 'cc';
+import { _decorator, Component, instantiate, Node, Prefab, CCInteger } from 'cc';
 import { IFDataSource, InfiniteList } from '../../../plugin/InfiniteList/InfiniteList';
 import InfiniteCell from '../../../plugin/InfiniteList/InfiniteCell';
 import { SocialModel } from '../../Model/SocialModel';
@@ -6,28 +6,34 @@ import { MainFollowListCell } from '../Main/Follow/MainFollowListCell';
 const { ccclass, property } = _decorator;
 
 @ccclass('FollowListScroll')
-export class FollowListScroll extends Component implements IFDataSource{
+export class FollowListScroll extends Component implements IFDataSource {
     @property(Prefab)
-    cellPrefab : Prefab
+    cellPrefab: Prefab
+    @property(CCInteger)
+    showtype: number = 1
 
-    infiniteList :InfiniteList
+    infiniteList: InfiniteList
 
     GetCellNumber(): number {
+        if (this.showtype == 2) {
+            return SocialModel.getInstance().randomPostList.length;
+        }
         return SocialModel.getInstance().otherPostList.length;
     }
+
     GetCellIdentifer(dataIndex: number): string {
         return 'cellNode';
     }
     GetCellSize(dataIndex: number): number {
-        let data = SocialModel.getInstance().getPostDataByOtherPostList(dataIndex)
+        let data = this.GetCellData(dataIndex)
         let imageUrl = data?.ImageURL && JSON.parse(data?.ImageURL || "[]")
         if (imageUrl && imageUrl.length > 0) {
             return 1070
-        }else{
+        } else {
             return 420
         }
-
     }
+     
     GetCellView(dataIndex: number, identifier?: string): InfiniteCell {
         const id = identifier || 'cellNode';
         const node = this.cellPrefab ? instantiate(this.cellPrefab) : new Node('ChatListCell');
@@ -37,16 +43,21 @@ export class FollowListScroll extends Component implements IFDataSource{
         return comp;
     }
     GetCellData?(dataIndex: number) {
+        if (this.showtype == 2) {
+            return SocialModel.getInstance().getPostDataByRandomPostList(dataIndex)
+        }
         return SocialModel.getInstance().getPostDataByOtherPostList(dataIndex)
     }
     start() {
-        this.scheduleOnce(()=>{
-            EventSystem.addListent("otherPostList", this.refreshData, this)
+        this.scheduleOnce(() => {
+            if (this.showtype == 1) {
+                EventSystem.addListent("otherPostList", this.refreshData, this)
+            }  
             this.infiniteList = this.getComponent("InfiniteList") as InfiniteList
             this.infiniteList.Init(this)
 
             this.refreshData();
-        } , 0.1)
+        }, 0.1)
     }
 
     refreshData() {
