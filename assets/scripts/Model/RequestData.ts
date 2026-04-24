@@ -32,7 +32,9 @@ export module network {
         FollowSuccess = 4014, // 关注成功
         UnFollowSuccess = 4015, // 取消关注成功
         FavoriteConfirm = 4016, // 收藏确认
-        FavoriteCancel  = 4017 // 取消收藏确认
+        FavoriteCancel  = 4017, // 取消收藏确认
+        LikePostData    = 4018, // 点赞帖子数据
+        FavoritePostData = 4019, // 收藏帖子数据
     }
 
     export enum ServerCommandConstants {

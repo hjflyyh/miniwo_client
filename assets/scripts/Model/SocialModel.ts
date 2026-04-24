@@ -9,6 +9,8 @@ export class SocialModel {
     public postList: number[] = []
     public otherPostList: number[] = []
     public randomPostList: number[] = []
+    public likePostList: number[] = []
+    public favoritePostList: number[] = []
     public postData: {} = {}
 
     public postLikeList: any[] = [] // 点赞列表 帖子ID
@@ -160,6 +162,16 @@ export class SocialModel {
             }
             EventSystem.send("postCollectConfirmBack", { postID: data.postID, isFavorite: this.isFavorite, changeCount: -1 })
         }
+        else if (cmd == network.FollowSocialCode.LikePostData && data?.list) {
+            this.receiveList(data.list || [])
+            this.likePostList = this.setPostData(data.list || [])
+            console.log("likePostList:", this.likePostList)
+        }
+        else if (cmd == network.FollowSocialCode.FavoritePostData && data?.list) {
+            this.receiveList(data.list || [])
+            this.favoritePostList = this.setPostData(data.list || [])
+            console.log("favoritePostList:", this.favoritePostList)
+        }
     }
 
     private setPostData(list: any[]) : number[] {
@@ -183,6 +195,16 @@ export class SocialModel {
 
     public getPostDataByRandomPostList(index: number) {
         const id = this.randomPostList[index]
+        return this.postData[id]
+    }
+
+    public getPostDataByLikePostList(index: number) {
+        const id = this.likePostList[index]
+        return this.postData[id]
+    }
+
+    public getPostDataByFavoritePostList(index: number) {
+        const id = this.favoritePostList[index]
         return this.postData[id]
     }
 

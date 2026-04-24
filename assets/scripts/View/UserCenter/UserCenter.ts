@@ -34,6 +34,14 @@ export class UserCenter extends Component {
         this.info.string = RoleModel.getInstance().bio
     }
 
+    OnClickCollect(){
+        AppConst.PanelManager.openView("res/View/Main/Follow/CollectFollowList", null, null, "res/View/UserCenter/UserCenter")
+    }
+
+    OnClickLike(){
+        AppConst.PanelManager.openView("res/View/Main/Follow/LikeFollowList", null, null, "res/View/UserCenter/UserCenter")
+    }
+
     OnClickCard() {
         AppConst.PanelManager.openView("res/View/Card/CardList", null, null, "res/View/UserCenter/UserCenter")
     }
