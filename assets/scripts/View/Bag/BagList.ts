@@ -17,7 +17,7 @@ export class BagList extends Component {
 
     showBags = []
 
-    private column = 3
+    private column = 5
 
     start() {
         this.scheduleOnce(() => {
@@ -54,10 +54,10 @@ export class BagList extends Component {
         let layout = new YXMasonryFlowLayout()
         layout.extraVisibleCount = 10
         layout.horizontalSpacing = -15
-        layout.verticalSpacing = 20
+        layout.verticalSpacing = 0
         layout.divide = column
         layout.itemSize = (indexPath) => {
-            return new Size(0, 500)
+            return new Size(0, 140)
         }
         this.listComp.layout = layout
     }
