@@ -25,14 +25,11 @@ export class MainFollowList extends Component {
 
     isOpenEdit = false
 
-    randomPostList = []
-
     /**
      * 模拟收到数据
      */
     receivedData() {
-        this.randomPostList = SocialModel.getInstance().randomPostList
-        this.listComp.numberOfItems = () => this.randomPostList.length
+        this.listComp.numberOfItems = () => SocialModel.getInstance().randomPostList.length
         // 更新列表
         this.listComp.reloadData()
     }
@@ -50,11 +47,11 @@ export class MainFollowList extends Component {
         this.scheduleOnce(() => {
             this.listComp.enabled = true
             // 确定列表内一共需要显示多少条内容   
-            this.listComp.numberOfItems = () => this.randomPostList.length;
+            this.listComp.numberOfItems = () => SocialModel.getInstance().randomPostList.length;
 
             this.listComp.cellForItemAt = (indexPath, collectionView) => {
                 // 通过下标可以获取到对应的数据
-                const data = this.randomPostList[indexPath.item]
+                const data = SocialModel.getInstance().getPostDataByRandomPostList(indexPath.item)
 
                 // 通过标识符获取重用池内的节点
                 const cell = collectionView.dequeueReusableCell(`cell`)

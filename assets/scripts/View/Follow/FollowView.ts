@@ -30,13 +30,22 @@ export class FollowView extends Component {
     postCommentLable: Label = null
 
     @property(Node)
-    public onLike: Node = null
+    onLike: Node = null
 
     @property(Node)
-    public offLike: Node = null
+    offLike: Node = null
 
     @property(Node)
-    public eggRewardBtn: Node = null
+    onCollect: Node = null
+
+    @property(Node)
+    offCollect: Node = null
+
+    @property(Label)
+    collectNumLable: Label = null
+
+    @property(Node)
+    eggRewardBtn: Node = null
 
     @property(EditBox)
     commentNode: EditBox = null
@@ -55,6 +64,7 @@ export class FollowView extends Component {
 
     private isLike: boolean = false
     private likeCount: number = 0
+    private collectCount: number = 0
     // 一级评论列表
     private commentRootList: any[] = []
     // 一级评论列表下级评论对象
@@ -75,11 +85,12 @@ export class FollowView extends Component {
         EventSystem.addListent("topCommentListData", this.topCommentListData, this)
         EventSystem.addListent("followBack", this.setFollow, this)
         EventSystem.addListent("userListCache", this.setNikeName, this)
+        EventSystem.addListent("postCollectConfirmBack", this.postCollectConfirmBack, this)
         let param = this.node["_openParam"]
 
         this.postID = param?.postID
         this.postAt = param?.postAt
-        const post =  param?.data
+        const post = param?.data
         if (!this.postID || !this.postAt || !post) {
             console.log("postID or postAt or data is empty")
             return
@@ -112,7 +123,7 @@ export class FollowView extends Component {
                     }
                 }
             }
-        }else{
+        } else {
             this.pageView.node.active = false
         }
 
@@ -120,8 +131,11 @@ export class FollowView extends Component {
         this.titleNode.string = post?.Title || ""
         this.postAtLable.string = Utils.getDateFromStr(post?.CreatedAt || "")
         this.commentRender.active = false
-
         this.postCommentLable.string = post?.CommentCount
+
+        this.collectCount = post?.FavoriteCount
+        this.setBtnByIsFavorite()
+
         this.likeCount = post?.LikeCount || 0
         this.isLike = SocialModel.getInstance().postLikeList.indexOf(this.postID) !== -1
         this.setBtnByIsLike()
@@ -187,6 +201,13 @@ export class FollowView extends Component {
         })
     }
 
+    OnClickCollect() {
+        AppConst.SocialHttpManager.sendPostHttp(SocialModel.getInstance().isFavorite ? "unfavoriteTimeline" : "favoriteTimeline", {
+            postID: this.postID,
+            postAt: this.postAt,
+        })
+    }
+
     OnClickFollow() {
         if (this.userID == RoleModel.getInstance().playerId) {
             return
@@ -224,11 +245,19 @@ export class FollowView extends Component {
         this.setBtnByIsLike()
     }
 
+    postCollectConfirmBack(postID) {
+        if (postID != this.postID) {
+            return
+        }
+        this.collectCount = SocialModel.getInstance().isFavorite ? this.collectCount + 1 : this.collectCount - 1
+        this.setBtnByIsFavorite()
+    }
+
     setNikeName() {
         this.nikeName.string = SocialModel.getInstance().userListCache[this.userID]?.nick_name
     }
 
-    setFollow(){
+    setFollow() {
         if (this.userID != RoleModel.getInstance().playerId) {
             this.isFollow.node.active = true
             this.isFollow.string = SocialModel.getInstance().followList.indexOf(this.userID) !== -1 ? "unfollow" : "follow"
@@ -239,6 +268,12 @@ export class FollowView extends Component {
         this.onLike.active = this.isLike
         this.offLike.active = !this.isLike
         this.postLikeLable.string = Math.max(0, this.likeCount).toString()
+    }
+
+    setBtnByIsFavorite() {
+        this.onCollect.active = SocialModel.getInstance().isFavorite
+        this.offCollect.active = !SocialModel.getInstance().isFavorite
+        this.collectNumLable.string = Math.max(0, this.collectCount).toString()
     }
 
     // 去重push

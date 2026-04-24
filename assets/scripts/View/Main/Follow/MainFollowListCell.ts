@@ -84,10 +84,10 @@ export class MainFollowListCell extends InfiniteCell {
     }
 
     OnClickCell() {
-        let post = SocialModel.getInstance().otherPostList.find(item => item.ID == this.postID)
+        let post = SocialModel.getInstance().postData[this.postID]
         if (!post) {
-            const randomPostList = SocialModel.getInstance().randomPostList
-            post = randomPostList.find(item => item.ID == this.postID)
+            console.log("post not found:", this.postID)
+            return
         }
         AppConst.PanelManager.openView("res/View/Follow/FollowView", {
             postID: this.postID,

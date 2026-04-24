@@ -50,9 +50,8 @@ export class UserCenterShareCell extends InfiniteCell {
 
     UpdateContent(index: number): void {
         this.index = index
-        const postList = SocialModel.getInstance().postList
-        if (postList[index * 2]) {
-            const post = postList[index * 2]
+        if (SocialModel.getInstance().getPostDataByPostList(index * 2)) {
+            const post = SocialModel.getInstance().getPostDataByPostList(index * 2)
             this.titleNode.string = post?.Title || ""
             this.contentNode.string = post?.Content || ""
             this.postLikeLable.string = Math.max(0, post?.LikeCount || 0).toString()
@@ -69,9 +68,9 @@ export class UserCenterShareCell extends InfiniteCell {
                 }
             }
         }
-        if (postList[index * 2 + 1]) {
+        if (SocialModel.getInstance().getPostDataByPostList(index * 2 + 1)) {
             this.cell2Node.active = true
-            const post2 = postList[index * 2 + 1]
+            const post2 = SocialModel.getInstance().getPostDataByPostList(index * 2 + 1)
             this.titleNode2.string = post2?.Title || ""
             this.contentNode2.string = post2?.Content || ""
             this.postLikeLable2.string = Math.max(0, post2?.LikeCount || 0).toString()
@@ -96,7 +95,7 @@ export class UserCenterShareCell extends InfiniteCell {
     }
 
     OnClickCell() {
-        const post = SocialModel.getInstance().postList[this.index * 2]
+        const post = SocialModel.getInstance().getPostDataByPostList(this.index * 2)
         if (post) {
             AppConst.PanelManager.openView("res/View/Follow/FollowView", {
                 postID: post.ID,
@@ -107,7 +106,7 @@ export class UserCenterShareCell extends InfiniteCell {
     }
 
     OnClickCell2() {
-        const post = SocialModel.getInstance().postList[this.index * 2 + 1]
+        const post = SocialModel.getInstance().getPostDataByPostList(this.index * 2 + 1)
         if (post) {
             AppConst.PanelManager.openView("res/View/Follow/FollowView", {
                 postID: post.ID,

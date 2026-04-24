@@ -19,7 +19,7 @@ export class FollowListScroll extends Component implements IFDataSource{
         return 'cellNode';
     }
     GetCellSize(dataIndex: number): number {
-        let data = SocialModel.getInstance().otherPostList[dataIndex]
+        let data = SocialModel.getInstance().getPostDataByOtherPostList(dataIndex)
         let imageUrl = data?.ImageURL && JSON.parse(data?.ImageURL || "[]")
         if (imageUrl && imageUrl.length > 0) {
             return 1070
@@ -37,7 +37,7 @@ export class FollowListScroll extends Component implements IFDataSource{
         return comp;
     }
     GetCellData?(dataIndex: number) {
-        return SocialModel.getInstance().otherPostList[dataIndex]
+        return SocialModel.getInstance().getPostDataByOtherPostList(dataIndex)
     }
     start() {
         this.scheduleOnce(()=>{

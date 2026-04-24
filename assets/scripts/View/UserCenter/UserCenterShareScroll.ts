@@ -22,7 +22,6 @@ export class UserCenterShareScroll extends Component implements IFDataSource {
         // this.infiniteList.Reload(true)
     }
     GetCellNumber(): number {
-        console.log(SocialModel.getInstance().postList)
         return Math.ceil(SocialModel.getInstance().postList.length / 2)
     }
     GetCellIdentifer(dataIndex: number): string {

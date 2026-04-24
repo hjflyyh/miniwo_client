@@ -4,11 +4,12 @@ export class SocialModel {
     private static _instance: SocialModel = null;
 
     public followList: any[] = []
-    public collectList: any[] = []
+    public isFavorite: boolean = false
 
-    public postList: any[] = []
-    public otherPostList: any[] = []
-    public randomPostList: any[] = []
+    public postList: number[] = []
+    public otherPostList: number[] = []
+    public randomPostList: number[] = []
+    public postData: {} = {}
 
     public postLikeList: any[] = [] // 点赞列表 帖子ID
 
@@ -62,19 +63,19 @@ export class SocialModel {
         }
         else if (cmd == network.FollowSocialCode.PostData) {
             this.receiveList(data.list || [])
-            this.postList = data.list || []
-            const postIDs = data.postIDs || []
-            if (postIDs.length > 0) {
-                this.postLikeList = [...new Set([...this.postLikeList, ...postIDs])]
+            this.postList = this.setPostData(data.list || [])
+            const postLikeIDs = data.postLikeIDs || []
+            if (postLikeIDs.length > 0) {
+                this.postLikeList = [...new Set([...this.postLikeList, ...postLikeIDs])]
             }
             console.log("postList:", this.postList)
         }
         else if (cmd == network.FollowSocialCode.OtherPostData) {
             this.receiveList(data.list || [])
-            this.otherPostList = data.list || []
-            const postIDs = data.postIDs || []
-            if (postIDs.length > 0) {
-                this.postLikeList = [...new Set([...this.postLikeList, ...postIDs])]
+            this.otherPostList = this.setPostData(data.list || [])
+            const postLikeIDs = data.postLikeIDs || []
+            if (postLikeIDs.length > 0) {
+                this.postLikeList = [...new Set([...this.postLikeList, ...postLikeIDs])]
             }
             EventSystem.send("otherPostList")
             console.log("OtherPostData data:", data)
@@ -83,6 +84,7 @@ export class SocialModel {
             this.receiveList(data.list || [])
             this.commentIDs = data?.commentIDs || []
             this.commentPostID = data?.postID
+            this.isFavorite = data?.isFavorite
             EventSystem.send("commentListData", { list: data.list, postID: data.postID, postAt: data.postAt, egg: data?.egg })
         }
         else if (cmd == network.FollowSocialCode.TopCommentData && data?.list) {
@@ -99,18 +101,16 @@ export class SocialModel {
         }
         else if (cmd == network.FollowSocialCode.LikeConfirm && !data?.commentID) {
             this.postLikeList.push(data.postID)
-            this.otherPostList = this.otherPostList.reduce((acc, item) =>
-            (acc.push(item.ID === data.postID
-                ? { ...item, LikeCount: item.LikeCount + 1 } : item), acc),
-                []);
+            if (this.postData[data.postID] && this.postData[data.postID].LikeCount >= 0) {
+                this.postData[data.postID].LikeCount = this.postData[data.postID].LikeCount + 1
+            }
             EventSystem.send("postLikeConfirmBack", data.postID)
         }
         else if (cmd == network.FollowSocialCode.UnLikeConfirm && !data?.commentID) {
             this.postLikeList = this.postLikeList.filter((item: any) => item != data.postID)
-            this.otherPostList = this.otherPostList.reduce((acc, item) =>
-            (acc.push(item.ID === data.postID
-                ? { ...item, LikeCount: item.LikeCount - 1 } : item), acc),
-                []);
+            if (this.postData[data.postID] && this.postData[data.postID].LikeCount > 0) {
+                this.postData[data.postID].LikeCount = this.postData[data.postID].LikeCount - 1
+            }
             EventSystem.send("postLikeConfirmBack", data.postID)
         }
         else if (cmd == network.FollowSocialCode.LikeConfirm && data?.commentID) {
@@ -129,12 +129,12 @@ export class SocialModel {
             }
         }
         else if (cmd == network.FollowSocialCode.RandomPostData && data?.list) {
-            const postIDs = data.postIDs || []
-            if (postIDs.length > 0) {
-                this.postLikeList = [...new Set([...this.postLikeList, ...postIDs])]
+            const postLikeIDs = data.postLikeIDs || []
+            if (postLikeIDs.length > 0) {
+                this.postLikeList = [...new Set([...this.postLikeList, ...postLikeIDs])]
             }
             this.receiveList(data.list || [])
-            this.randomPostList = data.list || []
+            this.randomPostList = this.setPostData(data.list || [])
             console.log("randomPostList:", this.randomPostList)
         }
         else if (cmd == network.FollowSocialCode.FollowSuccess) {
@@ -145,6 +145,44 @@ export class SocialModel {
             this.followList = this.followList.filter((item: any) => item != data.followedUserId)
             EventSystem.send("followBack", data.followedUserId)
         }
+        else if (cmd == network.FollowSocialCode.FavoriteConfirm) {
+            this.isFavorite = true
+            if (this.postData[data.postID] && this.postData[data.postID].FavoriteCount >= 0) {
+                this.postData[data.postID].FavoriteCount = this.postData[data.postID].FavoriteCount + 1
+            }
+            EventSystem.send("postCollectConfirmBack", data.postID)
+        }
+        else if (cmd == network.FollowSocialCode.FavoriteCancel) {
+            this.isFavorite = false
+            if (this.postData[data.postID] && this.postData[data.postID].FavoriteCount > 0) {
+                this.postData[data.postID].FavoriteCount = this.postData[data.postID].FavoriteCount - 1
+            }
+            EventSystem.send("postCollectConfirmBack", data.postID)
+        }
+    }
+
+    private setPostData(list: any[]) : number[] {
+        const ans = []
+        list.forEach((i) => {
+            this.postData[i.ID] = i
+            ans.push(i.ID)
+        })
+        return ans
+    }
+
+    public getPostDataByPostList(index: number) {
+        const id = this.postList[index]
+        return this.postData[id]
+    }
+
+    public getPostDataByOtherPostList(index: number) {
+        const id = this.otherPostList[index]
+        return this.postData[id]
+    }
+
+    public getPostDataByRandomPostList(index: number) {
+        const id = this.randomPostList[index]
+        return this.postData[id]
     }
 
     private receiveList(list: any[]) {

@@ -31,6 +31,8 @@ export module network {
         RandomPostData = 4013, // 随机帖子数据
         FollowSuccess = 4014, // 关注成功
         UnFollowSuccess = 4015, // 取消关注成功
+        FavoriteConfirm = 4016, // 收藏确认
+        FavoriteCancel  = 4017 // 取消收藏确认
     }
 
     export enum ServerCommandConstants {

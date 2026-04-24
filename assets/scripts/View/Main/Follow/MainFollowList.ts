@@ -26,18 +26,7 @@ export class MainFollowList extends Component {
     oldBtn: Node = null
 
     isOpenEdit = false
-    // /**
-    //  * 模拟收到数据
-    //  */
-    // receivedData() {
-    //     this.listComp.numberOfItems = () => SocialModel.getInstance().otherPostList.length
-    //     // 更新列表
-    //     this.listComp.reloadData()
-    // }
-
-    private column = 1
-    private alignment = 1
-
+    
     start() {
         EventSystem.addListent("followEditBack", this.postBack, this)
         EventSystem.addListent("otherPostList", this.refreshData, this)
@@ -46,34 +35,6 @@ export class MainFollowList extends Component {
     }
 
     refreshData() {
-        this.scheduleOnce(() => {
-            // this.listComp.enabled = true
-            // // 确定列表内一共需要显示多少条内容   
-            // this.listComp.numberOfItems = () => SocialModel.getInstance().otherPostList.length;
-
-            // this.listComp.cellForItemAt = (indexPath, collectionView) => {
-            //     // 通过下标可以获取到对应的数据
-            //     const data = SocialModel.getInstance().otherPostList[indexPath.item]
-
-            //     // 通过标识符获取重用池内的节点
-            //     const cell = collectionView.dequeueReusableCell(`cell`)
-
-            //     // 更新数据显示
-            //     const comp = cell.getComponent("MainFollowListCell") as MainFollowListCell
-
-            //     comp.onRrefresh(data)
-
-            //     return cell // 返回这个节点给列表显示
-            // }
-
-            // // 配置 layout 布局规则
-            // this.updateFlowLayout()
-
-            // // 模拟获取数据
-            // this.receivedData()
-
-        }, 0.1)
-
         this.setBtns()
     }
 
@@ -88,11 +49,7 @@ export class MainFollowList extends Component {
     }
 
     onClickAddBtn() {
-        if (this.isOpenEdit) {
-            this.isOpenEdit = false
-        } else {
-            this.isOpenEdit = true
-        }
+        this.isOpenEdit = !this.isOpenEdit
         this.setBtns()
     }
 
@@ -103,18 +60,6 @@ export class MainFollowList extends Component {
 
         AppConst.PanelManager.openView("res/View/Follow/FollowEditView")
     }
-
-    // updateFlowLayout(column: number = this.column, alignment: number = this.alignment) {
-    //     let layout = new YXMasonryFlowLayout()
-    //     layout.horizontalSpacing = 10
-    //     layout.verticalSpacing = 10
-    //     // layout.alignment = alignment
-
-    //     layout.itemSize = (indexPath) => {
-    //         return new math.Size(1000, 1070)
-    //     }
-    //     this.listComp.layout = layout
-    // }
 
     httpRequest() {
         AppConst.SocialHttpManager.sendGetHttp("myfollows", {})
