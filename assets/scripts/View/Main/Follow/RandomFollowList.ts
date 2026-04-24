@@ -8,8 +8,8 @@ import { YXMasonryFlowLayout } from '../../../../plugin/list-3x/yx-masonry-flow-
 import { InfiniteList } from '../../../../plugin/InfiniteList/InfiniteList';
 const { ccclass, property } = _decorator;
 
-@ccclass('MainFollowList')
-export class MainFollowList extends Component {
+@ccclass('RandomFollowList')
+export class RandomFollowList extends Component {
     /**
      * 列表组件
      */
@@ -28,8 +28,7 @@ export class MainFollowList extends Component {
     isOpenEdit = false
     
     start() {
-        EventSystem.addListent("followEditBack", this.postBack, this)
-        EventSystem.addListent("otherPostList", this.refreshData, this)
+       EventSystem.addListent("followEditBack", this.postBack, this)
         this.httpRequest()
         this.refreshData()
     }
@@ -62,8 +61,7 @@ export class MainFollowList extends Component {
     }
 
     httpRequest() {
-        AppConst.SocialHttpManager.sendGetHttp("myfollows", {})
-        AppConst.SocialHttpManager.sendGetHttp("followersTimeline", {})
+         AppConst.SocialHttpManager.sendGetHttp("randomTimeline", {})
     }
 
 }

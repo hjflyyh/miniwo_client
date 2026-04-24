@@ -2,12 +2,12 @@
   "ver": "1.1.50",
   "importer": "prefab",
   "imported": true,
-  "uuid": "a8d44e23-4386-43e8-9ae1-d130643e2cd4",
+  "uuid": "523dc58a-7638-4293-8808-84ceace5777b",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "RemmendationFollowList"
+    "syncNodeName": "RandomFollowList"
   }
 }

@@ -82,12 +82,12 @@ export class FollowCommentCell extends Component {
         })
     }
 
-    commentLikeConfirmBack({ postID, commentID }) {
+     commentLikeConfirmBack({ postID, commentID, isLike, changeCount }) {
         if (postID != this.postID || commentID != this.commentID) {
             return
         }
-        this.isLike = !this.isLike
-        this.likeCount = this.isLike ? this.likeCount + 1 : this.likeCount - 1
+        this.isLike = isLike
+        this.likeCount = this.likeCount + changeCount
         this.setBtnByIsLike()
     }
 
