@@ -18,6 +18,12 @@ export class FollowListScroll extends Component implements IFDataSource {
         if (this.showtype == 2) {
             return SocialModel.getInstance().randomPostList.length;
         }
+        if (this.showtype == 3) {
+            return SocialModel.getInstance().likePostList.length;
+        }
+        if (this.showtype == 4) {
+            return SocialModel.getInstance().favoritePostList.length;
+        }
         return SocialModel.getInstance().otherPostList.length;
     }
 
@@ -45,6 +51,12 @@ export class FollowListScroll extends Component implements IFDataSource {
     GetCellData?(dataIndex: number) {
         if (this.showtype == 2) {
             return SocialModel.getInstance().getPostDataByRandomPostList(dataIndex)
+        }
+        if (this.showtype == 3) {
+            return SocialModel.getInstance().getPostDataByLikePostList(dataIndex)
+        }
+        if (this.showtype == 4) {
+            return SocialModel.getInstance().getPostDataByFavoritePostList(dataIndex)
         }
         return SocialModel.getInstance().getPostDataByOtherPostList(dataIndex)
     }
