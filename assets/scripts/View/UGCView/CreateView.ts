@@ -167,6 +167,11 @@ export class CreateView extends Component {
         this.setTagChoose();
     }
 
+    OnHideCreateName(){
+        this.createNameNode.active = false;
+        this.createNpcNode.active = false;
+    }
+
     OnSaveMapWorldviewSuccess(){
         this.showTagIndex = 2
         this.setTagChoose();

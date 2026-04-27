@@ -21,6 +21,9 @@ export class MyWorldView extends Component {
     @property([Node])
     public unChooseTabs: Node[] = []
 
+    @property([Node])
+    public chooseNodes: Node[] = []
+
     private showTabIndex = 0;
     private mapListData = []
     private showMapListData = []
@@ -121,7 +124,7 @@ export class MyWorldView extends Component {
         layout.divide = column
         layout.itemSize = (indexPath) => {
             
-            return new Size(500, 712)
+            return new Size(349, 600)
         }
         this.mapList.layout = layout
     }
@@ -129,6 +132,7 @@ export class MyWorldView extends Component {
     setTabShow(){
         for(let i = 0 ; i < this.chooseTabs.length ; i++){
             this.chooseTabs[i].active = i == this.showTabIndex
+            this.chooseNodes[i].active = i == this.showTabIndex
             this.unChooseTabs[i].active = i != this.showTabIndex
         }
         this.mapList.reloadData()
