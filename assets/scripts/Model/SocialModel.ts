@@ -13,8 +13,7 @@ export class SocialModel {
     public favoritePostList: number[] = []
     public postData: {} = {}
 
-    public postLikeList: any[] = [] // 点赞列表 帖子ID
-
+    public postLikeList: number[] = [] // 点赞列表 帖子ID
     public commentPostID: number = 0  // 指定帖子id
     public commentIDs: number[] = [] // 帖子id下的所有点赞过的评论id
 
@@ -166,6 +165,9 @@ export class SocialModel {
             this.receiveList(data.list || [])
             this.likePostList = this.setPostData(data.list || [])
             console.log("likePostList:", this.likePostList)
+            if (this.likePostList.length > 0) {
+                this.postLikeList = [...new Set([...this.postLikeList, ...this.likePostList])]
+            }
         }
         else if (cmd == network.FollowSocialCode.FavoritePostData && data?.list) {
             this.receiveList(data.list || [])
