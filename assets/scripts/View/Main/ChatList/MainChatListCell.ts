@@ -1,6 +1,7 @@
-import { _decorator, Component, Label } from 'cc';
+import { _decorator, Component, Label, Sprite } from 'cc';
 import { LocalChatSessionItem, PrivateChatManager } from '../../../Manager/PrivateChatMessage';
 import { AppConst } from '../../../AppConst';
+import { Utils } from '../../../Utils/Utils';
 const { ccclass, property } = _decorator;
 
 @ccclass('MainChatListCell')
@@ -10,6 +11,9 @@ export class MainChatListCell extends Component {
 
     @property(Label)
     lastChat: Label = null;
+
+    @property(Sprite)
+    private npcHead : Sprite;
 
     private _session: LocalChatSessionItem | null = null;
 
@@ -25,6 +29,9 @@ export class MainChatListCell extends Component {
             (item.peerUid ? String(item.peerUid) : '');
         if (this.npcName) this.npcName.string = name;
         if (this.lastChat) this.lastChat.string = item.lastMsg != null ? String(item.lastMsg) : '';
+
+        //peerAvatar
+        Utils.loadCover(item.peerAvatar, this.npcHead , 78 , 78);
     }
 
     /** 按钮绑定：chatType 1=真人 userId；2=NPC，优先 npcId，否则 npcPeerUid */

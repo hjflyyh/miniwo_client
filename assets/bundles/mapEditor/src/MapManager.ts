@@ -111,6 +111,9 @@ export class MapManager extends Component {
             cfgName = "mapWallDecor"
         }
         let cfg = AppConst.JSONManager.getItem(cfgName , id)
+        if(cfg == null){
+            console.log("地图素材id未找到：" + id + " cfgName:" + cfgName)
+        }
         let cfgSize = [32,32]
         if(cfg["map_size"]){
             let split = cfg["map_size"].split("#");
