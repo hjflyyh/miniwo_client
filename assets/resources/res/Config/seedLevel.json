@@ -1,0 +1,72 @@
+{
+  "1": {
+    "output_bonus": "0",
+    "growth_time_reduction": "0",
+    "mutation_prob_increase": "0",
+    "exp_required": "50",
+    "gold_required": "50"
+  },
+  "2": {
+    "output_bonus": "0.02",
+    "growth_time_reduction": "-0.02",
+    "mutation_prob_increase": "5",
+    "exp_required": "80",
+    "gold_required": "80"
+  },
+  "3": {
+    "output_bonus": "0.02",
+    "growth_time_reduction": "-0.04",
+    "mutation_prob_increase": "10",
+    "exp_required": "120",
+    "gold_required": "120"
+  },
+  "4": {
+    "output_bonus": "0.05",
+    "growth_time_reduction": "-0.06",
+    "mutation_prob_increase": "15",
+    "exp_required": "180",
+    "gold_required": "180"
+  },
+  "5": {
+    "output_bonus": "0.05",
+    "growth_time_reduction": "-0.08",
+    "mutation_prob_increase": "20",
+    "exp_required": "250",
+    "gold_required": "250"
+  },
+  "6": {
+    "output_bonus": "0.08",
+    "growth_time_reduction": "-0.1",
+    "mutation_prob_increase": "25",
+    "exp_required": "350",
+    "gold_required": "350"
+  },
+  "7": {
+    "output_bonus": "0.08",
+    "growth_time_reduction": "-0.12",
+    "mutation_prob_increase": "30",
+    "exp_required": "500",
+    "gold_required": "500"
+  },
+  "8": {
+    "output_bonus": "0.1",
+    "growth_time_reduction": "-0.14",
+    "mutation_prob_increase": "35",
+    "exp_required": "700",
+    "gold_required": "700"
+  },
+  "9": {
+    "output_bonus": "0.1",
+    "growth_time_reduction": "-0.16",
+    "mutation_prob_increase": "40",
+    "exp_required": "1000",
+    "gold_required": "1000"
+  },
+  "10": {
+    "output_bonus": "0.15",
+    "growth_time_reduction": "-0.18",
+    "mutation_prob_increase": "50",
+    "exp_required": "0",
+    "gold_required": "0"
+  }
+}
