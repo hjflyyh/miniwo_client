@@ -476,9 +476,11 @@ public markSessionRead(peerUid: string) {
       }
     }
 
+    const needAvatar = !this.hasLocalPeerAvatar(peerUid);
     const r = await this.rpc("private_chat_send", {
       target_uid: peerUid,
       text: pure,
+      need_avatar: needAvatar,
     });
 
     if (!r?.success) {
@@ -520,6 +522,15 @@ public markSessionRead(peerUid: string) {
       this.npcPendingUnlockTimerByPeer.delete(peerUid);
     }, 12000) as unknown as number;
     this.npcPendingUnlockTimerByPeer.set(peerUid, t);
+  }
+
+  private hasLocalPeerAvatar(peerUid: string): boolean {
+    const uid = String(peerUid || "");
+    if (!uid) return false;
+    const s = this.sessionsByPeer.get(uid);
+    const local = this.localSessionsByPeer.get(uid);
+    const avatar = String(s?.peerAvatar || local?.peerAvatar || "").trim();
+    return avatar.length > 0;
   }
 
   /** 将会话与本地消息从旧 channelId 迁到 RPC 返回的 channelId */
