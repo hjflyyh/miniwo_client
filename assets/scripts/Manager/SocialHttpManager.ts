@@ -21,25 +21,28 @@ export class SocialHttpManager extends Component {
     public sendPostHttp(functionName, data) {
         console.log("post 请求参数：", data)
         EventSystem.send("ShowJuhua", "HttpSend")
-        fetch(this.getBaseUrl() + "/" + functionName, {
-            method: 'POST',
-            headers: {
-                "Authorization": `Bearer ${this.getToken()}`, // 核心：Bearer Token 鉴权
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-            .then(res => res.json())
-            .then(data => {
-                console.log("post 请求回复：", data)
-                if (data.success && data.data) {
-                    EventSystem.send("SocialHttpMessage", data.data)
-                } else {
-                    if (data.error) {
-                        EventSystem.send("ShowTips", data.error)
+        try {
+
+            fetch(this.getBaseUrl() + "/" + functionName, {
+                method: 'POST',
+                headers: {
+                    "Authorization": `Bearer ${this.getToken()}`, // 核心：Bearer Token 鉴权
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(res => res.json()).then(data => {
+                    console.log("post 请求回复：", data)
+                    if (data.success && data.data) {
+                        EventSystem.send("SocialHttpMessage", data.data)
+                    } else {
+                        if (data.error) {
+                            EventSystem.send("ShowTips", data.error)
+                        }
                     }
-                }
-            })
+                })
+        }catch(error){
+
+        }
     }
 
     public sendGetHttp(functionName, data) {

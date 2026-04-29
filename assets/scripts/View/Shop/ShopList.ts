@@ -61,7 +61,7 @@ export class ShopList extends Component {
         layout.verticalSpacing = 20
         layout.divide = column
         layout.itemSize = (indexPath) => {
-            return new Size(0, 500)
+            return new Size(0, 360)
         }
         this.listComp.layout = layout
     }
