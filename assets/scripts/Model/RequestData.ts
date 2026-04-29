@@ -13,6 +13,7 @@ export module network {
         CodeCardList = 104, //卡牌列表
         CodeMapList = 105, //地图列表
         CodePlayerNpcAffinity = 106, //玩家->好感度
+        CodeAffinityGiftItem = 107, //好感度变更  结构："data": { "npc_id": 1001,  "affinity": 35, "delta_total": 10, "reasons": ["ITEM_GIFT"],"daily_gain_remaining": 50
     }
 
     export enum FollowSocialCode {
@@ -61,6 +62,12 @@ export module network {
     export class JoinMapEequest {
         toJSON(map_id) {
             return { rpc: { id: "join_map", payload: JSON.stringify({ map_id: map_id }) } };
+        }
+    }
+
+    export class AffinityGiftItemEequest {
+        toJSON(npc_id , item_id) {
+            return { rpc: { id: "affinity_gift_item", payload: JSON.stringify({ npc_id: npc_id, item_id: item_id }) } };
         }
     }
 

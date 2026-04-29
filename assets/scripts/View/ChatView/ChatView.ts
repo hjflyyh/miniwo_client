@@ -1,13 +1,14 @@
-import { _decorator, Component, EditBox, Label, Node, Prefab, resources, UITransform, instantiate } from 'cc';
+import { _decorator, Component, EditBox, JsonAsset, Label, Node, Prefab, resources, UITransform, instantiate } from 'cc';
 import { PrivateChatManager, PrivateMsg } from '../../Manager/PrivateChatMessage';
 import { ChatScroll } from './ChatScroll';
 import { AffinitieModel } from '../../Model/AffinitieModel';
 import { HttpManager } from '../../Manager/HttpManager';
 import { RoleModel } from '../../Model/RoleModel';
+import { RewardItemCell } from './RewardItemCell';
+import { AppConst } from '../../AppConst';
+import { BagModel } from '../../Model/BagModel';
+import { network } from '../../Model/RequestData';
 const { ccclass, property } = _decorator;
-
-/** 与 NPC 私聊打开后自动发送的测试文案（仅 chatType===2） */
-const NPC_AUTO_TEST_TEXT = '测试消息';
 
 type ChatRow =
     | { kind: 'msg'; msg: PrivateMsg; npc_sprite_url?: string | null; npc_avatar?: string | null };
@@ -30,6 +31,20 @@ export class ChatView extends Component {
     @property(ChatScroll)
     chatScroll : ChatScroll
 
+    //奖励道具列表
+    @property(Node)
+    rewardTarget: Node = null;
+
+    @property(Node)
+    rewardContent: Node = null;
+
+    //奖励道具节点
+    @property(RewardItemCell)
+    rewardItemCell : RewardItemCell = null;
+
+    @property(Node)
+    bottomNode: Node = null;
+
     /** 当前会话对方 Nakama UID（与 PrivateChatManager 内一致） */
     private peerUid: string | null = null;
     private chatType: number = 0;
@@ -41,11 +56,25 @@ export class ChatView extends Component {
     // 兜底刷新：避免事件偶发漏投递/漏过滤导致必须重进界面
     private _pollRefreshLeft = 0;
     private _lastMsgCount = -1;
+    private rewardExpanded = false;
+    private bottomBaseY = 0;
+    private rewardCells: RewardItemCell[] = [];
+    private selectedRewardItemId = 0;
 
     onLoad() {
         if (!this.inputBox) {
             this.inputBox = this.node.getChildByName('EditBox')?.getComponent(EditBox) ?? null;
         }
+        if (this.bottomNode) {
+            this.bottomBaseY = this.bottomNode.position.y;
+        }
+        if (this.rewardTarget) {
+            this.rewardTarget.active = false;
+        }
+        if (this.rewardItemCell?.node) {
+            this.rewardItemCell.node.active = false;
+        }
+        this.initRewardList();
     }
 
    async start() {
@@ -108,6 +137,7 @@ export class ChatView extends Component {
             this.rebuildRows();
             EventSystem.addListent('PrivateChatMessage', this.onPrivateChatMessage, this);
             EventSystem.addListent('NpcAffinityUpdated', this.onNpcAffinityUpdated, this);
+            EventSystem.addListent('WebSocketNotifications', this.onWebSocketNotification, this);
             
 
             // 打开后短时间轮询刷新，确保 NPC 回复到达必显示
@@ -178,6 +208,7 @@ export class ChatView extends Component {
         } catch (e: any) {
             EventSystem.send('ShowTips', String(e?.message || e || '网络错误'));
             this.refreshLikesUI();
+
         }
     }
 
@@ -205,12 +236,21 @@ export class ChatView extends Component {
 
 
     onClickSend(){
-        const text = (this.inputBox?.string || '').trim();
-        if (!text) {
-            return;
-        }
         if (!this.peerUid) {
             EventSystem.send('ShowTips', '会话未建立');
+            return;
+        }
+        const inputText = (this.inputBox?.string || '').trim();
+        const shouldSendGift = !!this.rewardTarget?.active && this.selectedRewardItemId > 0;
+        const text = shouldSendGift
+            ? JSON.stringify({
+                event_type: "gift_item",
+                npc_id: this.npcId,
+                item_id: this.selectedRewardItemId,
+                quantity: 1,
+            })
+            : inputText;
+        if (!text) {
             return;
         }
         const pm = PrivateChatManager.getInstance();
@@ -220,6 +260,9 @@ export class ChatView extends Component {
                     this.inputBox.string = '';
                 }
                 this.rebuildRows();
+                if (shouldSendGift) {
+                    this.setRewardExpanded(false);
+                }
             })
             .catch((e: any) => {
                 EventSystem.send('ShowTips', String(e?.message || e || '发送失败'));
@@ -289,5 +332,117 @@ export class ChatView extends Component {
             npc_sprite_url: npcAvatar,
             npc_avatar: npcAvatar, // 兼容旧读取
         }));
+    }
+
+    public onClickReward() {
+        this.setRewardExpanded(!this.rewardExpanded);
+    }
+
+    private initRewardList() {
+        const data = AppConst.JSONManager?.getItemAll?.('item');
+        if (data) {
+            this.renderRewardList(data);
+            return;
+        }
+        resources.load('res/Config/item', JsonAsset, (err, asset) => {
+            if (err || !asset?.json) return;
+            this.renderRewardList(asset.json as Record<string, any>);
+        });
+    }
+
+    private renderRewardList(rawItemCfg: Record<string, any>) {
+        if (!this.rewardContent || !this.rewardItemCell?.node || !rawItemCfg) return;
+        const keepSelectedId = this.selectedRewardItemId;
+
+        const templateNode = this.rewardItemCell.node;
+        const children = [...this.rewardContent.children];
+        for (let i = 0; i < children.length; i++) {
+            const child = children[i];
+            if (child !== templateNode) {
+                child.destroy();
+            }
+        }
+
+        this.rewardCells = [];
+        this.selectedRewardItemId = 0;
+
+        const bagSlots = BagModel.getInstance().slots || [];
+        const bagCountByItemId = new Map<number, number>();
+        for (let i = 0; i < bagSlots.length; i++) {
+            const slot = bagSlots[i] as any;
+            const id = Number(slot?.item_id);
+            const count = Number(slot?.count ?? 0);
+            if (!Number.isFinite(id) || id <= 0) continue;
+            bagCountByItemId.set(id, Math.max(0, Number.isFinite(count) ? count : 0));
+        }
+
+        const rows = Object.keys(rawItemCfg)
+            .map((id) => {
+                const row = rawItemCfg[id] || {};
+                return {
+                    id: Number(id),
+                    ...row,
+                };
+            })
+            .filter((row) => Number.isFinite(row.id))
+            .filter((row) => {
+                const favorability = Number(row?.favorability);
+                return Number.isFinite(favorability) && favorability > 0;
+            })
+            .sort((a, b) => Number(a.favorability) - Number(b.favorability));
+
+        for (let i = 0; i < rows.length; i++) {
+            const node = instantiate(templateNode);
+            node.active = true;
+            node.setParent(this.rewardContent);
+            const cell = node.getComponent(RewardItemCell);
+            cell?.setData(rows[i]);
+            cell?.setItemNum(bagCountByItemId.get(Number(rows[i].id)) ?? 0);
+            cell?.setSelected(false);
+            if (cell) {
+                this.rewardCells.push(cell);
+                const itemId = Number(rows[i].id);
+                (node as any)._rewardItemId = itemId;
+                node.name = `reward_item_${itemId}`;
+                node.on(Node.EventType.TOUCH_END, () => {
+                    this.selectRewardItem(itemId);
+                }, this);
+            }
+        }
+        if (keepSelectedId > 0) {
+            const remain = rows.some((x) => Number(x.id) === keepSelectedId && (bagCountByItemId.get(Number(x.id)) ?? 0) > 0);
+            if (remain) {
+                this.selectRewardItem(keepSelectedId);
+            }
+        }
+    }
+
+    private selectRewardItem(itemId: number) {
+        this.selectedRewardItemId = Number(itemId) || 0;
+        for (let i = 0; i < this.rewardCells.length; i++) {
+            const cell = this.rewardCells[i];
+            const id = Number((cell.node as any)?._rewardItemId ?? 0);
+            cell.setSelected(id === this.selectedRewardItemId);
+        }
+    }
+
+    private setRewardExpanded(expanded: boolean) {
+        if (!this.bottomNode || !this.rewardTarget) return;
+        this.rewardExpanded = !!expanded;
+        if (this.rewardExpanded) {
+            this.rewardTarget.active = true;
+        }
+        const pos = this.bottomNode.position;
+        const rewardHeight = this.rewardTarget.getComponent(UITransform)?.contentSize.height ?? 0;
+        const nextY = this.rewardExpanded ? (this.bottomBaseY + rewardHeight) : this.bottomBaseY;
+        this.bottomNode.setPosition(pos.x, nextY, pos.z);
+        if (!this.rewardExpanded) {
+            this.rewardTarget.active = false;
+        }
+    }
+
+    private onWebSocketNotification(data: any) {
+        if (data?.code !== network.ServerCode.CodeBagUpdate) return;
+        this.initRewardList();
     }
 }
