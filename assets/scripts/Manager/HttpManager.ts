@@ -14,12 +14,18 @@ export class HttpManager extends Component {
     public sendPostHttp(functionName , data){
         log(functionName)
         EventSystem.send("ShowJuhua" ,"HttpSend")
-        fetch(HttpManager.baseUrl + "/" + functionName , {
+        const request = fetch(HttpManager.baseUrl + "/" + functionName , {
             method :'POST',
             headers: {'Content-Type': 'application/json'},
             body: data
         })
-        .then(res => res.json())
+        .then(async res => {
+            if (!res.ok) {
+                const raw = await res.text();
+                throw new Error(`POST ${functionName} HTTP ${res.status}: ${raw}`);
+            }
+            return res.json();
+        })
         .then(data => {
             console.log("请求回复：",data)
             if(data.success){
@@ -36,7 +42,16 @@ export class HttpManager extends Component {
                     EventSystem.send("ShowTips" , data.error)
                 }
             }
+            return data;
         })
+        .catch((err) => {
+            const error = err instanceof Error ? err : new Error(String(err));
+            EventSystem.send("ShowTips", "网络请求失败，请稍后重试");
+            EventSystem.send("HttpError", error);
+            throw error;
+        })
+        request.catch(() => undefined)
+        return request
     }
 
     /**
@@ -46,25 +61,40 @@ export class HttpManager extends Component {
     public sendPostHttpAny(functionName: string, data: any) {
         log(functionName);
         EventSystem.send("ShowJuhua", "HttpSend");
-        fetch(HttpManager.baseUrl + "/" + functionName, {
+        const request = fetch(HttpManager.baseUrl + "/" + functionName, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: data
         })
-            .then(res => res.json())
+            .then(async res => {
+                if (!res.ok) {
+                    const raw = await res.text();
+                    throw new Error(`POST ${functionName} HTTP ${res.status}: ${raw}`);
+                }
+                return res.json();
+            })
             .then(resp => {
                 console.log("请求回复：", resp);
                 if (resp?.error) {
                     EventSystem.send("ShowTips", resp.error);
-                    return;
+                    return resp;
                 }
                 if (resp?.message && resp?.success === false) {
                     EventSystem.send("ShowTips", resp.message);
-                    return;
+                    return resp;
                 }
                 // 统一派发：业务侧可按 functionName 区分解析
                 EventSystem.send("HttpMessage", { functionName, raw: resp });
+                return resp;
+            })
+            .catch((err) => {
+                const error = err instanceof Error ? err : new Error(String(err));
+                EventSystem.send("ShowTips", "网络请求失败，请稍后重试");
+                EventSystem.send("HttpError", error);
+                throw error;
             });
+        request.catch(() => undefined)
+        return request
     }
 
 }
