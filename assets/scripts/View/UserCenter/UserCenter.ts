@@ -55,7 +55,7 @@ export class UserCenter extends Component {
     }
 
     OnClickUserInfo() {
-        AppConst.PanelManager.openView("res/View/UserCenter/UserInfo", null, null, "res/View/UserCenter/UserCenter")
+        // AppConst.PanelManager.openView("res/View/UserCenter/UserInfo", null, null, "res/View/UserCenter/UserCenter")
     }
 
     private OnWSNotification(data) {
