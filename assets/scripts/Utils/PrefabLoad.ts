@@ -146,6 +146,12 @@ export class PrefabLoad extends Component {
             _this._res = _this._url = newUrl
 
             null != this.loadHandle && this.loadHandle.apply(this.target , this)
+        }else{
+            log("load error : " + newUrl)
+            if(this.isTexture){
+                this._resFrame = null
+                this.node && (this.node.getComponent(Sprite).spriteFrame = null)
+            }
         }
     }
 

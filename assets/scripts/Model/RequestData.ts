@@ -233,7 +233,7 @@ export module network {
     }
     export class ShopBuyRequest {
         toJSON(itemID, count) {
-            return { rpc: { id: "shop_buy", payload: JSON.stringify({ item_id: itemID, count: count }) } };
+            return { rpc: { id: "shop_buy", payload: JSON.stringify({ item_id: parseInt(itemID), count: parseInt(count) }) } };
         }
     }
     export class GetUserByIDRequest {
