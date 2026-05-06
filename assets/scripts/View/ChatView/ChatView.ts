@@ -1,4 +1,4 @@
-import { _decorator, Component, EditBox, JsonAsset, Label, Node, Prefab, resources, UITransform, instantiate } from 'cc';
+import { _decorator, Component, EditBox, JsonAsset, Label, log, Node, Prefab, resources, UITransform, instantiate } from 'cc';
 import { PrivateChatManager, PrivateMsg } from '../../Manager/PrivateChatMessage';
 import { ChatScroll } from './ChatScroll';
 import { AffinitieModel } from '../../Model/AffinitieModel';
@@ -9,6 +9,15 @@ import { AppConst } from '../../AppConst';
 import { BagModel } from '../../Model/BagModel';
 import { network } from '../../Model/RequestData';
 const { ccclass, property } = _decorator;
+
+/** 排查聊天界面：控制台搜 [ChatView] */
+function chatViewDebug(...args: any[]) {
+    try {
+        (log as any)?.apply?.(null, ['[ChatView]', ...args]);
+        return;
+    } catch {}
+    try { console.log('[ChatView]', ...args); } catch {}
+}
 
 type ChatRow =
     | { kind: 'msg'; msg: PrivateMsg; npc_sprite_url?: string | null; npc_avatar?: string | null };
@@ -84,6 +93,15 @@ export class ChatView extends Component {
         const chatType = open.chatType;
         const userId = open.userId;
 
+        try {
+            chatViewDebug('start openParam', {
+                chatType,
+                npcId,
+                hasNpcPeerUid: npcPeerUid != null && String(npcPeerUid).length > 0,
+                hasUserId: userId != null,
+            });
+        } catch {}
+
         const pm = PrivateChatManager.getInstance();
         this.chatType = Number(chatType) || 0;
         try {
@@ -145,6 +163,9 @@ export class ChatView extends Component {
             this._lastMsgCount = -1;
             this.schedule(this.pollRefresh, 0.3);
         } catch (e: any) {
+            try {
+                chatViewDebug('start failed', e?.message || e, e?.stack);
+            } catch {}
             EventSystem.send('ShowTips', String(e?.message || e));
         }
     }    
@@ -186,10 +207,11 @@ export class ChatView extends Component {
             return;
         }
         try {
+            let _this = this
             const res = await fetch(`${HttpManager.baseUrl}/getNpcInfo`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ token, npcId: this.npcId }),
+                body: JSON.stringify({ token, npcId: _this.npcId }),
             });
             const json = await res.json();
             if (!json?.success || !json?.data) {
@@ -237,6 +259,9 @@ export class ChatView extends Component {
 
     onClickSend(){
         if (!this.peerUid) {
+            try {
+                chatViewDebug('onClickSend: 无 peerUid，会话未建立');
+            } catch {}
             EventSystem.send('ShowTips', '会话未建立');
             return;
         }
@@ -265,6 +290,12 @@ export class ChatView extends Component {
                 }
             })
             .catch((e: any) => {
+                try {
+                    chatViewDebug('sendText failed', {
+                        peer_tail: String(this.peerUid || '').slice(-8),
+                        chatType: this.chatType,
+                    }, e?.message || e);
+                } catch {}
                 EventSystem.send('ShowTips', String(e?.message || e || '发送失败'));
             });
     }

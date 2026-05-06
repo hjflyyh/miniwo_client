@@ -114,9 +114,7 @@ export class ChatScroll extends Component implements IFDataSource{
         this.infiniteList.Reload(true);
 
         this.scheduleOnce(()=>{
-            if(this.showAry.length >= 10){
-                this.infiniteList._scrollView.scrollToPercentVertical(0 , 1)
-            }
+             this.infiniteList._scrollView.scrollToPercentVertical(0 , 1)
         } , 0.2)
 
     }
