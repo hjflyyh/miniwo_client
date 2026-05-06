@@ -14,7 +14,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": ""
+    "favorability": "",
+    "prop_type": "0"
   },
   "102": {
     "name_cn": "体力",
@@ -31,7 +32,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": ""
+    "favorability": "",
+    "prop_type": "0"
   },
   "103": {
     "name_cn": "好感度",
@@ -48,7 +50,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": ""
+    "favorability": "",
+    "prop_type": "4"
   },
   "1000": {
     "name_cn": "",
@@ -76,7 +79,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": ""
+    "favorability": "",
+    "prop_type": ""
   },
   "100000": {
     "name_cn": "梦尘",
@@ -93,7 +97,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": ""
+    "favorability": "",
+    "prop_type": "1"
   },
   "100001": {
     "name_cn": "留影",
@@ -110,7 +115,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": ""
+    "favorability": "",
+    "prop_type": "1"
   },
   "100002": {
     "name_cn": "星语",
@@ -127,7 +133,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": ""
+    "favorability": "",
+    "prop_type": "1"
   },
   "100003": {
     "name_cn": "星魄",
@@ -144,7 +151,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": ""
+    "favorability": "",
+    "prop_type": "1"
   },
   "100004": {
     "name_cn": "对话卡",
@@ -161,7 +169,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": ""
+    "favorability": "",
+    "prop_type": "1"
   },
   "100005": {
     "name_cn": "补签卡",
@@ -178,7 +187,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": ""
+    "favorability": "",
+    "prop_type": "1"
   },
   "100006": {
     "name_cn": "万能碎片",
@@ -195,7 +205,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": ""
+    "favorability": "",
+    "prop_type": "1"
   },
   "100007": {
     "name_cn": "随机碎片",
@@ -212,7 +223,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": ""
+    "favorability": "",
+    "prop_type": "1"
   },
   "100008": {
     "name_cn": "礼物1",
@@ -229,7 +241,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": "5"
+    "favorability": "5",
+    "prop_type": "2"
   },
   "100009": {
     "name_cn": "礼物2",
@@ -246,7 +259,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": "10"
+    "favorability": "10",
+    "prop_type": "2"
   },
   "100010": {
     "name_cn": "礼物3",
@@ -263,7 +277,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": "12"
+    "favorability": "12",
+    "prop_type": "2"
   },
   "100011": {
     "name_cn": "礼物4",
@@ -280,7 +295,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": "20"
+    "favorability": "20",
+    "prop_type": "2"
   },
   "100012": {
     "name_cn": "礼物5",
@@ -297,7 +313,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": "30"
+    "favorability": "30",
+    "prop_type": "2"
   },
   "100013": {
     "name_cn": "动物粮1",
@@ -314,7 +331,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": ""
+    "favorability": "",
+    "prop_type": "1"
   },
   "100014": {
     "name_cn": "动物粮2",
@@ -331,7 +349,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": ""
+    "favorability": "",
+    "prop_type": "1"
   },
   "100015": {
     "name_cn": "动物羽毛1",
@@ -348,7 +367,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": ""
+    "favorability": "",
+    "prop_type": "1"
   },
   "100016": {
     "name_cn": "动物羽毛2",
@@ -365,7 +385,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": ""
+    "favorability": "",
+    "prop_type": "1"
   },
   "100017": {
     "name_cn": "鲜花1",
@@ -382,7 +403,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": ""
+    "favorability": "",
+    "prop_type": "1"
   },
   "100018": {
     "name_cn": "鲜花2",
@@ -399,7 +421,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": ""
+    "favorability": "",
+    "prop_type": "1"
   },
   "100019": {
     "name_cn": "交互道具1",
@@ -416,7 +439,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": ""
+    "favorability": "",
+    "prop_type": "1"
   },
   "100020": {
     "name_cn": "交互道具2",
@@ -433,7 +457,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": ""
+    "favorability": "",
+    "prop_type": "1"
   },
   "100021": {
     "name_cn": "交互道具3",
@@ -450,7 +475,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": ""
+    "favorability": "",
+    "prop_type": "1"
   },
   "100022": {
     "name_cn": "VIP体验卡（1日）",
@@ -467,7 +493,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": ""
+    "favorability": "",
+    "prop_type": "1"
   },
   "100023": {
     "name_cn": "调色瓶",
@@ -484,7 +511,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": ""
+    "favorability": "",
+    "prop_type": "1"
   },
   "100024": {
     "name_cn": "纸飞机",
@@ -501,7 +529,8 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": ""
+    "favorability": "",
+    "prop_type": "1"
   },
   "100025": {
     "name_cn": "积分",
@@ -518,6 +547,7 @@
     "icon": "",
     "map_img": "",
     "map_spine": "",
-    "favorability": ""
+    "favorability": "",
+    "prop_type": "3"
   }
 }

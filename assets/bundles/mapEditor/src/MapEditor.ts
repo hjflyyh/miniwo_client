@@ -114,11 +114,11 @@ export class MapEditor extends Component {
     public mapWidth = 46;
     public mapHeight = 88;
 
-    @property({ type: CCBoolean, displayName: '启用格子拖动偏移', tooltip: '关闭时预览与摆放严格按格子中心；开启后手指/鼠标可带偏移（与逻辑占格无关）' })
-    public enablePlacementDragOffset = false;
+    @property({ displayName: '启用格子拖动偏移', tooltip: '关闭时预览与摆放严格按格子中心；开启后手指/鼠标可带偏移（与逻辑占格无关）' })
+    public enablePlacementDragOffset : boolean = false;
 
-    @property({ type: CCBoolean, displayName: '允许道具堆叠摆放', tooltip: '勾选后可在合法地板格上叠放家具，可摆放判断放宽（不再要求 place_type 与下层家具 decor_type 一一匹配）。不勾选则沿用原有不可堆叠与类型匹配规则。' })
-    public enableDecorStackPlacement = false;
+    @property({ displayName: '允许道具堆叠摆放', tooltip: '勾选后可在合法地板格上叠放家具，可摆放判断放宽（不再要求 place_type 与下层家具 decor_type 一一匹配）。不勾选则沿用原有不可堆叠与类型匹配规则。' })
+    public enableDecorStackPlacement : boolean = false;
 
     /** 最近一次鼠标/触摸在 mapContainer 下的本地坐标（用于格子内偏移摆放） */
     public lastPointerLocalPos: Vec2 | null = null;

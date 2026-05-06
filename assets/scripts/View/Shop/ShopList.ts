@@ -22,11 +22,16 @@ export class ShopList extends Component {
     private column = 3
 
     start() {
+        EventSystem.addListent("ShopDataUpdated", this.refreshShopList, this)
         let json = new network.ShopDataRequest();
         AppConst.WebSocketManager.send(json.toJSON());
         this.scheduleOnce(() => {
             this.refreshShopList();
         }, 0.1)
+    }
+
+    onDestroy() {
+        EventSystem.remove(this)
     }
 
     refreshShopList() {
@@ -49,9 +54,11 @@ export class ShopList extends Component {
                 return cell // 返回这个节点给列表显示
             }
             this.updateFlowLayout()
+            this.receivedData()
+        }else{
+            this.listComp.reloadData()
         }
 
-        this.receivedData()
     }
 
     updateFlowLayout(column: number = this.column) {
@@ -61,7 +68,7 @@ export class ShopList extends Component {
         layout.verticalSpacing = 20
         layout.divide = column
         layout.itemSize = (indexPath) => {
-            return new Size(0, 500)
+            return new Size(0, 360)
         }
         this.listComp.layout = layout
     }
