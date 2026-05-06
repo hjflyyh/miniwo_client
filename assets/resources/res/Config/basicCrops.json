@@ -10,7 +10,10 @@
     "base_production": "2",
     "base_harvest_exp": "1",
     "mutation_rate_per_mil": "1",
-    "harvest_count": "1"
+    "sunlight_attribute": "7",
+    "rain_attribute": "5",
+    "cold_resistance_attribute": "4",
+    "lodging_resistance_attribute": "6"
   },
   "2": {
     "crop_name": "水稻",
@@ -23,7 +26,10 @@
     "base_production": "2",
     "base_harvest_exp": "1",
     "mutation_rate_per_mil": "1",
-    "harvest_count": "1"
+    "sunlight_attribute": "6",
+    "rain_attribute": "8",
+    "cold_resistance_attribute": "3",
+    "lodging_resistance_attribute": "4"
   },
   "3": {
     "crop_name": "小麦",
@@ -36,7 +42,10 @@
     "base_production": "2",
     "base_harvest_exp": "1",
     "mutation_rate_per_mil": "1",
-    "harvest_count": "1"
+    "sunlight_attribute": "6",
+    "rain_attribute": "5",
+    "cold_resistance_attribute": "6",
+    "lodging_resistance_attribute": "7"
   },
   "4": {
     "crop_name": "红薯",
@@ -49,7 +58,10 @@
     "base_production": "2",
     "base_harvest_exp": "1",
     "mutation_rate_per_mil": "1",
-    "harvest_count": "1"
+    "sunlight_attribute": "7",
+    "rain_attribute": "4",
+    "cold_resistance_attribute": "5",
+    "lodging_resistance_attribute": "5"
   },
   "5": {
     "crop_name": "土豆",
@@ -62,7 +74,10 @@
     "base_production": "2",
     "base_harvest_exp": "1",
     "mutation_rate_per_mil": "1",
-    "harvest_count": "1"
+    "sunlight_attribute": "5",
+    "rain_attribute": "5",
+    "cold_resistance_attribute": "7",
+    "lodging_resistance_attribute": "5"
   },
   "6": {
     "crop_name": "高粱",
@@ -75,7 +90,10 @@
     "base_production": "2",
     "base_harvest_exp": "2",
     "mutation_rate_per_mil": "3",
-    "harvest_count": "1"
+    "sunlight_attribute": "8",
+    "rain_attribute": "4",
+    "cold_resistance_attribute": "4",
+    "lodging_resistance_attribute": "8"
   },
   "7": {
     "crop_name": "青菜",
@@ -88,7 +106,10 @@
     "base_production": "2",
     "base_harvest_exp": "6",
     "mutation_rate_per_mil": "5",
-    "harvest_count": "1"
+    "sunlight_attribute": "5",
+    "rain_attribute": "7",
+    "cold_resistance_attribute": "3",
+    "lodging_resistance_attribute": "4"
   },
   "8": {
     "crop_name": "向日葵",
@@ -101,7 +122,10 @@
     "base_production": "2",
     "base_harvest_exp": "6",
     "mutation_rate_per_mil": "5",
-    "harvest_count": "1"
+    "sunlight_attribute": "9",
+    "rain_attribute": "3",
+    "cold_resistance_attribute": "2",
+    "lodging_resistance_attribute": "3"
   },
   "9": {
     "crop_name": "油菜",
@@ -114,7 +138,10 @@
     "base_production": "2",
     "base_harvest_exp": "6",
     "mutation_rate_per_mil": "5",
-    "harvest_count": "1"
+    "sunlight_attribute": "6",
+    "rain_attribute": "6",
+    "cold_resistance_attribute": "5",
+    "lodging_resistance_attribute": "5"
   },
   "10": {
     "crop_name": "白菜",
@@ -127,7 +154,10 @@
     "base_production": "2",
     "base_harvest_exp": "6",
     "mutation_rate_per_mil": "5",
-    "harvest_count": "1"
+    "sunlight_attribute": "5",
+    "rain_attribute": "5",
+    "cold_resistance_attribute": "6",
+    "lodging_resistance_attribute": "6"
   },
   "11": {
     "crop_name": "紫甘蓝",
@@ -140,7 +170,10 @@
     "base_production": "2",
     "base_harvest_exp": "6",
     "mutation_rate_per_mil": "5",
-    "harvest_count": "1"
+    "sunlight_attribute": "4",
+    "rain_attribute": "5",
+    "cold_resistance_attribute": "7",
+    "lodging_resistance_attribute": "6"
   },
   "12": {
     "crop_name": "玫瑰花",
@@ -153,7 +186,10 @@
     "base_production": "2",
     "base_harvest_exp": "6",
     "mutation_rate_per_mil": "5",
-    "harvest_count": "1"
+    "sunlight_attribute": "7",
+    "rain_attribute": "4",
+    "cold_resistance_attribute": "3",
+    "lodging_resistance_attribute": "4"
   },
   "13": {
     "crop_name": "兰花",
@@ -166,6 +202,9 @@
     "base_production": "2",
     "base_harvest_exp": "6",
     "mutation_rate_per_mil": "5",
-    "harvest_count": "1"
+    "sunlight_attribute": "3",
+    "rain_attribute": "6",
+    "cold_resistance_attribute": "4",
+    "lodging_resistance_attribute": "5"
   }
 }
