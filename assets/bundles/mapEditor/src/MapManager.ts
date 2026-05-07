@@ -113,6 +113,13 @@ export class MapManager extends Component {
         let cfg = AppConst.JSONManager.getItem(cfgName , id)
         if(cfg == null){
             console.log("地图素材id未找到：" + id + " cfgName:" + cfgName)
+            let newNode = new Node()
+            let uiTransform : UITransform = newNode.getComponent(UITransform)
+            if(!uiTransform){
+                uiTransform = newNode.addComponent(UITransform)
+            }
+            uiTransform.contentSize = new Size(32 , 32)
+            return newNode
         }
         let cfgSize = [32,32]
         if(cfg["map_size"]){

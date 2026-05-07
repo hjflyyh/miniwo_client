@@ -41,9 +41,21 @@ export class MainChatList extends Component {
     }
 
     onEnable() {
+        EventSystem.addListent('PrivateChatMessage', this.onPrivateChatSync, this);
+        EventSystem.addListent('PrivateChatSessionHint', this.onPrivateChatSync, this);
+        EventSystem.addListent('PrivateChatReconnected', this.onPrivateChatSync, this);
         if (this.listCallbacksReady) {
             this.refreshPrivateSessionList();
         }
+    }
+
+    onDisable() {
+        EventSystem.remove(this);
+    }
+
+    /** 私聊有新消息 / 会话摘要变化时，与会话列表对齐（排序、最近一条、未读等） */
+    private onPrivateChatSync() {
+        this.refreshPrivateSessionList();
     }
 
     /** EditBox 结束编辑时：按搜索词刷新列表 */

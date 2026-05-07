@@ -12,6 +12,7 @@ export class Utils{
         assetManager.loadRemote<ImageAsset>(url , (err , ImageAsset) => {
             if(err || !ImageAsset){
                 console.log("图片下载失败" , err)
+                sprite.spriteFrame = null
                 return
             }
             const tex = new Texture2D()

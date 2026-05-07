@@ -117,6 +117,17 @@ export class LoginView extends Component {
         HttpManager.chatBaseUrl = `http://${HttpManager.ipBase}:7350`;
         this.persistHttpServer();
     }
+
+    onClickServer3(){
+        HttpManager.ipBase = "115.190.225.83"
+        HttpManager.baseUrl = "http://" + HttpManager.ipBase + ":8080"
+        HttpManager.chatBaseUrl = `http://${HttpManager.ipBase}:7350`;
+        this.persistHttpServer();
+    }
+
+    onCleanCache(){
+        sys.localStorage.clear()
+    }
 }
 
 

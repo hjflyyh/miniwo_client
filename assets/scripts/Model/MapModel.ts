@@ -374,12 +374,22 @@ export class MapModel {
             this.page = contentData.page
 
             let maps = contentData.maps
-            for(let m = 0 ; m < maps.length ;m++){
-                let mapId = maps[m].id
-                if(!this.maps[mapId]){
-                    this.maps[mapId] = this.sceneMaps.length
-                    this.sceneMaps.push(maps[m])
+            for (let m = 0; m < maps.length; m++) {
+                const rawId = maps[m]?.id;
+                const mapId = Number(rawId);
+                if (!Number.isFinite(mapId) || mapId <= 0) {
+                    continue;
                 }
+                // 不能用 !this.maps[mapId]：首条在列表下标为 0 时存的是 0，会被误判为「不存在」而重复 push
+                if (this.maps[mapId] !== undefined) {
+                    const idx = this.maps[mapId] as number;
+                    if (typeof idx === "number" && idx >= 0 && idx < this.sceneMaps.length) {
+                        this.sceneMaps[idx] = maps[m];
+                    }
+                    continue;
+                }
+                this.maps[mapId] = this.sceneMaps.length;
+                this.sceneMaps.push(maps[m]);
             }
         }
     }

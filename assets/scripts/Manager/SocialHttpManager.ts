@@ -21,28 +21,40 @@ export class SocialHttpManager extends Component {
     public sendPostHttp(functionName, data) {
         console.log("post 请求参数：", data)
         EventSystem.send("ShowJuhua", "HttpSend")
-        try {
-
-            fetch(this.getBaseUrl() + "/" + functionName, {
-                method: 'POST',
-                headers: {
-                    "Authorization": `Bearer ${this.getToken()}`, // 核心：Bearer Token 鉴权
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            }).then(res => res.json()).then(data => {
-                    console.log("post 请求回复：", data)
-                    if (data.success && data.data) {
-                        EventSystem.send("SocialHttpMessage", data.data)
-                    } else {
-                        if (data.error) {
-                            EventSystem.send("ShowTips", data.error)
-                        }
+        const request = fetch(this.getBaseUrl() + "/" + functionName, {
+            method: 'POST',
+            headers: {
+                "Authorization": `Bearer ${this.getToken()}`, // 核心：Bearer Token 鉴权
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(async res => {
+                if (!res.ok) {
+                    const raw = await res.text();
+                    throw new Error(`Social POST ${functionName} HTTP ${res.status}: ${raw}`);
+                }
+                return res.json();
+            })
+            .then(data => {
+                console.log("post 请求回复：", data)
+                if (data.success && data.data) {
+                    EventSystem.send("SocialHttpMessage", data.data)
+                } else {
+                    if (data.error) {
+                        EventSystem.send("ShowTips", data.error)
                     }
-                })
-        }catch(error){
-
-        }
+                }
+                return data;
+            })
+            .catch((err) => {
+                const error = err instanceof Error ? err : new Error(String(err));
+                EventSystem.send("ShowTips", "网络请求失败，请稍后重试");
+                EventSystem.send("HttpError", error);
+                throw error;
+            })
+        request.catch(() => undefined)
+        return request
     }
 
     public sendGetHttp(functionName, data) {
@@ -56,14 +68,20 @@ export class SocialHttpManager extends Component {
         const fullUrl = queryString ? `${functionName}?${queryString}` : functionName;
         EventSystem.send("ShowJuhua", "HttpSend")
         console.log("get 请求url：", fullUrl)
-        fetch(this.getBaseUrl() + "/" + fullUrl, {
+        const request = fetch(this.getBaseUrl() + "/" + fullUrl, {
             method: 'GET',
             headers: {
                 "Authorization": `Bearer ${this.getToken()}`, // 核心：Bearer Token 鉴权
                 'Content-Type': 'application/json'
             },
         })
-            .then(res => res.json())
+            .then(async res => {
+                if (!res.ok) {
+                    const raw = await res.text();
+                    throw new Error(`Social GET ${functionName} HTTP ${res.status}: ${raw}`);
+                }
+                return res.json();
+            })
             .then(data => {
                 console.log("get 请求回复：", data)
                 if (data.success && data.data) {
@@ -73,7 +91,16 @@ export class SocialHttpManager extends Component {
                         EventSystem.send("ShowTips", data.error)
                     }
                 }
+                return data;
             })
+            .catch((err) => {
+                const error = err instanceof Error ? err : new Error(String(err));
+                EventSystem.send("ShowTips", "网络请求失败，请稍后重试");
+                EventSystem.send("HttpError", error);
+                throw error;
+            })
+        request.catch(() => undefined)
+        return request
     }
 
 }
