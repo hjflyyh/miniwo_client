@@ -1,0 +1,100 @@
+{
+  "1": {
+    "attribute_name": "好感度",
+    "attribute_nam_en": "favorability",
+    "value_min_limit": "-100",
+    "value_max_limit": "1000",
+    "actual_store_max_limit": "3000"
+  },
+  "2": {
+    "attribute_name": "善恶值",
+    "attribute_nam_en": "morality",
+    "value_min_limit": "-500",
+    "value_max_limit": "500",
+    "actual_store_max_limit": "500"
+  },
+  "3": {
+    "attribute_name": "魅力值",
+    "attribute_nam_en": "charm",
+    "value_min_limit": "0",
+    "value_max_limit": "1000",
+    "actual_store_max_limit": "1000"
+  },
+  "4": {
+    "attribute_name": "领导力",
+    "attribute_nam_en": "leadership",
+    "value_min_limit": "0",
+    "value_max_limit": "1000",
+    "actual_store_max_limit": "1000"
+  },
+  "5": {
+    "attribute_name": "自由度",
+    "attribute_nam_en": "freedom",
+    "value_min_limit": "0",
+    "value_max_limit": "1000",
+    "actual_store_max_limit": "1000"
+  },
+  "6": {
+    "attribute_name": "健康值",
+    "attribute_nam_en": "health",
+    "value_min_limit": "0",
+    "value_max_limit": "100",
+    "actual_store_max_limit": "100"
+  },
+  "7": {
+    "attribute_name": "体力值",
+    "attribute_nam_en": "stamina",
+    "value_min_limit": "0",
+    "value_max_limit": "1000",
+    "actual_store_max_limit": "1000"
+  },
+  "8": {
+    "attribute_name": "心情值",
+    "attribute_nam_en": "mood",
+    "value_min_limit": "0",
+    "value_max_limit": "100",
+    "actual_store_max_limit": "100"
+  },
+  "9": {
+    "attribute_name": "智力",
+    "attribute_nam_en": "intelligence",
+    "value_min_limit": "0",
+    "value_max_limit": "1000",
+    "actual_store_max_limit": "1000"
+  },
+  "10": {
+    "attribute_name": "创造力",
+    "attribute_nam_en": "creativity",
+    "value_min_limit": "0",
+    "value_max_limit": "1000",
+    "actual_store_max_limit": "1000"
+  },
+  "11": {
+    "attribute_name": "耐心",
+    "attribute_nam_en": "patience",
+    "value_min_limit": "0",
+    "value_max_limit": "1000",
+    "actual_store_max_limit": "1000"
+  },
+  "12": {
+    "attribute_name": "好奇心",
+    "attribute_nam_en": "curiosity",
+    "value_min_limit": "0",
+    "value_max_limit": "1000",
+    "actual_store_max_limit": "1000"
+  },
+  "13": {
+    "attribute_name": "灵力值",
+    "attribute_nam_en": "mana",
+    "value_min_limit": "0",
+    "value_max_limit": "1000",
+    "actual_store_max_limit": "1000"
+  },
+  "14": {
+    "attribute_name": "幸运",
+    "attribute_nam_en": "luck",
+    "value_min_limit": "0",
+    "value_max_limit": "1000",
+    "actual_store_max_limit": "1000"
+  }
+}
