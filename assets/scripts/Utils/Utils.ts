@@ -10,6 +10,10 @@ export class Utils{
             url = HttpManager.baseUrl + url
         }
         assetManager.loadRemote<ImageAsset>(url , (err , ImageAsset) => {
+            // 异步返回时 cell 可能已回收 / 节点已销毁，避免访问无效 Sprite 报错
+            if (!sprite || !sprite.isValid) {
+                return;
+            }
             if(err || !ImageAsset){
                 console.log("图片下载失败" , err)
                 sprite.spriteFrame = null

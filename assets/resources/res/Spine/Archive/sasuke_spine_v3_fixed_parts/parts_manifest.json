@@ -1,0 +1,406 @@
+{
+  "source": "new-3-view/sasuke_spine_v3_exploded_no_sleeve_body_gpt_image2.png",
+  "contract": "new-3-view/spine_v3_attachment_contract.json",
+  "transparent_sheet": "new-3-view/sasuke_spine_v3_exploded_no_sleeve_body_fixed_transparent.png",
+  "output_dir": "new-3-view/sasuke_spine_v3_fixed_parts",
+  "component_count": 18,
+  "warnings": [],
+  "parts": [
+    {
+      "file": "side_head.png",
+      "source_component_bbox": [
+        197,
+        31,
+        407,
+        236
+      ],
+      "source_crop_size": [
+        226,
+        221
+      ],
+      "width": 560,
+      "height": 420,
+      "alpha_bbox": [
+        95,
+        30,
+        464,
+        390
+      ],
+      "warnings": []
+    },
+    {
+      "file": "side_body.png",
+      "source_component_bbox": [
+        215,
+        274,
+        338,
+        486
+      ],
+      "source_crop_size": [
+        139,
+        228
+      ],
+      "width": 360,
+      "height": 500,
+      "alpha_bbox": [
+        56,
+        20,
+        303,
+        445
+      ],
+      "warnings": []
+    },
+    {
+      "file": "side_left_arm.png",
+      "source_component_bbox": [
+        155,
+        523,
+        227,
+        688
+      ],
+      "source_crop_size": [
+        88,
+        181
+      ],
+      "width": 220,
+      "height": 460,
+      "alpha_bbox": [
+        33,
+        35,
+        186,
+        385
+      ],
+      "warnings": []
+    },
+    {
+      "file": "side_right_arm.png",
+      "source_component_bbox": [
+        342,
+        522,
+        412,
+        689
+      ],
+      "source_crop_size": [
+        86,
+        183
+      ],
+      "width": 220,
+      "height": 460,
+      "alpha_bbox": [
+        36,
+        35,
+        183,
+        385
+      ],
+      "warnings": []
+    },
+    {
+      "file": "side_left_leg.png",
+      "source_component_bbox": [
+        153,
+        760,
+        248,
+        941
+      ],
+      "source_crop_size": [
+        111,
+        197
+      ],
+      "width": 340,
+      "height": 380,
+      "alpha_bbox": [
+        91,
+        35,
+        248,
+        335
+      ],
+      "warnings": []
+    },
+    {
+      "file": "side_right_leg.png",
+      "source_component_bbox": [
+        332,
+        758,
+        405,
+        941
+      ],
+      "source_crop_size": [
+        89,
+        199
+      ],
+      "width": 340,
+      "height": 380,
+      "alpha_bbox": [
+        110,
+        35,
+        230,
+        335
+      ],
+      "warnings": []
+    },
+    {
+      "file": "front_head.png",
+      "source_component_bbox": [
+        645,
+        31,
+        870,
+        240
+      ],
+      "source_crop_size": [
+        241,
+        225
+      ],
+      "width": 560,
+      "height": 420,
+      "alpha_bbox": [
+        86,
+        30,
+        474,
+        390
+      ],
+      "warnings": []
+    },
+    {
+      "file": "front_body.png",
+      "source_component_bbox": [
+        694,
+        277,
+        821,
+        492
+      ],
+      "source_crop_size": [
+        143,
+        231
+      ],
+      "width": 360,
+      "height": 500,
+      "alpha_bbox": [
+        54,
+        20,
+        305,
+        445
+      ],
+      "warnings": []
+    },
+    {
+      "file": "front_left_arm.png",
+      "source_component_bbox": [
+        840,
+        521,
+        895,
+        683
+      ],
+      "source_crop_size": [
+        71,
+        178
+      ],
+      "width": 220,
+      "height": 460,
+      "alpha_bbox": [
+        50,
+        35,
+        169,
+        385
+      ],
+      "warnings": []
+    },
+    {
+      "file": "front_right_arm.png",
+      "source_component_bbox": [
+        614,
+        521,
+        670,
+        683
+      ],
+      "source_crop_size": [
+        72,
+        178
+      ],
+      "width": 220,
+      "height": 460,
+      "alpha_bbox": [
+        49,
+        35,
+        170,
+        385
+      ],
+      "warnings": []
+    },
+    {
+      "file": "front_left_leg.png",
+      "source_component_bbox": [
+        806,
+        759,
+        873,
+        941
+      ],
+      "source_crop_size": [
+        83,
+        198
+      ],
+      "width": 340,
+      "height": 380,
+      "alpha_bbox": [
+        115,
+        35,
+        225,
+        335
+      ],
+      "warnings": []
+    },
+    {
+      "file": "front_right_leg.png",
+      "source_component_bbox": [
+        641,
+        759,
+        707,
+        941
+      ],
+      "source_crop_size": [
+        82,
+        198
+      ],
+      "width": 340,
+      "height": 380,
+      "alpha_bbox": [
+        115,
+        35,
+        224,
+        335
+      ],
+      "warnings": []
+    },
+    {
+      "file": "back_head.png",
+      "source_component_bbox": [
+        1108,
+        31,
+        1332,
+        240
+      ],
+      "source_crop_size": [
+        240,
+        225
+      ],
+      "width": 560,
+      "height": 420,
+      "alpha_bbox": [
+        87,
+        30,
+        473,
+        390
+      ],
+      "warnings": []
+    },
+    {
+      "file": "back_body.png",
+      "source_component_bbox": [
+        1158,
+        277,
+        1282,
+        492
+      ],
+      "source_crop_size": [
+        140,
+        231
+      ],
+      "width": 360,
+      "height": 500,
+      "alpha_bbox": [
+        57,
+        20,
+        302,
+        445
+      ],
+      "warnings": []
+    },
+    {
+      "file": "back_left_arm.png",
+      "source_component_bbox": [
+        1102,
+        521,
+        1159,
+        688
+      ],
+      "source_crop_size": [
+        73,
+        183
+      ],
+      "width": 220,
+      "height": 460,
+      "alpha_bbox": [
+        50,
+        35,
+        169,
+        385
+      ],
+      "warnings": []
+    },
+    {
+      "file": "back_right_arm.png",
+      "source_component_bbox": [
+        1297,
+        521,
+        1356,
+        688
+      ],
+      "source_crop_size": [
+        75,
+        183
+      ],
+      "width": 220,
+      "height": 460,
+      "alpha_bbox": [
+        48,
+        35,
+        172,
+        385
+      ],
+      "warnings": []
+    },
+    {
+      "file": "back_left_leg.png",
+      "source_component_bbox": [
+        1110,
+        757,
+        1173,
+        941
+      ],
+      "source_crop_size": [
+        79,
+        200
+      ],
+      "width": 340,
+      "height": 380,
+      "alpha_bbox": [
+        118,
+        35,
+        221,
+        335
+      ],
+      "warnings": []
+    },
+    {
+      "file": "back_right_leg.png",
+      "source_component_bbox": [
+        1285,
+        757,
+        1351,
+        941
+      ],
+      "source_crop_size": [
+        82,
+        200
+      ],
+      "width": 340,
+      "height": 380,
+      "alpha_bbox": [
+        116,
+        35,
+        224,
+        335
+      ],
+      "warnings": []
+    }
+  ]
+}

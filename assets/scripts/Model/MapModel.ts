@@ -86,6 +86,8 @@ export class MapModel {
     public currentMapId: number = 0
     public isInMap: boolean = false
     private isRecoveringAfterReconnect: boolean = false
+    /** 用户发起的加入地图请求进行中（含列表点击进入），用于防止重复点击重复发 join_map */
+    private joinMapRequestPending: boolean = false
 
     public static getInstance(): MapModel {
         if (!this._instance) {
@@ -212,6 +214,12 @@ export class MapModel {
         if(!mapId || mapId <= 0){
             return;
         }
+        if (!fromReconnect && this.joinMapRequestPending) {
+            return;
+        }
+        if (!fromReconnect) {
+            this.joinMapRequestPending = true;
+        }
         this.currentMapId = mapId;
         this.isRecoveringAfterReconnect = fromReconnect;
         let joinMapRequest = new network.JoinMapEequest();
@@ -271,6 +279,7 @@ export class MapModel {
         this.currentMapId = 0;
         this.match_id = "";
         this.isRecoveringAfterReconnect = false;
+        this.joinMapRequestPending = false;
     }
 
     public initGridData(map : MapEditor){
@@ -413,6 +422,9 @@ export class MapModel {
                 if(payload && payload.code !== "SESSION_REPLACED"){
                     EventSystem.send("ShowTips" , msg);
                 }
+                if (!this.isRecoveringAfterReconnect) {
+                    this.joinMapRequestPending = false;
+                }
                 return;
             }
             this.currentMapId = Number(payload["map_id"] || this.currentMapId || 0);
@@ -427,6 +439,7 @@ export class MapModel {
             console.log("收到消息进入地图")
             console.log(payload)
             this.showMatchPayLoad = payload
+            this.joinMapRequestPending = false;
             MapModel.getInstance().EnterMap(0 , payload.map_detail)
         }
     }
