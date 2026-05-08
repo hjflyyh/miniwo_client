@@ -11,6 +11,9 @@ export class LoginView extends Component {
     private readonly STORAGE_IP_KEY = "LOGIN_HTTP_IP_BASE";
     private readonly STORAGE_URL_KEY = "LOGIN_HTTP_BASE_URL";
 
+    /** 邮箱登录：HTTP loginGame 进行中，需等本次请求结束后再允许下一次点击 */
+    private loginMailPending = false;
+
     @property(WebView)
     public webview: WebView;
 
@@ -82,12 +85,24 @@ export class LoginView extends Component {
     }
 
     onClickMailNext(){
-        AppConst.HttpManager.sendPostHttp("loginGame" , JSON.stringify({
+        if (this.loginMailPending) {
+            return;
+        }
+        this.loginMailPending = true;
+        const req = AppConst.HttpManager.sendPostHttp("loginGame" , JSON.stringify({
             platform : 0,
             loginType : 1,
             token : this.passwordEditBox.string,
             email : this.mailEditBox.string
-        }))
+        }));
+        Promise.resolve(req).then(
+            () => {},
+            () => {}
+        ).then(() => {
+            if (this.isValid) {
+                this.loginMailPending = false;
+            }
+        });
     }
 
     onClickMailBack(){

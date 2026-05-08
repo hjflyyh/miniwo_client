@@ -1,0 +1,1475 @@
+{
+  "name": "gojo_spine_skill_api_v4_manual_source_locked_slot_aware",
+  "principle": "Slot-aware split: limbs/body use Sasuke Spine slot rectangles; head may use an adaptive taller canvas for long hair while preserving the same render-center and bone-origin contract.",
+  "source_parts_dir": "new-3-view/gojo_spine_skill_api_v4_manual_fixed_parts",
+  "source_slot_layout": "/Users/kyohi/Documents/spine test/idle walk new/Imagine/_skill_build/spine-pixel-3view-character/assets/sasuke_setup_slot_layout.json",
+  "source_spine_json": "/Users/kyohi/Documents/spine test/idle walk new/Imagine/_skill_build/spine-pixel-3view-character/assets/sasuke_canonical_spine.json",
+  "source_occupancy_profile": null,
+  "canvas_policy": "adaptive-head",
+  "no_upscale_groups": [
+    "arm",
+    "body",
+    "head",
+    "leg"
+  ],
+  "coordinate_note": "bone_origin_in_image_px uses image coordinates: x right, y down. render_center_view/render_bbox_view use Sasuke setup view coordinates: x right, y up.",
+  "views": {
+    "side": {
+      "source_skin": "default",
+      "draw_order_bottom_to_top": [
+        "side_right_arm",
+        "side_head",
+        "side_right_leg",
+        "side_left_leg",
+        "side_body",
+        "side_left_arm"
+      ],
+      "canonical_bbox_view": [
+        -105.22,
+        -9.72,
+        174.78,
+        622.28
+      ]
+    },
+    "front": {
+      "source_skin": "z",
+      "draw_order_bottom_to_top": [
+        "front_right_arm",
+        "front_left_arm",
+        "front_left_leg",
+        "front_right_leg",
+        "front_head",
+        "front_body"
+      ],
+      "canonical_bbox_view": [
+        -149.66,
+        -9.92,
+        148.34,
+        622.28
+      ]
+    },
+    "back": {
+      "source_skin": "b",
+      "draw_order_bottom_to_top": [
+        "back_head",
+        "back_left_arm",
+        "back_right_arm",
+        "back_left_leg",
+        "back_right_leg",
+        "back_body"
+      ],
+      "canonical_bbox_view": [
+        -144.74,
+        -9.72,
+        148.26,
+        618.28
+      ]
+    }
+  },
+  "parts": {
+    "side_right_arm": {
+      "file": "side_right_arm.png",
+      "semantic_group": "arm",
+      "source_skin": "default",
+      "source_slot": "18",
+      "source_attachment": "18",
+      "source_bone": "20",
+      "draw_order_index": 0,
+      "spine_attachment_size": [
+        110,
+        210
+      ],
+      "target_canvas_size": [
+        110,
+        210
+      ],
+      "render_center_view": [
+        11.78,
+        259.27
+      ],
+      "render_bbox_view": [
+        -43.22,
+        154.27,
+        66.78,
+        364.27
+      ],
+      "bone_origin_view": [
+        -11.35,
+        337.72,
+        -89.73
+      ],
+      "bone_origin_in_image_px": [
+        31.87,
+        26.55
+      ],
+      "render_center_in_image_px": [
+        55.0,
+        105.0
+      ],
+      "source_size": [
+        220,
+        460
+      ],
+      "target_canvas": [
+        110,
+        210
+      ],
+      "source_alpha_bbox": [
+        79,
+        35,
+        140,
+        179
+      ],
+      "source_alpha_size": [
+        61,
+        144
+      ],
+      "scale_to_exact_slot_canvas": 1.0,
+      "scale_x_to_slot_canvas": 1.0,
+      "scale_y_to_slot_canvas": 1.0,
+      "nonuniform_scale": false,
+      "pasted_top_left": [
+        24,
+        33
+      ],
+      "output_alpha_bbox": [
+        24,
+        33,
+        85,
+        177
+      ],
+      "canvas_policy": "adaptive-head",
+      "no_upscale": true,
+      "size_policy": "preserve_source_size_or_downscale_to_fit",
+      "occupancy_profile": null,
+      "force_uniform_scale": false,
+      "occupancy_warnings": []
+    },
+    "side_head": {
+      "file": "side_head.png",
+      "semantic_group": "head",
+      "source_skin": "default",
+      "source_slot": "17",
+      "source_attachment": "17",
+      "source_bone": "19",
+      "draw_order_index": 1,
+      "spine_attachment_size": [
+        280,
+        266
+      ],
+      "target_canvas_size": [
+        280,
+        266
+      ],
+      "render_center_view": [
+        34.78,
+        489.28
+      ],
+      "render_bbox_view": [
+        -105.22,
+        356.28,
+        174.78,
+        622.28
+      ],
+      "bone_origin_view": [
+        -2.27,
+        372.55,
+        91.61
+      ],
+      "bone_origin_in_image_px": [
+        102.95,
+        249.73
+      ],
+      "render_center_in_image_px": [
+        140.0,
+        133.0
+      ],
+      "source_size": [
+        560,
+        420
+      ],
+      "target_canvas": [
+        280,
+        266
+      ],
+      "source_alpha_bbox": [
+        148,
+        126,
+        412,
+        390
+      ],
+      "source_alpha_size": [
+        264,
+        264
+      ],
+      "scale_to_exact_slot_canvas": 1.0,
+      "scale_x_to_slot_canvas": 1.0,
+      "scale_y_to_slot_canvas": 1.0,
+      "nonuniform_scale": false,
+      "pasted_top_left": [
+        8,
+        1
+      ],
+      "output_alpha_bbox": [
+        8,
+        1,
+        272,
+        265
+      ],
+      "canvas_policy": "adaptive-head",
+      "no_upscale": true,
+      "size_policy": "preserve_source_size_or_downscale_to_fit",
+      "occupancy_profile": null,
+      "force_uniform_scale": false,
+      "occupancy_warnings": []
+    },
+    "side_right_leg": {
+      "file": "side_right_leg.png",
+      "semantic_group": "leg",
+      "source_skin": "default",
+      "source_slot": "16",
+      "source_attachment": "16",
+      "source_bone": "24",
+      "draw_order_index": 2,
+      "spine_attachment_size": [
+        98,
+        209
+      ],
+      "target_canvas_size": [
+        98,
+        209
+      ],
+      "render_center_view": [
+        -7.24,
+        94.78
+      ],
+      "render_bbox_view": [
+        -56.24,
+        -9.72,
+        41.76,
+        199.28
+      ],
+      "bone_origin_view": [
+        -10.61,
+        66.72,
+        -92.12
+      ],
+      "bone_origin_in_image_px": [
+        45.63,
+        132.56
+      ],
+      "render_center_in_image_px": [
+        49.0,
+        104.5
+      ],
+      "source_size": [
+        340,
+        380
+      ],
+      "target_canvas": [
+        98,
+        209
+      ],
+      "source_alpha_bbox": [
+        133,
+        172,
+        206,
+        335
+      ],
+      "source_alpha_size": [
+        73,
+        163
+      ],
+      "scale_to_exact_slot_canvas": 1.0,
+      "scale_x_to_slot_canvas": 1.0,
+      "scale_y_to_slot_canvas": 1.0,
+      "nonuniform_scale": false,
+      "pasted_top_left": [
+        12,
+        23
+      ],
+      "output_alpha_bbox": [
+        12,
+        23,
+        85,
+        186
+      ],
+      "canvas_policy": "adaptive-head",
+      "no_upscale": true,
+      "size_policy": "preserve_source_size_or_downscale_to_fit",
+      "occupancy_profile": null,
+      "force_uniform_scale": false,
+      "occupancy_warnings": []
+    },
+    "side_left_leg": {
+      "file": "side_left_leg.png",
+      "semantic_group": "leg",
+      "source_skin": "default",
+      "source_slot": "15",
+      "source_attachment": "15",
+      "source_bone": "22",
+      "draw_order_index": 3,
+      "spine_attachment_size": [
+        98,
+        209
+      ],
+      "target_canvas_size": [
+        98,
+        209
+      ],
+      "render_center_view": [
+        18.78,
+        94.79
+      ],
+      "render_bbox_view": [
+        -30.22,
+        -9.71,
+        67.78,
+        199.29
+      ],
+      "bone_origin_view": [
+        15.15,
+        65.98,
+        -90.0
+      ],
+      "bone_origin_in_image_px": [
+        45.37,
+        133.31
+      ],
+      "render_center_in_image_px": [
+        49.0,
+        104.5
+      ],
+      "source_size": [
+        340,
+        380
+      ],
+      "target_canvas": [
+        98,
+        209
+      ],
+      "source_alpha_bbox": [
+        129,
+        170,
+        211,
+        335
+      ],
+      "source_alpha_size": [
+        82,
+        165
+      ],
+      "scale_to_exact_slot_canvas": 1.0,
+      "scale_x_to_slot_canvas": 1.0,
+      "scale_y_to_slot_canvas": 1.0,
+      "nonuniform_scale": false,
+      "pasted_top_left": [
+        8,
+        22
+      ],
+      "output_alpha_bbox": [
+        8,
+        22,
+        90,
+        187
+      ],
+      "canvas_policy": "adaptive-head",
+      "no_upscale": true,
+      "size_policy": "preserve_source_size_or_downscale_to_fit",
+      "occupancy_profile": null,
+      "force_uniform_scale": false,
+      "occupancy_warnings": []
+    },
+    "side_body": {
+      "file": "side_body.png",
+      "semantic_group": "body",
+      "source_skin": "default",
+      "source_slot": "14",
+      "source_attachment": "14",
+      "source_bone": "17",
+      "draw_order_index": 4,
+      "spine_attachment_size": [
+        182,
+        276
+      ],
+      "target_canvas_size": [
+        182,
+        276
+      ],
+      "render_center_view": [
+        4.77,
+        245.27
+      ],
+      "render_bbox_view": [
+        -86.23,
+        107.27,
+        95.77,
+        383.27
+      ],
+      "bone_origin_view": [
+        -1.51,
+        198.44,
+        89.75
+      ],
+      "bone_origin_in_image_px": [
+        84.72,
+        184.83
+      ],
+      "render_center_in_image_px": [
+        91.0,
+        138.0
+      ],
+      "source_size": [
+        360,
+        500
+      ],
+      "target_canvas": [
+        182,
+        276
+      ],
+      "source_alpha_bbox": [
+        119,
+        20,
+        241,
+        192
+      ],
+      "source_alpha_size": [
+        122,
+        172
+      ],
+      "scale_to_exact_slot_canvas": 1.0,
+      "scale_x_to_slot_canvas": 1.0,
+      "scale_y_to_slot_canvas": 1.0,
+      "nonuniform_scale": false,
+      "pasted_top_left": [
+        30,
+        52
+      ],
+      "output_alpha_bbox": [
+        30,
+        52,
+        152,
+        224
+      ],
+      "canvas_policy": "adaptive-head",
+      "no_upscale": true,
+      "size_policy": "preserve_source_size_or_downscale_to_fit",
+      "occupancy_profile": null,
+      "force_uniform_scale": false,
+      "occupancy_warnings": []
+    },
+    "side_left_arm": {
+      "file": "side_left_arm.png",
+      "semantic_group": "arm",
+      "source_skin": "default",
+      "source_slot": "13",
+      "source_attachment": "13",
+      "source_bone": "16",
+      "draw_order_index": 5,
+      "spine_attachment_size": [
+        110,
+        210
+      ],
+      "target_canvas_size": [
+        110,
+        210
+      ],
+      "render_center_view": [
+        59.77,
+        248.27
+      ],
+      "render_bbox_view": [
+        4.77,
+        143.27,
+        114.77,
+        353.27
+      ],
+      "bone_origin_view": [
+        42.39,
+        326.37,
+        -87.91
+      ],
+      "bone_origin_in_image_px": [
+        37.62,
+        26.9
+      ],
+      "render_center_in_image_px": [
+        55.0,
+        105.0
+      ],
+      "source_size": [
+        220,
+        460
+      ],
+      "target_canvas": [
+        110,
+        210
+      ],
+      "source_alpha_bbox": [
+        81,
+        35,
+        139,
+        180
+      ],
+      "source_alpha_size": [
+        58,
+        145
+      ],
+      "scale_to_exact_slot_canvas": 1.0,
+      "scale_x_to_slot_canvas": 1.0,
+      "scale_y_to_slot_canvas": 1.0,
+      "nonuniform_scale": false,
+      "pasted_top_left": [
+        26,
+        32
+      ],
+      "output_alpha_bbox": [
+        26,
+        32,
+        84,
+        177
+      ],
+      "canvas_policy": "adaptive-head",
+      "no_upscale": true,
+      "size_policy": "preserve_source_size_or_downscale_to_fit",
+      "occupancy_profile": null,
+      "force_uniform_scale": false,
+      "occupancy_warnings": []
+    },
+    "front_right_arm": {
+      "file": "front_right_arm.png",
+      "semantic_group": "arm",
+      "source_skin": "z",
+      "source_slot": "12",
+      "source_attachment": "12",
+      "source_bone": "12",
+      "draw_order_index": 6,
+      "spine_attachment_size": [
+        85,
+        226
+      ],
+      "target_canvas_size": [
+        85,
+        226
+      ],
+      "render_center_view": [
+        -84.18,
+        252.3
+      ],
+      "render_bbox_view": [
+        -126.68,
+        139.3,
+        -41.68,
+        365.3
+      ],
+      "bone_origin_view": [
+        -60.92,
+        347.09,
+        259.73
+      ],
+      "bone_origin_in_image_px": [
+        65.76,
+        18.21
+      ],
+      "render_center_in_image_px": [
+        42.5,
+        113.0
+      ],
+      "source_size": [
+        220,
+        460
+      ],
+      "target_canvas": [
+        85,
+        226
+      ],
+      "source_alpha_bbox": [
+        82,
+        35,
+        138,
+        176
+      ],
+      "source_alpha_size": [
+        56,
+        141
+      ],
+      "scale_to_exact_slot_canvas": 1.0,
+      "scale_x_to_slot_canvas": 1.0,
+      "scale_y_to_slot_canvas": 1.0,
+      "nonuniform_scale": false,
+      "pasted_top_left": [
+        14,
+        42
+      ],
+      "output_alpha_bbox": [
+        14,
+        42,
+        70,
+        183
+      ],
+      "canvas_policy": "adaptive-head",
+      "no_upscale": true,
+      "size_policy": "preserve_source_size_or_downscale_to_fit",
+      "occupancy_profile": null,
+      "force_uniform_scale": false,
+      "occupancy_warnings": []
+    },
+    "front_left_arm": {
+      "file": "front_left_arm.png",
+      "semantic_group": "arm",
+      "source_skin": "z",
+      "source_slot": "11",
+      "source_attachment": "11",
+      "source_bone": "11",
+      "draw_order_index": 7,
+      "spine_attachment_size": [
+        85,
+        226
+      ],
+      "target_canvas_size": [
+        85,
+        226
+      ],
+      "render_center_view": [
+        80.82,
+        254.29
+      ],
+      "render_bbox_view": [
+        38.32,
+        141.29,
+        123.32,
+        367.29
+      ],
+      "bone_origin_view": [
+        60.47,
+        339.76,
+        -77.09
+      ],
+      "bone_origin_in_image_px": [
+        22.15,
+        27.53
+      ],
+      "render_center_in_image_px": [
+        42.5,
+        113.0
+      ],
+      "source_size": [
+        220,
+        460
+      ],
+      "target_canvas": [
+        85,
+        226
+      ],
+      "source_alpha_bbox": [
+        82,
+        35,
+        138,
+        176
+      ],
+      "source_alpha_size": [
+        56,
+        141
+      ],
+      "scale_to_exact_slot_canvas": 1.0,
+      "scale_x_to_slot_canvas": 1.0,
+      "scale_y_to_slot_canvas": 1.0,
+      "nonuniform_scale": false,
+      "pasted_top_left": [
+        14,
+        42
+      ],
+      "output_alpha_bbox": [
+        14,
+        42,
+        70,
+        183
+      ],
+      "canvas_policy": "adaptive-head",
+      "no_upscale": true,
+      "size_policy": "preserve_source_size_or_downscale_to_fit",
+      "occupancy_profile": null,
+      "force_uniform_scale": false,
+      "occupancy_warnings": []
+    },
+    "front_left_leg": {
+      "file": "front_left_leg.png",
+      "semantic_group": "leg",
+      "source_skin": "z",
+      "source_slot": "0",
+      "source_attachment": "0",
+      "source_bone": "0",
+      "draw_order_index": 8,
+      "spine_attachment_size": [
+        86,
+        203
+      ],
+      "target_canvas_size": [
+        86,
+        203
+      ],
+      "render_center_view": [
+        38.32,
+        91.78
+      ],
+      "render_bbox_view": [
+        -4.68,
+        -9.72,
+        81.32,
+        193.28
+      ],
+      "bone_origin_view": [
+        34.11,
+        69.94,
+        -89.59
+      ],
+      "bone_origin_in_image_px": [
+        38.79,
+        123.34
+      ],
+      "render_center_in_image_px": [
+        43.0,
+        101.5
+      ],
+      "source_size": [
+        340,
+        380
+      ],
+      "target_canvas": [
+        86,
+        203
+      ],
+      "source_alpha_bbox": [
+        140,
+        172,
+        199,
+        335
+      ],
+      "source_alpha_size": [
+        59,
+        163
+      ],
+      "scale_to_exact_slot_canvas": 1.0,
+      "scale_x_to_slot_canvas": 1.0,
+      "scale_y_to_slot_canvas": 1.0,
+      "nonuniform_scale": false,
+      "pasted_top_left": [
+        14,
+        20
+      ],
+      "output_alpha_bbox": [
+        14,
+        20,
+        73,
+        183
+      ],
+      "canvas_policy": "adaptive-head",
+      "no_upscale": true,
+      "size_policy": "preserve_source_size_or_downscale_to_fit",
+      "occupancy_profile": null,
+      "force_uniform_scale": false,
+      "occupancy_warnings": []
+    },
+    "front_right_leg": {
+      "file": "front_right_leg.png",
+      "semantic_group": "leg",
+      "source_skin": "z",
+      "source_slot": "9",
+      "source_attachment": "9",
+      "source_bone": "14",
+      "draw_order_index": 9,
+      "spine_attachment_size": [
+        86,
+        203
+      ],
+      "target_canvas_size": [
+        86,
+        203
+      ],
+      "render_center_view": [
+        -43.29,
+        91.75
+      ],
+      "render_bbox_view": [
+        -86.71,
+        -9.92,
+        0.14,
+        193.43
+      ],
+      "bone_origin_view": [
+        -40.11,
+        69.43,
+        -90.6
+      ],
+      "bone_origin_in_image_px": [
+        46.18,
+        123.82
+      ],
+      "render_center_in_image_px": [
+        43.0,
+        101.5
+      ],
+      "source_size": [
+        340,
+        380
+      ],
+      "target_canvas": [
+        86,
+        203
+      ],
+      "source_alpha_bbox": [
+        141,
+        172,
+        199,
+        335
+      ],
+      "source_alpha_size": [
+        58,
+        163
+      ],
+      "scale_to_exact_slot_canvas": 1.0,
+      "scale_x_to_slot_canvas": 1.0,
+      "scale_y_to_slot_canvas": 1.0,
+      "nonuniform_scale": false,
+      "pasted_top_left": [
+        14,
+        20
+      ],
+      "output_alpha_bbox": [
+        14,
+        20,
+        72,
+        183
+      ],
+      "canvas_policy": "adaptive-head",
+      "no_upscale": true,
+      "size_policy": "preserve_source_size_or_downscale_to_fit",
+      "occupancy_profile": null,
+      "force_uniform_scale": false,
+      "occupancy_warnings": []
+    },
+    "front_head": {
+      "file": "front_head.png",
+      "semantic_group": "head",
+      "source_skin": "z",
+      "source_slot": "8",
+      "source_attachment": "8",
+      "source_bone": "8",
+      "draw_order_index": 10,
+      "spine_attachment_size": [
+        298,
+        273
+      ],
+      "target_canvas_size": [
+        298,
+        273
+      ],
+      "render_center_view": [
+        -0.66,
+        485.78
+      ],
+      "render_bbox_view": [
+        -149.66,
+        349.28,
+        148.34,
+        622.28
+      ],
+      "bone_origin_view": [
+        -0.73,
+        356.48,
+        89.66
+      ],
+      "bone_origin_in_image_px": [
+        148.93,
+        265.8
+      ],
+      "render_center_in_image_px": [
+        149.0,
+        136.5
+      ],
+      "source_size": [
+        560,
+        420
+      ],
+      "target_canvas": [
+        298,
+        273
+      ],
+      "source_alpha_bbox": [
+        134,
+        120,
+        425,
+        390
+      ],
+      "source_alpha_size": [
+        291,
+        270
+      ],
+      "scale_to_exact_slot_canvas": 1.0,
+      "scale_x_to_slot_canvas": 1.0,
+      "scale_y_to_slot_canvas": 1.0,
+      "nonuniform_scale": false,
+      "pasted_top_left": [
+        4,
+        2
+      ],
+      "output_alpha_bbox": [
+        4,
+        2,
+        295,
+        272
+      ],
+      "canvas_policy": "adaptive-head",
+      "no_upscale": true,
+      "size_policy": "preserve_source_size_or_downscale_to_fit",
+      "occupancy_profile": null,
+      "force_uniform_scale": false,
+      "occupancy_warnings": []
+    },
+    "front_body": {
+      "file": "front_body.png",
+      "semantic_group": "body",
+      "source_skin": "z",
+      "source_slot": "7",
+      "source_attachment": "7",
+      "source_bone": "9",
+      "draw_order_index": 11,
+      "spine_attachment_size": [
+        186,
+        263
+      ],
+      "target_canvas_size": [
+        186,
+        263
+      ],
+      "render_center_view": [
+        -4.67,
+        239.79
+      ],
+      "render_bbox_view": [
+        -97.67,
+        108.28,
+        88.34,
+        371.29
+      ],
+      "bone_origin_view": [
+        -3.36,
+        206.96,
+        89.22
+      ],
+      "bone_origin_in_image_px": [
+        94.31,
+        164.33
+      ],
+      "render_center_in_image_px": [
+        93.0,
+        131.5
+      ],
+      "source_size": [
+        360,
+        500
+      ],
+      "target_canvas": [
+        186,
+        263
+      ],
+      "source_alpha_bbox": [
+        109,
+        20,
+        251,
+        195
+      ],
+      "source_alpha_size": [
+        142,
+        175
+      ],
+      "scale_to_exact_slot_canvas": 1.0,
+      "scale_x_to_slot_canvas": 1.0,
+      "scale_y_to_slot_canvas": 1.0,
+      "nonuniform_scale": false,
+      "pasted_top_left": [
+        22,
+        44
+      ],
+      "output_alpha_bbox": [
+        22,
+        44,
+        164,
+        219
+      ],
+      "canvas_policy": "adaptive-head",
+      "no_upscale": true,
+      "size_policy": "preserve_source_size_or_downscale_to_fit",
+      "occupancy_profile": null,
+      "force_uniform_scale": false,
+      "occupancy_warnings": []
+    },
+    "back_head": {
+      "file": "back_head.png",
+      "semantic_group": "head",
+      "source_skin": "b",
+      "source_slot": "6",
+      "source_attachment": "6",
+      "source_bone": "bone2",
+      "draw_order_index": 12,
+      "spine_attachment_size": [
+        293,
+        265
+      ],
+      "target_canvas_size": [
+        293,
+        266
+      ],
+      "render_center_view": [
+        1.76,
+        485.78
+      ],
+      "render_bbox_view": [
+        -144.74,
+        353.28,
+        148.26,
+        618.28
+      ],
+      "bone_origin_view": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "bone_origin_in_image_px": [
+        144.74,
+        618.28
+      ],
+      "render_center_in_image_px": [
+        146.5,
+        132.5
+      ],
+      "source_size": [
+        560,
+        420
+      ],
+      "target_canvas": [
+        293,
+        266
+      ],
+      "source_alpha_bbox": [
+        142,
+        124,
+        417,
+        390
+      ],
+      "source_alpha_size": [
+        275,
+        266
+      ],
+      "scale_to_exact_slot_canvas": 1.0,
+      "scale_x_to_slot_canvas": 1.0,
+      "scale_y_to_slot_canvas": 1.0,
+      "nonuniform_scale": false,
+      "pasted_top_left": [
+        9,
+        0
+      ],
+      "output_alpha_bbox": [
+        9,
+        0,
+        284,
+        266
+      ],
+      "canvas_policy": "adaptive-head",
+      "no_upscale": true,
+      "size_policy": "preserve_source_size_or_downscale_to_fit",
+      "occupancy_profile": null,
+      "force_uniform_scale": false,
+      "occupancy_warnings": []
+    },
+    "back_left_arm": {
+      "file": "back_left_arm.png",
+      "semantic_group": "arm",
+      "source_skin": "b",
+      "source_slot": "5",
+      "source_attachment": "5",
+      "source_bone": "bone2",
+      "draw_order_index": 13,
+      "spine_attachment_size": [
+        85,
+        226
+      ],
+      "target_canvas_size": [
+        85,
+        226
+      ],
+      "render_center_view": [
+        -82.65,
+        251.28
+      ],
+      "render_bbox_view": [
+        -125.15,
+        138.28,
+        -40.15,
+        364.28
+      ],
+      "bone_origin_view": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "bone_origin_in_image_px": [
+        125.15,
+        364.28
+      ],
+      "render_center_in_image_px": [
+        42.5,
+        113.0
+      ],
+      "source_size": [
+        220,
+        460
+      ],
+      "target_canvas": [
+        85,
+        226
+      ],
+      "source_alpha_bbox": [
+        81,
+        35,
+        139,
+        179
+      ],
+      "source_alpha_size": [
+        58,
+        144
+      ],
+      "scale_to_exact_slot_canvas": 1.0,
+      "scale_x_to_slot_canvas": 1.0,
+      "scale_y_to_slot_canvas": 1.0,
+      "nonuniform_scale": false,
+      "pasted_top_left": [
+        14,
+        41
+      ],
+      "output_alpha_bbox": [
+        14,
+        41,
+        72,
+        185
+      ],
+      "canvas_policy": "adaptive-head",
+      "no_upscale": true,
+      "size_policy": "preserve_source_size_or_downscale_to_fit",
+      "occupancy_profile": null,
+      "force_uniform_scale": false,
+      "occupancy_warnings": []
+    },
+    "back_right_arm": {
+      "file": "back_right_arm.png",
+      "semantic_group": "arm",
+      "source_skin": "b",
+      "source_slot": "4",
+      "source_attachment": "4",
+      "source_bone": "bone2",
+      "draw_order_index": 14,
+      "spine_attachment_size": [
+        85,
+        226
+      ],
+      "target_canvas_size": [
+        85,
+        226
+      ],
+      "render_center_view": [
+        86.18,
+        251.28
+      ],
+      "render_bbox_view": [
+        43.68,
+        138.28,
+        128.68,
+        364.28
+      ],
+      "bone_origin_view": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "bone_origin_in_image_px": [
+        -43.68,
+        364.28
+      ],
+      "render_center_in_image_px": [
+        42.5,
+        113.0
+      ],
+      "source_size": [
+        220,
+        460
+      ],
+      "target_canvas": [
+        85,
+        226
+      ],
+      "source_alpha_bbox": [
+        80,
+        35,
+        139,
+        179
+      ],
+      "source_alpha_size": [
+        59,
+        144
+      ],
+      "scale_to_exact_slot_canvas": 1.0,
+      "scale_x_to_slot_canvas": 1.0,
+      "scale_y_to_slot_canvas": 1.0,
+      "nonuniform_scale": false,
+      "pasted_top_left": [
+        13,
+        41
+      ],
+      "output_alpha_bbox": [
+        13,
+        41,
+        72,
+        185
+      ],
+      "canvas_policy": "adaptive-head",
+      "no_upscale": true,
+      "size_policy": "preserve_source_size_or_downscale_to_fit",
+      "occupancy_profile": null,
+      "force_uniform_scale": false,
+      "occupancy_warnings": []
+    },
+    "back_left_leg": {
+      "file": "back_left_leg.png",
+      "semantic_group": "leg",
+      "source_skin": "b",
+      "source_slot": "3",
+      "source_attachment": "3",
+      "source_bone": "bone2",
+      "draw_order_index": 15,
+      "spine_attachment_size": [
+        78,
+        153
+      ],
+      "target_canvas_size": [
+        78,
+        153
+      ],
+      "render_center_view": [
+        -41.86,
+        66.78
+      ],
+      "render_bbox_view": [
+        -80.86,
+        -9.72,
+        -2.86,
+        143.28
+      ],
+      "bone_origin_view": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "bone_origin_in_image_px": [
+        80.86,
+        143.28
+      ],
+      "render_center_in_image_px": [
+        39.0,
+        76.5
+      ],
+      "source_size": [
+        340,
+        380
+      ],
+      "target_canvas": [
+        78,
+        153
+      ],
+      "source_alpha_bbox": [
+        139,
+        172,
+        200,
+        335
+      ],
+      "source_alpha_size": [
+        61,
+        163
+      ],
+      "scale_to_exact_slot_canvas": 0.93865,
+      "scale_x_to_slot_canvas": 0.93865,
+      "scale_y_to_slot_canvas": 0.93865,
+      "nonuniform_scale": false,
+      "pasted_top_left": [
+        10,
+        0
+      ],
+      "output_alpha_bbox": [
+        10,
+        0,
+        67,
+        153
+      ],
+      "canvas_policy": "adaptive-head",
+      "no_upscale": true,
+      "size_policy": "preserve_source_size_or_downscale_to_fit",
+      "occupancy_profile": null,
+      "force_uniform_scale": false,
+      "occupancy_warnings": []
+    },
+    "back_right_leg": {
+      "file": "back_right_leg.png",
+      "semantic_group": "leg",
+      "source_skin": "b",
+      "source_slot": "2",
+      "source_attachment": "2",
+      "source_bone": "bone2",
+      "draw_order_index": 16,
+      "spine_attachment_size": [
+        78,
+        153
+      ],
+      "target_canvas_size": [
+        78,
+        153
+      ],
+      "render_center_view": [
+        38.83,
+        66.78
+      ],
+      "render_bbox_view": [
+        -0.17,
+        -9.72,
+        77.83,
+        143.28
+      ],
+      "bone_origin_view": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "bone_origin_in_image_px": [
+        0.17,
+        143.28
+      ],
+      "render_center_in_image_px": [
+        39.0,
+        76.5
+      ],
+      "source_size": [
+        340,
+        380
+      ],
+      "target_canvas": [
+        78,
+        153
+      ],
+      "source_alpha_bbox": [
+        138,
+        172,
+        202,
+        335
+      ],
+      "source_alpha_size": [
+        64,
+        163
+      ],
+      "scale_to_exact_slot_canvas": 0.93865,
+      "scale_x_to_slot_canvas": 0.93865,
+      "scale_y_to_slot_canvas": 0.93865,
+      "nonuniform_scale": false,
+      "pasted_top_left": [
+        9,
+        0
+      ],
+      "output_alpha_bbox": [
+        9,
+        0,
+        69,
+        153
+      ],
+      "canvas_policy": "adaptive-head",
+      "no_upscale": true,
+      "size_policy": "preserve_source_size_or_downscale_to_fit",
+      "occupancy_profile": null,
+      "force_uniform_scale": false,
+      "occupancy_warnings": []
+    },
+    "back_body": {
+      "file": "back_body.png",
+      "semantic_group": "body",
+      "source_skin": "b",
+      "source_slot": "1",
+      "source_attachment": "1",
+      "source_bone": "bone2",
+      "draw_order_index": 17,
+      "spine_attachment_size": [
+        169,
+        277
+      ],
+      "target_canvas_size": [
+        169,
+        277
+      ],
+      "render_center_view": [
+        -5.36,
+        238.78
+      ],
+      "render_bbox_view": [
+        -89.86,
+        100.28,
+        79.14,
+        377.28
+      ],
+      "bone_origin_view": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "bone_origin_in_image_px": [
+        89.86,
+        377.28
+      ],
+      "render_center_in_image_px": [
+        84.5,
+        138.5
+      ],
+      "source_size": [
+        360,
+        500
+      ],
+      "target_canvas": [
+        169,
+        277
+      ],
+      "source_alpha_bbox": [
+        101,
+        20,
+        258,
+        193
+      ],
+      "source_alpha_size": [
+        157,
+        173
+      ],
+      "scale_to_exact_slot_canvas": 1.0,
+      "scale_x_to_slot_canvas": 1.0,
+      "scale_y_to_slot_canvas": 1.0,
+      "nonuniform_scale": false,
+      "pasted_top_left": [
+        6,
+        52
+      ],
+      "output_alpha_bbox": [
+        6,
+        52,
+        163,
+        225
+      ],
+      "canvas_policy": "adaptive-head",
+      "no_upscale": true,
+      "size_policy": "preserve_source_size_or_downscale_to_fit",
+      "occupancy_profile": null,
+      "force_uniform_scale": false,
+      "occupancy_warnings": []
+    }
+  }
+}

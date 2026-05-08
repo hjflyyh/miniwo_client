@@ -86,9 +86,7 @@ export class GameMapChatScroll extends Component implements IFDataSource{
             this.infiniteList.Reload(true);
 
             this.scheduleOnce(()=>{
-                if(this.chatAry.length >= 10){
-                    this.infiniteList._scrollView.scrollToPercentVertical(0 , 1)
-                }
+                this.infiniteList._scrollView.scrollToPercentVertical(0 , 1)
             } , 0.2)
         }
 
