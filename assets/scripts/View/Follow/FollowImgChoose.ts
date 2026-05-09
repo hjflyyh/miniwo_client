@@ -59,7 +59,7 @@ export class FollowImgChoose extends Component {
         layout.verticalSpacing = 20
         layout.divide = column
         layout.itemSize = (indexPath) => {
-            return new Size(0, 300)
+            return new Size(0, 230)
         }
         this.listComp.layout = layout
     }

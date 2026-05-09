@@ -6578,7 +6578,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -81.022,
+      "x": -103.836,
       "y": -15.194,
       "z": 0
     },
@@ -6624,7 +6624,7 @@
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
-      "x": 0.5,
+      "x": 0,
       "y": 0.5
     },
     "_id": ""
@@ -6656,7 +6656,7 @@
       "a": 255
     },
     "_string": "label",
-    "_horizontalAlign": 1,
+    "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 20,
     "_fontSize": 20,

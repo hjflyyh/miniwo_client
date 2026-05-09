@@ -1,0 +1,34 @@
+{
+  "1": {
+    "source_attribute": "魅力值",
+    "target_attribute": "好感度",
+    "influence_type": "百分比加成",
+    "calculate_formula": "charm/1000",
+    "limit": "0",
+    "value": "1"
+  },
+  "2": {
+    "source_attribute": "魅力值",
+    "target_attribute": "领导力",
+    "influence_type": "百分比加成",
+    "calculate_formula": "1+charm/500",
+    "limit": "0",
+    "value": "2"
+  },
+  "3": {
+    "source_attribute": "善恶值",
+    "target_attribute": "魅力值",
+    "influence_type": "百分比衰减",
+    "calculate_formula": "min(20%,|morality|/500×10%)",
+    "limit": "-0.2",
+    "value": "0.2"
+  },
+  "4": {
+    "source_attribute": "健康值",
+    "target_attribute": "体力值",
+    "influence_type": "百分比加成",
+    "calculate_formula": "health/2000",
+    "limit": "0",
+    "value": "0.5"
+  }
+}

@@ -105,7 +105,11 @@ export class UGCModel {
                 if(this.npcList[i].characteristics == ""){
                     return [];
                 }
-                return this.npcList[i].characteristics;
+                if(Array.isArray(this.npcList[i].characteristics)){
+                    return this.npcList[i].characteristics;
+                }else{
+                    return JSON.parse(this.npcList[i].characteristics);
+                }
             }
         }
         return []
@@ -127,6 +131,24 @@ export class UGCModel {
         }        
     }
 
+    public setNpcHobbies(npcId , hobbies){
+        for(let i = 0 ; i < this.npcList.length ; i++){
+            if(this.npcList[i].id == npcId){
+                this.npcList[i].hobbies = hobbies;
+            }
+        }        
+    }
+
+    public removeNpcHobbies(npcId , hobbiesId){
+        let hobbies = this.getNpcHobbies(npcId);
+        for(let i = 0 ; i < hobbies.length ; i++){   
+            if(hobbies[i] == hobbiesId){  
+                hobbies.splice(i , 1);
+            }
+        }
+        this.setNpcHobbies(npcId , hobbies)
+    }
+
     public getNpcBackground(npcId){ 
         for(let i = 0 ; i < this.npcList.length ; i++){
             if(this.npcList[i].id == npcId){
@@ -134,6 +156,30 @@ export class UGCModel {
             }
         }
         return "";
+    }
+
+    public addNpcHobbies(npcId , hobbiesId){    
+        let hobbies = this.getNpcHobbies(npcId);
+        hobbies.push(hobbiesId);
+        this.setNpcHobbies(npcId , hobbies)
+        return true;
+
+    }
+
+    public getNpcHobbies(npcId){ 
+        for(let i = 0 ; i < this.npcList.length ; i++){
+            if(this.npcList[i].id == npcId){
+                if(this.npcList[i].hobbies == ""){
+                    return [];
+                }
+                if(Array.isArray(this.npcList[i].hobbies)){
+                    return this.npcList[i].hobbies;
+                }else{
+                    return JSON.parse(this.npcList[i].hobbies);
+                }
+            }
+        }
+        return []
     }
 
     public getNpcSex(npcId){
@@ -168,7 +214,7 @@ export class UGCModel {
     public getBackgroundList(){
         let list = []
         for(let i = 0 ; i < RoleModel.getInstance().tags.length ; i++){
-            if(RoleModel.getInstance().tags[i].tag_type == 6){
+            if(RoleModel.getInstance().tags[i].tag_type == 7){
                 list.push(RoleModel.getInstance().tags[i])
             }
         }        
@@ -432,7 +478,7 @@ export class UGCModel {
     }
 
     //#### updateNpcById
-    public updateNpcById(mapId , npcId , name , sex , mbti , renshe , background){
+    public updateNpcById(mapId , npcId , name , sex , mbti , renshe , background , hobbies){
         AppConst.HttpManager.sendPostHttp(
             "updateNpcById",
               JSON.stringify({
@@ -443,7 +489,8 @@ export class UGCModel {
                 sex: sex,
                 mbti: mbti,
                 characteristics: renshe,
-                identity: background
+                identity: background,
+                hobbies: hobbies
               })
         )
     }
@@ -477,8 +524,16 @@ export class UGCModel {
         } else {
             characteristics = String(ch);
         }
+
+        let hobbies = npc.hobbies ?? "";
+        if (Array.isArray(hobbies)) {
+            hobbies = JSON.stringify(hobbies);
+        } else if (hobbies == null || hobbies === "") {
+            hobbies = "";
+        }
         const identity = String(npc.identity ?? "");
-        this.updateNpcById(mapId, idNum, name, sex, mbti, characteristics, identity);
+        
+        this.updateNpcById(mapId, idNum, name, sex, mbti, characteristics, identity, hobbies);
     }
 
     public delNpcById(mapId , npcId){

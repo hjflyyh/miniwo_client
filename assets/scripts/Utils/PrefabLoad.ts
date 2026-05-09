@@ -122,6 +122,9 @@ export class PrefabLoad extends Component {
         var _this = this;
         _this.runSuccess = true
 
+        if(!this.node){
+            return;
+        }
         this.reset()
         if(null != object){
             _this.resRef = object

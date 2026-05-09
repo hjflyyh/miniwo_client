@@ -25,14 +25,39 @@ export class BackgroundCell extends Component {
         
         this.backgroundLabel.string = background;
 
-        let npcBackground = UGCModel.getInstance().getNpcBackground(this.npcId);
-        this.chooseNode.active = npcBackground == background;
+        let npcHobbies = UGCModel.getInstance().getNpcHobbies(this.npcId);
+        let isIn = false
+        for(let i = 0 ; i < npcHobbies.length ; i++){
+            if(npcHobbies[i] == this.backgroundId){
+                isIn = true;
+            }
+            
+        }
+        this.chooseNode.active = isIn;
     }
 
     onClick(){
-        UGCModel.getInstance().setNpcBackground(this.npcId , this.backgroundStr);
-        UGCModel.getInstance().syncNpcToServerById(this.npcId);
-        EventSystem.send("NPCRefreshCell" , {npcId : this.npcId , backgroundStr : this.backgroundStr})
+        // UGCModel.getInstance().setNpcHobbies(this.npcId , this.backgroundId);
+        // UGCModel.getInstance().syncNpcToServerById(this.npcId);
+        // EventSystem.send("NPCRefreshCell" , {npcId : this.npcId , backgroundStr : this.backgroundStr})
+        let npcHobbies = UGCModel.getInstance().getNpcHobbies(this.npcId);
+        let isIn = false;
+        for(let i = 0 ; i < npcHobbies.length ; i++){
+            if(npcHobbies[i] == this.backgroundId){
+                isIn = true;
+                break;
+            }
+        }
+        if(isIn){
+            UGCModel.getInstance().removeNpcHobbies(this.npcId , this.backgroundId);
+            UGCModel.getInstance().syncNpcToServerById(this.npcId);
+        }else{
+            if (UGCModel.getInstance().addNpcHobbies(this.npcId , this.backgroundId)) {
+                UGCModel.getInstance().syncNpcToServerById(this.npcId);
+            }
+        }
+        
+        EventSystem.send("NPCRefreshCell" , {npcId : this.npcId , backgroundId : this.backgroundId})
     }
 }
 
