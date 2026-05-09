@@ -1,0 +1,20 @@
+{
+  "1": {
+    "daily_weather_segment_count": "1",
+    "weight": "60",
+    "single_weather_duration_max_min": "720",
+    "single_weather_duration_min_min": "720"
+  },
+  "2": {
+    "daily_weather_segment_count": "2",
+    "weight": "30",
+    "single_weather_duration_max_min": "690",
+    "single_weather_duration_min_min": "30"
+  },
+  "3": {
+    "daily_weather_segment_count": "3",
+    "weight": "10",
+    "single_weather_duration_max_min": "660",
+    "single_weather_duration_min_min": "30"
+  }
+}

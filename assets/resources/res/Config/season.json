@@ -1,0 +1,30 @@
+{
+  "1": {
+    "season_name": "春季",
+    "sunny": "55",
+    "rainy": "15",
+    "windy": "30",
+    "snowy": "0"
+  },
+  "2": {
+    "season_name": "夏季",
+    "sunny": "30",
+    "rainy": "50",
+    "windy": "10",
+    "snowy": "0"
+  },
+  "3": {
+    "season_name": "秋季",
+    "sunny": "55",
+    "rainy": "15",
+    "windy": "35",
+    "snowy": "0"
+  },
+  "4": {
+    "season_name": "冬季",
+    "sunny": "45",
+    "rainy": "0",
+    "windy": "5",
+    "snowy": "50"
+  }
+}
