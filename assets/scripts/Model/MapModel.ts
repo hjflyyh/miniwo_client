@@ -484,6 +484,7 @@ export class MapModel {
     public saveMapData(map : MapEditor , base64Image) {
         map.allMapAssetsData.Ground = [];
         map.allMapAssetsData.Plant = [];
+        map.allMapAssetsData.Fram = [];
         map.allMapAssetsData.Region = [];
         map.allMapAssetsData.Floor = [];
         map.allMapAssetsData.House = [];
@@ -519,6 +520,17 @@ export class MapModel {
                     offsetX: (value as any).offsetX ?? 0,
                     offsetY: (value as any).offsetY ?? 0,
                     // cfgId : value
+                })
+            } else if (value.tileType == "Fram") {
+                const tileScaleX = value.tile?.getScale?.().x;
+                const flipX = tileScaleX != null ? (tileScaleX < 0 ? -1 : 1) : (value.flipX != null ? (value.flipX < 0 ? -1 : 1) : 1);
+                map.allMapAssetsData.Fram.push({
+                    id: value.id,
+                    _type: "Fram",
+                    position: key,
+                    flipX,
+                    offsetX: (value as any).offsetX ?? 0,
+                    offsetY: (value as any).offsetY ?? 0,
                 })
             }
         })

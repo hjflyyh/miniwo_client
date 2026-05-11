@@ -46,6 +46,8 @@ export class GroundDataSource extends Component implements IFDataSource {
             cfg_name = "mapDecor"
         }else if(this.tileType == 12){
             cfg_name = "mapWallDecor"
+        }else if(this.tileType == 15){
+            cfg_name = "mapEdit"
         }
         
         let mapTag = MapModel.getInstance().EditMapTag
@@ -104,6 +106,8 @@ export class GroundDataSource extends Component implements IFDataSource {
             return {dataIndex : dataIndex , bundle : "mapEditor" , list : this.list , type : "DecorOrnament"}
         }else if(this.tileType == 14){
             return {dataIndex : dataIndex , bundle : "mapEditor" , list : this.list , type : "Appliance"}
+        }else if(this.tileType == 15){
+            return {dataIndex : dataIndex , bundle : "mapEditor" , list : this.list , type : "Fram"}
         }
         // return {dataIndex : dataIndex , bundle : "mapEditor" , list : this.list , type : "Ground"}
     }

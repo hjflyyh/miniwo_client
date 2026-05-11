@@ -28,6 +28,8 @@ interface WallSpriteConfig {
 export interface MapData {
     Ground: { id: string, _type: string, position: string , cfgId : number}[],
     Plant: { id: string, _type: string, position: string, flipX?: number, scaleX?: number, offsetX?: number, offsetY?: number }[],
+    /** mapEditor 分包 mapEdit 配置的农田/外景摆件（与 Plant 同级存在 mapItems） */
+    Fram?: { id: string, _type: string, position: string, flipX?: number, scaleX?: number, offsetX?: number, offsetY?: number }[],
     Region?: { id: string, minX: number, minY: number, maxX: number, maxY: number, npcIds?: string[] }[],
     Floor: { id: string, _type: string, position: string }[],
     House: {
@@ -186,6 +188,7 @@ export class MapEditor extends Component {
     public allMapAssetsData: MapData = {
         Ground: [],
         Plant: [],
+        Fram: [],
         Region: [],
         Floor: [],
         House: [],
@@ -241,6 +244,9 @@ export class MapEditor extends Component {
     private npcTileDebugNode: Node | null = null;
     private npcTileDebugGraphics: Graphics | null = null;
     private lastWebMapInfoPayload = '';
+
+
+    public mapGameType = 0; //农场
 
     /**
      * 绘制选择框
@@ -442,6 +448,9 @@ export class MapEditor extends Component {
                 
                 break;
             case ActionStatus.PLANT:
+                this.buildGoods(gridPos);
+                break;
+            case ActionStatus.FRAM:
                 this.buildGoods(gridPos);
                 break;
             case ActionStatus.REGION_NPC:
@@ -3378,7 +3387,10 @@ export class MapEditor extends Component {
         // 创建新的图块
         const tile = MapManager.GetInstance().getMapCurTileNode(this.curTileNode.name , this.curTileNode["tileType"]);
 
-        const offset = manager.actionStatus == ActionStatus.PLANT ? this.getPointerOffsetForGrid(gridPos, size) : new Vec2(0, 0);
+        const offset =
+            manager.actionStatus == ActionStatus.PLANT || manager.actionStatus == ActionStatus.FRAM
+                ? this.getPointerOffsetForGrid(gridPos, size)
+                : new Vec2(0, 0);
         tile.setPosition(worldPos.x + offset.x, worldPos.y + offset.y, worldPos.z);
         this.mapContainer.addChild(tile);
         // console.log(worldPos)
@@ -3398,6 +3410,19 @@ export class MapEditor extends Component {
                     offsetX: offset.x,
                     offsetY: offset.y
                 });
+            } else if (manager.actionStatus == ActionStatus.FRAM) {
+                const previewScaleX = this.curTileNode?.getScale()?.x ?? 1;
+                const flipX = previewScaleX < 0 ? -1 : 1;
+                const tileScale = tile.getScale();
+                tile.setScale(flipX, tileScale.y, tileScale.z);
+                this.mapItems.set(`${gridPos.x},${gridPos.y}`, {
+                    id: this.curTileNode.name + "#Fram",
+                    tile: tile,
+                    tileType: "Fram",
+                    flipX,
+                    offsetX: offset.x,
+                    offsetY: offset.y
+                });
             } else if (manager.actionStatus == ActionStatus.FLOOR) {
                 this.mapItems.set(`${gridPos.x},${gridPos.y}`, { id: tile.name, tile: tile, tileType: "Floor" });
                 this.buildFloorPoints.push(gridPos);
@@ -3413,7 +3438,7 @@ export class MapEditor extends Component {
         //     isWalkable: false
         // };
 
-        // 更新网格数据
+        // 更新网格数据（植物 / 农田摆件共用占格规则）
         for (let x = 0; x < buildingSize.x; x++) {
             for (let y = 0; y < buildingSize.y; y++) {
                 const gridX = gridPos.x + x;

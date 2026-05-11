@@ -4,6 +4,8 @@ import { RoleModel } from '../../Model/RoleModel';
 import { network } from '../../Model/RequestData';
 import { HttpManager } from '../../Manager/HttpManager';
 import { AppConst } from '../../AppConst';
+import { MapModel } from '../../Model/MapModel';
+import { GenericSpritesheetAnimator } from '../../Utils/GenericSpritesheetAnimator';
 const { ccclass, property } = _decorator;
 
 @ccclass('LoginView')
@@ -29,6 +31,9 @@ export class LoginView extends Component {
     @property(EditBox)
     public passwordEditBox
 
+    @property(GenericSpritesheetAnimator)
+    public animator: GenericSpritesheetAnimator;
+
     start() {
         this.initHttpServerFromStorage();
         this.firstNode.active = true
@@ -39,6 +44,10 @@ export class LoginView extends Component {
         EventSystem.addListent("GOOGLE_LOGIN_CLOSE" , this.onGooleLoginClose  , this)
 
         EventSystem.addListent("LoginSuccess" , this.onLoginSuccess , this)
+
+        if (this.animator) {
+            this.animator.loadAndPlay('res/NPCImage/zuozhu/review', 'review');
+        }
     }
 
     private initHttpServerFromStorage() {
@@ -142,6 +151,10 @@ export class LoginView extends Component {
 
     onCleanCache(){
         sys.localStorage.clear()
+    }
+
+    onClickMapEdit(){
+        MapModel.getInstance().EnterMap(1)
     }
 }
 

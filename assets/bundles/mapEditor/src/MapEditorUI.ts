@@ -86,6 +86,9 @@ export class MapEditorUI extends Component {
     @property(InfiniteList)
     decorAppliance : InfiniteList
 
+    @property(InfiniteList)
+    framList : InfiniteList
+
     @property(Canvas)
     public mapCanvas : Canvas
 
@@ -205,6 +208,8 @@ export class MapEditorUI extends Component {
         this.wallDecorList.Init(this.wallDecorList.node.getComponent("GroundDataSource") as GroundDataSource)
         this.decorOrnament.Init(this.decorOrnament.node.getComponent("GroundDataSource") as GroundDataSource)
         this.decorAppliance.Init(this.decorAppliance.node.getComponent("GroundDataSource") as GroundDataSource)
+        this.framList.Init(this.framList.node.getComponent("GroundDataSource") as GroundDataSource)
+
         input.on(Input.EventType.MOUSE_DOWN, this.onRegionMouseDown, this);
         input.on(Input.EventType.MOUSE_MOVE, this.onRegionMouseMove, this);
         input.on(Input.EventType.MOUSE_UP, this.onRegionMouseUp, this);
@@ -350,6 +355,10 @@ export class MapEditorUI extends Component {
             this.enableRegionSelectionMode();
 
             this.setBottomNode();
+        }else if (target.name == 'farm') {
+            _index = 2;
+            this.tileMenu.get('panel_farm').active = true;
+            MapManager.GetInstance().actionStatus = ActionStatus.FRAM;
         }
 
 
@@ -366,8 +375,10 @@ export class MapEditorUI extends Component {
 
     setBottomNode(){
         this.confirmBtn.active = MapManager.GetInstance().actionStatus == ActionStatus.DECOR || MapManager.GetInstance().actionStatus == ActionStatus.PLANT
+            || MapManager.GetInstance().actionStatus == ActionStatus.FRAM
             || MapManager.GetInstance().actionStatus == ActionStatus.REGION
         this.fanzhuangBtn.active = MapManager.GetInstance().actionStatus == ActionStatus.DECOR  || MapManager.GetInstance().actionStatus == ActionStatus.PLANT
+            || MapManager.GetInstance().actionStatus == ActionStatus.FRAM
 
         this.bottomAddNode.active = MapManager.GetInstance().actionStatus != ActionStatus.MOVE
             && MapManager.GetInstance().actionStatus != ActionStatus.Back

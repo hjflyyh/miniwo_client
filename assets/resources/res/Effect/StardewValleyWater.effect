@@ -1,0 +1,121 @@
+// StardewValleyWater.effect — 2D tile 水体：多层海浪扰动 + 噪声扭曲 + 深浅着色 + 细碎高光（星露谷风格）
+
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: stardew-water-vs:vert
+      frag: stardew-water-fs:frag
+      depthStencilState:
+        depthTest: false
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendDstAlpha: one_minus_src_alpha
+      rasterizerState:
+        cullMode: none
+      properties:
+        mainTexture: { value: white, editor: { tooltip: '平铺水纹/池塘贴图（建议使用无缝 tile）' } }
+        noiseTexture: { value: grey, editor: { tooltip: '噪声图（默认灰=几乎不扭曲；可换 Perlin 噪声）' } }
+        scrollSpeed: { value: [0.018, 0.014, 0, 0], editor: { tooltip: 'UV 流动方向与速度 xy' } }
+        noiseScroll: { value: [0.06, -0.05, 0, 0], editor: { tooltip: '噪声层滚动 xy' } }
+        deepColor: { value: [0.12, 0.38, 0.58, 1], editor: { type: color, tooltip: '深水/暗部色调' } }
+        shallowColor: { value: [0.45, 0.78, 0.92, 0.92], editor: { type: color, tooltip: '浅水/亮部色调（a 控制整体透明度）' } }
+        waveParams: { value: [0.85, 22.0, 2.8, 0.07], editor: { tooltip: 'x=海浪幅度 y=波纹频率 z=噪声缩放 w=噪声扭曲强度' } }
+        foamParams: { value: [0.18, 0.35, 0, 0], editor: { tooltip: 'x=闪烁强度 y=泡沫亮带强度' } }
+}%
+
+CCProgram stardew-water-vs %{
+  precision highp float;
+  #include <builtin/uniforms/cc-global>
+  #if USE_LOCAL
+    #include <builtin/uniforms/cc-local>
+  #endif
+
+  in vec3 a_position;
+  in vec2 a_texCoord;
+  in vec4 a_color;
+
+  out vec4 color;
+  out vec2 uv0;
+
+  vec4 vert () {
+    vec4 pos = vec4(a_position, 1.0);
+    #if USE_LOCAL
+      pos = cc_matWorld * pos;
+    #endif
+    pos = cc_matViewProj * pos;
+    uv0 = a_texCoord;
+    color = a_color;
+    return pos;
+  }
+}%
+
+CCProgram stardew-water-fs %{
+  precision highp float;
+  #include <builtin/uniforms/cc-global>
+
+  in vec4 color;
+  in vec2 uv0;
+
+  uniform sampler2D mainTexture;
+  uniform sampler2D noiseTexture;
+
+  // Cocos 3.8：非 sampler 的向量/标量参数必须放在 UBO（uniform block）内，且仅用 vec4 成员避免隐式对齐填充
+  uniform Constants {
+    vec4 scrollSpeed;
+    vec4 deepColor;
+    vec4 shallowColor;
+    vec4 noiseScroll;
+    vec4 waveParams;
+    vec4 foamParams;
+  };
+
+  vec4 frag () {
+    float t = cc_time.x;
+    vec2 uv = uv0 + scrollSpeed.xy * t;
+
+    float freq = waveParams.y;
+    float amp = waveParams.x * 0.01;
+
+    // 多层方向不同的正弦扰动，模拟星露谷里细碎、交错的海浪运动
+    vec2 w;
+    w.x = sin(uv.y * freq + t * 3.15)
+        + 0.6 * sin((uv.x + uv.y * 0.5) * freq * 0.75 + t * 2.4)
+        + 0.35 * sin(uv.x * freq * 1.3 - t * 2.9);
+    w.y = cos(uv.x * freq * 1.05 - t * 2.75)
+        + 0.55 * sin((uv.x * 0.6 - uv.y) * freq * 0.9 + t * 3.1)
+        + 0.4 * cos(uv.y * freq * 1.2 + t * 2.1);
+    vec2 waveDistort = w * amp;
+
+    float ns = waveParams.z;
+    vec2 nuv = uv * ns + noiseScroll.xy * t;
+    vec4 nz = texture(noiseTexture, nuv);
+    vec2 noiseDistort = (nz.xy - vec2(0.5)) * waveParams.w;
+
+    vec4 tex = texture(mainTexture, uv + waveDistort + noiseDistort);
+
+    float lum = clamp(dot(tex.rgb, vec3(0.299, 0.587, 0.114)), 0.0, 1.0);
+    vec3 waterRgb = mix(deepColor.rgb, shallowColor.rgb, lum);
+
+    // 轻微随贴图变化，避免整块颜色太平
+    waterRgb *= mix(vec3(0.88), vec3(1.08), tex.r);
+
+    // 细碎高光（斜向扫描感，接近原作水面 sparkle）
+    vec2 suv = uv0 * vec2(72.0, 52.0);
+    float glint = sin(suv.x + sin(suv.y * 1.7 + t * 1.8) * 2.5 + t * 4.2);
+    glint = pow(max(0.0, glint), 36.0) * foamParams.x;
+
+    // 泡沫状亮纹：低频包络 + 高频断裂
+    float foamWave = sin(uv0.x * 90.0 + sin(uv0.y * 70.0 + t * 2.2) * 4.5 + t * 3.6);
+    foamWave = smoothstep(0.72, 1.0, 0.5 + 0.5 * foamWave) * foamParams.y;
+    waterRgb = mix(waterRgb, vec3(1.0), foamWave * 0.28);
+
+    waterRgb += vec3(glint);
+
+    float alpha = tex.a * shallowColor.a * color.a;
+    return vec4(waterRgb, alpha);
+  }
+}%
