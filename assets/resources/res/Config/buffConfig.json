@@ -1,139 +1,119 @@
 {
   "1": {
-    "category": "1",
     "variable_name": "seed_level",
     "data_type": "int",
     "max_value": "10",
     "min_value": "1"
   },
   "2": {
-    "category": "1",
     "variable_name": "crop_base_price",
     "data_type": "float",
     "max_value": "",
     "min_value": ""
   },
   "3": {
-    "category": "1",
     "variable_name": "crop_growth_seconds",
     "data_type": "int",
     "max_value": "",
     "min_value": ""
   },
   "4": {
-    "category": "1",
     "variable_name": "is_season_special",
     "data_type": "bool",
     "max_value": "",
     "min_value": ""
   },
   "5": {
-    "category": "2",
     "variable_name": "planting_skill",
     "data_type": "int (0~3000)",
     "max_value": "3000",
     "min_value": "0"
   },
   "6": {
-    "category": "2",
     "variable_name": "psychic_skill",
     "data_type": "int (0~3000)",
     "max_value": "3000",
     "min_value": "0"
   },
   "7": {
-    "category": "2",
     "variable_name": "craft_skill",
     "data_type": "int (0~3000)",
     "max_value": "3000",
     "min_value": "0"
   },
   "8": {
-    "category": "2",
     "variable_name": "create_skill",
     "data_type": "int (0~3000)",
     "max_value": "3000",
     "min_value": "0"
   },
   "9": {
-    "category": "2",
     "variable_name": "martial_skill",
     "data_type": "int (0~3000)",
     "max_value": "3000",
     "min_value": "0"
   },
   "10": {
-    "category": "2",
     "variable_name": "freedom",
     "data_type": "int (0~1000)",
     "max_value": "1000",
     "min_value": "0"
   },
   "11": {
-    "category": "2",
     "variable_name": "charm",
     "data_type": "int (0~1000)",
     "max_value": "1000",
     "min_value": "0"
   },
   "12": {
-    "category": "2",
     "variable_name": "wage",
     "data_type": "int (0~10000)",
     "max_value": "10000",
     "min_value": "0"
   },
   "13": {
-    "category": "2",
     "variable_name": "health",
     "data_type": "int (0~1000)",
     "max_value": "1000",
     "min_value": "0"
   },
   "14": {
-    "category": "2",
     "variable_name": "stamina",
     "data_type": "int (0~1000)",
     "max_value": "1000",
     "min_value": "0"
   },
   "15": {
-    "category": "3",
     "variable_name": "terrain_type",
     "data_type": "int (0/1/2/3)",
     "max_value": "3",
     "min_value": "0"
   },
   "16": {
-    "category": "3",
     "variable_name": "world_level",
     "data_type": "int (1~100)",
     "max_value": "100",
     "min_value": "1"
   },
   "17": {
-    "category": "3",
     "variable_name": "supply_demand_factor",
     "data_type": "float (0.85~1.15)",
     "max_value": "1.15",
     "min_value": "0.85"
   },
   "18": {
-    "category": "3",
     "variable_name": "has_greenhouse",
     "data_type": "bool",
     "max_value": "1",
     "min_value": "0"
   },
   "19": {
-    "category": "4",
     "variable_name": "current_season",
     "data_type": "string",
     "max_value": "4",
     "min_value": "1"
   },
   "20": {
-    "category": "4",
     "variable_name": "current_weather",
     "data_type": "string",
     "max_value": "4",
