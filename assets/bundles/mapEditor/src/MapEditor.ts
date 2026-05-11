@@ -1,4 +1,4 @@
-import { _decorator, Animation, Camera, CCBoolean, CCInteger, Color, Component, director, EventMouse, EventTouch, find, Graphics, Input, input, instantiate, Label, Layers, log, math, Node, Prefab, RenderTexture, size, Size, Sprite, SpriteFrame, sys, Texture2D, tween, UITransform, v2, Vec2, Vec3, view } from 'cc';
+import { _decorator, Animation, assetManager, Camera, CCBoolean, CCInteger, Color, Component, director, EventMouse, EventTouch, find, Graphics, Input, input, instantiate, Label, Layers, log, math, Node, Prefab, RenderTexture, size, Size, Sprite, SpriteFrame, sys, Texture2D, tween, UITransform, v2, Vec2, Vec3, view } from 'cc';
 import { TileObjectData } from './TileItem';
 import { ActionStatus, MapManager } from './MapManager';
 import {DisplayTitle} from "db://assets/scripts/View/Utils/DisplayTitle";
@@ -11,7 +11,14 @@ import { RectangleHouseBuilder } from './RectangleHouseBuilder';
 import { MapLoadMap } from './MapLoadMap';
 import { RegionNpcCellBinder } from './RegionNpcCellBinder';
 import { network } from '../../../scripts/Model/RequestData';
+import { FARM_BG_TILE_SIZE } from '../../../scripts/Utils/FarmBgTileGrid';
 const { ccclass, property } = _decorator;
+
+/** mapGameType==0 农场模式下的逻辑格子数量 */
+const FARM_MAP_GRID_WIDTH = 303;
+const FARM_MAP_GRID_HEIGHT = 262;
+/** 农场底图横向块数（bg_00～bg_09 一行，下一行 bg_10～） */
+const FARM_BG_TILE_COLS = 10;
 
 
 enum GridCellType {
@@ -106,6 +113,7 @@ export class MapEditor extends Component {
 
     @property
     public sideDoorInsetX: number = 10;
+    
 
     private buildFloorPoints: Vec2[] = [];
     public houseItems: Map<string, { tile: Node, tileType: string, belong?: string }> = new Map();
@@ -206,7 +214,7 @@ export class MapEditor extends Component {
     public isMousePoint: boolean = false;
     public moveActionIndex: number = 0;
 
-    private currentOrthoSize: number = 700;
+    private currentOrthoSize: number = 800;
     private decorStackSeed = 0;
     private lastDecorHoverLogState = '';
     
@@ -247,6 +255,9 @@ export class MapEditor extends Component {
 
 
     public mapGameType = 0; //农场
+
+    /** 农场分包 maps/farm/bg 拼接底图根节点（仅 mapGameType==0） */
+    private farmBgLayerRoot: Node | null = null;
 
     /**
      * 绘制选择框
@@ -291,15 +302,24 @@ export class MapEditor extends Component {
         this.mapWidth = AppConst.UIRoot.MapEditorWidth
         this.mapHeight = AppConst.UIRoot.MapEditorHeight
         this.applyExternalGridSizeIfNeeded();
+        if (this.mapGameType == 0) {
+            this.mapWidth = FARM_MAP_GRID_WIDTH;
+            this.mapHeight = FARM_MAP_GRID_HEIGHT;
+        }
         console.log("地图格子尺寸：" + this.mapWidth + ":" + this.mapHeight)
 
         this.mapBgTransform.contentSize = new Size(this.mapWidth * this.tileSize , this.mapHeight * this.tileSize)
+        // 农场改用分包 FarmBgLayer；场景里 mapBg 节点 Sprite 与 FarmBg 同父节点且在上面一层，会盖住底图，此处关掉通用草地底图
+        this.applyEditorDefaultMapBgSpriteVisible(this.mapGameType !== 0)
 
         this.init();
         
         this.initGridData();
+        this.applyEntryCameraOrthoPreferred();
         this.updateSizeLabel();
+        this.snapCameraToMapTopLeftOnEnter();
         MapModel.getInstance().setMapGround(MapManager.GetInstance().getGroundAssetsStr()[this.chooseGroundId], 0 , this);
+        this.setupFarmBackgroundLayer();
         this.initMapGround();
 
         EventSystem.addListent("OnClickTileOhterIcon" , this.OnClickTileOhterIcon , this)
@@ -310,6 +330,21 @@ export class MapEditor extends Component {
         if (matchId) {
             let MatchJoinEequest = new network.MatchJoinEequest();
             AppConst.WebSocketManager.send(MatchJoinEequest.toJSON(matchId))
+        }
+    }
+
+    protected onDestroy(): void {
+        this.disposeFarmBackgroundResources();
+    }
+
+    /**
+     * 离开地图或组件销毁时调用：销毁农场分包底图节点，并恢复场景 mapBg 默认草地 Sprite。
+     *（农场模式下 start 曾关闭 mapBg 以免盖住 FarmBgLayer）
+     */
+    public disposeFarmBackgroundResources(): void {
+        this.clearFarmBgLayer();
+        if (this.mapGameType === 0) {
+            this.applyEditorDefaultMapBgSpriteVisible(true);
         }
     }
 
@@ -776,9 +811,12 @@ export class MapEditor extends Component {
             }
         }
 
-        for (let x = 0; x < this.mapWidth; x++) {
-            for (let y = 0; y < this.mapHeight; y++) {
-                this.setDisplayTile(new Vec2(x, y), new Size(32, 32), this.groundType);
+        // 农场(mapGameType==0)：不全图铺通用草地接缝层，否则 disMapContainer 会盖住 FarmBgLayer 分包底图；马路仍由 buildGround / MapLoadMap 按需 setDisplayTile
+        if (this.mapGameType != 0) {
+            for (let x = 0; x < this.mapWidth; x++) {
+                for (let y = 0; y < this.mapHeight; y++) {
+                    this.setDisplayTile(new Vec2(x, y), new Size(32, 32), this.groundType);
+                }
             }
         }
 
@@ -3674,6 +3712,30 @@ export class MapEditor extends Component {
         this.maxYCamera = this.boundaryMax.y - viewportHeight / 2;
     }
 
+    /**
+     * 进入地图时相机默认对准地图左上角（视口左上对齐地图左上）。
+     * 依赖 updateSizeLabel 已更新边界与 min/maxCamera。
+     */
+    private snapCameraToMapTopLeftOnEnter(): void {
+        if (!this.mainCamera?.node?.isValid) {
+            return;
+        }
+        const z = this.mainCamera.node.position.z;
+        let cx: number;
+        let cy: number;
+        // 视口小于地图：左上角 = 相机可取的最左 + 最高（见 updateSizeLabel）
+        if (this.minXCamera <= this.maxXCamera && this.minYCamera <= this.maxYCamera) {
+            cx = this.minXCamera;
+            cy = this.maxYCamera;
+        } else {
+            // 视口大于地图某方向：相机居中避免非法区间
+            cx = (this.boundaryMin.x + this.boundaryMax.x) * 0.5;
+            cy = (this.boundaryMin.y + this.boundaryMax.y) * 0.5;
+        }
+        this.targetPos.set(cx, cy, z);
+        this.mainCamera.node.setPosition(this.targetPos);
+    }
+
     public getAllHouseData() {
         return this.allHouse;
     }
@@ -4513,12 +4575,32 @@ export class MapEditor extends Component {
         return null;
     }
 
-    @property(CCInteger)
-    public minOrthoSize: number = 420;
+    /** 滚轮拉近极限：越小越能放大细节（视野越窄） */
+    @property({ type: CCInteger, displayName: 'MinOrthoSize', tooltip: '正交相机 orthoHeight 下限。数值越小越能拉近；农场看清格子可设 200～320。' })
+    public minOrthoSize: number = 280;
 
-    @property(CCInteger)
-    public maxOrthoSize: number = 1100;
+    /** 滚轮拉远极限：越大越能缩小（一屏看到越多地图）；农场必须足够大，否则默认远景会被夹住 */
+    @property({ type: CCInteger, displayName: 'MaxOrthoSize', tooltip: 'orthoHeight 上限。想看更大范围请提高（农场大地图常见 1400～2200）。' })
+    public maxOrthoSize: number = 1800;
+
+    /** 非农场进入地图时的默认 orthoHeight（同类地图可在编辑器里改） */
+    @property({ type: CCInteger, displayName: '进入默认视野', tooltip: '进入场景首次应用的 orthoHeight，越大一屏看到越多；须在 Min～Max 之间才会生效满值。' })
+    public defaultEntryOrthoSize: number = 850;
+
+    /** mapGameType==农场 进入时的默认视野（更大以便概览大地图） */
+    @property({ type: CCInteger, displayName: '农场进入默认视野', tooltip: '农场建议 1100～1600；若 MaxOrthoSize 偏小会被裁到上限。' })
+    public farmEntryOrthoSize: number = 1200;
+
     public wheelZoomStep: number = 60;
+
+    /** 首次进入：按地图类型设 currentOrthoSize，并夹在 [minOrthoSize, maxOrthoSize] */
+    private applyEntryCameraOrthoPreferred(): void {
+        let target = this.defaultEntryOrthoSize;
+        if (this.mapGameType === 0) {
+            target = this.farmEntryOrthoSize;
+        }
+        this.currentOrthoSize = Math.max(this.minOrthoSize, Math.min(this.maxOrthoSize, target));
+    }
 
     public zoomCamera(delta : number){
         const next = this.currentOrthoSize + delta
@@ -4857,6 +4939,111 @@ export class MapEditor extends Component {
                 }
             }
         }
+    }
+
+    /** 场景节点 mapBg（mapBgTransform）上的 Sprite：农场模式下关闭，避免挡住分包农场底图 */
+    private applyEditorDefaultMapBgSpriteVisible(visible: boolean): void {
+        const node = this.mapBgTransform?.node;
+        if (!node?.isValid) return;
+        const sp = node.getComponent(Sprite);
+        if (sp) {
+            sp.enabled = visible;
+        }
+    }
+
+    private clearFarmBgLayer(): void {
+        if (this.farmBgLayerRoot?.isValid) {
+            this.farmBgLayerRoot.destroy();
+            this.farmBgLayerRoot = null;
+        }
+    }
+
+    /** 资源名 bg_XX；serial 从 1 起对应 bg_01、bg_02… */
+    private farmBgSliceName(serial: number): string {
+        const n = Math.floor(serial);
+        if (n <= 0) {
+            return 'bg_01';
+        }
+        if (n < 100) {
+            const s = String(n);
+            return `bg_${s.length < 2 ? '0' + s : s}`;
+        }
+        return `bg_${n}`;
+    }
+
+    /**
+     * 农场底图：左上角起 bg_01，横向 10 张（bg_01～bg_10），换行 bg_11～bg_20…，铺满地图像素矩形。
+     */
+    private setupFarmBackgroundLayer(): void {
+        if (this.mapGameType !== 0) {
+            return;
+        }
+        this.clearFarmBgLayer();
+        const parent = this.disMapContainer?.parent;
+        if (!parent) {
+            return;
+        }
+
+        const mapPixelW = this.mapWidth * this.tileSize;
+        const mapPixelH = this.mapHeight * this.tileSize;
+        const tilePx = FARM_BG_TILE_SIZE;
+        const numRows = Math.ceil(mapPixelH / tilePx);
+
+        assetManager.loadBundle('mapEditor', (err, bundle) => {
+            if (err || !bundle) {
+                console.warn('[MapEditor] farm bg loadBundle failed', err);
+                return;
+            }
+
+            const root = new Node('FarmBgLayer');
+            root.layer = this.disMapContainer.layer;
+            const rootUi = root.addComponent(UITransform);
+            rootUi.setContentSize(mapPixelW, mapPixelH);
+            rootUi.setAnchorPoint(0.5, 0.5);
+            root.setPosition(this.disMapContainer.position);
+
+            parent.insertChild(root, 0);
+            this.farmBgLayerRoot = root;
+
+            const attachSprite = (sf: SpriteFrame | null, assetBase: string, r: number, c: number) => {
+                if (!sf || !this.farmBgLayerRoot?.isValid) {
+                    return;
+                }
+                const tileNode = new Node(assetBase);
+                tileNode.layer = root.layer;
+                const sp = tileNode.addComponent(Sprite);
+                sp.spriteFrame = sf;
+                sp.sizeMode = Sprite.SizeMode.RAW;
+                const ui = tileNode.getComponent(UITransform) ?? tileNode.addComponent(UITransform);
+                const w = sf.width || tilePx;
+                const h = sf.height || tilePx;
+                ui.setContentSize(w, h);
+                // 左上角对齐网格原点，避免按中心点排列产生纵向/横向缝隙
+                ui.setAnchorPoint(0, 1);
+
+                const leftX = -mapPixelW / 2 + c * tilePx;
+                const topY = mapPixelH / 2 - r * tilePx;
+                tileNode.setPosition(leftX, topY, 0);
+                root.addChild(tileNode);
+            };
+
+            for (let r = 0; r < numRows; r++) {
+                for (let c = 0; c < FARM_BG_TILE_COLS; c++) {
+                    const serial = r * FARM_BG_TILE_COLS + c + 1;
+                    const assetBase = `maps/farm/bg/${this.farmBgSliceName(serial)}`;
+
+                    bundle.load(`${assetBase}/spriteFrame`, SpriteFrame, (e1, sf1) => {
+                        if (!e1 && sf1) {
+                            attachSprite(sf1, assetBase, r, c);
+                            return;
+                        }
+                        bundle.load(assetBase, SpriteFrame, (e2, sf2) => {
+                            attachSprite(sf2 ?? null, assetBase, r, c);
+                        });
+                    });
+                }
+            }
+        });
     }
 }
 
