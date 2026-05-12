@@ -119,7 +119,7 @@ export class MapEditor extends Component {
     public mapWidth = 46;
     public mapHeight = 88;
 
-    @property({ displayName: '启用格子拖动偏移', tooltip: '关闭时预览与摆放严格按格子中心；开启后手指/鼠标可带偏移（与逻辑占格无关）' })
+    @property({ displayName: '启用格子拖动偏移', tooltip: '关闭时预览与摆放严格按格子中心；开启后手指/鼠标可带偏移（与逻辑占格无关）。含树/家具/墙饰/移动及农场农田(FRAM)。' })
     public enablePlacementDragOffset : boolean = false;
 
     @property({ displayName: '允许道具堆叠摆放', tooltip: '勾选后可在合法地板格上叠放家具，可摆放判断放宽（不再要求 place_type 与下层家具 decor_type 一一匹配）。不勾选则沿用原有不可堆叠与类型匹配规则。' })
@@ -997,25 +997,25 @@ export class MapEditor extends Component {
         const green = new Color(0, 255, 0, 120);
 
         // 不可走：仅铺非 Walkable 格（避免整张图重复矩形 + 单次超大 fill）
-        g.fillColor = red;
+        // g.fillColor = red;
         let batch = 0;
-        for (let x = 0; x < this.mapWidth; x++) {
-            for (let y = 0; y < this.mapHeight; y++) {
-                if (walkableSet.has(`${x},${y}`)) {
-                    continue;
-                }
-                appendRect(x, y);
-                batch++;
-                if (batch >= maxBatch) {
-                    g.fill();
-                    g.fillColor = red;
-                    batch = 0;
-                }
-            }
-        }
-        if (batch > 0) {
-            g.fill();
-        }
+        // for (let x = 0; x < this.mapWidth; x++) {
+        //     for (let y = 0; y < this.mapHeight; y++) {
+        //         if (walkableSet.has(`${x},${y}`)) {
+        //             continue;
+        //         }
+        //         appendRect(x, y);
+        //         batch++;
+        //         if (batch >= maxBatch) {
+        //             g.fill();
+        //             g.fillColor = red;
+        //             batch = 0;
+        //         }
+        //     }
+        // }
+        // if (batch > 0) {
+        //     g.fill();
+        // }
 
         // 可走：只遍历 Walkable 集合，分批铺绿
         g.fillColor = green;

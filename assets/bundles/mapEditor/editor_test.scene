@@ -2183,12 +2183,12 @@
     "sideDoorOffsetX": 0,
     "sideDoorOffsetY": 0,
     "sideDoorInsetX": 10,
-    "enablePlacementDragOffset": false,
+    "enablePlacementDragOffset": true,
     "enableDecorStackPlacement": true,
     "mapGraphics": {
       "__id__": 54
     },
-    "debugShowWalkable": false,
+    "debugShowWalkable": true,
     "map_data_test": true,
     "minOrthoSize": 800,
     "maxOrthoSize": 2000,

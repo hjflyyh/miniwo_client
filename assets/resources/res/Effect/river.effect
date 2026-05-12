@@ -1,0 +1,154 @@
+// Copyright (c) 2017-2020 Xiamen Yaji Software Co., Ltd.
+CCEffect %{
+techniques:
+  - passes:
+      - vert: river-vs:vert
+        frag: river-fs:frag
+        depthStencilState:
+          depthTest: false
+          depthWrite: false
+        blendState:
+          targets:
+            - blend: true
+              blendSrc: src_alpha
+              blendDst: one_minus_src_alpha
+              blendDstAlpha: one_minus_src_alpha
+        rasterizerState:
+          cullMode: none
+        properties:
+          alphaThreshold: { value: 0.5 }
+          u_noise: { editor: { type: sampler2D } }
+          u_ice: { editor: { type: sampler2D } }
+          u_rain: { editor: { type: sampler2D } }
+          u_time: { editor: { type: Float, visible: false } }
+          # 冰面颜色混合度
+          u_iceColor: { value: 0.04 }
+          # 冰裂缝亮度
+          u_iceCrack: { value: 0.3 }
+          # 水波波动速度
+          u_waveSpeed: { value: 0.02 }
+          # 代替宏
+          u_type: { value: 0 }
+
+}%
+
+CCProgram river-vs %{
+precision highp float;
+#include <builtin/uniforms/cc-global>
+#if USE_LOCAL
+  #include <builtin/uniforms/cc-local>
+#endif
+#if SAMPLE_FROM_RT
+  #include <common/common-define>
+#endif
+in vec3 a_position;
+in vec2 a_texCoord;
+in vec4 a_color;
+
+out vec4 color;
+out vec2 uv0;
+
+vec4 vert() {
+  vec4 pos = vec4(a_position, 1);
+  
+  #if USE_LOCAL
+    pos = cc_matWorld * pos;
+  #endif
+  
+  #if USE_PIXEL_ALIGNMENT
+    pos = cc_matView * pos;
+    pos.xyz = floor(pos.xyz);
+    pos = cc_matProj * pos;
+  #else
+    pos = cc_matViewProj * pos;
+  #endif
+  
+  uv0 = a_texCoord;
+  #if SAMPLE_FROM_RT
+    CC_HANDLE_RT_SAMPLE_FLIP(uv0);
+  #endif
+  color = a_color;
+  
+  return pos;
+}
+}%
+
+CCProgram river-fs %{
+precision highp float;
+#include <builtin/internal/embedded-alpha>
+#include <builtin/internal/alpha-test>
+
+in vec4 color;
+
+#if USE_TEXTURE
+  in vec2 uv0;
+  #pragma builtin(local)
+  layout(set = 2, binding = 12)uniform sampler2D cc_spriteTexture;
+#endif
+
+uniform sampler2D u_noise;
+uniform sampler2D u_ice;
+uniform sampler2D u_rain;
+uniform river {
+  float u_time;
+  float u_iceColor;
+  float u_iceCrack;
+  float u_waveSpeed;
+  float u_type;
+};
+
+// 改进版 2D 随机函数（分布更均匀）                                     
+float rand(vec2 co) {
+  // 更复杂的哈希计算，减少周期性                                     
+  return fract(sin(dot(co, vec2(27.619, 57.583))) * 43758.5453123);
+}
+
+vec4 frag() {
+  vec4 o = vec4(1, 1, 1, 1);
+  
+  // #if USE_TEXTURE                                                                                                                                                                                                                     
+  //   o *= CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);                                                                                                                                                                                                                     
+  //   #if IS_GRAY                                                                                                                                                                                                                     
+  //     float gray = 0.2126 * o.r + 0.7152 * o.g + 0.0722 * o.b;                                                                                                                                                                                                                     
+  //     o.r = o.g = o.b = gray;                                                                                                                                                                                                                     
+  //   #endif                                                                                                                                                                                                                     
+  // #endif                                                                                                                                                                                                                     
+  
+  vec4 tex;
+  float t = u_time * u_waveSpeed;
+  vec3 noise = CCSampleWithAlphaSeparated(u_noise, fract(uv0 + t)).rgb;
+  vec2 uvnew = uv0 + 0.03 * noise.xy;
+  if (u_type == 0.0) {
+    o = CCSampleWithAlphaSeparated(cc_spriteTexture, fract(uvnew));
+  }
+  else if (u_type == 1.0) {
+    tex = CCSampleWithAlphaSeparated(cc_spriteTexture, fract(uvnew));
+    vec4 colorRain = CCSampleWithAlphaSeparated(u_rain, fract(uvnew * 4.0));
+    o = tex + tex * colorRain * colorRain;
+  }
+  else if (u_type == 2.0) {
+    tex = CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
+    vec4 colorIce = CCSampleWithAlphaSeparated(u_ice, uv0);
+    for(float i = 1.0; i < 2.0; i ++ ) {
+      colorIce += CCSampleWithAlphaSeparated(u_ice, vec2(uv0.x, uv0.y + 0.001 * i));
+    }
+    vec4 mixColor = tex * colorIce;
+    float alphaMask = step(0.09, mixColor.a);
+    if (alphaMask == 0.0) {
+      //冰面的颜色混合度                                                                             
+      mixColor.rgb *= u_iceColor;
+    }else {
+      //冰裂纹颜色深度                                                                                        
+      mixColor.rgb *= alphaMask * u_iceCrack;
+    }
+    o = tex + mixColor;
+  }
+  else {
+    o = CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
+  }
+  
+  o *= color;
+  ALPHA_TEST(o);
+  return o;
+}
+}%

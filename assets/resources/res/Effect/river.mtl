@@ -5,12 +5,15 @@
   "__editorExtras__": {},
   "_native": "",
   "_effectAsset": {
-    "__uuid__": "709a53ef-966b-4b88-ac7b-3e8e31f52aac",
+    "__uuid__": "d67bc166-6c44-4932-a31e-7f047802b60b",
     "__expectedType__": "cc.EffectAsset"
   },
   "_techIdx": 0,
   "_defines": [
-    {}
+    {
+      "USE_TEXTURE": true,
+      "USE_WATER": true
+    }
   ],
   "_states": [
     {
@@ -25,12 +28,16 @@
   ],
   "_props": [
     {
-      "mainTexture": {
-        "__uuid__": "abc6960a-bf81-4756-92de-26a3f788bdf3@6c48a",
+      "u_noise": {
+        "__uuid__": "1782429c-983e-49c3-8f43-549f5023ffe9@6c48a",
         "__expectedType__": "cc.Texture2D"
       },
-      "noiseTexture": {
-        "__uuid__": "ae4649bc-12b7-4f42-9782-c01594a88b67@6c48a",
+      "u_ice": {
+        "__uuid__": "90938a3c-3191-45d6-90ae-ac34b4c4d10c@6c48a",
+        "__expectedType__": "cc.Texture2D"
+      },
+      "u_rain": {
+        "__uuid__": "0e4367fe-2a9a-4046-855f-105d49efd04d@6c48a",
         "__expectedType__": "cc.Texture2D"
       }
     }
