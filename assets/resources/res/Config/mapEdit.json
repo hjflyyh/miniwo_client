@@ -15,28 +15,28 @@
   },
   "103": {
     "name_cn": "桥前",
-    "resource": "maps/farm/home/bridge1",
+    "resource": "maps/farm/bridge/bridge1",
     "type": 15,
     "img_size": 1,
     "is_prefab": 0
   },
   "104": {
     "name_cn": "桥后",
-    "resource": "maps/farm/home/bridge2",
+    "resource": "maps/farm/bridge/bridge2",
     "type": 15,
     "img_size": 1,
     "is_prefab": 0
   },
   "105": {
     "name_cn": "stop图",
-    "resource": "maps/farm/home/stop",
+    "resource": "maps/farm/bridge/stop",
     "type": 15,
     "img_size": 1,
     "is_prefab": 0
   },
   "106": {
     "name_cn": "河",
-    "resource": "maps/farm/home/river/prefab",
+    "resource": "maps/farm/river/prefab",
     "type": 15,
     "img_size": 1,
     "is_prefab": 1

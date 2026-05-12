@@ -153,10 +153,19 @@ export class MapManager extends Component {
         }
 
         let spLoad : PrefabLoad = spriteNode.addComponent("PrefabLoad") as PrefabLoad
-        spLoad.isTexture= true
         spLoad.bundleName = "mapEditor"
-        const texPath = type == "Fram" ? (cfg["resource"] ?? cfg["image"]) : cfg["image"];
-        spLoad.url = texPath + "/spriteFrame";
+        if(cfg["is_prefab"] && cfg["is_prefab"] == 1){
+            spLoad.isTexture = false
+            spLoad.url = cfg["resource"] ? cfg["resource"] : cfg["image"];
+        }else{
+            spLoad.isTexture = true
+            const texPath = type == "Fram" ? (cfg["resource"] ?? cfg["image"]) : cfg["image"];
+            spLoad.url = texPath + "/spriteFrame";
+        }
+        // spLoad.isTexture= true
+        // spLoad.bundleName = "mapEditor"
+        // const texPath = type == "Fram" ? (cfg["resource"] ?? cfg["image"]) : cfg["image"];
+        // spLoad.url = texPath + "/spriteFrame";
 
         newNode.addChild(spriteNode)
 
