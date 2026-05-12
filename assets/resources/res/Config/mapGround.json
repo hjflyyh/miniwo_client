@@ -259,5 +259,14 @@
     "baseImg": "white_checker_two_tone_tile_1",
     "is_link_grid": 1,
     "is_link_water": 0
+  },
+  "9999": {
+    "name_cn": "透明地板",
+    "resource": "",
+    "size": 32,
+    "tags": "",
+    "baseImg": "",
+    "is_link_grid": 1,
+    "is_link_water": 0
   }
 }
