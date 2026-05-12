@@ -50,7 +50,7 @@ export class TileIconLayout extends Component implements InfiniteCell {
                 }
                 if(data["type"] == "Fram"){
                     let cfg = AppConst.JSONManager.getItem("mapEdit" , data["list"][startIndex + s].id)
-                    prefab.url = cfg["resource"];
+                    prefab.url = cfg["resource"] + "/spriteFrame";
                 }
 
                 let tileIcon = this.tileIcon[s].getComponent("tileIcon") as tileIcon

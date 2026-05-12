@@ -3,6 +3,13 @@ import { ImageAsset, Rect, Size, SpriteFrame, Texture2D, Vec2, assetManager } fr
 /** farm/bg 大地图分块边长（像素）。离线导出多张 PNG 见项目 tools/split_image_to_1024.py */
 export const FARM_BG_TILE_SIZE = 1024;
 
+/**
+ * 农场底图拼接步长（像素），必须与分包内「整格」PNG 边长一致（当前 maps/farm/bg 整格为 256×256）。
+ * 若重新导出底图尺寸，请同步改 {@link FarmMapConstants} 中边缘块宽高与本常量。
+ * 拼接在本地底图坐标内完成，再由 FarmMapBackgroundLayer 根节点整体缩放铺满地图像素范围。
+ */
+export const FARM_BG_LAYOUT_GRID = 256;
+
 export interface TileSliceItem {
     row: number;
     col: number;

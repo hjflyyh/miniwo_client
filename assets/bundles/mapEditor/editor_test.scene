@@ -2189,11 +2189,11 @@
       "__id__": 54
     },
     "debugShowWalkable": false,
-    "map_data_test": false,
-    "minOrthoSize": 3800,
-    "maxOrthoSize": 4500,
-    "defaultEntryOrthoSize": 3800,
-    "farmEntryOrthoSize": 3800,
+    "map_data_test": true,
+    "minOrthoSize": 800,
+    "maxOrthoSize": 2000,
+    "defaultEntryOrthoSize": 4500,
+    "farmEntryOrthoSize": 1800,
     "_id": "abq+rSUgpJcoQNEssTNPU6"
   },
   {

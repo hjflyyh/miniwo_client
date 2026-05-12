@@ -1,0 +1,34 @@
+{
+  "__type__": "cc.Material",
+  "_name": "SimpleRiverWater",
+  "_objFlags": 0,
+  "__editorExtras__": {},
+  "_native": "",
+  "_effectAsset": {
+    "__uuid__": "f1e2d3c4-b5a6-4788-a123-456789abcdef",
+    "__expectedType__": "cc.EffectAsset"
+  },
+  "_techIdx": 0,
+  "_defines": [
+    {}
+  ],
+  "_states": [
+    {
+      "rasterizerState": {},
+      "depthStencilState": {},
+      "blendState": {
+        "targets": [
+          {}
+        ]
+      }
+    }
+  ],
+  "_props": [
+    {
+      "mainTexture": {
+        "__uuid__": "abc6960a-bf81-4756-92de-26a3f788bdf3@6c48a",
+        "__expectedType__": "cc.Texture2D"
+      }
+    }
+  ]
+}

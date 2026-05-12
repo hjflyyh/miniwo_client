@@ -1,4 +1,4 @@
-import { _decorator, Animation, assetManager, Camera, CCBoolean, CCInteger, Color, Component, director, EventMouse, EventTouch, find, Graphics, Input, input, instantiate, Label, Layers, log, math, Node, Prefab, RenderTexture, size, Size, Sprite, SpriteFrame, sys, Texture2D, tween, UITransform, v2, Vec2, Vec3, view } from 'cc';
+import { _decorator, Animation, Camera, CCBoolean, CCInteger, Color, Component, director, EventMouse, EventTouch, find, Graphics, Input, input, instantiate, Label, Layers, log, math, Node, Prefab, RenderTexture, size, Size, Sprite, SpriteFrame, sys, Texture2D, tween, UITransform, v2, Vec2, Vec3, view } from 'cc';
 import { TileObjectData } from './TileItem';
 import { ActionStatus, MapManager } from './MapManager';
 import {DisplayTitle} from "db://assets/scripts/View/Utils/DisplayTitle";
@@ -11,15 +11,10 @@ import { RectangleHouseBuilder } from './RectangleHouseBuilder';
 import { MapLoadMap } from './MapLoadMap';
 import { RegionNpcCellBinder } from './RegionNpcCellBinder';
 import { network } from '../../../scripts/Model/RequestData';
-import { FARM_BG_TILE_SIZE } from '../../../scripts/Utils/FarmBgTileGrid';
+import { FARM_MAP_GRID_HEIGHT, FARM_MAP_GRID_WIDTH } from './farm/FarmMapConstants';
+import { FarmMapEditorModule, setMapBgGrassSpriteVisible } from './farm/FarmMapEditorModule';
+
 const { ccclass, property } = _decorator;
-
-/** mapGameType==0 农场模式下的逻辑格子数量 */
-const FARM_MAP_GRID_WIDTH = 303;
-const FARM_MAP_GRID_HEIGHT = 262;
-/** 农场底图横向块数（bg_00～bg_09 一行，下一行 bg_10～） */
-const FARM_BG_TILE_COLS = 10;
-
 
 enum GridCellType {
     EMPTY,   // 空
@@ -244,6 +239,9 @@ export class MapEditor extends Component {
     @property
     public debugShowWalkable = false;
 
+    /** Cocos Graphics 单次 fill 顶点缓冲有上限；大地图_walkable 调试需分批 fill */
+    private static readonly WALKABLE_DEBUG_MAX_RECTS_PER_FILL = 1500;
+
     @property
     public map_data_test = false;
 
@@ -256,8 +254,8 @@ export class MapEditor extends Component {
 
     public mapGameType = 0; //农场
 
-    /** 农场分包 maps/farm/bg 拼接底图根节点（仅 mapGameType==0） */
-    private farmBgLayerRoot: Node | null = null;
+    /** mapGameType===0 时农场专属逻辑（底图、mapBg 草地显隐等），见 farm/FarmMapEditorModule */
+    private farmModule: FarmMapEditorModule | null = null;
 
     /**
      * 绘制选择框
@@ -309,8 +307,17 @@ export class MapEditor extends Component {
         console.log("地图格子尺寸：" + this.mapWidth + ":" + this.mapHeight)
 
         this.mapBgTransform.contentSize = new Size(this.mapWidth * this.tileSize , this.mapHeight * this.tileSize)
-        // 农场改用分包 FarmBgLayer；场景里 mapBg 节点 Sprite 与 FarmBg 同父节点且在上面一层，会盖住底图，此处关掉通用草地底图
-        this.applyEditorDefaultMapBgSpriteVisible(this.mapGameType !== 0)
+        if (this.mapGameType === 0) {
+            this.farmModule = new FarmMapEditorModule();
+            this.farmModule.onEditorStart({
+                disMapContainer: this.disMapContainer,
+                mapBgNode: this.mapBgTransform?.node ?? null,
+                mapPixelWidth: this.mapWidth * this.tileSize,
+                mapPixelHeight: this.mapHeight * this.tileSize,
+            });
+        } else {
+            setMapBgGrassSpriteVisible(this.mapBgTransform?.node, true);
+        }
 
         this.init();
         
@@ -319,7 +326,6 @@ export class MapEditor extends Component {
         this.updateSizeLabel();
         this.snapCameraToMapTopLeftOnEnter();
         MapModel.getInstance().setMapGround(MapManager.GetInstance().getGroundAssetsStr()[this.chooseGroundId], 0 , this);
-        this.setupFarmBackgroundLayer();
         this.initMapGround();
 
         EventSystem.addListent("OnClickTileOhterIcon" , this.OnClickTileOhterIcon , this)
@@ -339,13 +345,10 @@ export class MapEditor extends Component {
 
     /**
      * 离开地图或组件销毁时调用：销毁农场分包底图节点，并恢复场景 mapBg 默认草地 Sprite。
-     *（农场模式下 start 曾关闭 mapBg 以免盖住 FarmBgLayer）
      */
     public disposeFarmBackgroundResources(): void {
-        this.clearFarmBgLayer();
-        if (this.mapGameType === 0) {
-            this.applyEditorDefaultMapBgSpriteVisible(true);
-        }
+        this.farmModule?.dispose(this.mapBgTransform?.node ?? null);
+        this.farmModule = null;
     }
 
     private parseGridSizeFromMapData(data: any): { width: number, height: number } | null {
@@ -967,40 +970,80 @@ export class MapEditor extends Component {
         }
         if (!this.walkableDebugGraphics) return;
 
-        this.walkableDebugGraphics.clear();
+        const g = this.walkableDebugGraphics;
+        g.clear();
 
-        // 先把整张图都标红（不可走）
-        this.walkableDebugGraphics.fillColor = new Color(255, 0, 0, 110);
-        for (let x = 0; x < this.mapWidth; x++) {
-            for (let y = 0; y < this.mapHeight; y++) {
-                const center = this.gridCellCenterForDebug(new Vec2(x, y));
-                const half = this.tileSize * 0.5;
-                this.walkableDebugGraphics.rect(center.x - half, center.y - half, this.tileSize, this.tileSize);
+        const walkableSet = new Set<string>();
+        if (cells) {
+            for (let i = 0; i < cells.length; i++) {
+                const key = cells[i];
+                if (typeof key === 'string') {
+                    walkableSet.add(key);
+                }
             }
         }
-        this.walkableDebugGraphics.fill();
 
-        // 再把 Walkable 覆盖成绿色（可走）
-        if (!cells || cells.length === 0) {
-            return;
+        const half = this.tileSize * 0.5;
+        const gridTmp = new Vec2();
+        const maxBatch = MapEditor.WALKABLE_DEBUG_MAX_RECTS_PER_FILL;
+
+        const appendRect = (x: number, y: number) => {
+            gridTmp.set(x, y);
+            const center = this.gridCellCenterForDebug(gridTmp);
+            g.rect(center.x - half, center.y - half, this.tileSize, this.tileSize);
+        };
+
+        const red = new Color(255, 0, 0, 110);
+        const green = new Color(0, 255, 0, 120);
+
+        // 不可走：仅铺非 Walkable 格（避免整张图重复矩形 + 单次超大 fill）
+        g.fillColor = red;
+        let batch = 0;
+        for (let x = 0; x < this.mapWidth; x++) {
+            for (let y = 0; y < this.mapHeight; y++) {
+                if (walkableSet.has(`${x},${y}`)) {
+                    continue;
+                }
+                appendRect(x, y);
+                batch++;
+                if (batch >= maxBatch) {
+                    g.fill();
+                    g.fillColor = red;
+                    batch = 0;
+                }
+            }
         }
-        this.walkableDebugGraphics.fillColor = new Color(0, 255, 0, 120);
-        for (let i = 0; i < cells.length; i++) {
-            const key = cells[i];
-            if (typeof key !== 'string') continue;
-            const parts = key.split(',');
-            if (parts.length < 2) continue;
+        if (batch > 0) {
+            g.fill();
+        }
 
+        // 可走：只遍历 Walkable 集合，分批铺绿
+        g.fillColor = green;
+        batch = 0;
+        walkableSet.forEach((key) => {
+            const parts = key.split(',');
+            if (parts.length < 2) {
+                return;
+            }
             const x = Number(parts[0]);
             const y = Number(parts[1]);
-            if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
-            if (x < 0 || y < 0 || x >= this.mapWidth || y >= this.mapHeight) continue;
-
-            const center = this.gridCellCenterForDebug(new Vec2(x, y));
-            const half = this.tileSize * 0.5;
-            this.walkableDebugGraphics.rect(center.x - half, center.y - half, this.tileSize, this.tileSize);
+            if (!Number.isFinite(x) || !Number.isFinite(y)) {
+                return;
+            }
+            if (x < 0 || y < 0 || x >= this.mapWidth || y >= this.mapHeight) {
+                return;
+            }
+            appendRect(x, y);
+            batch++;
+            if (batch >= maxBatch) {
+                g.fill();
+                g.fillColor = green;
+                batch = 0;
+            }
+        });
+        if (batch > 0) {
+            g.fill();
         }
-        this.walkableDebugGraphics.fill();
     }
 
     private ensureNpcTileDebugLayer() {
@@ -4941,110 +4984,6 @@ export class MapEditor extends Component {
         }
     }
 
-    /** 场景节点 mapBg（mapBgTransform）上的 Sprite：农场模式下关闭，避免挡住分包农场底图 */
-    private applyEditorDefaultMapBgSpriteVisible(visible: boolean): void {
-        const node = this.mapBgTransform?.node;
-        if (!node?.isValid) return;
-        const sp = node.getComponent(Sprite);
-        if (sp) {
-            sp.enabled = visible;
-        }
-    }
-
-    private clearFarmBgLayer(): void {
-        if (this.farmBgLayerRoot?.isValid) {
-            this.farmBgLayerRoot.destroy();
-            this.farmBgLayerRoot = null;
-        }
-    }
-
-    /** 资源名 bg_XX；serial 从 1 起对应 bg_01、bg_02… */
-    private farmBgSliceName(serial: number): string {
-        const n = Math.floor(serial);
-        if (n <= 0) {
-            return 'bg_01';
-        }
-        if (n < 100) {
-            const s = String(n);
-            return `bg_${s.length < 2 ? '0' + s : s}`;
-        }
-        return `bg_${n}`;
-    }
-
-    /**
-     * 农场底图：左上角起 bg_01，横向 10 张（bg_01～bg_10），换行 bg_11～bg_20…，铺满地图像素矩形。
-     */
-    private setupFarmBackgroundLayer(): void {
-        if (this.mapGameType !== 0) {
-            return;
-        }
-        this.clearFarmBgLayer();
-        const parent = this.disMapContainer?.parent;
-        if (!parent) {
-            return;
-        }
-
-        const mapPixelW = this.mapWidth * this.tileSize;
-        const mapPixelH = this.mapHeight * this.tileSize;
-        const tilePx = FARM_BG_TILE_SIZE;
-        const numRows = Math.ceil(mapPixelH / tilePx);
-
-        assetManager.loadBundle('mapEditor', (err, bundle) => {
-            if (err || !bundle) {
-                console.warn('[MapEditor] farm bg loadBundle failed', err);
-                return;
-            }
-
-            const root = new Node('FarmBgLayer');
-            root.layer = this.disMapContainer.layer;
-            const rootUi = root.addComponent(UITransform);
-            rootUi.setContentSize(mapPixelW, mapPixelH);
-            rootUi.setAnchorPoint(0.5, 0.5);
-            root.setPosition(this.disMapContainer.position);
-
-            parent.insertChild(root, 0);
-            this.farmBgLayerRoot = root;
-
-            const attachSprite = (sf: SpriteFrame | null, assetBase: string, r: number, c: number) => {
-                if (!sf || !this.farmBgLayerRoot?.isValid) {
-                    return;
-                }
-                const tileNode = new Node(assetBase);
-                tileNode.layer = root.layer;
-                const sp = tileNode.addComponent(Sprite);
-                sp.spriteFrame = sf;
-                sp.sizeMode = Sprite.SizeMode.RAW;
-                const ui = tileNode.getComponent(UITransform) ?? tileNode.addComponent(UITransform);
-                const w = sf.width || tilePx;
-                const h = sf.height || tilePx;
-                ui.setContentSize(w, h);
-                // 左上角对齐网格原点，避免按中心点排列产生纵向/横向缝隙
-                ui.setAnchorPoint(0, 1);
-
-                const leftX = -mapPixelW / 2 + c * tilePx;
-                const topY = mapPixelH / 2 - r * tilePx;
-                tileNode.setPosition(leftX, topY, 0);
-                root.addChild(tileNode);
-            };
-
-            for (let r = 0; r < numRows; r++) {
-                for (let c = 0; c < FARM_BG_TILE_COLS; c++) {
-                    const serial = r * FARM_BG_TILE_COLS + c + 1;
-                    const assetBase = `maps/farm/bg/${this.farmBgSliceName(serial)}`;
-
-                    bundle.load(`${assetBase}/spriteFrame`, SpriteFrame, (e1, sf1) => {
-                        if (!e1 && sf1) {
-                            attachSprite(sf1, assetBase, r, c);
-                            return;
-                        }
-                        bundle.load(assetBase, SpriteFrame, (e2, sf2) => {
-                            attachSprite(sf2 ?? null, assetBase, r, c);
-                        });
-                    });
-                }
-            }
-        });
-    }
 }
 
 
