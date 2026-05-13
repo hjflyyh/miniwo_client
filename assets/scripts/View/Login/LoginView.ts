@@ -6,6 +6,10 @@ import { HttpManager } from '../../Manager/HttpManager';
 import { AppConst } from '../../AppConst';
 import { MapModel } from '../../Model/MapModel';
 import { GenericSpritesheetAnimator } from '../../Utils/GenericSpritesheetAnimator';
+
+/** 与 onClickServer3 一致：原生 App（真机/模拟器）默认 HTTP / WS 入口 */
+const LOGIN_NATIVE_DEFAULT_IP = '115.190.225.83';
+
 const { ccclass, property } = _decorator;
 
 @ccclass('LoginView')
@@ -31,11 +35,17 @@ export class LoginView extends Component {
     @property(EditBox)
     public passwordEditBox
 
+    @property(Node)
+    public serverSelectNode
+
     @property(GenericSpritesheetAnimator)
     public animator: GenericSpritesheetAnimator;
 
     start() {
         this.initHttpServerFromStorage();
+        if (sys.isNative && this.serverSelectNode) {
+            this.serverSelectNode.active = false;
+        }
         this.firstNode.active = true
         this.mailNode.active = false
         GoogleAuthManager.GetInstance().init()
@@ -46,11 +56,17 @@ export class LoginView extends Component {
         EventSystem.addListent("LoginSuccess" , this.onLoginSuccess , this)
 
         if (this.animator) {
-            this.animator.loadAndPlay('res/NPCImage/zuozhu/review', 'review');
+            this.animator.loadAndPlay('res/NPCImage/zuozhu/waiting', 'waiting');
         }
     }
 
     private initHttpServerFromStorage() {
+        if (sys.isNative) {
+            // this.applyHttpEndpoints(LOGIN_NATIVE_DEFAULT_IP , "c3a28e10a5be4672.natapp.cc");
+            // this.applyHttpEndpoints("192.168.30.109");
+            this.applyHttpEndpoints(LOGIN_NATIVE_DEFAULT_IP , LOGIN_NATIVE_DEFAULT_IP);
+            return;
+        }
         const defaultIp = "192.168.30.109";
         const defaultUrl = `http://${defaultIp}:8080`;
         const storage = sys.localStorage;
@@ -68,6 +84,15 @@ export class LoginView extends Component {
         }
     }
 
+    /** 切换登录/聊天 HTTP 根地址（与三个服按钮共用） */
+    private applyHttpEndpoints(ip: string , wsIp: string = null) {
+        HttpManager.ipBase = ip;
+        HttpManager.baseUrl = `http://${ip}:8080`;
+        HttpManager.chatBaseUrl = `http://${ip}:7350`;
+        HttpManager.wsIpBase = wsIp || ip + ":7350";
+        this.persistHttpServer();
+    }
+
     private persistHttpServer() {
         const storage = sys.localStorage;
         storage.setItem(this.STORAGE_IP_KEY, HttpManager.ipBase);
@@ -80,6 +105,8 @@ export class LoginView extends Component {
     }
 
     onClickGoogle(){
+        EventSystem.send("ShowTips", "未开放谷歌登录，请使用邮箱")
+        return
         GoogleAuthManager.GetInstance().login();
     }
 
@@ -89,6 +116,8 @@ export class LoginView extends Component {
     }
 
     onClickApple(){
+        EventSystem.send("ShowTips", "未开放苹果登录，请使用邮箱")
+        return
         this.webview.node.active = true;
         this.webview.url = "http://"+ HttpManager.ipBase +"/apple-login.html";
     }
@@ -129,24 +158,15 @@ export class LoginView extends Component {
     }
 
     onClickServer1(){
-        HttpManager.ipBase = "192.168.30.109"
-        HttpManager.baseUrl = "http://" + HttpManager.ipBase + ":8080"
-        HttpManager.chatBaseUrl = `http://${HttpManager.ipBase}:7350`;
-        this.persistHttpServer();
+        this.applyHttpEndpoints("192.168.30.109");
     }
 
     onClickServer2(){
-        HttpManager.ipBase = "192.168.31.102"
-        HttpManager.baseUrl = "http://" + HttpManager.ipBase + ":8080"
-        HttpManager.chatBaseUrl = `http://${HttpManager.ipBase}:7350`;
-        this.persistHttpServer();
+        this.applyHttpEndpoints("192.168.31.102");
     }
 
     onClickServer3(){
-        HttpManager.ipBase = "115.190.225.83"
-        HttpManager.baseUrl = "http://" + HttpManager.ipBase + ":8080"
-        HttpManager.chatBaseUrl = `http://${HttpManager.ipBase}:7350`;
-        this.persistHttpServer();
+        this.applyHttpEndpoints(LOGIN_NATIVE_DEFAULT_IP , LOGIN_NATIVE_DEFAULT_IP);
     }
 
     onCleanCache(){

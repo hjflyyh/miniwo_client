@@ -1,8 +1,9 @@
-import { _decorator, Component, Node , log} from 'cc';
+import { _decorator, Component, Node, log, sys } from 'cc';
 import { network } from '../Model/RequestData';
 import { AppConst } from '../AppConst';
 import { RoleModel } from '../Model/RoleModel';
 import { NPCModel } from '../Model/NPCModel';
+import { HttpManager } from './HttpManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -114,6 +115,7 @@ export class WebSocketManager extends Component {
 
     public setConfig(url){
         log("socket:" + url)
+        this.wsNativeLog('setConfig', this.maskWsUrlForLog(url), 'HttpManager.ipBase=', HttpManager.ipBase);
         this.config = {
             url: url,
             protocols: null,
@@ -123,6 +125,32 @@ export class WebSocketManager extends Component {
             heartbeatTimeout: 10000,
             autoReconnect: true
         };
+    }
+
+    /** 仅原生 App 输出，便于 Xcode / adb 排查 WS 握手与断连 */
+    private wsNativeLog(...args: unknown[]): void {
+        if (!sys.isNative) {
+            return;
+        }
+        console.warn('[WebSocket][native]', ...args);
+    }
+
+    /** 日志里隐藏 token，避免泄露 session */
+    private maskWsUrlForLog(url: string): string {
+        if (!url) {
+            return '';
+        }
+        const marker = 'token=';
+        const i = url.indexOf(marker);
+        if (i < 0) {
+            return url;
+        }
+        const start = i + marker.length;
+        const tail = url.slice(start);
+        const amp = tail.indexOf('&');
+        const tok = amp >= 0 ? tail.slice(0, amp) : tail;
+        const rest = amp >= 0 ? tail.slice(amp) : '';
+        return `${url.slice(0, start)}<redacted,len=${tok.length}>${rest}`;
     }
 
     /**
@@ -179,24 +207,34 @@ export class WebSocketManager extends Component {
     private doConnect(): void {
         try {
             this.setState(WebSocketState.CONNECTING);
-            
+            console.log('WebSocketManager: 尝试连接', this.config?.url || '');
+            this.wsNativeLog(
+                'doConnect attempt',
+                'reconnectAttempts=', this.reconnectAttempts,
+                'isManualClose=', this.isManualClose,
+                'url=', this.maskWsUrlForLog(this.config?.url || ''),
+                'ipBase=', HttpManager.ipBase
+            );
+
             // 清除之前的 WebSocket 实例
             if (this.ws) {
                 this.cleanupWebSocket();
             }
-            
+
             // 创建新的 WebSocket 连接
-            if (this.config.protocols) {
-                this.ws = new WebSocket(this.config.url, this.config.protocols);
-            } else {
-                this.ws = new WebSocket(this.config.url);
-            }
+            // if (this.config.protocols) {
+            //     this.ws = new WebSocket(this.config.url, this.config.protocols);
+            // } else {
+            //     this.ws = new WebSocket(this.config.url);
+            // }
+            this.ws = new WebSocket(this.config.url);
             this.ws.binaryType = 'arraybuffer';
-            
+
             this.setupWebSocketEvents();
-            
+
         } catch (error) {
             console.error('WebSocketManager: 创建连接失败', error);
+            this.wsNativeLog('doConnect threw', String(error));
             this.handleConnectionError();
         }
     }
@@ -216,6 +254,7 @@ export class WebSocketManager extends Component {
     private onOpen(event: Event): void {
         const wasReconnecting = this.reconnectAttempts > 0 || this.state === WebSocketState.RECONNECTING;
         console.log('WebSocketManager: 连接成功');
+        this.wsNativeLog('onOpen', 'wasReconnecting=', wasReconnecting, 'readyState=', this.ws?.readyState);
         this.setState(WebSocketState.OPEN);
         this.reconnectAttempts = 0;
         this.lastMessageTime = Date.now();
@@ -241,6 +280,16 @@ export class WebSocketManager extends Component {
      */
     private onClose(event: CloseEvent): void {
         console.log(`WebSocketManager: 连接关闭, code: ${event.code}, reason: ${event.reason}`);
+        this.wsNativeLog(
+            'onClose',
+            'code=', event.code,
+            'reason=', event.reason || '(empty)',
+            'wasClean=', event.wasClean,
+            'isManualClose=', this.isManualClose,
+            'autoReconnect=', this.config?.autoReconnect,
+            'lastMsgAgeMs=', Date.now() - this.lastMessageTime,
+            'url=', this.maskWsUrlForLog(this.config?.url || '')
+        );
         this.setState(WebSocketState.CLOSED);
         
         // 清除心跳检测
@@ -250,7 +299,7 @@ export class WebSocketManager extends Component {
         // eventTarget.emit(WebSocketEvent.DISCONNECTED, event);
         
         // 如果不是手动关闭且配置了自动重连，则尝试重连
-        if (!this.isManualClose && this.config.autoReconnect) {
+        if (!this.isManualClose && this.config?.autoReconnect) {
             this.scheduleReconnect();
         }
     }
@@ -377,20 +426,77 @@ export class WebSocketManager extends Component {
      * 错误回调
      */
     private onError(event: Event): void {
-        console.error('WebSocketManager: 连接错误', event);
-        
+        const ws = this.ws;
+        const details = this.captureWebSocketErrorDetails(event, ws);
+        try {
+            console.error('WebSocketManager: 连接错误', JSON.stringify(details));
+        } catch {
+            console.error('WebSocketManager: 连接错误', details);
+        }
+        try {
+            console.error('WebSocketManager: 连接错误 raw event stringify', JSON.stringify(event, Object.getOwnPropertyNames(event)));
+        } catch {
+            console.error('WebSocketManager: 连接错误 event (无法 JSON.stringify)', event?.type, event);
+        }
+        this.wsNativeLog(
+            'onError',
+            JSON.stringify(details),
+            'configUrl=', this.maskWsUrlForLog(this.config?.url || '')
+        );
+
         // 触发错误事件
         // eventTarget.emit(WebSocketEvent.ERROR, event);
-        
+
         // 处理连接错误
         this.handleConnectionError();
     }
 
+    /** 尽量从 Event / ErrorEvent 中取出可序列化字段（原生上常无法直接打印 event 对象） */
+    private captureWebSocketErrorDetails(event: Event, ws: WebSocket | null): Record<string, unknown> {
+        const out: Record<string, unknown> = {
+            eventType: event?.type,
+            eventCtor: event?.constructor?.name,
+            wsReadyState: ws?.readyState,
+            wsUrlMasked: ws?.url ? this.maskWsUrlForLog(ws.url) : '',
+        };
+        const anyEv = event as unknown as Record<string, unknown>;
+        for (const key of ['message', 'filename', 'lineno', 'colno']) {
+            if (anyEv[key] !== undefined && anyEv[key] !== null) {
+                out[key] = anyEv[key];
+            }
+        }
+        const nested = anyEv['error'];
+        if (nested instanceof Error) {
+            out.errorName = nested.name;
+            out.errorMessage = nested.message;
+            out.errorStack = nested.stack;
+        } else if (nested !== undefined && nested !== null) {
+            try {
+                out.error = JSON.stringify(nested);
+            } catch {
+                out.error = String(nested);
+            }
+        }
+        try {
+            const t = event.target as WebSocket | null;
+            if (t) {
+                out.targetReadyState = t.readyState;
+                if (t.url) {
+                    out.targetUrlMasked = this.maskWsUrlForLog(t.url);
+                }
+            }
+        } catch {
+            // ignore
+        }
+        return out;
+    }
+
     private handleConnectionError(): void {
+        this.wsNativeLog('handleConnectionError', 'isManualClose=', this.isManualClose);
         this.setState(WebSocketState.CLOSED);
-        
+
         // 如果不是手动关闭且配置了自动重连，则尝试重连
-        if (!this.isManualClose && this.config.autoReconnect) {
+        if (!this.isManualClose && this.config?.autoReconnect) {
             this.scheduleReconnect();
         }
     }
@@ -400,17 +506,24 @@ export class WebSocketManager extends Component {
         // 检查是否达到最大重连次数
         if (this.reconnectAttempts >= this.config.maxReconnectAttempts!) {
             console.error(`WebSocketManager: 已达到最大重连次数 (${this.config.maxReconnectAttempts})`);
+            this.wsNativeLog('scheduleReconnect aborted: max attempts', this.config.maxReconnectAttempts);
             return;
         }
-        
+
         // 检查网络状态
         if (!this.checkNetworkAvailable()) {
             console.warn('WebSocketManager: 网络不可用，暂停重连');
+            this.wsNativeLog('scheduleReconnect paused: checkNetworkAvailable=false');
             return;
         }
-        
+
         this.reconnectAttempts++;
         console.log(`WebSocketManager: 尝试重连 (${this.reconnectAttempts}/${this.config.maxReconnectAttempts})`);
+        this.wsNativeLog(
+            'scheduleReconnect',
+            `attempt ${this.reconnectAttempts}/${this.config.maxReconnectAttempts}`,
+            'url=', this.maskWsUrlForLog(this.config?.url || '')
+        );
         
         this.setState(WebSocketState.RECONNECTING);
         // eventTarget.emit(WebSocketEvent.RECONNECTING, { attempt: this.reconnectAttempts });
@@ -486,6 +599,12 @@ export class WebSocketManager extends Component {
             
             if (timeSinceLastMessage > this.config.heartbeatTimeout!) {
                 console.error('WebSocketManager: 心跳超时，连接可能已断开');
+                this.wsNativeLog(
+                    'heartbeat timeout',
+                    'timeSinceLastMessageMs=', timeSinceLastMessage,
+                    'thresholdMs=', this.config.heartbeatTimeout,
+                    'url=', this.maskWsUrlForLog(this.config?.url || '')
+                );
                 this.handleConnectionError();
             }
         }, this.config.heartbeatTimeout) as unknown as number;

@@ -363,7 +363,7 @@
       "r": 255,
       "g": 255,
       "b": 255,
-      "a": 15
+      "a": 38
     },
     "_spriteFrame": {
       "__uuid__": "3b35a61b-d7ec-4e42-a031-368caf658337@f9941",
@@ -523,8 +523,6 @@
       "__id__": 0
     },
     "fileId": "0csb1oJnlD1bW32fcL8Hb5",
-    "instance": null,
-    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {

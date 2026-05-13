@@ -47,13 +47,18 @@ export const ZUOZHU_ACTION_HORIZONTAL_SLICES: Readonly<Record<string, number>> =
     idle: 6,
     jumping: 5,
     review: 6,
-    'running-left': 7,
+    'running-left': 8,
     /** 未在需求里写出，与 running-left 对称 */
-    'running-right': 7,
+    'running-right': 8,
     running: 6,
     waiting: 6,
     /** 未在需求里写出，可按资源改 map */
     waving: 4,
+    "running-up": 8,
+    "walking-left" : 8,
+    "walking-right" : 8,
+    "walking-down" : 8,
+    "running-down" : 8,
 };
 
 /**

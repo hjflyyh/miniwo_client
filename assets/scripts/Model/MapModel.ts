@@ -3,6 +3,7 @@ import { AppConst } from "../AppConst";
 import { network } from "./RequestData";
 import { MapEditor } from "../../bundles/mapEditor/src/MapEditor";
 import { UGCModel } from "./UGCModel";
+import { postMessageToParent } from "../Utils/ParentPostMessage";
 // import { CaptureUtils } from "../../bundles/mapEditor/src/CaptureUtils";
 
 export class MapModel {
@@ -509,13 +510,19 @@ export class MapModel {
         })
 
         map.mapItems.forEach((value, key) => {
+            const plantFramPos =
+                (value as any).gridAnchor && String((value as any).gridAnchor).includes(',')
+                    ? String((value as any).gridAnchor)
+                    : key.includes('|')
+                      ? key.split('|')[0]
+                      : key;
             if (value.tileType == "Plant") {
                 const tileScaleX = value.tile?.getScale?.().x;
                 const flipX = tileScaleX != null ? (tileScaleX < 0 ? -1 : 1) : (value.flipX != null ? (value.flipX < 0 ? -1 : 1) : 1);
                 map.allMapAssetsData.Plant.push({
                     id: value.id,
                     _type: "Plant",
-                    position: key ,
+                    position: plantFramPos,
                     flipX,
                     offsetX: (value as any).offsetX ?? 0,
                     offsetY: (value as any).offsetY ?? 0,
@@ -527,7 +534,7 @@ export class MapModel {
                 map.allMapAssetsData.Fram.push({
                     id: value.id,
                     _type: "Fram",
-                    position: key,
+                    position: plantFramPos,
                     flipX,
                     offsetX: (value as any).offsetX ?? 0,
                     offsetY: (value as any).offsetY ?? 0,
@@ -671,7 +678,7 @@ export class MapModel {
         }
 
         if(AppConst.SDKManager.isEditMapingWeb){
-            window.parent.postMessage({
+            postMessageToParent({
                 channel: 'miniwo-map-editor',
                 source: 'miniwo-cocos',
                 type: 'COCOS_SEND_MAP_DATA',

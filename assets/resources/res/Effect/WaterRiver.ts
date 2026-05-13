@@ -9,7 +9,7 @@ export class WaterRiver extends Component {
     
     start() {
         this.mr1 = this.getComponent(Sprite).customMaterial;
-        this.mr1.setProperty("u_type", 1);
+        this.mr1.setProperty("u_type", 0);
     }
 
     update(deltaTime: number) {

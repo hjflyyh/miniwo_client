@@ -5,6 +5,7 @@ const { ccclass, property } = _decorator;
 @ccclass('HttpManager')
 export class HttpManager extends Component {
     public static ipBase = "192.168.30.109"
+    public static wsIpBase = "c3a28e10a5be4672.natapp.cc"
     public static baseUrl = "http://" + HttpManager.ipBase + ":8080"
     public static chatBaseUrl = "http://" + HttpManager.ipBase + ":7350"
     start() {

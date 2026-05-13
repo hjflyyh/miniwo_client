@@ -13,6 +13,7 @@ import { RegionNpcCellBinder } from './RegionNpcCellBinder';
 import { network } from '../../../scripts/Model/RequestData';
 import { FARM_MAP_GRID_HEIGHT, FARM_MAP_GRID_WIDTH } from './farm/FarmMapConstants';
 import { FarmMapEditorModule, setMapBgGrassSpriteVisible } from './farm/FarmMapEditorModule';
+import { postMessageToParent } from '../../../scripts/Utils/ParentPostMessage';
 
 const { ccclass, property } = _decorator;
 
@@ -112,7 +113,7 @@ export class MapEditor extends Component {
 
     private buildFloorPoints: Vec2[] = [];
     public houseItems: Map<string, { tile: Node, tileType: string, belong?: string }> = new Map();
-    public mapItems: Map<string, { id: string, tile: Node, tileType: string, belong?: string, flipX?: number, offsetX?: number, offsetY?: number }> = new Map();
+    public mapItems: Map<string, { id: string, tile: Node, tileType: string, belong?: string, flipX?: number, offsetX?: number, offsetY?: number, gridAnchor?: string }> = new Map();
     public mapData: number[][] = [];
     public mapRegions: { id: string, minX: number, minY: number, maxX: number, maxY: number, npcIds: string[] }[] = [];
     public tileSize = 32;
@@ -122,7 +123,7 @@ export class MapEditor extends Component {
     @property({ displayName: '启用格子拖动偏移', tooltip: '关闭时预览与摆放严格按格子中心；开启后手指/鼠标可带偏移（与逻辑占格无关）。含树/家具/墙饰/移动及农场农田(FRAM)。' })
     public enablePlacementDragOffset : boolean = false;
 
-    @property({ displayName: '允许道具堆叠摆放', tooltip: '勾选后可在合法地板格上叠放家具，可摆放判断放宽（不再要求 place_type 与下层家具 decor_type 一一匹配）。不勾选则沿用原有不可堆叠与类型匹配规则。' })
+    @property({ displayName: '允许道具堆叠摆放', tooltip: '勾选后：室内家具可叠放（放宽 place_type 与 decor_type 匹配）；农场地图(mapGameType=0)上外景树/农田(Plant、Fram)也可叠放，多实例用唯一 mapItems key。不勾选则沿用原规则。' })
     public enableDecorStackPlacement : boolean = false;
 
     /** 最近一次鼠标/触摸在 mapContainer 下的本地坐标（用于格子内偏移摆放） */
@@ -139,8 +140,8 @@ export class MapEditor extends Component {
         npc_banner1: Node,
     } = { move: null, detele: null, frame: null, sign: null, npc_banner1: null };
 
-    moveItem: { id: string, tile: Node, tileType: string, initGride: Vec2, belong?: string, decorKey?: string, offsetX?: number, offsetY?: number, initOffsetX?: number, initOffsetY?: number, grabOffsetX?: number, grabOffsetY?: number } = null;
-    deteleItem: { tile: Node | null, tileType: string, belong?: string, decorKey?: string, doorPos?: Vec2, doorDir?: string, anchorPos?: Vec2 } = null;
+    moveItem: { id: string, tile: Node, tileType: string, initGride: Vec2, belong?: string, decorKey?: string, offsetX?: number, offsetY?: number, initOffsetX?: number, initOffsetY?: number, grabOffsetX?: number, grabOffsetY?: number, mapItemKey?: string, initMapItemKey?: string } = null;
+    deteleItem: { tile: Node | null, tileType: string, belong?: string, decorKey?: string, doorPos?: Vec2, doorDir?: string, anchorPos?: Vec2, mapItemKey?: string } = null;
     moveStatus: number = 0;
 
     public groundType: number = 1;
@@ -696,7 +697,7 @@ export class MapEditor extends Component {
         }
         this.lastWebMapInfoPayload = payloadStr;
 
-        window.parent.postMessage({
+        postMessageToParent({
             channel: 'miniwo-map-editor',
             source: 'miniwo-cocos',
             type: 'COCOS_MAP_INFO_UPDATE',
@@ -1485,23 +1486,36 @@ export class MapEditor extends Component {
             }
 
             let size = null;
-            if (this.mapItems.has(`${gridPos.x},${gridPos.y}`)) {
-                const item = this.mapItems.get(`${gridPos.x},${gridPos.y}`);
+            const simpleKey = `${gridPos.x},${gridPos.y}`;
+            let picked: { key: string; item: { id: string; tile: Node; tileType: string; flipX?: number; offsetX?: number; offsetY?: number; gridAnchor?: string } } | null = null;
+            if (this.mapItems.has(simpleKey)) {
+                picked = { key: simpleKey, item: this.mapItems.get(simpleKey) };
+            } else {
+                const hit = this.findTopOutdoorPlantFramMapHit(gridPos);
+                if (hit) {
+                    picked = hit;
+                }
+            }
+            if (picked) {
+                const item = picked.item;
                 const ptr = this.lastPointerLocalPos;
                 const tilePos = item.tile?.getPosition?.() ?? new Vec3();
                 const grabOffsetX = this.enablePlacementDragOffset && ptr ? (ptr.x - tilePos.x) : 0;
                 const grabOffsetY = this.enablePlacementDragOffset && ptr ? (ptr.y - tilePos.y) : 0;
+                const anchorVec = this.getMapItemAnchorVecForFootprint(picked.key, item) ?? new Vec2(gridPos.x, gridPos.y);
                 this.moveItem = {
                     id: item.id,
                     tile: item.tile,
                     tileType: item.tileType,
-                    initGride: gridPos,
+                    initGride: anchorVec,
                     offsetX: (item as any).offsetX ?? 0,
                     offsetY: (item as any).offsetY ?? 0,
                     initOffsetX: (item as any).offsetX ?? 0,
                     initOffsetY: (item as any).offsetY ?? 0,
                     grabOffsetX,
-                    grabOffsetY
+                    grabOffsetY,
+                    mapItemKey: picked.key,
+                    initMapItemKey: picked.key,
                 };
                 console.log(`[MOVE_SELECT] id=${this.moveItem.id}, name=${this.moveItem.tile?.name}, type=${this.moveItem.tileType}, grid=${gridPos.x},${gridPos.y}`);
                 size = this.moveItem.tile.getComponent(UITransform).contentSize;
@@ -1571,7 +1585,7 @@ export class MapEditor extends Component {
         }
     }
 
-    private resolveDeleteTarget(gridPos: Vec2): { tile: Node | null, tileType: string, belong?: string, decorKey?: string, doorPos?: Vec2, doorDir?: string, anchorPos?: Vec2 } | null {
+    private resolveDeleteTarget(gridPos: Vec2): { tile: Node | null, tileType: string, belong?: string, decorKey?: string, doorPos?: Vec2, doorDir?: string, anchorPos?: Vec2, mapItemKey?: string } | null {
         const key = `${gridPos.x},${gridPos.y}`;
         const houseCell = this.houseItems.get(key);
         if (houseCell?.belong) {
@@ -1604,33 +1618,37 @@ export class MapEditor extends Component {
 
         const mapItem = this.mapItems.get(key);
         if (mapItem) {
-            return { tile: mapItem.tile || null, tileType: mapItem.tileType, anchorPos: new Vec2(gridPos.x, gridPos.y) };
+            return { tile: mapItem.tile || null, tileType: mapItem.tileType, anchorPos: new Vec2(gridPos.x, gridPos.y), mapItemKey: key };
         }
 
-        // 大尺寸非房屋道具：支持点击占地区域任意格子命中删除（不仅限锚点格）
+        // 大尺寸非房屋道具：支持点击占地区域任意格子命中删除（不仅限锚点格）；同格多实例时取 Map 中最后一个
+        let lastFootHit: { itemKey: string; item: { id: string; tile: Node; tileType: string; gridAnchor?: string }; anchor: Vec2 } | null = null;
         for (const [itemKey, item] of this.mapItems.entries()) {
-            if (!item) {
+            if (!item?.tile) {
                 continue;
             }
-            const split = itemKey.split(',');
-            if (split.length !== 2) {
+            const anchorStr = this.getMapItemGridAnchorString(itemKey, item);
+            if (!anchorStr) {
                 continue;
             }
-            const anchorX = parseInt(split[0], 10);
-            const anchorY = parseInt(split[1], 10);
-            if (!Number.isFinite(anchorX) || !Number.isFinite(anchorY)) {
+            const anchor = this.parseAnchorStringToVec(anchorStr);
+            if (!anchor) {
                 continue;
             }
             const gridSize = this.getNodeGridSize(item.tile);
-            const inX = gridPos.x >= anchorX && gridPos.x <= anchorX + gridSize.x - 1;
-            const inY = gridPos.y <= anchorY && gridPos.y >= anchorY - (gridSize.y - 1);
+            const inX = gridPos.x >= anchor.x && gridPos.x <= anchor.x + gridSize.x - 1;
+            const inY = gridPos.y <= anchor.y && gridPos.y >= anchor.y - (gridSize.y - 1);
             if (!inX || !inY) {
                 continue;
             }
+            lastFootHit = { itemKey, item, anchor };
+        }
+        if (lastFootHit) {
             return {
-                tile: item.tile || null,
-                tileType: item.tileType,
-                anchorPos: new Vec2(anchorX, anchorY)
+                tile: lastFootHit.item.tile || null,
+                tileType: lastFootHit.item.tileType,
+                anchorPos: lastFootHit.anchor,
+                mapItemKey: lastFootHit.itemKey,
             };
         }
 
@@ -1867,16 +1885,20 @@ export class MapEditor extends Component {
                         }
                     }
                 } else if (!this.isWallDacorationTileType(this.moveItem.tileType)) {
-                    // 更新网格数据
-                    for (let x = 0; x < buildingSize.x; x++) {
-                        for (let y = 0; y < buildingSize.y; y++) {
-                            const gridX = gridPos.x + x;
-                            const gridY = gridPos.y - y;
-                            this.mapData[gridX][gridY] = 0;
+                    const anchorStart = this.moveItem.initGride;
+                    const delKey = this.moveItem.mapItemKey ?? `${anchorStart.x},${anchorStart.y}`;
+                    this.mapItems.delete(delKey);
+                    if (this.isOutdoorPlantFramTileType(this.moveItem.tileType)) {
+                        this.refreshOutdoorPlantFramFootprintMapData(anchorStart, buildingSize);
+                    } else {
+                        for (let x = 0; x < buildingSize.x; x++) {
+                            for (let y = 0; y < buildingSize.y; y++) {
+                                const gridX = anchorStart.x + x;
+                                const gridY = anchorStart.y - y;
+                                this.mapData[gridX][gridY] = 0;
+                            }
                         }
                     }
-
-                    this.mapItems.delete(`${gridPos.x},${gridPos.y}`);
                 }
 
                 this.moveStatus = 1;
@@ -1982,14 +2004,12 @@ export class MapEditor extends Component {
                     }
                 } else {
                     if (this.checkPlacementValidity(gridPos)) {
-                        // 移动
                         const size = this.moveItem.tile.getComponent(UITransform).contentSize;
                         const worldPos = MapModel.getInstance().gridToWorld(gridPos, size, this);
                         const ox = (this.moveItem as any).offsetX ?? 0;
                         const oy = (this.moveItem as any).offsetY ?? 0;
                         this.moveItem.tile.setPosition(worldPos.x + ox, worldPos.y + oy, worldPos.z);
 
-                        // 更新网格数据
                         for (let x = 0; x < buildingSize.x; x++) {
                             for (let y = 0; y < buildingSize.y; y++) {
                                 const gridX = gridPos.x + x;
@@ -1997,9 +2017,28 @@ export class MapEditor extends Component {
                                 this.mapData[gridX][gridY] = 2;
                             }
                         }
-                        this.mapItems.set(`${gridPos.x},${gridPos.y}`, this.moveItem);
+                        const flipX = this.moveItem.tile.getScale().x < 0 ? -1 : 1;
+                        const farmStack = this.farmOutdoorStackActive();
+                        const newKey =
+                            farmStack && this.isOutdoorPlantFramTileType(this.moveItem.tileType)
+                                ? this.makeOutdoorPlantFramMapItemKey(
+                                      gridPos,
+                                      this.moveItem.tileType === 'Fram' ? `Fram_move_${this.moveItem.id}` : `Plant_move_${this.moveItem.id}`
+                                  )
+                                : `${gridPos.x},${gridPos.y}`;
+                        const entry: { id: string; tile: Node; tileType: string; flipX: number; offsetX: number; offsetY: number; gridAnchor?: string } = {
+                            id: this.moveItem.id,
+                            tile: this.moveItem.tile,
+                            tileType: this.moveItem.tileType,
+                            flipX,
+                            offsetX: ox,
+                            offsetY: oy,
+                        };
+                        if (farmStack && this.isOutdoorPlantFramTileType(this.moveItem.tileType)) {
+                            entry.gridAnchor = `${gridPos.x},${gridPos.y}`;
+                        }
+                        this.mapItems.set(newKey, entry);
                     } else {
-                        // 移动
                         const size = this.moveItem.tile.getComponent(UITransform).contentSize;
                         const worldPos = MapModel.getInstance().gridToWorld(this.moveItem.initGride, size, this);
                         const ox = (this.moveItem as any).initOffsetX ?? 0;
@@ -2008,7 +2047,6 @@ export class MapEditor extends Component {
                         (this.moveItem as any).offsetY = oy;
                         this.moveItem.tile.setPosition(worldPos.x + ox, worldPos.y + oy, worldPos.z);
 
-                        // 更新网格数据
                         for (let x = 0; x < buildingSize.x; x++) {
                             for (let y = 0; y < buildingSize.y; y++) {
                                 const gridX = this.moveItem.initGride.x + x;
@@ -2016,7 +2054,20 @@ export class MapEditor extends Component {
                                 this.mapData[gridX][gridY] = 2;
                             }
                         }
-                        this.mapItems.set(`${this.moveItem.initGride.x},${this.moveItem.initGride.y}`, this.moveItem);
+                        const rollbackKey = this.moveItem.initMapItemKey ?? `${this.moveItem.initGride.x},${this.moveItem.initGride.y}`;
+                        const flipXR = this.moveItem.tile.getScale().x < 0 ? -1 : 1;
+                        const rollbackEntry: { id: string; tile: Node; tileType: string; flipX: number; offsetX: number; offsetY: number; gridAnchor?: string } = {
+                            id: this.moveItem.id,
+                            tile: this.moveItem.tile,
+                            tileType: this.moveItem.tileType,
+                            flipX: flipXR,
+                            offsetX: ox,
+                            offsetY: oy,
+                        };
+                        if (this.farmOutdoorStackActive() && this.isOutdoorPlantFramTileType(this.moveItem.tileType)) {
+                            rollbackEntry.gridAnchor = `${this.moveItem.initGride.x},${this.moveItem.initGride.y}`;
+                        }
+                        this.mapItems.set(rollbackKey, rollbackEntry);
                     }
                 }
 
@@ -2759,32 +2810,37 @@ export class MapEditor extends Component {
             MapManager.GetInstance().getMapEditorUI().checkButtonVisible(true);
             this.buildControl.detele.play('detele_action');
             return;
-        } else if (target?.anchorPos && this.mapItems.has(`${target.anchorPos.x},${target.anchorPos.y}`)) {
-            const anchorPos = target.anchorPos;
-            const anchorKey = `${anchorPos.x},${anchorPos.y}`;
-            const mapItem = this.mapItems.get(anchorKey);
-            if (mapItem.tileType == "Floor") {
-                for (let i = 0; i < this.buildFloorPoints.length; i++) {
-                    const element = this.buildFloorPoints[i];
-                    if (element.x == anchorPos.x && element.y == anchorPos.y) {
-                        this.buildFloorPoints.splice(i, 1);
-                        break;
+        } else if (target?.anchorPos) {
+            const storageKey = target.mapItemKey ?? `${target.anchorPos.x},${target.anchorPos.y}`;
+            if (this.mapItems.has(storageKey)) {
+                const anchorPos = target.anchorPos;
+                const mapItem = this.mapItems.get(storageKey);
+                if (mapItem.tileType == "Floor") {
+                    for (let i = 0; i < this.buildFloorPoints.length; i++) {
+                        const element = this.buildFloorPoints[i];
+                        if (element.x == anchorPos.x && element.y == anchorPos.y) {
+                            this.buildFloorPoints.splice(i, 1);
+                            break;
+                        }
                     }
                 }
-            }
 
-            const buildingSize = this.getNodeGridSize(mapItem.tile);
-            if (mapItem.tile) {
-                mapItem.tile.destroy();
-            }
-            this.mapItems.delete(anchorKey);
+                const buildingSize = this.getNodeGridSize(mapItem.tile);
+                if (mapItem.tile) {
+                    mapItem.tile.destroy();
+                }
+                this.mapItems.delete(storageKey);
 
-            // 更新网格数据
-            for (let x = 0; x < buildingSize.x; x++) {
-                for (let y = 0; y < buildingSize.y; y++) {
-                    const gridX = anchorPos.x + x;
-                    const gridY = anchorPos.y - y;
-                    this.mapData[gridX][gridY] = 0;
+                if (this.isOutdoorPlantFramTileType(mapItem.tileType)) {
+                    this.refreshOutdoorPlantFramFootprintMapData(anchorPos, buildingSize);
+                } else {
+                    for (let x = 0; x < buildingSize.x; x++) {
+                        for (let y = 0; y < buildingSize.y; y++) {
+                            const gridX = anchorPos.x + x;
+                            const gridY = anchorPos.y - y;
+                            this.mapData[gridX][gridY] = 0;
+                        }
+                    }
                 }
             }
         } else if (this.containsArray(this.buildFloorPoints, gridPos)) {
@@ -3283,6 +3339,27 @@ export class MapEditor extends Component {
             return false;
         }
 
+        const mgr = MapManager.GetInstance();
+        const outdoorPlantFramMove =
+            mgr.actionStatus === ActionStatus.MOVE &&
+            this.moveItem != null &&
+            this.isOutdoorPlantFramTileType(this.moveItem.tileType);
+        const outdoorPlantFramPlace =
+            mgr.actionStatus === ActionStatus.PLANT || mgr.actionStatus === ActionStatus.FRAM;
+        if (this.farmOutdoorStackActive() && (outdoorPlantFramPlace || outdoorPlantFramMove)) {
+            for (let x = 0; x < buildingSize.x; x++) {
+                for (let y = 0; y < buildingSize.y; y++) {
+                    const checkX1 = gridPos.x + x;
+                    const checkY1 = gridPos.y - y;
+                    const v = this.mapData[checkX1][checkY1];
+                    if (v !== 0 && v !== 2) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
         for (let x = 0; x < buildingSize.x; x++) {
             for (let y = 0; y < buildingSize.y; y++) {
                 const checkX1 = gridPos.x + x;
@@ -3476,34 +3553,51 @@ export class MapEditor extends Component {
         this.mapContainer.addChild(tile);
         // console.log(worldPos)
         // console.log(gridPos)
-        // 加入
-        if (!this.mapItems.has(`${gridPos.x},${gridPos.y}`)) {
+        // 加入（农场堆叠时 Plant/Fram 允许多实例同锚点，使用唯一 mapItems key）
+        const farmStack = this.farmOutdoorStackActive();
+        const allowDupPlantFramAnchor =
+            farmStack && (manager.actionStatus === ActionStatus.PLANT || manager.actionStatus === ActionStatus.FRAM);
+        if (allowDupPlantFramAnchor || !this.mapItems.has(`${gridPos.x},${gridPos.y}`)) {
             if (manager.actionStatus == ActionStatus.PLANT) {
                 const previewScaleX = this.curTileNode?.getScale()?.x ?? 1;
                 const flipX = previewScaleX < 0 ? -1 : 1;
                 const tileScale = tile.getScale();
                 tile.setScale(flipX, tileScale.y, tileScale.z);
-                this.mapItems.set(`${gridPos.x},${gridPos.y}`, {
+                const storageKey = farmStack
+                    ? this.makeOutdoorPlantFramMapItemKey(gridPos, `Plant_${this.curTileNode.name}`)
+                    : `${gridPos.x},${gridPos.y}`;
+                const plantEntry: { id: string; tile: Node; tileType: string; flipX: number; offsetX: number; offsetY: number; gridAnchor?: string } = {
                     id: this.curTileNode.name + "#" + this.curTileNode["tileType"],
                     tile: tile,
                     tileType: "Plant",
                     flipX,
                     offsetX: offset.x,
-                    offsetY: offset.y
-                });
+                    offsetY: offset.y,
+                };
+                if (farmStack) {
+                    plantEntry.gridAnchor = `${gridPos.x},${gridPos.y}`;
+                }
+                this.mapItems.set(storageKey, plantEntry);
             } else if (manager.actionStatus == ActionStatus.FRAM) {
                 const previewScaleX = this.curTileNode?.getScale()?.x ?? 1;
                 const flipX = previewScaleX < 0 ? -1 : 1;
                 const tileScale = tile.getScale();
                 tile.setScale(flipX, tileScale.y, tileScale.z);
-                this.mapItems.set(`${gridPos.x},${gridPos.y}`, {
+                const storageKey = farmStack
+                    ? this.makeOutdoorPlantFramMapItemKey(gridPos, `Fram_${this.curTileNode.name}`)
+                    : `${gridPos.x},${gridPos.y}`;
+                const framEntry: { id: string; tile: Node; tileType: string; flipX: number; offsetX: number; offsetY: number; gridAnchor?: string } = {
                     id: this.curTileNode.name + "#Fram",
                     tile: tile,
                     tileType: "Fram",
                     flipX,
                     offsetX: offset.x,
-                    offsetY: offset.y
-                });
+                    offsetY: offset.y,
+                };
+                if (farmStack) {
+                    framEntry.gridAnchor = `${gridPos.x},${gridPos.y}`;
+                }
+                this.mapItems.set(storageKey, framEntry);
             } else if (manager.actionStatus == ActionStatus.FLOOR) {
                 this.mapItems.set(`${gridPos.x},${gridPos.y}`, { id: tile.name, tile: tile, tileType: "Floor" });
                 this.buildFloorPoints.push(gridPos);
@@ -3838,6 +3932,117 @@ export class MapEditor extends Component {
     private buildDecorStackKey(gridPos: Vec2, tileName: string): string {
         this.decorStackSeed += 1;
         return `${gridPos.x},${gridPos.y}|${tileName}|${Date.now()}_${this.decorStackSeed}`;
+    }
+
+    /** 农场 + 开启堆叠：mapItems 用唯一 key；否则仍为 `x,y`（与旧存档一致） */
+    public makeOutdoorPlantFramMapItemKey(anchor: Vec2, uniqueToken: string): string {
+        if (this.mapGameType !== 0 || !this.enableDecorStackPlacement) {
+            return `${anchor.x},${anchor.y}`;
+        }
+        this.decorStackSeed += 1;
+        return `${anchor.x},${anchor.y}|${uniqueToken}|${Date.now()}_${this.decorStackSeed}`;
+    }
+
+    private farmOutdoorStackActive(): boolean {
+        return this.mapGameType === 0 && this.enableDecorStackPlacement;
+    }
+
+    private isOutdoorPlantFramTileType(tileType: string): boolean {
+        return tileType === 'Plant' || tileType === 'Fram';
+    }
+
+    /** mapItems key → 逻辑锚点 `x,y`（兼容 `x,y|...`） */
+    private getMapItemGridAnchorString(itemKey: string, item?: { gridAnchor?: string }): string | null {
+        const ga = item && (item as any).gridAnchor;
+        if (ga && typeof ga === 'string' && ga.includes(',')) {
+            return ga;
+        }
+        const head = itemKey.includes('|') ? itemKey.split('|')[0] : itemKey;
+        const parts = head.split(',');
+        if (parts.length < 2) {
+            return null;
+        }
+        const ax = parseInt(parts[0], 10);
+        const ay = parseInt(parts[1], 10);
+        if (!Number.isFinite(ax) || !Number.isFinite(ay)) {
+            return null;
+        }
+        return `${ax},${ay}`;
+    }
+
+    private parseAnchorStringToVec(anchorStr: string): Vec2 | null {
+        const parts = anchorStr.split(',');
+        const ax = parseInt(parts[0], 10);
+        const ay = parseInt(parts[1], 10);
+        if (!Number.isFinite(ax) || !Number.isFinite(ay)) {
+            return null;
+        }
+        return new Vec2(ax, ay);
+    }
+
+    private getMapItemAnchorVecForFootprint(itemKey: string, item: { gridAnchor?: string; tile: Node }): Vec2 | null {
+        const s = this.getMapItemGridAnchorString(itemKey, item);
+        return s ? this.parseAnchorStringToVec(s) : null;
+    }
+
+    private isGridInsideMapItemFootprint(gridPos: Vec2, anchor: Vec2, tile: Node): boolean {
+        const gridSize = this.getNodeGridSize(tile);
+        const inX = gridPos.x >= anchor.x && gridPos.x <= anchor.x + gridSize.x - 1;
+        const inY = gridPos.y <= anchor.y && gridPos.y >= anchor.y - (gridSize.y - 1);
+        return inX && inY;
+    }
+
+    private isOutdoorMapCellCoveredByPlantFram(gx: number, gy: number): boolean {
+        for (const [itemKey, item] of this.mapItems.entries()) {
+            if (!item?.tile || !this.isOutdoorPlantFramTileType(item.tileType)) {
+                continue;
+            }
+            const anchor = this.getMapItemAnchorVecForFootprint(itemKey, item);
+            if (!anchor) {
+                continue;
+            }
+            if (this.isGridInsideMapItemFootprint(new Vec2(gx, gy), anchor, item.tile)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** footprint 内原为外景占格(2)的格子：若无其它 Plant/Fram 覆盖则恢复为 0 */
+    private refreshOutdoorPlantFramFootprintMapData(anchor: Vec2, buildingSize: Vec2) {
+        for (let x = 0; x < buildingSize.x; x++) {
+            for (let y = 0; y < buildingSize.y; y++) {
+                const gx = anchor.x + x;
+                const gy = anchor.y - y;
+                if (gx < 0 || gx >= this.mapWidth || gy < 0 || gy >= this.mapHeight) {
+                    continue;
+                }
+                if (this.mapData[gx][gy] !== 2) {
+                    continue;
+                }
+                if (!this.isOutdoorMapCellCoveredByPlantFram(gx, gy)) {
+                    this.mapData[gx][gy] = 0;
+                }
+            }
+        }
+    }
+
+    /** 点击格命中的最上层外景 Plant/Fram（Map 遍历顺序中最后一个） */
+    private findTopOutdoorPlantFramMapHit(gridPos: Vec2): { key: string; item: { id: string; tile: Node; tileType: string; belong?: string; flipX?: number; offsetX?: number; offsetY?: number; gridAnchor?: string } } | null {
+        let last: { key: string; item: { id: string; tile: Node; tileType: string; belong?: string; flipX?: number; offsetX?: number; offsetY?: number; gridAnchor?: string } } | null = null;
+        for (const [itemKey, item] of this.mapItems.entries()) {
+            if (!item?.tile || !this.isOutdoorPlantFramTileType(item.tileType)) {
+                continue;
+            }
+            const anchor = this.getMapItemAnchorVecForFootprint(itemKey, item);
+            if (!anchor) {
+                continue;
+            }
+            if (this.isGridInsideMapItemFootprint(gridPos, anchor, item.tile)) {
+                last = { key: itemKey, item };
+            }
+        }
+        return last;
     }
 
     private getDecorPositionKey(rawKey: string, decor: { position?: string }): string {

@@ -6,6 +6,7 @@ import {PanelManager} from "db://assets/scripts/Manager/PanelManager";
 import { SDKManager } from '../Manager/SDKManager';
 import { GoogleAuthInitOptions, GoogleAuthManager } from '../Manager/GoogleAuthManager';
 import { MapModel } from '../Model/MapModel';
+import { postMessageToParent } from '../Utils/ParentPostMessage';
 const { ccclass, property } = _decorator;
 
 @ccclass('UIRoot')
@@ -49,7 +50,7 @@ export class UIRoot extends Component {
         director.addPersistRootNode(this.Root);
 
         AppConst.SDKManager.isEditMapingWeb = false
-        window.parent.postMessage({
+        postMessageToParent({
             channel: 'miniwo-map-editor',
             source: 'miniwo-cocos',
             type: 'COCOS_INIT_DONE',

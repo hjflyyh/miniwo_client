@@ -571,7 +571,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 501.602203125,
-      "height": 56.49999999999999
+      "height": 120.786
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -606,14 +606,14 @@
       "b": 0,
       "a": 255
     },
-    "_string": "NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容",
+    "_string": "NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容",
     "_horizontalAlign": 0,
     "_verticalAlign": 0,
     "_actualFontSize": 20,
     "_fontSize": 20,
     "_fontFamily": "Arial",
     "_lineHeight": 25,
-    "_overflow": 3,
+    "_overflow": 1,
     "_enableWrapText": true,
     "_font": null,
     "_isSystemFontUsed": true,

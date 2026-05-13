@@ -50,7 +50,7 @@
   },
   "108": {
     "name_cn": "种植土地",
-    "resource": "maps/farm/farm/tudiPrefab",
+    "resource": "maps/farm/farm/tudiPrefab1",
     "type": 15,
     "img_size": 1,
     "is_prefab": 1
@@ -59,6 +59,48 @@
     "name_cn": "围栏",
     "resource": "maps/farm/farm/weilan",
     "type": 15,
+    "img_size": 1,
+    "is_prefab": 0
+  },
+  "110": {
+    "name_cn": "种植土地",
+    "resource": "maps/farm/farm/tudiPrefab2",
+    "type": 15,
+    "img_size": 1,
+    "is_prefab": 1
+  },
+  "111": {
+    "name_cn": "种植土地",
+    "resource": "maps/farm/farm/tudiPrefab3",
+    "type": 15,
+    "img_size": 1,
+    "is_prefab": 1
+  },
+  "112": {
+    "name_cn": "种植土地",
+    "resource": "maps/farm/farm/tudiPrefab4",
+    "type": 15,
+    "img_size": 1,
+    "is_prefab": 1
+  },
+  "113": {
+    "name_cn": "商店",
+    "resource": "maps/architecture/shop",
+    "type": 0,
+    "img_size": 1,
+    "is_prefab": 0
+  },
+  "114": {
+    "name_cn": "甜品",
+    "resource": "maps/architecture/dessert",
+    "type": 0,
+    "img_size": 1,
+    "is_prefab": 0
+  },
+  "115": {
+    "name_cn": "服装",
+    "resource": "maps/architecture/clothing",
+    "type": 0,
     "img_size": 1,
     "is_prefab": 0
   }

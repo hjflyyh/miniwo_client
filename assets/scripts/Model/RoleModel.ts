@@ -218,8 +218,8 @@ export class RoleModel {
 
     private OnHttpMessage(data) {
         if (data.cmd == network.ServerHttpCommand.COMMON_LOGIN) {
-            console.log("-----------data:", data)
-
+            console.log("-----------data:")
+            console.log(data.nakama_token)
             this.isForceLogoutHandling = false;
             this.nakamaSessionId = "";
             this.token = data.token
@@ -239,7 +239,10 @@ export class RoleModel {
                 this.bio = userInfo?.bio
             }
 
-            AppConst.WebSocketManager.setConfig("ws://" + HttpManager.ipBase + ":7350/ws?token=" + data.nakama_token);
+            const nakamaToken = data.nakama_token != null ? String(data.nakama_token) : '';
+            const wsUrl = `ws://${HttpManager.wsIpBase}/ws?token=${encodeURIComponent(nakamaToken)}`;
+            console.log(wsUrl)
+            AppConst.WebSocketManager.setConfig(wsUrl);
             AppConst.WebSocketManager.connect();
         }
     }
