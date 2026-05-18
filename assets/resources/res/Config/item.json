@@ -75,6 +75,25 @@
     "prop_type": "0",
     "is_displayed_in_backpack": "1"
   },
+  "105": {
+    "name_cn": "AI",
+    "name_en": "AI",
+    "info_cn": "玩家使用AI功能的道具",
+    "info_en": "player_use_ai_function_item",
+    "rare": 0,
+    "type": 1,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "0",
+    "is_displayed_in_backpack": "1"
+  },
   "1000": {
     "name_cn": "",
     "name_en": "",
