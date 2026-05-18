@@ -15,7 +15,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "",
-    "prop_type": "0"
+    "prop_type": "0",
+    "is_displayed_in_backpack": "1"
   },
   "102": {
     "name_cn": "体力",
@@ -33,7 +34,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "",
-    "prop_type": "0"
+    "prop_type": "0",
+    "is_displayed_in_backpack": "1"
   },
   "103": {
     "name_cn": "好感度",
@@ -51,7 +53,27 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "",
-    "prop_type": "4"
+    "prop_type": "4",
+    "is_displayed_in_backpack": "1"
+  },
+  "104": {
+    "name_cn": "金币",
+    "name_en": "gold_coin",
+    "info_cn": "",
+    "info_en": "",
+    "rare": 0,
+    "type": 1,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "0",
+    "is_displayed_in_backpack": "1"
   },
   "1000": {
     "name_cn": "",
@@ -80,7 +102,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "",
-    "prop_type": ""
+    "prop_type": "",
+    "is_displayed_in_backpack": "0"
   },
   "100000": {
     "name_cn": "梦尘",
@@ -98,7 +121,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "",
-    "prop_type": "1"
+    "prop_type": "1",
+    "is_displayed_in_backpack": "0"
   },
   "100001": {
     "name_cn": "留影",
@@ -116,7 +140,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "",
-    "prop_type": "1"
+    "prop_type": "1",
+    "is_displayed_in_backpack": "0"
   },
   "100002": {
     "name_cn": "星语",
@@ -134,7 +159,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "",
-    "prop_type": "1"
+    "prop_type": "1",
+    "is_displayed_in_backpack": "0"
   },
   "100003": {
     "name_cn": "星魄",
@@ -152,7 +178,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "",
-    "prop_type": "1"
+    "prop_type": "1",
+    "is_displayed_in_backpack": "0"
   },
   "100004": {
     "name_cn": "对话卡",
@@ -170,7 +197,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "",
-    "prop_type": "1"
+    "prop_type": "1",
+    "is_displayed_in_backpack": "0"
   },
   "100005": {
     "name_cn": "补签卡",
@@ -188,7 +216,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "",
-    "prop_type": "1"
+    "prop_type": "1",
+    "is_displayed_in_backpack": "0"
   },
   "100006": {
     "name_cn": "万能碎片",
@@ -206,7 +235,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "",
-    "prop_type": "1"
+    "prop_type": "1",
+    "is_displayed_in_backpack": "0"
   },
   "100007": {
     "name_cn": "随机碎片",
@@ -224,7 +254,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "",
-    "prop_type": "1"
+    "prop_type": "1",
+    "is_displayed_in_backpack": "0"
   },
   "100008": {
     "name_cn": "礼物1",
@@ -242,7 +273,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "5",
-    "prop_type": "2"
+    "prop_type": "2",
+    "is_displayed_in_backpack": "0"
   },
   "100009": {
     "name_cn": "礼物2",
@@ -260,7 +292,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "10",
-    "prop_type": "2"
+    "prop_type": "2",
+    "is_displayed_in_backpack": "0"
   },
   "100010": {
     "name_cn": "礼物3",
@@ -278,7 +311,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "12",
-    "prop_type": "2"
+    "prop_type": "2",
+    "is_displayed_in_backpack": "0"
   },
   "100011": {
     "name_cn": "礼物4",
@@ -296,7 +330,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "20",
-    "prop_type": "2"
+    "prop_type": "2",
+    "is_displayed_in_backpack": "0"
   },
   "100012": {
     "name_cn": "礼物5",
@@ -314,7 +349,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "30",
-    "prop_type": "2"
+    "prop_type": "2",
+    "is_displayed_in_backpack": "0"
   },
   "100013": {
     "name_cn": "动物粮1",
@@ -332,7 +368,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "",
-    "prop_type": "1"
+    "prop_type": "1",
+    "is_displayed_in_backpack": "0"
   },
   "100014": {
     "name_cn": "动物粮2",
@@ -350,7 +387,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "",
-    "prop_type": "1"
+    "prop_type": "1",
+    "is_displayed_in_backpack": "0"
   },
   "100015": {
     "name_cn": "动物羽毛1",
@@ -368,7 +406,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "",
-    "prop_type": "1"
+    "prop_type": "1",
+    "is_displayed_in_backpack": "0"
   },
   "100016": {
     "name_cn": "动物羽毛2",
@@ -386,7 +425,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "",
-    "prop_type": "1"
+    "prop_type": "1",
+    "is_displayed_in_backpack": "0"
   },
   "100017": {
     "name_cn": "鲜花1",
@@ -404,7 +444,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "",
-    "prop_type": "1"
+    "prop_type": "1",
+    "is_displayed_in_backpack": "0"
   },
   "100018": {
     "name_cn": "鲜花2",
@@ -422,7 +463,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "",
-    "prop_type": "1"
+    "prop_type": "1",
+    "is_displayed_in_backpack": "0"
   },
   "100019": {
     "name_cn": "交互道具1",
@@ -440,7 +482,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "",
-    "prop_type": "1"
+    "prop_type": "1",
+    "is_displayed_in_backpack": "0"
   },
   "100020": {
     "name_cn": "交互道具2",
@@ -458,7 +501,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "",
-    "prop_type": "1"
+    "prop_type": "1",
+    "is_displayed_in_backpack": "0"
   },
   "100021": {
     "name_cn": "交互道具3",
@@ -476,7 +520,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "",
-    "prop_type": "1"
+    "prop_type": "1",
+    "is_displayed_in_backpack": "0"
   },
   "100022": {
     "name_cn": "VIP体验卡（1日）",
@@ -494,7 +539,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "",
-    "prop_type": "1"
+    "prop_type": "1",
+    "is_displayed_in_backpack": "0"
   },
   "100023": {
     "name_cn": "调色瓶",
@@ -512,7 +558,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "",
-    "prop_type": "1"
+    "prop_type": "1",
+    "is_displayed_in_backpack": "0"
   },
   "100024": {
     "name_cn": "纸飞机",
@@ -530,7 +577,8 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "",
-    "prop_type": "1"
+    "prop_type": "1",
+    "is_displayed_in_backpack": "0"
   },
   "100025": {
     "name_cn": "积分",
@@ -548,6 +596,501 @@
     "map_img": "",
     "map_spine": "",
     "favorability": "",
-    "prop_type": "3"
+    "prop_type": "3",
+    "is_displayed_in_backpack": "1"
+  },
+  "100026": {
+    "name_cn": "玉米种子",
+    "name_en": "corn_seed",
+    "info_cn": "适宜田地播种，成熟可收获饱满玉米",
+    "info_en": "Plant in fields, harvest plump corn",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "1",
+    "is_displayed_in_backpack": "1"
+  },
+  "100027": {
+    "name_cn": "水稻种子",
+    "name_en": "rice_seed",
+    "info_cn": "水田专属种苗，培育产出优质稻谷",
+    "info_en": "Paddy seeds, grow fine rice",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "1",
+    "is_displayed_in_backpack": "1"
+  },
+  "100028": {
+    "name_cn": "小麦种子",
+    "name_en": "wheat_seed",
+    "info_cn": "旱地易栽种，成熟收割可得小麦",
+    "info_en": "Grow on dry land, reap wheat",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "1",
+    "is_displayed_in_backpack": "1"
+  },
+  "100029": {
+    "name_cn": "红薯种子",
+    "name_en": "sweet_potato_seed",
+    "info_cn": "埋土即可生长，结出香甜红薯",
+    "info_en": "Bury in soil, get sweet potatoes",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "1",
+    "is_displayed_in_backpack": "1"
+  },
+  "100030": {
+    "name_cn": "土豆种子",
+    "name_en": "potato_seed",
+    "info_cn": "土里扎根生长，结出圆润土豆",
+    "info_en": "Root deep down, yield potatoes",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "1",
+    "is_displayed_in_backpack": "1"
+  },
+  "100031": {
+    "name_cn": "高粱种子",
+    "name_en": "sorghum_seed",
+    "info_cn": "耐贫瘠易活，成熟收获红高粱",
+    "info_en": "Tough to grow, harvest red sorghum",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "1",
+    "is_displayed_in_backpack": "1"
+  },
+  "100032": {
+    "name_cn": "青菜种子",
+    "name_en": "green_vegetable_seed",
+    "info_cn": "速成蔬菜种，快速长成鲜嫩青菜",
+    "info_en": "Fast seeds, grow fresh greens",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "1",
+    "is_displayed_in_backpack": "1"
+  },
+  "100033": {
+    "name_cn": "向日葵种子",
+    "name_en": "sunflower_seed",
+    "info_cn": "向阳生长，成熟结满葵花籽",
+    "info_en": "Sun-loving, gain sunflower seeds",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "1",
+    "is_displayed_in_backpack": "1"
+  },
+  "100034": {
+    "name_cn": "油菜种子",
+    "name_en": "rapeseed",
+    "info_cn": "田间易种植，可收获油料作物",
+    "info_en": "Field-grown, obtain oil crops",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "1",
+    "is_displayed_in_backpack": "1"
+  },
+  "100035": {
+    "name_cn": "白菜种子",
+    "name_en": "chinese_cabbage_seed",
+    "info_cn": "家常蔬菜种，长势旺盛好培育",
+    "info_en": "Easy-grow daily veggies",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "1",
+    "is_displayed_in_backpack": "1"
+  },
+  "100036": {
+    "name_cn": "紫甘蓝种子",
+    "name_en": "purple_cabbage_seed",
+    "info_cn": "特色菜种，长成紧实紫甘蓝",
+    "info_en": "Special seeds, grow purple cabbage",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "1",
+    "is_displayed_in_backpack": "1"
+  },
+  "100037": {
+    "name_cn": "玫瑰花种子",
+    "name_en": "rose_seed",
+    "info_cn": "悉心培育，绽放娇艳玫瑰花",
+    "info_en": "Care for gorgeous roses",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "1",
+    "is_displayed_in_backpack": "1"
+  },
+  "100038": {
+    "name_cn": "兰花种子",
+    "name_en": "orchid_seed",
+    "info_cn": "雅致花种，精心养护开出幽兰",
+    "info_en": "Tend well, bloom orchids",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "1",
+    "is_displayed_in_backpack": "1"
+  },
+  "100039": {
+    "name_cn": "玉米作物",
+    "name_en": "corn_crop",
+    "info_cn": "成熟农作物，可采摘获取食材",
+    "info_en": "Ripe crops for ingredients",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "1",
+    "is_displayed_in_backpack": "1"
+  },
+  "100040": {
+    "name_cn": "水稻作物",
+    "name_en": "rice_crop",
+    "info_cn": "水田成熟作物，采收得到稻谷",
+    "info_en": "Paddy crops yield rice",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "1",
+    "is_displayed_in_backpack": "1"
+  },
+  "100041": {
+    "name_cn": "小麦作物",
+    "name_en": "wheat_crop",
+    "info_cn": "成熟良田作物，收割取用麦粒",
+    "info_en": "Farm crops get wheat",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "1",
+    "is_displayed_in_backpack": "1"
+  },
+  "100042": {
+    "name_cn": "红薯作物",
+    "name_en": "sweet_potato_crop",
+    "info_cn": "成熟藤蔓作物，挖出香甜红薯",
+    "info_en": "Vines bear sweet potatoes",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "1",
+    "is_displayed_in_backpack": "1"
+  },
+  "100043": {
+    "name_cn": "土豆作物",
+    "name_en": "potato_crop",
+    "info_cn": "成熟土生作物，采收新鲜土豆",
+    "info_en": "Soil crops produce potatoes",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "1",
+    "is_displayed_in_backpack": "1"
+  },
+  "100044": {
+    "name_cn": "高粱作物",
+    "name_en": "sorghum_crop",
+    "info_cn": "成熟高大作物，可收获高粱粒",
+    "info_en": "Tall plants gain sorghum",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "1",
+    "is_displayed_in_backpack": "1"
+  },
+  "100045": {
+    "name_cn": "青菜作物",
+    "name_en": "green_vegetable_crop",
+    "info_cn": "成熟鲜嫩蔬菜，采摘即可食用",
+    "info_en": "Fresh veggies ready to pick",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "1",
+    "is_displayed_in_backpack": "1"
+  },
+  "100046": {
+    "name_cn": "向日葵作物",
+    "name_en": "sunflower_crop",
+    "info_cn": "成熟向阳植株，收获葵花籽",
+    "info_en": "Sun plants bear sunflower seeds",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "1",
+    "is_displayed_in_backpack": "1"
+  },
+  "100047": {
+    "name_cn": "油菜作物",
+    "name_en": "rape_crop",
+    "info_cn": "成熟油料作物，可提炼实用油料",
+    "info_en": "Oil crops make edible oil",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "1",
+    "is_displayed_in_backpack": "1"
+  },
+  "100048": {
+    "name_cn": "白菜作物",
+    "name_en": "chinese_cabbage_crop",
+    "info_cn": "成熟家常蔬菜，清甜口感俱佳",
+    "info_en": "Daily veggies taste sweet",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "1",
+    "is_displayed_in_backpack": "1"
+  },
+  "100049": {
+    "name_cn": "紫甘蓝作物",
+    "name_en": "purple_cabbage_crop",
+    "info_cn": "成熟特色蔬菜，营养十分丰富",
+    "info_en": "Specialty veggies full of nutrition",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "1",
+    "is_displayed_in_backpack": "1"
+  },
+  "100050": {
+    "name_cn": "玫瑰花作物",
+    "name_en": "rose_crop",
+    "info_cn": "盛放花卉植株，颜值格外出众",
+    "info_en": "Beautiful blooming flowers",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "1",
+    "is_displayed_in_backpack": "1"
+  },
+  "100051": {
+    "name_cn": "兰花作物",
+    "name_en": "orchid_crop",
+    "info_cn": "成熟清雅植株，自带淡淡花香",
+    "info_en": "Elegant plants with soft fragrance",
+    "rare": 0,
+    "type": 4,
+    "box_map1": [],
+    "box_map2": "",
+    "box_map3": "",
+    "box_map4": "",
+    "reward": "",
+    "icon": "",
+    "map_img": "",
+    "map_spine": "",
+    "favorability": "",
+    "prop_type": "1",
+    "is_displayed_in_backpack": "1"
   }
 }
