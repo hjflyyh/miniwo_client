@@ -12,15 +12,14 @@ import { GameViewNpcCell } from './GameViewNpcCell';
 import { EditBoxFixedWidthAutoHeight } from '../../Utils/EditBoxFixedWidthAutoHeight';
 import { YXMasonryFlowLayout } from 'db://assets/plugin/list-3x/yx-masonry-flow-layout';
 import { GameMapChatScroll } from './GameMapChatScroll';
+import { MapEditorUI } from 'db://assets/bundles/mapEditor/src/MapEditorUI';
+import { MapManager } from 'db://assets/bundles/mapEditor/src/MapManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameView')
 export class GameView extends Component {
     @property(EditBox)
     editBox: EditBox = null!;
-
-    @property(EditBoxFixedWidthAutoHeight)
-    editBoxFixedWidthAutoHeight: EditBoxFixedWidthAutoHeight = null!;
 
     @property(Label)
     mapName: Label = null!;
@@ -34,9 +33,6 @@ export class GameView extends Component {
     atNpc: Node = null
 
     @property(Node)
-    chatNpc: Node = null
-
-    @property(Node)
     atNpcLayout: Node = null
 
     @property(Node)
@@ -45,11 +41,7 @@ export class GameView extends Component {
     @property(Node)
     atNpcCell: Node = null
 
-    @property(Node)
-    chatNpcCell: Node = null
-
     private atNpcCells = []
-    private chatNpcCells = []
 
     private atNpcData = null
 
@@ -69,20 +61,34 @@ export class GameView extends Component {
 
     private editBoxBaseY = 0
 
+    @property(Node)
+    UI: Node = null
+
+    @property(Node)
+    showUI: Node = null
+
+    @property(Node)
+    showUIArrow: Node = null
+
+    @property(Node)
+    showChatUI: Node = null
+
+    @property(Node)
+    showChatArrow: Node = null
+
+    @property(Node)
+    buildContent: Node = null
+
     start() {
         this.atNpc.active = false
-        this.chatNpc.active = false
 
         this.atNpcCell.active = false
-        this.chatNpcCell.active = false
 
-
-        this.editBoxFixedWidthAutoHeight.showText.string = ""
         this.editBoxBaseY = this.editBox.node.position.y
 
         MapChatManager.instance.initMap();
 
-        this.mapName.string = MapModel.getInstance().showMatchPayLoad["map_name"]
+        this.mapName.string = RoleModel.getInstance().nickName
 
         this.scheduleOnce(()=>{
             this.receivedData()
@@ -90,9 +96,62 @@ export class GameView extends Component {
 
         EventSystem.addListent("EventRefreshChat", this.receivedData , this)
         EventSystem.addListent("WebSocketMessage" , this.OnWebSocketMessage , this)
+        EventSystem.addListent("CloseMapEditor" , this.CloseMapEditor , this)
 
         this.onEditEnd()
         
+        this.showUI.active = true
+        this.showChatUI.active = true
+
+        this.refreshBuildContentVisibility();
+    }
+
+    private refreshBuildContentVisibility() {
+        if (!this.buildContent) {
+            return;
+        }
+        this.buildContent.active = this.isCurrentMapOwnedBySelf();
+    }
+
+    private isCurrentMapOwnedBySelf(): boolean {
+        const detail = MapModel.getInstance().map_detail;
+        const payload = MapModel.getInstance().showMatchPayLoad;
+
+        // 优先 map_detail，其次 join_map 顶层 payload（若后端放在这里）
+        const ownerId =
+            detail?.player_id ??
+            detail?.playerId ??
+            payload?.player_id;
+
+        if (ownerId == null || ownerId === '') {
+            return false;
+        }
+
+        return String(ownerId) === String(RoleModel.getInstance().playerId);
+    }    
+
+    public CloseMapEditor() {
+        this.node.active = true
+    }
+
+    public onClickBuild(){
+        if(!this.isCurrentMapOwnedBySelf()){
+            AppConst.PanelManager.openView("res/View/TipsView" , {content : "只能编辑自己的地图哦~"})
+            return
+        }
+        this.node.active = false
+        EventSystem.send("OpenMapEditor")
+        MapManager.GetInstance()?.getMapEditor()?.focusCameraForBuildEntry()
+    }
+
+    public onClickShowUI(){ 
+        this.showUI.active = !this.showUI.active
+        this.showUIArrow.setScale(1 , this.showUI.active ? 1 : -1 , 1)
+    }
+
+    public onClickShowChatUI(){ 
+        this.showChatUI.active = !this.showChatUI.active
+        this.showChatArrow.setScale(1 , this.showChatUI.active ? 1 : -1 , 1)
     }
 
     public OnWebSocketMessage(data){
@@ -117,10 +176,11 @@ export class GameView extends Component {
         if(this.editBox.string != ""){
             MapChatManager.instance.sendMapChat(this.editBox.string)
             this.editBox.string = ""
-            if(this.editBoxFixedWidthAutoHeight.showText != null){
-                this.editBoxFixedWidthAutoHeight.showText.string = ""
-            }
         }
+    }
+
+    public onClickBag(){
+        AppConst.PanelManager.openView("res/View/Bag/BagList" , null , null , null , this.UI)
     }
 
     public onClickNpcAt(){
@@ -139,25 +199,8 @@ export class GameView extends Component {
         }
     }
 
-    public onClickChatNpc(){
-        this.chatNpc.active = true
-        if(this.chatNpcCells.length <= 0){
-            for(let npcId in MapModel.getInstance().mapNpcs){
-                let npcData = MapModel.getInstance().mapNpcs[npcId]
-                let cell = instantiate(this.chatNpcCell)
-                let gameNpcCell : GameViewNpcCell = cell.getComponent("GameViewNpcCell") as GameViewNpcCell
-                gameNpcCell.refreshData(npcData)
-                cell.parent = this.chatNpcLayout
-                
-                cell.active = true
-                this.chatNpcCells.push({id: npcId, node: cell})
-            }
-        }
-    }
-
     public onClickCloseNpcAt(){
         this.atNpc.active = false
-        this.chatNpc.active = false
     }
 
     public onClickNpc(a , b){
@@ -165,21 +208,9 @@ export class GameView extends Component {
         
         console.log("点击了NPC", npcCell["npcData"])
         this.atNpcData = npcCell["npcData"]
-        this.editBox.string = this.editBox.string + `  @${this.atNpcData.name}  `
-        if(this.editBoxFixedWidthAutoHeight.showText != null){
-            this.editBoxFixedWidthAutoHeight.showText.string = this.editBox.string
-        }
         this.atNpc.active = false
-    }
 
-    //右边的聊天头像
-    public onClickChatHeadNpc(a){
-        this.chatNpc.active = false
-
-        let npcCell = a.target.getComponent("GameViewNpcCell") as GameViewNpcCell
-
-        console.log("点击了NPC", npcCell["npcData"])
-        AppConst.PanelManager.openView("res/View/Chat/ChatView", { chatType: 2, npcId: npcCell["npcData"].id })
+        this.editBox.string = `  @${this.atNpcData.name}  `
     }
 
     public onClickCloseScene(){
@@ -189,22 +220,20 @@ export class GameView extends Component {
     }
 
     public onEditEnd(){
-        const showText = this.editBoxFixedWidthAutoHeight?.showText
-        if (!showText) return
 
-        const labelUt = showText.node.getComponent(UITransform)
-        if (!labelUt) return
+        // const labelUt = showText.node.getComponent(UITransform)
+        // if (!labelUt) return
 
-        showText.string = this.editBox.string || ''
-        showText.updateRenderData(true)
+        // showText.string = this.editBox.string || ''
+        // showText.updateRenderData(true)
 
-        const lineHeight = Math.max(1, showText.lineHeight || 0)
-        const contentH = Math.max(1, labelUt.contentSize.height)
-        const lineCount = Math.max(1, Math.ceil(contentH / lineHeight))
+        // const lineHeight = Math.max(1, showText.lineHeight || 0)
+        // const contentH = Math.max(1, labelUt.contentSize.height)
+        // const lineCount = Math.max(1, Math.ceil(contentH / lineHeight))
 
-        const offsetY = (lineCount - 1) * this.editBoxLineOffsetY
-        const pos = this.editBox.node.position
-        this.editBox.node.setPosition(pos.x, this.editBoxBaseY + offsetY - 15, pos.z)
+        // const offsetY = (lineCount - 1) * this.editBoxLineOffsetY
+        // const pos = this.editBox.node.position
+        // this.editBox.node.setPosition(pos.x, this.editBoxBaseY + offsetY - 15, pos.z)
     }
     
     receivedData() {

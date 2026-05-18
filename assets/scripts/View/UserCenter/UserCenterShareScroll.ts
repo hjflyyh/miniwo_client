@@ -11,16 +11,27 @@ export class UserCenterShareScroll extends Component implements IFDataSource {
     cellPrefab: Prefab
 
     infiniteList: InfiniteList
+
+    isInit: boolean = false
     start() {
 
         this.scheduleOnce(() => {
             this.infiniteList = this.getComponent("InfiniteList") as InfiniteList
             this.infiniteList.Init(this)
+            this.isInit = true
         }, 0.1)
 
+        EventSystem.addListent("SocialPostData", this.Refresh, this)
         //刷新，需要在init之后
         // this.infiniteList.Reload(true)
     }
+
+    Refresh(){
+        if(this.isInit){
+            this.infiniteList.Reload(true)
+        }
+    }
+
     GetCellNumber(): number {
         return Math.ceil(SocialModel.getInstance().postList.length / 2)
     }

@@ -32,6 +32,9 @@ export class SelectionComponent extends Component {
             if(selectionItem.changeIndex >= 0){
                 for(let i = 0 ; i < this.iceIndexs.length ; i++){
                     if(this.iceIndexs[i] == selectionItem.changeIndex){
+                        if(this.changeCallBack != null && this.changeCallBackTarget != null){
+                            null != this.changeCallBack && this.changeCallBack.apply(this.changeCallBackTarget , this)
+                        }
                         return
                     }
                 }
@@ -42,11 +45,9 @@ export class SelectionComponent extends Component {
                 }
                 this.changeIndex = selectionItem.changeIndex
 
-                if(isCallBack){
                     if(this.changeCallBack != null && this.changeCallBackTarget != null){
                         null != this.changeCallBack && this.changeCallBack.apply(this.changeCallBackTarget , this)
                     }
-                }
                 this.onChangeIndex();
             }else{
                 log("子组件index错误")

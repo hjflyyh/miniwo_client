@@ -14,6 +14,7 @@ import { network } from '../../../scripts/Model/RequestData';
 import { FARM_MAP_GRID_HEIGHT, FARM_MAP_GRID_WIDTH } from './farm/FarmMapConstants';
 import { FarmMapEditorModule, setMapBgGrassSpriteVisible } from './farm/FarmMapEditorModule';
 import { postMessageToParent } from '../../../scripts/Utils/ParentPostMessage';
+import { GenericSpritesheetAnimator } from 'db://assets/scripts/Utils/GenericSpritesheetAnimator';
 
 const { ccclass, property } = _decorator;
 
@@ -153,6 +154,45 @@ export class MapEditor extends Component {
     private readonly houseInsetLeft = 1;
     private readonly houseInsetRight = 1;
     private lastSelectionFailReason: '' | 'size' | 'placement' = '';
+
+        @property(GenericSpritesheetAnimator)
+        public animator: GenericSpritesheetAnimator;
+
+    /**
+     * mapFloor.json：is_auto_build 为 1 时，框选用地 raw 不外缩、不自动生成外墙，且不要求 8×10 / 12 格起铺。
+     * 0 或未配置：保持原「内缩 + 自动造房外墙」逻辑。
+     */
+    private isMapFloorSkipAutoHouseWallsByCfgId(cfgId: unknown): boolean {
+        if (cfgId === undefined || cfgId === null || cfgId === '') {
+            return false;
+        }
+        const cfg = AppConst.JSONManager.getItem('mapFloor', String(cfgId));
+        return cfg != null && Number(cfg['is_auto_build']) === 1;
+    }
+
+    /** 当前选中的地板 cfg（curTileNode.name） */
+    private isCurMapFloorSkipAutoHouseWalls(): boolean {
+        return this.isMapFloorSkipAutoHouseWallsByCfgId(this.curTileNode?.name);
+    }
+
+    /** 自动造房：内缩 rect；is_auto_build=1：raw，不做 houseInset 补全 */
+    private getFloorDragBuildRect(): { minX: number; maxX: number; minY: number; maxY: number } | null {
+        if (this.isCurMapFloorSkipAutoHouseWalls()) {
+            return this.getRawDragRect();
+        }
+        return this.getInsetBuildRect();
+    }
+
+    /** 某一组待成房地板是否来自 is_auto_build=1 */
+    private isHouseFloorGroupSkipAutoWalls(house: number[][]): boolean {
+        if (!house || house.length === 0) {
+            return false;
+        }
+        const pt = house[0];
+        const cell = this.houseItems.get(`${pt[0]},${pt[1]}`);
+        const cfgId = cell?.tile != null ? (cell.tile as any)['cfgId'] : undefined;
+        return this.isMapFloorSkipAutoHouseWallsByCfgId(cfgId);
+    }
 
     private NEIGHBOURS: Vec2[] = [
         new Vec2(0, 0),
@@ -331,13 +371,16 @@ export class MapEditor extends Component {
 
         EventSystem.addListent("OnClickTileOhterIcon" , this.OnClickTileOhterIcon , this)
         EventSystem.addListent("OnClickFloorIcon" , this.OnClickFloorIcon , this)
-
     
         const matchId = MapModel.getInstance().match_id;
         if (matchId) {
             let MatchJoinEequest = new network.MatchJoinEequest();
             AppConst.WebSocketManager.send(MatchJoinEequest.toJSON(matchId))
         }
+
+        // if (this.animator) {
+        //     this.animator.loadAndPlay('res/NPCImage/zuozhu/walking-down', 'walking-down');
+        // }
     }
 
     protected onDestroy(): void {
@@ -1711,6 +1754,10 @@ export class MapEditor extends Component {
             }
 
             const target = this.resolveDeleteTarget(gridPos);
+            if (target?.tileType === "House" && !this.canDemolishHouse()) {
+                this.deteleItem = null;
+                return;
+            }
             this.deteleItem = target;
 
             let size = new Size(this.tileSize, this.tileSize);
@@ -2346,12 +2393,18 @@ export class MapEditor extends Component {
     }
 
     autoGraphicsWall(){
-        const rect = this.getInsetBuildRect();
+        const rect = this.getFloorDragBuildRect();
         if (!rect) {
             this.lastSelectionFailReason = 'size';
             return false;
         }
-        if (!this.isHouseRectSizeValid(rect.minX, rect.maxX, rect.minY, rect.maxY)) {
+        const skipAuto = this.isCurMapFloorSkipAutoHouseWalls();
+        if (skipAuto) {
+            if (rect.minX > rect.maxX || rect.minY > rect.maxY) {
+                this.lastSelectionFailReason = 'size';
+                return false;
+            }
+        } else if (!this.isHouseRectSizeValid(rect.minX, rect.maxX, rect.minY, rect.maxY)) {
             this.lastSelectionFailReason = 'size';
             return false;
         }
@@ -2790,6 +2843,11 @@ export class MapEditor extends Component {
         }
         const target = this.deteleItem || this.resolveDeleteTarget(gridPos);
         if (target?.tileType === "House" && target?.belong) {
+            if (!this.canDemolishHouse()) {
+                AppConst.PanelManager.openView("res/View/TipsView", { content: "当前地图不能拆除房屋" });
+                this.deteleItem = null;
+                return;
+            }
             this.removeWholeHouse(target.belong);
             this.deteleItem = null;
             this.setTileMaskSp();
@@ -3676,6 +3734,8 @@ export class MapEditor extends Component {
 
         this.buildIcon.addChild(this.curTileNode);
 
+        // 与手机端 onTouchStart(FLOOR) 一致：选中地块后即可在地图上按下拖拽画框，不必先点中小预览 mask
+        this.isBuildSwitch = true;
         this.setTileSclect()
     }
 
@@ -4260,11 +4320,16 @@ export class MapEditor extends Component {
             return
         }
 
-        const rect = this.getInsetBuildRect();
+        const skipAuto = this.isCurMapFloorSkipAutoHouseWalls();
+        const rect = this.getFloorDragBuildRect();
         if (!rect) {
             return;
         }
-        if (!this.isHouseRectSizeValid(rect.minX, rect.maxX, rect.minY, rect.maxY)) {
+        if (skipAuto) {
+            if (rect.minX > rect.maxX || rect.minY > rect.maxY) {
+                return;
+            }
+        } else if (!this.isHouseRectSizeValid(rect.minX, rect.maxX, rect.minY, rect.maxY)) {
             this.showHouseSizeTips();
             return;
         }
@@ -4275,13 +4340,14 @@ export class MapEditor extends Component {
         const dragPoints: Vec2[] = path.map((p) => new Vec2(p.x , p.y))
         const candidates = RectangleHouseBuilder.collectBuildableRectangles({
             floorPoints: dragPoints,
-            minWidth: this.houseMinWidth,
-            minHeight: this.houseMinHeight,
+            minWidth: skipAuto ? 1 : this.houseMinWidth,
+            minHeight: skipAuto ? 1 : this.houseMinHeight,
             passExtraCheck: (cell) => this.checkPlacementValidity(cell)
         })
 
         if(candidates.length == 0) return;
-        if(path.length >= 12){
+        const minCellsToPaint = skipAuto ? 1 : 12;
+        if(path.length >= minCellsToPaint){
             path.forEach((point, index) => {
                 let gridPos = new Vec2(point.x , point.y)
                 this.autoBuildWall(gridPos , false)
@@ -4349,19 +4415,87 @@ export class MapEditor extends Component {
                 if (py < minY) minY = py;
                 if (py > maxY) maxY = py;
             }
-            if (!this.isHouseRectSizeValid(minX, maxX, minY, maxY)) {
-                this.showHouseSizeTips();
+            const skipAutoHouseWalls = this.isHouseFloorGroupSkipAutoWalls(house);
+            if (!skipAutoHouseWalls) {
+                if (!this.isHouseRectSizeValid(minX, maxX, minY, maxY)) {
+                    this.showHouseSizeTips();
+                    continue;
+                }
+            } else if (minX > maxX || minY > maxY) {
                 continue;
             }
 
-            if (MapModel.getInstance().isContinuousRectangle(house , this)) {
+            if (!MapModel.getInstance().isContinuousRectangle(house , this)) {
+                continue;
+            }
 
-                for (let i = 0; i < house.length; i++) {
-                    const child = house[i];
-                    if (this.checkCloseHouse(v2(child[0], child[1])) == false) {
+            if (skipAutoHouseWalls) {
+                const posVecOnly: Vec2[] = [];
+                const houseItemsOnly: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, dir: string }> = new Map();
+                let cfgIdOnly: string | number = '';
+                let missing = false;
+                house.forEach((pt) => {
+                    const item = this.houseItems.get(`${pt[0]},${pt[1]}`);
+                    if (!item || !item.tile) {
+                        missing = true;
                         return;
                     }
+                    item.belong = `house_${this._houseIndex}`;
+                    let size = new Size(this.tileSize, this.tileSize);
+                    size = item.tile.getComponent(UITransform).contentSize;
+                    cfgIdOnly = (item.tile as any)['cfgId'];
+                    houseItemsOnly.set(`${pt[0]},${pt[1]}`, {
+                        tile: item.tile,
+                        tileType: 'Floor',
+                        belong: `house_${this._houseIndex}`,
+                        width: size.width,
+                        height: size.height,
+                        dir: '',
+                    });
+                    posVecOnly.push(new Vec2(pt[0], pt[1]));
+                });
+                if (missing || cfgIdOnly === '' || cfgIdOnly === null || cfgIdOnly === undefined) {
+                    continue;
                 }
+                const gridCellsOnly = this.buildSurround(posVecOnly, []);
+                const houseNameOnly = `house_${this._houseIndex}`;
+                this.allHouse.set(houseNameOnly, {
+                    grid: posVecOnly,
+                    base: houseItemsOnly,
+                    decor: new Map(),
+                    npc: null,
+                    cfgId: parseInt(String(cfgIdOnly), 10),
+                    floorTileId: String(cfgIdOnly),
+                    floorRenderNode: null,
+                    floorPatchRenderNodes: [],
+                    horWalls: new Map(),
+                    verWalls: new Map(),
+                    surround: gridCellsOnly,
+                    outWall: [],
+                    inWall: [],
+                    openWall: [],
+                });
+                this.refreshHouseFloorRenderNode(houseNameOnly);
+                this._houseIndex++;
+                hasBuiltHouse = true;
+                house.forEach((pt) => {
+                    for (let j = 0; j < this.buildFloorPoints.length; j++) {
+                        const st = this.buildFloorPoints[j];
+                        if (st.x == pt[0] && st.y == pt[1]) {
+                            this.buildFloorPoints.splice(j, 1);
+                            break;
+                        }
+                    }
+                });
+                continue;
+            }
+
+            for (let i = 0; i < house.length; i++) {
+                const child = house[i];
+                if (this.checkCloseHouse(v2(child[0], child[1])) == false) {
+                    return;
+                }
+            }
 
                 let makeWalls: { pos: Vec2; _node: Node; dir?: string }[] = [];
 
@@ -4582,7 +4716,6 @@ export class MapEditor extends Component {
                         }
                     }
                 })
-            }
         }
 
         // 测试态下画完房子后，立即刷新可行走调试层（蓝绿块）
@@ -4860,6 +4993,69 @@ export class MapEditor extends Component {
             this.targetPos.y = Math.max(this.minYCamera , Math.min(this.maxYCamera , this.targetPos.y))
             this.mainCamera.node.setPosition(this.targetPos)
         }
+    }
+
+    private applyCameraOrthoSize(orthoSize: number): void {
+        this.currentOrthoSize = Math.max(this.minOrthoSize, Math.min(this.maxOrthoSize, orthoSize));
+        this.updateSizeLabel();
+        if (this.targetPos) {
+            this.targetPos.x = Math.max(this.minXCamera, Math.min(this.maxXCamera, this.targetPos.x));
+            this.targetPos.y = Math.max(this.minYCamera, Math.min(this.maxYCamera, this.targetPos.y));
+            this.mainCamera.node.setPosition(this.targetPos);
+        }
+    }
+
+    /** 将相机拉到最远（一屏看到最多地图） */
+    public setCameraToMaxView(): void {
+        this.applyCameraOrthoSize(this.maxOrthoSize);
+    }
+
+    /** 将相机拉到最近（放大细节，视野最窄） */
+    public setCameraToMinView(): void {
+        this.applyCameraOrthoSize(this.minOrthoSize);
+    }
+
+    /** 建造入口：先拉最远视野，再平移到地图中第一栋房子 */
+    public focusCameraForBuildEntry(): void {
+        this.setCameraToMinView();
+        const grids = this.getFirstHouseGrid();
+        if (!grids) {
+            return;
+        }
+        const center = MapModel.getInstance().getHouseCenterPos(grids, this);
+        this.focusCameraOnWorldPoint(center);
+    }
+
+    private getFirstHouseGrid(): Vec2[] | null {
+        if (this.allHouse.size > 0) {
+            const first = this.allHouse.values().next().value;
+            return first?.grid?.length ? first.grid : null;
+        }
+        const houses = this.allMapAssetsData.House;
+        if (!houses?.length) {
+            return null;
+        }
+        const grids: Vec2[] = [];
+        for (const floor of houses[0].Floor) {
+            const parts = floor.position.split(',');
+            grids.push(new Vec2(parseInt(parts[0], 10), parseInt(parts[1], 10)));
+        }
+        return grids.length > 0 ? grids : null;
+    }
+
+    private focusCameraOnWorldPoint(worldPos: Vec3): void {
+        if (!this.mainCamera?.node?.isValid) {
+            return;
+        }
+        const z = this.mainCamera.node.position.z;
+        this.targetPos.set(worldPos.x, worldPos.y, z);
+        this.targetPos.x = Math.max(this.minXCamera, Math.min(this.maxXCamera, this.targetPos.x));
+        this.targetPos.y = Math.max(this.minYCamera, Math.min(this.maxYCamera, this.targetPos.y));
+    }
+
+    /** mapGameType>=0 的玩法地图不允许拆除整栋房屋 */
+    private canDemolishHouse(): boolean {
+        return this.mapGameType < 0;
     }
 
     public loadHourse(){

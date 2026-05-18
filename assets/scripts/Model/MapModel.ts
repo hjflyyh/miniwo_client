@@ -482,20 +482,32 @@ export class MapModel {
     }
 
         // 存储地图数据
+    /** 保存地图时格子宽高向上取整（农场等场景 mapWidth/mapHeight 可能为小数） */
+    private getMapSaveGridSize(map: MapEditor): { width: number; height: number } {
+        const width = Math.ceil(Number(map.mapWidth) || 0);
+        const height = Math.ceil(Number(map.mapHeight) || 0);
+        return {
+            width: Math.max(1, width),
+            height: Math.max(1, height),
+        };
+    }
+
     public saveMapData(map : MapEditor , base64Image) {
+        const { width: saveWidth, height: saveHeight } = this.getMapSaveGridSize(map);
+
         map.allMapAssetsData.Ground = [];
         map.allMapAssetsData.Plant = [];
         map.allMapAssetsData.Fram = [];
         map.allMapAssetsData.Region = [];
         map.allMapAssetsData.Floor = [];
         map.allMapAssetsData.House = [];
-        map.allMapAssetsData.mapWidth = map.mapWidth;
-        map.allMapAssetsData.mapHeight = map.mapHeight;
-        map.allMapAssetsData.gridWidth = map.mapWidth;
-        map.allMapAssetsData.gridHeight = map.mapHeight;
+        map.allMapAssetsData.mapWidth = saveWidth;
+        map.allMapAssetsData.mapHeight = saveHeight;
+        map.allMapAssetsData.gridWidth = saveWidth;
+        map.allMapAssetsData.gridHeight = saveHeight;
         map.allMapAssetsData.Walkable = {
-            width: map.mapWidth,
-            height: map.mapHeight,
+            width: saveWidth,
+            height: saveHeight,
             cells: [],
         };
         map.placeholderTilemap.forEach((value, key) => {
@@ -644,11 +656,11 @@ export class MapModel {
             })
         })
 
-        const walkableCells = this.buildWalkableCells(map);
+        const walkableCells = this.buildWalkableCells(map, saveWidth, saveHeight);
 
         map.allMapAssetsData.Walkable = {
-            width: map.mapWidth,
-            height: map.mapHeight,
+            width: saveWidth,
+            height: saveHeight,
             cells: walkableCells,
         };
 
@@ -692,7 +704,9 @@ export class MapModel {
         }
     }
 
-    public buildWalkableCells(map: MapEditor): string[] {
+    public buildWalkableCells(map: MapEditor, gridWidth?: number, gridHeight?: number): string[] {
+        const mapWidth = gridWidth ?? map.mapWidth;
+        const mapHeight = gridHeight ?? map.mapHeight;
         // 规则：
         // 1) 道路（placeholder 非空）可走
         // 2) 房间地板（mapData==1）可走
@@ -708,9 +722,9 @@ export class MapModel {
         });
 
         // 房间地板
-        for (let x = 0; x < map.mapWidth; x++) {
-            for (let y = 0; y < map.mapHeight; y++) {
-                if (map.mapData[x][y] === 1) {
+        for (let x = 0; x < mapWidth; x++) {
+            for (let y = 0; y < mapHeight; y++) {
+                if (map.mapData[x]?.[y] === 1) {
                     walkableSet.add(`${x},${y}`);
                 }
             }
@@ -738,7 +752,7 @@ export class MapModel {
                 for (let i = 0; i < offsets.length; i++) {
                     const nx = pos.x + offsets[i][0];
                     const ny = pos.y + offsets[i][1];
-                    if (nx < 0 || nx >= map.mapWidth || ny < 0 || ny >= map.mapHeight) {
+                    if (nx < 0 || nx >= mapWidth || ny < 0 || ny >= mapHeight) {
                         continue;
                     }
                     if (floorSet.has(`${nx},${ny}`)) {
@@ -749,9 +763,9 @@ export class MapModel {
         });
 
         // 家具/墙体阻挡
-        for (let x = 0; x < map.mapWidth; x++) {
-            for (let y = 0; y < map.mapHeight; y++) {
-                if (map.mapData[x][y] === 3 || map.mapData[x][y] === 2) {
+        for (let x = 0; x < mapWidth; x++) {
+            for (let y = 0; y < mapHeight; y++) {
+                if (map.mapData[x]?.[y] === 3 || map.mapData[x]?.[y] === 2) {
                     walkableSet.delete(`${x},${y}`);
                 }
             }

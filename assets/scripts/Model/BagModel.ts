@@ -37,13 +37,25 @@ export class BagModel {
         return AppConst.JSONManager.getItemAll("systemConfig")[18]["configuration"].split("_")[0]
     }
 
+    public getItemCount(itemId: number): number {
+        if (!itemId || itemId <= 0) {
+            return 0
+        }
+        const slots = (this.slots as any[]) || []
+        const slot = slots.find((s: any) => Number(s?.item_id) === itemId)
+        const count = Number(slot?.count ?? 0)
+        return Number.isFinite(count) ? Math.max(0, count) : 0
+    }
 
     private OnWSNotification(data) {
         if (data.code == network.ServerCode.CodeBagUpdate) {
             console.log("更新背包数据")
+            console.log("BagModel OnWSNotification" , data)
             let contentData = JSON.parse(data.content)
             this.empty_slots = contentData.empty_slots
             this.slots = contentData.slots
+
+            EventSystem.send("BagUpdate")
         }
     }
 }
