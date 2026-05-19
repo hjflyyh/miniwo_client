@@ -142,5 +142,9 @@
   "37": {
     "function": "新手引导奖励",
     "configuration": "104_1000#100026_6"
+  },
+  "38": {
+    "function": "农场土地块数",
+    "configuration": "6_150"
   }
 }
