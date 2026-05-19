@@ -138,5 +138,9 @@
   "36": {
     "function": "帖子字体颜色配置",
     "configuration": "FF0000#FF8500#FFD600#1FFF00#7AEFFF#0047FF#7A00FF#CDA0FF#FFBBF7#000000#FFFFFF"
+  },
+  "37": {
+    "function": "新手引导奖励",
+    "configuration": "104_1000#100026_6"
   }
 }
