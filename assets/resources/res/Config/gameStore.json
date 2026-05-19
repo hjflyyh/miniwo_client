@@ -1,5 +1,6 @@
 {
   "1": {
+    "type": "0",
     "item_name": "玉米种子",
     "item_id": "100026",
     "icon": "itemIcon/corn_2",
@@ -15,6 +16,7 @@
     "badge": "0"
   },
   "2": {
+    "type": "0",
     "item_name": "水稻种子",
     "item_id": "100027",
     "icon": "itemIcon/rice_2",
@@ -30,6 +32,7 @@
     "badge": "1"
   },
   "3": {
+    "type": "0",
     "item_name": "小麦种子",
     "item_id": "100028",
     "icon": "itemIcon/wheat_2",
@@ -45,6 +48,7 @@
     "badge": "0"
   },
   "4": {
+    "type": "0",
     "item_name": "红薯种子",
     "item_id": "100029",
     "icon": "itemIcon/sweet_potato_2",
@@ -60,6 +64,7 @@
     "badge": "1"
   },
   "5": {
+    "type": "0",
     "item_name": "土豆种子",
     "item_id": "100030",
     "icon": "itemIcon/potato_2",
@@ -75,6 +80,7 @@
     "badge": "2"
   },
   "6": {
+    "type": "1",
     "item_name": "礼物3",
     "item_id": "100010",
     "icon": "itemIcon/gift_3",
@@ -90,6 +96,7 @@
     "badge": null
   },
   "7": {
+    "type": "1",
     "item_name": "礼物4",
     "item_id": "100011",
     "icon": "itemIcon/gift_4",
@@ -105,6 +112,7 @@
     "badge": null
   },
   "8": {
+    "type": "1",
     "item_name": "礼物5",
     "item_id": "100012",
     "icon": "itemIcon/gift_5",
@@ -120,6 +128,7 @@
     "badge": null
   },
   "9": {
+    "type": "1",
     "item_name": "动物粮1",
     "item_id": "100013",
     "icon": "itemIcon/animal_food_1",
@@ -135,6 +144,7 @@
     "badge": null
   },
   "10": {
+    "type": "1",
     "item_name": "动物粮2",
     "item_id": "100014",
     "icon": "itemIcon/animal_food_2",
@@ -150,6 +160,7 @@
     "badge": null
   },
   "11": {
+    "type": "1",
     "item_name": "交互道具1",
     "item_id": "100019",
     "icon": "itemIcon/interactive_item_1",
@@ -165,6 +176,7 @@
     "badge": null
   },
   "12": {
+    "type": "1",
     "item_name": "交互道具2",
     "item_id": "100020",
     "icon": "itemIcon/interactive_item_2",
@@ -180,6 +192,7 @@
     "badge": null
   },
   "13": {
+    "type": "1",
     "item_name": "交互道具3",
     "item_id": "100021",
     "icon": "itemIcon/interactive_item_3",
