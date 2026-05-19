@@ -46,7 +46,9 @@ export class MapListItem extends Component implements InfiniteCell{
     OnClick(){
         console.log("进入地图")
         console.log(this.mapData)
-        MapModel.getInstance().requestJoinMap(Number(this.mapData["id"]));
+        const mapModel = MapModel.getInstance();
+        mapModel.pendingMapGameType = mapModel.resolveMapGameType(this.mapData);
+        mapModel.requestJoinMap(Number(this.mapData["id"]));
     }
 
     OnClickLike(){

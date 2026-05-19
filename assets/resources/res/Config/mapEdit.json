@@ -85,10 +85,10 @@
   },
   "113": {
     "name_cn": "商店",
-    "resource": "maps/architecture/shop",
+    "resource": "maps/architecture/shopPrefab",
     "type": 0,
     "img_size": 1,
-    "is_prefab": 0
+    "is_prefab": 1
   },
   "114": {
     "name_cn": "甜品",
@@ -103,5 +103,12 @@
     "type": 0,
     "img_size": 1,
     "is_prefab": 0
+  },
+  "116": {
+    "name_cn": "仓库",
+    "resource": "maps/architecture/warehousePrefab",
+    "type": 0,
+    "img_size": 1,
+    "is_prefab": 1
   }
 }

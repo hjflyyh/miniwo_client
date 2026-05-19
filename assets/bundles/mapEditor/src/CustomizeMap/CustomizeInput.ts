@@ -260,11 +260,12 @@ export class CustomizeInput extends Component {
         }
         if (!this.mapEditor.tileMaskNode || !this.mapEditor.mapContainer) return;
 
-        const tileMaskUI = this.mapEditor.tileMaskNode.getComponent(UITransform);
-        if (!tileMaskUI) return;
-
-        const localPos = this.mapEditor.mapContainer.getComponent(UITransform).convertToNodeSpaceAR(this.mapEditor.tileMaskNode.worldPosition);
-        const gridPos = this.mapEditor.getPositionToGrid(new Vec2(localPos.x, localPos.y), tileMaskUI.contentSize);
+        this.mapEditor.tileMaskNode.active = true;
+        const gridPos = this.mapEditor.resolvePlacementGridFromMask();
+        if (!gridPos) {
+            EventSystem.send("ShowTips", "摆放位置无效，请拖动到可放置区域");
+            return;
+        }
         this.mapEditor.buildMap(gridPos);
     }
 
@@ -327,6 +328,18 @@ export class CustomizeInput extends Component {
             return
         }
 
+        if (
+            this.mapEditor.isTouchPlacementDevice() &&
+            this.mapEditor.isBuildSwitch &&
+            this.isPlacementDragOffsetAction(manager.actionStatus)
+        ) {
+            const loc = event.getLocation();
+            const gridPos = MapModel.getInstance().worldPosToGride(loc, this.mapEditor);
+            this.mapEditor.applyTileMaskPreviewWorldPosition(gridPos, loc);
+            this.mapEditor.isMousePoint = true;
+            this.mapEditor.startMousePosition = loc.clone();
+        }
+
         if (!this.mapEditor.isBuildSwitch) {
             const mouseWorldPoint = this.mapEditor.mainCamera.screenToWorld(new Vec3(event.getLocation().x, event.getLocation().y, 0))
             if (this.mapEditor.tileMaskNode.getComponent(UITransform).getBoundingBoxToWorld().contains(new Vec2(mouseWorldPoint.x, mouseWorldPoint.y))) {
@@ -380,17 +393,20 @@ export class CustomizeInput extends Component {
         }
 
         if (this.mapEditor.isBuildSwitch) {
-            const gridPos = MapModel.getInstance().worldPosToGride(event.getLocation() , this.mapEditor);
-            const localPos = MapModel.getInstance().gridToWorld(gridPos , null , this.mapEditor);
-            const worldPos = this.mapEditor.mapContainer.getComponent(UITransform).convertToWorldSpaceAR(localPos)
+            const touchLoc = event.getLocation();
+            const gridPos = MapModel.getInstance().worldPosToGride(touchLoc, this.mapEditor);
             const dragOffsetModes = this.isPlacementDragOffsetAction(manager.actionStatus);
             if (this.mapEditor.enablePlacementDragOffset && dragOffsetModes) {
-                this.mapEditor.applyTileMaskPreviewWorldPosition(gridPos, event.getLocation());
+                this.mapEditor.applyTileMaskPreviewWorldPosition(gridPos, touchLoc);
+                if (!this.mapEditor.usePlacementFingerFollow()) {
+                    this.mapEditor.showMaskColor(gridPos);
+                }
             } else {
+                const localPos = MapModel.getInstance().gridToWorld(gridPos, null, this.mapEditor);
+                const worldPos = this.mapEditor.mapContainer.getComponent(UITransform).convertToWorldSpaceAR(localPos);
                 this.mapEditor.tileMaskNode.setWorldPosition(worldPos);
+                this.mapEditor.showMaskColor(gridPos);
             }
-
-            this.mapEditor.showMaskColor(gridPos);
 
             if (manager.actionStatus == ActionStatus.MOVE) {
                 this.mapEditor.signMoveTile(gridPos);

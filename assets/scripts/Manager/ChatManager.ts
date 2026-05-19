@@ -68,7 +68,7 @@ export class MapChatManager {
      * 从文本中解析 @名字，与当前地图 mapNpcs 的 name 完全匹配则收集对应 npc id（去重）。
      * 例：`sfsdfsf  @NPC_6  sfsdf` → 若某 npc.name === "NPC_6" 则 mentions 包含其 id。
      */
-    private buildMentionsFromText(text: string): string[] {
+    public buildMentionsFromText(text: string): string[] {
         const map = MapModel.getInstance().mapNpcs as Record<string, { name?: string }>;
         const re = /@\s*([^\s@]+)/g;
         const seen = new Set<string>();

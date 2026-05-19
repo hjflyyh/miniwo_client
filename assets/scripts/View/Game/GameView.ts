@@ -1,9 +1,10 @@
-import { _decorator, Component, EditBox, instantiate, Label, math, Node, UITransform, director } from 'cc';
+import { _decorator, Component, EditBox, instantiate, Label, math, Node, resources, Sprite, SpriteFrame, UITransform, director } from 'cc';
 import { AppConst } from '../../AppConst';
 import { network } from '../../Model/RequestData';
 import { RoleModel } from '../../Model/RoleModel';
 import { HttpManager } from '../../Manager/HttpManager';
 import { MapChatManager } from '../../Manager/ChatManager';
+import { PrivateChatManager } from '../../Manager/PrivateChatMessage';
 import { MapModel } from '../../Model/MapModel';
 import { YXCollectionView, YXIndexPath } from 'db://assets/plugin/list-3x/yx-collection-view';
 import { CustomGridFlowLayout } from 'db://assets/plugin/list-3x/custom-grid-flow-layout';
@@ -14,6 +15,9 @@ import { YXMasonryFlowLayout } from 'db://assets/plugin/list-3x/yx-masonry-flow-
 import { GameMapChatScroll } from './GameMapChatScroll';
 import { MapEditorUI } from 'db://assets/bundles/mapEditor/src/MapEditorUI';
 import { MapManager } from 'db://assets/bundles/mapEditor/src/MapManager';
+import { GameSendRewardCell } from './GameSendRewardCell';
+import { BagModel } from '../../Model/BagModel';
+import { GAME_FARM_PLOT_CLICK_EVENT, GameFarmPlotClickPayload } from './GameFarmNode';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameView')
@@ -79,10 +83,43 @@ export class GameView extends Component {
     @property(Node)
     buildContent: Node = null
 
+    //奖励道具列表
+    @property(Node)
+    rewardTarget: Node = null;
+
+    @property(Node)
+    rewardContent: Node = null;
+
+    @property(Node)
+    farmNode : Node = null;
+
+    @property(Node)
+    farmContent : Node = null;
+
+    @property(Node)    
+    farmItemCell : Node = null;
+
+    //奖励道具节点
+    @property(GameSendRewardCell)
+    rewardItemCell : GameSendRewardCell = null;    
+
+    private rewardCells: GameSendRewardCell[] = [];
+
+    private farmCells: Node[] = [];
+
+    private selectedFarmPlot: GameFarmPlotClickPayload | null = null;
+
     start() {
         this.atNpc.active = false
 
         this.atNpcCell.active = false
+
+        if (this.farmNode) {
+            this.farmNode.active = false
+        }
+        if (this.farmItemCell) {
+            this.farmItemCell.active = false
+        }
 
         this.editBoxBaseY = this.editBox.node.position.y
 
@@ -97,6 +134,9 @@ export class GameView extends Component {
         EventSystem.addListent("EventRefreshChat", this.receivedData , this)
         EventSystem.addListent("WebSocketMessage" , this.OnWebSocketMessage , this)
         EventSystem.addListent("CloseMapEditor" , this.CloseMapEditor , this)
+        EventSystem.addListent("WebSocketNotifications", this.onWebSocketNotification, this)
+        EventSystem.addListent("OpenGameShop", this.OpenGameShop, this)
+        EventSystem.addListent(GAME_FARM_PLOT_CLICK_EVENT, this.onGameFarmPlotClick, this)
 
         this.onEditEnd()
         
@@ -104,6 +144,199 @@ export class GameView extends Component {
         this.showChatUI.active = true
 
         this.refreshBuildContentVisibility();
+
+        this.initRewardList();
+        this.initFarmList();
+    }
+
+     private initRewardList() {
+         const data = AppConst.JSONManager?.getItemAll?.('item');
+         if (data) {
+             this.renderRewardList(data);
+             return;
+         }
+     }
+
+    private renderRewardList(rawItemCfg: Record<string, any>) {
+        if (!this.rewardContent || !this.rewardItemCell?.node || !rawItemCfg) return;
+        const templateNode = this.rewardItemCell.node;
+        const children = [...this.rewardContent.children];
+        for (let i = 0; i < children.length; i++) {
+            const child = children[i];
+            if (child !== templateNode) {
+                child.destroy();
+            }
+        }
+
+        this.rewardCells = [];
+
+        const bagSlots = BagModel.getInstance().slots || [];
+        const bagCountByItemId = new Map<number, number>();
+        for (let i = 0; i < bagSlots.length; i++) {
+            const slot = bagSlots[i] as any;
+            const id = Number(slot?.item_id);
+            const count = Number(slot?.count ?? 0);
+            if (!Number.isFinite(id) || id <= 0) continue;
+            bagCountByItemId.set(id, Math.max(0, Number.isFinite(count) ? count : 0));
+        }
+
+        const rows = Object.keys(rawItemCfg)
+            .map((id) => {
+                const row = rawItemCfg[id] || {};
+                return {
+                    id: Number(id),
+                    ...row,
+                };
+            })
+            .filter((row) => Number.isFinite(row.id))
+            .filter((row) => {
+                const favorability = Number(row?.favorability);
+                return Number.isFinite(favorability) && favorability > 0;
+            })
+            .sort((a, b) => Number(a.favorability) - Number(b.favorability));
+
+        for (let i = 0; i < rows.length; i++) {
+            const node = instantiate(templateNode);
+            node.active = true;
+            node.setParent(this.rewardContent);
+            const cell = node.getComponent(GameSendRewardCell);
+            cell?.setData(rows[i]);
+            cell?.setItemNum(bagCountByItemId.get(Number(rows[i].id)) ?? 0);
+            // cell?.setSelected(false);
+            if (cell) {
+                this.rewardCells.push(cell);
+                const itemId = Number(rows[i].id);
+                (node as any)._rewardItemId = itemId;
+                node.name = `reward_item_${itemId}`;
+
+                node.on(Node.EventType.TOUCH_END, () => {
+                    this.onRewardItemClick(itemId);
+                }, this);
+            }
+        }
+        this.rewardItemCell.node.active = false;
+        this.rewardTarget.active = false;
+    }
+
+    private initFarmList() {
+        const cropsCfg = AppConst.JSONManager?.getItemAll?.('basicCrops');
+        const itemCfg = AppConst.JSONManager?.getItemAll?.('item');
+        if (cropsCfg && itemCfg) {
+            this.renderFarmList(cropsCfg, itemCfg);
+        }
+    }
+
+    private renderFarmList(rawCropsCfg: Record<string, any>, rawItemCfg: Record<string, any>) {
+        if (!this.farmContent || !this.farmItemCell || !rawCropsCfg || !rawItemCfg) {
+            return;
+        }
+        const templateNode = this.farmItemCell;
+        const children = [...this.farmContent.children];
+        for (let i = 0; i < children.length; i++) {
+            const child = children[i];
+            if (child !== templateNode) {
+                child.destroy();
+            }
+        }
+
+        this.farmCells = [];
+
+        const bagSlots = BagModel.getInstance().slots || [];
+        const bagCountByItemId = new Map<number, number>();
+        for (let i = 0; i < bagSlots.length; i++) {
+            const slot = bagSlots[i] as any;
+            const id = Number(slot?.item_id);
+            const count = Number(slot?.count ?? 0);
+            if (!Number.isFinite(id) || id <= 0) continue;
+            bagCountByItemId.set(id, Math.max(0, Number.isFinite(count) ? count : 0));
+        }
+
+        const rows = Object.keys(rawCropsCfg)
+            .map((cropKey) => {
+                const crop = rawCropsCfg[cropKey] || {};
+                const itemId = Number(crop.item_id);
+                const item = rawItemCfg[String(itemId)] || null;
+                return {
+                    cropKey: Number(cropKey),
+                    itemId,
+                    crop,
+                    item,
+                };
+            })
+            .filter((row) => Number.isFinite(row.itemId) && row.itemId > 0)
+            .filter((row) => row.item != null)
+            .filter((row) => row.crop.base_seed_price != null && row.crop.base_seed_price !== '')
+            .sort((a, b) => {
+                const categoryDiff = Number(a.crop.category) - Number(b.crop.category);
+                if (categoryDiff !== 0) {
+                    return categoryDiff;
+                }
+                return a.cropKey - b.cropKey;
+            });
+
+        for (let i = 0; i < rows.length; i++) {
+            const row = rows[i];
+            const node = instantiate(templateNode);
+            node.active = true;
+            node.setParent(this.farmContent);
+            const itemId = row.itemId;
+            const count = bagCountByItemId.get(itemId) ?? 0;
+            const displayName = String(
+                row.item?.name_cn || row.crop.crop_name || row.item?.name_en || itemId
+            );
+            this.refreshFarmCell(node, itemId, count, displayName);
+            (node as any)._farmItemId = itemId;
+            (node as any)._farmCropKey = row.cropKey;
+            node.name = `farm_item_${itemId}`;
+            this.farmCells.push(node);
+        }
+
+        templateNode.active = false;
+    }
+
+    private onGameFarmPlotClick(payload: GameFarmPlotClickPayload) {
+        const plotIndex = Number(payload?.plotIndex);
+        if (!Number.isFinite(plotIndex) || plotIndex < 0) {
+            return;
+        }
+        this.selectedFarmPlot = {
+            farmIndex: Number(payload?.farmIndex) || 0,
+            plotIndex,
+            plotNodeName: payload?.plotNodeName,
+        };
+        if (this.rewardTarget) {
+            this.rewardTarget.active = false;
+        }
+        if (this.atNpc) {
+            this.atNpc.active = false;
+        }
+        if (this.farmNode) {
+            this.farmNode.active = true;
+        }
+    }
+
+    private refreshFarmCell(node: Node, itemId: number, count: number, _displayName?: string) {
+        const spriteRoot = node.getChildByName('Sprite');
+        const iconNode = spriteRoot?.getChildByName('icon');
+        const icon = iconNode?.getComponent(Sprite);
+        if (icon) {
+            resources.load(`UITexture/itemIcon/${itemId}/spriteFrame`, SpriteFrame, (err, sf) => {
+                if (!err && sf && icon.isValid) {
+                    icon.spriteFrame = sf;
+                    return;
+                }
+                resources.load(`common/image/item_${itemId}/spriteFrame`, SpriteFrame, (err2, sf2) => {
+                    if (!err2 && sf2 && icon.isValid) {
+                        icon.spriteFrame = sf2;
+                    }
+                });
+            });
+        }
+        const label = spriteRoot?.getChildByName('Label-001')?.getComponent(Label);
+        if (label) {
+            const safeCount = Math.max(0, Number.isFinite(Number(count)) ? Number(count) : 0);
+            label.string = `x${safeCount}`;
+        }
     }
 
     private refreshBuildContentVisibility() {
@@ -130,13 +363,114 @@ export class GameView extends Component {
         return String(ownerId) === String(RoleModel.getInstance().playerId);
     }    
 
+    public onClickReward() {
+        const text = this.editBox?.string ?? '';
+        const mentions = MapChatManager.instance.buildMentionsFromText(text);
+        if (mentions.length === 0) {
+            EventSystem.send('ShowTips', '需要先@一个npc');
+            return;
+        }
+        this.rewardTarget.active = true;
+    }
+
+    private onRewardItemClick(itemId: number) {
+        const id = Number(itemId);
+        if (!Number.isFinite(id) || id <= 0) {
+            return;
+        }
+        const text = this.editBox?.string ?? '';
+        const mentions = MapChatManager.instance.buildMentionsFromText(text);
+        if (mentions.length === 0) {
+            EventSystem.send('ShowTips', '需要先@一个npc');
+            return;
+        }
+        const count = BagModel.getInstance().getItemCount(id);
+        if (count <= 0) {
+            EventSystem.send('ShowTips', '道具数量不足');
+            return;
+        }
+        void this.sendGiftItemToMentionedNpc(id, mentions[0]);
+    }
+
+    private async sendGiftItemToMentionedNpc(itemId: number, mentionKey: string) {
+        const npcId = this.resolveNpcIdFromMention(mentionKey);
+        if (npcId <= 0) {
+            EventSystem.send('ShowTips', '无法识别NPC，请重新@');
+            return;
+        }
+        const giftText = JSON.stringify({
+            event_type: 'gift_item',
+            npc_id: npcId,
+            item_id: itemId,
+            quantity: 1,
+        });
+        try {
+            const pm = PrivateChatManager.getInstance();
+            const session = await pm.openNpcSession(npcId);
+            await pm.sendText(session.peerUid, giftText);
+            if (this.rewardTarget) {
+                this.rewardTarget.active = false;
+            }
+            EventSystem.send('ShowTips', "赠送成功");
+            this.editBox.string = '';
+        } catch (e: any) {
+            EventSystem.send('ShowTips', String(e?.message || e || '赠送失败'));
+        }
+    }
+
+    private resolveNpcIdFromMention(mentionKey: string): number {
+        const map = MapModel.getInstance().mapNpcs as Record<string, any>;
+        const npc = map[mentionKey];
+        if (npc) {
+            const candidates = [npc.npc_id, npc.npcId, npc.id, mentionKey];
+            for (let i = 0; i < candidates.length; i++) {
+                const parsed = this.parseNpcId(candidates[i]);
+                if (parsed > 0) {
+                    return parsed;
+                }
+            }
+        }
+        return this.parseNpcId(mentionKey);
+    }
+
+    private parseNpcId(raw: unknown): number {
+        if (raw == null) {
+            return 0;
+        }
+        const direct = Number(raw);
+        if (Number.isFinite(direct) && direct > 0) {
+            return direct;
+        }
+        const s = String(raw).trim();
+        if (!s) {
+            return 0;
+        }
+        const head = Number(s.split('_')[0]);
+        if (Number.isFinite(head) && head > 0) {
+            return head;
+        }
+        const fromPrefix = Number(s.replace(/^npc_/i, ''));
+        if (Number.isFinite(fromPrefix) && fromPrefix > 0) {
+            return fromPrefix;
+        }
+        return 0;
+    }
+
+    private onWebSocketNotification(data: any) {
+        if (data?.code !== network.ServerCode.CodeBagUpdate) {
+            return;
+        }
+        this.initRewardList();
+        this.initFarmList();
+    }
+
     public CloseMapEditor() {
         this.node.active = true
     }
 
     public onClickBuild(){
         if(!this.isCurrentMapOwnedBySelf()){
-            AppConst.PanelManager.openView("res/View/TipsView" , {content : "只能编辑自己的地图哦~"})
+            EventSystem.send("ShowTips" , "只能编辑自己的地图哦~")
             return
         }
         this.node.active = false
@@ -179,6 +513,10 @@ export class GameView extends Component {
         }
     }
 
+    public OpenGameShop(){
+        AppConst.PanelManager.openView("res/View/Shop/ShopList" , null , null , null , this.UI)
+    }
+
     public onClickBag(){
         AppConst.PanelManager.openView("res/View/Bag/BagList" , null , null , null , this.UI)
     }
@@ -201,6 +539,13 @@ export class GameView extends Component {
 
     public onClickCloseNpcAt(){
         this.atNpc.active = false
+        this.rewardTarget.active = false
+        this.farmNode.active = false
+        this.selectedFarmPlot = null
+    }
+
+    onDestroy() {
+        EventSystem.remove(this);
     }
 
     public onClickNpc(a , b){

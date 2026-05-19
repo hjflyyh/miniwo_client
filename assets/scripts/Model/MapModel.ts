@@ -201,9 +201,53 @@ export class MapModel {
     }
 
     public map_detail = null
+
+    /** 进入 editor_test 前解析的玩法类型；0=农场 */
+    public pendingMapGameType: number | null = null
+
+    /**
+     * 从地图详情 / 列表项 / map_data 解析 mapGameType。
+     * 字段兼容：map_game_type、mapGameType、game_type、map_data 内同名字段。
+     */
+    public resolveMapGameType(detail?: any): number | null {
+        const d = detail ?? this.map_detail;
+        if (!d) {
+            return null;
+        }
+        const direct = d.map_game_type ?? d.mapGameType ?? d.game_type ?? d.map_game_type_id;
+        if (direct != null && direct !== '') {
+            const n = Number(direct);
+            if (Number.isFinite(n)) {
+                return n;
+            }
+        }
+        const raw = d.map_data;
+        if (raw != null && String(raw).trim() !== '') {
+            try {
+                const data = typeof raw === 'string' ? JSON.parse(raw) : raw;
+                const fromData = data?.map_game_type ?? data?.mapGameType ?? data?.game_type;
+                if (fromData != null && fromData !== '') {
+                    const n = Number(fromData);
+                    if (Number.isFinite(n)) {
+                        return n;
+                    }
+                }
+            } catch {
+                // ignore
+            }
+        }
+        return null;
+    }
+
+    public isFarmMapGameType(gameType?: number | null): boolean {
+        const t = gameType ?? this.pendingMapGameType ?? this.resolveMapGameType(this.map_detail);
+        return t === 0;
+    }
+
     //type 0根据地图列表进入地图，需要去掉所有UI   1进入编辑
     public EnterMap(type , map_detail = null){
         this.map_detail = map_detail
+        this.pendingMapGameType = this.resolveMapGameType(map_detail)
         this.isInMap = true
         this.mapNpcs = {}
         AppConst.PanelManager.CloseAll()

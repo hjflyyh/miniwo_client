@@ -251,6 +251,8 @@ export class MapEditorUI extends Component {
     }
 
     public onClickBackSelect(){
+        this.bottomAddNode.active = false;
+        
         if(this.selectNode1.active){
             this.node.active = false
             EventSystem.send("CloseMapEditor")
@@ -420,6 +422,9 @@ export class MapEditorUI extends Component {
             this.setBottomNode();
         }else if (target.name == 'farm') {
             _index = 2;
+            this.selectNode1.active = false;
+            this.selectNode2.active = true;
+            this.gameBuildScroll.setTileType(15);   
             // this.tileMenu.get('panel_farm').active = true;
             MapManager.GetInstance().actionStatus = ActionStatus.FRAM;
         }

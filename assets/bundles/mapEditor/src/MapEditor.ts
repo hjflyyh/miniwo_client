@@ -338,6 +338,11 @@ export class MapEditor extends Component {
     }
 
     start() {
+        const pendingType = MapModel.getInstance().pendingMapGameType;
+        if (pendingType != null && Number.isFinite(Number(pendingType))) {
+            this.mapGameType = Number(pendingType);
+        }
+
         this.mapWidth = AppConst.UIRoot.MapEditorWidth
         this.mapHeight = AppConst.UIRoot.MapEditorHeight
         this.applyExternalGridSizeIfNeeded();
@@ -497,7 +502,60 @@ export class MapEditor extends Component {
         this.tileMaskNode.active = false;
         this.targetPos = this.mainCamera.node.getPosition();
 
+        if (this.isTouchPlacementDevice()) {
+            this.enablePlacementDragOffset = true;
+        }
+
         this.setArrowSignActive(false);
+    }
+
+    private isMobileWebBrowser(): boolean {
+        if (!sys.isBrowser) {
+            return false;
+        }
+        try {
+            return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+        } catch {
+            return false;
+        }
+    }
+
+    /** 移动端或手机浏览器 */
+    public isTouchPlacementDevice(): boolean {
+        return sys.isMobile || this.isMobileWebBrowser();
+    }
+
+    /** 移动端 / 手机浏览器：摆放预览跟手 */
+    public usePlacementFingerFollow(): boolean {
+        return this.isTouchPlacementDevice() && this.enablePlacementDragOffset;
+    }
+
+    public normalizePlacementGrid(gridPos: Vec2): Vec2 {
+        return new Vec2(Math.floor(gridPos.x), Math.floor(gridPos.y));
+    }
+
+    /** 根据当前预览遮罩位置解析摆放格子（确认按钮用） */
+    public resolvePlacementGridFromMask(): Vec2 | null {
+        if (!this.tileMaskNode?.isValid || !this.mapContainer?.isValid) {
+            return null;
+        }
+        const tileMaskUI = this.tileMaskNode.getComponent(UITransform);
+        const mapUi = this.mapContainer.getComponent(UITransform);
+        if (!tileMaskUI || !mapUi) {
+            return null;
+        }
+        const localPos = mapUi.convertToNodeSpaceAR(this.tileMaskNode.worldPosition);
+        const gridPos = this.normalizePlacementGrid(
+            this.getPositionToGrid(new Vec2(localPos.x, localPos.y), tileMaskUI.contentSize)
+        );
+        if (gridPos.x < 0 || gridPos.y < 0) {
+            return null;
+        }
+        const buildingSize = MapModel.getInstance().getBuildingSize(tileMaskUI.contentSize, this);
+        if (gridPos.x + buildingSize.x > this.mapWidth || gridPos.y + buildingSize.y > this.mapHeight) {
+            return null;
+        }
+        return gridPos;
     }
 
     private initGridData() {
@@ -511,8 +569,9 @@ export class MapEditor extends Component {
     }
 
     buildMap(gridPos: Vec2) {
-        if(gridPos.x <= 0 || gridPos.y <= 0){
-            return
+        gridPos = this.normalizePlacementGrid(gridPos);
+        if (gridPos.x < 0 || gridPos.y < 0) {
+            return;
         }
         const manager = MapManager.GetInstance();
         log(manager.actionStatus)
@@ -593,6 +652,14 @@ export class MapEditor extends Component {
                 this.lastPointerLocalPos = new Vec2(lp.x, lp.y);
             }
             if (this.lastPointerLocalPos) {
+                if (this.usePlacementFingerFollow() && screenPos) {
+                    const fingerLocal = new Vec3(this.lastPointerLocalPos.x, this.lastPointerLocalPos.y, 0);
+                    this.tileMaskNode.setWorldPosition(mapUi.convertToWorldSpaceAR(fingerLocal));
+                    const snapGrid = MapModel.getInstance().worldPosToGride(screenPos, this);
+                    this.showMaskColor(snapGrid);
+                    this.curGride = snapGrid;
+                    return;
+                }
                 const off = this.getPointerOffsetForGrid(gridPos, size);
                 const base = MapModel.getInstance().gridToWorld(gridPos, size, this);
                 const local = new Vec3(base.x + off.x, base.y + off.y, base.z);
@@ -3695,6 +3762,7 @@ export class MapEditor extends Component {
         const manager = MapManager.GetInstance();
 
         this.maskSp.color = new Color('#FFFFFF32');
+        this.tileMaskNode.active = true;
         this.setTileMaskSp();
     }
 
