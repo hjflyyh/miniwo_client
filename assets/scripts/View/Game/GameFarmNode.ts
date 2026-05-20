@@ -1,6 +1,9 @@
 import { _decorator, Button, Component, EventMouse, EventTouch, Input, input, Node, sys, tween, UITransform, v3, Vec2, Vec3 } from 'cc';
 import { MapManager } from '../../../bundles/mapEditor/src/MapManager';
 import { MapEditor } from '../../../bundles/mapEditor/src/MapEditor';
+import { FARM_EVENT_DATA_UPDATED } from '../../Model/Farm/FarmTypes';
+import { FarmModel } from '../../Model/Farm/FarmModel';
+import { toServerFarmId } from '../../Model/Farm/FarmPlotMapper';
 const { ccclass, property } = _decorator;
 
 /** 点击地图上的小农田时抛出，GameView 监听后打开种子列表 */
@@ -11,12 +14,15 @@ export const FARM_PLOT_COUNT = 36;
 export type GameFarmPlotClickPayload = {
     farmIndex: number;
     plotIndex: number;
+    /** 服务端 farm_id；无匹配时为 null */
+    farmId: number | null;
     plotNodeName?: string;
 };
 
 type PlotHit = {
     node: Node;
     plotIndex: number;
+    farmId: number | null;
 };
 
 @ccclass('GameFarmNode')
@@ -30,6 +36,10 @@ export class GameFarmNode extends Component {
 
     private static readonly TAP_MOVE_THRESHOLD = 12;
 
+    private readonly plotBaseScale = new Map<Node, Vec3>();
+    private serverFarmIdSet = new Set<number>();
+    private farmDataListener: Record<string, unknown> = {};
+
     private touchStartPos: Vec2 | null = null;
     private pendingPlot: PlotHit | null = null;
     private touchMoved = false;
@@ -38,12 +48,70 @@ export class GameFarmNode extends Component {
     private mouseMoved = false;
 
     onLoad() {
+        this.cachePlotBaseScales();
         this.stripPlotButtons();
         this.bindGlobalInput();
     }
 
+    start() {
+        EventSystem.addListent(FARM_EVENT_DATA_UPDATED, this.onFarmDataUpdated, this.farmDataListener);
+        this.syncPlotVisibilityFromModel();
+    }
+
     onDestroy() {
+        EventSystem.remove(this.farmDataListener);
         this.unbindGlobalInput();
+    }
+
+    private cachePlotBaseScales() {
+        const children = this.node.children;
+        for (let i = 0; i < children.length; i++) {
+            const plotNode = children[i];
+            if (this.parsePlotIndex(plotNode) < 0) {
+                continue;
+            }
+            if (!this.plotBaseScale.has(plotNode)) {
+                this.plotBaseScale.set(plotNode, plotNode.scale.clone());
+            }
+        }
+    }
+
+    private onFarmDataUpdated() {
+        this.syncPlotVisibilityFromModel();
+    }
+
+    /** 按 farm_data 显示/隐藏小田地：无对应 farm_id 则隐藏 */
+    private syncPlotVisibilityFromModel() {
+        const farmModel = FarmModel.getInstance();
+        const farmCount = farmModel.getFarmCount();
+        this.serverFarmIdSet.clear();
+        const plots = farmModel.getAllPlots();
+        for (let i = 0; i < plots.length; i++) {
+            this.serverFarmIdSet.add(plots[i].farm_id);
+        }
+
+        const children = this.node.children;
+        for (let i = 0; i < children.length; i++) {
+            const plotNode = children[i];
+            const plotIndex = this.parsePlotIndex(plotNode);
+            if (plotIndex < 0) {
+                continue;
+            }
+
+            const farmId = toServerFarmId(this.farmIndex, plotIndex, farmCount);
+            const visible =
+                farmId != null &&
+                this.serverFarmIdSet.has(farmId) &&
+                farmModel.getPlot(farmId) != null;
+
+            plotNode.active = visible;
+            if (visible) {
+                const base = this.plotBaseScale.get(plotNode);
+                if (base) {
+                    plotNode.setScale(base);
+                }
+            }
+        }
     }
 
     /** 移除 Button，避免吞掉触摸导致无法拖动/缩放地图 */
@@ -136,7 +204,7 @@ export class GameFarmNode extends Component {
             const hit = this.hitTestPlotAtScreen(event.getLocation());
             if (hit && hit.plotIndex === this.pendingMousePlot.plotIndex) {
                 this.playPlotClickScale(hit.node);
-                this.onPlotClick(hit.plotIndex, hit.node.name);
+                this.onPlotClick(hit);
             }
         }
         this.mouseStartPos = null;
@@ -153,7 +221,7 @@ export class GameFarmNode extends Component {
             return;
         }
         this.playPlotClickScale(hit.node);
-        this.onPlotClick(hit.plotIndex, hit.node.name);
+        this.onPlotClick(hit);
     }
 
     private resetTouch() {
@@ -167,6 +235,18 @@ export class GameFarmNode extends Component {
         return editor?.mainCamera ?? null;
     }
 
+    private resolveFarmIdForPlot(plotIndex: number): number | null {
+        const farmId = toServerFarmId(
+            this.farmIndex,
+            plotIndex,
+            FarmModel.getInstance().getFarmCount()
+        );
+        if (farmId == null || !this.serverFarmIdSet.has(farmId)) {
+            return null;
+        }
+        return farmId;
+    }
+
     private hitTestPlotAtScreen(screen: Vec2): PlotHit | null {
         const camera = this.getMapCamera();
         if (!camera) {
@@ -176,8 +256,15 @@ export class GameFarmNode extends Component {
         const children = this.node.children;
         for (let i = children.length - 1; i >= 0; i--) {
             const plotNode = children[i];
+            if (!plotNode.active) {
+                continue;
+            }
             const plotIndex = this.parsePlotIndex(plotNode);
             if (plotIndex < 0) {
+                continue;
+            }
+            const farmId = this.resolveFarmIdForPlot(plotIndex);
+            if (farmId == null) {
                 continue;
             }
             const ui = plotNode.getComponent(UITransform);
@@ -188,7 +275,7 @@ export class GameFarmNode extends Component {
             const halfW = ui.width * 0.5;
             const halfH = ui.height * 0.5;
             if (local.x >= -halfW && local.x <= halfW && local.y >= -halfH && local.y <= halfH) {
-                return { node: plotNode, plotIndex };
+                return { node: plotNode, plotIndex, farmId };
             }
         }
         return null;
@@ -211,7 +298,7 @@ export class GameFarmNode extends Component {
             return;
         }
         tween(plotNode).stop();
-        const base = plotNode.scale.clone();
+        const base = this.plotBaseScale.get(plotNode) ?? plotNode.scale.clone();
         const pressed = v3(
             base.x * this.clickScale,
             base.y * this.clickScale,
@@ -223,11 +310,12 @@ export class GameFarmNode extends Component {
             .start();
     }
 
-    private onPlotClick(plotIndex: number, plotNodeName: string) {
+    private onPlotClick(hit: PlotHit) {
         const payload: GameFarmPlotClickPayload = {
             farmIndex: Number(this.farmIndex) || 0,
-            plotIndex,
-            plotNodeName,
+            plotIndex: hit.plotIndex,
+            farmId: hit.farmId,
+            plotNodeName: hit.node.name,
         };
         EventSystem.send(GAME_FARM_PLOT_CLICK_EVENT, payload);
     }

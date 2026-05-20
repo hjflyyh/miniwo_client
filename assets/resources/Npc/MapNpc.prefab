@@ -168,7 +168,7 @@
       "__expectedType__": "sp.SkeletonData"
     },
     "defaultSkin": "jie",
-    "defaultAnimation": "z walk",
+    "defaultAnimation": "z idle",
     "_premultipliedAlpha": false,
     "_timeScale": 1,
     "_preCacheMode": 0,

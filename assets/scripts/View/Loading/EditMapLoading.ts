@@ -3,6 +3,7 @@ import { MapAssetsManager } from 'db://assets/src/common/MapAssetsManager';
 import { AppConst } from 'db://assets/scripts/AppConst';
 import { MapModel } from 'db://assets/scripts/Model/MapModel';
 import { FarmMapAssetPreloader } from 'db://assets/bundles/mapEditor/src/farm/FarmMapAssetPreloader';
+import { FarmModel } from 'db://assets/scripts/Model/Farm/FarmModel';
 const { ccclass, property } = _decorator;
 
 @ccclass('EditMapLoading')
@@ -30,7 +31,10 @@ export class EditMapLoading extends Component {
         const mapModel = MapModel.getInstance();
         const mapGameType =
             mapModel.pendingMapGameType ?? mapModel.resolveMapGameType(mapModel.map_detail);
-        const isFarmMap = true;
+        const isFarmMap = mapGameType === 0 || mapGameType == null;
+        if (isFarmMap && mapModel.pendingMapGameType == null) {
+            mapModel.pendingMapGameType = 0;
+        }
 
         const mapAssetsPromise = MapAssetsManager.GetInstance()
             .loadMapEditorAssets()
@@ -76,6 +80,10 @@ export class EditMapLoading extends Component {
                 return;
             }
             console.log('场景 editor_test 切换成功');
+            if (mapModel.isFarmMapGameType() || isFarmMap) {
+                console.log('[EditMapLoading] 进图拉取农场天气');
+                void FarmModel.getInstance().enterFarm();
+            }
             this.loadSpeed = 0.5;
             this.isLoadSuccess = true;
             AppConst.PanelManager.CloseView(this);

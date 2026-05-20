@@ -13,6 +13,7 @@ import { RegionNpcCellBinder } from './RegionNpcCellBinder';
 import { network } from '../../../scripts/Model/RequestData';
 import { FARM_MAP_GRID_HEIGHT, FARM_MAP_GRID_WIDTH } from './farm/FarmMapConstants';
 import { FarmMapEditorModule, setMapBgGrassSpriteVisible } from './farm/FarmMapEditorModule';
+import { FarmModel } from '../../../scripts/Model/Farm/FarmModel';
 import { postMessageToParent } from '../../../scripts/Utils/ParentPostMessage';
 import { GenericSpritesheetAnimator } from 'db://assets/scripts/Utils/GenericSpritesheetAnimator';
 
@@ -361,6 +362,8 @@ export class MapEditor extends Component {
                 mapPixelWidth: this.mapWidth * this.tileSize,
                 mapPixelHeight: this.mapHeight * this.tileSize,
             });
+            console.log('[MapEditor] 农场地图，请求天气数据');
+            void FarmModel.getInstance().enterFarm();
         } else {
             setMapBgGrassSpriteVisible(this.mapBgTransform?.node, true);
         }

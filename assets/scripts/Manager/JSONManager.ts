@@ -7,7 +7,7 @@ export class JSONManager extends Component {
     public configs = [
         "language" , "cardCombine" , "mapGround" , "mapOutsideRenovation" , "mapFloor" , 
         "mapDecor" ,"mapWallDecor", "item", "cardStar", "socialEasterEgg", "systemConfig" , 
-        "dialogueLibrary" , "gameStore" , "mapEdit" , "basicCrops"
+        "dialogueLibrary" , "gameStore" , "mapEdit" , "basicCrops" , "basicSeeds"
     ]
     public jsonMap = {}
 

@@ -69,9 +69,9 @@ export class PrefabLoad extends Component {
                 let bundle = assetManager.getBundle(this.bundleName)
                 if(this.isTexture){
                     bundle.load(newUrl, SpriteFrame, (err, spriteFrame) => {
-                            if(spriteFrame == null){
-                                console.log(newUrl)
-                            }
+                            // if(spriteFrame == null){
+                            //     console.log(newUrl)
+                            // }
                             _this.onAddObject(err , spriteFrame , newUrl);
                         }
                     )

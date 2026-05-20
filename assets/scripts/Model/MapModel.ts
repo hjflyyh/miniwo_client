@@ -4,6 +4,7 @@ import { network } from "./RequestData";
 import { MapEditor } from "../../bundles/mapEditor/src/MapEditor";
 import { UGCModel } from "./UGCModel";
 import { postMessageToParent } from "../Utils/ParentPostMessage";
+import { FarmModel } from "./Farm/FarmModel";
 // import { CaptureUtils } from "../../bundles/mapEditor/src/CaptureUtils";
 
 export class MapModel {
@@ -247,7 +248,25 @@ export class MapModel {
     //type 0根据地图列表进入地图，需要去掉所有UI   1进入编辑
     public EnterMap(type , map_detail = null){
         this.map_detail = map_detail
-        this.pendingMapGameType = this.resolveMapGameType(map_detail)
+        const resolvedType = this.resolveMapGameType(map_detail);
+        if (resolvedType != null) {
+            this.pendingMapGameType = resolvedType;
+        }
+        // 列表/ join_map 未带 map_game_type 时，游玩进图默认按农场（editor_test）
+        if (type === 0 && this.pendingMapGameType == null) {
+            this.pendingMapGameType = 0;
+        }
+        const gameType = this.pendingMapGameType ?? this.resolveMapGameType(this.map_detail);
+        console.log('[MapModel] EnterMap', {
+            type,
+            resolvedType,
+            pendingMapGameType: this.pendingMapGameType,
+            isFarm: gameType === 0,
+        });
+        // 仅明确非农场时才清理；类型未知时不 leave，避免误清
+        if (gameType != null && gameType !== 0) {
+            FarmModel.getInstance().leaveFarm();
+        }
         this.isInMap = true
         this.mapNpcs = {}
         AppConst.PanelManager.CloseAll()
@@ -325,6 +344,7 @@ export class MapModel {
         this.match_id = "";
         this.isRecoveringAfterReconnect = false;
         this.joinMapRequestPending = false;
+        FarmModel.getInstance().leaveFarm();
     }
 
     public initGridData(map : MapEditor){
@@ -479,6 +499,9 @@ export class MapModel {
             if(this.isRecoveringAfterReconnect){
                 this.isRecoveringAfterReconnect = false;
                 this.sendMatchJoin(this.match_id);
+                if (this.isFarmMapGameType()) {
+                    void FarmModel.getInstance().enterFarm();
+                }
                 return;
             }
             console.log("收到消息进入地图")
@@ -486,6 +509,9 @@ export class MapModel {
             this.showMatchPayLoad = payload
             this.joinMapRequestPending = false;
             MapModel.getInstance().EnterMap(0 , payload.map_detail)
+            if (this.isFarmMapGameType()) {
+                void FarmModel.getInstance().enterFarm();
+            }
         }
     }
 

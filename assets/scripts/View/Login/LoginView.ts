@@ -179,7 +179,9 @@ export class LoginView extends Component {
     }
 
     onClickMapEdit(){
-        MapModel.getInstance().EnterMap(1)
+        const mapModel = MapModel.getInstance();
+        mapModel.pendingMapGameType = 0;
+        mapModel.EnterMap(1);
     }
 }
 

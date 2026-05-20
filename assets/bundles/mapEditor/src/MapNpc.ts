@@ -146,6 +146,10 @@ export class MapNpc extends Component {
     private facingScaleX = 1;
 
     start() {
+    }
+
+    initNpcNode(){
+
         this.spineNode = this.node.getChildByName('spine')!;
         this.dialogueNode = this.node.getChildByName('dialogueNode')
         this.dialogueLabel = this.dialogueNode.getChildByName('dialogueLabel').getComponent(Label)

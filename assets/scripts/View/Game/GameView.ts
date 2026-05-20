@@ -18,6 +18,8 @@ import { MapManager } from 'db://assets/bundles/mapEditor/src/MapManager';
 import { GameSendRewardCell } from './GameSendRewardCell';
 import { BagModel } from '../../Model/BagModel';
 import { GAME_FARM_PLOT_CLICK_EVENT, GameFarmPlotClickPayload } from './GameFarmNode';
+import { FarmModel } from '../../Model/Farm/FarmModel';
+import { GameFarmChooseCell } from './GameFarmChooseCell';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameView')
@@ -137,6 +139,7 @@ export class GameView extends Component {
         EventSystem.addListent("WebSocketNotifications", this.onWebSocketNotification, this)
         EventSystem.addListent("OpenGameShop", this.OpenGameShop, this)
         EventSystem.addListent(GAME_FARM_PLOT_CLICK_EVENT, this.onGameFarmPlotClick, this)
+        EventSystem.addListent('ConfigLoadAll', this.onConfigLoadAll, this)
 
         this.onEditEnd()
         
@@ -145,6 +148,14 @@ export class GameView extends Component {
 
         this.refreshBuildContentVisibility();
 
+        this.initRewardList();
+        this.initFarmList();
+        if (MapModel.getInstance().isFarmMapGameType()) {
+            void FarmModel.getInstance().enterFarm();
+        }
+    }
+
+    private onConfigLoadAll() {
         this.initRewardList();
         this.initFarmList();
     }
@@ -219,15 +230,15 @@ export class GameView extends Component {
     }
 
     private initFarmList() {
-        const cropsCfg = AppConst.JSONManager?.getItemAll?.('basicCrops');
+        const seedsCfg = AppConst.JSONManager?.getItemAll?.('basicSeeds');
         const itemCfg = AppConst.JSONManager?.getItemAll?.('item');
-        if (cropsCfg && itemCfg) {
-            this.renderFarmList(cropsCfg, itemCfg);
+        if (seedsCfg && itemCfg) {
+            this.renderFarmList(seedsCfg, itemCfg);
         }
     }
 
-    private renderFarmList(rawCropsCfg: Record<string, any>, rawItemCfg: Record<string, any>) {
-        if (!this.farmContent || !this.farmItemCell || !rawCropsCfg || !rawItemCfg) {
+    private renderFarmList(rawSeedsCfg: Record<string, any>, rawItemCfg: Record<string, any>) {
+        if (!this.farmContent || !this.farmItemCell || !rawSeedsCfg || !rawItemCfg) {
             return;
         }
         const templateNode = this.farmItemCell;
@@ -251,27 +262,27 @@ export class GameView extends Component {
             bagCountByItemId.set(id, Math.max(0, Number.isFinite(count) ? count : 0));
         }
 
-        const rows = Object.keys(rawCropsCfg)
-            .map((cropKey) => {
-                const crop = rawCropsCfg[cropKey] || {};
-                const itemId = Number(crop.item_id);
+        const rows = Object.keys(rawSeedsCfg)
+            .map((seedKey) => {
+                const seed = rawSeedsCfg[seedKey] || {};
+                const itemId = Number(seed.item_id);
                 const item = rawItemCfg[String(itemId)] || null;
                 return {
-                    cropKey: Number(cropKey),
+                    seedKey: Number(seedKey),
                     itemId,
-                    crop,
+                    seed,
                     item,
                 };
             })
             .filter((row) => Number.isFinite(row.itemId) && row.itemId > 0)
             .filter((row) => row.item != null)
-            .filter((row) => row.crop.base_seed_price != null && row.crop.base_seed_price !== '')
+            .filter((row) => row.seed.base_seed_price != null && row.seed.base_seed_price !== '')
             .sort((a, b) => {
-                const categoryDiff = Number(a.crop.category) - Number(b.crop.category);
+                const categoryDiff = Number(a.seed.category) - Number(b.seed.category);
                 if (categoryDiff !== 0) {
                     return categoryDiff;
                 }
-                return a.cropKey - b.cropKey;
+                return a.seedKey - b.seedKey;
             });
 
         for (let i = 0; i < rows.length; i++) {
@@ -282,11 +293,11 @@ export class GameView extends Component {
             const itemId = row.itemId;
             const count = bagCountByItemId.get(itemId) ?? 0;
             const displayName = String(
-                row.item?.name_cn || row.crop.crop_name || row.item?.name_en || itemId
+                row.item?.name_cn || row.seed.crop_name || row.item?.name_en || itemId
             );
             this.refreshFarmCell(node, itemId, count, displayName);
             (node as any)._farmItemId = itemId;
-            (node as any)._farmCropKey = row.cropKey;
+            (node as any)._farmSeedKey = row.seedKey;
             node.name = `farm_item_${itemId}`;
             this.farmCells.push(node);
         }
@@ -295,8 +306,16 @@ export class GameView extends Component {
     }
 
     private onGameFarmPlotClick(payload: GameFarmPlotClickPayload) {
+        if (!this.isCurrentMapOwnedBySelf()) {
+            EventSystem.send('ShowTips', '只能在自己的农场种植哦~');
+            return;
+        }
         const plotIndex = Number(payload?.plotIndex);
         if (!Number.isFinite(plotIndex) || plotIndex < 0) {
+            return;
+        }
+        const farmId = payload?.farmId != null ? Number(payload.farmId) : null;
+        if (farmId == null || !Number.isFinite(farmId) || farmId <= 0) {
             return;
         }
         this.selectedFarmPlot = {
@@ -316,26 +335,30 @@ export class GameView extends Component {
     }
 
     private refreshFarmCell(node: Node, itemId: number, count: number, _displayName?: string) {
-        const spriteRoot = node.getChildByName('Sprite');
-        const iconNode = spriteRoot?.getChildByName('icon');
-        const icon = iconNode?.getComponent(Sprite);
-        if (icon) {
-            resources.load(`UITexture/itemIcon/${itemId}/spriteFrame`, SpriteFrame, (err, sf) => {
-                if (!err && sf && icon.isValid) {
-                    icon.spriteFrame = sf;
-                    return;
-                }
-                resources.load(`common/image/item_${itemId}/spriteFrame`, SpriteFrame, (err2, sf2) => {
-                    if (!err2 && sf2 && icon.isValid) {
-                        icon.spriteFrame = sf2;
-                    }
-                });
-            });
-        }
-        const label = spriteRoot?.getChildByName('Label-001')?.getComponent(Label);
-        if (label) {
-            const safeCount = Math.max(0, Number.isFinite(Number(count)) ? Number(count) : 0);
-            label.string = `x${safeCount}`;
+        // const spriteRoot = node.getChildByName('Sprite');
+        // const iconNode = spriteRoot?.getChildByName('icon');
+        // const icon = iconNode?.getComponent(Sprite);
+        // if (icon) {
+        //     resources.load(`UITexture/itemIcon/${itemId}/spriteFrame`, SpriteFrame, (err, sf) => {
+        //         if (!err && sf && icon.isValid) {
+        //             icon.spriteFrame = sf;
+        //             return;
+        //         }
+        //         resources.load(`common/image/item_${itemId}/spriteFrame`, SpriteFrame, (err2, sf2) => {
+        //             if (!err2 && sf2 && icon.isValid) {
+        //                 icon.spriteFrame = sf2;
+        //             }
+        //         });
+        //     });
+        // }
+        // const label = spriteRoot?.getChildByName('Label-001')?.getComponent(Label);
+        // if (label) {
+        //     const safeCount = Math.max(0, Number.isFinite(Number(count)) ? Number(count) : 0);
+        //     label.string = `x${safeCount}`;
+        // }
+        let chooseCell = node.getComponent(GameFarmChooseCell);
+        if (chooseCell) {
+            chooseCell.refreshNode(itemId, count, _displayName);
         }
     }
 
@@ -490,6 +513,7 @@ export class GameView extends Component {
 
     public OnWebSocketMessage(data){
         if(data["id"] == "leave_map"){
+            FarmModel.getInstance().leaveFarm();
             let request = new network.MatchLeaveEequest();
             AppConst.WebSocketManager.send(request.toJSON(MapModel.getInstance().match_id));
             

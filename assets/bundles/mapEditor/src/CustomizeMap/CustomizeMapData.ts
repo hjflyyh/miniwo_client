@@ -75,6 +75,7 @@ export class CustomizeMapData extends Component {
         this.map.npcLayer.addChild(newNpc)
 
         let mapNpc = newNpc.addComponent(MapNpc)
+        mapNpc.initNpcNode();
         mapNpc.npcId = npcId
         mapNpc.map = this.map
         mapNpc.customizeMapData = this
@@ -234,7 +235,7 @@ export class CustomizeMapData extends Component {
                         }
                         this.updateNpcDebugTileCache(npcData, npcLocal);
 
-                        if(npcData.state == 1){
+                        if(npcData.state == 1 || npcData.state == 0){
                             npc.onServerMove({
                                 x: npcLocal.x,
                                 y: npcLocal.y,
