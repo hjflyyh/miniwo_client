@@ -6,17 +6,11 @@
     "info_en": "",
     "rare": 0,
     "type": 1,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "0",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "102": {
     "name_cn": "体力",
@@ -25,17 +19,11 @@
     "info_en": "",
     "rare": 0,
     "type": 1,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "0",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "103": {
     "name_cn": "好感度",
@@ -44,17 +32,11 @@
     "info_en": "npc_to_player_affection",
     "rare": 0,
     "type": 5,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "4",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "104": {
     "name_cn": "金币",
@@ -63,17 +45,11 @@
     "info_en": "",
     "rare": 0,
     "type": 1,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "0",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "105": {
     "name_cn": "AI",
@@ -82,17 +58,11 @@
     "info_en": "player_use_ai_function_item",
     "rare": 0,
     "type": 1,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "0",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "1000": {
     "name_cn": "",
@@ -101,28 +71,11 @@
     "info_en": "",
     "rare": 0,
     "type": 4,
-    "box_map1": [
-      [
-        "id",
-        56,
-        "权重"
-      ],
-      [
-        "id",
-        "num",
-        "权重"
-      ]
-    ],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "",
-    "is_displayed_in_backpack": "0"
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": ""
   },
   "100000": {
     "name_cn": "梦尘",
@@ -131,17 +84,11 @@
     "info_en": "card_upgrade_item",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "0"
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": ""
   },
   "100001": {
     "name_cn": "留影",
@@ -150,17 +97,11 @@
     "info_en": "card_upgrade_item",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "0"
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": ""
   },
   "100002": {
     "name_cn": "星语",
@@ -169,17 +110,11 @@
     "info_en": "card_star_up_item",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "0"
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": ""
   },
   "100003": {
     "name_cn": "星魄",
@@ -188,17 +123,11 @@
     "info_en": "card_star_up_item",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "0"
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": ""
   },
   "100004": {
     "name_cn": "对话卡",
@@ -207,17 +136,11 @@
     "info_en": "npc_interaction_item",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "0"
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": ""
   },
   "100005": {
     "name_cn": "补签卡",
@@ -226,17 +149,11 @@
     "info_en": "check_in_reissue_item",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "0"
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": ""
   },
   "100006": {
     "name_cn": "万能碎片",
@@ -245,17 +162,11 @@
     "info_en": "card_omnipotent_fragment",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "0"
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": ""
   },
   "100007": {
     "name_cn": "随机碎片",
@@ -264,17 +175,11 @@
     "info_en": "card_random_fragment",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "0"
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": ""
   },
   "100008": {
     "name_cn": "礼物1",
@@ -283,17 +188,11 @@
     "info_en": "favor_plus_5_after_gift",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "5",
-    "prop_type": "2",
-    "is_displayed_in_backpack": "0"
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": ""
   },
   "100009": {
     "name_cn": "礼物2",
@@ -302,17 +201,11 @@
     "info_en": "favor_plus_10_after_gift",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "10",
-    "prop_type": "2",
-    "is_displayed_in_backpack": "0"
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": ""
   },
   "100010": {
     "name_cn": "礼物3",
@@ -321,17 +214,11 @@
     "info_en": "favor_plus_12_after_gift",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "12",
-    "prop_type": "2",
-    "is_displayed_in_backpack": "0"
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": ""
   },
   "100011": {
     "name_cn": "礼物4",
@@ -340,17 +227,11 @@
     "info_en": "favor_plus_20_after_gift",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "20",
-    "prop_type": "2",
-    "is_displayed_in_backpack": "0"
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": ""
   },
   "100012": {
     "name_cn": "礼物5",
@@ -359,17 +240,11 @@
     "info_en": "favor_plus_30_after_gift",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "30",
-    "prop_type": "2",
-    "is_displayed_in_backpack": "0"
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": ""
   },
   "100013": {
     "name_cn": "动物粮1",
@@ -378,17 +253,11 @@
     "info_en": "50pct_chance_animal_feather_after_feed",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "0"
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": ""
   },
   "100014": {
     "name_cn": "动物粮2",
@@ -397,17 +266,11 @@
     "info_en": "guaranteed_animal_feather_after_feed",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "0"
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": ""
   },
   "100015": {
     "name_cn": "动物羽毛1",
@@ -416,17 +279,11 @@
     "info_en": "10_for_gift_1_craft",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "0"
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": ""
   },
   "100016": {
     "name_cn": "动物羽毛2",
@@ -435,17 +292,11 @@
     "info_en": "10_for_gift_2_craft",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "0"
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": ""
   },
   "100017": {
     "name_cn": "鲜花1",
@@ -454,17 +305,11 @@
     "info_en": "10_for_gift_3_craft",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "0"
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": ""
   },
   "100018": {
     "name_cn": "鲜花2",
@@ -473,17 +318,11 @@
     "info_en": "10_for_gift_4_craft",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "0"
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": ""
   },
   "100019": {
     "name_cn": "交互道具1",
@@ -491,18 +330,12 @@
     "info_cn": "可扔到地图中触发恶作剧事件",
     "info_en": "throw_on_map_trigger_prank_event",
     "rare": 0,
-    "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
+    "type": 6,
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "0"
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": ""
   },
   "100020": {
     "name_cn": "交互道具2",
@@ -510,18 +343,12 @@
     "info_cn": "可扔到地图中触发NPC动作",
     "info_en": "throw_on_map_trigger_npc_action",
     "rare": 0,
-    "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
+    "type": 6,
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "0"
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": ""
   },
   "100021": {
     "name_cn": "交互道具3",
@@ -529,18 +356,12 @@
     "info_cn": "可扔到地图中触发NPC动作",
     "info_en": "throw_on_map_trigger_npc_action",
     "rare": 0,
-    "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
+    "type": 6,
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "0"
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": ""
   },
   "100022": {
     "name_cn": "VIP体验卡（1日）",
@@ -549,17 +370,11 @@
     "info_en": "24h_vip_trial_card",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "0"
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": ""
   },
   "100023": {
     "name_cn": "调色瓶",
@@ -568,17 +383,11 @@
     "info_en": "color_bottle_skill_effect",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "0"
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": ""
   },
   "100024": {
     "name_cn": "纸飞机",
@@ -587,17 +396,11 @@
     "info_en": "paper_plane_skill_effect",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "0"
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": ""
   },
   "100025": {
     "name_cn": "积分",
@@ -605,18 +408,12 @@
     "info_cn": "日常&周常任务积分",
     "info_en": "daily_weekly_task_points",
     "rare": 0,
-    "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
+    "type": 8,
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "3",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "100026": {
     "name_cn": "玉米种子",
@@ -625,17 +422,11 @@
     "info_en": "Plant in fields, harvest plump corn",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "100027": {
     "name_cn": "水稻种子",
@@ -644,17 +435,11 @@
     "info_en": "Paddy seeds, grow fine rice",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "100028": {
     "name_cn": "小麦种子",
@@ -663,17 +448,11 @@
     "info_en": "Grow on dry land, reap wheat",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "100029": {
     "name_cn": "红薯种子",
@@ -682,17 +461,11 @@
     "info_en": "Bury in soil, get sweet potatoes",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "100030": {
     "name_cn": "土豆种子",
@@ -701,17 +474,11 @@
     "info_en": "Root deep down, yield potatoes",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "100031": {
     "name_cn": "高粱种子",
@@ -720,17 +487,11 @@
     "info_en": "Tough to grow, harvest red sorghum",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "100032": {
     "name_cn": "青菜种子",
@@ -739,17 +500,11 @@
     "info_en": "Fast seeds, grow fresh greens",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "100033": {
     "name_cn": "向日葵种子",
@@ -758,17 +513,11 @@
     "info_en": "Sun-loving, gain sunflower seeds",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "100034": {
     "name_cn": "油菜种子",
@@ -777,17 +526,11 @@
     "info_en": "Field-grown, obtain oil crops",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "100035": {
     "name_cn": "白菜种子",
@@ -796,17 +539,11 @@
     "info_en": "Easy-grow daily veggies",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "100036": {
     "name_cn": "紫甘蓝种子",
@@ -815,17 +552,11 @@
     "info_en": "Special seeds, grow purple cabbage",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "100037": {
     "name_cn": "玫瑰花种子",
@@ -834,17 +565,11 @@
     "info_en": "Care for gorgeous roses",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "100038": {
     "name_cn": "兰花种子",
@@ -853,17 +578,11 @@
     "info_en": "Tend well, bloom orchids",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "100039": {
     "name_cn": "玉米作物",
@@ -872,17 +591,11 @@
     "info_en": "Ripe crops for ingredients",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "100040": {
     "name_cn": "水稻作物",
@@ -891,17 +604,11 @@
     "info_en": "Paddy crops yield rice",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "100041": {
     "name_cn": "小麦作物",
@@ -910,17 +617,11 @@
     "info_en": "Farm crops get wheat",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "100042": {
     "name_cn": "红薯作物",
@@ -929,17 +630,11 @@
     "info_en": "Vines bear sweet potatoes",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "100043": {
     "name_cn": "土豆作物",
@@ -948,17 +643,11 @@
     "info_en": "Soil crops produce potatoes",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "100044": {
     "name_cn": "高粱作物",
@@ -967,17 +656,11 @@
     "info_en": "Tall plants gain sorghum",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "100045": {
     "name_cn": "青菜作物",
@@ -986,17 +669,11 @@
     "info_en": "Fresh veggies ready to pick",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "100046": {
     "name_cn": "向日葵作物",
@@ -1005,17 +682,11 @@
     "info_en": "Sun plants bear sunflower seeds",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "100047": {
     "name_cn": "油菜作物",
@@ -1024,17 +695,11 @@
     "info_en": "Oil crops make edible oil",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "100048": {
     "name_cn": "白菜作物",
@@ -1043,17 +708,11 @@
     "info_en": "Daily veggies taste sweet",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "100049": {
     "name_cn": "紫甘蓝作物",
@@ -1062,17 +721,11 @@
     "info_en": "Specialty veggies full of nutrition",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "100050": {
     "name_cn": "玫瑰花作物",
@@ -1081,17 +734,11 @@
     "info_en": "Beautiful blooming flowers",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
   },
   "100051": {
     "name_cn": "兰花作物",
@@ -1100,16 +747,36 @@
     "info_en": "Elegant plants with soft fragrance",
     "rare": 0,
     "type": 4,
-    "box_map1": [],
-    "box_map2": "",
-    "box_map3": "",
-    "box_map4": "",
     "reward": "",
     "icon": "",
-    "map_img": "",
-    "map_spine": "",
     "favorability": "",
-    "prop_type": "1",
-    "is_displayed_in_backpack": "1"
+    "is_displayed_in_backpack": "1",
+    "fertilizer_reduce_time": ""
+  },
+  "100052": {
+    "name_cn": "普通肥料",
+    "name_en": "common_fertilizer",
+    "info_cn": "农用基础肥料，使用后缩短作物 30 秒生长时长",
+    "info_en": "Basic farm fertilizer, cuts crop growth time by 30 seconds",
+    "rare": 0,
+    "type": 4,
+    "reward": "",
+    "icon": "",
+    "favorability": "",
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": "1"
+  },
+  "100053": {
+    "name_cn": "高级肥料",
+    "name_en": "senior_fertilizer",
+    "info_cn": "强效速效肥料，使用即可让作物直接成熟收获",
+    "info_en": "Super efficient fertilizer, instantly ripen all crops",
+    "rare": 0,
+    "type": 4,
+    "reward": "",
+    "icon": "",
+    "favorability": "",
+    "is_displayed_in_backpack": "0",
+    "fertilizer_reduce_time": "0"
   }
 }
