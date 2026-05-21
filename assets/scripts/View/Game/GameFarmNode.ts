@@ -286,7 +286,7 @@ export class GameFarmNode extends Component {
         if (cached) {
             sprite.spriteFrame = cached;
             buffNode.active = true;
-            buffNode.setSiblingIndex(buffNode.parent.children.length - 1);
+            this.syncPlotOverlayDrawOrder(buffNode.parent);
             return;
         }
 
@@ -309,8 +309,39 @@ export class GameFarmNode extends Component {
             this.buffSpriteCache.set(buffType, sf);
             sprite.spriteFrame = sf;
             buffNode.active = true;
-            buffNode.setSiblingIndex(buffNode.parent.children.length - 1);
+            this.syncPlotOverlayDrawOrder(buffNode.parent);
         });
+    }
+
+    /**
+     * 地块子节点绘制顺序（自下而上）：buff < Watering < Planting / PlantingEnd。
+     * buff 不得盖住生长中预制件。
+     */
+    private syncPlotOverlayDrawOrder(plotNode: Node) {
+        if (!plotNode?.isValid) {
+            return;
+        }
+        const layerNames = [
+            PLOT_BUFF_NODE_NAME,
+            WATERING_PREFAB_NODE_NAME,
+            PLANTING_PREFAB_NODE_NAME,
+            PLANTING_END_PREFAB_NODE_NAME,
+        ];
+        let nextIndex = 0;
+        for (let i = 0; i < layerNames.length; i++) {
+            const child = plotNode.getChildByName(layerNames[i]);
+            if (!child?.isValid || !child.active) {
+                continue;
+            }
+            child.setSiblingIndex(nextIndex);
+            nextIndex++;
+        }
+        const top =
+            plotNode.getChildByName(PLANTING_END_PREFAB_NODE_NAME) ??
+            plotNode.getChildByName(PLANTING_PREFAB_NODE_NAME);
+        if (top?.isValid && top.active) {
+            top.setSiblingIndex(plotNode.children.length - 1);
+        }
     }
 
     private resolveWateringPrefab() {
@@ -400,10 +431,11 @@ export class GameFarmNode extends Component {
         const showEnd = isPlotHarvestable(plot, nowSec);
         const showWater = plotNeedsWaterOverlay(plot) && !showEnd;
         const showPlanting = isPlotGrowing(plot, nowSec) && !showEnd;
+        this.refreshPlotBuffOverlay(plotNode, plot, nowSec);
         this.setPlotWateringVisible(plotNode, showWater);
         this.setPlotPlantingVisible(plotNode, showPlanting, plot);
         this.setPlotPlantingEndVisible(plotNode, showEnd, plot);
-        this.refreshPlotBuffOverlay(plotNode, plot, nowSec);
+        this.syncPlotOverlayDrawOrder(plotNode);
     }
 
     private syncPlotOverlaysFromModel() {
@@ -455,7 +487,7 @@ export class GameFarmNode extends Component {
             wateringNode.setParent(plotNode);
         }
         wateringNode.active = true;
-        wateringNode.setSiblingIndex(plotNode.children.length - 1);
+        this.syncPlotOverlayDrawOrder(plotNode);
     }
 
     private setPlotPlantingVisible(plotNode: Node, visible: boolean, plot?: FarmPlotState | null) {
@@ -492,7 +524,7 @@ export class GameFarmNode extends Component {
             plantingNode.setParent(plotNode);
         }
         plantingNode.active = true;
-        plantingNode.setSiblingIndex(plotNode.children.length - 1);
+        this.syncPlotOverlayDrawOrder(plotNode);
 
         const ctrl = plantingNode.getComponent(Planting);
         if (ctrl && plot) {
@@ -535,7 +567,7 @@ export class GameFarmNode extends Component {
             endNode.setParent(plotNode);
         }
         endNode.active = true;
-        endNode.setSiblingIndex(plotNode.children.length - 1);
+        this.syncPlotOverlayDrawOrder(plotNode);
 
         const ctrl = endNode.getComponent(PlantingEnd);
         if (ctrl && plot) {
