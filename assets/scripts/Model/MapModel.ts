@@ -5,6 +5,7 @@ import { MapEditor } from "../../bundles/mapEditor/src/MapEditor";
 import { UGCModel } from "./UGCModel";
 import { postMessageToParent } from "../Utils/ParentPostMessage";
 import { FarmModel } from "./Farm/FarmModel";
+import { logFarmPlotGridsOnSave } from "./Farm/FarmPlotGridLog";
 // import { CaptureUtils } from "../../bundles/mapEditor/src/CaptureUtils";
 
 export class MapModel {
@@ -726,6 +727,8 @@ export class MapModel {
             })
         })
 
+        logFarmPlotGridsOnSave(map);
+
         const walkableCells = this.buildWalkableCells(map, saveWidth, saveHeight);
 
         map.allMapAssetsData.Walkable = {
@@ -832,11 +835,16 @@ export class MapModel {
             });
         });
 
-        // 家具/墙体阻挡
+        // 家具/墙体阻挡（该格已铺马路 placeholder 时不再视为占用）
         for (let x = 0; x < mapWidth; x++) {
             for (let y = 0; y < mapHeight; y++) {
                 if (map.mapData[x]?.[y] === 3 || map.mapData[x]?.[y] === 2) {
-                    walkableSet.delete(`${x},${y}`);
+                    const key = `${x},${y}`;
+                    const ph = map.placeholderTilemap.get(key);
+                    if (ph && !ph.empty) {
+                        continue;
+                    }
+                    walkableSet.delete(key);
                 }
             }
         }

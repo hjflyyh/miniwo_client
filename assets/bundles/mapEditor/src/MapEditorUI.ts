@@ -345,6 +345,9 @@ export class MapEditorUI extends Component {
         else if (target.name == 'ground') {
             _index = 2;
             // this.tileMenu.get('panel_ground').active = true;
+            this.selectNode1.active = false;
+            this.selectNode2.active = true;
+            this.gameBuildScroll.setTileType(0);      
             MapManager.GetInstance().actionStatus = ActionStatus.GROUND;
         } else if (target.name == 'plant') {
             _index = 3;

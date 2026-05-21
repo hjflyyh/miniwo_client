@@ -1,10 +1,54 @@
-import { _decorator, Button, Component, EventMouse, EventTouch, Input, input, Node, sys, tween, UITransform, v3, Vec2, Vec3 } from 'cc';
+import {
+    _decorator,
+    Button,
+    Component,
+    EventMouse,
+    EventTouch,
+    Input,
+    input,
+    director,
+    instantiate,
+    Node,
+    Prefab,
+    resources,
+    sys,
+    tween,
+    UITransform,
+    v3,
+    Vec2,
+    Vec3,
+    Sprite,
+    SpriteFrame,
+    Color,
+} from 'cc';
 import { MapManager } from '../../../bundles/mapEditor/src/MapManager';
 import { MapEditor } from '../../../bundles/mapEditor/src/MapEditor';
-import { FARM_EVENT_DATA_UPDATED } from '../../Model/Farm/FarmTypes';
+import {
+    FARM_EVENT_DATA_UPDATED,
+    FarmBuff,
+    FarmPlotState,
+    getActiveFarmBuffs,
+    isPlotGrowing,
+    isPlotHarvestable,
+    plotNeedsWaterOverlay,
+    sortFarmBuffsForDisplay,
+} from '../../Model/Farm/FarmTypes';
+import { getFarmBuffSpriteResourcePath } from '../../Model/Farm/FarmPlotBuffVisual';
 import { FarmModel } from '../../Model/Farm/FarmModel';
 import { toServerFarmId } from '../../Model/Farm/FarmPlotMapper';
+import { Planting } from './Planting';
+import { PlantingEnd } from './PlantingEnd';
 const { ccclass, property } = _decorator;
+
+const WATERING_PREFAB_NODE_NAME = 'WateringPrefab';
+const WATERING_PREFAB_RESOURCE_PATH = 'UITexture/farm/WateringPrefab';
+const PLANTING_PREFAB_NODE_NAME = 'Planting';
+const PLANTING_PREFAB_RESOURCE_PATH = 'UITexture/farm/Planting';
+const PLANTING_END_PREFAB_NODE_NAME = 'PlantingEnd';
+const PLANTING_END_PREFAB_RESOURCE_PATH = 'UITexture/farm/PlantingEnd';
+const PLOT_BUFF_NODE_NAME = 'buff';
+/** 农田 function 面板统一挂在此层，避免相邻地块遮挡 */
+const FARM_FUNCTION_OVERLAY_NAME = 'FarmPlotFunctionOverlay';
 
 /** 点击地图上的小农田时抛出，GameView 监听后打开种子列表 */
 export const GAME_FARM_PLOT_CLICK_EVENT = 'GameFarmPlotClick';
@@ -34,9 +78,30 @@ export class GameFarmNode extends Component {
     @property
     clickScale = 0.9;
 
+    /** 已播种未浇水时挂在地块上的预制件；未拖入则从 resources 加载 */
+    @property(Prefab)
+    wateringPrefab: Prefab = null;
+
+    /** 生长中挂在地块上的预制件；未拖入则从 resources 加载 */
+    @property(Prefab)
+    plantingPrefab: Prefab = null;
+
+    /** 生长到期时挂在地块上的预制件；未拖入则从 resources 加载 */
+    @property(Prefab)
+    plantingEndPrefab: Prefab = null;
+
     private static readonly TAP_MOVE_THRESHOLD = 12;
 
+    private wateringPrefabResolved: Prefab | null = null;
+    private plantingPrefabResolved: Prefab | null = null;
+    private plantingPrefabLoading = false;
+    private plantingEndPrefabResolved: Prefab | null = null;
+    private plantingEndPrefabLoading = false;
+    private readonly buffSpriteCache = new Map<number, SpriteFrame>();
+    private readonly buffSpriteMissing = new Set<number>();
+
     private readonly plotBaseScale = new Map<Node, Vec3>();
+    private functionOverlayRoot: Node | null = null;
     private serverFarmIdSet = new Set<number>();
     private farmDataListener: Record<string, unknown> = {};
 
@@ -51,15 +116,62 @@ export class GameFarmNode extends Component {
         this.cachePlotBaseScales();
         this.stripPlotButtons();
         this.bindGlobalInput();
+        this.ensureFunctionOverlayRoot();
+        this.resolveWateringPrefab();
+        this.resolvePlantingPrefab();
+        this.resolvePlantingEndPrefab();
+    }
+
+    /** Planting.fNode 展开时挂到该节点，置于整块农田分区最上层 */
+    public getFunctionOverlayRoot(): Node {
+        this.ensureFunctionOverlayRoot();
+        return this.functionOverlayRoot;
+    }
+
+    private ensureFunctionOverlayRoot() {
+        if (this.functionOverlayRoot?.isValid) {
+            this.bringFunctionOverlayToFront();
+            return;
+        }
+        const overlay = new Node(FARM_FUNCTION_OVERLAY_NAME);
+        overlay.setParent(this.node);
+        this.functionOverlayRoot = overlay;
+        this.bringFunctionOverlayToFront();
+    }
+
+    private bringFunctionOverlayToFront() {
+        const root = this.functionOverlayRoot;
+        if (root?.isValid && root.parent === this.node) {
+            root.setSiblingIndex(this.node.children.length - 1);
+        }
     }
 
     start() {
-        EventSystem.addListent(FARM_EVENT_DATA_UPDATED, this.onFarmDataUpdated, this.farmDataListener);
+        EventSystem.addListent(FARM_EVENT_DATA_UPDATED, this.onFarmDataUpdated, this);
+        this.syncFromFarmModel();
+    }
+
+    /** 进图或 farm_data 更新后：刷新显隐与可收获 PlantingEnd */
+    public syncFromFarmModel() {
         this.syncPlotVisibilityFromModel();
+        this.syncPlotOverlaysFromModel();
+    }
+
+    /** 农场数据就绪后刷新场景中所有 GameFarmNode（进图优化） */
+    public static syncAllInScene(root?: Node) {
+        const scene = director.getScene();
+        if (!scene) {
+            return;
+        }
+        const base = root ?? scene;
+        const nodes = base.getComponentsInChildren(GameFarmNode);
+        for (let i = 0; i < nodes.length; i++) {
+            nodes[i].syncFromFarmModel();
+        }
     }
 
     onDestroy() {
-        EventSystem.remove(this.farmDataListener);
+        EventSystem.remove(this);
         this.unbindGlobalInput();
     }
 
@@ -77,7 +189,7 @@ export class GameFarmNode extends Component {
     }
 
     private onFarmDataUpdated() {
-        this.syncPlotVisibilityFromModel();
+        this.syncFromFarmModel();
     }
 
     /** 按 farm_data 显示/隐藏小田地：无对应 farm_id 则隐藏 */
@@ -104,13 +216,330 @@ export class GameFarmNode extends Component {
                 this.serverFarmIdSet.has(farmId) &&
                 farmModel.getPlot(farmId) != null;
 
-            plotNode.active = visible;
+            // plotNode.active = visible;
+            if(!visible){
+                plotNode.getComponent(Sprite).color = Color.GRAY
+            }else{
+                plotNode.getComponent(Sprite).color = Color.WHITE
+            }
             if (visible) {
                 const base = this.plotBaseScale.get(plotNode);
                 if (base) {
                     plotNode.setScale(base);
                 }
+                this.refreshPlotNode(plotNode, farmId);
+            } else {
+                this.setPlotWateringVisible(plotNode, false);
+                this.setPlotPlantingVisible(plotNode, false);
+                this.setPlotPlantingEndVisible(plotNode, false);
+                this.refreshPlotBuffOverlay(plotNode, null, farmModel.getNowUnixSec());
             }
+        }
+    }
+
+    /** 根据地块 buff 数组在子节点 buff 上显示 farmBuff/buffType_{type} */
+    private refreshPlotBuffOverlay(plotNode: Node, plot: FarmPlotState | null, nowSec: number) {
+        const buffNode = plotNode.getChildByName(PLOT_BUFF_NODE_NAME);
+        if (!buffNode) {
+            return;
+        }
+        let sprite = buffNode.getComponent(Sprite);
+        if (!sprite) {
+            sprite = buffNode.addComponent(Sprite);
+            sprite.spriteFrame = null;
+            sprite.color = Color.WHITE;
+        }
+        buffNode.scale = v3(0.5, 0.5, 1);
+
+        const activeBuffs = sortFarmBuffsForDisplay(getActiveFarmBuffs(plot, nowSec));
+        if (!activeBuffs.length) {
+            buffNode.active = false;
+            sprite.spriteFrame = null;
+            return;
+        }
+
+        this.tryApplyPlotBuffSprite(buffNode, sprite, activeBuffs, 0);
+    }
+
+    private tryApplyPlotBuffSprite(
+        buffNode: Node,
+        sprite: Sprite,
+        buffs: FarmBuff[],
+        index: number,
+    ) {
+        if (!buffNode.isValid || !sprite.isValid) {
+            return;
+        }
+        if (index >= buffs.length) {
+            buffNode.active = false;
+            sprite.spriteFrame = null;
+            return;
+        }
+
+        const buffType = Math.floor(Number(buffs[index].buff_type) || 0);
+        if (this.buffSpriteMissing.has(buffType)) {
+            this.tryApplyPlotBuffSprite(buffNode, sprite, buffs, index + 1);
+            return;
+        }
+
+        const cached = this.buffSpriteCache.get(buffType);
+        if (cached) {
+            sprite.spriteFrame = cached;
+            buffNode.active = true;
+            buffNode.setSiblingIndex(buffNode.parent.children.length - 1);
+            return;
+        }
+
+        const path = getFarmBuffSpriteResourcePath(buffType);
+        if (!path) {
+            this.buffSpriteMissing.add(buffType);
+            this.tryApplyPlotBuffSprite(buffNode, sprite, buffs, index + 1);
+            return;
+        }
+
+        resources.load(path, SpriteFrame, (err, sf) => {
+            if (!buffNode.isValid || !sprite.isValid) {
+                return;
+            }
+            if (err || !sf) {
+                this.buffSpriteMissing.add(buffType);
+                this.tryApplyPlotBuffSprite(buffNode, sprite, buffs, index + 1);
+                return;
+            }
+            this.buffSpriteCache.set(buffType, sf);
+            sprite.spriteFrame = sf;
+            buffNode.active = true;
+            buffNode.setSiblingIndex(buffNode.parent.children.length - 1);
+        });
+    }
+
+    private resolveWateringPrefab() {
+        if (this.wateringPrefab) {
+            this.wateringPrefabResolved = this.wateringPrefab;
+            return;
+        }
+        resources.load(WATERING_PREFAB_RESOURCE_PATH, Prefab, (err, prefab) => {
+            if (err || !prefab) {
+                console.log('[GameFarmNode] WateringPrefab 加载失败', err?.message ?? err);
+                return;
+            }
+            this.wateringPrefabResolved = prefab;
+            if (this.node?.isValid) {
+                this.syncPlotOverlaysFromModel();
+            }
+        });
+    }
+
+    private getWateringPrefab(): Prefab | null {
+        return this.wateringPrefabResolved ?? this.wateringPrefab;
+    }
+
+    private resolvePlantingEndPrefab() {
+        if (this.plantingEndPrefab) {
+            this.plantingEndPrefabResolved = this.plantingEndPrefab;
+            if (FarmModel.getInstance().isActive()) {
+                this.syncPlotOverlaysFromModel();
+            }
+            return;
+        }
+        if (this.plantingEndPrefabResolved || this.plantingEndPrefabLoading) {
+            return;
+        }
+        this.plantingEndPrefabLoading = true;
+        resources.load(PLANTING_END_PREFAB_RESOURCE_PATH, Prefab, (err, prefab) => {
+            this.plantingEndPrefabLoading = false;
+            if (err || !prefab) {
+                console.log('[GameFarmNode] PlantingEnd 加载失败', err?.message ?? err);
+                return;
+            }
+            this.plantingEndPrefabResolved = prefab;
+            if (this.node?.isValid) {
+                this.syncPlotOverlaysFromModel();
+            }
+        });
+    }
+
+    private resolvePlantingPrefab() {
+        if (this.plantingPrefab) {
+            this.plantingPrefabResolved = this.plantingPrefab;
+            if (FarmModel.getInstance().isActive()) {
+                this.syncPlotOverlaysFromModel();
+            }
+            return;
+        }
+        if (this.plantingPrefabResolved || this.plantingPrefabLoading) {
+            return;
+        }
+        this.plantingPrefabLoading = true;
+        resources.load(PLANTING_PREFAB_RESOURCE_PATH, Prefab, (err, prefab) => {
+            this.plantingPrefabLoading = false;
+            if (err || !prefab) {
+                console.log('[GameFarmNode] Planting 加载失败', err?.message ?? err);
+                return;
+            }
+            this.plantingPrefabResolved = prefab;
+            if (this.node?.isValid) {
+                this.syncPlotOverlaysFromModel();
+            }
+        });
+    }
+
+    private getPlantingPrefab(): Prefab | null {
+        return this.plantingPrefabResolved ?? this.plantingPrefab;
+    }
+
+    private getPlantingEndPrefab(): Prefab | null {
+        return this.plantingEndPrefabResolved ?? this.plantingEndPrefab;
+    }
+
+    /** 根据 farm_data 刷新单块农田上的浇水 / 生长 / 成熟预制件 */
+    private refreshPlotNode(plotNode: Node, farmId: number) {
+        const farmModel = FarmModel.getInstance();
+        const plot = farmModel.getPlot(farmId);
+        const nowSec = farmModel.getNowUnixSec();
+        const showEnd = isPlotHarvestable(plot, nowSec);
+        const showWater = plotNeedsWaterOverlay(plot) && !showEnd;
+        const showPlanting = isPlotGrowing(plot, nowSec) && !showEnd;
+        this.setPlotWateringVisible(plotNode, showWater);
+        this.setPlotPlantingVisible(plotNode, showPlanting, plot);
+        this.setPlotPlantingEndVisible(plotNode, showEnd, plot);
+        this.refreshPlotBuffOverlay(plotNode, plot, nowSec);
+    }
+
+    private syncPlotOverlaysFromModel() {
+        const farmModel = FarmModel.getInstance();
+        const farmCount = farmModel.getFarmCount();
+        const children = this.node.children;
+        for (let i = 0; i < children.length; i++) {
+            const plotNode = children[i];
+            if (!plotNode.active) {
+                continue;
+            }
+            const plotIndex = this.parsePlotIndex(plotNode);
+            if (plotIndex < 0) {
+                continue;
+            }
+            const farmId = toServerFarmId(this.farmIndex, plotIndex, farmCount);
+            if (farmId == null) {
+                this.setPlotWateringVisible(plotNode, false);
+                this.setPlotPlantingVisible(plotNode, false);
+                this.setPlotPlantingEndVisible(plotNode, false);
+                this.refreshPlotBuffOverlay(plotNode, null, farmModel.getNowUnixSec());
+                continue;
+            }
+            this.refreshPlotNode(plotNode, farmId);
+        }
+    }
+
+    private setPlotWateringVisible(plotNode: Node, visible: boolean) {
+        this.ensureWateringPrefabInstance(plotNode, visible);
+    }
+
+    private ensureWateringPrefabInstance(plotNode: Node, visible: boolean) {
+        let wateringNode = plotNode.getChildByName(WATERING_PREFAB_NODE_NAME);
+        if (!visible) {
+            if (wateringNode) {
+                wateringNode.destroy();
+            }
+            return;
+        }
+
+        const prefab = this.getWateringPrefab();
+        if (!prefab) {
+            return;
+        }
+
+        if (!wateringNode) {
+            wateringNode = instantiate(prefab);
+            wateringNode.name = WATERING_PREFAB_NODE_NAME;
+            wateringNode.setParent(plotNode);
+        }
+        wateringNode.active = true;
+        wateringNode.setSiblingIndex(plotNode.children.length - 1);
+    }
+
+    private setPlotPlantingVisible(plotNode: Node, visible: boolean, plot?: FarmPlotState | null) {
+        this.ensurePlantingPrefabInstance(plotNode, visible, plot ?? null);
+    }
+
+    private ensurePlantingPrefabInstance(
+        plotNode: Node,
+        visible: boolean,
+        plot: FarmPlotState | null,
+    ) {
+        let plantingNode = plotNode.getChildByName(PLANTING_PREFAB_NODE_NAME);
+        if (!visible) {
+            if (plantingNode) {
+                plantingNode.getComponent(Planting)?.disposeFunctionPanel();
+                plantingNode.destroy();
+            }
+            return;
+        }
+
+        const endNode = plotNode.getChildByName(PLANTING_END_PREFAB_NODE_NAME);
+        if (endNode) {
+            endNode.destroy();
+        }
+
+        const prefab = this.getPlantingPrefab();
+        if (!prefab) {
+            return;
+        }
+
+        if (!plantingNode) {
+            plantingNode = instantiate(prefab);
+            plantingNode.name = PLANTING_PREFAB_NODE_NAME;
+            plantingNode.setParent(plotNode);
+        }
+        plantingNode.active = true;
+        plantingNode.setSiblingIndex(plotNode.children.length - 1);
+
+        const ctrl = plantingNode.getComponent(Planting);
+        if (ctrl && plot) {
+            ctrl.setup(plot.farm_id, String(plot.seed ?? '').trim());
+        }
+    }
+
+    private setPlotPlantingEndVisible(plotNode: Node, visible: boolean, plot?: FarmPlotState | null) {
+        this.ensurePlantingEndPrefabInstance(plotNode, visible, plot ?? null);
+    }
+
+    private ensurePlantingEndPrefabInstance(
+        plotNode: Node,
+        visible: boolean,
+        plot: FarmPlotState | null,
+    ) {
+        let endNode = plotNode.getChildByName(PLANTING_END_PREFAB_NODE_NAME);
+        if (!visible) {
+            if (endNode) {
+                endNode.getComponent(PlantingEnd)?.disposeFunctionPanel();
+                endNode.destroy();
+            }
+            return;
+        }
+
+        const growingNode = plotNode.getChildByName(PLANTING_PREFAB_NODE_NAME);
+        if (growingNode) {
+            growingNode.getComponent(Planting)?.disposeFunctionPanel();
+            growingNode.destroy();
+        }
+
+        const prefab = this.getPlantingEndPrefab();
+        if (!prefab) {
+            return;
+        }
+
+        if (!endNode) {
+            endNode = instantiate(prefab);
+            endNode.name = PLANTING_END_PREFAB_NODE_NAME;
+            endNode.setParent(plotNode);
+        }
+        endNode.active = true;
+        endNode.setSiblingIndex(plotNode.children.length - 1);
+
+        const ctrl = endNode.getComponent(PlantingEnd);
+        if (ctrl && plot) {
+            ctrl.setup(plot.farm_id, String(plot.seed ?? '').trim());
         }
     }
 

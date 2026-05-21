@@ -1,17 +1,26 @@
 import { AppConst } from '../../AppConst';
+import { MapModel } from '../MapModel';
+import { GameFarmNode } from '../../View/Game/GameFarmNode';
 import { nakamaRpc } from '../../Utils/NakamaRpc';
 import {
     FARM_EVENT_DATA_UPDATED,
     FARM_EVENT_WEATHER_UPDATED,
+    FARM_MATCH_OPCODE_DATA,
+    FARM_PLOT_FUNCTION_HIDE_OTHERS,
     FarmDataResponse,
     FarmPlotPhase,
     FarmPlotDto,
     FarmPlotState,
+    isFarmBuffActive,
+    isPlotGrowing,
+    isPlotHarvestable,
     nowUnixSec,
+    getPlotGrowRemainSec,
     resolveFarmPlotPhase,
     WeatherDataResponse,
     WeatherSnapshot,
     weatherTypeName,
+    FARM_MATCH_OPCODE_DATA_HARVEST,
 } from './FarmTypes';
 
 /** 天气刷新失败后重试间隔（毫秒） */
@@ -37,7 +46,69 @@ export class FarmModel {
         return this._instance;
     }
 
-    public init(): void {}
+    public init(): void {
+        EventSystem.addListent('OnMatchData', this.onMatchData, this);
+    }
+
+    /**
+     * 处理服务端主动推送的农田数据（Match op_code=4 或含 farms 的业务体）。
+     * payload 格式与 farm_water / farm_data 成功响应一致：{ success, farms }。
+     */
+    public applyFarmPushPayload(payload: unknown, source = 'farm_push'): void {
+        if (!this.active) {
+            return;
+        }
+        const body = this.normalizeFarmPushBody(payload);
+        if (!body?.success || !Array.isArray(body.farms)) {
+            console.log(`[FarmModel] ${source} → 忽略无效农田推送`, payload);
+            return;
+        }
+        console.log(`[FarmModel] ${source} → 收到农田推送，${body.farms.length} 块地`);
+        this.applyFarms(body.farms, source);
+    }
+
+    private normalizeFarmPushBody(payload: unknown): FarmDataResponse | null {
+        if (payload == null) {
+            return null;
+        }
+        let raw: unknown = payload;
+        if (typeof raw === 'string') {
+            try {
+                raw = JSON.parse(raw);
+            } catch {
+                return null;
+            }
+        }
+        if (typeof raw !== 'object' || raw === null) {
+            return null;
+        }
+        const obj = raw as Record<string, unknown>;
+        if (obj.farms != null || obj.success != null) {
+            return obj as unknown as FarmDataResponse;
+        }
+        const content = obj.content;
+        if (typeof content === 'string') {
+            try {
+                return JSON.parse(content) as FarmDataResponse;
+            } catch {
+                return null;
+            }
+        }
+        if (content && typeof content === 'object') {
+            return content as unknown as FarmDataResponse;
+        }
+        return null;
+    }
+
+    private onMatchData(data: { opCode?: number; payload?: unknown }) {
+        if (!this.active || !MapModel.getInstance().isFarmMapGameType()) {
+            return;
+        }
+        if (Number(data?.opCode) !== FARM_MATCH_OPCODE_DATA && Number(data?.opCode) !== FARM_MATCH_OPCODE_DATA_HARVEST) {
+            return;
+        }
+        this.applyFarmPushPayload(data?.payload, 'match:farm_water');
+    }
 
     public isActive(): boolean {
         return this.active;
@@ -66,6 +137,52 @@ export class FarmModel {
         return resolveFarmPlotPhase(this.getPlot(farmId), nowSec);
     }
 
+    /** 与地块倒计时一致的时间源（优先 WebSocket 服务端时间） */
+    public getNowUnixSec(): number {
+        return this.nowUnixSec();
+    }
+
+    public isPlotHarvestableById(farmId: number, nowSec = this.nowUnixSec()): boolean {
+        return isPlotHarvestable(this.getPlot(farmId), nowSec);
+    }
+
+    /** Planting 本地倒计时归零或全局定时器到期：刷新为 PlantingEnd */
+    public notifyGrowCountdownEnded(farmId?: number): void {
+        if (!this.active) {
+            return;
+        }
+        const nowSec = this.nowUnixSec();
+        const id = farmId != null ? Math.floor(Number(farmId) || 0) : 0;
+        if (id > 0 && !isPlotHarvestable(this.getPlot(id), nowSec)) {
+            return;
+        }
+        EventSystem.send(FARM_PLOT_FUNCTION_HIDE_OTHERS, {});
+        this.applyLocalGrowExpiredPlots(nowSec);
+        GameFarmNode.syncAllInScene();
+    }
+
+    /** 当前可收获的 farm_id 列表 */
+    public getHarvestableFarmIds(nowSec = this.nowUnixSec()): number[] {
+        const ids: number[] = [];
+        this.plots.forEach((plot) => {
+            if (isPlotHarvestable(plot, nowSec)) {
+                ids.push(plot.farm_id);
+            }
+        });
+        return ids.sort((a, b) => a - b);
+    }
+
+    /** 是否存在仍在生长倒计时的地块 */
+    public hasGrowingPlots(nowSec = this.nowUnixSec()): boolean {
+        let found = false;
+        this.plots.forEach((plot) => {
+            if (isPlotGrowing(plot, nowSec)) {
+                found = true;
+            }
+        });
+        return found;
+    }
+
     /** 进入农场：并行请求天气与全部地块 */
     public async enterFarm(): Promise<void> {
         if (this.enterPromise) {
@@ -76,6 +193,7 @@ export class FarmModel {
         this.enterPromise = this.refreshAll()
             .then(() => {
                 console.log('[FarmModel] enterFarm → 农场数据加载完成');
+                this.onPlotsDataSynced('enterFarm');
             })
             .catch((e) => {
                 console.log('[FarmModel] enterFarm → 加载未完成', e?.message ?? e);
@@ -96,13 +214,11 @@ export class FarmModel {
         console.log('[FarmModel] leaveFarm');
     }
 
-    /** 地块下次应刷新 farm_data 的 Unix 秒（syncedAt + grow_remain） */
+    /** 地块成熟结束 Unix 秒（grow_remain） */
     public getPlotNextUpdateAtSec(farmId: number): number | null {
         const plot = this.getPlot(farmId);
-        if (!plot || plot.grow_remain <= 0) {
-            return null;
-        }
-        return plot.syncedAt + plot.grow_remain;
+        const end = getPlotGrowRemainSec(plot);
+        return end > 0 ? end : null;
     }
 
     public async refreshAll(): Promise<void> {
@@ -135,6 +251,103 @@ export class FarmModel {
         this.scheduleNextWeatherRefresh();
     }
 
+    /** 在指定地块播种（farm_grow，仅写入种子，需再浇水才开始生长） */
+    public async grow(farmId: number, seed: string): Promise<{ ok: boolean; message?: string }> {
+        if (!this.active) {
+            return { ok: false, message: '未在农场中' };
+        }
+        const id = Number(farmId);
+        const seedId = String(seed ?? '').trim();
+        if (!Number.isFinite(id) || id <= 0 || !seedId) {
+            return { ok: false, message: 'invalid params' };
+        }
+
+        let res: FarmDataResponse | null = null;
+        try {
+            res = await nakamaRpc<FarmDataResponse>('farm_grow', {
+                farm_id: id,
+                seed: seedId,
+            });
+        } catch (e: any) {
+            console.log('[FarmModel] farm_grow 请求异常', e?.message ?? e);
+            return { ok: false, message: e?.message ?? '请求失败' };
+        }
+
+        if (!res || res.success === false) {
+            console.log('[FarmModel] farm_grow 业务失败', res?.message ?? 'unknown');
+            return { ok: false, message: res?.message ?? '种植失败' };
+        }
+
+        if (Array.isArray(res.farms)) {
+            this.applyFarms(res.farms);
+        }
+        console.log('[FarmModel] farm_grow 成功', { farm_id: id, seed: seedId });
+        return { ok: true };
+    }
+
+    /** 浇水并开始生长（farm_water） */
+    public async water(farmId: number): Promise<{ ok: boolean; message?: string }> {
+        if (!this.active) {
+            return { ok: false, message: '未在农场中' };
+        }
+        const id = Number(farmId);
+        if (!Number.isFinite(id) || id <= 0) {
+            return { ok: false, message: 'invalid params' };
+        }
+
+        let res: FarmDataResponse | null = null;
+        try {
+            res = await nakamaRpc<FarmDataResponse>('farm_water', { farm_id: id });
+        } catch (e: any) {
+            console.log('[FarmModel] farm_water 请求异常', e?.message ?? e);
+            return { ok: false, message: e?.message ?? '请求失败' };
+        }
+
+        if (!res || res.success === false) {
+            console.log('[FarmModel] farm_water 业务失败', res?.message ?? 'unknown');
+            return { ok: false, message: res?.message ?? '浇水失败' };
+        }
+
+        if (Array.isArray(res.farms)) {
+            this.applyFarms(res.farms);
+        }
+        console.log('[FarmModel] farm_water 成功', { farm_id: id });
+        return { ok: true };
+    }
+
+    /** 成熟地块收获（farm_get） */
+    public async harvest(farmId: number): Promise<{ ok: boolean; message?: string }> {
+        if (!this.active) {
+            return { ok: false, message: '未在农场中' };
+        }
+        const id = Number(farmId);
+        if (!Number.isFinite(id) || id <= 0) {
+            return { ok: false, message: 'invalid params' };
+        }
+        if (!this.isPlotHarvestableById(id)) {
+            return { ok: false, message: '作物尚未成熟' };
+        }
+
+        let res: FarmDataResponse | null = null;
+        try {
+            res = await nakamaRpc<FarmDataResponse>('farm_get', { farm_id: id });
+        } catch (e: any) {
+            console.log('[FarmModel] farm_get 请求异常', e?.message ?? e);
+            return { ok: false, message: e?.message ?? '请求失败' };
+        }
+
+        if (!res || res.success === false) {
+            console.log('[FarmModel] farm_get 业务失败', res?.message ?? 'unknown');
+            return { ok: false, message: res?.message ?? '收获失败' };
+        }
+
+        if (Array.isArray(res.farms)) {
+            this.applyFarms(res.farms);
+        }
+        console.log('[FarmModel] farm_get 成功', { farm_id: id });
+        return { ok: true };
+    }
+
     public async refreshFarms(): Promise<void> {
         let res: FarmDataResponse | null = null;
         try {
@@ -156,7 +369,6 @@ export class FarmModel {
         }
         this.applyFarms(res.farms);
         this.logFarmSnapshot();
-        this.scheduleNextFarmRefresh();
     }
 
     private applyWeather(res: WeatherDataResponse): boolean {
@@ -171,7 +383,7 @@ export class FarmModel {
         return true;
     }
 
-    private applyFarms(farms: FarmPlotDto[]): void {
+    private applyFarms(farms: FarmPlotDto[], source = 'applyFarms'): void {
         const syncedAt = this.nowUnixSec();
         this.plots.clear();
         for (let i = 0; i < farms.length; i++) {
@@ -180,15 +392,35 @@ export class FarmModel {
             if (!Number.isFinite(farmId) || farmId <= 0) {
                 continue;
             }
+            const growRemain = Math.max(0, Number(dto.grow_remain) || 0);
             this.plots.set(farmId, {
                 farm_id: farmId,
                 seed: String(dto.seed ?? ''),
                 buff: dto.buff ?? null,
-                grow_remain: Math.max(0, Number(dto.grow_remain) || 0),
+                grow_remain: growRemain,
                 syncedAt,
             });
         }
         EventSystem.send(FARM_EVENT_DATA_UPDATED, this.getAllPlots());
+        this.onPlotsDataSynced(source);
+    }
+
+    /**
+     * 地块数据同步后：处理已到期、进图判断可收获、刷新场景；有倒计时则启动一次生长定时器。
+     */
+    private onPlotsDataSynced(source: string): void {
+        const nowSec = this.nowUnixSec();
+        this.applyLocalGrowExpiredPlots(nowSec);
+
+        const harvestable = this.getHarvestableFarmIds(nowSec);
+        if (harvestable.length > 0) {
+            console.log(`[FarmModel] ${source} → 可收获地块 farm_id=`, harvestable);
+        } else {
+            console.log(`[FarmModel] ${source} → 无可收获地块`);
+        }
+
+        GameFarmNode.syncAllInScene();
+        this.scheduleGrowCountdown();
     }
 
     private logFarmSnapshot(): void {
@@ -225,56 +457,115 @@ export class FarmModel {
         }
     }
 
-    private computeNextFarmRefreshAtSec(): number | null {
+    /** 仍在生长中的地块（未到期）下一次成熟时刻 */
+    private computeNextFarmGrowEndAtSec(): number | null {
         const nowSec = this.nowUnixSec();
         let next: number | null = null;
         this.plots.forEach((plot) => {
-            if (plot.grow_remain <= 0) {
+            const endAt = getPlotGrowRemainSec(plot);
+            if (endAt <= 0 || !plot.seed) {
                 return;
             }
-            const at = plot.syncedAt + plot.grow_remain;
-            if (at <= nowSec) {
-                next = nowSec;
+            if (endAt <= nowSec) {
                 return;
             }
-            if (next == null || at < next) {
-                next = at;
+            if (next == null || endAt < next) {
+                next = endAt;
             }
         });
         return next;
     }
 
-    private scheduleNextFarmRefresh(): void {
+    /** 成熟时间已到：仅本地刷新阶段/UI，不请求 farm_data */
+    private applyLocalGrowExpiredPlots(nowSec = this.nowUnixSec()): boolean {
+        let changed = false;
+        this.plots.forEach((plot) => {
+            const end = getPlotGrowRemainSec(plot);
+            if (end <= 0 || !plot.seed) {
+                return;
+            }
+            if (nowSec >= end) {
+                changed = true;
+            }
+        });
+        if (changed) {
+            EventSystem.send(FARM_EVENT_DATA_UPDATED, this.getAllPlots());
+        }
+        return changed;
+    }
+
+    /** 下一次 buff 结束时刻（仅统计当前仍生效的 buff） */
+    private computeNextBuffEndAtSec(): number | null {
+        const nowSec = this.nowUnixSec();
+        let next: number | null = null;
+        this.plots.forEach((plot) => {
+            if (!plot.buff?.length) {
+                return;
+            }
+            for (let i = 0; i < plot.buff.length; i++) {
+                const b = plot.buff[i];
+                if (!isFarmBuffActive(b, nowSec)) {
+                    continue;
+                }
+                const end = Math.floor(Number(b.end) || 0);
+                if (end <= nowSec) {
+                    continue;
+                }
+                if (next == null || end < next) {
+                    next = end;
+                }
+            }
+        });
+        return next;
+    }
+
+    /** 生长到期 / buff 到期时刷新地块 UI */
+    private scheduleGrowCountdown(): void {
         this.clearFarmRefreshTimer();
         if (!this.active) {
             return;
         }
 
-        const at = this.computeNextFarmRefreshAtSec();
-        if (at == null) {
-            return;
-        }
-
         const nowSec = this.nowUnixSec();
-        if (at <= nowSec) {
-            console.log('[FarmModel] 地块 grow_remain 已到期，立即刷新 farm_data');
-            void this.onFarmTimerFire();
+        const growAt = this.computeNextFarmGrowEndAtSec();
+        const buffAt = this.computeNextBuffEndAtSec();
+        const candidates: number[] = [];
+        if (growAt != null && growAt > nowSec) {
+            candidates.push(growAt);
+        }
+        if (buffAt != null && buffAt > nowSec) {
+            candidates.push(buffAt);
+        }
+        if (!candidates.length) {
             return;
         }
 
+        const at = Math.min(...candidates);
         const delayMs = Math.max(500, (at - nowSec) * 1000 + 200);
-        console.log(`[FarmModel] 已安排农田刷新，${at - nowSec}s 后触发`);
+        const kind = at === buffAt && at !== growAt ? 'buff' : at === growAt && at !== buffAt ? 'grow' : 'grow+buff';
+        console.log(
+            `[FarmModel] 农田 UI 定时 ${at - nowSec}s 后刷新（${kind}，at=${at}）`,
+        );
         this.farmRefreshTimer = setTimeout(() => {
-            void this.onFarmTimerFire();
+            this.onFarmUiTimerFire();
         }, delayMs);
     }
 
-    private async onFarmTimerFire(): Promise<void> {
+    private onFarmUiTimerFire(): void {
+        this.clearFarmRefreshTimer();
         if (!this.active) {
             return;
         }
-        console.log('[FarmModel] 定时触发 → 刷新 farm_data');
-        await this.refreshFarms();
+        const nowSec = this.nowUnixSec();
+        console.log('[FarmModel] 农田 UI 定时到期 → 刷新土地');
+        this.applyLocalGrowExpiredPlots(nowSec);
+        EventSystem.send(FARM_EVENT_DATA_UPDATED, this.getAllPlots());
+        GameFarmNode.syncAllInScene();
+        const harvestable = this.getHarvestableFarmIds(nowSec);
+        if (harvestable.length > 0) {
+            console.log('[FarmModel] 到期后可收获地块 farm_id=', harvestable);
+        }
+        this.scheduleGrowCountdown();
     }
 
     private scheduleNextWeatherRefresh(): void {

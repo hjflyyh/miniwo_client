@@ -85,7 +85,8 @@ export class CustomizeMapData extends Component {
         MapManager.GetInstance().getMapEditorUI().npcHeadNode.parent.addChild(newHead)
 
         let npcHeadNode = newHead.getComponent(NpcHeadNode)
-        npcHeadNode.setNpcId(npcId , newNpc)
+        npcHeadNode.setNpcId(npcId, newNpc)
+        npcHeadNode.refreshNpcIconFromMap()
 
         return mapNpc
     }

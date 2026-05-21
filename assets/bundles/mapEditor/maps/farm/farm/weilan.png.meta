@@ -2,7 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "f1f9490a-2744-4889-8a74-5c9d1aa205dc",
+  "uuid": "3ffd2988-6cef-448c-ba14-4d06051c5e79",
   "files": [
     ".json",
     ".png"
@@ -10,14 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "f1f9490a-2744-4889-8a74-5c9d1aa205dc@6c48a",
+      "uuid": "3ffd2988-6cef-448c-ba14-4d06051c5e79@6c48a",
       "displayName": "weilan",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "f1f9490a-2744-4889-8a74-5c9d1aa205dc",
+        "imageUuidOrDatabaseUri": "3ffd2988-6cef-448c-ba14-4d06051c5e79",
         "isUuid": true,
         "visible": false,
         "minfilter": "linear",
@@ -34,7 +34,7 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "f1f9490a-2744-4889-8a74-5c9d1aa205dc@f9941",
+      "uuid": "3ffd2988-6cef-448c-ba14-4d06051c5e79@f9941",
       "displayName": "weilan",
       "id": "f9941",
       "name": "spriteFrame",
@@ -113,7 +113,7 @@
           ]
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "f1f9490a-2744-4889-8a74-5c9d1aa205dc@6c48a",
+        "imageUuidOrDatabaseUri": "3ffd2988-6cef-448c-ba14-4d06051c5e79@6c48a",
         "atlasUuid": "",
         "trimType": "auto"
       },
@@ -129,6 +129,6 @@
     "type": "sprite-frame",
     "fixAlphaTransparencyArtifacts": false,
     "hasAlpha": true,
-    "redirect": "f1f9490a-2744-4889-8a74-5c9d1aa205dc@6c48a"
+    "redirect": "3ffd2988-6cef-448c-ba14-4d06051c5e79@6c48a"
   }
 }

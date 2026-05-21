@@ -128,6 +128,12 @@ export class MapEditor extends Component {
     @property({ displayName: '允许道具堆叠摆放', tooltip: '勾选后：室内家具可叠放（放宽 place_type 与 decor_type 匹配）；农场地图(mapGameType=0)上外景树/农田(Plant、Fram)也可叠放，多实例用唯一 mapItems key。不勾选则沿用原规则。' })
     public enableDecorStackPlacement : boolean = false;
 
+    @property({
+        displayName: '铺路忽略格子占用',
+        tooltip: '勾选后：铺路(GROUND)忽略 mapData、地板/墙/家具、其它路面类型、邻格类型与是否已铺；点击/拖过即强制铺当前选中路面。',
+    })
+    public enableRoadIgnoreGridOccupancy = false;
+
     /** 最近一次鼠标/触摸在 mapContainer 下的本地坐标（用于格子内偏移摆放） */
     public lastPointerLocalPos: Vec2 | null = null;
     private graphics: Graphics = null;
@@ -906,6 +912,13 @@ export class MapEditor extends Component {
             }
         } else if (manager.actionStatus == ActionStatus.WALL) {
             
+        } else if (manager.actionStatus == ActionStatus.GROUND) {
+            if (this.canPlaceRoadAt(gridPos)) {
+                this.maskSp.color = new Color('#00FF296A');
+                this.curGride = gridPos;
+            } else if (this.curGride.x != gridPos.x || this.curGride.y != gridPos.y) {
+                this.maskSp.color = new Color('#FF00006A');
+            }
         } else {
             if (this.checkPlacementValidity(gridPos) && this.checkPlaceTreeValidity(gridPos)) {
                 this.maskSp.color = new Color('#00FF296A');
@@ -969,39 +982,155 @@ export class MapEditor extends Component {
         }
     }
 
-    // 建造地板
-    buildGround(gridPos: Vec2) {
-        if (this.placeholderTilemap.get(`${gridPos.x},${gridPos.y}`).empty) {
-            let islike = false;
-            const _list = [new Vec2(0, -1), new Vec2(0, 1), new Vec2(-1, 0), new Vec2(1, 0), new Vec2(-1, -1), new Vec2(1, -1), new Vec2(-1, 1), new Vec2(1, 1)]
-            for (let i = 0; i < _list.length; i++) {
-                const element = _list[i];
-                const pos = new Vec2(gridPos.x + element.x, gridPos.y + element.y);
-                if (this.placeholderTilemap.get(`${pos.x},${pos.y}`)._tileType != this.groundType) {
-                    islike = true;
-                    break;
-                }
+    private isRoadGridInBounds(gridPos: Vec2): boolean {
+        return (
+            gridPos.x >= 0 &&
+            gridPos.y >= 0 &&
+            gridPos.x < this.mapWidth &&
+            gridPos.y < this.mapHeight
+        );
+    }
+
+    /** 铺路：格子是否被 mapData 占用（地板/墙/家具） */
+    private isRoadBlockedByMapData(gridPos: Vec2): boolean {
+        if (!this.isRoadGridInBounds(gridPos)) {
+            return true;
+        }
+        const v = this.mapData[gridPos.x]?.[gridPos.y];
+        return v != null && v !== 0;
+    }
+
+    private ensurePlaceholderCell(gridPos: Vec2) {
+        const key = `${gridPos.x},${gridPos.y}`;
+        if (!this.placeholderTilemap.has(key)) {
+            this.placeholderTilemap.set(key, {
+                _type: 1,
+                empty: true,
+                _tileType: this.groundType,
+                cfgId: this.chooseGroundId,
+            });
+        }
+    }
+
+    /** 当前模式下该格是否允许铺路（预览绿框 / buildGround 共用） */
+    private canPlaceRoadAt(gridPos: Vec2): boolean {
+        if (!this.isRoadGridInBounds(gridPos)) {
+            return false;
+        }
+        if (this.enableRoadIgnoreGridOccupancy) {
+            return true;
+        }
+        if (!this.placeholderTilemap.has(`${gridPos.x},${gridPos.y}`)) {
+            return false;
+        }
+        if (this.isRoadBlockedByMapData(gridPos)) {
+            return false;
+        }
+        const cell = this.placeholderTilemap.get(`${gridPos.x},${gridPos.y}`);
+        return !!cell?.empty;
+    }
+
+    private clearDisplayTileAt(gridPos: Vec2) {
+        const entry = this.displayTilemap.get(`${gridPos.x},${gridPos.y}`);
+        if (entry?.tileNode?.isValid) {
+            entry.tileNode.destroy();
+        }
+        this.displayTilemap.delete(`${gridPos.x},${gridPos.y}`);
+    }
+
+    private clearDisplayTilesForRoadPaint(center: Vec2) {
+        this.clearDisplayTileAt(center);
+        for (let i = 0; i < this.NEIGHBOURS.length; i++) {
+            const n = this.NEIGHBOURS[i];
+            this.clearDisplayTileAt(new Vec2(center.x + n.x, center.y + n.y));
+        }
+    }
+
+    /** 忽略占用铺路时：释放 mapData 占格（0=空；1 地板 / 2 墙 / 3 家具） */
+    private releaseMapDataOccupancyForForcedRoad(gridPos: Vec2) {
+        if (!this.isRoadGridInBounds(gridPos)) {
+            return;
+        }
+        const row = this.mapData[gridPos.x];
+        if (!row) {
+            return;
+        }
+        row[gridPos.y] = 0;
+    }
+
+    private placeRoadCell(gridPos: Vec2) {
+        const force = this.enableRoadIgnoreGridOccupancy;
+        if (force) {
+            if (!this.isRoadGridInBounds(gridPos)) {
+                return;
             }
+            this.ensurePlaceholderCell(gridPos);
+            this.releaseMapDataOccupancyForForcedRoad(gridPos);
+        } else if (!this.canPlaceRoadAt(gridPos)) {
+            return;
+        }
 
-            if (!islike) {
-                this.placeholderTilemap.set(`${gridPos.x},${gridPos.y}`, { _type: 2, empty: false, _tileType: this.groundType , cfgId : this.chooseGroundId });
-                this.setDisplayTile(gridPos, new Size(this.tileSize, this.tileSize), this.groundType);
+        this.clearDisplayTilesForRoadPaint(gridPos);
+        this.placeholderTilemap.set(`${gridPos.x},${gridPos.y}`, {
+            _type: 2,
+            empty: false,
+            _tileType: this.groundType,
+            cfgId: this.chooseGroundId,
+        });
+        this.setDisplayTile(gridPos, new Size(this.tileSize, this.tileSize), this.groundType);
+    }
 
-                const fillCells = computeSameTypeClosedFillCells({
-                    mapWidth : this.mapWidth,
-                    mapHeight : this.mapHeight,
-                    placeholderTilemap : this.placeholderTilemap as any,
-                    cfgId : this.chooseGroundId,
-                    seed : gridPos,
-                    padding : 1
-                })
-                // console.log(fillCells)
-                if(fillCells.length > 0){
-                    for(let f = 0 ; f < fillCells.length ; f++){
-                        let cellGrid = fillCells[f]
-                        this.placeholderTilemap.set(`${cellGrid.x},${cellGrid.y}`, { _type: 2, empty: false, _tileType: this.groundType , cfgId : this.chooseGroundId });
-                        this.setDisplayTile(cellGrid, new Size(this.tileSize, this.tileSize), this.groundType);
-                    }
+    // 建造地板 / 铺路
+    buildGround(gridPos: Vec2) {
+        if (this.enableRoadIgnoreGridOccupancy) {
+            this.placeRoadCell(gridPos);
+            return;
+        }
+
+        if (!this.canPlaceRoadAt(gridPos)) {
+            return;
+        }
+
+        const cell = this.placeholderTilemap.get(`${gridPos.x},${gridPos.y}`);
+        if (!cell?.empty) {
+            return;
+        }
+
+        let islike = false;
+        const _list = [
+            new Vec2(0, -1),
+            new Vec2(0, 1),
+            new Vec2(-1, 0),
+            new Vec2(1, 0),
+            new Vec2(-1, -1),
+            new Vec2(1, -1),
+            new Vec2(-1, 1),
+            new Vec2(1, 1),
+        ];
+        for (let i = 0; i < _list.length; i++) {
+            const element = _list[i];
+            const pos = new Vec2(gridPos.x + element.x, gridPos.y + element.y);
+            const neighbor = this.placeholderTilemap.get(`${pos.x},${pos.y}`);
+            if (!neighbor || neighbor._tileType != this.groundType) {
+                islike = true;
+                break;
+            }
+        }
+
+        if (!islike) {
+            this.placeRoadCell(gridPos);
+
+            const fillCells = computeSameTypeClosedFillCells({
+                mapWidth: this.mapWidth,
+                mapHeight: this.mapHeight,
+                placeholderTilemap: this.placeholderTilemap as any,
+                cfgId: this.chooseGroundId,
+                seed: gridPos,
+                padding: 1,
+            });
+            if (fillCells.length > 0) {
+                for (let f = 0; f < fillCells.length; f++) {
+                    this.placeRoadCell(fillCells[f]);
                 }
             }
         }
@@ -1014,10 +1143,19 @@ export class MapEditor extends Component {
             const newPos = new Vec2(pos.x + this.NEIGHBOURS[i].x, pos.y + this.NEIGHBOURS[i].y);
             let localPos = MapModel.getInstance().gridToWorld(newPos , null, this);
 
-            //url cfgId
-            const tileData = this.calculateDisplayTile(newPos)
-            if(tileData["url"] == "ground/texture2d/dirty_road/dirty_road_7/spriteFrame"){
-                return
+            const tileData = this.calculateDisplayTile(newPos);
+            if (tileData == null) {
+                continue;
+            }
+            const tileUrl =
+                typeof tileData === 'string'
+                    ? tileData
+                    : String((tileData as { url?: string }).url ?? '');
+            if (
+                tileUrl === 'ground/texture2d/dirty_road/dirty_road_7/spriteFrame' &&
+                !this.enableRoadIgnoreGridOccupancy
+            ) {
+                continue;
             }
             // 创建新的图块
             const tile = new Node;
@@ -1031,14 +1169,18 @@ export class MapEditor extends Component {
 
             let displayTitle = tile.addComponent("DisplayTitle") as DisplayTitle;
             displayTitle.sp = sprite
-            displayTitle.spframeName = tileData["url"]
+            displayTitle.spframeName = tileUrl
             // console.log(tileData["url"])
             
             displayTitle.gridKey = `${newPos.x},${newPos.y}`
             displayTitle.poolNodeSize = _size
             displayTitle.camera = MapManager.GetInstance().getMapEditor().mainCamera
 
-            this.displayTilemap.set(`${newPos.x},${newPos.y}`, { tileNode: tile, _type: _tag , cfgId : tileData["cfgId"]})
+            this.displayTilemap.set(`${newPos.x},${newPos.y}`, {
+                tileNode: tile,
+                _type: _tag,
+                cfgId: this.chooseGroundId,
+            });
         }
     }
 

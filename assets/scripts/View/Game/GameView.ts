@@ -19,7 +19,12 @@ import { GameSendRewardCell } from './GameSendRewardCell';
 import { BagModel } from '../../Model/BagModel';
 import { GAME_FARM_PLOT_CLICK_EVENT, GameFarmPlotClickPayload } from './GameFarmNode';
 import { FarmModel } from '../../Model/Farm/FarmModel';
-import { GameFarmChooseCell } from './GameFarmChooseCell';
+import {
+    GAME_FARM_SEED_CHOOSE_EVENT,
+    GameFarmChooseCell,
+    GameFarmSeedChoosePayload,
+} from './GameFarmChooseCell';
+import { isPlotSeedEmpty, plotNeedsWaterOverlay } from '../../Model/Farm/FarmTypes';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameView')
@@ -139,6 +144,7 @@ export class GameView extends Component {
         EventSystem.addListent("WebSocketNotifications", this.onWebSocketNotification, this)
         EventSystem.addListent("OpenGameShop", this.OpenGameShop, this)
         EventSystem.addListent(GAME_FARM_PLOT_CLICK_EVENT, this.onGameFarmPlotClick, this)
+        EventSystem.addListent(GAME_FARM_SEED_CHOOSE_EVENT, this.onGameFarmSeedChoose, this)
         EventSystem.addListent('ConfigLoadAll', this.onConfigLoadAll, this)
 
         this.onEditEnd()
@@ -295,7 +301,7 @@ export class GameView extends Component {
             const displayName = String(
                 row.item?.name_cn || row.seed.crop_name || row.item?.name_en || itemId
             );
-            this.refreshFarmCell(node, itemId, count, displayName);
+            this.refreshFarmCell(node, itemId, count, row.seedKey, displayName);
             (node as any)._farmItemId = itemId;
             (node as any)._farmSeedKey = row.seedKey;
             node.name = `farm_item_${itemId}`;
@@ -305,7 +311,7 @@ export class GameView extends Component {
         templateNode.active = false;
     }
 
-    private onGameFarmPlotClick(payload: GameFarmPlotClickPayload) {
+    private async onGameFarmPlotClick(payload: GameFarmPlotClickPayload) {
         if (!this.isCurrentMapOwnedBySelf()) {
             EventSystem.send('ShowTips', '只能在自己的农场种植哦~');
             return;
@@ -318,9 +324,34 @@ export class GameView extends Component {
         if (farmId == null || !Number.isFinite(farmId) || farmId <= 0) {
             return;
         }
+
+        await FarmModel.getInstance().refreshFarms();
+        const plot = FarmModel.getInstance().getPlot(farmId);
+
+        if (this.farmNode) {
+            this.farmNode.active = false;
+        }
+        this.selectedFarmPlot = null;
+        this.syncFarmChooseCellsFarmId(null);
+
+        if (plotNeedsWaterOverlay(plot)) {
+            // const result = await FarmModel.getInstance().water(farmId);
+            // if (result.ok) {
+            //     EventSystem.send('ShowTips', '浇水成功');
+            // } else {
+            //     EventSystem.send('ShowTips', result.message ?? '浇水失败');
+            // }
+            return;
+        }
+
+        if (!isPlotSeedEmpty(plot)) {
+            return;
+        }
+
         this.selectedFarmPlot = {
             farmIndex: Number(payload?.farmIndex) || 0,
             plotIndex,
+            farmId,
             plotNodeName: payload?.plotNodeName,
         };
         if (this.rewardTarget) {
@@ -332,34 +363,86 @@ export class GameView extends Component {
         if (this.farmNode) {
             this.farmNode.active = true;
         }
+        this.syncFarmChooseCellsFarmId(farmId);
     }
 
-    private refreshFarmCell(node: Node, itemId: number, count: number, _displayName?: string) {
-        // const spriteRoot = node.getChildByName('Sprite');
-        // const iconNode = spriteRoot?.getChildByName('icon');
-        // const icon = iconNode?.getComponent(Sprite);
-        // if (icon) {
-        //     resources.load(`UITexture/itemIcon/${itemId}/spriteFrame`, SpriteFrame, (err, sf) => {
-        //         if (!err && sf && icon.isValid) {
-        //             icon.spriteFrame = sf;
-        //             return;
-        //         }
-        //         resources.load(`common/image/item_${itemId}/spriteFrame`, SpriteFrame, (err2, sf2) => {
-        //             if (!err2 && sf2 && icon.isValid) {
-        //                 icon.spriteFrame = sf2;
-        //             }
-        //         });
-        //     });
-        // }
-        // const label = spriteRoot?.getChildByName('Label-001')?.getComponent(Label);
-        // if (label) {
-        //     const safeCount = Math.max(0, Number.isFinite(Number(count)) ? Number(count) : 0);
-        //     label.string = `x${safeCount}`;
-        // }
-        let chooseCell = node.getComponent(GameFarmChooseCell);
-        if (chooseCell) {
-            chooseCell.refreshNode(itemId, count, _displayName);
+    private syncFarmChooseCellsFarmId(farmId: number | null) {
+        for (let i = 0; i < this.farmCells.length; i++) {
+            const node = this.farmCells[i];
+            node?.getComponent(GameFarmChooseCell)?.setFarmId(farmId);
         }
+    }
+
+    private refreshFarmCell(
+        node: Node,
+        itemId: number,
+        count: number,
+        seedKey: number,
+        _displayName?: string
+    ) {
+        const chooseCell = node.getComponent(GameFarmChooseCell);
+        chooseCell?.setFarmId(this.selectedFarmPlot?.farmId ?? null);
+        chooseCell?.refreshNode(itemId, count, seedKey, _displayName);
+    }
+
+    /** 背包变更时仅刷新种子数量，不重建列表 */
+    private refreshFarmItemCounts() {
+        if (!this.farmCells.length) {
+            return;
+        }
+        for (let i = 0; i < this.farmCells.length; i++) {
+            const node = this.farmCells[i];
+            if (!node?.isValid) {
+                continue;
+            }
+            const itemId = Number((node as any)._farmItemId);
+            if (!Number.isFinite(itemId) || itemId <= 0) {
+                continue;
+            }
+            const count = BagModel.getInstance().getItemCount(itemId);
+            node.getComponent(GameFarmChooseCell)?.setCount(count);
+        }
+    }
+
+    private async onGameFarmSeedChoose(payload: GameFarmSeedChoosePayload) {
+        if (!this.isCurrentMapOwnedBySelf()) {
+            EventSystem.send('ShowTips', '只能在自己的农场种植哦~');
+            return;
+        }
+        const farmId = this.selectedFarmPlot?.farmId;
+        if (farmId == null || !Number.isFinite(farmId) || farmId <= 0) {
+            EventSystem.send('ShowTips', '请先选择一块农田');
+            return;
+        }
+
+        const itemId = Number(payload?.itemId);
+        const seedKey = Number(payload?.seedKey);
+        if (!Number.isFinite(itemId) || itemId <= 0 || !Number.isFinite(seedKey) || seedKey <= 0) {
+            return;
+        }
+
+        if (BagModel.getInstance().getItemCount(itemId) <= 0) {
+            EventSystem.send('ShowTips', '种子不足');
+            return;
+        }
+
+        const plot = FarmModel.getInstance().getPlot(farmId);
+        if (!isPlotSeedEmpty(plot)) {
+            EventSystem.send('ShowTips', '该地块已有作物');
+            return;
+        }
+
+        const result = await FarmModel.getInstance().grow(farmId, String(seedKey));
+        if (!result.ok) {
+            EventSystem.send('ShowTips', result.message ?? '种植失败');
+            return;
+        }
+
+        if (this.farmNode) {
+            this.farmNode.active = false;
+        }
+        this.selectedFarmPlot = null;
+        EventSystem.send('ShowTips', '播种成功');
     }
 
     private refreshBuildContentVisibility() {
@@ -484,7 +567,7 @@ export class GameView extends Component {
             return;
         }
         this.initRewardList();
-        this.initFarmList();
+        this.refreshFarmItemCounts();
     }
 
     public CloseMapEditor() {
