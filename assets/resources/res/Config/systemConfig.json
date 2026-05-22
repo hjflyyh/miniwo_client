@@ -146,5 +146,21 @@
   "38": {
     "function": "农场土地块数",
     "configuration": "6_150"
+  },
+  "39": {
+    "function": "探索解锁条件",
+    "configuration": "100056"
+  },
+  "40": {
+    "function": "派遣消耗",
+    "configuration": "102_100#102_200"
+  },
+  "41": {
+    "function": "探索时长",
+    "configuration": "1#10"
+  },
+  "42": {
+    "function": "犯罪被抓AI角色坐牢时长&保释金",
+    "configuration": "18000#104_20000"
   }
 }
