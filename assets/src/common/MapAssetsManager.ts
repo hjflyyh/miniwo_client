@@ -45,10 +45,23 @@ export class MapAssetsManager extends Component {
     private _throttleSlot : number = 0
 
     async loadMapEditorAssets() {
-        let bundle = assetManager.getBundle("mapEditor")
-            bundle.load("ground/texture2d/dirty_road/dirty_road_7/spriteFrame", SpriteFrame, (err, spriteFrame) => {
-                spriteFrame.addRef()
-        })
+        const bundle = assetManager.getBundle("mapEditor");
+        if (!bundle) {
+            console.error("[MapAssetsManager] mapEditor bundle 未加载，请先 loadBundle");
+            return;
+        }
+        const dirtyRoad7Path = "ground/texture2d/dirty_road/dirty_road_7/spriteFrame";
+        bundle.load(dirtyRoad7Path, SpriteFrame, (err, spriteFrame) => {
+            if (err) {
+                console.error("[MapAssetsManager] bundle.load failed:", dirtyRoad7Path, err);
+                return;
+            }
+            if (!spriteFrame) {
+                console.error("[MapAssetsManager] bundle.load empty result:", dirtyRoad7Path);
+                return;
+            }
+            spriteFrame.addRef();
+        });
 
         // this.loadAllNum = MapEditorUIConfig.UIConfig_Object.length * 2
         // this.loadAllNum += MapEditorUIConfig.NPC_CONFIG.length * 3
@@ -181,19 +194,21 @@ export class MapAssetsManager extends Component {
         console.log(assetUrl)
         return new Promise((resolve, reject) => {
             if (_index == 1) {
-                bundle.load(assetUrl, _type, (err, bundle) => {
+                bundle.load(assetUrl, _type, (err, asset) => {
                     if (err) {
-                        reject(err); // 失败时 reject
+                        console.error("[MapAssetsManager] bundle.load failed:", assetUrl, err);
+                        reject(err);
                     } else {
-                        resolve(bundle); // 成功时 resolve
+                        resolve(asset);
                     }
                 });
             } else {
-                bundle.loadDir(assetUrl, _type, (err, bundle) => {
+                bundle.loadDir(assetUrl, _type, (err, assets) => {
                     if (err) {
-                        reject(err); // 失败时 reject
+                        console.error("[MapAssetsManager] bundle.loadDir failed:", assetUrl, err);
+                        reject(err);
                     } else {
-                        resolve(bundle); // 成功时 resolve
+                        resolve(assets);
                     }
                 });
             }

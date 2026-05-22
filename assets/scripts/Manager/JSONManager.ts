@@ -38,11 +38,13 @@ export class JSONManager extends Component {
 
     public loadAll(){
         var _t = this
+        console.log("开始加载配置")
         for(let i = 0 ;i < this.configs.length ; i++){
             let cfgName = this.configs[i]
+            console.log(cfgName)
             resources.load("res/Config/" + this.configs[i] , JsonAsset , function(err , json){
                 if(json != null){
-                    log("加载配置：" + json.name)
+                    console.log("加载配置：" + json.name)
                     _t.jsonMap[json.name] = json.json
 
                     _t.loadSuccessNum++;
@@ -51,7 +53,8 @@ export class JSONManager extends Component {
                         EventSystem.send("ConfigLoadAll")
                     }
                 }else{
-                    log("配置加载失败:" + cfgName)
+                    console.log("配置加载失败:" + cfgName)
+                    console.log(err)
                 }
             })
         }

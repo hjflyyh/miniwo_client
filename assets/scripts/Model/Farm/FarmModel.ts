@@ -315,6 +315,43 @@ export class FarmModel {
         return { ok: true };
     }
 
+    /** 施肥（farm_fertilization） */
+    public async fertilize(
+        farmId: number,
+        itemId: number
+    ): Promise<{ ok: boolean; message?: string }> {
+        if (!this.active) {
+            return { ok: false, message: '未在农场中' };
+        }
+        const id = Number(farmId);
+        const iid = Math.floor(Number(itemId) || 0);
+        if (!Number.isFinite(id) || id <= 0 || iid <= 0) {
+            return { ok: false, message: 'invalid params' };
+        }
+
+        let res: FarmDataResponse | null = null;
+        try {
+            res = await nakamaRpc<FarmDataResponse>('farm_fertilization', {
+                farm_id: id,
+                item_id: iid,
+            });
+        } catch (e: any) {
+            console.log('[FarmModel] farm_fertilization 请求异常', e?.message ?? e);
+            return { ok: false, message: e?.message ?? '请求失败' };
+        }
+
+        if (!res || res.success === false) {
+            console.log('[FarmModel] farm_fertilization 业务失败', res?.message ?? 'unknown');
+            return { ok: false, message: res?.message ?? '施肥失败' };
+        }
+
+        if (Array.isArray(res.farms)) {
+            this.applyFarms(res.farms);
+        }
+        console.log('[FarmModel] farm_fertilization 成功', { farm_id: id, item_id: iid });
+        return { ok: true };
+    }
+
     /** 成熟地块收获（farm_get） */
     public async harvest(farmId: number): Promise<{ ok: boolean; message?: string }> {
         if (!this.active) {

@@ -2,7 +2,7 @@ import { _decorator, Component, ProgressBar, director } from 'cc';
 import { MapAssetsManager } from 'db://assets/src/common/MapAssetsManager';
 import { AppConst } from 'db://assets/scripts/AppConst';
 import { MapModel } from 'db://assets/scripts/Model/MapModel';
-import { FarmMapAssetPreloader } from 'db://assets/bundles/mapEditor/src/farm/FarmMapAssetPreloader';
+// import { FarmMapAssetPreloader } from 'db://assets/bundles/mapEditor/src/farm/FarmMapAssetPreloader';
 import { FarmModel } from 'db://assets/scripts/Model/Farm/FarmModel';
 const { ccclass, property } = _decorator;
 
@@ -45,17 +45,7 @@ export class EditMapLoading extends Component {
                 console.warn('[EditMapLoading] loadMapEditorAssets failed', e);
             });
 
-        const farmPromise = isFarmMap
-            ? FarmMapAssetPreloader.preload((ratio) => {
-                  this.setProgress(0.15 + ratio * 0.55);
-              }).catch((e) => {
-                  console.warn('[EditMapLoading] FarmMapAssetPreloader failed', e);
-              })
-            : Promise.resolve().then(() => {
-                  if (!isFarmMap) {
-                      this.setProgress(0.35);
-                  }
-              });
+        const farmPromise = false
 
         await Promise.all([mapAssetsPromise, farmPromise]);
 

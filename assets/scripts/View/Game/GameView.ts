@@ -2,19 +2,14 @@ import { _decorator, Component, EditBox, instantiate, Label, math, Node, resourc
 import { AppConst } from '../../AppConst';
 import { network } from '../../Model/RequestData';
 import { RoleModel } from '../../Model/RoleModel';
-import { HttpManager } from '../../Manager/HttpManager';
 import { MapChatManager } from '../../Manager/ChatManager';
 import { PrivateChatManager } from '../../Manager/PrivateChatMessage';
 import { MapModel } from '../../Model/MapModel';
-import { YXCollectionView, YXIndexPath } from 'db://assets/plugin/list-3x/yx-collection-view';
-import { CustomGridFlowLayout } from 'db://assets/plugin/list-3x/custom-grid-flow-layout';
-import { GameViewChatCell } from './GameViewChatCell';
 import { GameViewNpcCell } from './GameViewNpcCell';
-import { EditBoxFixedWidthAutoHeight } from '../../Utils/EditBoxFixedWidthAutoHeight';
-import { YXMasonryFlowLayout } from 'db://assets/plugin/list-3x/yx-masonry-flow-layout';
+
 import { GameMapChatScroll } from './GameMapChatScroll';
-import { MapEditorUI } from 'db://assets/bundles/mapEditor/src/MapEditorUI';
-import { MapManager } from 'db://assets/bundles/mapEditor/src/MapManager';
+
+// import { MapManager } from 'db://assets/bundles/mapEditor/src/MapManager';
 import { GameSendRewardCell } from './GameSendRewardCell';
 import { BagModel } from '../../Model/BagModel';
 import { GAME_FARM_PLOT_CLICK_EVENT, GameFarmPlotClickPayload } from './GameFarmNode';
@@ -581,7 +576,8 @@ export class GameView extends Component {
         }
         this.node.active = false
         EventSystem.send("OpenMapEditor")
-        MapManager.GetInstance()?.getMapEditor()?.focusCameraForBuildEntry()
+        EventSystem.send("focusCameraForBuildEntry")
+        // MapManager.GetInstance()?.getMapEditor()?.focusCameraForBuildEntry()
     }
 
     public onClickShowUI(){ 

@@ -27,7 +27,7 @@ export class Loading extends Component {
     @property(SpriteFrame)
     animationFrameArr: SpriteFrame[] = [];
 
-    bundleNames: Array<string> = ["mapEditor" , "npcAnimation"];
+    bundleNames: Array<string> = ["mapEditor"];
 
     //初始化任务，加载bundle，加载config
     initTaskQueue = {}
@@ -56,6 +56,7 @@ export class Loading extends Component {
 
     //配置加载完成
     OnConfigLoadAll(){
+      console.log("配置加载完成")
       this.initTaskQueue[this.taskConfig] = true
       this.checkInitTask()
     }
@@ -66,6 +67,7 @@ export class Loading extends Component {
             return
           }
         }
+        console.log("所有初始化任务完成")  
         EventSystem.send("InitTaskQueueSuccess")
     }
 
@@ -87,6 +89,7 @@ export class Loading extends Component {
             console.log(`Bundle ${loadedBundle.name} 加载成功`);
             _this.loadSuccessBundleNum++;
             if(_this.loadSuccessBundleNum == _this.bundleNames.length){
+              console.log("所有Bundle加载完成");
               this.initTaskQueue[this.taskBundle] = true
               this.checkInitTask();
               // MapAssetsManager.GetInstance().loadMapEditorAssets();

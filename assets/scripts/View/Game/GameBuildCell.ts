@@ -52,7 +52,8 @@ export class GameBuildCell extends Component implements InfiniteCell {
     }
 
     onClick(){
-        MapManager.GetInstance().getMapEditor().tileMaskNode.active = true;
+        // MapManager.GetInstance().getMapEditor().tileMaskNode.active = true;
+        EventSystem.send("BuildCellOnClick")
         if(this.tileType == "Ground"){
             EventSystem.send("OnClickTileGroundIcon" , this.tileId)
         }else if(this.tileType == "Floor"){

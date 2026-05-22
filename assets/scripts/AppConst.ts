@@ -20,4 +20,6 @@ export class AppConst{
     public static HttpManager : HttpManager;
     public static SocialHttpManager : SocialHttpManager;
     public static JournalManager : JournalManager;
+
+    public static mapManager : any;
 }

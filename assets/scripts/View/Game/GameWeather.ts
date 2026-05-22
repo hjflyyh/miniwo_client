@@ -33,12 +33,12 @@ export class GameWeather extends Component {
     }
 
     start() {
-        EventSystem.addListent(FARM_EVENT_WEATHER_UPDATED, this.onWeatherUpdated, this.weatherListener);
+        EventSystem.addListent(FARM_EVENT_WEATHER_UPDATED, this.onWeatherUpdated, this);
         this.syncFromModel();
     }
 
     onDestroy() {
-        EventSystem.remove(this.weatherListener);
+        
     }
 
     private onWeatherUpdated(snapshot?: WeatherSnapshot) {
