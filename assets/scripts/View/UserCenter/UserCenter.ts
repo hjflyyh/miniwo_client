@@ -30,7 +30,7 @@ export class UserCenter extends Component {
 
     setUser() {
         this.userName.string = RoleModel.getInstance().nickName
-        this.userId.string = RoleModel.getInstance().playerId
+        this.userId.string = "id: " + RoleModel.getInstance().playerId
         this.info.string = RoleModel.getInstance().bio
     }
 
@@ -55,7 +55,7 @@ export class UserCenter extends Component {
     }
 
     OnClickUserInfo() {
-        AppConst.PanelManager.openView("res/View/UserCenter/UserInfo", null, null, "res/View/UserCenter/UserCenter")
+        // AppConst.PanelManager.openView("res/View/UserCenter/UserInfo", null, null, "res/View/UserCenter/UserCenter")
     }
 
     private OnWSNotification(data) {

@@ -1,0 +1,114 @@
+{
+  "101": {
+    "name_cn": "农场家",
+    "resource": "maps/farm/home/homeBg",
+    "type": 15,
+    "img_size": 1,
+    "is_prefab": 0
+  },
+  "102": {
+    "name_cn": "农场家",
+    "resource": "maps/farm/home/homeWall",
+    "type": 15,
+    "img_size": 1,
+    "is_prefab": 0
+  },
+  "103": {
+    "name_cn": "桥前",
+    "resource": "maps/farm/bridge/bridge1",
+    "type": 15,
+    "img_size": 1,
+    "is_prefab": 0
+  },
+  "104": {
+    "name_cn": "桥后",
+    "resource": "maps/farm/bridge/bridge2",
+    "type": 15,
+    "img_size": 1,
+    "is_prefab": 0
+  },
+  "105": {
+    "name_cn": "stop图",
+    "resource": "maps/farm/bridge/stop",
+    "type": 15,
+    "img_size": 1,
+    "is_prefab": 0
+  },
+  "106": {
+    "name_cn": "河",
+    "resource": "maps/farm/river/prefab",
+    "type": 15,
+    "img_size": 1,
+    "is_prefab": 1
+  },
+  "107": {
+    "name_cn": "池塘",
+    "resource": "maps/farm/farm/chitang",
+    "type": 15,
+    "img_size": 1,
+    "is_prefab": 0
+  },
+  "108": {
+    "name_cn": "种植土地",
+    "resource": "maps/farm/farm/tudiPrefab1",
+    "type": 15,
+    "img_size": 1,
+    "is_prefab": 1
+  },
+  "109": {
+    "name_cn": "围栏",
+    "resource": "maps/farm/farm/weilan",
+    "type": 15,
+    "img_size": 1,
+    "is_prefab": 0
+  },
+  "110": {
+    "name_cn": "种植土地",
+    "resource": "maps/farm/farm/tudiPrefab2",
+    "type": 15,
+    "img_size": 1,
+    "is_prefab": 1
+  },
+  "111": {
+    "name_cn": "种植土地",
+    "resource": "maps/farm/farm/tudiPrefab3",
+    "type": 15,
+    "img_size": 1,
+    "is_prefab": 1
+  },
+  "112": {
+    "name_cn": "种植土地",
+    "resource": "maps/farm/farm/tudiPrefab4",
+    "type": 15,
+    "img_size": 1,
+    "is_prefab": 1
+  },
+  "113": {
+    "name_cn": "商店",
+    "resource": "maps/architecture/shopPrefab",
+    "type": 0,
+    "img_size": 1,
+    "is_prefab": 1
+  },
+  "114": {
+    "name_cn": "甜品",
+    "resource": "maps/architecture/dessert",
+    "type": 0,
+    "img_size": 1,
+    "is_prefab": 0
+  },
+  "115": {
+    "name_cn": "服装",
+    "resource": "maps/architecture/clothing",
+    "type": 0,
+    "img_size": 1,
+    "is_prefab": 0
+  },
+  "116": {
+    "name_cn": "仓库",
+    "resource": "maps/architecture/warehousePrefab",
+    "type": 0,
+    "img_size": 1,
+    "is_prefab": 1
+  }
+}

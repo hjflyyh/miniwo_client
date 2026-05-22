@@ -23,6 +23,8 @@ export interface ComputeFillOptions {
      * Default: 1
      */
     padding?: number;
+    /** 为 true 时封闭区内非道路格均可填充（不要求 placeholder.empty） */
+    ignoreGridOccupancy?: boolean;
 }
 
 export class RoadClosureFillUtil {
@@ -56,7 +58,18 @@ export class RoadClosureFillUtil {
             return !!cell && !cell.empty && cell.cfgId === cfgId;
         };
 
+        const ignoreOccupancy = !!options.ignoreGridOccupancy;
+
         const isFillableEmpty = (x: number, y: number): boolean => {
+            if (!inBounds(x, y)) {
+                return false;
+            }
+            if (isWall(x, y)) {
+                return false;
+            }
+            if (ignoreOccupancy) {
+                return true;
+            }
             const cell = getCell(x, y);
             return !!cell && cell.empty;
         };

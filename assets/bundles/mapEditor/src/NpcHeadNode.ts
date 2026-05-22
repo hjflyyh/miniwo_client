@@ -1,4 +1,6 @@
-import { _decorator, Camera, Component, Node, UITransform, Vec3, view } from 'cc';
+import { _decorator, Camera, Component, Node, Sprite, UITransform, Vec3, view } from 'cc';
+import { MapModel } from '../../../scripts/Model/MapModel';
+import { Utils } from '../../../scripts/Utils/Utils';
 import { MapManager } from './MapManager';
 const { ccclass, property } = _decorator;
 
@@ -6,6 +8,9 @@ const { ccclass, property } = _decorator;
 export class NpcHeadNode extends Component {
     public npcId = 0;
     public npcNode: Node | null = null;
+
+    @property(Sprite)
+    npcIcon : Sprite = null
 
     @property(Node)
     public showNode: Node = null!;
@@ -32,21 +37,128 @@ export class NpcHeadNode extends Component {
     @property
     public cameraMoveSpeed = 3600;
 
+    /** 头像显示尺寸（像素），为 0 时沿用 npcIcon 节点 UITransform */
+    @property
+    public iconSize = 60;
+
     private mapCamera: Camera | null = null;
+    private lastIconUrl = '';
     private parentUITransform: UITransform | null = null;
     private tmpWorld = new Vec3();
     private tmpScreen = new Vec3();
     private lastDebugLogMs = 0;
 
+    onLoad() {
+        EventSystem.addListent('OnMatchData', this.onMatchData, this);
+    }
+
     start() {
         const editor = MapManager.GetInstance()?.getMapEditor?.();
         this.mapCamera = editor?.mainCamera ?? null;
         this.parentUITransform = this.node.parent?.getComponent(UITransform) ?? null;
+        if (this.npcId > 0) {
+            this.refreshNpcIconFromMap();
+        }
+    }
+
+    onDestroy() {
+        EventSystem.remove(this);
     }
 
     public setNpcId(id: number, node: Node) {
-        this.npcId = id;
+        this.npcId = Math.floor(Number(id) || 0);
         this.npcNode = node;
+        this.refreshNpcIconFromMap();
+    }
+
+    /** 从地图 NPC 数据刷新贴边头像 */
+    public refreshNpcIconFromMap() {
+        const sprite = this.npcIcon;
+        if (!sprite?.isValid || this.npcId <= 0) {
+            return;
+        }
+        const npc = this.resolveMapNpc(this.npcId);
+        const url = this.resolveNpcIconUrl(npc);
+        if (!url) {
+            this.lastIconUrl = '';
+            sprite.spriteFrame = null;
+            return;
+        }
+        if (url === this.lastIconUrl) {
+            return;
+        }
+        this.lastIconUrl = url;
+        const ui = sprite.getComponent(UITransform) || sprite.node.getComponent(UITransform);
+        const w = this.iconSize > 0 ? this.iconSize : ui?.width;
+        const h = this.iconSize > 0 ? this.iconSize : ui?.height;
+        Utils.loadCover(url, sprite, w ?? null, h ?? null);
+    }
+
+    private onMatchData(data: any) {
+        if (data?.opCode !== 1 || this.npcId <= 0) {
+            return;
+        }
+        const npcs = data?.payload?.npcs;
+        if (!Array.isArray(npcs)) {
+            return;
+        }
+        for (let i = 0; i < npcs.length; i++) {
+            const row = npcs[i];
+            const id = Math.floor(Number(row?.id ?? row?.npc_id ?? row?.npcId) || 0);
+            if (id === this.npcId) {
+                this.refreshNpcIconFromMap();
+                return;
+            }
+        }
+    }
+
+    /** 按 npcId 从 mapNpcs / mapEditNpc 查找 */
+    private resolveMapNpc(npcId: number): Record<string, unknown> | null {
+        const id = Math.floor(Number(npcId) || 0);
+        if (id <= 0) {
+            return null;
+        }
+        const map = MapModel.getInstance().mapNpcs as Record<string, Record<string, unknown>>;
+        const fromMatch = map[String(id)] ?? map[id as unknown as string];
+        if (fromMatch) {
+            return fromMatch;
+        }
+        const editList = MapModel.getInstance().mapEditNpc as Array<Record<string, unknown>>;
+        if (Array.isArray(editList)) {
+            for (let i = 0; i < editList.length; i++) {
+                const row = editList[i];
+                if (Math.floor(Number(row?.id) || 0) === id) {
+                    return row;
+                }
+            }
+        }
+        return null;
+    }
+
+    /** 头像 URL：优先 npc_avatar_url，其次 portrait / sprite */
+    private resolveNpcIconUrl(npc: Record<string, unknown> | null): string {
+        if (!npc) {
+            return '';
+        }
+        const keys = [
+            'npc_avatar_url',
+            'npcAvatarUrl',
+            'avatar_url',
+            'avatarUrl',
+            'portrait_url',
+            'portraitUrl',
+            'npc_sprite_url',
+            'npcSpriteUrl',
+            'sprite_url',
+            'spriteUrl',
+        ];
+        for (let i = 0; i < keys.length; i++) {
+            const v = npc[keys[i]];
+            if (v != null && String(v).trim()) {
+                return String(v).trim();
+            }
+        }
+        return '';
     }
 
     update(_deltaTime: number) {

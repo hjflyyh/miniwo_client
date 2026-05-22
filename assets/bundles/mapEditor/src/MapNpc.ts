@@ -146,6 +146,10 @@ export class MapNpc extends Component {
     private facingScaleX = 1;
 
     start() {
+    }
+
+    initNpcNode(){
+
         this.spineNode = this.node.getChildByName('spine')!;
         this.dialogueNode = this.node.getChildByName('dialogueNode')
         this.dialogueLabel = this.dialogueNode.getChildByName('dialogueLabel').getComponent(Label)
@@ -509,13 +513,13 @@ export class MapNpc extends Component {
 
         if (!this.spine) return;
         const anim = next === NpcState.Move
-            ? (this.useHorizontalMoveAnim ? 'c walk' : 'walk')
-            : 'idle';
+            ? (this.useHorizontalMoveAnim ? 'c walk' : 'z walk')
+            : 'z idle';
         try {
             // 可选混合，减少切换生硬感
             if ((this.spine as any).setMix) {
-                this.spine.setMix('idle', 'walk', 0.12);
-                this.spine.setMix('walk', 'idle', 0.16);
+                this.spine.setMix('z idle', 'walk', 0.12);
+                this.spine.setMix('z walk', 'idle', 0.16);
             }
             if ((this.spine as any).animation !== anim || force || prevState !== next) {
                 this.spine.setAnimation(0, anim, true);
@@ -538,7 +542,7 @@ export class MapNpc extends Component {
             // c walk 默认朝左，右移时做镜像
             this.facingScaleX = dx >= 0 ? -1 : 1;
             this.node.setScale(1, 1, 1);
-            this.spineNode.setScale(this.facingScaleX * 0.2, 0.2, 1);
+            this.spineNode.setScale(this.facingScaleX * 0.4, 0.4, 1);
         } else {
             this.node.setScale(1, 1, 1);
         }

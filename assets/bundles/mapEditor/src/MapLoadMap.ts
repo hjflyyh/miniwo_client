@@ -1,4 +1,4 @@
-import { Size, Sprite, sys, UITransform, Vec2 } from "cc";
+import { Node, Size, Sprite, sys, UITransform, Vec2 } from "cc";
 import { MapData, MapEditor } from "./MapEditor";
 import { MapManager } from "./MapManager";
 import { MapModel } from "../../../scripts/Model/MapModel";
@@ -9,6 +9,9 @@ export class MapLoadMap {
         const manager = MapManager.GetInstance();
 
         mapEditor.allMapAssetsData = map;
+        if (!Array.isArray(mapEditor.allMapAssetsData.Fram)) {
+            mapEditor.allMapAssetsData.Fram = [];
+        }
         mapEditor.clearWalkableDebugOverlay();
         mapEditor.clearNpcTileDebugOverlay();
 
@@ -43,16 +46,76 @@ export class MapLoadMap {
             }
             mapEditor.mapContainer.addChild(tile);
 
-            mapEditor.mapItems.set(`${pos.x},${pos.y}`, {
+            const farmStack = mapEditor.mapGameType === 0 && mapEditor.enableDecorStackPlacement;
+            const plantKey = farmStack
+                ? mapEditor.makeOutdoorPlantFramMapItemKey(pos, `Plant_load_${i}_${idAry[0]}`)
+                : `${pos.x},${pos.y}`;
+            const plantEntry: { id: string; tile: Node; tileType: string; flipX: number; offsetX: number; offsetY: number; gridAnchor?: string } = {
                 id: idAry[0] + "#" + idAry[1],
                 tile: tile,
                 tileType: "Plant",
                 flipX: flipX != null ? (flipX < 0 ? -1 : 1) : 1,
                 offsetX: ox,
-                offsetY: oy
-            });
+                offsetY: oy,
+            };
+            if (farmStack) {
+                plantEntry.gridAnchor = `${pos.x},${pos.y}`;
+            }
+            mapEditor.mapItems.set(plantKey, plantEntry);
 
             // 更新网格数据
+            for (let x = 0; x < buildingSize.x; x++) {
+                for (let y = 0; y < buildingSize.y; y++) {
+                    const gridX = pos.x + x;
+                    const gridY = pos.y - y;
+                    if (y == 2) {
+                        mapEditor.mapData[gridX][gridY] = 0;
+                    } else {
+                        mapEditor.mapData[gridX][gridY] = 2;
+                    }
+                }
+            }
+        }
+
+        // mapEdit 农田 / Fram 摆件（与 Plant 同层）
+        const framData = mapEditor.allMapAssetsData.Fram ?? [];
+        for (let i = 0; i < framData.length; i++) {
+            const fram = framData[i];
+            let pos = new Vec2(parseInt(fram.position.split(',')[0]), parseInt(fram.position.split(',')[1]));
+
+            let idAry = fram.id.split("#");
+            const tile = MapManager.GetInstance().getMapCurTileNode(idAry[0], "Fram");
+            let size = tile.getComponent(UITransform).contentSize;
+            const buildingSize = MapModel.getInstance().getBuildingSize(size, mapEditor);
+
+            const worldPos = MapModel.getInstance().gridToWorld(pos, size, mapEditor);
+            const ox = Number((fram as any).offsetX ?? 0) || 0;
+            const oy = Number((fram as any).offsetY ?? 0) || 0;
+            tile.setPosition(worldPos.x + ox, worldPos.y + oy, worldPos.z);
+            const flipX = fram.flipX != null ? fram.flipX : (fram as any).scaleX;
+            if (flipX != null && flipX < 0) {
+                const scale = tile.getScale();
+                tile.setScale(-1, scale.y, scale.z);
+            }
+            mapEditor.mapContainer.addChild(tile);
+
+            const farmStackFram = mapEditor.mapGameType === 0 && mapEditor.enableDecorStackPlacement;
+            const framKey = farmStackFram
+                ? mapEditor.makeOutdoorPlantFramMapItemKey(pos, `Fram_load_${i}_${idAry[0]}`)
+                : `${pos.x},${pos.y}`;
+            const framEntry: { id: string; tile: Node; tileType: string; flipX: number; offsetX: number; offsetY: number; gridAnchor?: string } = {
+                id: idAry[0] + "#Fram",
+                tile: tile,
+                tileType: "Fram",
+                flipX: flipX != null ? (flipX < 0 ? -1 : 1) : 1,
+                offsetX: ox,
+                offsetY: oy,
+            };
+            if (farmStackFram) {
+                framEntry.gridAnchor = `${pos.x},${pos.y}`;
+            }
+            mapEditor.mapItems.set(framKey, framEntry);
+
             for (let x = 0; x < buildingSize.x; x++) {
                 for (let y = 0; y < buildingSize.y; y++) {
                     const gridX = pos.x + x;

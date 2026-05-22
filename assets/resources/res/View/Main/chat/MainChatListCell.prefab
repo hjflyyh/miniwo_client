@@ -98,7 +98,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 0,
+      "x": 2.8860000000000072,
       "y": 0,
       "z": 0
     },
@@ -139,7 +139,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 1000,
+      "width": 702.956,
       "height": 200
     },
     "_anchorPoint": {
@@ -176,10 +176,10 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "2516b66f-265c-49e2-9b8d-4864675feb9c@f9941",
+      "__uuid__": "ef1514d4-f1b9-4c0e-8c28-34f289889067@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
-    "_type": 0,
+    "_type": 1,
     "_fillType": 0,
     "_sizeMode": 0,
     "_fillCenter": {
@@ -234,7 +234,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -410.842,
+      "x": -251.642,
       "y": 0,
       "z": 0
     },
@@ -370,8 +370,8 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -334.129,
-      "y": 54.552,
+      "x": -156.481,
+      "y": 66.474,
       "z": 0
     },
     "_lrot": {
@@ -460,7 +460,7 @@
     "_isSystemFontUsed": true,
     "_spacingX": 0,
     "_isItalic": false,
-    "_isBold": false,
+    "_isBold": true,
     "_isUnderline": false,
     "_underlineHeight": 2,
     "_cacheMode": 0,
@@ -529,8 +529,8 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -334.129,
-      "y": 20.457,
+      "x": -156.481,
+      "y": 28.714,
       "z": 0
     },
     "_lrot": {
@@ -570,8 +570,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 781.269203125,
-      "height": 90.39999999999999
+      "width": 501.602203125,
+      "height": 120.786
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -606,14 +606,14 @@
       "b": 0,
       "a": 255
     },
-    "_string": "NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容",
+    "_string": "NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容",
     "_horizontalAlign": 0,
     "_verticalAlign": 0,
     "_actualFontSize": 20,
     "_fontSize": 20,
     "_fontFamily": "Arial",
-    "_lineHeight": 40,
-    "_overflow": 3,
+    "_lineHeight": 25,
+    "_overflow": 1,
     "_enableWrapText": true,
     "_font": null,
     "_isSystemFontUsed": true,
@@ -710,6 +710,9 @@
     },
     "lastChat": {
       "__id__": 23
+    },
+    "npcHead": {
+      "__id__": 11
     },
     "_id": ""
   },

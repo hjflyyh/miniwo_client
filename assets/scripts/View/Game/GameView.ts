@@ -1,9 +1,10 @@
-import { _decorator, Component, EditBox, instantiate, Label, math, Node, UITransform, director } from 'cc';
+import { _decorator, Component, EditBox, instantiate, Label, math, Node, resources, Sprite, SpriteFrame, UITransform, director } from 'cc';
 import { AppConst } from '../../AppConst';
 import { network } from '../../Model/RequestData';
 import { RoleModel } from '../../Model/RoleModel';
 import { HttpManager } from '../../Manager/HttpManager';
 import { MapChatManager } from '../../Manager/ChatManager';
+import { PrivateChatManager } from '../../Manager/PrivateChatMessage';
 import { MapModel } from '../../Model/MapModel';
 import { YXCollectionView, YXIndexPath } from 'db://assets/plugin/list-3x/yx-collection-view';
 import { CustomGridFlowLayout } from 'db://assets/plugin/list-3x/custom-grid-flow-layout';
@@ -12,15 +13,24 @@ import { GameViewNpcCell } from './GameViewNpcCell';
 import { EditBoxFixedWidthAutoHeight } from '../../Utils/EditBoxFixedWidthAutoHeight';
 import { YXMasonryFlowLayout } from 'db://assets/plugin/list-3x/yx-masonry-flow-layout';
 import { GameMapChatScroll } from './GameMapChatScroll';
+import { MapEditorUI } from 'db://assets/bundles/mapEditor/src/MapEditorUI';
+import { MapManager } from 'db://assets/bundles/mapEditor/src/MapManager';
+import { GameSendRewardCell } from './GameSendRewardCell';
+import { BagModel } from '../../Model/BagModel';
+import { GAME_FARM_PLOT_CLICK_EVENT, GameFarmPlotClickPayload } from './GameFarmNode';
+import { FarmModel } from '../../Model/Farm/FarmModel';
+import {
+    GAME_FARM_SEED_CHOOSE_EVENT,
+    GameFarmChooseCell,
+    GameFarmSeedChoosePayload,
+} from './GameFarmChooseCell';
+import { isPlotSeedEmpty, plotNeedsWaterOverlay } from '../../Model/Farm/FarmTypes';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameView')
 export class GameView extends Component {
     @property(EditBox)
     editBox: EditBox = null!;
-
-    @property(EditBoxFixedWidthAutoHeight)
-    editBoxFixedWidthAutoHeight: EditBoxFixedWidthAutoHeight = null!;
 
     @property(Label)
     mapName: Label = null!;
@@ -34,9 +44,6 @@ export class GameView extends Component {
     atNpc: Node = null
 
     @property(Node)
-    chatNpc: Node = null
-
-    @property(Node)
     atNpcLayout: Node = null
 
     @property(Node)
@@ -45,11 +52,7 @@ export class GameView extends Component {
     @property(Node)
     atNpcCell: Node = null
 
-    @property(Node)
-    chatNpcCell: Node = null
-
     private atNpcCells = []
-    private chatNpcCells = []
 
     private atNpcData = null
 
@@ -69,20 +72,67 @@ export class GameView extends Component {
 
     private editBoxBaseY = 0
 
+    @property(Node)
+    UI: Node = null
+
+    @property(Node)
+    showUI: Node = null
+
+    @property(Node)
+    showUIArrow: Node = null
+
+    @property(Node)
+    showChatUI: Node = null
+
+    @property(Node)
+    showChatArrow: Node = null
+
+    @property(Node)
+    buildContent: Node = null
+
+    //奖励道具列表
+    @property(Node)
+    rewardTarget: Node = null;
+
+    @property(Node)
+    rewardContent: Node = null;
+
+    @property(Node)
+    farmNode : Node = null;
+
+    @property(Node)
+    farmContent : Node = null;
+
+    @property(Node)    
+    farmItemCell : Node = null;
+
+    //奖励道具节点
+    @property(GameSendRewardCell)
+    rewardItemCell : GameSendRewardCell = null;    
+
+    private rewardCells: GameSendRewardCell[] = [];
+
+    private farmCells: Node[] = [];
+
+    private selectedFarmPlot: GameFarmPlotClickPayload | null = null;
+
     start() {
         this.atNpc.active = false
-        this.chatNpc.active = false
 
         this.atNpcCell.active = false
-        this.chatNpcCell.active = false
 
+        if (this.farmNode) {
+            this.farmNode.active = false
+        }
+        if (this.farmItemCell) {
+            this.farmItemCell.active = false
+        }
 
-        this.editBoxFixedWidthAutoHeight.showText.string = ""
         this.editBoxBaseY = this.editBox.node.position.y
 
         MapChatManager.instance.initMap();
 
-        this.mapName.string = MapModel.getInstance().showMatchPayLoad["map_name"]
+        this.mapName.string = RoleModel.getInstance().nickName
 
         this.scheduleOnce(()=>{
             this.receivedData()
@@ -90,13 +140,463 @@ export class GameView extends Component {
 
         EventSystem.addListent("EventRefreshChat", this.receivedData , this)
         EventSystem.addListent("WebSocketMessage" , this.OnWebSocketMessage , this)
+        EventSystem.addListent("CloseMapEditor" , this.CloseMapEditor , this)
+        EventSystem.addListent("WebSocketNotifications", this.onWebSocketNotification, this)
+        EventSystem.addListent("OpenGameShop", this.OpenGameShop, this)
+        EventSystem.addListent(GAME_FARM_PLOT_CLICK_EVENT, this.onGameFarmPlotClick, this)
+        EventSystem.addListent(GAME_FARM_SEED_CHOOSE_EVENT, this.onGameFarmSeedChoose, this)
+        EventSystem.addListent('ConfigLoadAll', this.onConfigLoadAll, this)
 
         this.onEditEnd()
         
+        this.showUI.active = true
+        this.showChatUI.active = true
+
+        this.refreshBuildContentVisibility();
+
+        this.initRewardList();
+        this.initFarmList();
+        if (MapModel.getInstance().isFarmMapGameType()) {
+            void FarmModel.getInstance().enterFarm();
+        }
+    }
+
+    private onConfigLoadAll() {
+        this.initRewardList();
+        this.initFarmList();
+    }
+
+     private initRewardList() {
+         const data = AppConst.JSONManager?.getItemAll?.('item');
+         if (data) {
+             this.renderRewardList(data);
+             return;
+         }
+     }
+
+    private renderRewardList(rawItemCfg: Record<string, any>) {
+        if (!this.rewardContent || !this.rewardItemCell?.node || !rawItemCfg) return;
+        const templateNode = this.rewardItemCell.node;
+        const children = [...this.rewardContent.children];
+        for (let i = 0; i < children.length; i++) {
+            const child = children[i];
+            if (child !== templateNode) {
+                child.destroy();
+            }
+        }
+
+        this.rewardCells = [];
+
+        const bagSlots = BagModel.getInstance().slots || [];
+        const bagCountByItemId = new Map<number, number>();
+        for (let i = 0; i < bagSlots.length; i++) {
+            const slot = bagSlots[i] as any;
+            const id = Number(slot?.item_id);
+            const count = Number(slot?.count ?? 0);
+            if (!Number.isFinite(id) || id <= 0) continue;
+            bagCountByItemId.set(id, Math.max(0, Number.isFinite(count) ? count : 0));
+        }
+
+        const rows = Object.keys(rawItemCfg)
+            .map((id) => {
+                const row = rawItemCfg[id] || {};
+                return {
+                    id: Number(id),
+                    ...row,
+                };
+            })
+            .filter((row) => Number.isFinite(row.id))
+            .filter((row) => {
+                const favorability = Number(row?.favorability);
+                return Number.isFinite(favorability) && favorability > 0;
+            })
+            .sort((a, b) => Number(a.favorability) - Number(b.favorability));
+
+        for (let i = 0; i < rows.length; i++) {
+            const node = instantiate(templateNode);
+            node.active = true;
+            node.setParent(this.rewardContent);
+            const cell = node.getComponent(GameSendRewardCell);
+            cell?.setData(rows[i]);
+            cell?.setItemNum(bagCountByItemId.get(Number(rows[i].id)) ?? 0);
+            // cell?.setSelected(false);
+            if (cell) {
+                this.rewardCells.push(cell);
+                const itemId = Number(rows[i].id);
+                (node as any)._rewardItemId = itemId;
+                node.name = `reward_item_${itemId}`;
+
+                node.on(Node.EventType.TOUCH_END, () => {
+                    this.onRewardItemClick(itemId);
+                }, this);
+            }
+        }
+        this.rewardItemCell.node.active = false;
+        this.rewardTarget.active = false;
+    }
+
+    private initFarmList() {
+        const seedsCfg = AppConst.JSONManager?.getItemAll?.('basicSeeds');
+        const itemCfg = AppConst.JSONManager?.getItemAll?.('item');
+        if (seedsCfg && itemCfg) {
+            this.renderFarmList(seedsCfg, itemCfg);
+        }
+    }
+
+    private renderFarmList(rawSeedsCfg: Record<string, any>, rawItemCfg: Record<string, any>) {
+        if (!this.farmContent || !this.farmItemCell || !rawSeedsCfg || !rawItemCfg) {
+            return;
+        }
+        const templateNode = this.farmItemCell;
+        const children = [...this.farmContent.children];
+        for (let i = 0; i < children.length; i++) {
+            const child = children[i];
+            if (child !== templateNode) {
+                child.destroy();
+            }
+        }
+
+        this.farmCells = [];
+
+        const bagSlots = BagModel.getInstance().slots || [];
+        const bagCountByItemId = new Map<number, number>();
+        for (let i = 0; i < bagSlots.length; i++) {
+            const slot = bagSlots[i] as any;
+            const id = Number(slot?.item_id);
+            const count = Number(slot?.count ?? 0);
+            if (!Number.isFinite(id) || id <= 0) continue;
+            bagCountByItemId.set(id, Math.max(0, Number.isFinite(count) ? count : 0));
+        }
+
+        const rows = Object.keys(rawSeedsCfg)
+            .map((seedKey) => {
+                const seed = rawSeedsCfg[seedKey] || {};
+                const itemId = Number(seed.item_id);
+                const item = rawItemCfg[String(itemId)] || null;
+                return {
+                    seedKey: Number(seedKey),
+                    itemId,
+                    seed,
+                    item,
+                };
+            })
+            .filter((row) => Number.isFinite(row.itemId) && row.itemId > 0)
+            .filter((row) => row.item != null)
+            .filter((row) => row.seed.base_seed_price != null && row.seed.base_seed_price !== '')
+            .sort((a, b) => {
+                const categoryDiff = Number(a.seed.category) - Number(b.seed.category);
+                if (categoryDiff !== 0) {
+                    return categoryDiff;
+                }
+                return a.seedKey - b.seedKey;
+            });
+
+        for (let i = 0; i < rows.length; i++) {
+            const row = rows[i];
+            const node = instantiate(templateNode);
+            node.active = true;
+            node.setParent(this.farmContent);
+            const itemId = row.itemId;
+            const count = bagCountByItemId.get(itemId) ?? 0;
+            const displayName = String(
+                row.item?.name_cn || row.seed.crop_name || row.item?.name_en || itemId
+            );
+            this.refreshFarmCell(node, itemId, count, row.seedKey, displayName);
+            (node as any)._farmItemId = itemId;
+            (node as any)._farmSeedKey = row.seedKey;
+            node.name = `farm_item_${itemId}`;
+            this.farmCells.push(node);
+        }
+
+        templateNode.active = false;
+    }
+
+    private async onGameFarmPlotClick(payload: GameFarmPlotClickPayload) {
+        if (!this.isCurrentMapOwnedBySelf()) {
+            EventSystem.send('ShowTips', '只能在自己的农场种植哦~');
+            return;
+        }
+        const plotIndex = Number(payload?.plotIndex);
+        if (!Number.isFinite(plotIndex) || plotIndex < 0) {
+            return;
+        }
+        const farmId = payload?.farmId != null ? Number(payload.farmId) : null;
+        if (farmId == null || !Number.isFinite(farmId) || farmId <= 0) {
+            return;
+        }
+
+        await FarmModel.getInstance().refreshFarms();
+        const plot = FarmModel.getInstance().getPlot(farmId);
+
+        if (this.farmNode) {
+            this.farmNode.active = false;
+        }
+        this.selectedFarmPlot = null;
+        this.syncFarmChooseCellsFarmId(null);
+
+        if (plotNeedsWaterOverlay(plot)) {
+            // const result = await FarmModel.getInstance().water(farmId);
+            // if (result.ok) {
+            //     EventSystem.send('ShowTips', '浇水成功');
+            // } else {
+            //     EventSystem.send('ShowTips', result.message ?? '浇水失败');
+            // }
+            return;
+        }
+
+        if (!isPlotSeedEmpty(plot)) {
+            return;
+        }
+
+        this.selectedFarmPlot = {
+            farmIndex: Number(payload?.farmIndex) || 0,
+            plotIndex,
+            farmId,
+            plotNodeName: payload?.plotNodeName,
+        };
+        if (this.rewardTarget) {
+            this.rewardTarget.active = false;
+        }
+        if (this.atNpc) {
+            this.atNpc.active = false;
+        }
+        if (this.farmNode) {
+            this.farmNode.active = true;
+        }
+        this.syncFarmChooseCellsFarmId(farmId);
+    }
+
+    private syncFarmChooseCellsFarmId(farmId: number | null) {
+        for (let i = 0; i < this.farmCells.length; i++) {
+            const node = this.farmCells[i];
+            node?.getComponent(GameFarmChooseCell)?.setFarmId(farmId);
+        }
+    }
+
+    private refreshFarmCell(
+        node: Node,
+        itemId: number,
+        count: number,
+        seedKey: number,
+        _displayName?: string
+    ) {
+        const chooseCell = node.getComponent(GameFarmChooseCell);
+        chooseCell?.setFarmId(this.selectedFarmPlot?.farmId ?? null);
+        chooseCell?.refreshNode(itemId, count, seedKey, _displayName);
+    }
+
+    /** 背包变更时仅刷新种子数量，不重建列表 */
+    private refreshFarmItemCounts() {
+        if (!this.farmCells.length) {
+            return;
+        }
+        for (let i = 0; i < this.farmCells.length; i++) {
+            const node = this.farmCells[i];
+            if (!node?.isValid) {
+                continue;
+            }
+            const itemId = Number((node as any)._farmItemId);
+            if (!Number.isFinite(itemId) || itemId <= 0) {
+                continue;
+            }
+            const count = BagModel.getInstance().getItemCount(itemId);
+            node.getComponent(GameFarmChooseCell)?.setCount(count);
+        }
+    }
+
+    private async onGameFarmSeedChoose(payload: GameFarmSeedChoosePayload) {
+        if (!this.isCurrentMapOwnedBySelf()) {
+            EventSystem.send('ShowTips', '只能在自己的农场种植哦~');
+            return;
+        }
+        const farmId = this.selectedFarmPlot?.farmId;
+        if (farmId == null || !Number.isFinite(farmId) || farmId <= 0) {
+            EventSystem.send('ShowTips', '请先选择一块农田');
+            return;
+        }
+
+        const itemId = Number(payload?.itemId);
+        const seedKey = Number(payload?.seedKey);
+        if (!Number.isFinite(itemId) || itemId <= 0 || !Number.isFinite(seedKey) || seedKey <= 0) {
+            return;
+        }
+
+        if (BagModel.getInstance().getItemCount(itemId) <= 0) {
+            EventSystem.send('ShowTips', '种子不足');
+            return;
+        }
+
+        const plot = FarmModel.getInstance().getPlot(farmId);
+        if (!isPlotSeedEmpty(plot)) {
+            EventSystem.send('ShowTips', '该地块已有作物');
+            return;
+        }
+
+        const result = await FarmModel.getInstance().grow(farmId, String(seedKey));
+        if (!result.ok) {
+            EventSystem.send('ShowTips', result.message ?? '种植失败');
+            return;
+        }
+
+        if (this.farmNode) {
+            this.farmNode.active = false;
+        }
+        this.selectedFarmPlot = null;
+        EventSystem.send('ShowTips', '播种成功');
+    }
+
+    private refreshBuildContentVisibility() {
+        if (!this.buildContent) {
+            return;
+        }
+        this.buildContent.active = this.isCurrentMapOwnedBySelf();
+    }
+
+    private isCurrentMapOwnedBySelf(): boolean {
+        const detail = MapModel.getInstance().map_detail;
+        const payload = MapModel.getInstance().showMatchPayLoad;
+
+        // 优先 map_detail，其次 join_map 顶层 payload（若后端放在这里）
+        const ownerId =
+            detail?.player_id ??
+            detail?.playerId ??
+            payload?.player_id;
+
+        if (ownerId == null || ownerId === '') {
+            return false;
+        }
+
+        return String(ownerId) === String(RoleModel.getInstance().playerId);
+    }    
+
+    public onClickReward() {
+        const text = this.editBox?.string ?? '';
+        const mentions = MapChatManager.instance.buildMentionsFromText(text);
+        if (mentions.length === 0) {
+            EventSystem.send('ShowTips', '需要先@一个npc');
+            return;
+        }
+        this.rewardTarget.active = true;
+    }
+
+    private onRewardItemClick(itemId: number) {
+        const id = Number(itemId);
+        if (!Number.isFinite(id) || id <= 0) {
+            return;
+        }
+        const text = this.editBox?.string ?? '';
+        const mentions = MapChatManager.instance.buildMentionsFromText(text);
+        if (mentions.length === 0) {
+            EventSystem.send('ShowTips', '需要先@一个npc');
+            return;
+        }
+        const count = BagModel.getInstance().getItemCount(id);
+        if (count <= 0) {
+            EventSystem.send('ShowTips', '道具数量不足');
+            return;
+        }
+        void this.sendGiftItemToMentionedNpc(id, mentions[0]);
+    }
+
+    private async sendGiftItemToMentionedNpc(itemId: number, mentionKey: string) {
+        const npcId = this.resolveNpcIdFromMention(mentionKey);
+        if (npcId <= 0) {
+            EventSystem.send('ShowTips', '无法识别NPC，请重新@');
+            return;
+        }
+        const giftText = JSON.stringify({
+            event_type: 'gift_item',
+            npc_id: npcId,
+            item_id: itemId,
+            quantity: 1,
+        });
+        try {
+            const pm = PrivateChatManager.getInstance();
+            const session = await pm.openNpcSession(npcId);
+            await pm.sendText(session.peerUid, giftText);
+            if (this.rewardTarget) {
+                this.rewardTarget.active = false;
+            }
+            EventSystem.send('ShowTips', "赠送成功");
+            this.editBox.string = '';
+        } catch (e: any) {
+            EventSystem.send('ShowTips', String(e?.message || e || '赠送失败'));
+        }
+    }
+
+    private resolveNpcIdFromMention(mentionKey: string): number {
+        const map = MapModel.getInstance().mapNpcs as Record<string, any>;
+        const npc = map[mentionKey];
+        if (npc) {
+            const candidates = [npc.npc_id, npc.npcId, npc.id, mentionKey];
+            for (let i = 0; i < candidates.length; i++) {
+                const parsed = this.parseNpcId(candidates[i]);
+                if (parsed > 0) {
+                    return parsed;
+                }
+            }
+        }
+        return this.parseNpcId(mentionKey);
+    }
+
+    private parseNpcId(raw: unknown): number {
+        if (raw == null) {
+            return 0;
+        }
+        const direct = Number(raw);
+        if (Number.isFinite(direct) && direct > 0) {
+            return direct;
+        }
+        const s = String(raw).trim();
+        if (!s) {
+            return 0;
+        }
+        const head = Number(s.split('_')[0]);
+        if (Number.isFinite(head) && head > 0) {
+            return head;
+        }
+        const fromPrefix = Number(s.replace(/^npc_/i, ''));
+        if (Number.isFinite(fromPrefix) && fromPrefix > 0) {
+            return fromPrefix;
+        }
+        return 0;
+    }
+
+    private onWebSocketNotification(data: any) {
+        if (data?.code !== network.ServerCode.CodeBagUpdate) {
+            return;
+        }
+        this.initRewardList();
+        this.refreshFarmItemCounts();
+    }
+
+    public CloseMapEditor() {
+        this.node.active = true
+    }
+
+    public onClickBuild(){
+        if(!this.isCurrentMapOwnedBySelf()){
+            EventSystem.send("ShowTips" , "只能编辑自己的地图哦~")
+            return
+        }
+        this.node.active = false
+        EventSystem.send("OpenMapEditor")
+        MapManager.GetInstance()?.getMapEditor()?.focusCameraForBuildEntry()
+    }
+
+    public onClickShowUI(){ 
+        this.showUI.active = !this.showUI.active
+        this.showUIArrow.setScale(1 , this.showUI.active ? 1 : -1 , 1)
+    }
+
+    public onClickShowChatUI(){ 
+        this.showChatUI.active = !this.showChatUI.active
+        this.showChatArrow.setScale(1 , this.showChatUI.active ? 1 : -1 , 1)
     }
 
     public OnWebSocketMessage(data){
         if(data["id"] == "leave_map"){
+            FarmModel.getInstance().leaveFarm();
             let request = new network.MatchLeaveEequest();
             AppConst.WebSocketManager.send(request.toJSON(MapModel.getInstance().match_id));
             
@@ -117,10 +617,15 @@ export class GameView extends Component {
         if(this.editBox.string != ""){
             MapChatManager.instance.sendMapChat(this.editBox.string)
             this.editBox.string = ""
-            if(this.editBoxFixedWidthAutoHeight.showText != null){
-                this.editBoxFixedWidthAutoHeight.showText.string = ""
-            }
         }
+    }
+
+    public OpenGameShop(){
+        AppConst.PanelManager.openView("res/View/Shop/ShopList" , null , null , null , this.UI)
+    }
+
+    public onClickBag(){
+        AppConst.PanelManager.openView("res/View/Bag/BagList" , null , null , null , this.UI)
     }
 
     public onClickNpcAt(){
@@ -139,25 +644,15 @@ export class GameView extends Component {
         }
     }
 
-    public onClickChatNpc(){
-        this.chatNpc.active = true
-        if(this.chatNpcCells.length <= 0){
-            for(let npcId in MapModel.getInstance().mapNpcs){
-                let npcData = MapModel.getInstance().mapNpcs[npcId]
-                let cell = instantiate(this.chatNpcCell)
-                let gameNpcCell : GameViewNpcCell = cell.getComponent("GameViewNpcCell") as GameViewNpcCell
-                gameNpcCell.refreshData(npcData)
-                cell.parent = this.chatNpcLayout
-                
-                cell.active = true
-                this.chatNpcCells.push({id: npcId, node: cell})
-            }
-        }
-    }
-
     public onClickCloseNpcAt(){
         this.atNpc.active = false
-        this.chatNpc.active = false
+        this.rewardTarget.active = false
+        this.farmNode.active = false
+        this.selectedFarmPlot = null
+    }
+
+    onDestroy() {
+        EventSystem.remove(this);
     }
 
     public onClickNpc(a , b){
@@ -165,21 +660,9 @@ export class GameView extends Component {
         
         console.log("点击了NPC", npcCell["npcData"])
         this.atNpcData = npcCell["npcData"]
-        this.editBox.string = this.editBox.string + `  @${this.atNpcData.name}  `
-        if(this.editBoxFixedWidthAutoHeight.showText != null){
-            this.editBoxFixedWidthAutoHeight.showText.string = this.editBox.string
-        }
         this.atNpc.active = false
-    }
 
-    //右边的聊天头像
-    public onClickChatHeadNpc(a){
-        this.chatNpc.active = false
-
-        let npcCell = a.target.getComponent("GameViewNpcCell") as GameViewNpcCell
-
-        console.log("点击了NPC", npcCell["npcData"])
-        AppConst.PanelManager.openView("res/View/Chat/ChatView", { chatType: 2, npcId: npcCell["npcData"].id })
+        this.editBox.string = `  @${this.atNpcData.name}  `
     }
 
     public onClickCloseScene(){
@@ -189,22 +672,20 @@ export class GameView extends Component {
     }
 
     public onEditEnd(){
-        const showText = this.editBoxFixedWidthAutoHeight?.showText
-        if (!showText) return
 
-        const labelUt = showText.node.getComponent(UITransform)
-        if (!labelUt) return
+        // const labelUt = showText.node.getComponent(UITransform)
+        // if (!labelUt) return
 
-        showText.string = this.editBox.string || ''
-        showText.updateRenderData(true)
+        // showText.string = this.editBox.string || ''
+        // showText.updateRenderData(true)
 
-        const lineHeight = Math.max(1, showText.lineHeight || 0)
-        const contentH = Math.max(1, labelUt.contentSize.height)
-        const lineCount = Math.max(1, Math.ceil(contentH / lineHeight))
+        // const lineHeight = Math.max(1, showText.lineHeight || 0)
+        // const contentH = Math.max(1, labelUt.contentSize.height)
+        // const lineCount = Math.max(1, Math.ceil(contentH / lineHeight))
 
-        const offsetY = (lineCount - 1) * this.editBoxLineOffsetY
-        const pos = this.editBox.node.position
-        this.editBox.node.setPosition(pos.x, this.editBoxBaseY + offsetY - 15, pos.z)
+        // const offsetY = (lineCount - 1) * this.editBoxLineOffsetY
+        // const pos = this.editBox.node.position
+        // this.editBox.node.setPosition(pos.x, this.editBoxBaseY + offsetY - 15, pos.z)
     }
     
     receivedData() {

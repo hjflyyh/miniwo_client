@@ -70,6 +70,7 @@ export class SocialModel {
                 this.postLikeList = [...new Set([...this.postLikeList, ...postLikeIDs])]
             }
             console.log("postList:", this.postList)
+            EventSystem.send("SocialPostData")
         }
         else if (cmd == network.FollowSocialCode.OtherPostData) {
             this.receiveList(data.list || [])

@@ -25,6 +25,7 @@ export enum ActionStatus {
     REGION,
     /** 区域 NPC 头像（实际由 EditHead 调 MapEditor.layoutRegionNpcHeads* 同步；buildMap 仅占位扩展） */
     REGION_NPC,
+    FRAM,
 }
 
 @ccclass('MapManager')
@@ -104,13 +105,29 @@ export class MapManager extends Component {
         if(type == "Floor"){
             cfgName = "mapFloor"
         }
+        if(type == "Fram"){
+            cfgName = "mapEdit"
+        }
         if(type == "Decor" || type == "DecorOrnament" || type == "Appliance"){
             cfgName = "mapDecor"
         }
         if(type == "WallDacoration" || type == "WallDecor"){
             cfgName = "mapWallDecor"
         }
+        if (type == "Fram") {
+            cfgName = "mapEdit"
+        }
         let cfg = AppConst.JSONManager.getItem(cfgName , id)
+        if(cfg == null){
+            console.log("地图素材id未找到：" + id + " cfgName:" + cfgName)
+            let newNode = new Node()
+            let uiTransform : UITransform = newNode.getComponent(UITransform)
+            if(!uiTransform){
+                uiTransform = newNode.addComponent(UITransform)
+            }
+            uiTransform.contentSize = new Size(32 , 32)
+            return newNode
+        }
         let cfgSize = [32,32]
         if(cfg["map_size"]){
             let split = cfg["map_size"].split("#");
@@ -136,9 +153,19 @@ export class MapManager extends Component {
         }
 
         let spLoad : PrefabLoad = spriteNode.addComponent("PrefabLoad") as PrefabLoad
-        spLoad.isTexture= true
         spLoad.bundleName = "mapEditor"
-        spLoad.url = cfg["image"] + "/spriteFrame";
+        if(cfg["is_prefab"] && cfg["is_prefab"] == 1){
+            spLoad.isTexture = false
+            spLoad.url = cfg["resource"] ? cfg["resource"] : cfg["image"];
+        }else{
+            spLoad.isTexture = true
+            const texPath = type == "Fram" ? (cfg["resource"] ?? cfg["image"]) : cfg["image"];
+            spLoad.url = texPath + "/spriteFrame";
+        }
+        // spLoad.isTexture= true
+        // spLoad.bundleName = "mapEditor"
+        // const texPath = type == "Fram" ? (cfg["resource"] ?? cfg["image"]) : cfg["image"];
+        // spLoad.url = texPath + "/spriteFrame";
 
         newNode.addChild(spriteNode)
 

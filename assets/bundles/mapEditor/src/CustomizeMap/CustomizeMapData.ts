@@ -75,6 +75,7 @@ export class CustomizeMapData extends Component {
         this.map.npcLayer.addChild(newNpc)
 
         let mapNpc = newNpc.addComponent(MapNpc)
+        mapNpc.initNpcNode();
         mapNpc.npcId = npcId
         mapNpc.map = this.map
         mapNpc.customizeMapData = this
@@ -84,7 +85,8 @@ export class CustomizeMapData extends Component {
         MapManager.GetInstance().getMapEditorUI().npcHeadNode.parent.addChild(newHead)
 
         let npcHeadNode = newHead.getComponent(NpcHeadNode)
-        npcHeadNode.setNpcId(npcId , newNpc)
+        npcHeadNode.setNpcId(npcId, newNpc)
+        npcHeadNode.refreshNpcIconFromMap()
 
         return mapNpc
     }
@@ -234,7 +236,7 @@ export class CustomizeMapData extends Component {
                         }
                         this.updateNpcDebugTileCache(npcData, npcLocal);
 
-                        if(npcData.state == 1){
+                        if(npcData.state == 1 || npcData.state == 0){
                             npc.onServerMove({
                                 x: npcLocal.x,
                                 y: npcLocal.y,

@@ -1,5 +1,6 @@
 import { _decorator, Component, Label, Node, Size, Sprite, UITransform } from 'cc';
 import { Utils } from '../../../Utils/Utils';
+import { AppConst } from '../../../AppConst';
 const { ccclass, property } = _decorator;
 
 @ccclass('MainCharacterListCell')
@@ -22,12 +23,14 @@ export class MainCharacterListCell extends Component {
     @property(Label)
     likeNum : Label
 
+    data
     start() {
 
     }
 
     refreshData(data){
         console.log(data)
+        this.data = data
         this.npcName.string = data.name
         this.npcInfo.string = data.info
         this.likeNum.string = data.npc_like_count
@@ -37,6 +40,14 @@ export class MainCharacterListCell extends Component {
 
     onClickLike(){
         
+    }
+
+    onClickNpc(){
+                AppConst.PanelManager.openView('res/View/Chat/ChatView', {
+                    chatType: 2,
+                    npcId: this.data.npc_id,
+                    userName: this.data.name ?? undefined,
+                });
     }
 }
 

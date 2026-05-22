@@ -11,6 +11,8 @@ import { MapModel } from '../../../scripts/Model/MapModel';
 import { AppConst } from 'db://assets/scripts/AppConst';
 import { CustomizeInput } from './CustomizeMap/CustomizeInput';
 import { EditHead } from './EditHead';
+import { network } from 'db://assets/scripts/Model/RequestData';
+import { GameBuildScroll } from 'db://assets/scripts/View/Game/GameBuildScroll';
 
 const { ccclass, property } = _decorator;
 
@@ -57,34 +59,37 @@ export class MapEditorUI extends Component {
     npcHeadsPositionOffsetZ = 0;
 
     @property(Node)
-    GameUI: Node = null;
+    public GameUI: Node = null;
 
     @property(Node)
     buttonStepPack: Node[] = [];
 
-    @property(InfiniteList)
-    groundList : InfiniteList
+    // @property(InfiniteList)
+    // groundList : InfiniteList
 
-    @property(InfiniteList)
-    plantList : InfiniteList
+    // @property(InfiniteList)
+    // plantList : InfiniteList
 
-    @property(InfiniteList)
-    wallList : InfiniteList
+    // @property(InfiniteList)
+    // wallList : InfiniteList
 
-    @property(InfiniteList)
-    floorList : InfiniteList
+    // @property(InfiniteList)
+    // floorList : InfiniteList
 
-    @property(InfiniteList)
-    decorList : InfiniteList
+    // @property(InfiniteList)
+    // decorList : InfiniteList
 
-    @property(InfiniteList)
-    wallDecorList : InfiniteList
+    // @property(InfiniteList)
+    // wallDecorList : InfiniteList
 
-    @property(InfiniteList)
-    decorOrnament : InfiniteList
+    // @property(InfiniteList)
+    // decorOrnament : InfiniteList
 
-    @property(InfiniteList)
-    decorAppliance : InfiniteList
+    // @property(InfiniteList)
+    // decorAppliance : InfiniteList
+
+    // @property(InfiniteList)
+    // framList : InfiniteList
 
     @property(Canvas)
     public mapCanvas : Canvas
@@ -94,6 +99,23 @@ export class MapEditorUI extends Component {
 
     @property(Node)
     public bottomAddNode : Node
+
+    @property(Node)
+    public toolUI: Node = null;
+
+    //第一层类型
+    @property(Node)    
+    public selectNode1: Node = null;
+
+    //选中家具类型，具体的摆放道具
+    @property(Node)    
+    public selectNode2: Node = null;
+
+    @property(GameBuildScroll)
+    public gameBuildScroll : GameBuildScroll = null;
+
+    @property([Node])
+    public hideNodes : Node[] = []; 
 
     private mapToolNode: { tool: Node; switch: Node; }[] = [];
     private tileMenu: Map<string, Node> = new Map;
@@ -108,6 +130,7 @@ export class MapEditorUI extends Component {
 
     private isSave: boolean = false;
     private saveIndex: number = 0;
+    private hideOtherHidden = false;
     private isWaittingEpisodeData: boolean = false;
     private isDramaAction: boolean = false; // 是否开拍
     private regionSelectMode = false;
@@ -127,15 +150,17 @@ export class MapEditorUI extends Component {
 
     protected onLoad(): void {
         this.bottomAddNode.active = false
-        this.gridNumLabel.string = `${AppConst.UIRoot.MapEditorWidth} x ${AppConst.UIRoot.MapEditorHeight}`;
+        
         MapManager.GetInstance().setMapEditorUI(this);
         
-        const content = this.node.getChildByName('toolUI').getChildByName('content');
+        // const content = this.node.getChildByName('toolUI/ScrollView/view').getChildByName('content');
         this.tileContent = this.node.getChildByName('tliePanel');
 
-        for (let i = 0; i < content.children.length; i++) {
-            const element = content.children[i];
-            this.mapToolNode.push({ tool: element, switch: element.getChildByName('switch') ? element.getChildByName('switch') : null });
+        for (let i = 0; i < this.toolUI.children.length; i++) {
+            const element = this.toolUI.children[i];
+            if(element.active){
+                this.mapToolNode.push({ tool: element, switch: element.getChildByName('switch') ? element.getChildByName('switch') : null });
+            }
         }
 
         for (let i = 0; i < this.tileContent.children.length; i++) {
@@ -180,6 +205,9 @@ export class MapEditorUI extends Component {
 
             AppConst.PanelManager.openView("res/View/Game/GameView" , null , null , null , this.GameUI)
         }
+
+
+        EventSystem.addListent("OpenMapEditor" , this.OpenMapEditor , this)
     }
 
     protected onDestroy(): void {
@@ -196,21 +224,46 @@ export class MapEditorUI extends Component {
         EventSystem.addListent("OnClickTileGroundIcon" , this.OnClickTileGroundIcon , this)
         EventSystem.addListent("OnClickTileOhterIcon" , this.OnClickTileOhterIcon , this)
         EventSystem.addListent("OnClickFloorIcon" , this.OnClickFloorIcon , this)
+        // this.groundList.Init(this.groundList.node.getComponent("GroundDataSource") as GroundDataSource)
+        // this.plantList.Init(this.plantList.node.getComponent("GroundDataSource") as GroundDataSource)
+        // this.wallList.Init(this.wallList.node.getComponent("GroundDataSource") as GroundDataSource)
+        // this.floorList.Init(this.floorList.node.getComponent("GroundDataSource") as GroundDataSource)
+        // this.decorList.Init(this.decorList.node.getComponent("GroundDataSource") as GroundDataSource)
+        // this.wallDecorList.Init(this.wallDecorList.node.getComponent("GroundDataSource") as GroundDataSource)
+        // this.decorOrnament.Init(this.decorOrnament.node.getComponent("GroundDataSource") as GroundDataSource)
+        // this.decorAppliance.Init(this.decorAppliance.node.getComponent("GroundDataSource") as GroundDataSource)
+        // this.framList.Init(this.framList.node.getComponent("GroundDataSource") as GroundDataSource)
 
-        this.groundList.Init(this.groundList.node.getComponent("GroundDataSource") as GroundDataSource)
-        this.plantList.Init(this.plantList.node.getComponent("GroundDataSource") as GroundDataSource)
-        this.wallList.Init(this.wallList.node.getComponent("GroundDataSource") as GroundDataSource)
-        this.floorList.Init(this.floorList.node.getComponent("GroundDataSource") as GroundDataSource)
-        this.decorList.Init(this.decorList.node.getComponent("GroundDataSource") as GroundDataSource)
-        this.wallDecorList.Init(this.wallDecorList.node.getComponent("GroundDataSource") as GroundDataSource)
-        this.decorOrnament.Init(this.decorOrnament.node.getComponent("GroundDataSource") as GroundDataSource)
-        this.decorAppliance.Init(this.decorAppliance.node.getComponent("GroundDataSource") as GroundDataSource)
         input.on(Input.EventType.MOUSE_DOWN, this.onRegionMouseDown, this);
         input.on(Input.EventType.MOUSE_MOVE, this.onRegionMouseMove, this);
         input.on(Input.EventType.MOUSE_UP, this.onRegionMouseUp, this);
         input.on(Input.EventType.TOUCH_START, this.onRegionTouchStart, this);
         input.on(Input.EventType.TOUCH_MOVE, this.onRegionTouchMove, this);
         input.on(Input.EventType.TOUCH_END, this.onRegionTouchEnd, this);
+
+        this.selectNode1.active = true;
+        this.selectNode2.active = false;
+    }
+
+
+    OpenMapEditor() {
+        this.node.active = true
+    }
+
+    public onClickBackSelect(){
+        this.bottomAddNode.active = false;
+        
+        if(this.selectNode1.active){
+            this.node.active = false
+            EventSystem.send("CloseMapEditor")
+            return
+        }
+        this.selectNode1.active = true;
+        this.selectNode2.active = false;
+            // _index = 11;
+        MapManager.GetInstance().actionStatus = ActionStatus.Back;
+        MapManager.GetInstance().getMapEditor().hideTileMask();
+        this.bottomAddNode.active = false;        
     }
 
     update(deltaTime: number) {
@@ -291,11 +344,17 @@ export class MapEditorUI extends Component {
         // } 
         else if (target.name == 'ground') {
             _index = 2;
-            this.tileMenu.get('panel_ground').active = true;
+            // this.tileMenu.get('panel_ground').active = true;
+            this.selectNode1.active = false;
+            this.selectNode2.active = true;
+            this.gameBuildScroll.setTileType(0);      
             MapManager.GetInstance().actionStatus = ActionStatus.GROUND;
         } else if (target.name == 'plant') {
             _index = 3;
-            this.tileMenu.get('panel_plant').active = true;
+            // this.tileMenu.get('panel_plant').active = true;
+            this.selectNode1.active = false;
+            this.selectNode2.active = true;
+            this.gameBuildScroll.setTileType(3);            
             MapManager.GetInstance().actionStatus = ActionStatus.PLANT;
         } else if (target.name == 'house') {
             _index = 4;
@@ -319,8 +378,13 @@ export class MapEditorUI extends Component {
             }
         } else if (target.name == 'decor') {
             _index = 5;
-            this.tileMenu.get('panel_decor').active = true;
+            // this.tileMenu.get('panel_decor').active = true;
+            this.selectNode1.active = false;
+            this.selectNode2.active = true;
+            this.gameBuildScroll.setTileType(4);
             MapManager.GetInstance().actionStatus = ActionStatus.DECOR;
+
+
         } else if (target.name == 'save') {
             _index = 10;
             this.onShowSaveDialog();
@@ -333,15 +397,24 @@ export class MapEditorUI extends Component {
             this.bottomAddNode.active = false;
         } else if (target.name == 'wallDacoration') {
             _index = 12;
-            this.tileMenu.get('panel_wall_decor').active = true;
+            // this.tileMenu.get('panel_wall_decor').active = true;
+            this.selectNode1.active = false;
+            this.selectNode2.active = true;
+            this.gameBuildScroll.setTileType(12);
             MapManager.GetInstance().actionStatus = ActionStatus.WALL_DECOR;
         }else if (target.name == 'decor_ornament') {
             _index = 13;
-            this.tileMenu.get('panel_decor_ornament').active = true;
+            // this.tileMenu.get('panel_decor_ornament').active = true;
+            this.selectNode1.active = false;
+            this.selectNode2.active = true;
+            this.gameBuildScroll.setTileType(13);
             MapManager.GetInstance().actionStatus = ActionStatus.DECOR;
         }else if (target.name == 'appliance') {
             _index = 14;
-            this.tileMenu.get('panel_appliance').active = true;
+            // this.tileMenu.get('panel_appliance').active = true;
+            this.selectNode1.active = false;
+            this.selectNode2.active = true;
+            this.gameBuildScroll.setTileType(14);            
             MapManager.GetInstance().actionStatus = ActionStatus.DECOR;
         }else if(target.name == "region"){
             _index = 15;
@@ -350,6 +423,13 @@ export class MapEditorUI extends Component {
             this.enableRegionSelectionMode();
 
             this.setBottomNode();
+        }else if (target.name == 'farm') {
+            _index = 2;
+            this.selectNode1.active = false;
+            this.selectNode2.active = true;
+            this.gameBuildScroll.setTileType(15);   
+            // this.tileMenu.get('panel_farm').active = true;
+            MapManager.GetInstance().actionStatus = ActionStatus.FRAM;
         }
 
 
@@ -366,8 +446,10 @@ export class MapEditorUI extends Component {
 
     setBottomNode(){
         this.confirmBtn.active = MapManager.GetInstance().actionStatus == ActionStatus.DECOR || MapManager.GetInstance().actionStatus == ActionStatus.PLANT
+            || MapManager.GetInstance().actionStatus == ActionStatus.FRAM
             || MapManager.GetInstance().actionStatus == ActionStatus.REGION
         this.fanzhuangBtn.active = MapManager.GetInstance().actionStatus == ActionStatus.DECOR  || MapManager.GetInstance().actionStatus == ActionStatus.PLANT
+            || MapManager.GetInstance().actionStatus == ActionStatus.FRAM
 
         this.bottomAddNode.active = MapManager.GetInstance().actionStatus != ActionStatus.MOVE
             && MapManager.GetInstance().actionStatus != ActionStatus.Back
@@ -699,6 +781,20 @@ export class MapEditorUI extends Component {
         return true;
     }
 
+    public onClickHideOther() {
+        this.hideOtherHidden = !this.hideOtherHidden;
+        const visible = !this.hideOtherHidden;
+        for (let i = 0; i < this.hideNodes.length; i++) {
+            const node = this.hideNodes[i];
+            if (node?.isValid) {
+                node.active = visible;
+            }
+        }
+        if(this.selectNode2.active){
+            this.onClickBackSelect()
+        }
+    }
+
     public cancelPendingRegionSelection() {
         this.pendingRegionRect = null;
         this.clearPendingRegionNpcIds();
@@ -921,7 +1017,9 @@ export class MapEditorUI extends Component {
             pt.active = false;
         })
 
-        MapManager.GetInstance().actionStatus = ActionStatus.Back;
+        if(!this.selectNode2.active){
+            MapManager.GetInstance().actionStatus = ActionStatus.Back;
+        }
         MapManager.GetInstance().getMapEditor().hideTileMask();
         this.bottomAddNode.active = false;
     }
@@ -1214,6 +1312,19 @@ export class MapEditorUI extends Component {
 
     onSaveNpcDataCallBack(param) {
         this.saveIndex += 1;
+    }
+
+    onCloseScene(){
+
+            director.loadScene("GameScene", (error: Error) => {
+                if (error) {
+                    console.error('切换到 GameScene 失败:', error);
+                } else {
+                    console.log('已退出 editor_test，切回 GameScene');
+                    AppConst.PanelManager.openView("res/View/TipsView")
+                    AppConst.PanelManager.openView("res/View/Main/MainView")
+                }
+            });
     }
 }
 

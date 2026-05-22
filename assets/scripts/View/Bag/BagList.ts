@@ -3,6 +3,7 @@ import { YXCollectionView } from '../../../plugin/list-3x/yx-collection-view';
 import { CardModel } from '../../Model/CardModel';
 import { CustomGridFlowLayout } from '../../../plugin/list-3x/custom-grid-flow-layout';
 import { YXMasonryFlowLayout } from '../../../plugin/list-3x/yx-masonry-flow-layout';
+import { AppConst } from '../../AppConst';
 import { BagModel } from '../../Model/BagModel';
 import { BagListCell } from './BagListCell';
 const { ccclass, property } = _decorator;
@@ -26,7 +27,18 @@ export class BagList extends Component {
     }
 
     refreshBagList() {
-        this.showBags = BagModel.getInstance().slots
+        const slots = BagModel.getInstance().slots || []
+        this.showBags = slots.filter((slot: any) => {
+            const itemId = slot?.item_id
+            if (!itemId) {
+                return false
+            }
+            const itemCfg = AppConst.JSONManager.getItem("item", `${itemId}`)
+            if (!itemCfg) {
+                return false
+            }
+            return `${itemCfg.is_displayed_in_backpack}` === "0"
+        })
         console.log("BagList refreshBagList" , this.showBags)
 
         this.listComp.numberOfItems = () => this.showBags.length;

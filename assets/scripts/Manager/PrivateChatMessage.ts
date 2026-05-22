@@ -14,6 +14,57 @@ function chatLog(...args: any[]) {
   try { console.log(...args); } catch {}
 }
 
+/** 排查「私聊连不上」：控制台搜 [ChatDebug] */
+function chatDebug(...args: any[]) {
+  chatLog("[ChatDebug]", ...args);
+}
+
+/** RPC payload 脱敏摘要（避免刷屏、避免泄露长文本） */
+function summarizeRpcPayload(id: string, payloadObj: any): Record<string, unknown> {
+  try {
+    const o = payloadObj && typeof payloadObj === "object" ? payloadObj : {};
+    if (id === "private_chat_send") {
+      const t = String((o as any).text ?? "");
+      return {
+        target_uid_tail: String((o as any).target_uid ?? "").slice(-8),
+        text_len: t.length,
+        need_avatar: (o as any).need_avatar,
+      };
+    }
+    if (id === "private_chat_history") {
+      return {
+        target_uid_tail: String((o as any).target_uid ?? "").slice(-8),
+        limit: (o as any).limit,
+      };
+    }
+    if (id === "get_npc_chat_id") {
+      return { npc_id: (o as any).npc_id };
+    }
+    return { keys: Object.keys(o as object) };
+  } catch {
+    return {};
+  }
+}
+
+function wsConnectedSummary(): string {
+  try {
+    const wsm = AppConst.WebSocketManager as any;
+    if (!wsm?.isConnected) return "WebSocketManager?";
+    return wsm.isConnected() ? "ws=OPEN" : "ws=NOT_CONNECTED";
+  } catch {
+    return "ws=?";
+  }
+}
+
+/**
+ * Nakama RT `channel_join` 返回「对方 UID 不存在」类错误。
+ * 常见于换服、清库、或 NPC 账号重建后，本地仍缓存旧的 `nakama_uid`。
+ */
+function isStaleChannelTargetError(message: string): boolean {
+  const m = String(message || "").toLowerCase();
+  return m.includes("invalid channel target") || m.includes("user id not found");
+}
+
 /** 调试：会话列表一行写入/落盘时的摘要（便于对照后端字段与 peerName 来源） */
 function logSessionRow(tag: string, row: LocalChatSessionItem) {
   try {
@@ -80,9 +131,34 @@ export class PrivateChatManager {
   private readonly storagePrefix = "private_chat_v1";
   private readonly maxMsgPerChannel = 300;
 
-  private readonly sessionListKey = "private_chat_v1:sessions";
+  /** 升级前未按账号隔离的全局 key（仅用于一次性迁移） */
+  private readonly legacySessionListKey = "private_chat_v1:sessions";
+  private readonly legacyNpcUidMapKey = "private_chat_v1:npc_uid_map";
+  private legacyChannelStorageKey(channelId: string): string {
+    return `${this.storagePrefix}:${channelId}`;
+  }
+
+  /** 未登录时用占位，避免与其他 key 冲突 */
+  private scopedStorageUid(): string {
+    const uid = String(this.selfUid || "").trim();
+    return uid || "_";
+  }
+
   /** npcId -> peerUid 的本地缓存，避免打开 NPC 私聊必须先等 RPC 才能显示本地记录 */
-  private readonly npcUidMapKey = "private_chat_v1:npc_uid_map";
+  private npcUidMapStorageKey(): string {
+    return `${this.storagePrefix}:u:${this.scopedStorageUid()}:npc_uid_map`;
+  }
+
+  private sessionListStorageKey(): string {
+    return `${this.storagePrefix}:u:${this.scopedStorageUid()}:sessions`;
+  }
+
+  /** 某频道消息列表 */
+  private channelMsgsStorageKey(channelId: string): string {
+    return `${this.storagePrefix}:u:${this.scopedStorageUid()}:${channelId}`;
+  }
+
+  private _eventsBound = false;
 
   /** Nakama RT 请求 cid（与应答 echo 一致；用简单递增字符串，避免服务端回显数字 1/2 与自定义 cj_ 前缀不一致导致永远匹配不上） */
   private _rtCidSeq = 0;
@@ -96,9 +172,101 @@ export class PrivateChatManager {
 
   /** 登录后调用 */
   init(selfUid: string) {
-    this.selfUid = selfUid;
+    const next = String(selfUid || "").trim();
+    if (next !== this.selfUid) {
+      this.clearRuntimeStateForUserSwitch();
+    }
+    this.selfUid = next;
+    if (!this.selfUid) {
+      return;
+    }
+    this.migrateLegacyStorageIfNeeded();
     this.loadLocalSessions();
-    this.bindEvents();
+    if (!this._eventsBound) {
+      this.bindEvents();
+      this._eventsBound = true;
+    }
+  }
+
+  /** 切换 Nakama 账号时清空内存中的会话与消息，避免与本地存储串档 */
+  private clearRuntimeStateForUserSwitch(): void {
+    for (const t of this.npcPendingUnlockTimerByPeer.values()) {
+      clearTimeout(t);
+    }
+    this.npcPendingUnlockTimerByPeer.clear();
+    this.npcPendingByPeer.clear();
+    this.sessionsByPeer.clear();
+    this.sessionsByChannel.clear();
+    this.msgsByChannel.clear();
+    this.localSessionsByPeer.clear();
+  }
+
+  /**
+   * 将旧版「全局一份」的私聊缓存迁到当前账号命名空间，并删除旧 key。
+   * 仅在当前账号尚无会话存档且检测到 legacy key 时执行。
+   */
+  private migrateLegacyStorageIfNeeded(): void {
+    const uid = String(this.selfUid || "").trim();
+    if (!uid) return;
+
+    const sessionKey = this.sessionListStorageKey();
+    const legacySessionsRaw = sys.localStorage.getItem(this.legacySessionListKey);
+
+    if (!sys.localStorage.getItem(sessionKey) && legacySessionsRaw) {
+      try {
+        sys.localStorage.setItem(sessionKey, legacySessionsRaw);
+        const arr = JSON.parse(legacySessionsRaw);
+        if (Array.isArray(arr)) {
+          for (let i = 0; i < arr.length; i++) {
+            const row = arr[i] as LocalChatSessionItem;
+            const cid = row && String(row.channelId || "");
+            if (!cid) continue;
+            const legacyChan = this.legacyChannelStorageKey(cid);
+            const nextChan = this.channelMsgsStorageKey(cid);
+            if (!sys.localStorage.getItem(nextChan)) {
+              const blob = sys.localStorage.getItem(legacyChan);
+              if (blob) {
+                sys.localStorage.setItem(nextChan, blob);
+              }
+            }
+          }
+        }
+      } catch {
+        // ignore
+      }
+      try {
+        sys.localStorage.removeItem(this.legacySessionListKey);
+        const arr = JSON.parse(legacySessionsRaw);
+        if (Array.isArray(arr)) {
+          for (let i = 0; i < arr.length; i++) {
+            const row = arr[i] as LocalChatSessionItem;
+            const cid = row && String(row.channelId || "");
+            if (cid) {
+              sys.localStorage.removeItem(this.legacyChannelStorageKey(cid));
+            }
+          }
+        }
+      } catch {
+        // ignore
+      }
+    }
+
+    const npcKey = this.npcUidMapStorageKey();
+    if (!sys.localStorage.getItem(npcKey)) {
+      const legacyNpc = sys.localStorage.getItem(this.legacyNpcUidMapKey);
+      if (legacyNpc) {
+        try {
+          sys.localStorage.setItem(npcKey, legacyNpc);
+        } catch {
+          // ignore
+        }
+        try {
+          sys.localStorage.removeItem(this.legacyNpcUidMapKey);
+        } catch {
+          // ignore
+        }
+      }
+    }
   }
 
   private bindEvents() {
@@ -115,7 +283,7 @@ export class PrivateChatManager {
    * 会话列表（按用户聚合，按最近消息时间倒序）。
    *
    * 数据来源（非后端直接一条接口返回整张表）：
-   * - 内存 Map `localSessionsByPeer`，启动时由 `loadLocalSessions()` 从 `localStorage` key `private_chat_v1:sessions` 读入；
+   * - 内存 Map `localSessionsByPeer`，启动时由 `loadLocalSessions()` 从「当前账号」对应的 `localStorage` key（`private_chat_v1:u:<selfUid>:sessions`）读入；
    * - 之后每次 `upsertLocalSession` / `markSessionRead` 会 `persistLocalSessions()` 写回磁盘。
    *
    * `peerName` 可能来自：
@@ -202,7 +370,7 @@ public markSessionRead(peerUid: string) {
   }
 
   private loadNpcUidMap(): Record<string, string> {
-    const raw = sys.localStorage.getItem(this.npcUidMapKey);
+    const raw = sys.localStorage.getItem(this.npcUidMapStorageKey());
     if (!raw) return {};
     try {
       const o = JSON.parse(raw);
@@ -213,7 +381,7 @@ public markSessionRead(peerUid: string) {
 
   private saveNpcUidMap(map: Record<string, string>) {
     try {
-      sys.localStorage.setItem(this.npcUidMapKey, JSON.stringify(map || {}));
+      sys.localStorage.setItem(this.npcUidMapStorageKey(), JSON.stringify(map || {}));
     } catch {}
   }
 
@@ -253,24 +421,68 @@ public markSessionRead(peerUid: string) {
     this.saveNpcUidMap(m);
   }
 
+  /** 清除某 NPC 在本地映射里缓存的 nakama_uid，便于下次走 `get_npc_chat_id` 重拉 */
+  private removeNpcPeerUidCacheForNpc(npcId: number): void {
+    const id = Number(npcId);
+    if (!Number.isFinite(id) || id <= 0) return;
+    const m = this.loadNpcUidMap();
+    if (m[String(id)] == null) return;
+    delete m[String(id)];
+    this.saveNpcUidMap(m);
+  }
+
+  /** 仅清内存中的会话对象（localStorage 会话列表不动，避免误删历史） */
+  private evictRuntimeSessionForPeer(peerUid: string): void {
+    const uid = String(peerUid || "");
+    if (!uid) return;
+    const s = this.sessionsByPeer.get(uid);
+    if (s?.channelId) {
+      const cid = String(s.channelId);
+      this.sessionsByChannel.delete(cid);
+      this.msgsByChannel.delete(cid);
+    }
+    this.sessionsByPeer.delete(uid);
+  }
+
   /** 打开 NPC 私聊 */
   async openNpcSession(npcId: number): Promise<ChatSession> {
     try { chatLog("[openNpcSession]", { npcId }); } catch {}
     const cachedUid = this.getCachedNpcPeerUid(npcId);
     if (cachedUid) {
       this.tryOpenLocalSession(cachedUid);
-      return this.openSessionByUid(
-        cachedUid,
-        true,
-        this.localSessionsByPeer.get(cachedUid)?.peerName ?? null,
-        this.localSessionsByPeer.get(cachedUid)?.peerAvatar ?? null
-      );
+      try {
+        return await this.openSessionByUid(
+          cachedUid,
+          true,
+          this.localSessionsByPeer.get(cachedUid)?.peerName ?? null,
+          this.localSessionsByPeer.get(cachedUid)?.peerAvatar ?? null
+        );
+      } catch (e) {
+        const msg = String((e as any)?.message || e);
+        if (isStaleChannelTargetError(msg)) {
+          try {
+            chatDebug("openNpcSession: 缓存 nakama_uid 对当前 Nakama 无效，清除映射并重拉", {
+              npcId,
+              old_uid_tail: cachedUid.slice(-8),
+            });
+          } catch {}
+          this.removeNpcPeerUidCacheForNpc(npcId);
+          this.evictRuntimeSessionForPeer(cachedUid);
+        } else {
+          throw e instanceof Error ? e : new Error(msg);
+        }
+      }
     }
     const r = await this.rpc("get_npc_chat_id", { npc_id: npcId });
     try {
       chatLog("[pm] get_npc_chat_id RPC 原始返回（用于核对 name/avatar 等字段）", r);
     } catch {}
-    if (!r?.success || !r.nakama_uid) throw new Error(r?.message || "get_npc_chat_id failed");
+    if (!r?.success || !r.nakama_uid) {
+      try {
+        chatDebug("get_npc_chat_id failed", { npcId, message: r?.message, success: r?.success });
+      } catch {}
+      throw new Error(r?.message || "get_npc_chat_id failed");
+    }
 
     this.cacheNpcPeerUid(npcId, String(r.nakama_uid));
     try { chatLog("[openNpcSession] got uid", { npcId, peerUid: String(r.nakama_uid) }); } catch {}
@@ -310,7 +522,16 @@ public markSessionRead(peerUid: string) {
           this.migrateSessionChannelId(cached, ch.id);
         }
       } catch (e) {
-        try { chatLog("[openSessionByUid] cached joinChat failed", { peerUid, err: String((e as any)?.message || e) }); } catch {}
+        const msg = String((e as any)?.message || e);
+        try { chatLog("[openSessionByUid] cached joinChat failed", { peerUid, err: msg }); } catch {}
+        if (isNPC && isStaleChannelTargetError(msg) && this.getNpcIdByPeerUid(peerUid) != null) {
+          try {
+            chatDebug("cached joinChat: NPC 目标 UID 过期，抛出以触发 openNpcSession 重拉", {
+              peer_tail: peerUid.slice(-8),
+            });
+          } catch {}
+          throw e instanceof Error ? e : new Error(msg);
+        }
       }
       return cached;
     }
@@ -372,11 +593,23 @@ public markSessionRead(peerUid: string) {
 
   /** 从服务端拉取 DM 最近消息（含 NPC 回复），合并进本地并刷新 UI */
   private async loadDmHistory(session: ChatSession): Promise<void> {
+    try {
+      chatDebug("loadDmHistory ->", wsConnectedSummary(), {
+        peer_tail: String(session.peerUid || "").slice(-8),
+      });
+    } catch {}
     const r = await this.rpc("private_chat_history", {
       target_uid: session.peerUid,
       limit: 50,
     });
     if (!r?.success || !Array.isArray(r.messages) || r.messages.length === 0) {
+      try {
+        chatDebug("loadDmHistory empty/fail", {
+          success: r?.success,
+          message: (r as any)?.message,
+          keys: r ? Object.keys(r) : [],
+        });
+      } catch {}
       return;
     }
     const channelId = session.channelId;
@@ -476,12 +709,24 @@ public markSessionRead(peerUid: string) {
       }
     }
 
+    const needAvatar = !this.hasLocalPeerAvatar(peerUid);
+    try {
+      chatDebug("sendText ->", wsConnectedSummary(), summarizeRpcPayload("private_chat_send", {
+        target_uid: peerUid,
+        text: pure,
+        need_avatar: needAvatar,
+      }));
+    } catch {}
     const r = await this.rpc("private_chat_send", {
       target_uid: peerUid,
       text: pure,
+      need_avatar: needAvatar,
     });
 
     if (!r?.success) {
+      try {
+        chatDebug("sendText RPC fail", r);
+      } catch {}
       throw new Error(r?.message || "send failed");
     }
 
@@ -522,6 +767,15 @@ public markSessionRead(peerUid: string) {
     this.npcPendingUnlockTimerByPeer.set(peerUid, t);
   }
 
+  private hasLocalPeerAvatar(peerUid: string): boolean {
+    const uid = String(peerUid || "");
+    if (!uid) return false;
+    const s = this.sessionsByPeer.get(uid);
+    const local = this.localSessionsByPeer.get(uid);
+    const avatar = String(s?.peerAvatar || local?.peerAvatar || "").trim();
+    return avatar.length > 0;
+  }
+
   /** 将会话与本地消息从旧 channelId 迁到 RPC 返回的 channelId */
   private migrateSessionChannelId(session: ChatSession, newChannelId: string) {
     const oldId = session.channelId;
@@ -535,6 +789,13 @@ public markSessionRead(peerUid: string) {
     }
     this.msgsByChannel.set(newChannelId, msgs);
     this.sessionsByChannel.set(newChannelId, session);
+    try {
+      if (String(this.selfUid || "").trim()) {
+        sys.localStorage.removeItem(this.channelMsgsStorageKey(oldId));
+      }
+    } catch {
+      // ignore
+    }
     this.persist(newChannelId);
     const row = this.localSessionsByPeer.get(session.peerUid);
     if (row) {
@@ -841,6 +1102,13 @@ public markSessionRead(peerUid: string) {
         // Nakama RT：根节点带 cid，应答里带回同一 cid，避免并发多次 channel_join 错配
         // Nakama RT channel_join type：1=ROOM, 2=DIRECT, 3=GROUP。这里必须用 2（私聊）。
         // 注意：channel_id 字符串前缀（你们看到的 "4."）不是这里的 type。
+        try {
+          chatDebug("joinChat send", wsConnectedSummary(), {
+            cid,
+            target_tail: String(targetUid || "").slice(-8),
+            type: 2,
+          });
+        } catch {}
         try { chatLog("[joinChat] send", { cid, target: targetUid, type: 2 }); } catch {}
         const ok = AppConst.WebSocketManager.send({
           cid,
@@ -852,10 +1120,16 @@ public markSessionRead(peerUid: string) {
           },
         });
         if (!ok) {
+          try {
+            chatDebug("joinChat send() returned false — WebSocket 未就绪或未 OPEN", wsConnectedSummary());
+          } catch {}
           return reject(new Error("channel_join send failed"));
         }
 
         timeout = setTimeout(() => {
+          try {
+            chatDebug("joinChat timeout 8s", { cid, target_tail: String(targetUid || "").slice(-8), ws: wsConnectedSummary() });
+          } catch {}
           finish(new Error("joinChat timeout"));
         }, 8000);
 
@@ -917,11 +1191,23 @@ public markSessionRead(peerUid: string) {
         else resolve(parsed);
       };
 
+      try {
+        chatDebug(`rpc -> ${id}`, wsConnectedSummary(), summarizeRpcPayload(id, payloadObj));
+      } catch {}
+
       const req = { rpc: { id, payload: JSON.stringify(payloadObj) } };
       const ok = AppConst.WebSocketManager.send(req);
-      if (!ok) return reject(new Error("rpc send failed"));
+      if (!ok) {
+        try {
+          chatDebug(`rpc send failed (ws not ready): ${id}`, wsConnectedSummary());
+        } catch {}
+        return reject(new Error("rpc send failed"));
+      }
 
       timeout = setTimeout(() => {
+        try {
+          chatDebug(`rpc timeout: ${id}`, wsConnectedSummary());
+        } catch {}
         finish(new Error(`rpc timeout: ${id}`));
       }, 8000);
 
@@ -929,8 +1215,19 @@ public markSessionRead(peerUid: string) {
         if (rpcData?.id !== id) return;
         try {
           const parsed = typeof rpcData.payload === "string" ? JSON.parse(rpcData.payload) : rpcData.payload;
+          if (parsed && typeof parsed === "object" && (parsed as any).success === false) {
+            try {
+              chatDebug(`rpc response success=false: ${id}`, {
+                message: (parsed as any).message,
+                error: (parsed as any).error,
+              });
+            } catch {}
+          }
           finish(null, parsed);
         } catch (e) {
+          try {
+            chatDebug(`rpc payload parse error: ${id}`, e);
+          } catch {}
           finish(e instanceof Error ? e : new Error(String(e)));
         }
       };
@@ -1000,12 +1297,14 @@ public markSessionRead(peerUid: string) {
   }
 
   private persist(channelId: string) {
+    if (!String(this.selfUid || "").trim()) return;
     const arr = this.msgsByChannel.get(channelId) || [];
-    sys.localStorage.setItem(this.storageKey(channelId), JSON.stringify(arr));
+    sys.localStorage.setItem(this.channelMsgsStorageKey(channelId), JSON.stringify(arr));
   }
 
   private loadLocalMsgs(channelId: string): PrivateMsg[] {
-    const raw = sys.localStorage.getItem(this.storageKey(channelId));
+    if (!String(this.selfUid || "").trim()) return [];
+    const raw = sys.localStorage.getItem(this.channelMsgsStorageKey(channelId));
     if (!raw) return [];
     try {
       const arr = JSON.parse(raw);
@@ -1015,13 +1314,12 @@ public markSessionRead(peerUid: string) {
     }
   }
 
-  private storageKey(channelId: string) {
-    return `${this.storagePrefix}:${channelId}`;
-  }
-
   private loadLocalSessions() {
     this.localSessionsByPeer.clear();
-    const raw = sys.localStorage.getItem(this.sessionListKey);
+    if (!String(this.selfUid || "").trim()) {
+      return;
+    }
+    const raw = sys.localStorage.getItem(this.sessionListStorageKey());
     if (!raw) return;
     try {
       const arr = JSON.parse(raw);
@@ -1055,7 +1353,7 @@ public markSessionRead(peerUid: string) {
     const list = this.getSessionList();
     try {
       chatLog("[pm] persistLocalSessions 写入 localStorage", {
-        key: this.sessionListKey,
+        key: this.sessionListStorageKey(),
         count: list.length,
         rows: list.map((x) => ({
           peerUid: x.peerUid,
@@ -1067,6 +1365,9 @@ public markSessionRead(peerUid: string) {
         })),
       });
     } catch {}
-    sys.localStorage.setItem(this.sessionListKey, JSON.stringify(list));
+    if (!String(this.selfUid || "").trim()) {
+      return;
+    }
+    sys.localStorage.setItem(this.sessionListStorageKey(), JSON.stringify(list));
   }
 }

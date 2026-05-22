@@ -69,9 +69,9 @@ export class PrefabLoad extends Component {
                 let bundle = assetManager.getBundle(this.bundleName)
                 if(this.isTexture){
                     bundle.load(newUrl, SpriteFrame, (err, spriteFrame) => {
-                            if(spriteFrame == null){
-                                console.log(newUrl)
-                            }
+                            // if(spriteFrame == null){
+                            //     console.log(newUrl)
+                            // }
                             _this.onAddObject(err , spriteFrame , newUrl);
                         }
                     )
@@ -122,6 +122,9 @@ export class PrefabLoad extends Component {
         var _this = this;
         _this.runSuccess = true
 
+        if(!this.node){
+            return;
+        }
         this.reset()
         if(null != object){
             _this.resRef = object
@@ -146,6 +149,12 @@ export class PrefabLoad extends Component {
             _this._res = _this._url = newUrl
 
             null != this.loadHandle && this.loadHandle.apply(this.target , this)
+        }else{
+            // log("load error : " + newUrl)
+            if(this.isTexture){
+                this._resFrame = null
+                this.node && (this.node.getComponent(Sprite).spriteFrame = null)
+            }
         }
     }
 

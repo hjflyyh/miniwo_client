@@ -11,8 +11,13 @@ import { RectangleHouseBuilder } from './RectangleHouseBuilder';
 import { MapLoadMap } from './MapLoadMap';
 import { RegionNpcCellBinder } from './RegionNpcCellBinder';
 import { network } from '../../../scripts/Model/RequestData';
-const { ccclass, property } = _decorator;
+import { FARM_MAP_GRID_HEIGHT, FARM_MAP_GRID_WIDTH } from './farm/FarmMapConstants';
+import { FarmMapEditorModule, setMapBgGrassSpriteVisible } from './farm/FarmMapEditorModule';
+import { FarmModel } from '../../../scripts/Model/Farm/FarmModel';
+import { postMessageToParent } from '../../../scripts/Utils/ParentPostMessage';
+import { GenericSpritesheetAnimator } from 'db://assets/scripts/Utils/GenericSpritesheetAnimator';
 
+const { ccclass, property } = _decorator;
 
 enum GridCellType {
     EMPTY,   // 空
@@ -28,6 +33,8 @@ interface WallSpriteConfig {
 export interface MapData {
     Ground: { id: string, _type: string, position: string , cfgId : number}[],
     Plant: { id: string, _type: string, position: string, flipX?: number, scaleX?: number, offsetX?: number, offsetY?: number }[],
+    /** mapEditor 分包 mapEdit 配置的农田/外景摆件（与 Plant 同级存在 mapItems） */
+    Fram?: { id: string, _type: string, position: string, flipX?: number, scaleX?: number, offsetX?: number, offsetY?: number }[],
     Region?: { id: string, minX: number, minY: number, maxX: number, maxY: number, npcIds?: string[] }[],
     Floor: { id: string, _type: string, position: string }[],
     House: {
@@ -104,21 +111,28 @@ export class MapEditor extends Component {
 
     @property
     public sideDoorInsetX: number = 10;
+    
 
     private buildFloorPoints: Vec2[] = [];
     public houseItems: Map<string, { tile: Node, tileType: string, belong?: string }> = new Map();
-    public mapItems: Map<string, { id: string, tile: Node, tileType: string, belong?: string, flipX?: number, offsetX?: number, offsetY?: number }> = new Map();
+    public mapItems: Map<string, { id: string, tile: Node, tileType: string, belong?: string, flipX?: number, offsetX?: number, offsetY?: number, gridAnchor?: string }> = new Map();
     public mapData: number[][] = [];
     public mapRegions: { id: string, minX: number, minY: number, maxX: number, maxY: number, npcIds: string[] }[] = [];
     public tileSize = 32;
     public mapWidth = 46;
     public mapHeight = 88;
 
-    @property({ type: CCBoolean, displayName: '启用格子拖动偏移', tooltip: '关闭时预览与摆放严格按格子中心；开启后手指/鼠标可带偏移（与逻辑占格无关）' })
-    public enablePlacementDragOffset = false;
+    @property({ displayName: '启用格子拖动偏移', tooltip: '关闭时预览与摆放严格按格子中心；开启后手指/鼠标可带偏移（与逻辑占格无关）。含树/家具/墙饰/移动及农场农田(FRAM)。' })
+    public enablePlacementDragOffset : boolean = false;
 
-    @property({ type: CCBoolean, displayName: '允许道具堆叠摆放', tooltip: '勾选后可在合法地板格上叠放家具，可摆放判断放宽（不再要求 place_type 与下层家具 decor_type 一一匹配）。不勾选则沿用原有不可堆叠与类型匹配规则。' })
-    public enableDecorStackPlacement = false;
+    @property({ displayName: '允许道具堆叠摆放', tooltip: '勾选后：室内家具可叠放（放宽 place_type 与 decor_type 匹配）；农场地图(mapGameType=0)上外景树/农田(Plant、Fram)也可叠放，多实例用唯一 mapItems key。不勾选则沿用原规则。' })
+    public enableDecorStackPlacement : boolean = false;
+
+    @property({
+        displayName: '铺路忽略格子占用',
+        tooltip: '勾选后：铺路(GROUND)忽略 mapData、地板/墙/家具、其它路面类型、邻格类型与是否已铺；点击/拖过即强制铺当前选中路面。',
+    })
+    public enableRoadIgnoreGridOccupancy = false;
 
     /** 最近一次鼠标/触摸在 mapContainer 下的本地坐标（用于格子内偏移摆放） */
     public lastPointerLocalPos: Vec2 | null = null;
@@ -134,8 +148,8 @@ export class MapEditor extends Component {
         npc_banner1: Node,
     } = { move: null, detele: null, frame: null, sign: null, npc_banner1: null };
 
-    moveItem: { id: string, tile: Node, tileType: string, initGride: Vec2, belong?: string, decorKey?: string, offsetX?: number, offsetY?: number, initOffsetX?: number, initOffsetY?: number, grabOffsetX?: number, grabOffsetY?: number } = null;
-    deteleItem: { tile: Node | null, tileType: string, belong?: string, decorKey?: string, doorPos?: Vec2, doorDir?: string, anchorPos?: Vec2 } = null;
+    moveItem: { id: string, tile: Node, tileType: string, initGride: Vec2, belong?: string, decorKey?: string, offsetX?: number, offsetY?: number, initOffsetX?: number, initOffsetY?: number, grabOffsetX?: number, grabOffsetY?: number, mapItemKey?: string, initMapItemKey?: string } = null;
+    deteleItem: { tile: Node | null, tileType: string, belong?: string, decorKey?: string, doorPos?: Vec2, doorDir?: string, anchorPos?: Vec2, mapItemKey?: string } = null;
     moveStatus: number = 0;
 
     public groundType: number = 1;
@@ -147,6 +161,45 @@ export class MapEditor extends Component {
     private readonly houseInsetLeft = 1;
     private readonly houseInsetRight = 1;
     private lastSelectionFailReason: '' | 'size' | 'placement' = '';
+
+        @property(GenericSpritesheetAnimator)
+        public animator: GenericSpritesheetAnimator;
+
+    /**
+     * mapFloor.json：is_auto_build 为 1 时，框选用地 raw 不外缩、不自动生成外墙，且不要求 8×10 / 12 格起铺。
+     * 0 或未配置：保持原「内缩 + 自动造房外墙」逻辑。
+     */
+    private isMapFloorSkipAutoHouseWallsByCfgId(cfgId: unknown): boolean {
+        if (cfgId === undefined || cfgId === null || cfgId === '') {
+            return false;
+        }
+        const cfg = AppConst.JSONManager.getItem('mapFloor', String(cfgId));
+        return cfg != null && Number(cfg['is_auto_build']) === 1;
+    }
+
+    /** 当前选中的地板 cfg（curTileNode.name） */
+    private isCurMapFloorSkipAutoHouseWalls(): boolean {
+        return this.isMapFloorSkipAutoHouseWallsByCfgId(this.curTileNode?.name);
+    }
+
+    /** 自动造房：内缩 rect；is_auto_build=1：raw，不做 houseInset 补全 */
+    private getFloorDragBuildRect(): { minX: number; maxX: number; minY: number; maxY: number } | null {
+        if (this.isCurMapFloorSkipAutoHouseWalls()) {
+            return this.getRawDragRect();
+        }
+        return this.getInsetBuildRect();
+    }
+
+    /** 某一组待成房地板是否来自 is_auto_build=1 */
+    private isHouseFloorGroupSkipAutoWalls(house: number[][]): boolean {
+        if (!house || house.length === 0) {
+            return false;
+        }
+        const pt = house[0];
+        const cell = this.houseItems.get(`${pt[0]},${pt[1]}`);
+        const cfgId = cell?.tile != null ? (cell.tile as any)['cfgId'] : undefined;
+        return this.isMapFloorSkipAutoHouseWallsByCfgId(cfgId);
+    }
 
     private NEIGHBOURS: Vec2[] = [
         new Vec2(0, 0),
@@ -186,6 +239,7 @@ export class MapEditor extends Component {
     public allMapAssetsData: MapData = {
         Ground: [],
         Plant: [],
+        Fram: [],
         Region: [],
         Floor: [],
         House: [],
@@ -203,7 +257,7 @@ export class MapEditor extends Component {
     public isMousePoint: boolean = false;
     public moveActionIndex: number = 0;
 
-    private currentOrthoSize: number = 700;
+    private currentOrthoSize: number = 800;
     private decorStackSeed = 0;
     private lastDecorHoverLogState = '';
     
@@ -233,6 +287,9 @@ export class MapEditor extends Component {
     @property
     public debugShowWalkable = false;
 
+    /** Cocos Graphics 单次 fill 顶点缓冲有上限；大地图_walkable 调试需分批 fill */
+    private static readonly WALKABLE_DEBUG_MAX_RECTS_PER_FILL = 1500;
+
     @property
     public map_data_test = false;
 
@@ -241,6 +298,12 @@ export class MapEditor extends Component {
     private npcTileDebugNode: Node | null = null;
     private npcTileDebugGraphics: Graphics | null = null;
     private lastWebMapInfoPayload = '';
+
+
+    public mapGameType = 0; //农场
+
+    /** mapGameType===0 时农场专属逻辑（底图、mapBg 草地显隐等），见 farm/FarmMapEditorModule */
+    private farmModule: FarmMapEditorModule | null = null;
 
     /**
      * 绘制选择框
@@ -282,29 +345,68 @@ export class MapEditor extends Component {
     }
 
     start() {
+        const pendingType = MapModel.getInstance().pendingMapGameType;
+        if (pendingType != null && Number.isFinite(Number(pendingType))) {
+            this.mapGameType = Number(pendingType);
+        }
+
         this.mapWidth = AppConst.UIRoot.MapEditorWidth
         this.mapHeight = AppConst.UIRoot.MapEditorHeight
         this.applyExternalGridSizeIfNeeded();
+        if (this.mapGameType == 0) {
+            this.mapWidth = FARM_MAP_GRID_WIDTH;
+            this.mapHeight = FARM_MAP_GRID_HEIGHT;
+        }
         console.log("地图格子尺寸：" + this.mapWidth + ":" + this.mapHeight)
 
         this.mapBgTransform.contentSize = new Size(this.mapWidth * this.tileSize , this.mapHeight * this.tileSize)
+        if (this.mapGameType === 0) {
+            this.farmModule = new FarmMapEditorModule();
+            this.farmModule.onEditorStart({
+                disMapContainer: this.disMapContainer,
+                mapBgNode: this.mapBgTransform?.node ?? null,
+                mapPixelWidth: this.mapWidth * this.tileSize,
+                mapPixelHeight: this.mapHeight * this.tileSize,
+            });
+            console.log('[MapEditor] 农场地图，请求天气数据');
+            void FarmModel.getInstance().enterFarm();
+        } else {
+            setMapBgGrassSpriteVisible(this.mapBgTransform?.node, true);
+        }
 
         this.init();
         
         this.initGridData();
+        this.applyEntryCameraOrthoPreferred();
         this.updateSizeLabel();
+        this.snapCameraToMapTopLeftOnEnter();
         MapModel.getInstance().setMapGround(MapManager.GetInstance().getGroundAssetsStr()[this.chooseGroundId], 0 , this);
         this.initMapGround();
 
         EventSystem.addListent("OnClickTileOhterIcon" , this.OnClickTileOhterIcon , this)
         EventSystem.addListent("OnClickFloorIcon" , this.OnClickFloorIcon , this)
-
     
         const matchId = MapModel.getInstance().match_id;
         if (matchId) {
             let MatchJoinEequest = new network.MatchJoinEequest();
             AppConst.WebSocketManager.send(MatchJoinEequest.toJSON(matchId))
         }
+
+        // if (this.animator) {
+        //     this.animator.loadAndPlay('res/NPCImage/zuozhu/walking-down', 'walking-down');
+        // }
+    }
+
+    protected onDestroy(): void {
+        this.disposeFarmBackgroundResources();
+    }
+
+    /**
+     * 离开地图或组件销毁时调用：销毁农场分包底图节点，并恢复场景 mapBg 默认草地 Sprite。
+     */
+    public disposeFarmBackgroundResources(): void {
+        this.farmModule?.dispose(this.mapBgTransform?.node ?? null);
+        this.farmModule = null;
     }
 
     private parseGridSizeFromMapData(data: any): { width: number, height: number } | null {
@@ -409,7 +511,60 @@ export class MapEditor extends Component {
         this.tileMaskNode.active = false;
         this.targetPos = this.mainCamera.node.getPosition();
 
+        if (this.isTouchPlacementDevice()) {
+            this.enablePlacementDragOffset = true;
+        }
+
         this.setArrowSignActive(false);
+    }
+
+    private isMobileWebBrowser(): boolean {
+        if (!sys.isBrowser) {
+            return false;
+        }
+        try {
+            return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+        } catch {
+            return false;
+        }
+    }
+
+    /** 移动端或手机浏览器 */
+    public isTouchPlacementDevice(): boolean {
+        return sys.isMobile || this.isMobileWebBrowser();
+    }
+
+    /** 移动端 / 手机浏览器：摆放预览跟手 */
+    public usePlacementFingerFollow(): boolean {
+        return this.isTouchPlacementDevice() && this.enablePlacementDragOffset;
+    }
+
+    public normalizePlacementGrid(gridPos: Vec2): Vec2 {
+        return new Vec2(Math.floor(gridPos.x), Math.floor(gridPos.y));
+    }
+
+    /** 根据当前预览遮罩位置解析摆放格子（确认按钮用） */
+    public resolvePlacementGridFromMask(): Vec2 | null {
+        if (!this.tileMaskNode?.isValid || !this.mapContainer?.isValid) {
+            return null;
+        }
+        const tileMaskUI = this.tileMaskNode.getComponent(UITransform);
+        const mapUi = this.mapContainer.getComponent(UITransform);
+        if (!tileMaskUI || !mapUi) {
+            return null;
+        }
+        const localPos = mapUi.convertToNodeSpaceAR(this.tileMaskNode.worldPosition);
+        const gridPos = this.normalizePlacementGrid(
+            this.getPositionToGrid(new Vec2(localPos.x, localPos.y), tileMaskUI.contentSize)
+        );
+        if (gridPos.x < 0 || gridPos.y < 0) {
+            return null;
+        }
+        const buildingSize = MapModel.getInstance().getBuildingSize(tileMaskUI.contentSize, this);
+        if (gridPos.x + buildingSize.x > this.mapWidth || gridPos.y + buildingSize.y > this.mapHeight) {
+            return null;
+        }
+        return gridPos;
     }
 
     private initGridData() {
@@ -423,8 +578,9 @@ export class MapEditor extends Component {
     }
 
     buildMap(gridPos: Vec2) {
-        if(gridPos.x <= 0 || gridPos.y <= 0){
-            return
+        gridPos = this.normalizePlacementGrid(gridPos);
+        if (gridPos.x < 0 || gridPos.y < 0) {
+            return;
         }
         const manager = MapManager.GetInstance();
         log(manager.actionStatus)
@@ -442,6 +598,9 @@ export class MapEditor extends Component {
                 
                 break;
             case ActionStatus.PLANT:
+                this.buildGoods(gridPos);
+                break;
+            case ActionStatus.FRAM:
                 this.buildGoods(gridPos);
                 break;
             case ActionStatus.REGION_NPC:
@@ -502,6 +661,14 @@ export class MapEditor extends Component {
                 this.lastPointerLocalPos = new Vec2(lp.x, lp.y);
             }
             if (this.lastPointerLocalPos) {
+                if (this.usePlacementFingerFollow() && screenPos) {
+                    const fingerLocal = new Vec3(this.lastPointerLocalPos.x, this.lastPointerLocalPos.y, 0);
+                    this.tileMaskNode.setWorldPosition(mapUi.convertToWorldSpaceAR(fingerLocal));
+                    const snapGrid = MapModel.getInstance().worldPosToGride(screenPos, this);
+                    this.showMaskColor(snapGrid);
+                    this.curGride = snapGrid;
+                    return;
+                }
                 const off = this.getPointerOffsetForGrid(gridPos, size);
                 const base = MapModel.getInstance().gridToWorld(gridPos, size, this);
                 const local = new Vec3(base.x + off.x, base.y + off.y, base.z);
@@ -649,7 +816,7 @@ export class MapEditor extends Component {
         }
         this.lastWebMapInfoPayload = payloadStr;
 
-        window.parent.postMessage({
+        postMessageToParent({
             channel: 'miniwo-map-editor',
             source: 'miniwo-cocos',
             type: 'COCOS_MAP_INFO_UPDATE',
@@ -745,6 +912,13 @@ export class MapEditor extends Component {
             }
         } else if (manager.actionStatus == ActionStatus.WALL) {
             
+        } else if (manager.actionStatus == ActionStatus.GROUND) {
+            if (this.canPlaceRoadAt(gridPos)) {
+                this.maskSp.color = new Color('#00FF296A');
+                this.curGride = gridPos;
+            } else if (this.curGride.x != gridPos.x || this.curGride.y != gridPos.y) {
+                this.maskSp.color = new Color('#FF00006A');
+            }
         } else {
             if (this.checkPlacementValidity(gridPos) && this.checkPlaceTreeValidity(gridPos)) {
                 this.maskSp.color = new Color('#00FF296A');
@@ -767,9 +941,12 @@ export class MapEditor extends Component {
             }
         }
 
-        for (let x = 0; x < this.mapWidth; x++) {
-            for (let y = 0; y < this.mapHeight; y++) {
-                this.setDisplayTile(new Vec2(x, y), new Size(32, 32), this.groundType);
+        // 农场(mapGameType==0)：不全图铺通用草地接缝层，否则 disMapContainer 会盖住 FarmBgLayer 分包底图；马路仍由 buildGround / MapLoadMap 按需 setDisplayTile
+        if (this.mapGameType != 0) {
+            for (let x = 0; x < this.mapWidth; x++) {
+                for (let y = 0; y < this.mapHeight; y++) {
+                    this.setDisplayTile(new Vec2(x, y), new Size(32, 32), this.groundType);
+                }
             }
         }
 
@@ -805,39 +982,155 @@ export class MapEditor extends Component {
         }
     }
 
-    // 建造地板
-    buildGround(gridPos: Vec2) {
-        if (this.placeholderTilemap.get(`${gridPos.x},${gridPos.y}`).empty) {
-            let islike = false;
-            const _list = [new Vec2(0, -1), new Vec2(0, 1), new Vec2(-1, 0), new Vec2(1, 0), new Vec2(-1, -1), new Vec2(1, -1), new Vec2(-1, 1), new Vec2(1, 1)]
-            for (let i = 0; i < _list.length; i++) {
-                const element = _list[i];
-                const pos = new Vec2(gridPos.x + element.x, gridPos.y + element.y);
-                if (this.placeholderTilemap.get(`${pos.x},${pos.y}`)._tileType != this.groundType) {
-                    islike = true;
-                    break;
-                }
+    private isRoadGridInBounds(gridPos: Vec2): boolean {
+        return (
+            gridPos.x >= 0 &&
+            gridPos.y >= 0 &&
+            gridPos.x < this.mapWidth &&
+            gridPos.y < this.mapHeight
+        );
+    }
+
+    /** 铺路：格子是否被 mapData 占用（地板/墙/家具） */
+    private isRoadBlockedByMapData(gridPos: Vec2): boolean {
+        if (!this.isRoadGridInBounds(gridPos)) {
+            return true;
+        }
+        const v = this.mapData[gridPos.x]?.[gridPos.y];
+        return v != null && v !== 0;
+    }
+
+    private ensurePlaceholderCell(gridPos: Vec2) {
+        const key = `${gridPos.x},${gridPos.y}`;
+        if (!this.placeholderTilemap.has(key)) {
+            this.placeholderTilemap.set(key, {
+                _type: 1,
+                empty: true,
+                _tileType: this.groundType,
+                cfgId: this.chooseGroundId,
+            });
+        }
+    }
+
+    /** 当前模式下该格是否允许铺路（预览绿框 / buildGround 共用） */
+    private canPlaceRoadAt(gridPos: Vec2): boolean {
+        if (!this.isRoadGridInBounds(gridPos)) {
+            return false;
+        }
+        if (this.enableRoadIgnoreGridOccupancy) {
+            return true;
+        }
+        if (!this.placeholderTilemap.has(`${gridPos.x},${gridPos.y}`)) {
+            return false;
+        }
+        if (this.isRoadBlockedByMapData(gridPos)) {
+            return false;
+        }
+        const cell = this.placeholderTilemap.get(`${gridPos.x},${gridPos.y}`);
+        return !!cell?.empty;
+    }
+
+    private clearDisplayTileAt(gridPos: Vec2) {
+        const entry = this.displayTilemap.get(`${gridPos.x},${gridPos.y}`);
+        if (entry?.tileNode?.isValid) {
+            entry.tileNode.destroy();
+        }
+        this.displayTilemap.delete(`${gridPos.x},${gridPos.y}`);
+    }
+
+    private clearDisplayTilesForRoadPaint(center: Vec2) {
+        this.clearDisplayTileAt(center);
+        for (let i = 0; i < this.NEIGHBOURS.length; i++) {
+            const n = this.NEIGHBOURS[i];
+            this.clearDisplayTileAt(new Vec2(center.x + n.x, center.y + n.y));
+        }
+    }
+
+    /** 忽略占用铺路时：释放 mapData 占格（0=空；1 地板 / 2 墙 / 3 家具） */
+    private releaseMapDataOccupancyForForcedRoad(gridPos: Vec2) {
+        if (!this.isRoadGridInBounds(gridPos)) {
+            return;
+        }
+        const row = this.mapData[gridPos.x];
+        if (!row) {
+            return;
+        }
+        row[gridPos.y] = 0;
+    }
+
+    private placeRoadCell(gridPos: Vec2) {
+        const force = this.enableRoadIgnoreGridOccupancy;
+        if (force) {
+            if (!this.isRoadGridInBounds(gridPos)) {
+                return;
             }
+            this.ensurePlaceholderCell(gridPos);
+            this.releaseMapDataOccupancyForForcedRoad(gridPos);
+        } else if (!this.canPlaceRoadAt(gridPos)) {
+            return;
+        }
 
-            if (!islike) {
-                this.placeholderTilemap.set(`${gridPos.x},${gridPos.y}`, { _type: 2, empty: false, _tileType: this.groundType , cfgId : this.chooseGroundId });
-                this.setDisplayTile(gridPos, new Size(this.tileSize, this.tileSize), this.groundType);
+        this.clearDisplayTilesForRoadPaint(gridPos);
+        this.placeholderTilemap.set(`${gridPos.x},${gridPos.y}`, {
+            _type: 2,
+            empty: false,
+            _tileType: this.groundType,
+            cfgId: this.chooseGroundId,
+        });
+        this.setDisplayTile(gridPos, new Size(this.tileSize, this.tileSize), this.groundType);
+    }
 
-                const fillCells = computeSameTypeClosedFillCells({
-                    mapWidth : this.mapWidth,
-                    mapHeight : this.mapHeight,
-                    placeholderTilemap : this.placeholderTilemap as any,
-                    cfgId : this.chooseGroundId,
-                    seed : gridPos,
-                    padding : 1
-                })
-                // console.log(fillCells)
-                if(fillCells.length > 0){
-                    for(let f = 0 ; f < fillCells.length ; f++){
-                        let cellGrid = fillCells[f]
-                        this.placeholderTilemap.set(`${cellGrid.x},${cellGrid.y}`, { _type: 2, empty: false, _tileType: this.groundType , cfgId : this.chooseGroundId });
-                        this.setDisplayTile(cellGrid, new Size(this.tileSize, this.tileSize), this.groundType);
-                    }
+    // 建造地板 / 铺路
+    buildGround(gridPos: Vec2) {
+        if (this.enableRoadIgnoreGridOccupancy) {
+            this.placeRoadCell(gridPos);
+            return;
+        }
+
+        if (!this.canPlaceRoadAt(gridPos)) {
+            return;
+        }
+
+        const cell = this.placeholderTilemap.get(`${gridPos.x},${gridPos.y}`);
+        if (!cell?.empty) {
+            return;
+        }
+
+        let islike = false;
+        const _list = [
+            new Vec2(0, -1),
+            new Vec2(0, 1),
+            new Vec2(-1, 0),
+            new Vec2(1, 0),
+            new Vec2(-1, -1),
+            new Vec2(1, -1),
+            new Vec2(-1, 1),
+            new Vec2(1, 1),
+        ];
+        for (let i = 0; i < _list.length; i++) {
+            const element = _list[i];
+            const pos = new Vec2(gridPos.x + element.x, gridPos.y + element.y);
+            const neighbor = this.placeholderTilemap.get(`${pos.x},${pos.y}`);
+            if (!neighbor || neighbor._tileType != this.groundType) {
+                islike = true;
+                break;
+            }
+        }
+
+        if (!islike) {
+            this.placeRoadCell(gridPos);
+
+            const fillCells = computeSameTypeClosedFillCells({
+                mapWidth: this.mapWidth,
+                mapHeight: this.mapHeight,
+                placeholderTilemap: this.placeholderTilemap as any,
+                cfgId: this.chooseGroundId,
+                seed: gridPos,
+                padding: 1,
+            });
+            if (fillCells.length > 0) {
+                for (let f = 0; f < fillCells.length; f++) {
+                    this.placeRoadCell(fillCells[f]);
                 }
             }
         }
@@ -850,10 +1143,19 @@ export class MapEditor extends Component {
             const newPos = new Vec2(pos.x + this.NEIGHBOURS[i].x, pos.y + this.NEIGHBOURS[i].y);
             let localPos = MapModel.getInstance().gridToWorld(newPos , null, this);
 
-            //url cfgId
-            const tileData = this.calculateDisplayTile(newPos)
-            if(tileData["url"] == "ground/texture2d/dirty_road/dirty_road_7/spriteFrame"){
-                return
+            const tileData = this.calculateDisplayTile(newPos);
+            if (tileData == null) {
+                continue;
+            }
+            const tileUrl =
+                typeof tileData === 'string'
+                    ? tileData
+                    : String((tileData as { url?: string }).url ?? '');
+            if (
+                tileUrl === 'ground/texture2d/dirty_road/dirty_road_7/spriteFrame' &&
+                !this.enableRoadIgnoreGridOccupancy
+            ) {
+                continue;
             }
             // 创建新的图块
             const tile = new Node;
@@ -867,14 +1169,18 @@ export class MapEditor extends Component {
 
             let displayTitle = tile.addComponent("DisplayTitle") as DisplayTitle;
             displayTitle.sp = sprite
-            displayTitle.spframeName = tileData["url"]
+            displayTitle.spframeName = tileUrl
             // console.log(tileData["url"])
             
             displayTitle.gridKey = `${newPos.x},${newPos.y}`
             displayTitle.poolNodeSize = _size
             displayTitle.camera = MapManager.GetInstance().getMapEditor().mainCamera
 
-            this.displayTilemap.set(`${newPos.x},${newPos.y}`, { tileNode: tile, _type: _tag , cfgId : tileData["cfgId"]})
+            this.displayTilemap.set(`${newPos.x},${newPos.y}`, {
+                tileNode: tile,
+                _type: _tag,
+                cfgId: this.chooseGroundId,
+            });
         }
     }
 
@@ -920,40 +1226,80 @@ export class MapEditor extends Component {
         }
         if (!this.walkableDebugGraphics) return;
 
-        this.walkableDebugGraphics.clear();
+        const g = this.walkableDebugGraphics;
+        g.clear();
 
-        // 先把整张图都标红（不可走）
-        this.walkableDebugGraphics.fillColor = new Color(255, 0, 0, 110);
-        for (let x = 0; x < this.mapWidth; x++) {
-            for (let y = 0; y < this.mapHeight; y++) {
-                const center = this.gridCellCenterForDebug(new Vec2(x, y));
-                const half = this.tileSize * 0.5;
-                this.walkableDebugGraphics.rect(center.x - half, center.y - half, this.tileSize, this.tileSize);
+        const walkableSet = new Set<string>();
+        if (cells) {
+            for (let i = 0; i < cells.length; i++) {
+                const key = cells[i];
+                if (typeof key === 'string') {
+                    walkableSet.add(key);
+                }
             }
         }
-        this.walkableDebugGraphics.fill();
 
-        // 再把 Walkable 覆盖成绿色（可走）
-        if (!cells || cells.length === 0) {
-            return;
-        }
-        this.walkableDebugGraphics.fillColor = new Color(0, 255, 0, 120);
-        for (let i = 0; i < cells.length; i++) {
-            const key = cells[i];
-            if (typeof key !== 'string') continue;
+        const half = this.tileSize * 0.5;
+        const gridTmp = new Vec2();
+        const maxBatch = MapEditor.WALKABLE_DEBUG_MAX_RECTS_PER_FILL;
+
+        const appendRect = (x: number, y: number) => {
+            gridTmp.set(x, y);
+            const center = this.gridCellCenterForDebug(gridTmp);
+            g.rect(center.x - half, center.y - half, this.tileSize, this.tileSize);
+        };
+
+        const red = new Color(255, 0, 0, 110);
+        const green = new Color(0, 255, 0, 120);
+
+        // 不可走：仅铺非 Walkable 格（避免整张图重复矩形 + 单次超大 fill）
+        // g.fillColor = red;
+        let batch = 0;
+        // for (let x = 0; x < this.mapWidth; x++) {
+        //     for (let y = 0; y < this.mapHeight; y++) {
+        //         if (walkableSet.has(`${x},${y}`)) {
+        //             continue;
+        //         }
+        //         appendRect(x, y);
+        //         batch++;
+        //         if (batch >= maxBatch) {
+        //             g.fill();
+        //             g.fillColor = red;
+        //             batch = 0;
+        //         }
+        //     }
+        // }
+        // if (batch > 0) {
+        //     g.fill();
+        // }
+
+        // 可走：只遍历 Walkable 集合，分批铺绿
+        g.fillColor = green;
+        batch = 0;
+        walkableSet.forEach((key) => {
             const parts = key.split(',');
-            if (parts.length < 2) continue;
-
+            if (parts.length < 2) {
+                return;
+            }
             const x = Number(parts[0]);
             const y = Number(parts[1]);
-            if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
-            if (x < 0 || y < 0 || x >= this.mapWidth || y >= this.mapHeight) continue;
-
-            const center = this.gridCellCenterForDebug(new Vec2(x, y));
-            const half = this.tileSize * 0.5;
-            this.walkableDebugGraphics.rect(center.x - half, center.y - half, this.tileSize, this.tileSize);
+            if (!Number.isFinite(x) || !Number.isFinite(y)) {
+                return;
+            }
+            if (x < 0 || y < 0 || x >= this.mapWidth || y >= this.mapHeight) {
+                return;
+            }
+            appendRect(x, y);
+            batch++;
+            if (batch >= maxBatch) {
+                g.fill();
+                g.fillColor = green;
+                batch = 0;
+            }
+        });
+        if (batch > 0) {
+            g.fill();
         }
-        this.walkableDebugGraphics.fill();
     }
 
     private ensureNpcTileDebugLayer() {
@@ -1395,23 +1741,36 @@ export class MapEditor extends Component {
             }
 
             let size = null;
-            if (this.mapItems.has(`${gridPos.x},${gridPos.y}`)) {
-                const item = this.mapItems.get(`${gridPos.x},${gridPos.y}`);
+            const simpleKey = `${gridPos.x},${gridPos.y}`;
+            let picked: { key: string; item: { id: string; tile: Node; tileType: string; flipX?: number; offsetX?: number; offsetY?: number; gridAnchor?: string } } | null = null;
+            if (this.mapItems.has(simpleKey)) {
+                picked = { key: simpleKey, item: this.mapItems.get(simpleKey) };
+            } else {
+                const hit = this.findTopOutdoorPlantFramMapHit(gridPos);
+                if (hit) {
+                    picked = hit;
+                }
+            }
+            if (picked) {
+                const item = picked.item;
                 const ptr = this.lastPointerLocalPos;
                 const tilePos = item.tile?.getPosition?.() ?? new Vec3();
                 const grabOffsetX = this.enablePlacementDragOffset && ptr ? (ptr.x - tilePos.x) : 0;
                 const grabOffsetY = this.enablePlacementDragOffset && ptr ? (ptr.y - tilePos.y) : 0;
+                const anchorVec = this.getMapItemAnchorVecForFootprint(picked.key, item) ?? new Vec2(gridPos.x, gridPos.y);
                 this.moveItem = {
                     id: item.id,
                     tile: item.tile,
                     tileType: item.tileType,
-                    initGride: gridPos,
+                    initGride: anchorVec,
                     offsetX: (item as any).offsetX ?? 0,
                     offsetY: (item as any).offsetY ?? 0,
                     initOffsetX: (item as any).offsetX ?? 0,
                     initOffsetY: (item as any).offsetY ?? 0,
                     grabOffsetX,
-                    grabOffsetY
+                    grabOffsetY,
+                    mapItemKey: picked.key,
+                    initMapItemKey: picked.key,
                 };
                 console.log(`[MOVE_SELECT] id=${this.moveItem.id}, name=${this.moveItem.tile?.name}, type=${this.moveItem.tileType}, grid=${gridPos.x},${gridPos.y}`);
                 size = this.moveItem.tile.getComponent(UITransform).contentSize;
@@ -1481,7 +1840,7 @@ export class MapEditor extends Component {
         }
     }
 
-    private resolveDeleteTarget(gridPos: Vec2): { tile: Node | null, tileType: string, belong?: string, decorKey?: string, doorPos?: Vec2, doorDir?: string, anchorPos?: Vec2 } | null {
+    private resolveDeleteTarget(gridPos: Vec2): { tile: Node | null, tileType: string, belong?: string, decorKey?: string, doorPos?: Vec2, doorDir?: string, anchorPos?: Vec2, mapItemKey?: string } | null {
         const key = `${gridPos.x},${gridPos.y}`;
         const houseCell = this.houseItems.get(key);
         if (houseCell?.belong) {
@@ -1514,33 +1873,37 @@ export class MapEditor extends Component {
 
         const mapItem = this.mapItems.get(key);
         if (mapItem) {
-            return { tile: mapItem.tile || null, tileType: mapItem.tileType, anchorPos: new Vec2(gridPos.x, gridPos.y) };
+            return { tile: mapItem.tile || null, tileType: mapItem.tileType, anchorPos: new Vec2(gridPos.x, gridPos.y), mapItemKey: key };
         }
 
-        // 大尺寸非房屋道具：支持点击占地区域任意格子命中删除（不仅限锚点格）
+        // 大尺寸非房屋道具：支持点击占地区域任意格子命中删除（不仅限锚点格）；同格多实例时取 Map 中最后一个
+        let lastFootHit: { itemKey: string; item: { id: string; tile: Node; tileType: string; gridAnchor?: string }; anchor: Vec2 } | null = null;
         for (const [itemKey, item] of this.mapItems.entries()) {
-            if (!item) {
+            if (!item?.tile) {
                 continue;
             }
-            const split = itemKey.split(',');
-            if (split.length !== 2) {
+            const anchorStr = this.getMapItemGridAnchorString(itemKey, item);
+            if (!anchorStr) {
                 continue;
             }
-            const anchorX = parseInt(split[0], 10);
-            const anchorY = parseInt(split[1], 10);
-            if (!Number.isFinite(anchorX) || !Number.isFinite(anchorY)) {
+            const anchor = this.parseAnchorStringToVec(anchorStr);
+            if (!anchor) {
                 continue;
             }
             const gridSize = this.getNodeGridSize(item.tile);
-            const inX = gridPos.x >= anchorX && gridPos.x <= anchorX + gridSize.x - 1;
-            const inY = gridPos.y <= anchorY && gridPos.y >= anchorY - (gridSize.y - 1);
+            const inX = gridPos.x >= anchor.x && gridPos.x <= anchor.x + gridSize.x - 1;
+            const inY = gridPos.y <= anchor.y && gridPos.y >= anchor.y - (gridSize.y - 1);
             if (!inX || !inY) {
                 continue;
             }
+            lastFootHit = { itemKey, item, anchor };
+        }
+        if (lastFootHit) {
             return {
-                tile: item.tile || null,
-                tileType: item.tileType,
-                anchorPos: new Vec2(anchorX, anchorY)
+                tile: lastFootHit.item.tile || null,
+                tileType: lastFootHit.item.tileType,
+                anchorPos: lastFootHit.anchor,
+                mapItemKey: lastFootHit.itemKey,
             };
         }
 
@@ -1603,6 +1966,10 @@ export class MapEditor extends Component {
             }
 
             const target = this.resolveDeleteTarget(gridPos);
+            if (target?.tileType === "House" && !this.canDemolishHouse()) {
+                this.deteleItem = null;
+                return;
+            }
             this.deteleItem = target;
 
             let size = new Size(this.tileSize, this.tileSize);
@@ -1777,16 +2144,20 @@ export class MapEditor extends Component {
                         }
                     }
                 } else if (!this.isWallDacorationTileType(this.moveItem.tileType)) {
-                    // 更新网格数据
-                    for (let x = 0; x < buildingSize.x; x++) {
-                        for (let y = 0; y < buildingSize.y; y++) {
-                            const gridX = gridPos.x + x;
-                            const gridY = gridPos.y - y;
-                            this.mapData[gridX][gridY] = 0;
+                    const anchorStart = this.moveItem.initGride;
+                    const delKey = this.moveItem.mapItemKey ?? `${anchorStart.x},${anchorStart.y}`;
+                    this.mapItems.delete(delKey);
+                    if (this.isOutdoorPlantFramTileType(this.moveItem.tileType)) {
+                        this.refreshOutdoorPlantFramFootprintMapData(anchorStart, buildingSize);
+                    } else {
+                        for (let x = 0; x < buildingSize.x; x++) {
+                            for (let y = 0; y < buildingSize.y; y++) {
+                                const gridX = anchorStart.x + x;
+                                const gridY = anchorStart.y - y;
+                                this.mapData[gridX][gridY] = 0;
+                            }
                         }
                     }
-
-                    this.mapItems.delete(`${gridPos.x},${gridPos.y}`);
                 }
 
                 this.moveStatus = 1;
@@ -1892,14 +2263,12 @@ export class MapEditor extends Component {
                     }
                 } else {
                     if (this.checkPlacementValidity(gridPos)) {
-                        // 移动
                         const size = this.moveItem.tile.getComponent(UITransform).contentSize;
                         const worldPos = MapModel.getInstance().gridToWorld(gridPos, size, this);
                         const ox = (this.moveItem as any).offsetX ?? 0;
                         const oy = (this.moveItem as any).offsetY ?? 0;
                         this.moveItem.tile.setPosition(worldPos.x + ox, worldPos.y + oy, worldPos.z);
 
-                        // 更新网格数据
                         for (let x = 0; x < buildingSize.x; x++) {
                             for (let y = 0; y < buildingSize.y; y++) {
                                 const gridX = gridPos.x + x;
@@ -1907,9 +2276,28 @@ export class MapEditor extends Component {
                                 this.mapData[gridX][gridY] = 2;
                             }
                         }
-                        this.mapItems.set(`${gridPos.x},${gridPos.y}`, this.moveItem);
+                        const flipX = this.moveItem.tile.getScale().x < 0 ? -1 : 1;
+                        const farmStack = this.farmOutdoorStackActive();
+                        const newKey =
+                            farmStack && this.isOutdoorPlantFramTileType(this.moveItem.tileType)
+                                ? this.makeOutdoorPlantFramMapItemKey(
+                                      gridPos,
+                                      this.moveItem.tileType === 'Fram' ? `Fram_move_${this.moveItem.id}` : `Plant_move_${this.moveItem.id}`
+                                  )
+                                : `${gridPos.x},${gridPos.y}`;
+                        const entry: { id: string; tile: Node; tileType: string; flipX: number; offsetX: number; offsetY: number; gridAnchor?: string } = {
+                            id: this.moveItem.id,
+                            tile: this.moveItem.tile,
+                            tileType: this.moveItem.tileType,
+                            flipX,
+                            offsetX: ox,
+                            offsetY: oy,
+                        };
+                        if (farmStack && this.isOutdoorPlantFramTileType(this.moveItem.tileType)) {
+                            entry.gridAnchor = `${gridPos.x},${gridPos.y}`;
+                        }
+                        this.mapItems.set(newKey, entry);
                     } else {
-                        // 移动
                         const size = this.moveItem.tile.getComponent(UITransform).contentSize;
                         const worldPos = MapModel.getInstance().gridToWorld(this.moveItem.initGride, size, this);
                         const ox = (this.moveItem as any).initOffsetX ?? 0;
@@ -1918,7 +2306,6 @@ export class MapEditor extends Component {
                         (this.moveItem as any).offsetY = oy;
                         this.moveItem.tile.setPosition(worldPos.x + ox, worldPos.y + oy, worldPos.z);
 
-                        // 更新网格数据
                         for (let x = 0; x < buildingSize.x; x++) {
                             for (let y = 0; y < buildingSize.y; y++) {
                                 const gridX = this.moveItem.initGride.x + x;
@@ -1926,7 +2313,20 @@ export class MapEditor extends Component {
                                 this.mapData[gridX][gridY] = 2;
                             }
                         }
-                        this.mapItems.set(`${this.moveItem.initGride.x},${this.moveItem.initGride.y}`, this.moveItem);
+                        const rollbackKey = this.moveItem.initMapItemKey ?? `${this.moveItem.initGride.x},${this.moveItem.initGride.y}`;
+                        const flipXR = this.moveItem.tile.getScale().x < 0 ? -1 : 1;
+                        const rollbackEntry: { id: string; tile: Node; tileType: string; flipX: number; offsetX: number; offsetY: number; gridAnchor?: string } = {
+                            id: this.moveItem.id,
+                            tile: this.moveItem.tile,
+                            tileType: this.moveItem.tileType,
+                            flipX: flipXR,
+                            offsetX: ox,
+                            offsetY: oy,
+                        };
+                        if (this.farmOutdoorStackActive() && this.isOutdoorPlantFramTileType(this.moveItem.tileType)) {
+                            rollbackEntry.gridAnchor = `${this.moveItem.initGride.x},${this.moveItem.initGride.y}`;
+                        }
+                        this.mapItems.set(rollbackKey, rollbackEntry);
                     }
                 }
 
@@ -2205,12 +2605,18 @@ export class MapEditor extends Component {
     }
 
     autoGraphicsWall(){
-        const rect = this.getInsetBuildRect();
+        const rect = this.getFloorDragBuildRect();
         if (!rect) {
             this.lastSelectionFailReason = 'size';
             return false;
         }
-        if (!this.isHouseRectSizeValid(rect.minX, rect.maxX, rect.minY, rect.maxY)) {
+        const skipAuto = this.isCurMapFloorSkipAutoHouseWalls();
+        if (skipAuto) {
+            if (rect.minX > rect.maxX || rect.minY > rect.maxY) {
+                this.lastSelectionFailReason = 'size';
+                return false;
+            }
+        } else if (!this.isHouseRectSizeValid(rect.minX, rect.maxX, rect.minY, rect.maxY)) {
             this.lastSelectionFailReason = 'size';
             return false;
         }
@@ -2649,6 +3055,11 @@ export class MapEditor extends Component {
         }
         const target = this.deteleItem || this.resolveDeleteTarget(gridPos);
         if (target?.tileType === "House" && target?.belong) {
+            if (!this.canDemolishHouse()) {
+                AppConst.PanelManager.openView("res/View/TipsView", { content: "当前地图不能拆除房屋" });
+                this.deteleItem = null;
+                return;
+            }
             this.removeWholeHouse(target.belong);
             this.deteleItem = null;
             this.setTileMaskSp();
@@ -2669,32 +3080,37 @@ export class MapEditor extends Component {
             MapManager.GetInstance().getMapEditorUI().checkButtonVisible(true);
             this.buildControl.detele.play('detele_action');
             return;
-        } else if (target?.anchorPos && this.mapItems.has(`${target.anchorPos.x},${target.anchorPos.y}`)) {
-            const anchorPos = target.anchorPos;
-            const anchorKey = `${anchorPos.x},${anchorPos.y}`;
-            const mapItem = this.mapItems.get(anchorKey);
-            if (mapItem.tileType == "Floor") {
-                for (let i = 0; i < this.buildFloorPoints.length; i++) {
-                    const element = this.buildFloorPoints[i];
-                    if (element.x == anchorPos.x && element.y == anchorPos.y) {
-                        this.buildFloorPoints.splice(i, 1);
-                        break;
+        } else if (target?.anchorPos) {
+            const storageKey = target.mapItemKey ?? `${target.anchorPos.x},${target.anchorPos.y}`;
+            if (this.mapItems.has(storageKey)) {
+                const anchorPos = target.anchorPos;
+                const mapItem = this.mapItems.get(storageKey);
+                if (mapItem.tileType == "Floor") {
+                    for (let i = 0; i < this.buildFloorPoints.length; i++) {
+                        const element = this.buildFloorPoints[i];
+                        if (element.x == anchorPos.x && element.y == anchorPos.y) {
+                            this.buildFloorPoints.splice(i, 1);
+                            break;
+                        }
                     }
                 }
-            }
 
-            const buildingSize = this.getNodeGridSize(mapItem.tile);
-            if (mapItem.tile) {
-                mapItem.tile.destroy();
-            }
-            this.mapItems.delete(anchorKey);
+                const buildingSize = this.getNodeGridSize(mapItem.tile);
+                if (mapItem.tile) {
+                    mapItem.tile.destroy();
+                }
+                this.mapItems.delete(storageKey);
 
-            // 更新网格数据
-            for (let x = 0; x < buildingSize.x; x++) {
-                for (let y = 0; y < buildingSize.y; y++) {
-                    const gridX = anchorPos.x + x;
-                    const gridY = anchorPos.y - y;
-                    this.mapData[gridX][gridY] = 0;
+                if (this.isOutdoorPlantFramTileType(mapItem.tileType)) {
+                    this.refreshOutdoorPlantFramFootprintMapData(anchorPos, buildingSize);
+                } else {
+                    for (let x = 0; x < buildingSize.x; x++) {
+                        for (let y = 0; y < buildingSize.y; y++) {
+                            const gridX = anchorPos.x + x;
+                            const gridY = anchorPos.y - y;
+                            this.mapData[gridX][gridY] = 0;
+                        }
+                    }
                 }
             }
         } else if (this.containsArray(this.buildFloorPoints, gridPos)) {
@@ -3193,6 +3609,27 @@ export class MapEditor extends Component {
             return false;
         }
 
+        const mgr = MapManager.GetInstance();
+        const outdoorPlantFramMove =
+            mgr.actionStatus === ActionStatus.MOVE &&
+            this.moveItem != null &&
+            this.isOutdoorPlantFramTileType(this.moveItem.tileType);
+        const outdoorPlantFramPlace =
+            mgr.actionStatus === ActionStatus.PLANT || mgr.actionStatus === ActionStatus.FRAM;
+        if (this.farmOutdoorStackActive() && (outdoorPlantFramPlace || outdoorPlantFramMove)) {
+            for (let x = 0; x < buildingSize.x; x++) {
+                for (let y = 0; y < buildingSize.y; y++) {
+                    const checkX1 = gridPos.x + x;
+                    const checkY1 = gridPos.y - y;
+                    const v = this.mapData[checkX1][checkY1];
+                    if (v !== 0 && v !== 2) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
         for (let x = 0; x < buildingSize.x; x++) {
             for (let y = 0; y < buildingSize.y; y++) {
                 const checkX1 = gridPos.x + x;
@@ -3378,26 +3815,59 @@ export class MapEditor extends Component {
         // 创建新的图块
         const tile = MapManager.GetInstance().getMapCurTileNode(this.curTileNode.name , this.curTileNode["tileType"]);
 
-        const offset = manager.actionStatus == ActionStatus.PLANT ? this.getPointerOffsetForGrid(gridPos, size) : new Vec2(0, 0);
+        const offset =
+            manager.actionStatus == ActionStatus.PLANT || manager.actionStatus == ActionStatus.FRAM
+                ? this.getPointerOffsetForGrid(gridPos, size)
+                : new Vec2(0, 0);
         tile.setPosition(worldPos.x + offset.x, worldPos.y + offset.y, worldPos.z);
         this.mapContainer.addChild(tile);
         // console.log(worldPos)
         // console.log(gridPos)
-        // 加入
-        if (!this.mapItems.has(`${gridPos.x},${gridPos.y}`)) {
+        // 加入（农场堆叠时 Plant/Fram 允许多实例同锚点，使用唯一 mapItems key）
+        const farmStack = this.farmOutdoorStackActive();
+        const allowDupPlantFramAnchor =
+            farmStack && (manager.actionStatus === ActionStatus.PLANT || manager.actionStatus === ActionStatus.FRAM);
+        if (allowDupPlantFramAnchor || !this.mapItems.has(`${gridPos.x},${gridPos.y}`)) {
             if (manager.actionStatus == ActionStatus.PLANT) {
                 const previewScaleX = this.curTileNode?.getScale()?.x ?? 1;
                 const flipX = previewScaleX < 0 ? -1 : 1;
                 const tileScale = tile.getScale();
                 tile.setScale(flipX, tileScale.y, tileScale.z);
-                this.mapItems.set(`${gridPos.x},${gridPos.y}`, {
+                const storageKey = farmStack
+                    ? this.makeOutdoorPlantFramMapItemKey(gridPos, `Plant_${this.curTileNode.name}`)
+                    : `${gridPos.x},${gridPos.y}`;
+                const plantEntry: { id: string; tile: Node; tileType: string; flipX: number; offsetX: number; offsetY: number; gridAnchor?: string } = {
                     id: this.curTileNode.name + "#" + this.curTileNode["tileType"],
                     tile: tile,
                     tileType: "Plant",
                     flipX,
                     offsetX: offset.x,
-                    offsetY: offset.y
-                });
+                    offsetY: offset.y,
+                };
+                if (farmStack) {
+                    plantEntry.gridAnchor = `${gridPos.x},${gridPos.y}`;
+                }
+                this.mapItems.set(storageKey, plantEntry);
+            } else if (manager.actionStatus == ActionStatus.FRAM) {
+                const previewScaleX = this.curTileNode?.getScale()?.x ?? 1;
+                const flipX = previewScaleX < 0 ? -1 : 1;
+                const tileScale = tile.getScale();
+                tile.setScale(flipX, tileScale.y, tileScale.z);
+                const storageKey = farmStack
+                    ? this.makeOutdoorPlantFramMapItemKey(gridPos, `Fram_${this.curTileNode.name}`)
+                    : `${gridPos.x},${gridPos.y}`;
+                const framEntry: { id: string; tile: Node; tileType: string; flipX: number; offsetX: number; offsetY: number; gridAnchor?: string } = {
+                    id: this.curTileNode.name + "#Fram",
+                    tile: tile,
+                    tileType: "Fram",
+                    flipX,
+                    offsetX: offset.x,
+                    offsetY: offset.y,
+                };
+                if (farmStack) {
+                    framEntry.gridAnchor = `${gridPos.x},${gridPos.y}`;
+                }
+                this.mapItems.set(storageKey, framEntry);
             } else if (manager.actionStatus == ActionStatus.FLOOR) {
                 this.mapItems.set(`${gridPos.x},${gridPos.y}`, { id: tile.name, tile: tile, tileType: "Floor" });
                 this.buildFloorPoints.push(gridPos);
@@ -3413,7 +3883,7 @@ export class MapEditor extends Component {
         //     isWalkable: false
         // };
 
-        // 更新网格数据
+        // 更新网格数据（植物 / 农田摆件共用占格规则）
         for (let x = 0; x < buildingSize.x; x++) {
             for (let y = 0; y < buildingSize.y; y++) {
                 const gridX = gridPos.x + x;
@@ -3437,6 +3907,7 @@ export class MapEditor extends Component {
         const manager = MapManager.GetInstance();
 
         this.maskSp.color = new Color('#FFFFFF32');
+        this.tileMaskNode.active = true;
         this.setTileMaskSp();
     }
 
@@ -3476,6 +3947,8 @@ export class MapEditor extends Component {
 
         this.buildIcon.addChild(this.curTileNode);
 
+        // 与手机端 onTouchStart(FLOOR) 一致：选中地块后即可在地图上按下拖拽画框，不必先点中小预览 mask
+        this.isBuildSwitch = true;
         this.setTileSclect()
     }
 
@@ -3649,6 +4122,30 @@ export class MapEditor extends Component {
         this.maxYCamera = this.boundaryMax.y - viewportHeight / 2;
     }
 
+    /**
+     * 进入地图时相机默认对准地图左上角（视口左上对齐地图左上）。
+     * 依赖 updateSizeLabel 已更新边界与 min/maxCamera。
+     */
+    private snapCameraToMapTopLeftOnEnter(): void {
+        if (!this.mainCamera?.node?.isValid) {
+            return;
+        }
+        const z = this.mainCamera.node.position.z;
+        let cx: number;
+        let cy: number;
+        // 视口小于地图：左上角 = 相机可取的最左 + 最高（见 updateSizeLabel）
+        if (this.minXCamera <= this.maxXCamera && this.minYCamera <= this.maxYCamera) {
+            cx = this.minXCamera;
+            cy = this.maxYCamera;
+        } else {
+            // 视口大于地图某方向：相机居中避免非法区间
+            cx = (this.boundaryMin.x + this.boundaryMax.x) * 0.5;
+            cy = (this.boundaryMin.y + this.boundaryMax.y) * 0.5;
+        }
+        this.targetPos.set(cx, cy, z);
+        this.mainCamera.node.setPosition(this.targetPos);
+    }
+
     public getAllHouseData() {
         return this.allHouse;
     }
@@ -3708,6 +4205,117 @@ export class MapEditor extends Component {
     private buildDecorStackKey(gridPos: Vec2, tileName: string): string {
         this.decorStackSeed += 1;
         return `${gridPos.x},${gridPos.y}|${tileName}|${Date.now()}_${this.decorStackSeed}`;
+    }
+
+    /** 农场 + 开启堆叠：mapItems 用唯一 key；否则仍为 `x,y`（与旧存档一致） */
+    public makeOutdoorPlantFramMapItemKey(anchor: Vec2, uniqueToken: string): string {
+        if (this.mapGameType !== 0 || !this.enableDecorStackPlacement) {
+            return `${anchor.x},${anchor.y}`;
+        }
+        this.decorStackSeed += 1;
+        return `${anchor.x},${anchor.y}|${uniqueToken}|${Date.now()}_${this.decorStackSeed}`;
+    }
+
+    private farmOutdoorStackActive(): boolean {
+        return this.mapGameType === 0 && this.enableDecorStackPlacement;
+    }
+
+    private isOutdoorPlantFramTileType(tileType: string): boolean {
+        return tileType === 'Plant' || tileType === 'Fram';
+    }
+
+    /** mapItems key → 逻辑锚点 `x,y`（兼容 `x,y|...`） */
+    private getMapItemGridAnchorString(itemKey: string, item?: { gridAnchor?: string }): string | null {
+        const ga = item && (item as any).gridAnchor;
+        if (ga && typeof ga === 'string' && ga.includes(',')) {
+            return ga;
+        }
+        const head = itemKey.includes('|') ? itemKey.split('|')[0] : itemKey;
+        const parts = head.split(',');
+        if (parts.length < 2) {
+            return null;
+        }
+        const ax = parseInt(parts[0], 10);
+        const ay = parseInt(parts[1], 10);
+        if (!Number.isFinite(ax) || !Number.isFinite(ay)) {
+            return null;
+        }
+        return `${ax},${ay}`;
+    }
+
+    private parseAnchorStringToVec(anchorStr: string): Vec2 | null {
+        const parts = anchorStr.split(',');
+        const ax = parseInt(parts[0], 10);
+        const ay = parseInt(parts[1], 10);
+        if (!Number.isFinite(ax) || !Number.isFinite(ay)) {
+            return null;
+        }
+        return new Vec2(ax, ay);
+    }
+
+    private getMapItemAnchorVecForFootprint(itemKey: string, item: { gridAnchor?: string; tile: Node }): Vec2 | null {
+        const s = this.getMapItemGridAnchorString(itemKey, item);
+        return s ? this.parseAnchorStringToVec(s) : null;
+    }
+
+    private isGridInsideMapItemFootprint(gridPos: Vec2, anchor: Vec2, tile: Node): boolean {
+        const gridSize = this.getNodeGridSize(tile);
+        const inX = gridPos.x >= anchor.x && gridPos.x <= anchor.x + gridSize.x - 1;
+        const inY = gridPos.y <= anchor.y && gridPos.y >= anchor.y - (gridSize.y - 1);
+        return inX && inY;
+    }
+
+    private isOutdoorMapCellCoveredByPlantFram(gx: number, gy: number): boolean {
+        for (const [itemKey, item] of this.mapItems.entries()) {
+            if (!item?.tile || !this.isOutdoorPlantFramTileType(item.tileType)) {
+                continue;
+            }
+            const anchor = this.getMapItemAnchorVecForFootprint(itemKey, item);
+            if (!anchor) {
+                continue;
+            }
+            if (this.isGridInsideMapItemFootprint(new Vec2(gx, gy), anchor, item.tile)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** footprint 内原为外景占格(2)的格子：若无其它 Plant/Fram 覆盖则恢复为 0 */
+    private refreshOutdoorPlantFramFootprintMapData(anchor: Vec2, buildingSize: Vec2) {
+        for (let x = 0; x < buildingSize.x; x++) {
+            for (let y = 0; y < buildingSize.y; y++) {
+                const gx = anchor.x + x;
+                const gy = anchor.y - y;
+                if (gx < 0 || gx >= this.mapWidth || gy < 0 || gy >= this.mapHeight) {
+                    continue;
+                }
+                if (this.mapData[gx][gy] !== 2) {
+                    continue;
+                }
+                if (!this.isOutdoorMapCellCoveredByPlantFram(gx, gy)) {
+                    this.mapData[gx][gy] = 0;
+                }
+            }
+        }
+    }
+
+    /** 点击格命中的最上层外景 Plant/Fram（Map 遍历顺序中最后一个） */
+    private findTopOutdoorPlantFramMapHit(gridPos: Vec2): { key: string; item: { id: string; tile: Node; tileType: string; belong?: string; flipX?: number; offsetX?: number; offsetY?: number; gridAnchor?: string } } | null {
+        let last: { key: string; item: { id: string; tile: Node; tileType: string; belong?: string; flipX?: number; offsetX?: number; offsetY?: number; gridAnchor?: string } } | null = null;
+        for (const [itemKey, item] of this.mapItems.entries()) {
+            if (!item?.tile || !this.isOutdoorPlantFramTileType(item.tileType)) {
+                continue;
+            }
+            const anchor = this.getMapItemAnchorVecForFootprint(itemKey, item);
+            if (!anchor) {
+                continue;
+            }
+            if (this.isGridInsideMapItemFootprint(gridPos, anchor, item.tile)) {
+                last = { key: itemKey, item };
+            }
+        }
+        return last;
     }
 
     private getDecorPositionKey(rawKey: string, decor: { position?: string }): string {
@@ -3925,11 +4533,16 @@ export class MapEditor extends Component {
             return
         }
 
-        const rect = this.getInsetBuildRect();
+        const skipAuto = this.isCurMapFloorSkipAutoHouseWalls();
+        const rect = this.getFloorDragBuildRect();
         if (!rect) {
             return;
         }
-        if (!this.isHouseRectSizeValid(rect.minX, rect.maxX, rect.minY, rect.maxY)) {
+        if (skipAuto) {
+            if (rect.minX > rect.maxX || rect.minY > rect.maxY) {
+                return;
+            }
+        } else if (!this.isHouseRectSizeValid(rect.minX, rect.maxX, rect.minY, rect.maxY)) {
             this.showHouseSizeTips();
             return;
         }
@@ -3940,13 +4553,14 @@ export class MapEditor extends Component {
         const dragPoints: Vec2[] = path.map((p) => new Vec2(p.x , p.y))
         const candidates = RectangleHouseBuilder.collectBuildableRectangles({
             floorPoints: dragPoints,
-            minWidth: this.houseMinWidth,
-            minHeight: this.houseMinHeight,
+            minWidth: skipAuto ? 1 : this.houseMinWidth,
+            minHeight: skipAuto ? 1 : this.houseMinHeight,
             passExtraCheck: (cell) => this.checkPlacementValidity(cell)
         })
 
         if(candidates.length == 0) return;
-        if(path.length >= 12){
+        const minCellsToPaint = skipAuto ? 1 : 12;
+        if(path.length >= minCellsToPaint){
             path.forEach((point, index) => {
                 let gridPos = new Vec2(point.x , point.y)
                 this.autoBuildWall(gridPos , false)
@@ -4014,19 +4628,87 @@ export class MapEditor extends Component {
                 if (py < minY) minY = py;
                 if (py > maxY) maxY = py;
             }
-            if (!this.isHouseRectSizeValid(minX, maxX, minY, maxY)) {
-                this.showHouseSizeTips();
+            const skipAutoHouseWalls = this.isHouseFloorGroupSkipAutoWalls(house);
+            if (!skipAutoHouseWalls) {
+                if (!this.isHouseRectSizeValid(minX, maxX, minY, maxY)) {
+                    this.showHouseSizeTips();
+                    continue;
+                }
+            } else if (minX > maxX || minY > maxY) {
                 continue;
             }
 
-            if (MapModel.getInstance().isContinuousRectangle(house , this)) {
+            if (!MapModel.getInstance().isContinuousRectangle(house , this)) {
+                continue;
+            }
 
-                for (let i = 0; i < house.length; i++) {
-                    const child = house[i];
-                    if (this.checkCloseHouse(v2(child[0], child[1])) == false) {
+            if (skipAutoHouseWalls) {
+                const posVecOnly: Vec2[] = [];
+                const houseItemsOnly: Map<string, { tile: Node, tileType: string, width: number, height: number, belong?: string, dir: string }> = new Map();
+                let cfgIdOnly: string | number = '';
+                let missing = false;
+                house.forEach((pt) => {
+                    const item = this.houseItems.get(`${pt[0]},${pt[1]}`);
+                    if (!item || !item.tile) {
+                        missing = true;
                         return;
                     }
+                    item.belong = `house_${this._houseIndex}`;
+                    let size = new Size(this.tileSize, this.tileSize);
+                    size = item.tile.getComponent(UITransform).contentSize;
+                    cfgIdOnly = (item.tile as any)['cfgId'];
+                    houseItemsOnly.set(`${pt[0]},${pt[1]}`, {
+                        tile: item.tile,
+                        tileType: 'Floor',
+                        belong: `house_${this._houseIndex}`,
+                        width: size.width,
+                        height: size.height,
+                        dir: '',
+                    });
+                    posVecOnly.push(new Vec2(pt[0], pt[1]));
+                });
+                if (missing || cfgIdOnly === '' || cfgIdOnly === null || cfgIdOnly === undefined) {
+                    continue;
                 }
+                const gridCellsOnly = this.buildSurround(posVecOnly, []);
+                const houseNameOnly = `house_${this._houseIndex}`;
+                this.allHouse.set(houseNameOnly, {
+                    grid: posVecOnly,
+                    base: houseItemsOnly,
+                    decor: new Map(),
+                    npc: null,
+                    cfgId: parseInt(String(cfgIdOnly), 10),
+                    floorTileId: String(cfgIdOnly),
+                    floorRenderNode: null,
+                    floorPatchRenderNodes: [],
+                    horWalls: new Map(),
+                    verWalls: new Map(),
+                    surround: gridCellsOnly,
+                    outWall: [],
+                    inWall: [],
+                    openWall: [],
+                });
+                this.refreshHouseFloorRenderNode(houseNameOnly);
+                this._houseIndex++;
+                hasBuiltHouse = true;
+                house.forEach((pt) => {
+                    for (let j = 0; j < this.buildFloorPoints.length; j++) {
+                        const st = this.buildFloorPoints[j];
+                        if (st.x == pt[0] && st.y == pt[1]) {
+                            this.buildFloorPoints.splice(j, 1);
+                            break;
+                        }
+                    }
+                });
+                continue;
+            }
+
+            for (let i = 0; i < house.length; i++) {
+                const child = house[i];
+                if (this.checkCloseHouse(v2(child[0], child[1])) == false) {
+                    return;
+                }
+            }
 
                 let makeWalls: { pos: Vec2; _node: Node; dir?: string }[] = [];
 
@@ -4247,7 +4929,6 @@ export class MapEditor extends Component {
                         }
                     }
                 })
-            }
         }
 
         // 测试态下画完房子后，立即刷新可行走调试层（蓝绿块）
@@ -4488,12 +5169,32 @@ export class MapEditor extends Component {
         return null;
     }
 
-    @property(CCInteger)
-    public minOrthoSize: number = 420;
+    /** 滚轮拉近极限：越小越能放大细节（视野越窄） */
+    @property({ type: CCInteger, displayName: 'MinOrthoSize', tooltip: '正交相机 orthoHeight 下限。数值越小越能拉近；农场看清格子可设 200～320。' })
+    public minOrthoSize: number = 280;
 
-    @property(CCInteger)
-    public maxOrthoSize: number = 1100;
+    /** 滚轮拉远极限：越大越能缩小（一屏看到越多地图）；农场必须足够大，否则默认远景会被夹住 */
+    @property({ type: CCInteger, displayName: 'MaxOrthoSize', tooltip: 'orthoHeight 上限。想看更大范围请提高（农场大地图常见 1400～2200）。' })
+    public maxOrthoSize: number = 1800;
+
+    /** 非农场进入地图时的默认 orthoHeight（同类地图可在编辑器里改） */
+    @property({ type: CCInteger, displayName: '进入默认视野', tooltip: '进入场景首次应用的 orthoHeight，越大一屏看到越多；须在 Min～Max 之间才会生效满值。' })
+    public defaultEntryOrthoSize: number = 850;
+
+    /** mapGameType==农场 进入时的默认视野（更大以便概览大地图） */
+    @property({ type: CCInteger, displayName: '农场进入默认视野', tooltip: '农场建议 1100～1600；若 MaxOrthoSize 偏小会被裁到上限。' })
+    public farmEntryOrthoSize: number = 1200;
+
     public wheelZoomStep: number = 60;
+
+    /** 首次进入：按地图类型设 currentOrthoSize，并夹在 [minOrthoSize, maxOrthoSize] */
+    private applyEntryCameraOrthoPreferred(): void {
+        let target = this.defaultEntryOrthoSize;
+        if (this.mapGameType === 0) {
+            target = this.farmEntryOrthoSize;
+        }
+        this.currentOrthoSize = Math.max(this.minOrthoSize, Math.min(this.maxOrthoSize, target));
+    }
 
     public zoomCamera(delta : number){
         const next = this.currentOrthoSize + delta
@@ -4505,6 +5206,69 @@ export class MapEditor extends Component {
             this.targetPos.y = Math.max(this.minYCamera , Math.min(this.maxYCamera , this.targetPos.y))
             this.mainCamera.node.setPosition(this.targetPos)
         }
+    }
+
+    private applyCameraOrthoSize(orthoSize: number): void {
+        this.currentOrthoSize = Math.max(this.minOrthoSize, Math.min(this.maxOrthoSize, orthoSize));
+        this.updateSizeLabel();
+        if (this.targetPos) {
+            this.targetPos.x = Math.max(this.minXCamera, Math.min(this.maxXCamera, this.targetPos.x));
+            this.targetPos.y = Math.max(this.minYCamera, Math.min(this.maxYCamera, this.targetPos.y));
+            this.mainCamera.node.setPosition(this.targetPos);
+        }
+    }
+
+    /** 将相机拉到最远（一屏看到最多地图） */
+    public setCameraToMaxView(): void {
+        this.applyCameraOrthoSize(this.maxOrthoSize);
+    }
+
+    /** 将相机拉到最近（放大细节，视野最窄） */
+    public setCameraToMinView(): void {
+        this.applyCameraOrthoSize(this.minOrthoSize);
+    }
+
+    /** 建造入口：先拉最远视野，再平移到地图中第一栋房子 */
+    public focusCameraForBuildEntry(): void {
+        this.setCameraToMinView();
+        const grids = this.getFirstHouseGrid();
+        if (!grids) {
+            return;
+        }
+        const center = MapModel.getInstance().getHouseCenterPos(grids, this);
+        this.focusCameraOnWorldPoint(center);
+    }
+
+    private getFirstHouseGrid(): Vec2[] | null {
+        if (this.allHouse.size > 0) {
+            const first = this.allHouse.values().next().value;
+            return first?.grid?.length ? first.grid : null;
+        }
+        const houses = this.allMapAssetsData.House;
+        if (!houses?.length) {
+            return null;
+        }
+        const grids: Vec2[] = [];
+        for (const floor of houses[0].Floor) {
+            const parts = floor.position.split(',');
+            grids.push(new Vec2(parseInt(parts[0], 10), parseInt(parts[1], 10)));
+        }
+        return grids.length > 0 ? grids : null;
+    }
+
+    private focusCameraOnWorldPoint(worldPos: Vec3): void {
+        if (!this.mainCamera?.node?.isValid) {
+            return;
+        }
+        const z = this.mainCamera.node.position.z;
+        this.targetPos.set(worldPos.x, worldPos.y, z);
+        this.targetPos.x = Math.max(this.minXCamera, Math.min(this.maxXCamera, this.targetPos.x));
+        this.targetPos.y = Math.max(this.minYCamera, Math.min(this.maxYCamera, this.targetPos.y));
+    }
+
+    /** mapGameType>=0 的玩法地图不允许拆除整栋房屋 */
+    private canDemolishHouse(): boolean {
+        return this.mapGameType < 0;
     }
 
     public loadHourse(){
@@ -4833,6 +5597,7 @@ export class MapEditor extends Component {
             }
         }
     }
+
 }
 
 

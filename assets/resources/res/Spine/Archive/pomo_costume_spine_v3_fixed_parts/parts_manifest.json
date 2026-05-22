@@ -1,0 +1,406 @@
+{
+  "source": "new-3-view/pomo_costume_spine_exploded_skill_test_imagegen.png",
+  "contract": "/Users/kyohi/.codex/skills/spine-pixel-3view-character/assets/spine_attachment_contract.json",
+  "transparent_sheet": "new-3-view/pomo_costume_spine_exploded_skill_test_transparent.png",
+  "output_dir": "new-3-view/pomo_costume_spine_v3_fixed_parts",
+  "component_count": 18,
+  "warnings": [],
+  "parts": [
+    {
+      "file": "side_head.png",
+      "source_component_bbox": [
+        194,
+        33,
+        412,
+        249
+      ],
+      "source_crop_size": [
+        234,
+        232
+      ],
+      "width": 560,
+      "height": 420,
+      "alpha_bbox": [
+        98,
+        30,
+        461,
+        390
+      ],
+      "warnings": []
+    },
+    {
+      "file": "side_body.png",
+      "source_component_bbox": [
+        224,
+        271,
+        360,
+        502
+      ],
+      "source_crop_size": [
+        152,
+        247
+      ],
+      "width": 360,
+      "height": 500,
+      "alpha_bbox": [
+        55,
+        20,
+        305,
+        445
+      ],
+      "warnings": []
+    },
+    {
+      "file": "side_left_arm.png",
+      "source_component_bbox": [
+        181,
+        538,
+        242,
+        691
+      ],
+      "source_crop_size": [
+        77,
+        169
+      ],
+      "width": 220,
+      "height": 460,
+      "alpha_bbox": [
+        40,
+        35,
+        180,
+        385
+      ],
+      "warnings": []
+    },
+    {
+      "file": "side_right_arm.png",
+      "source_component_bbox": [
+        338,
+        538,
+        399,
+        691
+      ],
+      "source_crop_size": [
+        77,
+        169
+      ],
+      "width": 220,
+      "height": 460,
+      "alpha_bbox": [
+        40,
+        35,
+        180,
+        385
+      ],
+      "warnings": []
+    },
+    {
+      "file": "side_left_leg.png",
+      "source_component_bbox": [
+        173,
+        754,
+        268,
+        944
+      ],
+      "source_crop_size": [
+        111,
+        206
+      ],
+      "width": 340,
+      "height": 380,
+      "alpha_bbox": [
+        95,
+        35,
+        245,
+        335
+      ],
+      "warnings": []
+    },
+    {
+      "file": "side_right_leg.png",
+      "source_component_bbox": [
+        325,
+        755,
+        408,
+        944
+      ],
+      "source_crop_size": [
+        99,
+        205
+      ],
+      "width": 340,
+      "height": 380,
+      "alpha_bbox": [
+        104,
+        35,
+        236,
+        335
+      ],
+      "warnings": []
+    },
+    {
+      "file": "front_head.png",
+      "source_component_bbox": [
+        638,
+        30,
+        869,
+        257
+      ],
+      "source_crop_size": [
+        247,
+        243
+      ],
+      "width": 560,
+      "height": 420,
+      "alpha_bbox": [
+        97,
+        30,
+        463,
+        390
+      ],
+      "warnings": []
+    },
+    {
+      "file": "front_body.png",
+      "source_component_bbox": [
+        656,
+        279,
+        851,
+        507
+      ],
+      "source_crop_size": [
+        211,
+        244
+      ],
+      "width": 360,
+      "height": 500,
+      "alpha_bbox": [
+        30,
+        20,
+        330,
+        371
+      ],
+      "warnings": []
+    },
+    {
+      "file": "front_left_arm.png",
+      "source_component_bbox": [
+        804,
+        540,
+        859,
+        691
+      ],
+      "source_crop_size": [
+        71,
+        167
+      ],
+      "width": 220,
+      "height": 460,
+      "alpha_bbox": [
+        46,
+        35,
+        173,
+        385
+      ],
+      "warnings": []
+    },
+    {
+      "file": "front_right_arm.png",
+      "source_component_bbox": [
+        641,
+        540,
+        696,
+        691
+      ],
+      "source_crop_size": [
+        71,
+        167
+      ],
+      "width": 220,
+      "height": 460,
+      "alpha_bbox": [
+        46,
+        35,
+        173,
+        385
+      ],
+      "warnings": []
+    },
+    {
+      "file": "front_left_leg.png",
+      "source_component_bbox": [
+        777,
+        757,
+        854,
+        944
+      ],
+      "source_crop_size": [
+        93,
+        203
+      ],
+      "width": 340,
+      "height": 380,
+      "alpha_bbox": [
+        108,
+        35,
+        232,
+        335
+      ],
+      "warnings": []
+    },
+    {
+      "file": "front_right_leg.png",
+      "source_component_bbox": [
+        642,
+        757,
+        719,
+        944
+      ],
+      "source_crop_size": [
+        93,
+        203
+      ],
+      "width": 340,
+      "height": 380,
+      "alpha_bbox": [
+        108,
+        35,
+        232,
+        335
+      ],
+      "warnings": []
+    },
+    {
+      "file": "back_head.png",
+      "source_component_bbox": [
+        1105,
+        32,
+        1323,
+        257
+      ],
+      "source_crop_size": [
+        234,
+        241
+      ],
+      "width": 560,
+      "height": 420,
+      "alpha_bbox": [
+        105,
+        30,
+        454,
+        390
+      ],
+      "warnings": []
+    },
+    {
+      "file": "back_body.png",
+      "source_component_bbox": [
+        1120,
+        282,
+        1307,
+        508
+      ],
+      "source_crop_size": [
+        203,
+        242
+      ],
+      "width": 360,
+      "height": 500,
+      "alpha_bbox": [
+        30,
+        20,
+        330,
+        383
+      ],
+      "warnings": []
+    },
+    {
+      "file": "back_left_arm.png",
+      "source_component_bbox": [
+        1103,
+        540,
+        1159,
+        692
+      ],
+      "source_crop_size": [
+        72,
+        168
+      ],
+      "width": 220,
+      "height": 460,
+      "alpha_bbox": [
+        45,
+        35,
+        174,
+        385
+      ],
+      "warnings": []
+    },
+    {
+      "file": "back_right_arm.png",
+      "source_component_bbox": [
+        1273,
+        540,
+        1329,
+        692
+      ],
+      "source_crop_size": [
+        72,
+        168
+      ],
+      "width": 220,
+      "height": 460,
+      "alpha_bbox": [
+        45,
+        35,
+        174,
+        385
+      ],
+      "warnings": []
+    },
+    {
+      "file": "back_left_leg.png",
+      "source_component_bbox": [
+        1115,
+        758,
+        1184,
+        944
+      ],
+      "source_crop_size": [
+        85,
+        202
+      ],
+      "width": 340,
+      "height": 380,
+      "alpha_bbox": [
+        114,
+        35,
+        225,
+        335
+      ],
+      "warnings": []
+    },
+    {
+      "file": "back_right_leg.png",
+      "source_component_bbox": [
+        1249,
+        758,
+        1319,
+        944
+      ],
+      "source_crop_size": [
+        86,
+        202
+      ],
+      "width": 340,
+      "height": 380,
+      "alpha_bbox": [
+        113,
+        35,
+        226,
+        335
+      ],
+      "warnings": []
+    }
+  ]
+}

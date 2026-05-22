@@ -3,6 +3,9 @@ import { AppConst } from "../AppConst";
 import { network } from "./RequestData";
 import { MapEditor } from "../../bundles/mapEditor/src/MapEditor";
 import { UGCModel } from "./UGCModel";
+import { postMessageToParent } from "../Utils/ParentPostMessage";
+import { FarmModel } from "./Farm/FarmModel";
+import { logFarmPlotGridsOnSave } from "./Farm/FarmPlotGridLog";
 // import { CaptureUtils } from "../../bundles/mapEditor/src/CaptureUtils";
 
 export class MapModel {
@@ -86,6 +89,8 @@ export class MapModel {
     public currentMapId: number = 0
     public isInMap: boolean = false
     private isRecoveringAfterReconnect: boolean = false
+    /** 用户发起的加入地图请求进行中（含列表点击进入），用于防止重复点击重复发 join_map */
+    private joinMapRequestPending: boolean = false
 
     public static getInstance(): MapModel {
         if (!this._instance) {
@@ -198,9 +203,71 @@ export class MapModel {
     }
 
     public map_detail = null
+
+    /** 进入 editor_test 前解析的玩法类型；0=农场 */
+    public pendingMapGameType: number | null = null
+
+    /**
+     * 从地图详情 / 列表项 / map_data 解析 mapGameType。
+     * 字段兼容：map_game_type、mapGameType、game_type、map_data 内同名字段。
+     */
+    public resolveMapGameType(detail?: any): number | null {
+        const d = detail ?? this.map_detail;
+        if (!d) {
+            return null;
+        }
+        const direct = d.map_game_type ?? d.mapGameType ?? d.game_type ?? d.map_game_type_id;
+        if (direct != null && direct !== '') {
+            const n = Number(direct);
+            if (Number.isFinite(n)) {
+                return n;
+            }
+        }
+        const raw = d.map_data;
+        if (raw != null && String(raw).trim() !== '') {
+            try {
+                const data = typeof raw === 'string' ? JSON.parse(raw) : raw;
+                const fromData = data?.map_game_type ?? data?.mapGameType ?? data?.game_type;
+                if (fromData != null && fromData !== '') {
+                    const n = Number(fromData);
+                    if (Number.isFinite(n)) {
+                        return n;
+                    }
+                }
+            } catch {
+                // ignore
+            }
+        }
+        return null;
+    }
+
+    public isFarmMapGameType(gameType?: number | null): boolean {
+        const t = gameType ?? this.pendingMapGameType ?? this.resolveMapGameType(this.map_detail);
+        return t === 0;
+    }
+
     //type 0根据地图列表进入地图，需要去掉所有UI   1进入编辑
     public EnterMap(type , map_detail = null){
         this.map_detail = map_detail
+        const resolvedType = this.resolveMapGameType(map_detail);
+        if (resolvedType != null) {
+            this.pendingMapGameType = resolvedType;
+        }
+        // 列表/ join_map 未带 map_game_type 时，游玩进图默认按农场（editor_test）
+        if (type === 0 && this.pendingMapGameType == null) {
+            this.pendingMapGameType = 0;
+        }
+        const gameType = this.pendingMapGameType ?? this.resolveMapGameType(this.map_detail);
+        console.log('[MapModel] EnterMap', {
+            type,
+            resolvedType,
+            pendingMapGameType: this.pendingMapGameType,
+            isFarm: gameType === 0,
+        });
+        // 仅明确非农场时才清理；类型未知时不 leave，避免误清
+        if (gameType != null && gameType !== 0) {
+            FarmModel.getInstance().leaveFarm();
+        }
         this.isInMap = true
         this.mapNpcs = {}
         AppConst.PanelManager.CloseAll()
@@ -211,6 +278,12 @@ export class MapModel {
     public requestJoinMap(mapId: number, fromReconnect: boolean = false){
         if(!mapId || mapId <= 0){
             return;
+        }
+        if (!fromReconnect && this.joinMapRequestPending) {
+            return;
+        }
+        if (!fromReconnect) {
+            this.joinMapRequestPending = true;
         }
         this.currentMapId = mapId;
         this.isRecoveringAfterReconnect = fromReconnect;
@@ -271,6 +344,8 @@ export class MapModel {
         this.currentMapId = 0;
         this.match_id = "";
         this.isRecoveringAfterReconnect = false;
+        this.joinMapRequestPending = false;
+        FarmModel.getInstance().leaveFarm();
     }
 
     public initGridData(map : MapEditor){
@@ -374,12 +449,22 @@ export class MapModel {
             this.page = contentData.page
 
             let maps = contentData.maps
-            for(let m = 0 ; m < maps.length ;m++){
-                let mapId = maps[m].id
-                if(!this.maps[mapId]){
-                    this.maps[mapId] = this.sceneMaps.length
-                    this.sceneMaps.push(maps[m])
+            for (let m = 0; m < maps.length; m++) {
+                const rawId = maps[m]?.id;
+                const mapId = Number(rawId);
+                if (!Number.isFinite(mapId) || mapId <= 0) {
+                    continue;
                 }
+                // 不能用 !this.maps[mapId]：首条在列表下标为 0 时存的是 0，会被误判为「不存在」而重复 push
+                if (this.maps[mapId] !== undefined) {
+                    const idx = this.maps[mapId] as number;
+                    if (typeof idx === "number" && idx >= 0 && idx < this.sceneMaps.length) {
+                        this.sceneMaps[idx] = maps[m];
+                    }
+                    continue;
+                }
+                this.maps[mapId] = this.sceneMaps.length;
+                this.sceneMaps.push(maps[m]);
             }
         }
     }
@@ -403,6 +488,9 @@ export class MapModel {
                 if(payload && payload.code !== "SESSION_REPLACED"){
                     EventSystem.send("ShowTips" , msg);
                 }
+                if (!this.isRecoveringAfterReconnect) {
+                    this.joinMapRequestPending = false;
+                }
                 return;
             }
             this.currentMapId = Number(payload["map_id"] || this.currentMapId || 0);
@@ -412,12 +500,19 @@ export class MapModel {
             if(this.isRecoveringAfterReconnect){
                 this.isRecoveringAfterReconnect = false;
                 this.sendMatchJoin(this.match_id);
+                if (this.isFarmMapGameType()) {
+                    void FarmModel.getInstance().enterFarm();
+                }
                 return;
             }
             console.log("收到消息进入地图")
             console.log(payload)
             this.showMatchPayLoad = payload
+            this.joinMapRequestPending = false;
             MapModel.getInstance().EnterMap(0 , payload.map_detail)
+            if (this.isFarmMapGameType()) {
+                void FarmModel.getInstance().enterFarm();
+            }
         }
     }
 
@@ -458,19 +553,32 @@ export class MapModel {
     }
 
         // 存储地图数据
+    /** 保存地图时格子宽高向上取整（农场等场景 mapWidth/mapHeight 可能为小数） */
+    private getMapSaveGridSize(map: MapEditor): { width: number; height: number } {
+        const width = Math.ceil(Number(map.mapWidth) || 0);
+        const height = Math.ceil(Number(map.mapHeight) || 0);
+        return {
+            width: Math.max(1, width),
+            height: Math.max(1, height),
+        };
+    }
+
     public saveMapData(map : MapEditor , base64Image) {
+        const { width: saveWidth, height: saveHeight } = this.getMapSaveGridSize(map);
+
         map.allMapAssetsData.Ground = [];
         map.allMapAssetsData.Plant = [];
+        map.allMapAssetsData.Fram = [];
         map.allMapAssetsData.Region = [];
         map.allMapAssetsData.Floor = [];
         map.allMapAssetsData.House = [];
-        map.allMapAssetsData.mapWidth = map.mapWidth;
-        map.allMapAssetsData.mapHeight = map.mapHeight;
-        map.allMapAssetsData.gridWidth = map.mapWidth;
-        map.allMapAssetsData.gridHeight = map.mapHeight;
+        map.allMapAssetsData.mapWidth = saveWidth;
+        map.allMapAssetsData.mapHeight = saveHeight;
+        map.allMapAssetsData.gridWidth = saveWidth;
+        map.allMapAssetsData.gridHeight = saveHeight;
         map.allMapAssetsData.Walkable = {
-            width: map.mapWidth,
-            height: map.mapHeight,
+            width: saveWidth,
+            height: saveHeight,
             cells: [],
         };
         map.placeholderTilemap.forEach((value, key) => {
@@ -485,17 +593,34 @@ export class MapModel {
         })
 
         map.mapItems.forEach((value, key) => {
+            const plantFramPos =
+                (value as any).gridAnchor && String((value as any).gridAnchor).includes(',')
+                    ? String((value as any).gridAnchor)
+                    : key.includes('|')
+                      ? key.split('|')[0]
+                      : key;
             if (value.tileType == "Plant") {
                 const tileScaleX = value.tile?.getScale?.().x;
                 const flipX = tileScaleX != null ? (tileScaleX < 0 ? -1 : 1) : (value.flipX != null ? (value.flipX < 0 ? -1 : 1) : 1);
                 map.allMapAssetsData.Plant.push({
                     id: value.id,
                     _type: "Plant",
-                    position: key ,
+                    position: plantFramPos,
                     flipX,
                     offsetX: (value as any).offsetX ?? 0,
                     offsetY: (value as any).offsetY ?? 0,
                     // cfgId : value
+                })
+            } else if (value.tileType == "Fram") {
+                const tileScaleX = value.tile?.getScale?.().x;
+                const flipX = tileScaleX != null ? (tileScaleX < 0 ? -1 : 1) : (value.flipX != null ? (value.flipX < 0 ? -1 : 1) : 1);
+                map.allMapAssetsData.Fram.push({
+                    id: value.id,
+                    _type: "Fram",
+                    position: plantFramPos,
+                    flipX,
+                    offsetX: (value as any).offsetX ?? 0,
+                    offsetY: (value as any).offsetY ?? 0,
                 })
             }
         })
@@ -602,11 +727,13 @@ export class MapModel {
             })
         })
 
-        const walkableCells = this.buildWalkableCells(map);
+        logFarmPlotGridsOnSave(map);
+
+        const walkableCells = this.buildWalkableCells(map, saveWidth, saveHeight);
 
         map.allMapAssetsData.Walkable = {
-            width: map.mapWidth,
-            height: map.mapHeight,
+            width: saveWidth,
+            height: saveHeight,
             cells: walkableCells,
         };
 
@@ -636,7 +763,7 @@ export class MapModel {
         }
 
         if(AppConst.SDKManager.isEditMapingWeb){
-            window.parent.postMessage({
+            postMessageToParent({
                 channel: 'miniwo-map-editor',
                 source: 'miniwo-cocos',
                 type: 'COCOS_SEND_MAP_DATA',
@@ -650,7 +777,9 @@ export class MapModel {
         }
     }
 
-    public buildWalkableCells(map: MapEditor): string[] {
+    public buildWalkableCells(map: MapEditor, gridWidth?: number, gridHeight?: number): string[] {
+        const mapWidth = gridWidth ?? map.mapWidth;
+        const mapHeight = gridHeight ?? map.mapHeight;
         // 规则：
         // 1) 道路（placeholder 非空）可走
         // 2) 房间地板（mapData==1）可走
@@ -666,9 +795,9 @@ export class MapModel {
         });
 
         // 房间地板
-        for (let x = 0; x < map.mapWidth; x++) {
-            for (let y = 0; y < map.mapHeight; y++) {
-                if (map.mapData[x][y] === 1) {
+        for (let x = 0; x < mapWidth; x++) {
+            for (let y = 0; y < mapHeight; y++) {
+                if (map.mapData[x]?.[y] === 1) {
                     walkableSet.add(`${x},${y}`);
                 }
             }
@@ -696,7 +825,7 @@ export class MapModel {
                 for (let i = 0; i < offsets.length; i++) {
                     const nx = pos.x + offsets[i][0];
                     const ny = pos.y + offsets[i][1];
-                    if (nx < 0 || nx >= map.mapWidth || ny < 0 || ny >= map.mapHeight) {
+                    if (nx < 0 || nx >= mapWidth || ny < 0 || ny >= mapHeight) {
                         continue;
                     }
                     if (floorSet.has(`${nx},${ny}`)) {
@@ -706,11 +835,16 @@ export class MapModel {
             });
         });
 
-        // 家具/墙体阻挡
-        for (let x = 0; x < map.mapWidth; x++) {
-            for (let y = 0; y < map.mapHeight; y++) {
-                if (map.mapData[x][y] === 3 || map.mapData[x][y] === 2) {
-                    walkableSet.delete(`${x},${y}`);
+        // 家具/墙体阻挡（该格已铺马路 placeholder 时不再视为占用）
+        for (let x = 0; x < mapWidth; x++) {
+            for (let y = 0; y < mapHeight; y++) {
+                if (map.mapData[x]?.[y] === 3 || map.mapData[x]?.[y] === 2) {
+                    const key = `${x},${y}`;
+                    const ph = map.placeholderTilemap.get(key);
+                    if (ph && !ph.empty) {
+                        continue;
+                    }
+                    walkableSet.delete(key);
                 }
             }
         }
