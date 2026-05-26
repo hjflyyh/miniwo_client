@@ -138,6 +138,7 @@ export class GameView extends Component {
         EventSystem.addListent("CloseMapEditor" , this.CloseMapEditor , this)
         EventSystem.addListent("WebSocketNotifications", this.onWebSocketNotification, this)
         EventSystem.addListent("OpenGameShop", this.OpenGameShop, this)
+        EventSystem.addListent("OpenGameWarehouse", this.OpenGameWarehouse, this)
         EventSystem.addListent(GAME_FARM_PLOT_CLICK_EVENT, this.onGameFarmPlotClick, this)
         EventSystem.addListent(GAME_FARM_SEED_CHOOSE_EVENT, this.onGameFarmSeedChoose, this)
         EventSystem.addListent('ConfigLoadAll', this.onConfigLoadAll, this)
@@ -614,6 +615,10 @@ export class GameView extends Component {
             MapChatManager.instance.sendMapChat(this.editBox.string)
             this.editBox.string = ""
         }
+    }
+
+    public OpenGameWarehouse(){
+        AppConst.PanelManager.openView("res/View/Granary/GranaryView" , null , null , null , this.UI)
     }
 
     public OpenGameShop(){

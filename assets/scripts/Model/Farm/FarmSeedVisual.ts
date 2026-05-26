@@ -6,7 +6,7 @@ export function getBasicSeedMatureSpriteResourcePath(seedKey: string): string | 
     if (!key) {
         return null;
     }
-    const cfg = AppConst.JSONManager?.getItem?.('basicSeeds', key);
+    const cfg = AppConst.JSONManager?.getItem?.('basicCrops', key);
     const icon = cfg?.icon != null ? String(cfg.icon).trim() : '';
     if (!icon) {
         return null;
@@ -19,7 +19,7 @@ export function getBasicSeedSpriteResourcePath(seedKey: string): string | null {
     if (!key) {
         return null;
     }
-    const cfg = AppConst.JSONManager?.getItem?.('basicSeeds', key);
+    const cfg = AppConst.JSONManager?.getItem?.('basicCrops', key);
     const icon = cfg?.icon != null ? String(cfg.icon).trim() : '';
     if (!icon) {
         return null;
