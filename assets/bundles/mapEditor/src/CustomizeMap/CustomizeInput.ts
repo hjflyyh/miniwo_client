@@ -41,9 +41,49 @@ export class CustomizeInput extends Component {
         return ok;
     }
 
+    /** 手机 App / 手机浏览器：已选道具时可在地图任意位置按下并跟手拖动 */
+    private isPlacementFingerDragActive(manager: ReturnType<typeof MapManager.GetInstance>): boolean {
+        if (!this.mapEditor?.isTouchPlacementDevice()) {
+            return false;
+        }
+        if (!this.mapEditor.enablePlacementDragOffset) {
+            return false;
+        }
+        if (!this.isPlacementDragOffsetAction(manager.actionStatus)) {
+            return false;
+        }
+        return this.mapEditor.isBuildSwitch || this.mapEditor.hasPlacementItemSelected();
+    }
+
+    private beginPlacementFingerDrag(event: EventTouch): void {
+        if (!this.mapEditor.isBuildSwitch) {
+            this.mapEditor.isBuildSwitch = true;
+        }
+        const loc = event.getLocation();
+        const gridPos = MapModel.getInstance().worldPosToGride(loc, this.mapEditor);
+        this.mapEditor.applyTileMaskPreviewWorldPosition(gridPos, loc);
+        this.mapEditor.isMousePoint = true;
+        this.mapEditor.startMousePosition = loc.clone();
+    }
+
+    private beginDeleteFingerDrag(loc: Vec2): void {
+        if (!this.mapEditor.isBuildSwitch) {
+            this.mapEditor.isBuildSwitch = true;
+        }
+        const gridPos = MapModel.getInstance().worldPosToGride(loc, this.mapEditor);
+        this.mapEditor.signDeteleTile(gridPos);
+        this.mapEditor.isMousePoint = true;
+        this.mapEditor.startMousePosition = loc.clone();
+    }
+
+    private shouldKeepBuildSwitchOnTouchEnd(manager: ReturnType<typeof MapManager.GetInstance>): boolean {
+        return this.isPlacementFingerDragActive(manager) || manager.actionStatus === ActionStatus.DETELE;
+    }
+
     start() {
         this.tryBindMapEditor();
-        if (sys.isMobile) {
+        const useTouchInput = this.mapEditor?.isTouchPlacementDevice?.() ?? sys.isMobile;
+        if (useTouchInput) {
             input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
             input.on(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
             input.on(Input.EventType.TOUCH_END, this.onTouchEnd, this);
@@ -66,6 +106,15 @@ export class CustomizeInput extends Component {
                 if (!this.ensureMapEditor()) return;
                 const manager = MapManager.GetInstance();
                 if (manager.actionStatus == ActionStatus.REGION) return;
+
+                if (manager.actionStatus == ActionStatus.DETELE) {
+                    if (!this.mapEditor.isBuildSwitch) {
+                        this.mapEditor.isBuildSwitch = true;
+                    }
+                    const gridPos = MapModel.getInstance().worldPosToGride(event.getLocation(), this.mapEditor);
+                    this.mapEditor.signDeteleTile(gridPos);
+                    return;
+                }
 
                 // 仅在开启「格子拖动偏移」且为可偏移模式时记录指针本地坐标
                 if (this.mapEditor.enablePlacementDragOffset && this.isPlacementDragOffsetAction(manager.actionStatus)) {
@@ -152,7 +201,9 @@ export class CustomizeInput extends Component {
                 this.mapEditor._currentPoint = this.mapEditor._startPoint.clone();
                 this.mapEditor._currentGrad = this.mapEditor._startGrad.clone();
 
-                if (!this.mapEditor.isBuildSwitch) {
+                if (manager.actionStatus == ActionStatus.DETELE) {
+                    this.beginDeleteFingerDrag(event.getLocation());
+                } else if (!this.mapEditor.isBuildSwitch) {
                     const mouseWorldPoint = this.mapEditor.mainCamera.screenToWorld(new Vec3(event.getLocation().x, event.getLocation().y, 0))
                     if (this.mapEditor.tileMaskNode.getComponent(UITransform).getBoundingBoxToWorld().contains(new Vec2(mouseWorldPoint.x, mouseWorldPoint.y))) {
                         const gridPos = MapModel.getInstance().worldPosToGride(event.getLocation() , this.mapEditor);
@@ -328,19 +379,11 @@ export class CustomizeInput extends Component {
             return
         }
 
-        if (
-            this.mapEditor.isTouchPlacementDevice() &&
-            this.mapEditor.isBuildSwitch &&
-            this.isPlacementDragOffsetAction(manager.actionStatus)
-        ) {
-            const loc = event.getLocation();
-            const gridPos = MapModel.getInstance().worldPosToGride(loc, this.mapEditor);
-            this.mapEditor.applyTileMaskPreviewWorldPosition(gridPos, loc);
-            this.mapEditor.isMousePoint = true;
-            this.mapEditor.startMousePosition = loc.clone();
-        }
-
-        if (!this.mapEditor.isBuildSwitch) {
+        if (manager.actionStatus == ActionStatus.DETELE) {
+            this.beginDeleteFingerDrag(event.getLocation());
+        } else if (this.isPlacementFingerDragActive(manager)) {
+            this.beginPlacementFingerDrag(event);
+        } else if (!this.mapEditor.isBuildSwitch) {
             const mouseWorldPoint = this.mapEditor.mainCamera.screenToWorld(new Vec3(event.getLocation().x, event.getLocation().y, 0))
             if (this.mapEditor.tileMaskNode.getComponent(UITransform).getBoundingBoxToWorld().contains(new Vec2(mouseWorldPoint.x, mouseWorldPoint.y))) {
                 this.mapEditor.isBuildSwitch = true;
@@ -385,24 +428,35 @@ export class CustomizeInput extends Component {
             return
         }
 
-        if (this.mapEditor.enablePlacementDragOffset && this.isPlacementDragOffsetAction(manager.actionStatus)) {
-            const loc = event.getLocation();
-            const w = this.mapEditor.mainCamera.screenToWorld(new Vec3(loc.x, loc.y, 0));
-            const lp = this.mapEditor.mapContainer.getComponent(UITransform).convertToNodeSpaceAR(new Vec3(w.x, w.y, 0));
-            this.mapEditor.lastPointerLocalPos = new Vec2(lp.x, lp.y);
-        }
-
-        if (this.mapEditor.isBuildSwitch) {
+        if (manager.actionStatus == ActionStatus.DETELE) {
+            if (!this.mapEditor.isBuildSwitch) {
+                this.mapEditor.isBuildSwitch = true;
+            }
             const touchLoc = event.getLocation();
             const gridPos = MapModel.getInstance().worldPosToGride(touchLoc, this.mapEditor);
-            const dragOffsetModes = this.isPlacementDragOffsetAction(manager.actionStatus);
-            if (this.mapEditor.enablePlacementDragOffset && dragOffsetModes) {
+            this.mapEditor.signDeteleTile(gridPos);
+            return;
+        }
+
+        const placementFingerDrag = this.isPlacementFingerDragActive(manager);
+        if (placementFingerDrag || this.mapEditor.isBuildSwitch) {
+            if (placementFingerDrag && !this.mapEditor.isBuildSwitch) {
+                this.mapEditor.isBuildSwitch = true;
+            }
+
+            const touchLoc = event.getLocation();
+            const gridPos = MapModel.getInstance().worldPosToGride(touchLoc, this.mapEditor);
+            const localPos = MapModel.getInstance().gridToWorld(gridPos, null, this.mapEditor);
+
+            if (this.mapEditor.enablePlacementDragOffset && this.isPlacementDragOffsetAction(manager.actionStatus)) {
+                const w = this.mapEditor.mainCamera.screenToWorld(new Vec3(touchLoc.x, touchLoc.y, 0));
+                const lp = this.mapEditor.mapContainer.getComponent(UITransform).convertToNodeSpaceAR(new Vec3(w.x, w.y, 0));
+                this.mapEditor.lastPointerLocalPos = new Vec2(lp.x, lp.y);
                 this.mapEditor.applyTileMaskPreviewWorldPosition(gridPos, touchLoc);
                 if (!this.mapEditor.usePlacementFingerFollow()) {
                     this.mapEditor.showMaskColor(gridPos);
                 }
-            } else {
-                const localPos = MapModel.getInstance().gridToWorld(gridPos, null, this.mapEditor);
+            } else if (this.mapEditor.isBuildSwitch) {
                 const worldPos = this.mapEditor.mapContainer.getComponent(UITransform).convertToWorldSpaceAR(localPos);
                 this.mapEditor.tileMaskNode.setWorldPosition(worldPos);
                 this.mapEditor.showMaskColor(gridPos);
@@ -411,8 +465,6 @@ export class CustomizeInput extends Component {
             if (manager.actionStatus == ActionStatus.MOVE) {
                 this.mapEditor.signMoveTile(gridPos);
                 this.mapEditor.buildMap(gridPos);
-            } else if (manager.actionStatus == ActionStatus.DETELE) {
-                this.mapEditor.signDeteleTile(gridPos);
             } else if (manager.actionStatus == ActionStatus.FLOOR) {
                 if (this.mapEditor.isMousePoint) {
                     // this.buildMap(gridPos);
@@ -494,9 +546,10 @@ export class CustomizeInput extends Component {
             }
         }
 
-        if (manager.actionStatus != ActionStatus.GROUND) {
+        // 摆放/删除模式保持 isBuildSwitch，下次可在地图任意位置按下继续跟手拖（与 PC 鼠标一致）
+        if (manager.actionStatus != ActionStatus.GROUND && !this.shouldKeepBuildSwitchOnTouchEnd(manager)) {
             this.mapEditor.isBuildSwitch = false;
-        }else{
+        } else if (manager.actionStatus == ActionStatus.GROUND) {
             const gridPos = MapModel.getInstance().worldPosToGride(event.getLocation() , this.mapEditor);
             const localPos = MapModel.getInstance().gridToWorld(gridPos , null , this.mapEditor);
             const worldPos = this.mapEditor.mapContainer.getComponent(UITransform).convertToWorldSpaceAR(localPos)

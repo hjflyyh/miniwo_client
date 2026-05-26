@@ -146,6 +146,13 @@ export class MapNpc extends Component {
     private facingScaleX = 1;
 
     start() {
+        this.schedule(()=>{
+            this.closeDialogTime--;
+            if(this.closeDialogTime <= 0){  
+                this.closeDialogTime = 0;
+                this.dialogueNode.active = false
+            }
+        } , 1);
     }
 
     initNpcNode(){
@@ -169,19 +176,32 @@ export class MapNpc extends Component {
         this.samplePositionByTime(renderMs, dt);
     }
 
+    private closeDialogTime = 10
+    private dialogTime = 10
     public onServerDialog(data){
-        this.dialogueNode.active = true
-        // console.log(data)
-        // console.log("dialog")
-        // let dialogCfg = AppConst.JSONManager.getItem("dialogueLibrary" , data.dialogue_idle["id"])
-        this.dialogueLabel.string = AppConst.LanguageManager.getDialogString(data.dialogue_idle["id"])
+        if(data.dialogue_idle != null && data.dialogue_idle["id"] != null && AppConst.LanguageManager.getDialogString(data.dialogue_idle["id"]) != ""){
+            this.dialogueNode.active = true
+            this.dialogueLabel.string = AppConst.LanguageManager.getDialogString(data.dialogue_idle["id"])
+            this.closeDialogTime = this.dialogTime
+        }else if(data.dialogStr != null && data.dialogStr != ""){
+            this.dialogueNode.active = true
+            this.dialogueLabel.string = data.dialogStr
+            this.closeDialogTime = this.dialogTime
+        }else{
+            // this.dialogueNode.active = false
+        }
     }
+
+    // public onServerDialogStr(data){
+    //     this.dialogueNode.active = true
+    //     this.dialogueLabel.string = data.dialogStr;
+    // }    
 
     /**
      * 服务器回包入口：每次收到移动数据调用
      */
     public onServerMove(data: NpcMovePacket) {
-        this.dialogueNode.active = false
+        // this.dialogueNode.active = false
         if (data == null || data.x == null || data.y == null) return;
 
         const serverPos = this.serverToNpcLayerPos(data.x, data.y);

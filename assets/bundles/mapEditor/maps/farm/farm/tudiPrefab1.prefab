@@ -8463,7 +8463,10 @@
       "__uuid__": "a83b2876-33a9-4138-9182-5cfa3f231dee",
       "__expectedType__": "cc.Prefab"
     },
-    "plantingPrefab": null,
+    "plantingPrefab": {
+      "__uuid__": "38b00983-22f6-4405-8540-61bf85413eec",
+      "__expectedType__": "cc.Prefab"
+    },
     "plantingEndPrefab": {
       "__uuid__": "38dd7fe4-d929-4deb-bf76-06a845636ac8",
       "__expectedType__": "cc.Prefab"

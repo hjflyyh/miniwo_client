@@ -346,7 +346,7 @@ export class Planting extends Component {
             }
             return;
         }
-        this.timeLabel.string = formatGrowRemain(remain);
+        this.timeLabel.string = "Remaining time:" + formatGrowRemain(remain);
     }
 
     private loadPlantSprite(seedKey: string) {

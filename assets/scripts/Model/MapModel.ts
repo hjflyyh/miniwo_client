@@ -21,6 +21,8 @@ export class MapModel {
     public mapEditAdminToken;
     public mapEditMapId;
     public mapEditData;
+
+    public my_map_data = null
     /**
      * 编辑态 NPC 列表（配置长什么样就怎样实例化，与「哪个区域选了哪些 npc」无关；区域各自 npc 在 mapRegions[].npcIds）。
      * 单条绑定：prefab / prefabPath / mapPrefab，prefabBundle，或 tileId / tilePrefabId。
@@ -477,8 +479,6 @@ export class MapModel {
         }
     }
 
-    public my_map_data = null
-
     public match_id;
     public showMatchPayLoad;
     private OnWebSocketMessage(data){
@@ -780,8 +780,8 @@ export class MapModel {
                 data : _data,
                 base64Image : base64Image
             }, '*');
-        }else if(UGCModel.getInstance().mapData.id > 0){
-            UGCModel.getInstance().saveMapData(UGCModel.getInstance().mapData.id , _data , base64Image);
+        }else if(this.my_map_data.id > 0){
+            UGCModel.getInstance().saveMapData(this.my_map_data.id , _data , "");
         }else{
             sys.localStorage.setItem("MapData", _data);
         }

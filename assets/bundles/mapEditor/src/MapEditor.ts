@@ -118,6 +118,8 @@ export class MapEditor extends Component {
     public mapItems: Map<string, { id: string, tile: Node, tileType: string, belong?: string, flipX?: number, offsetX?: number, offsetY?: number, gridAnchor?: string }> = new Map();
     public mapData: number[][] = [];
     public mapRegions: { id: string, minX: number, minY: number, maxX: number, maxY: number, npcIds: string[] }[] = [];
+    /** 删除模式暂时禁用：地图区域高亮/删除、整屋拆除 */
+    private static readonly DELETE_SKIP_REGION_AND_HOUSE = true;
     public tileSize = 32;
     public mapWidth = 46;
     public mapHeight = 88;
@@ -539,6 +541,11 @@ export class MapEditor extends Component {
         return this.isTouchPlacementDevice() && this.enablePlacementDragOffset;
     }
 
+    /** 是否已选中待摆放/移动的道具预览（tileMask 上的 curTileNode） */
+    public hasPlacementItemSelected(): boolean {
+        return !!(this.curTileNode?.isValid);
+    }
+
     public normalizePlacementGrid(gridPos: Vec2): Vec2 {
         return new Vec2(Math.floor(gridPos.x), Math.floor(gridPos.y));
     }
@@ -673,12 +680,14 @@ export class MapEditor extends Component {
                 const base = MapModel.getInstance().gridToWorld(gridPos, size, this);
                 const local = new Vec3(base.x + off.x, base.y + off.y, base.z);
                 this.tileMaskNode.setWorldPosition(mapUi.convertToWorldSpaceAR(local));
+                this.showMaskColor(gridPos);
                 return;
             }
         }
 
         const base = MapModel.getInstance().gridToWorld(gridPos, size, this);
         this.tileMaskNode.setWorldPosition(mapUi.convertToWorldSpaceAR(base));
+        this.showMaskColor(gridPos);
     }
 
     /** 调试用：单格中心，不受 tileMask 当前尺寸影响（避免 gridToWorld(..., null) 随预览家具尺寸整体偏移） */
@@ -919,6 +928,8 @@ export class MapEditor extends Component {
             } else if (this.curGride.x != gridPos.x || this.curGride.y != gridPos.y) {
                 this.maskSp.color = new Color('#FF00006A');
             }
+        } else if (manager.actionStatus == ActionStatus.DETELE) {
+            this.updateDeleteMaskColor(gridPos);
         } else {
             if (this.checkPlacementValidity(gridPos) && this.checkPlaceTreeValidity(gridPos)) {
                 this.maskSp.color = new Color('#00FF296A');
@@ -932,6 +943,30 @@ export class MapEditor extends Component {
     }
 
     public map_id = 0
+
+    /** 删除预览：绿=可删，红=不可删 */
+    private updateDeleteMaskColor(
+        gridPos: Vec2,
+        resolvedTarget?: { tile: Node | null, tileType: string, belong?: string, decorKey?: string, doorPos?: Vec2, doorDir?: string, anchorPos?: Vec2, mapItemKey?: string } | null
+    ) {
+        if (!MapEditor.DELETE_SKIP_REGION_AND_HOUSE) {
+            const hitRegion = this.getMapRegionByGrid(gridPos);
+            if (hitRegion) {
+                this.maskSp.color = new Color('#FF00006A');
+                return;
+            }
+        }
+        const target = resolvedTarget !== undefined ? resolvedTarget : this.resolveDeleteTarget(gridPos);
+        if (!target) {
+            this.maskSp.color = new Color('#FF00006A');
+            return;
+        }
+        if (target.tileType === 'House') {
+            this.maskSp.color = new Color(this.canDemolishHouse() ? '#00FF296A' : '#FF00006A');
+            return;
+        }
+        this.maskSp.color = new Color('#00FF296A');
+    }
 
     // 初始化地图
     initMapGround() {
@@ -1858,7 +1893,9 @@ export class MapEditor extends Component {
                     decorKey: topDecorAny.key
                 };
             }
-            return { tile: null, tileType: "House", belong: houseCell.belong };
+            if (!MapEditor.DELETE_SKIP_REGION_AND_HOUSE) {
+                return { tile: null, tileType: "House", belong: houseCell.belong };
+            }
         }
 
         const topDecorAny = this.getTopDecorCoveringGridGlobal(gridPos);
@@ -1943,6 +1980,7 @@ export class MapEditor extends Component {
     signDeteleTile(gridPos: Vec2) {
         const manager = MapManager.GetInstance();
         if (manager.actionStatus == ActionStatus.DETELE) {
+            if (!MapEditor.DELETE_SKIP_REGION_AND_HOUSE) {
             const hitRegion = this.getMapRegionByGrid(gridPos);
             if (hitRegion) {
                 this.deteleItem = null;
@@ -1964,10 +2002,12 @@ export class MapEditor extends Component {
                 this.maskSp.color = new Color('#FF00006A');
                 return;
             }
+            }
 
             const target = this.resolveDeleteTarget(gridPos);
             if (target?.tileType === "House" && !this.canDemolishHouse()) {
                 this.deteleItem = null;
+                this.updateDeleteMaskColor(gridPos, null);
                 return;
             }
             this.deteleItem = target;
@@ -1981,12 +2021,19 @@ export class MapEditor extends Component {
                 }
             } else if (target?.tile && target.tile.isValid) {
                 size = target.tile.getComponent(UITransform)?.contentSize || size;
+                this.tileMaskNode.setWorldPosition(target.tile.worldPosition);
+            } else {
+                const localPos = MapModel.getInstance().gridToWorld(gridPos, size, this);
+                this.tileMaskNode.setWorldPosition(
+                    this.mapContainer.getComponent(UITransform).convertToWorldSpaceAR(localPos)
+                );
             }
 
             this.buildIcon.getComponent(UITransform).setContentSize(size);
             this.maskSp.getComponent(UITransform).setContentSize(size.width + 10, size.height + 10);
             this.tileMaskNode.getComponent(UITransform).setContentSize(size);
             this.buildControl.frame.setContentSize(size.width + 15, size.height + 15);
+            this.updateDeleteMaskColor(gridPos, this.deteleItem);
         }
     }
 
@@ -3046,15 +3093,17 @@ export class MapEditor extends Component {
 
     // 销毁地块（优先单拆：房门、家具、墙饰；否则拆整屋）
     deteleTile(gridPos: Vec2) {
-        const removedRegionCount = this.removeMapRegionByGrid(gridPos);
-        if (removedRegionCount > 0) {
-            MapManager.GetInstance().getMapEditorUI()?.refreshRegionHighlightsFromData?.();
-            this.deteleItem = null;
-            this.buildControl.detele.play('detele_action');
-            return;
+        if (!MapEditor.DELETE_SKIP_REGION_AND_HOUSE) {
+            const removedRegionCount = this.removeMapRegionByGrid(gridPos);
+            if (removedRegionCount > 0) {
+                MapManager.GetInstance().getMapEditorUI()?.refreshRegionHighlightsFromData?.();
+                this.deteleItem = null;
+                this.buildControl.detele.play('detele_action');
+                return;
+            }
         }
         const target = this.deteleItem || this.resolveDeleteTarget(gridPos);
-        if (target?.tileType === "House" && target?.belong) {
+        if (!MapEditor.DELETE_SKIP_REGION_AND_HOUSE && target?.tileType === "House" && target?.belong) {
             if (!this.canDemolishHouse()) {
                 AppConst.PanelManager.openView("res/View/TipsView", { content: "当前地图不能拆除房屋" });
                 this.deteleItem = null;
@@ -4055,6 +4104,7 @@ export class MapEditor extends Component {
     selectDeteleTile() {
         if (this.curTileNode) this.curTileNode.destroy();
 
+        this.isBuildSwitch = true;
         this.tileMaskNode.active = true;
         this.buildControl.move.node.active = false;
         this.buildControl.detele.node.active = true;
