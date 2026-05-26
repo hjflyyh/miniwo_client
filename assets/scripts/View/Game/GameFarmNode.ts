@@ -21,8 +21,8 @@ import {
     SpriteFrame,
     Color,
 } from 'cc';
-import { MapManager } from '../../../bundles/mapEditor/src/MapManager';
-import { MapEditor } from '../../../bundles/mapEditor/src/MapEditor';
+// import { MapManager } from '../../../bundles/mapEditor/src/MapManager';
+// import { MapEditor } from '../../../bundles/mapEditor/src/MapEditor';
 import {
     FARM_EVENT_DATA_UPDATED,
     FarmBuff,
@@ -38,6 +38,7 @@ import { FarmModel } from '../../Model/Farm/FarmModel';
 import { toServerFarmId } from '../../Model/Farm/FarmPlotMapper';
 import { Planting } from './Planting';
 import { PlantingEnd } from './PlantingEnd';
+import { AppConst } from '../../AppConst';
 const { ccclass, property } = _decorator;
 
 const WATERING_PREFAB_NODE_NAME = 'WateringPrefab';
@@ -692,7 +693,7 @@ export class GameFarmNode extends Component {
     }
 
     private getMapCamera() {
-        const editor = MapManager.GetInstance()?.getMapEditor?.() as MapEditor;
+        const editor = AppConst.mapManager.getMapEditor?.();
         return editor?.mainCamera ?? null;
     }
 

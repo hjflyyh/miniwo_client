@@ -1,8 +1,14 @@
 /** 天气数据更新（Model 拉取成功后广播） */
 export const FARM_EVENT_WEATHER_UPDATED = 'FarmWeatherUpdated';
 
-/** 地块数据更新（farm_data / grow / water / get / Match 推送成功后广播） */
+/** 地块数据更新（farm_data / grow / water / get / fertilization / Match 推送成功后广播） */
 export const FARM_EVENT_DATA_UPDATED = 'FarmDataUpdated';
+
+/** 普通肥料 item_id（item 表 100052） */
+export const FARM_FERTILIZER_ITEM_COMMON = 100052;
+
+/** 高级肥料 item_id（item 表 100053） */
+export const FARM_FERTILIZER_ITEM_SENIOR = 100053;
 
 /** 展开地块 function 面板前广播：除 except 外全部收起（Planting / PlantingEnd 监听） */
 export const FARM_PLOT_FUNCTION_HIDE_OTHERS = 'FarmPlotFunctionHideOthers';

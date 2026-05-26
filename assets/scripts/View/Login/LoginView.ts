@@ -65,7 +65,7 @@ export class LoginView extends Component {
         if (sys.isNative) {
             // this.applyHttpEndpoints(LOGIN_NATIVE_DEFAULT_IP , "c3a28e10a5be4672.natapp.cc");
             // this.applyHttpEndpoints("192.168.30.109");
-            this.applyHttpEndpoints(LOGIN_NATIVE_DEFAULT_IP);
+            this.applyHttpEndpoints(LOGIN_NATIVE_DEFAULT_IP , LOGIN_NATIVE_DEFAULT_IP);
             return;
         }
         const defaultIp = "192.168.30.109";

@@ -10,10 +10,15 @@ import {
     Vec3,
 } from 'cc';
 import {
+    FARM_EVENT_DATA_UPDATED,
+    FARM_FERTILIZER_ITEM_COMMON,
+    FARM_FERTILIZER_ITEM_SENIOR,
     FARM_PLOT_FUNCTION_HIDE_OTHERS,
     FarmPlotFunctionHidePayload,
     getPlotGrowRemainSec,
+    isPlotGrowing,
 } from '../../Model/Farm/FarmTypes';
+import { BagModel } from '../../Model/BagModel';
 import { FarmModel } from '../../Model/Farm/FarmModel';
 import { getBasicSeedSpriteResourcePath } from '../../Model/Farm/FarmSeedVisual';
 import { GameFarmNode } from './GameFarmNode';
@@ -50,10 +55,18 @@ export class Planting extends Component {
     @property(Label)
     timeLabel: Label = null;
 
+    @property(Label)
+    feiliaoNumber1: Label = null;
+
+    @property(Label)
+    feiliaoNumber2: Label = null;
+
+
     private lastSeedKey = '';
     private growExpiredNotified = false;
     private countdownTimer: ReturnType<typeof setInterval> | null = null;
     private fNodeLifted = false;
+    private fertilizing = false;
     private readonly fNodeHomeLpos = new Vec3();
     private readonly fNodeHomeLrot = new Quat();
     private readonly fNodeHomeLscale = new Vec3();
@@ -71,11 +84,14 @@ export class Planting extends Component {
             this.timeLabel = this.node.getChildByName(TIME_NODE_NAME)?.getComponent(Label) ?? null;
         }
         EventSystem.addListent(FARM_PLOT_FUNCTION_HIDE_OTHERS, this.onHideOthersRequest, this);
+        EventSystem.addListent('BagUpdate', this.refreshFertilizerDisplay, this);
+        EventSystem.addListent(FARM_EVENT_DATA_UPDATED, this.onFarmDataUpdated, this);
         this.setFunctionPanelVisible(false);
     }
 
     onDestroy() {
         this.stopCountdownTick();
+        EventSystem.remove(this);
         this.disposeFunctionPanel();
     }
 
@@ -92,6 +108,16 @@ export class Planting extends Component {
             panel.destroy();
             this.fNodeLifted = false;
         }
+    }
+
+    /** 普通肥料（item_id 100052） */
+    public onClickShoufei1() {
+        void this.useFertilizer(FARM_FERTILIZER_ITEM_COMMON);
+    }
+
+    /** 高级肥料（item_id 100053） */
+    public onClickShoufei2() {
+        void this.useFertilizer(FARM_FERTILIZER_ITEM_SENIOR);
     }
 
     /** 绑定农田 id 并刷新作物贴图（basicSeeds.icon + "_1"）与倒计时 */
@@ -115,6 +141,7 @@ export class Planting extends Component {
             this.loadPlantSprite(key);
         }
         this.refreshCountdownDisplay();
+        this.refreshFertilizerDisplay();
         this.startCountdownTick();
     }
 
@@ -129,6 +156,7 @@ export class Planting extends Component {
         } as FarmPlotFunctionHidePayload);
         this.setFunctionPanelVisible(true);
         this.refreshCountdownDisplay();
+        this.refreshFertilizerDisplay();
     }
 
     /** 隐藏场景中所有地块 function 面板 */
@@ -227,6 +255,68 @@ export class Planting extends Component {
         if (this.countdownTimer != null) {
             clearInterval(this.countdownTimer);
             this.countdownTimer = null;
+        }
+    }
+
+    private onFarmDataUpdated() {
+        if (!this.node?.isValid) {
+            return;
+        }
+        this.refreshCountdownDisplay();
+        const model = FarmModel.getInstance();
+        if (model.isPlotHarvestableById(this.farmId)) {
+            model.notifyGrowCountdownEnded(this.farmId);
+        }
+    }
+
+    /** 刷新 function 面板上两种肥料背包数量 */
+    public refreshFertilizerDisplay() {
+        const bag = BagModel.getInstance();
+        if (this.feiliaoNumber1?.isValid) {
+            this.feiliaoNumber1.string = String(bag.getItemCount(FARM_FERTILIZER_ITEM_COMMON));
+        }
+        if (this.feiliaoNumber2?.isValid) {
+            this.feiliaoNumber2.string = String(bag.getItemCount(FARM_FERTILIZER_ITEM_SENIOR));
+        }
+    }
+
+    private async useFertilizer(itemId: number) {
+        const farmId = Math.floor(Number(this.farmId) || 0);
+        if (farmId <= 0 || this.fertilizing) {
+            return;
+        }
+
+        const model = FarmModel.getInstance();
+        const plot = model.getPlot(farmId);
+        if (!plot || !String(plot.seed ?? '').trim()) {
+            EventSystem.send('ShowTips', '暂无作物');
+            return;
+        }
+        if (model.isPlotHarvestableById(farmId)) {
+            EventSystem.send('ShowTips', '作物已成熟，请收获');
+            return;
+        }
+        if (!isPlotGrowing(plot, model.getNowUnixSec())) {
+            EventSystem.send('ShowTips', '请先浇水后再施肥');
+            return;
+        }
+        if (BagModel.getInstance().getItemCount(itemId) <= 0) {
+            EventSystem.send('ShowTips', '肥料不足');
+            return;
+        }
+
+        this.fertilizing = true;
+        try {
+            const result = await model.fertilize(farmId, itemId);
+            if (result.ok) {
+                this.refreshFertilizerDisplay();
+                this.refreshCountdownDisplay();
+                EventSystem.send('ShowTips', '施肥成功');
+            } else {
+                EventSystem.send('ShowTips', result.message ?? '施肥失败');
+            }
+        } finally {
+            this.fertilizing = false;
         }
     }
 

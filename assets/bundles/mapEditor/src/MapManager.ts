@@ -54,11 +54,21 @@ export class MapManager extends Component {
     }
 
     start() {
-
+        AppConst.mapManager = this
+        EventSystem.addListent("BuildCellOnClick" , this.BuildCellOnClick , this)
+        EventSystem.addListent("focusCameraForBuildEntry" , this.focusCameraForBuildEntry , this)
     }
 
     update(deltaTime: number) {
 
+    }
+
+    focusCameraForBuildEntry(){
+        this.getMapEditor()?.focusCameraForBuildEntry()
+    }
+
+    BuildCellOnClick(){
+        this.getMapEditor().tileMaskNode.active = true;
     }
 
     RefreshTileGroundById(){
