@@ -466,8 +466,18 @@ export class MapModel {
                 this.maps[mapId] = this.sceneMaps.length;
                 this.sceneMaps.push(maps[m]);
             }
+        }else if(data.code == network.ServerCode.CodeMyMapList){
+            console.log("更新我的地图数据")
+            let contentData = JSON.parse(data.content)
+            if(contentData.maps.length > 0){  
+                this.my_map_data = contentData.maps[0];
+                console.log(this.my_map_data)
+            }
+                
         }
     }
+
+    public my_map_data = null
 
     public match_id;
     public showMatchPayLoad;

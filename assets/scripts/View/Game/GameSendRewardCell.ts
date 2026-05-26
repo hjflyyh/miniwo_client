@@ -1,4 +1,5 @@
 import { _decorator, Component, Label, Node, resources, Sprite, SpriteFrame } from 'cc';
+import { PrefabLoad } from '../../Utils/PrefabLoad';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameSendRewardCell')
@@ -8,6 +9,9 @@ export class GameSendRewardCell extends Component {
 
     @property(Sprite)
     itemIcon: Sprite = null;
+
+    @property(PrefabLoad)
+    rewardTarget: PrefabLoad = null;
 
     start() {
 
@@ -30,17 +34,18 @@ export class GameSendRewardCell extends Component {
     
     private loadItemIcon(itemId: number) {
         if (!this.itemIcon || !Number.isFinite(itemId) || itemId <= 0) return;
-        resources.load(`UITexture/itemIcon/${itemId}/spriteFrame`, SpriteFrame, (err, sf) => {
-            if (!err && sf && this.itemIcon?.isValid) {
-                this.itemIcon.spriteFrame = sf;
-                return;
-            }
-            resources.load(`common/image/item_${itemId}/spriteFrame`, SpriteFrame, (err2, sf2) => {
-                if (!err2 && sf2 && this.itemIcon?.isValid) {
-                    this.itemIcon.spriteFrame = sf2;
-                }
-            });
-        });
-    }    
+        this.rewardTarget.url = `UITexture/itemIcon/${itemId}/spriteFrame`;
+        // resources.load(`UITexture/itemIcon/${itemId}/spriteFrame`, SpriteFrame, (err, sf) => {
+        //     if (!err && sf && this.itemIcon?.isValid) {
+        //         this.itemIcon.spriteFrame = sf;
+        //         return;
+        //     }
+        //     resources.load(`common/image/item_${itemId}/spriteFrame`, SpriteFrame, (err2, sf2) => {
+        //         if (!err2 && sf2 && this.itemIcon?.isValid) {
+        //             this.itemIcon.spriteFrame = sf2;
+        //         }
+        //     });
+        // });
+    }
 }
 

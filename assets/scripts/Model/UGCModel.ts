@@ -1,4 +1,5 @@
 import { AppConst } from "../AppConst";
+import { MapModel } from "./MapModel";
 import { RoleModel } from "./RoleModel";
 
 /**
@@ -500,7 +501,7 @@ export class UGCModel {
      * characteristics 为数组时会序列化为 JSON 字符串以符合接口 string 类型。
      */
     public syncNpcToServerById(npcId: number) {
-        const mapId = this.mapData?.id;
+        const mapId = MapModel.getInstance().my_map_data.id;
         if (mapId == null || Number(mapId) <= 0) {
             return;
         }
@@ -545,6 +546,169 @@ export class UGCModel {
                 npcId: Number(npcId)
             })
         )
+    }
+
+    public getNpcById(npcId: number): any | null {
+        const idNum = Number(npcId);
+        if (!Number.isFinite(idNum) || idNum <= 0) {
+            return null;
+        }
+        return this.npcList.find((n: any) => {
+            const nid = n && (n.id != null ? n.id : n.npc_id);
+            return Number(nid) === idNum;
+        }) ?? null;
+    }
+
+    private parseIdArray(maybe: any): number[] {
+        if (maybe == null) return [];
+        if (Array.isArray(maybe)) {
+            return maybe.map((v) => Number(v)).filter((n) => Number.isFinite(n));
+        }
+        if (typeof maybe === "string") {
+            const s = maybe.trim();
+            if (!s) return [];
+            if (s.startsWith("[") && s.endsWith("]")) {
+                try {
+                    const arr = JSON.parse(s);
+                    if (Array.isArray(arr)) {
+                        return arr.map((v) => Number(v)).filter((n) => Number.isFinite(n));
+                    }
+                } catch {
+                    // fallthrough
+                }
+            }
+            const nums = s.match(/\d+/g) || [];
+            return nums.map((v) => Number(v)).filter((n) => Number.isFinite(n));
+        }
+        if (typeof maybe === "number" && Number.isFinite(maybe)) {
+            return [maybe];
+        }
+        return [];
+    }
+
+    private parseStringList(maybe: any): string[] {
+        if (maybe == null) return [];
+        if (Array.isArray(maybe)) {
+            return maybe.map((v) => String(v ?? "").trim()).filter(Boolean);
+        }
+        if (typeof maybe === "string") {
+            const s = maybe.trim();
+            if (!s) return [];
+            if (s.startsWith("[") && s.endsWith("]")) {
+                try {
+                    const arr = JSON.parse(s);
+                    if (Array.isArray(arr)) {
+                        return arr.map((v) => String(v ?? "").trim()).filter(Boolean);
+                    }
+                } catch {
+                    // fallthrough
+                }
+            }
+            return s.split(/[,，|｜、\n\r\t]+/g).map((v) => v.trim()).filter(Boolean);
+        }
+        return [String(maybe)].map((v) => v.trim()).filter(Boolean);
+    }
+
+    private resolveTagNameById(id: number, tagType?: number): string {
+        if (!Number.isFinite(id) || id <= 0) return "";
+        const tags = RoleModel.getInstance()?.tags || [];
+        for (let i = 0; i < tags.length; i++) {
+            const t = tags[i];
+            if (!t) continue;
+            if (Number(t.id) === id) {
+                if (tagType == null || Number(t.tag_type) === tagType) {
+                    return String(t.tag_name || "");
+                }
+            }
+        }
+        return "";
+    }
+
+    private toTagNameArray(raw: any, tagType?: number): string[] {
+        const ids = this.parseIdArray(raw);
+        if (ids.length > 0) {
+            return ids
+                .map((id) => this.resolveTagNameById(id, tagType))
+                .filter(Boolean);
+        }
+        return this.parseStringList(raw);
+    }
+
+    private sexToText(sex: any): string {
+        const sexNum = Number(sex);
+        if (sexNum === 0) return "男";
+        if (sexNum === 1) return "女";
+        if (sexNum === 2) return "其他";
+        if (typeof sex === "string" && sex.trim()) return sex.trim();
+        return "";
+    }
+
+    /** 组装 generateAICharacter 请求体（标签 id 转为 tag_name） */
+    public buildGenerateAICharacterPayload(npcId: number): Record<string, unknown> | null {
+        const npc = this.getNpcById(npcId);
+        if (!npc) return null;
+
+        const mapId = Number(
+            npc.map_id ?? MapModel.getInstance().my_map_data?.id ?? this.mapData.id ?? 0
+        );
+        const nid = Number(npc.id ?? npc.npc_id ?? npcId);
+
+        return {
+            token: this.token(),
+            name: String(npc.name ?? ""),
+            age: Number(npc.age ?? 0),
+            sex: this.sexToText(npc.sex),
+            mbti: this.resolveTagNameById(Number(npc.mbti), 5),
+            characteristics: this.toTagNameArray(npc.characteristics, 2),
+            hobbies: this.toTagNameArray(npc.hobbies),
+            identity: this.toTagNameArray(npc.identity, 7),
+            map_id: mapId,
+            npc_id: nid,
+        };
+    }
+
+    /** AI 生成角色人设（透传 JSON：{ ok, data }） */
+    public generateAICharacter(npcId: number) {
+        const body = this.buildGenerateAICharacterPayload(npcId);
+        if (!body) {
+            EventSystem.send("ShowTips", "NPC不存在");
+            return Promise.reject(new Error("NPC not found"));
+        }
+        return AppConst.HttpManager.sendPostHttpAny(
+            "generateAICharacter",
+            JSON.stringify(body)
+        );
+    }
+
+    /** 将 generateAICharacter 返回的 data 合并进内存 NPC */
+    public applyAICharacterToNpc(npcId: number, aiData: Record<string, unknown>) {
+        const npc = this.getNpcById(npcId);
+        if (!npc || !aiData) return;
+        Object.assign(npc, aiData);
+    }
+
+    /** 模式 B：外貌描述文生图 → POST /api/npc/character/generate */
+    public generateNpcCharacterByText(name: string, npcDescription: string) {
+        return AppConst.HttpManager.sendPostHttpAny(
+            "api/npc/character/generate",
+            JSON.stringify({
+                token: this.token(),
+                name: String(name || ""),
+                npc_description: String(npcDescription || ""),
+            })
+        );
+    }
+
+    /** 模式 A：参考图图生图 → POST /api/npc/character/generate */
+    public generateNpcCharacterByReference(name: string, referenceImageData: string) {
+        return AppConst.HttpManager.sendPostHttpAny(
+            "api/npc/character/generate",
+            JSON.stringify({
+                token: this.token(),
+                name: String(name || ""),
+                reference_image_data: String(referenceImageData || ""),
+            })
+        );
     }
 
     //#### generateNpcByAI（AI 透传/准透传）

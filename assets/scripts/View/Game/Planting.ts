@@ -17,6 +17,7 @@ import {
     FarmPlotFunctionHidePayload,
     getPlotGrowRemainSec,
     isPlotGrowing,
+    isPlotHarvestable,
 } from '../../Model/Farm/FarmTypes';
 import { BagModel } from '../../Model/BagModel';
 import { FarmModel } from '../../Model/Farm/FarmModel';
@@ -263,10 +264,6 @@ export class Planting extends Component {
             return;
         }
         this.refreshCountdownDisplay();
-        const model = FarmModel.getInstance();
-        if (model.isPlotHarvestableById(this.farmId)) {
-            model.notifyGrowCountdownEnded(this.farmId);
-        }
     }
 
     /** 刷新 function 面板上两种肥料背包数量 */
@@ -310,7 +307,15 @@ export class Planting extends Component {
             const result = await model.fertilize(farmId, itemId);
             if (result.ok) {
                 this.refreshFertilizerDisplay();
-                this.refreshCountdownDisplay();
+                const plot = model.getPlot(farmId);
+                const nowSec = model.getNowUnixSec();
+                if (isPlotHarvestable(plot, nowSec)) {
+                    this.growExpiredNotified = true;
+                    model.notifyGrowCountdownEnded(farmId);
+                } else {
+                    this.refreshCountdownDisplay();
+                    GameFarmNode.refreshPlotByFarmId(farmId);
+                }
                 EventSystem.send('ShowTips', '施肥成功');
             } else {
                 EventSystem.send('ShowTips', result.message ?? '施肥失败');

@@ -157,7 +157,6 @@ export class FarmModel {
             return;
         }
         EventSystem.send(FARM_PLOT_FUNCTION_HIDE_OTHERS, {});
-        this.applyLocalGrowExpiredPlots(nowSec);
         GameFarmNode.syncAllInScene();
     }
 
@@ -346,7 +345,7 @@ export class FarmModel {
         }
 
         if (Array.isArray(res.farms)) {
-            this.applyFarms(res.farms);
+            this.applyFarms(res.farms, 'farm_fertilization', { replaceAll: false, syncScene: true });
         }
         console.log('[FarmModel] farm_fertilization 成功', { farm_id: id, item_id: iid });
         return { ok: true };
@@ -378,9 +377,11 @@ export class FarmModel {
             return { ok: false, message: res?.message ?? '收获失败' };
         }
 
-        if (Array.isArray(res.farms)) {
-            this.applyFarms(res.farms);
+        const farms = Array.isArray(res.farms) ? [...res.farms] : [];
+        if (!farms.some((f) => Number(f.farm_id) === id)) {
+            farms.push({ farm_id: id, seed: '', grow_remain: 0, buff: null });
         }
+        this.applyFarms(farms, 'farm_get');
         console.log('[FarmModel] farm_get 成功', { farm_id: id });
         return { ok: true };
     }
@@ -404,7 +405,7 @@ export class FarmModel {
             console.log('[FarmModel] farm_data 返回缺少 farms 数组');
             return;
         }
-        this.applyFarms(res.farms);
+        this.applyFarms(res.farms, 'farm_data', { replaceAll: true });
         this.logFarmSnapshot();
     }
 
@@ -420,32 +421,68 @@ export class FarmModel {
         return true;
     }
 
-    private applyFarms(farms: FarmPlotDto[], source = 'applyFarms'): void {
-        const syncedAt = this.nowUnixSec();
-        this.plots.clear();
+    private applyFarms(
+        farms: FarmPlotDto[],
+        source = 'applyFarms',
+        options: { replaceAll?: boolean; syncScene?: boolean } = {},
+    ): void {
+        const replaceAll = options.replaceAll === true;
+        const syncScene = options.syncScene !== false;
+        if (replaceAll) {
+            this.plots.clear();
+        }
         for (let i = 0; i < farms.length; i++) {
             const dto = farms[i];
             const farmId = Number(dto.farm_id);
             if (!Number.isFinite(farmId) || farmId <= 0) {
                 continue;
             }
-            const growRemain = Math.max(0, Number(dto.grow_remain) || 0);
-            this.plots.set(farmId, {
-                farm_id: farmId,
-                seed: String(dto.seed ?? ''),
-                buff: dto.buff ?? null,
-                grow_remain: growRemain,
-                syncedAt,
-            });
+            const prev = this.plots.get(farmId) ?? null;
+            this.plots.set(farmId, this.mergePlotDto(dto, prev, source));
         }
         EventSystem.send(FARM_EVENT_DATA_UPDATED, this.getAllPlots());
-        this.onPlotsDataSynced(source);
+        this.onPlotsDataSynced(source, syncScene);
+    }
+
+    /** 合并单块地块：仅当 dto 显式带字段时才覆盖；收获时未返回 seed 视为空地 */
+    private mergePlotDto(
+        dto: FarmPlotDto,
+        prev: FarmPlotState | null,
+        source: string,
+    ): FarmPlotState {
+        const farmId = Number(dto.farm_id);
+        const hasSeed = Object.prototype.hasOwnProperty.call(dto, 'seed');
+        const hasBuff = dto.buff !== undefined;
+        const hasGrowRemain = dto.grow_remain != null;
+
+        let seed: string;
+        if (hasSeed) {
+            seed = String(dto.seed ?? '').trim();
+        } else if (source === 'farm_get') {
+            seed = '';
+        } else {
+            seed = String(prev?.seed ?? '').trim();
+        }
+
+        const grow_remain = hasGrowRemain
+            ? Math.max(0, Number(dto.grow_remain) || 0)
+            : Math.max(0, Number(prev?.grow_remain) || 0);
+
+        const buff = hasBuff ? (dto.buff ?? null) : (prev?.buff ?? null);
+
+        return {
+            farm_id: farmId,
+            seed,
+            buff,
+            grow_remain,
+            syncedAt: this.nowUnixSec(),
+        };
     }
 
     /**
      * 地块数据同步后：处理已到期、进图判断可收获、刷新场景；有倒计时则启动一次生长定时器。
      */
-    private onPlotsDataSynced(source: string): void {
+    private onPlotsDataSynced(source: string, syncScene = true): void {
         const nowSec = this.nowUnixSec();
         this.applyLocalGrowExpiredPlots(nowSec);
 
@@ -456,7 +493,9 @@ export class FarmModel {
             console.log(`[FarmModel] ${source} → 无可收获地块`);
         }
 
-        GameFarmNode.syncAllInScene();
+        if (syncScene) {
+            GameFarmNode.syncAllInScene();
+        }
         this.scheduleGrowCountdown();
     }
 
@@ -513,7 +552,7 @@ export class FarmModel {
         return next;
     }
 
-    /** 成熟时间已到：仅本地刷新阶段/UI，不请求 farm_data */
+    /** 成熟时间已到：仅检测是否有到期地块（不重复广播事件，避免循环同步） */
     private applyLocalGrowExpiredPlots(nowSec = this.nowUnixSec()): boolean {
         let changed = false;
         this.plots.forEach((plot) => {
@@ -525,9 +564,6 @@ export class FarmModel {
                 changed = true;
             }
         });
-        if (changed) {
-            EventSystem.send(FARM_EVENT_DATA_UPDATED, this.getAllPlots());
-        }
         return changed;
     }
 
@@ -596,7 +632,6 @@ export class FarmModel {
         const nowSec = this.nowUnixSec();
         console.log('[FarmModel] 农田 UI 定时到期 → 刷新土地');
         this.applyLocalGrowExpiredPlots(nowSec);
-        EventSystem.send(FARM_EVENT_DATA_UPDATED, this.getAllPlots());
         GameFarmNode.syncAllInScene();
         const harvestable = this.getHarvestableFarmIds(nowSec);
         if (harvestable.length > 0) {

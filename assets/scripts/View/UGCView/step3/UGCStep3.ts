@@ -2,6 +2,7 @@ import { _decorator, Component, instantiate, Label, Node } from 'cc';
 import { UGCModel } from '../../../Model/UGCModel';
 import { UGCNpcTabCell } from './UGCNpcTabCell';
 import { UGCNpcInfoCell } from './UGCNpcInfoCell';
+import { MapModel } from '../../../Model/MapModel';
 const { ccclass, property } = _decorator;
 
 @ccclass('UGCStep3')
@@ -19,7 +20,7 @@ export class UGCStep3 extends Component {
         this.npcTabCell.active = false
         this.npcInfoCell.active = false
 
-        UGCModel.getInstance().getNpcByMap(UGCModel.getInstance().mapData.id);
+        UGCModel.getInstance().getNpcByMap(MapModel.getInstance().my_map_data.id);
 
         this.refreshTabNpc();
         

@@ -5228,9 +5228,13 @@ export class MapEditor extends Component {
         this.applyCameraOrthoSize(this.minOrthoSize);
     }
 
+    public setCameraView(size): void {
+        this.applyCameraOrthoSize(size);
+    }
+
     /** 建造入口：先拉最远视野，再平移到地图中第一栋房子 */
     public focusCameraForBuildEntry(): void {
-        this.setCameraToMinView();
+        this.setCameraView(this.minOrthoSize + 600);
         const grids = this.getFirstHouseGrid();
         if (!grids) {
             return;

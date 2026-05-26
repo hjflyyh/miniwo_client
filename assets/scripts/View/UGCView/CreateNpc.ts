@@ -1,11 +1,11 @@
 import { _decorator, Component, instantiate, Node } from 'cc';
 import { UGCModel } from '../../Model/UGCModel';
 import { CreateNpcNameCell } from './CreateNpcNameCell';
-import { RoleModel } from '../../Model/RoleModel';
 import { MTBICell } from './createNpc/MTBICell';
 import { SexCell } from './createNpc/SexCell';
 import { RensheCell } from './createNpc/RensheCell';
 import { BackgroundCell } from './createNpc/BackgroundCell';
+import { AppConst } from '../../AppConst';
 const { ccclass, property } = _decorator;
 
 @ccclass('CreateNpc')
@@ -31,16 +31,70 @@ export class CreateNpc extends Component {
     public backgroundCell : Node = null;
     public backgroundNodes : Node[] = [];
 
+    @property(Node)
+    public waitNode : Node = null;
+
     public chooseNpcId = 0;
     start() {
         console.log(this.node["_openParam"])
         this.chooseNpcId = this.node["_openParam"].id;
         this.npcTabCell.active = false
+        this.waitNode.active = false;
         this.refreshTabNpc();
         this.refreshTabs();
 
         EventSystem.addListent("CreateNpcNameCell" , this.onChooseNpc , this)
         EventSystem.addListent("NPCRefreshCell" , this.onChooseMBTI , this)
+        EventSystem.addListent("OnRefreshUGCMapNpc" , this.refreshTabNpc , this)
+    }
+
+    onClickEditImg(){
+        const npcId = this.chooseNpcId;
+        if (!npcId) {
+            EventSystem.send("ShowTips", "请先选择NPC");
+            return;
+        }
+        const npc = UGCModel.getInstance().getNpcById(npcId);
+        if (!npc) {
+            EventSystem.send("ShowTips", "NPC不存在");
+            return;
+        }
+
+        const existingAppearance = String(npc.appearance ?? "").trim();
+        if (existingAppearance) {
+            AppConst.PanelManager.openView(
+                "res/View/CreateMap/EditNpcImg",
+                this.buildEditNpcImgOpenParam(npc, npcId),
+            );
+            return;
+        }
+
+        this.waitNode.active = true;
+        UGCModel.getInstance().generateAICharacter(npcId).then((resp: any) => {
+            if (!resp?.ok || !resp?.data) {
+                EventSystem.send("ShowTips", "AI generation failed");
+                this.waitNode.active = false;
+                return;
+            }
+            this.waitNode.active = false;
+            const aiData = resp.data;
+            UGCModel.getInstance().applyAICharacterToNpc(npcId, aiData);
+            AppConst.PanelManager.openView(
+                "res/View/CreateMap/EditNpcImg",
+                this.buildEditNpcImgOpenParam(npc, npcId, aiData),
+            );
+        }).catch(() => {
+            this.waitNode.active = false;
+        });
+    }
+
+    private buildEditNpcImgOpenParam(npc: any, npcId: number, aiData?: Record<string, unknown>) {
+        return {
+            ...npc,
+            id: Number(npc.id ?? npc.npc_id ?? npcId),
+            ...(aiData ?? {}),
+            appearance: String(aiData?.appearance ?? npc.appearance ?? ""),
+        };
     }
 
     onChooseNpc(npcId){

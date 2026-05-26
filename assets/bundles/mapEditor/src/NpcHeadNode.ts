@@ -79,6 +79,7 @@ export class NpcHeadNode extends Component {
         }
         const npc = this.resolveMapNpc(this.npcId);
         const url = this.resolveNpcIconUrl(npc);
+        console.log(url)
         if (!url) {
             this.lastIconUrl = '';
             sprite.spriteFrame = null;
