@@ -2,7 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "df32e6f8-09a5-454b-bb94-2ecfe03f14ad",
+  "uuid": "faa3e159-692f-45f6-95bc-bd6d8071e92e",
   "files": [
     ".json",
     ".png"
@@ -10,14 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "df32e6f8-09a5-454b-bb94-2ecfe03f14ad@6c48a",
-      "displayName": "potato_2",
+      "uuid": "faa3e159-692f-45f6-95bc-bd6d8071e92e@6c48a",
+      "displayName": "red rose",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "df32e6f8-09a5-454b-bb94-2ecfe03f14ad",
+        "imageUuidOrDatabaseUri": "faa3e159-692f-45f6-95bc-bd6d8071e92e",
         "isUuid": true,
         "visible": false,
         "minfilter": "linear",
@@ -34,8 +34,8 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "df32e6f8-09a5-454b-bb94-2ecfe03f14ad@f9941",
-      "displayName": "potato_2",
+      "uuid": "faa3e159-692f-45f6-95bc-bd6d8071e92e@f9941",
+      "displayName": "red rose",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
@@ -45,10 +45,10 @@
         "offsetY": 0,
         "trimX": 0,
         "trimY": 0,
-        "width": 90,
-        "height": 162,
-        "rawWidth": 90,
-        "rawHeight": 162,
+        "width": 45,
+        "height": 42,
+        "rawWidth": 45,
+        "rawHeight": 42,
         "borderTop": 0,
         "borderBottom": 0,
         "borderLeft": 0,
@@ -60,17 +60,17 @@
         "meshType": 0,
         "vertices": {
           "rawPosition": [
-            -45,
-            -81,
+            -22.5,
+            -21,
             0,
-            45,
-            -81,
+            22.5,
+            -21,
             0,
-            -45,
-            81,
+            -22.5,
+            21,
             0,
-            45,
-            81,
+            22.5,
+            21,
             0
           ],
           "indexes": [
@@ -83,12 +83,12 @@
           ],
           "uv": [
             0,
-            162,
-            90,
-            162,
+            42,
+            45,
+            42,
             0,
             0,
-            90,
+            45,
             0
           ],
           "nuv": [
@@ -102,18 +102,18 @@
             1
           ],
           "minPos": [
-            -45,
-            -81,
+            -22.5,
+            -21,
             0
           ],
           "maxPos": [
-            45,
-            81,
+            22.5,
+            21,
             0
           ]
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "df32e6f8-09a5-454b-bb94-2ecfe03f14ad@6c48a",
+        "imageUuidOrDatabaseUri": "faa3e159-692f-45f6-95bc-bd6d8071e92e@6c48a",
         "atlasUuid": "",
         "trimType": "auto"
       },
@@ -129,6 +129,6 @@
     "type": "sprite-frame",
     "fixAlphaTransparencyArtifacts": false,
     "hasAlpha": true,
-    "redirect": "df32e6f8-09a5-454b-bb94-2ecfe03f14ad@6c48a"
+    "redirect": "faa3e159-692f-45f6-95bc-bd6d8071e92e@6c48a"
   }
 }

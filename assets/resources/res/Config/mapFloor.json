@@ -3,84 +3,66 @@
     "name_cn": "地板1",
     "icon": "floor/icon/floor_100_icon",
     "image": "floor/image/floor_100",
-    "tags": "",
-    "is_auto_build": 0
+    "tags": ""
   },
   "2": {
     "name_cn": "地板2",
     "icon": "floor/icon/floor_101_icon",
     "image": "floor/image/floor_101",
-    "tags": "",
-    "is_auto_build": 0
+    "tags": ""
   },
   "3": {
     "name_cn": "黑白格纹地板",
     "icon": "floor/icon/Black and White Checkered Flooring",
     "image": "floor/image/Black and White Checkered Flooring",
-    "tags": "",
-    "is_auto_build": 0
+    "tags": ""
   },
   "4": {
     "name_cn": "奶白格纹地板",
     "icon": "floor/icon/Cream White Checkered Flooring",
     "image": "floor/image/Cream White Checkered Flooring",
-    "tags": "",
-    "is_auto_build": 0
+    "tags": ""
   },
   "5": {
     "name_cn": "红木色横纹地板",
     "icon": "floor/icon/Mahogany - Horizontal Grain Flooring",
     "image": "floor/image/Mahogany - Horizontal Grain Flooring",
-    "tags": "",
-    "is_auto_build": 0
+    "tags": ""
   },
   "6": {
     "name_cn": "橡木横纹地板",
     "icon": "floor/icon/Oak - Horizontal Grain Flooring",
     "image": "floor/image/Oak - Horizontal Grain Flooring",
-    "tags": "",
-    "is_auto_build": 0
+    "tags": ""
   },
   "7": {
     "name_cn": "橡木竖纹地板",
     "icon": "floor/icon/Oak - Vertical Grain Flooring",
     "image": "floor/image/Oak - Vertical Grain Flooring",
-    "tags": "",
-    "is_auto_build": 0
+    "tags": ""
   },
   "8": {
     "name_cn": "绿色毛绒地板",
     "icon": "floor/icon/Plush Flooring - Green",
     "image": "floor/image/Plush Flooring - Green",
-    "tags": "",
-    "is_auto_build": 0
+    "tags": ""
   },
   "9": {
     "name_cn": "红色毛绒地板",
     "icon": "floor/icon/Plush Flooring - Red",
     "image": "floor/image/Plush Flooring - Red",
-    "tags": "",
-    "is_auto_build": 0
+    "tags": ""
   },
   "10": {
     "name_cn": "黄色毛绒地板",
     "icon": "floor/icon/Plush Flooring - Yellow",
     "image": "floor/image/Plush Flooring - Yellow",
-    "tags": "",
-    "is_auto_build": 0
+    "tags": ""
   },
   "11": {
     "name_cn": "实木竖纹地板",
     "icon": "floor/icon/Solid Wood - Vertical Grain Flooring",
     "image": "floor/image/Solid Wood - Vertical Grain Flooring",
-    "tags": "",
-    "is_auto_build": 0
-  },
-  "999": {
-    "name_cn": "透明地板",
-    "icon": "",
-    "image": "",
-    "tags": "",
-    "is_auto_build": 1
+    "tags": ""
   }
 }
