@@ -5,9 +5,17 @@ import { LoadLocalImage } from '../../../Utils/LoadLocalImage';
 import { Utils } from '../../../Utils/Utils';
 const { ccclass, property } = _decorator;
 
+/** 立绘任务轮询间隔（毫秒） */
+const STANDEE_POLL_INTERVAL_MS = 1500;
+/** 最长轮询次数（约 3 分钟） */
+const STANDEE_POLL_MAX_ATTEMPTS = 120;
+
 @ccclass('EditNpcImg')
 export class EditNpcImg extends Component {
     private npcTabs : Node[] = [];
+    private standeePollTimer: ReturnType<typeof setTimeout> | null = null;
+    private standeePollAttempts = 0;
+    private standeePollAborted = false;
 
     @property(Node)
     public npcTabCell : Node = null;
@@ -81,6 +89,10 @@ export class EditNpcImg extends Component {
 
     /** 模式 B：AI 外貌描述文生图 */
     onClickAIText(){
+        if (!this.chooseNpcId) {
+            EventSystem.send("ShowTips", "请先选择NPC");
+            return;
+        }
         const desc = (this.editBox?.string || this.getOpenParam().appearance || "").trim();
         if (!desc) {
             EventSystem.send("ShowTips", "请输入外貌描述");
@@ -92,13 +104,20 @@ export class EditNpcImg extends Component {
             return;
         }
 
-        UGCModel.getInstance().generateNpcCharacterByText(name, desc).then((resp: any) => {
-            this.onPortraitGenerated(resp);
-        }).catch(() => undefined);
+        this.beginPortraitGeneration();
+        UGCModel.getInstance().generateNpcCharacterByText(this.chooseNpcId, name, desc).then((resp: any) => {
+            this.handleStandeeSubmitResponse(resp);
+        }).catch(() => {
+            this.endPortraitGeneration();
+        });
     }
 
     /** 模式 A：本机参考图图生图 */
     onClickAIImg(){
+        if (!this.chooseNpcId) {
+            EventSystem.send("ShowTips", "请先选择NPC");
+            return;
+        }
         const dataUrl = this.localImageLoader?.getSelectedDataUrl() || "";
         if (!dataUrl) {
             EventSystem.send("ShowTips", "请先上传参考图");
@@ -110,9 +129,12 @@ export class EditNpcImg extends Component {
             return;
         }
 
-        UGCModel.getInstance().generateNpcCharacterByReference(name, dataUrl).then((resp: any) => {
-            this.onPortraitGenerated(resp);
-        }).catch(() => undefined);
+        this.beginPortraitGeneration();
+        UGCModel.getInstance().generateNpcCharacterByReference(this.chooseNpcId, name, dataUrl).then((resp: any) => {
+            this.handleStandeeSubmitResponse(resp);
+        }).catch(() => {
+            this.endPortraitGeneration();
+        });
     }
 
     /** 重新请求 AI 生成当前 NPC 的人设数据（含 appearance） */
@@ -164,6 +186,126 @@ export class EditNpcImg extends Component {
         }
     }
 
+    onDestroy() {
+        this.standeePollAborted = true;
+        this.stopStandeePolling();
+    }
+
+    private beginPortraitGeneration() {
+        this.standeePollAborted = false;
+        this.stopStandeePolling();
+        if (this.waitNode) {
+            this.waitNode.active = true;
+        }
+    }
+
+    private endPortraitGeneration() {
+        if (this.waitNode) {
+            this.waitNode.active = false;
+        }
+        this.stopStandeePolling();
+    }
+
+    private stopStandeePolling() {
+        if (this.standeePollTimer != null) {
+            clearTimeout(this.standeePollTimer);
+            this.standeePollTimer = null;
+        }
+        this.standeePollAttempts = 0;
+    }
+
+    private scheduleStandeePoll(taskId: string) {
+        if (this.standeePollAborted || !this.node?.isValid) {
+            return;
+        }
+        this.standeePollTimer = setTimeout(() => {
+            this.standeePollTimer = null;
+            void this.pollStandeeTask(taskId);
+        }, STANDEE_POLL_INTERVAL_MS);
+    }
+
+    /** 文生图 / 图生图提交响应：含 task_id 则轮询，否则走同步结果 */
+    private handleStandeeSubmitResponse(resp: any) {
+        if (!resp?.ok) {
+            this.endPortraitGeneration();
+            const msg = resp?.error || resp?.message;
+            if (msg) {
+                EventSystem.send("ShowTips", String(msg));
+            }
+            return;
+        }
+
+        const status = String(resp?.status ?? "").toLowerCase();
+        if (status === "completed" || status === "complete") {
+            this.endPortraitGeneration();
+            this.onStandeeTaskCompleted(resp);
+            return;
+        }
+
+        const taskId = String(resp?.task_id ?? "").trim();
+        if (taskId) {
+            void this.pollStandeeTask(taskId);
+            return;
+        }
+
+        this.endPortraitGeneration();
+        this.onPortraitGenerated(resp);
+    }
+
+    private async pollStandeeTask(taskId: string) {
+        if (this.standeePollAborted || !this.node?.isValid) {
+            return;
+        }
+
+        if (this.standeePollAttempts >= STANDEE_POLL_MAX_ATTEMPTS) {
+            this.endPortraitGeneration();
+            EventSystem.send("ShowTips", "立绘生成超时，请稍后重试");
+            return;
+        }
+        this.standeePollAttempts += 1;
+
+        try {
+            const resp = await UGCModel.getInstance().queryNpcStandeeTask(taskId);
+            if (this.standeePollAborted || !this.node?.isValid) {
+                return;
+            }
+
+            if (!resp?.ok) {
+                this.endPortraitGeneration();
+                EventSystem.send("ShowTips", String(resp?.message || resp?.error || "立绘生成失败"));
+                return;
+            }
+
+            const status = String(resp?.status ?? "").toLowerCase();
+            if (status === "completed" || status === "complete") {
+                this.endPortraitGeneration();
+                this.onStandeeTaskCompleted(resp);
+                return;
+            }
+
+            if (status === "failed" || status === "error") {
+                this.endPortraitGeneration();
+                EventSystem.send("ShowTips", String(resp?.message || resp?.error || "立绘生成失败"));
+                return;
+            }
+
+            this.scheduleStandeePoll(taskId);
+        } catch {
+            this.endPortraitGeneration();
+        }
+    }
+
+    /** 轮询完成：暂只取 preview_url 展示 */
+    private onStandeeTaskCompleted(resp: any) {
+        const previewUrl = String(resp?.result?.preview_url ?? "").trim();
+        if (previewUrl) {
+            this.displayPortraitUrl(previewUrl);
+            this.savePortraitToNpc(previewUrl);
+            return;
+        }
+        this.onPortraitGenerated(resp);
+    }
+
     private onPortraitGenerated(resp: any) {
         if (resp?.ok === false || resp?.success === false) {
             const msg = resp?.error || resp?.message;
@@ -175,7 +317,7 @@ export class EditNpcImg extends Component {
 
         const { url, dataUrl } = this.extractPortraitFromResponse(resp);
         if (!url && !dataUrl) {
-            EventSystem.send("ShowTips", "生图失败，未返回图片");
+            EventSystem.send("ShowTips", "Image generation in progress");
             return;
         }
 

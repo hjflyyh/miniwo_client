@@ -687,27 +687,62 @@ export class UGCModel {
         Object.assign(npc, aiData);
     }
 
-    /** 模式 B：外貌描述文生图 → POST /api/npc/character/generate */
-    public generateNpcCharacterByText(name: string, npcDescription: string) {
+    private resolveNpcIdForRequest(npcId: number): number | null {
+        const npc = this.getNpcById(npcId);
+        const nid = Number(npc?.id ?? npc?.npc_id ?? npcId);
+        if (!Number.isFinite(nid) || nid <= 0) {
+            return null;
+        }
+        return Math.floor(nid);
+    }
+
+    /** 模式 B：外貌描述文生图 → POST /api/npc/character/standee */
+    public generateNpcCharacterByText(npcId: number, name: string, npcDescription: string) {
+        const nid = this.resolveNpcIdForRequest(npcId);
+        if (nid == null) {
+            EventSystem.send("ShowTips", "NPC不存在");
+            return Promise.reject(new Error("NPC not found"));
+        }
         return AppConst.HttpManager.sendPostHttpAny(
-            "api/npc/character/generate",
+            "api/npc/character/standee",
             JSON.stringify({
                 token: this.token(),
+                npc_id: nid,
                 name: String(name || ""),
                 npc_description: String(npcDescription || ""),
-            })
+            }),
+            { silent: true },
         );
     }
 
-    /** 模式 A：参考图图生图 → POST /api/npc/character/generate */
-    public generateNpcCharacterByReference(name: string, referenceImageData: string) {
+    /** 模式 A：参考图图生图 → POST /api/npc/character/standee */
+    public generateNpcCharacterByReference(npcId: number, name: string, referenceImageData: string) {
+        const nid = this.resolveNpcIdForRequest(npcId);
+        if (nid == null) {
+            EventSystem.send("ShowTips", "NPC不存在");
+            return Promise.reject(new Error("NPC not found"));
+        }
         return AppConst.HttpManager.sendPostHttpAny(
-            "api/npc/character/generate",
+            "api/npc/character/standee",
             JSON.stringify({
                 token: this.token(),
+                npc_id: nid,
                 name: String(name || ""),
                 reference_image_data: String(referenceImageData || ""),
-            })
+            }),
+            { silent: true },
+        );
+    }
+
+    /** 立绘异步任务轮询 → GET /api/npc/character/standee/:task_id */
+    public queryNpcStandeeTask(taskId: string) {
+        const id = encodeURIComponent(String(taskId || "").trim());
+        if (!id) {
+            return Promise.reject(new Error("task_id empty"));
+        }
+        return AppConst.HttpManager.sendGetHttpAny(
+            `api/npc/character/standee/${id}?token=${encodeURIComponent(this.token())}`,
+            { silent: true },
         );
     }
 

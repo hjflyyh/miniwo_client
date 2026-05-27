@@ -22,6 +22,7 @@ import {
     weatherTypeName,
     FARM_MATCH_OPCODE_DATA_HARVEST,
 } from './FarmTypes';
+import { network } from '../RequestData';
 
 /** 天气刷新失败后重试间隔（毫秒） */
 const WEATHER_RETRY_MS = 5000;
@@ -39,6 +40,8 @@ export class FarmModel {
     private weatherRefreshTimer: ReturnType<typeof setTimeout> | null = null;
     private farmRefreshTimer: ReturnType<typeof setTimeout> | null = null;
 
+
+    public seedLevelData
     public static getInstance(): FarmModel {
         if (!this._instance) {
             this._instance = new FarmModel();
@@ -48,6 +51,23 @@ export class FarmModel {
 
     public init(): void {
         EventSystem.addListent('OnMatchData', this.onMatchData, this);
+        EventSystem.addListent("WebSocketNotifications" , this.OnWSNotification , this)
+    }
+
+    public getSeedLv(id){
+        if(this.seedLevelData[id]){
+            return this.seedLevelData[id]["level"]
+        }
+        return 0
+    }
+
+    private OnWSNotification(data){
+        if(data.code == network.ServerCode.CodeSeedLv){
+            console.log("seedllevel数据：")
+            let content = JSON.parse(data.content)
+            console.log(content)
+            this.seedLevelData = content
+        }
     }
 
     /**

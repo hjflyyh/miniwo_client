@@ -59,9 +59,11 @@ export class HttpManager extends Component {
      * 兼容 AI 透传 JSON：不要求 {success:true,data} 包装，直接把原始响应派发出去。
      * 仍会优先提示 error/message 字段。
      */
-    public sendPostHttpAny(functionName: string, data: any) {
+    public sendPostHttpAny(functionName: string, data: any, options?: { silent?: boolean }) {
         log(functionName);
-        EventSystem.send("ShowJuhua", "HttpSend");
+        if (!options?.silent) {
+            EventSystem.send("ShowJuhua", "HttpSend");
+        }
         const request = fetch(HttpManager.baseUrl + "/" + functionName, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -96,6 +98,47 @@ export class HttpManager extends Component {
             });
         request.catch(() => undefined)
         return request
+    }
+
+    /** GET 透传 JSON（用于立绘任务轮询等） */
+    public sendGetHttpAny(path: string, options?: { silent?: boolean }) {
+        const normalized = String(path || "").replace(/^\//, "");
+        log("GET " + normalized);
+        if (!options?.silent) {
+            EventSystem.send("ShowJuhua", "HttpSend");
+        }
+        const request = fetch(HttpManager.baseUrl + "/" + normalized, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        })
+            .then(async (res) => {
+                if (!res.ok) {
+                    const raw = await res.text();
+                    throw new Error(`GET ${normalized} HTTP ${res.status}: ${raw}`);
+                }
+                return res.json();
+            })
+            .then((resp) => {
+                console.log("GET 请求回复：", resp);
+                if (resp?.error) {
+                    EventSystem.send("ShowTips", resp.error);
+                    return resp;
+                }
+                if (resp?.message && resp?.success === false) {
+                    EventSystem.send("ShowTips", resp.message);
+                    return resp;
+                }
+                EventSystem.send("HttpMessage", { functionName: normalized, raw: resp });
+                return resp;
+            })
+            .catch((err) => {
+                const error = err instanceof Error ? err : new Error(String(err));
+                EventSystem.send("ShowTips", "网络请求失败，请稍后重试");
+                EventSystem.send("HttpError", error);
+                throw error;
+            });
+        request.catch(() => undefined);
+        return request;
     }
 
 }

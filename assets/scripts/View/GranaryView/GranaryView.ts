@@ -1,6 +1,7 @@
 import { _decorator, Color, Component, instantiate, Label, Layout, Node, ScrollView } from 'cc';
 import { AppConst } from '../../AppConst';
 import { GranaryItemCell } from './GranaryItemCell';
+import { GranaryStarCell } from './GranaryStarCell';
 const { ccclass, property } = _decorator;
 
 type GranaryListRow = {
@@ -131,7 +132,7 @@ export class GranaryView extends Component {
         if (useStarode) {
             this.clearListCells(this.itemListContent, this.itemCell, this.showItems);
             const rows = this.buildBasicCropsRows();
-            this.syncListCells(this.starodeListContent, this.starodeCell, this.showStarodes, rows, 1);
+            this.syncListCells(this.starodeListContent, this.starodeCell, this.showStarodes, rows, 2);
             this.applyListLayout(this.starodeListContent);
             this.setScrollViewVisible(this.starodeScrollRoot, true);
             this.resetScrollView(this.starodeScrollRoot);
@@ -234,9 +235,17 @@ export class GranaryView extends Component {
                 continue;
             }
             node.active = true;
-            node.name = `granary_${cellType}_${row.configKey}`;
-            const cell = node.getComponent(GranaryItemCell);
-            cell?.refreshNode(cellType, row.configKey);
+            if(cellType == 2){
+
+                node.name = `granary_${cellType}_${row.configKey}`;
+                const cell = node.getComponent(GranaryStarCell);
+                cell?.refreshNode(row.configKey);
+            }else{
+
+                node.name = `granary_${cellType}_${row.configKey}`;
+                const cell = node.getComponent(GranaryItemCell);
+                cell?.refreshNode(cellType, row.configKey);
+            }
         }
     }
 

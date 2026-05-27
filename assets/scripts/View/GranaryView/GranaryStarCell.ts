@@ -1,34 +1,39 @@
-import { _decorator, Component, Label, resources, Sprite, SpriteFrame } from 'cc';
+import { _decorator, Component, Label, Node, resources, Sprite, SpriteFrame } from 'cc';
 import { AppConst } from '../../AppConst';
-import { BagModel } from '../../Model/BagModel';
-import { PrefabLoad } from '../../Utils/PrefabLoad';
 import { getBasicSeedMatureSpriteResourcePath } from '../../Model/Farm/FarmSeedVisual';
+import { FarmModel } from '../../Model/Farm/FarmModel';
 const { ccclass, property } = _decorator;
 
-@ccclass('GranaryItemCell')
-export class GranaryItemCell extends Component {
+@ccclass('GranaryStarCell')
+export class GranaryStarCell extends Component {
     @property(Label)
     public nameLabel: Label = null;
 
     @property(Label)
-    public numLabel: Label = null;
+    public lvLabel: Label = null;
 
     @property(Sprite)
     public prefabLoader: Sprite = null;
 
-    /** @param type 0=basicSeeds 1=basicCrops；@param id 配置表 key */
-    public refreshNode(type: number, id: number | string) {
-        const configKey = String(id);
-        const tableName = type === 0 ? 'basicSeeds' : 'basicCrops';
+    @property([Node])
+    public stars : Node[] = []
+
+    start() {
+
+    }
+
+    public refreshNode(id: number | string) {
+       const configKey = String(id);
+        const tableName = 'basicCrops';
         const row = AppConst.JSONManager?.getItem?.(tableName, configKey) as Record<string, unknown> | null;
         if (!row) {
-            this.clearDisplay();
+            // this.clearDisplay();
             return;
         }
 
         const itemId = Number(row.item_id);
         if (!Number.isFinite(itemId) || itemId <= 0) {
-            this.clearDisplay();
+            // this.clearDisplay();
             return;
         }
 
@@ -36,28 +41,23 @@ export class GranaryItemCell extends Component {
         const displayName = String(
             row.crop_name ?? itemCfg?.name_cn ?? itemCfg?.name_en ?? itemId
         );
-        const count = BagModel.getInstance().getItemCount(itemId);
+        
 
         if (this.nameLabel) {
             this.nameLabel.string = displayName;
         }
-        if (this.numLabel) {
-            this.numLabel.string = `x${count}`;
-        }
         
-        let url = type == 0 ? `UITexture/itemIcon/${itemId}/spriteFrame` : getBasicSeedMatureSpriteResourcePath(id + "")
+        let url = getBasicSeedMatureSpriteResourcePath(id + "")
         let _this = this
         resources.load(url, SpriteFrame, (err, sf) => {
             _this.prefabLoader.spriteFrame = sf;
         });
-    }
 
-    private clearDisplay() {
-        if (this.nameLabel) {
-            this.nameLabel.string = '';
+        let seedLv = FarmModel.getInstance().getSeedLv(configKey)
+        this.lvLabel.string = seedLv;
+        for(let i = 0 ; i < this.stars.length ; i++){
+            this.stars[i].active = seedLv > i + 1
         }
-        if (this.numLabel) {
-            this.numLabel.string = '';
-        }
-    }
+    }    
 }
+
