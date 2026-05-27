@@ -6,7 +6,7 @@
     "event name": "发现作物",
     "base weight": "100",
     "judgment attribute": "113",
-    "judgment method": "≥",
+    "judgment method": "1",
     "threshold": "80",
     "weight coefficient": "50",
     "reward pool": "1001"
@@ -18,7 +18,7 @@
     "event name": "发现作物",
     "base weight": "100",
     "judgment attribute": "118",
-    "judgment method": "≥",
+    "judgment method": "1",
     "threshold": "50",
     "weight coefficient": "30",
     "reward pool": "1001"
@@ -30,7 +30,7 @@
     "event name": "发现种子",
     "base weight": "100",
     "judgment attribute": "119",
-    "judgment method": "≥",
+    "judgment method": "1",
     "threshold": "100",
     "weight coefficient": "50",
     "reward pool": "1002"
@@ -42,7 +42,7 @@
     "event name": "帮工报酬",
     "base weight": "100",
     "judgment attribute": "102",
-    "judgment method": "≥",
+    "judgment method": "1",
     "threshold": "700",
     "weight coefficient": "5",
     "reward pool": "1003"
@@ -54,7 +54,7 @@
     "event name": "获得路人馈赠",
     "base weight": "100",
     "judgment attribute": "110",
-    "judgment method": "≥",
+    "judgment method": "1",
     "threshold": "60",
     "weight coefficient": "5",
     "reward pool": "1003"
@@ -66,7 +66,7 @@
     "event name": "结识新朋友",
     "base weight": "100",
     "judgment attribute": "110",
-    "judgment method": "≥",
+    "judgment method": "1",
     "threshold": "70",
     "weight coefficient": "50",
     "reward pool": "1004"
@@ -77,8 +77,8 @@
     "ai decision": "0",
     "event name": "结识新朋友",
     "base weight": "100",
-    "judgment attribute": "MBTI(E)",
-    "judgment method": "=",
+    "judgment attribute": "101",
+    "judgment method": "2",
     "threshold": "1",
     "weight coefficient": "30",
     "reward pool": "1004"
@@ -90,7 +90,7 @@
     "event name": "被误认为英雄",
     "base weight": "100",
     "judgment attribute": "121",
-    "judgment method": "≥",
+    "judgment method": "1",
     "threshold": "120",
     "weight coefficient": "40",
     "reward pool": "1003"
@@ -102,7 +102,7 @@
     "event name": "被误认为英雄",
     "base weight": "100",
     "judgment attribute": "108",
-    "judgment method": "≥",
+    "judgment method": "1",
     "threshold": "50",
     "weight coefficient": "50",
     "reward pool": "1003"
@@ -114,7 +114,7 @@
     "event name": "发现遗迹碎片",
     "base weight": "100",
     "judgment attribute": "118",
-    "judgment method": "≥",
+    "judgment method": "1",
     "threshold": "70",
     "weight coefficient": "50",
     "reward pool": "1005"
@@ -125,8 +125,8 @@
     "ai decision": "0",
     "event name": "发现遗迹碎片",
     "base weight": "100",
-    "judgment attribute": "探索时长",
-    "judgment method": "≥",
+    "judgment attribute": "103",
+    "judgment method": "1",
     "threshold": "6",
     "weight coefficient": "30",
     "reward pool": "1005"
@@ -138,7 +138,7 @@
     "event name": "灵感大爆发",
     "base weight": "100",
     "judgment attribute": "114",
-    "judgment method": "≥",
+    "judgment method": "1",
     "threshold": "80",
     "weight coefficient": "80",
     "reward pool": "1006"
@@ -150,7 +150,7 @@
     "event name": "灵感大爆发",
     "base weight": "100",
     "judgment attribute": "109",
-    "judgment method": "≥",
+    "judgment method": "1",
     "threshold": "90",
     "weight coefficient": "50",
     "reward pool": "1006"
@@ -162,7 +162,7 @@
     "event name": "武学切磋",
     "base weight": "100",
     "judgment attribute": "121",
-    "judgment method": "≥",
+    "judgment method": "1",
     "threshold": "150",
     "weight coefficient": "50",
     "reward pool": "1007"
@@ -174,7 +174,7 @@
     "event name": "神秘占卜师",
     "base weight": "100",
     "judgment attribute": "116",
-    "judgment method": "≥",
+    "judgment method": "1",
     "threshold": "70",
     "weight coefficient": "20",
     "reward pool": "1008"
@@ -186,7 +186,7 @@
     "event name": "迷路",
     "base weight": "100",
     "judgment attribute": "113",
-    "judgment method": "<",
+    "judgment method": "3",
     "threshold": "40",
     "weight coefficient": "5",
     "reward pool": "1004"
@@ -198,7 +198,7 @@
     "event name": "陷入沉思",
     "base weight": "100",
     "judgment attribute": "113",
-    "judgment method": "≥",
+    "judgment method": "1",
     "threshold": "90",
     "weight coefficient": "20",
     "reward pool": "1004"
@@ -222,7 +222,7 @@
     "event name": "遭遇推销员",
     "base weight": "100",
     "judgment attribute": "104",
-    "judgment method": "≥",
+    "judgment method": "1",
     "threshold": "10000",
     "weight coefficient": "50",
     "reward pool": null
@@ -234,7 +234,7 @@
     "event name": "遭遇强盗",
     "base weight": "100",
     "judgment attribute": "108",
-    "judgment method": "≤",
+    "judgment method": "4",
     "threshold": "-20",
     "weight coefficient": "200",
     "reward pool": null
@@ -246,7 +246,7 @@
     "event name": "遭遇强盗",
     "base weight": "100",
     "judgment attribute": "121",
-    "judgment method": "<",
+    "judgment method": "3",
     "threshold": "100",
     "weight coefficient": "300",
     "reward pool": null
@@ -258,7 +258,7 @@
     "event name": "食物中毒",
     "base weight": "100",
     "judgment attribute": "118",
-    "judgment method": "<",
+    "judgment method": "3",
     "threshold": "30",
     "weight coefficient": "50",
     "reward pool": "1012"
@@ -270,7 +270,7 @@
     "event name": "抢劫他人",
     "base weight": "30",
     "judgment attribute": "108",
-    "judgment method": "≤",
+    "judgment method": "4",
     "threshold": "-50",
     "weight coefficient": "200",
     "reward pool": null
