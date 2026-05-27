@@ -1514,13 +1514,13 @@
     "sideDoorInsetX": 10,
     "enablePlacementDragOffset": true,
     "enableDecorStackPlacement": true,
-    "enableRoadIgnoreGridOccupancy": true,
+    "enableRoadIgnoreGridOccupancy": false,
     "animator": null,
     "mapGraphics": {
       "__id__": 37
     },
     "debugShowWalkable": false,
-    "map_data_test": true,
+    "map_data_test": false,
     "minOrthoSize": 300,
     "maxOrthoSize": 2000,
     "defaultEntryOrthoSize": 4500,
