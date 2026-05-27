@@ -152,10 +152,14 @@
     "configuration": "100056"
   },
   "40": {
+    "function": "派遣消耗",
+    "configuration": "100#200"
+  },
+  "41": {
     "function": "探索时长",
     "configuration": "1#10"
   },
-  "41": {
+  "42": {
     "function": "犯罪被抓AI角色坐牢时长&保释金",
     "configuration": "18000#104_20000"
   }
