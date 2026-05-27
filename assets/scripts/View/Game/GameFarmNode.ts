@@ -72,6 +72,10 @@ type PlotHit = {
 
 @ccclass('GameFarmNode')
 export class GameFarmNode extends Component {
+    /**
+     * 场景农田分区：-1=tudiPrefab0（格子 0～6 → farm_id 1～7）；
+     * 0～3=tudiPrefab1～4（从 farm_id 7 起，每区 36 格）。
+     */
     @property
     farmIndex: number = 0;
 
@@ -838,7 +842,7 @@ export class GameFarmNode extends Component {
 
     private onPlotClick(hit: PlotHit) {
         const payload: GameFarmPlotClickPayload = {
-            farmIndex: Number(this.farmIndex) || 0,
+            farmIndex: Number.isFinite(Number(this.farmIndex)) ? Number(this.farmIndex) : 0,
             plotIndex: hit.plotIndex,
             farmId: hit.farmId,
             plotNodeName: hit.node.name,

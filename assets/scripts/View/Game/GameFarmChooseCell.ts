@@ -36,9 +36,16 @@ export class GameFarmChooseCell extends Component {
         this.seedKey = seedKey;
         this.setCount(count);
 
+        if (this.spriteRoot) {
+            this.spriteRoot.enabled = false;
+        }
         resources.load(`UITexture/itemIcon/${itemId}/spriteFrame`, SpriteFrame, (err, sf) => {
-            if (!err && sf && this.spriteRoot?.isValid) {
+            if (!this.spriteRoot?.isValid) {
+                return;
+            }
+            if (!err && sf) {
                 this.spriteRoot.spriteFrame = sf;
+                this.spriteRoot.enabled = true;
             }
         });
     }

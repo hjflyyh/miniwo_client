@@ -110,5 +110,12 @@
     "type": 0,
     "img_size": 1,
     "is_prefab": 1
+  },
+  "117": {
+    "name_cn": "种植土地",
+    "resource": "maps/farm/farm/tudiPrefab0",
+    "type": 15,
+    "img_size": 1,
+    "is_prefab": 1
   }
 }

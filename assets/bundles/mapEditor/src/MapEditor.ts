@@ -295,6 +295,9 @@ export class MapEditor extends Component {
     @property
     public map_data_test = false;
 
+    private static readonly MAP_DATA_TEST_CONFIG = 'beifeng';
+    private mapDataTestLoaded = false;
+
     private walkableDebugNode: Node | null = null;
     private walkableDebugGraphics: Graphics | null = null;
     private npcTileDebugNode: Node | null = null;
@@ -354,6 +357,7 @@ export class MapEditor extends Component {
 
         this.mapWidth = AppConst.UIRoot.MapEditorWidth
         this.mapHeight = AppConst.UIRoot.MapEditorHeight
+        this.ensureMapDataTestConfigListener();
         this.applyExternalGridSizeIfNeeded();
         if (this.mapGameType == 0) {
             this.mapWidth = FARM_MAP_GRID_WIDTH;
@@ -428,6 +432,44 @@ export class MapEditor extends Component {
         return { width: Math.floor(width), height: Math.floor(height) };
     }
 
+    /** map_data_test 开启时从 res/Config/beifeng.json 读取地图数据 */
+    private getMapDataTestPayload(): MapData | null {
+        if (!this.map_data_test) {
+            return null;
+        }
+        const json = AppConst.JSONManager?.getItemAll(MapEditor.MAP_DATA_TEST_CONFIG);
+        if (json && typeof json === 'object') {
+            return json as MapData;
+        }
+        return null;
+    }
+
+    private ensureMapDataTestConfigListener() {
+        if (!this.map_data_test) {
+            return;
+        }
+        EventSystem.addListent('ConfigLoadAll', this.onMapDataTestConfigReady, this);
+    }
+
+    private onMapDataTestConfigReady() {
+        if (!this.map_data_test || !this.node?.isValid || this.mapDataTestLoaded) {
+            return;
+        }
+        if (MapModel.getInstance().showEditMapType === 0) {
+            return;
+        }
+        const testData = this.getMapDataTestPayload();
+        if (!testData) {
+            console.warn('[map_data_test] beifeng.json not found after ConfigLoadAll');
+            return;
+        }
+        MapModel.getInstance().showEditMapType = 1;
+        MapLoadMap.loadMapData(testData, this);
+        this.mapDataTestLoaded = true;
+        this.sendWebMapInfoIfChanged();
+        console.log('[map_data_test] loaded map from beifeng.json');
+    }
+
     private getBootMapDataForGridSize(): any | null {
         // 进入地图：优先使用服务器 map_detail 里的地图数据
         if (MapModel.getInstance().showEditMapType == 0) {
@@ -442,16 +484,9 @@ export class MapEditor extends Component {
             return null;
         }
 
-        // 编辑器测试模式：优先本地 MapData
+        // 编辑器测试模式：使用 beifeng.json
         if (this.map_data_test) {
-            const localRaw = sys.localStorage.getItem("MapData");
-            if (localRaw && localRaw.trim() !== "") {
-                try {
-                    return JSON.parse(localRaw);
-                } catch (e) {
-                    console.warn('[MapEditor] parse local MapData failed', e);
-                }
-            }
+            return this.getMapDataTestPayload();
         }
 
         // Web 编辑模式：使用外部注入 mapEditData
@@ -993,21 +1028,19 @@ export class MapEditor extends Component {
             return
         }
 
-        //编辑器进入，如果有编辑数据，显示之前编辑的内容
+        // 编辑器测试模式：从 beifeng.json 加载地图
         if (this.map_data_test) {
-            const localMapData = sys.localStorage.getItem("MapData");
-            if (localMapData && localMapData.trim() !== "") {
-                try {
-                    const data = JSON.parse(localMapData);
-                    MapModel.getInstance().showEditMapType = 1;
-                    MapLoadMap.loadMapData(data, this);
-
-                    this.sendWebMapInfoIfChanged();
-                    return;
-                } catch (e) {
-                    console.warn("[map_data_test] parse local MapData failed", e);
-                }
+            const testData = this.getMapDataTestPayload();
+            if (testData) {
+                MapModel.getInstance().showEditMapType = 1;
+                MapLoadMap.loadMapData(testData, this);
+                this.mapDataTestLoaded = true;
+                this.sendWebMapInfoIfChanged();
+                console.log('[map_data_test] loaded map from beifeng.json');
+                return;
             }
+            console.log('[map_data_test] waiting for beifeng.json (ConfigLoadAll)');
+            return;
         }
 
         //编辑器进入，如果有编辑数据，显示之前编辑的内容

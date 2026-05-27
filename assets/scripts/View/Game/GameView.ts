@@ -345,7 +345,7 @@ export class GameView extends Component {
         }
 
         this.selectedFarmPlot = {
-            farmIndex: Number(payload?.farmIndex) || 0,
+            farmIndex: Number.isFinite(Number(payload?.farmIndex)) ? Number(payload.farmIndex) : 0,
             plotIndex,
             farmId,
             plotNodeName: payload?.plotNodeName,
@@ -356,10 +356,32 @@ export class GameView extends Component {
         if (this.atNpc) {
             this.atNpc.active = false;
         }
+        this.refreshAllFarmChooseCells(farmId);
         if (this.farmNode) {
             this.farmNode.active = true;
         }
-        this.syncFarmChooseCellsFarmId(farmId);
+    }
+
+    /** 打开种子面板前：重设 farmId 并重新 load 图标（避免 Sprite 空 spriteFrame onEnable） */
+    private refreshAllFarmChooseCells(farmId: number | null) {
+        for (let i = 0; i < this.farmCells.length; i++) {
+            const node = this.farmCells[i];
+            if (!node?.isValid) {
+                continue;
+            }
+            const cell = node.getComponent(GameFarmChooseCell);
+            if (!cell) {
+                continue;
+            }
+            cell.setFarmId(farmId);
+            const itemId = Number((node as any)._farmItemId);
+            const seedKey = Number((node as any)._farmSeedKey);
+            if (!Number.isFinite(itemId) || itemId <= 0 || !Number.isFinite(seedKey)) {
+                continue;
+            }
+            const count = BagModel.getInstance().getItemCount(itemId);
+            cell.refreshNode(itemId, count, seedKey);
+        }
     }
 
     private syncFarmChooseCellsFarmId(farmId: number | null) {

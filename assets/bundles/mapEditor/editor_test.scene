@@ -1514,7 +1514,7 @@
     "sideDoorInsetX": 10,
     "enablePlacementDragOffset": true,
     "enableDecorStackPlacement": true,
-    "enableRoadIgnoreGridOccupancy": false,
+    "enableRoadIgnoreGridOccupancy": true,
     "animator": null,
     "mapGraphics": {
       "__id__": 37
@@ -6024,7 +6024,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": -654,
+      "y": -797,
       "z": 0
     },
     "_lrot": {
