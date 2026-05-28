@@ -16,8 +16,13 @@ export class GranaryItemCell extends Component {
     @property(Sprite)
     public prefabLoader: Sprite = null;
 
+    private showType
+    private showId
+
     /** @param type 0=basicSeeds 1=basicCrops；@param id 配置表 key */
     public refreshNode(type: number, id: number | string) {
+        this.showType = type
+        this.showId = id
         const configKey = String(id);
         const tableName = type === 0 ? 'basicSeeds' : 'basicCrops';
         const row = AppConst.JSONManager?.getItem?.(tableName, configKey) as Record<string, unknown> | null;
@@ -59,5 +64,9 @@ export class GranaryItemCell extends Component {
         if (this.numLabel) {
             this.numLabel.string = '';
         }
+    }
+
+    public onClick(){
+        EventSystem.send("OnClickGranaryItemCell" , {type : this.showType , id : this.showId})
     }
 }

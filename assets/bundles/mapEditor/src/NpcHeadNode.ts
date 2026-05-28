@@ -82,7 +82,7 @@ export class NpcHeadNode extends Component {
         console.log(url)
         if (!url) {
             this.lastIconUrl = '';
-            sprite.spriteFrame = null;
+            // sprite.spriteFrame = null;
             return;
         }
         if (url === this.lastIconUrl) {

@@ -1,6 +1,10 @@
 // 将此组件挂载到一个包含 Button 和 Sprite 的节点上
-import { _decorator, Component, Node, Sprite, SpriteFrame, Texture2D, ImageAsset, sys } from 'cc';
+import { _decorator, Component, Node, Sprite, SpriteFrame, Texture2D, ImageAsset, sys, UITransform } from 'cc';
 const { ccclass, property } = _decorator;
+
+/** 用户上传参考图最小宽高（像素） */
+export const MIN_UPLOAD_IMAGE_WIDTH = 240;
+export const MIN_UPLOAD_IMAGE_HEIGHT = 240;
 
 @ccclass('LoadLocalImage')
 export class LoadLocalImage extends Component {
@@ -12,6 +16,8 @@ export class LoadLocalImage extends Component {
 
     private input: HTMLInputElement = null;
     private lastDataUrl = "";
+    private lastImageWidth = 0;
+    private lastImageHeight = 0;
 
     /** 最近一次选中的图片 Data URL（供图生图接口使用） */
     public getSelectedDataUrl(): string {
@@ -20,6 +26,15 @@ export class LoadLocalImage extends Component {
 
     public hasSelectedImage(): boolean {
         return !!this.lastDataUrl;
+    }
+
+    /** 已选图且宽高均不小于 240 */
+    public meetsMinUploadSize(): boolean {
+        return (
+            !!this.lastDataUrl &&
+            this.lastImageWidth >= MIN_UPLOAD_IMAGE_WIDTH &&
+            this.lastImageHeight >= MIN_UPLOAD_IMAGE_HEIGHT
+        );
     }
 
     start() {
@@ -57,10 +72,26 @@ export class LoadLocalImage extends Component {
     }
 
     createSpriteFrameFromDataURL(dataURL: string) {
-        this.lastDataUrl = dataURL;
         const image = new Image();
         image.onload = () => {
-            if (!this.targetSprite?.isValid) return;
+            if (!this.targetSprite?.isValid) {
+                return;
+            }
+
+            const w = image.width;
+            const h = image.height;
+            if (w < MIN_UPLOAD_IMAGE_WIDTH || h < MIN_UPLOAD_IMAGE_HEIGHT) {
+                this.clearSelection();
+                EventSystem.send(
+                    "ShowTips",
+                    `上传图片不能小于${MIN_UPLOAD_IMAGE_WIDTH}×${MIN_UPLOAD_IMAGE_HEIGHT}`,
+                );
+                return;
+            }
+
+            this.lastDataUrl = dataURL;
+            this.lastImageWidth = w;
+            this.lastImageHeight = h;
 
             const imgAsset = new ImageAsset(image);
             const texture = new Texture2D();
@@ -70,7 +101,7 @@ export class LoadLocalImage extends Component {
             spriteFrame.texture = texture;
 
             this.targetSprite.spriteFrame = spriteFrame;
-            this.targetSprite.sizeMode = Sprite.SizeMode.TRIMMED;
+            this.fitSpriteInsideParent(w, h);
 
             if (this.nullShowNode) {
                 this.nullShowNode.active = false;
@@ -79,8 +110,51 @@ export class LoadLocalImage extends Component {
         };
         image.onerror = () => {
             console.error('[LoadLocalImage] 图片加载失败');
+            this.clearSelection();
         };
         image.src = dataURL;
+    }
+
+    /**
+     * 在父节点范围内等比缩放展示，宽高均不超过父节点 UITransform。
+     */
+    private fitSpriteInsideParent(imgW: number, imgH: number) {
+        const sprite = this.targetSprite;
+        if (!sprite?.isValid || imgW <= 0 || imgH <= 0) {
+            return;
+        }
+
+        let ui = sprite.getComponent(UITransform);
+        if (!ui) {
+            ui = sprite.node.addComponent(UITransform);
+        }
+
+        const parentUi = sprite.node.parent?.getComponent(UITransform);
+        let maxW = parentUi?.width ?? 0;
+        let maxH = parentUi?.height ?? 0;
+        if (maxW <= 0 || maxH <= 0) {
+            maxW = ui.width > 0 ? ui.width : 512;
+            maxH = ui.height > 0 ? ui.height : 512;
+        }
+
+        const scale = Math.min(maxW / imgW, maxH / imgH);
+        sprite.sizeMode = Sprite.SizeMode.CUSTOM;
+        ui.setContentSize(imgW * scale, imgH * scale);
+    }
+
+    private clearSelection() {
+        this.lastDataUrl = "";
+        this.lastImageWidth = 0;
+        this.lastImageHeight = 0;
+        if (this.targetSprite) {
+            this.targetSprite.spriteFrame = null;
+            if (this.targetSprite.node) {
+                this.targetSprite.node.active = false;
+            }
+        }
+        if (this.nullShowNode) {
+            this.nullShowNode.active = true;
+        }
     }
 
     onClick() {

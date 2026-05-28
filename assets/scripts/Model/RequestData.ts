@@ -3,6 +3,7 @@ import { MapModel } from "./MapModel";
 export module network {
     export enum ServerHttpCommand {
         COMMON_LOGIN = 1, // 登录
+        COMMON_REGISTER = 7,//注册
     }
 
     export enum ServerCode {

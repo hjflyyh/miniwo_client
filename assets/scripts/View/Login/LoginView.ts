@@ -2,13 +2,10 @@ import { _decorator, Component, EditBox, Node, WebView, sys } from 'cc';
 import { GoogleAuthManager } from '../../Manager/GoogleAuthManager';
 import { RoleModel } from '../../Model/RoleModel';
 import { network } from '../../Model/RequestData';
-import { HttpManager } from '../../Manager/HttpManager';
+import { HttpManager, LOGIN_NATIVE_DEFAULT_IP } from '../../Manager/HttpManager';
 import { AppConst } from '../../AppConst';
 import { MapModel } from '../../Model/MapModel';
 import { GenericSpritesheetAnimator } from '../../Utils/GenericSpritesheetAnimator';
-
-/** 与 onClickServer3 一致：原生 App（真机/模拟器）默认 HTTP / WS 入口 */
-const LOGIN_NATIVE_DEFAULT_IP = '115.190.225.83';
 
 const { ccclass, property } = _decorator;
 
@@ -20,6 +17,8 @@ export class LoginView extends Component {
 
     /** 邮箱登录：HTTP loginGame 进行中，需等本次请求结束后再允许下一次点击 */
     private loginMailPending = false;
+    /** 邮箱注册：HTTP register 进行中 */
+    private registerPending = false;
 
     @property(WebView)
     public webview: WebView;
@@ -30,6 +29,9 @@ export class LoginView extends Component {
     @property(Node)
     public mailNode;
 
+    @property(Node)
+    public mailRegisterNode;
+
     @property(EditBox)
     public mailEditBox
 
@@ -38,6 +40,15 @@ export class LoginView extends Component {
 
     @property(Node)
     public serverSelectNode
+
+    @property(EditBox)
+    public registerMail : EditBox
+
+    @property(EditBox)
+    public registerPWD : EditBox
+
+    @property(EditBox)
+    public registerPWDConfirm : EditBox
 
     @property(GenericSpritesheetAnimator)
     public animator: GenericSpritesheetAnimator;
@@ -49,6 +60,7 @@ export class LoginView extends Component {
         }
         this.firstNode.active = true
         this.mailNode.active = false
+        this.mailRegisterNode.active = false
         GoogleAuthManager.GetInstance().init()
         GoogleAuthManager.GetInstance().bindWebView(this.webview)
         window.addEventListener("message" , onMsg)
@@ -63,9 +75,8 @@ export class LoginView extends Component {
 
     private initHttpServerFromStorage() {
         if (sys.isNative) {
-            // this.applyHttpEndpoints(LOGIN_NATIVE_DEFAULT_IP , "c3a28e10a5be4672.natapp.cc");
-            // this.applyHttpEndpoints("192.168.30.109");
-            this.applyHttpEndpoints(LOGIN_NATIVE_DEFAULT_IP , LOGIN_NATIVE_DEFAULT_IP);
+            HttpManager.initNativeDefaultEndpoints();
+            this.persistHttpServer();
             return;
         }
         const defaultIp = "192.168.30.109";
@@ -147,9 +158,63 @@ export class LoginView extends Component {
         });
     }
 
+    onClickRegister(){
+        if (this.registerPending) {
+            return;
+        }
+
+        const email = (this.registerMail?.string || "").trim();
+        const password = this.registerPWD?.string || "";
+        const passwordConfirm = this.registerPWDConfirm?.string || "";
+
+        if (!email) {
+            EventSystem.send("ShowTips", "Please enter email");
+            return;
+        }
+        if (!password) {
+            EventSystem.send("ShowTips", "Please enter password");
+            return;
+        }
+        if (!passwordConfirm) {
+            EventSystem.send("ShowTips", "Please confirm password");
+            return;
+        }
+        if (password !== passwordConfirm) {
+            EventSystem.send("ShowTips", "Passwords do not match");
+            return;
+        }
+
+        this.registerPending = true;
+        const req = AppConst.HttpManager.sendPostHttp("register", JSON.stringify({
+            email,
+            loginType: 1,
+            token: password,
+            plantform: 0,
+        }));
+        Promise.resolve(req).then(
+            () => {},
+            () => {},
+        ).then(() => {
+            if (this.isValid) {
+                this.registerPending = false;
+            }
+        });
+    }
+
+    onOpenRegister(){
+        this.mailNode.active = false
+        this.mailRegisterNode.active = true        
+    }
+
+    onCloseMailRegister(){
+        this.mailNode.active = true
+        this.mailRegisterNode.active = false     
+    }
+
     onClickMailBack(){
         this.firstNode.active = true
         this.mailNode.active = false
+        this.mailRegisterNode.active = false
     }
 
     onLoginSuccess(){

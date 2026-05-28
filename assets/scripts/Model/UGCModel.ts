@@ -1,3 +1,4 @@
+import { sys } from "cc";
 import { AppConst } from "../AppConst";
 import { MapModel } from "./MapModel";
 import { RoleModel } from "./RoleModel";
@@ -336,6 +337,12 @@ export class UGCModel {
             } else {
                 this.npcList = [];
             }
+            const mapId = Number(
+                MapModel.getInstance().my_map_data?.id ?? this.mapData.id ?? data.mapId ?? 0,
+            );
+            if (mapId > 0) {
+                this.mergeNpcListFromLocal(mapId);
+            }
             EventSystem.send("OnRefreshUGCMapNpc")
         } else if (data.functionName == "creatorNpc") {
             // creatorNpc：统一壳 {success:true,data:{...,npc:{...}}}，这里收到的是 data.npc
@@ -557,6 +564,145 @@ export class UGCModel {
             const nid = n && (n.id != null ? n.id : n.npc_id);
             return Number(nid) === idNum;
         }) ?? null;
+    }
+
+    private npcListLocalStorageKey(mapId: number): string {
+        return `ugc_npc_list_map_${Math.floor(Number(mapId) || 0)}`;
+    }
+
+    /** 将当前 npcList 写入本地（按地图维度缓存立绘 URL 等） */
+    public saveNpcListToLocal(mapId?: number) {
+        const mid = Math.floor(
+            Number(mapId ?? MapModel.getInstance().my_map_data?.id ?? this.mapData.id ?? 0),
+        );
+        if (!Number.isFinite(mid) || mid <= 0) {
+            return;
+        }
+        try {
+            sys.localStorage.setItem(this.npcListLocalStorageKey(mid), JSON.stringify(this.npcList));
+        } catch (e) {
+            console.warn("[UGCModel] saveNpcListToLocal failed", e);
+        }
+    }
+
+    /** 拉取服务端列表后，合并本地已缓存的立绘 URL */
+    public mergeNpcListFromLocal(mapId: number) {
+        const mid = Math.floor(Number(mapId) || 0);
+        if (mid <= 0) {
+            return;
+        }
+        try {
+            const raw = sys.localStorage.getItem(this.npcListLocalStorageKey(mid));
+            if (!raw) {
+                return;
+            }
+            const cached = JSON.parse(raw);
+            if (!Array.isArray(cached)) {
+                return;
+            }
+            for (let i = 0; i < cached.length; i++) {
+                const cn = cached[i];
+                const idNum = Number(cn?.id ?? cn?.npc_id);
+                if (!Number.isFinite(idNum) || idNum <= 0) {
+                    continue;
+                }
+                const idx = this.npcList.findIndex((n: any) => {
+                    const nid = n && (n.id != null ? n.id : n.npc_id);
+                    return Number(nid) === idNum;
+                });
+                if (idx < 0) {
+                    continue;
+                }
+                const modelUrl = String(cn?.model_url ?? cn?.standee_url ?? cn?.portrait_url ?? "").trim();
+                if (modelUrl) {
+                    this.npcList[idx].model_url = modelUrl;
+                    this.npcList[idx].standee_url = String(cn?.standee_url ?? modelUrl).trim();
+                    this.npcList[idx].portrait_url = String(cn?.portrait_url ?? modelUrl).trim();
+                }
+            }
+        } catch (e) {
+            console.warn("[UGCModel] mergeNpcListFromLocal failed", e);
+        }
+    }
+
+    /**
+     * 立绘生成完成：更新内存 NPC 与本地缓存。
+     * model_url 为服务端 NPC 列表标准字段。
+     */
+    public applyStandeeUrlToNpc(npcId: number, standeeUrl: string, compositeNpcId?: string) {
+        const url = String(standeeUrl || "").trim();
+        if (!url) {
+            return;
+        }
+        const npc = this.getNpcById(npcId);
+        if (!npc) {
+            return;
+        }
+        npc.model_url = url;
+        npc.standee_url = url;
+        npc.portrait_url = url;
+        if (compositeNpcId) {
+            npc.composite_npc_id = String(compositeNpcId);
+            npc.reference_image_url = this.buildStandeePreviewPath(compositeNpcId);
+        }
+        this.saveNpcListToLocal();
+        EventSystem.send("OnRefreshUGCMapNpc");
+    }
+
+    /** 立绘预览路径，供序列帧生成 reference_image_url 使用 */
+    public buildStandeePreviewPath(compositeNpcId: string): string {
+        const key = String(compositeNpcId || "").trim();
+        if (!key) {
+            return "";
+        }
+        return `/api/npc/character/standee-preview/${key}`;
+    }
+
+    public getStandeeReferenceImageUrl(npcId: number): string {
+        const npc = this.getNpcById(npcId);
+        if (!npc) {
+            return "";
+        }
+        const stored = String(npc.reference_image_url ?? "").trim();
+        if (stored) {
+            return stored;
+        }
+        const composite = String(npc.composite_npc_id ?? "").trim();
+        if (composite) {
+            return this.buildStandeePreviewPath(composite);
+        }
+        const mapId = Number(
+            npc.map_id ?? MapModel.getInstance().my_map_data?.id ?? this.mapData.id ?? 0,
+        );
+        const nid = Number(npc.id ?? npc.npc_id ?? npcId);
+        if (mapId > 0 && nid > 0) {
+            return this.buildStandeePreviewPath(`${mapId}_${nid}`);
+        }
+        return "";
+    }
+
+    /** 根据立绘预览路径生成序列帧 → POST /api/npc/character/generate */
+    public generateNpcSpriteFrames(npcId: number, name: string, referenceImageUrl: string) {
+        const nid = this.resolveNpcIdForRequest(npcId);
+        if (nid == null) {
+            EventSystem.send("ShowTips", "NPC不存在");
+            return Promise.reject(new Error("NPC not found"));
+        }
+        const ref = String(referenceImageUrl || "").trim();
+        if (!ref) {
+            EventSystem.send("ShowTips", "立绘预览地址无效");
+            return Promise.reject(new Error("reference_image_url empty"));
+        }
+        return AppConst.HttpManager.sendPostHttpAny(
+            "api/npc/character/generate",
+            JSON.stringify({
+                token: this.token(),
+                name: String(name || ""),
+                npc_id: nid,
+                reference_image_url: ref,
+            }),
+            { silent: true },
+        );
     }
 
     private parseIdArray(maybe: any): number[] {

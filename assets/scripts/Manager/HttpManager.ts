@@ -1,6 +1,9 @@
-import { _decorator, Component, log, Node } from 'cc';
+import { _decorator, Component, log, sys } from 'cc';
 import { AppConst } from '../AppConst';
-const { ccclass, property } = _decorator;
+const { ccclass } = _decorator;
+
+/** 原生 App（真机/模拟器）默认 HTTP / WS 入口，与 LoginView 选服一致 */
+export const LOGIN_NATIVE_DEFAULT_IP = '115.190.225.83';
 
 @ccclass('HttpManager')
 export class HttpManager extends Component {
@@ -8,8 +11,92 @@ export class HttpManager extends Component {
     public static wsIpBase = "c3a28e10a5be4672.natapp.cc"
     public static baseUrl = "http://" + HttpManager.ipBase + ":8080"
     public static chatBaseUrl = "http://" + HttpManager.ipBase + ":7350"
+
+    /** 原生端写入默认服地址（LoginView 与启动探测共用） */
+    public static initNativeDefaultEndpoints() {
+        HttpManager.ipBase = LOGIN_NATIVE_DEFAULT_IP;
+        HttpManager.baseUrl = `http://${LOGIN_NATIVE_DEFAULT_IP}:8080`;
+        HttpManager.chatBaseUrl = `http://${LOGIN_NATIVE_DEFAULT_IP}:7350`;
+        HttpManager.wsIpBase = `${LOGIN_NATIVE_DEFAULT_IP}:7350`;
+    }
+
+    /**
+     * iOS 首次联网会弹出系统「无线局域网与蜂窝数据」选项。
+     * 启动时主动探测，避免等到点击登录才出现。
+     */
+    public probeNetworkAccessOnLaunch() {
+        const url = HttpManager.baseUrl;
+        if (!url) {
+            return;
+        }
+        fetch(url, { method: "GET" }).catch(() => undefined);
+    }
+
     start() {
-        AppConst.HttpManager = this
+        AppConst.HttpManager = this;
+        if (sys.isNative && sys.platform === sys.Platform.IOS) {
+            HttpManager.initNativeDefaultEndpoints();
+            this.probeNetworkAccessOnLaunch();
+        }
+    }
+
+    /**
+     * 从 fetch 抛出的 Error 中解析服务端错误文案。
+     * 例：POST register HTTP 400: {"error":"密码不能为空且至少6位"}
+     */
+    public static resolveErrorTip(err: unknown, fallback = "网络请求失败，请稍后重试"): string {
+        const raw = err instanceof Error ? err.message : String(err ?? "");
+        const fromBody = HttpManager.parseErrorBodyFromHttpMessage(raw);
+        if (fromBody) {
+            return fromBody;
+        }
+        if (/HTTP\s+\d+:/i.test(raw)) {
+            return fallback;
+        }
+        const trimmed = raw.trim();
+        return trimmed || fallback;
+    }
+
+    private static parseErrorBodyFromHttpMessage(message: string): string {
+        const text = String(message || "");
+        const httpBodyMatch = text.match(/HTTP\s+\d+:\s*([\s\S]+)$/i);
+        const candidates = httpBodyMatch ? [httpBodyMatch[1].trim()] : [text.trim()];
+        for (const candidate of candidates) {
+            const parsed = HttpManager.extractErrorFieldFromJson(candidate);
+            if (parsed) {
+                return parsed;
+            }
+        }
+        return "";
+    }
+
+    private static extractErrorFieldFromJson(jsonText: string): string {
+        if (!jsonText) {
+            return "";
+        }
+        try {
+            const body = JSON.parse(jsonText);
+            if (body == null || typeof body !== "object") {
+                return "";
+            }
+            const fields = ["error", "message", "messager"];
+            for (const key of fields) {
+                const val = body[key];
+                if (val != null && String(val).trim()) {
+                    return String(val).trim();
+                }
+            }
+        } catch {
+            // 非 JSON 响应体
+        }
+        return "";
+    }
+
+    private handleRequestError(err: unknown) {
+        const error = err instanceof Error ? err : new Error(String(err));
+        EventSystem.send("ShowTips", HttpManager.resolveErrorTip(error));
+        EventSystem.send("HttpError", error);
+        throw error;
     }
 
     public sendPostHttp(functionName , data){
@@ -45,12 +132,7 @@ export class HttpManager extends Component {
             }
             return data;
         })
-        .catch((err) => {
-            const error = err instanceof Error ? err : new Error(String(err));
-            EventSystem.send("ShowTips", "网络请求失败，请稍后重试");
-            EventSystem.send("HttpError", error);
-            throw error;
-        })
+        .catch((err) => this.handleRequestError(err))
         request.catch(() => undefined)
         return request
     }
@@ -90,12 +172,7 @@ export class HttpManager extends Component {
                 EventSystem.send("HttpMessage", { functionName, raw: resp });
                 return resp;
             })
-            .catch((err) => {
-                const error = err instanceof Error ? err : new Error(String(err));
-                EventSystem.send("ShowTips", "网络请求失败，请稍后重试");
-                EventSystem.send("HttpError", error);
-                throw error;
-            });
+            .catch((err) => this.handleRequestError(err));
         request.catch(() => undefined)
         return request
     }
@@ -131,12 +208,7 @@ export class HttpManager extends Component {
                 EventSystem.send("HttpMessage", { functionName: normalized, raw: resp });
                 return resp;
             })
-            .catch((err) => {
-                const error = err instanceof Error ? err : new Error(String(err));
-                EventSystem.send("ShowTips", "网络请求失败，请稍后重试");
-                EventSystem.send("HttpError", error);
-                throw error;
-            });
+            .catch((err) => this.handleRequestError(err));
         request.catch(() => undefined);
         return request;
     }

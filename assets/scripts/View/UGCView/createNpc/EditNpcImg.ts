@@ -1,8 +1,14 @@
-import { _decorator, Component, EditBox, ImageAsset, instantiate, Node, Sprite, SpriteFrame, Texture2D } from 'cc';
+import { _decorator, Component, EditBox, ImageAsset, instantiate, Node, Sprite, SpriteFrame, Texture2D, UITransform } from 'cc';
+import { AppConst } from '../../../AppConst';
 import { UGCModel } from '../../../Model/UGCModel';
 import { CreateNpcNameCell } from '../CreateNpcNameCell';
-import { LoadLocalImage } from '../../../Utils/LoadLocalImage';
+import {
+    LoadLocalImage,
+    MIN_UPLOAD_IMAGE_HEIGHT,
+    MIN_UPLOAD_IMAGE_WIDTH,
+} from '../../../Utils/LoadLocalImage';
 import { Utils } from '../../../Utils/Utils';
+import { HttpManager } from '../../../Manager/HttpManager';
 const { ccclass, property } = _decorator;
 
 /** 立绘任务轮询间隔（毫秒） */
@@ -32,6 +38,9 @@ export class EditNpcImg extends Component {
     @property(Node)
     public waitNode : Node = null;
 
+    @property(Node)
+    public confirmNode : Node = null
+
     public chooseNpcId = 0;
 
     start() {
@@ -39,7 +48,12 @@ export class EditNpcImg extends Component {
             this.localImageLoader = this.node.getComponentInChildren(LoadLocalImage);
         }
 
-        this.waitNode.active = false;
+        if (this.waitNode) {
+            this.waitNode.active = false;
+        }
+        if (this.confirmNode) {
+            this.confirmNode.active = false;
+        }
 
         const openParam = this.getOpenParam();
         console.log(openParam);
@@ -52,10 +66,20 @@ export class EditNpcImg extends Component {
         if (portraitUrl) {
             this.displayPortraitUrl(portraitUrl);
         }
+
+        EventSystem.addListent("CreateNpcNameCell", this.onChooseNpcTab, this);
     }
 
     private getOpenParam(): any {
         return (this.node as any)["_openParam"] || {};
+    }
+
+    private isUploadImageSizeValid(): boolean {
+        const loader = this.localImageLoader;
+        if (!loader?.hasSelectedImage()) {
+            return false;
+        }
+        return loader.meetsMinUploadSize();
     }
 
     private getNpcName(): string {
@@ -112,17 +136,87 @@ export class EditNpcImg extends Component {
         });
     }
 
+    onClickNext(){
+        if (!this.chooseNpcId) {
+            EventSystem.send("ShowTips", "请先选择NPC");
+            return;
+        }
+        if (!this.hasNpcStandeePortrait(this.chooseNpcId)) {
+            EventSystem.send("ShowTips", "请先生成NPC立绘");
+            return;
+        }
+        if (this.confirmNode) {
+            this.confirmNode.active = true;
+        }
+    }
+
+    onClickCloseNext(){
+        this.confirmNode.active = false
+    }
+
+    onClickConfirm(){
+        if (this.confirmNode) {
+            this.confirmNode.active = false;
+        }
+        if (!this.chooseNpcId) {
+            EventSystem.send("ShowTips", "请先选择NPC");
+            return;
+        }
+        if (!this.hasNpcStandeePortrait(this.chooseNpcId)) {
+            EventSystem.send("ShowTips", "请先生成NPC立绘");
+            return;
+        }
+
+        const ugc = UGCModel.getInstance();
+        const npc = ugc.getNpcById(this.chooseNpcId);
+        if (!npc) {
+            EventSystem.send("ShowTips", "NPC不存在");
+            return;
+        }
+
+        const name = this.getNpcName();
+        const referenceImageUrl = ugc.getStandeeReferenceImageUrl(this.chooseNpcId);
+        if (!referenceImageUrl) {
+            EventSystem.send("ShowTips", "立绘预览地址无效");
+            return;
+        }
+
+        const mapName = ugc.mapData?.map_name || "";
+        const tipsPayload = Object.assign({}, npc, this.getOpenParam(), { mapName });
+
+        ugc.generateNpcSpriteFrames(this.chooseNpcId, name, referenceImageUrl).then((resp: any) => {
+            if (resp?.ok === false) {
+                EventSystem.send("ShowTips", String(resp?.message || resp?.error || "序列帧生成失败"));
+                return;
+            }
+            if (resp?.message) {
+                EventSystem.send("ShowTips", String(resp.message));
+
+                AppConst.PanelManager.CloseViewByUrl("res/View/CreateMap/EditNpcImg");
+                AppConst.PanelManager.CloseViewByUrl("res/View/CreateMap/CreateNpc");
+                AppConst.PanelManager.openView("res/View/CreateMap/NPCTips", tipsPayload);                
+            }
+        }).catch(() => undefined);
+    }
+
     /** 模式 A：本机参考图图生图 */
     onClickAIImg(){
         if (!this.chooseNpcId) {
             EventSystem.send("ShowTips", "请先选择NPC");
             return;
         }
-        const dataUrl = this.localImageLoader?.getSelectedDataUrl() || "";
-        if (!dataUrl) {
+        if (!this.localImageLoader?.hasSelectedImage()) {
             EventSystem.send("ShowTips", "请先上传参考图");
             return;
         }
+        if (!this.isUploadImageSizeValid()) {
+            EventSystem.send(
+                "ShowTips",
+                `上传图片不能小于${MIN_UPLOAD_IMAGE_WIDTH}×${MIN_UPLOAD_IMAGE_HEIGHT}`,
+            );
+            return;
+        }
+        const dataUrl = this.localImageLoader.getSelectedDataUrl();
         const name = this.getNpcName();
         if (!name) {
             EventSystem.send("ShowTips", "NPC 名称无效");
@@ -178,9 +272,12 @@ export class EditNpcImg extends Component {
         if (npc) {
             npc.portrait_url = "";
             npc.model_url = "";
+            npc.standee_url = "";
         }
         openParam.portrait_url = "";
         openParam.model_url = "";
+        openParam.standee_url = "";
+        UGCModel.getInstance().saveNpcListToLocal();
         if (this.lihui) {
             this.lihui.spriteFrame = null;
         }
@@ -189,6 +286,30 @@ export class EditNpcImg extends Component {
     onDestroy() {
         this.standeePollAborted = true;
         this.stopStandeePolling();
+        EventSystem.remove(this);
+    }
+
+    private onChooseNpcTab(npcId: number) {
+        const id = Number(npcId);
+        if (!Number.isFinite(id) || id <= 0) {
+            return;
+        }
+        this.chooseNpcId = id;
+        this.refreshTabNpc();
+        const npc = UGCModel.getInstance().getNpcById(id);
+        const openParam = this.getOpenParam();
+        if (openParam) {
+            openParam.id = id;
+        }
+        if (this.editBox) {
+            this.editBox.string = String(npc?.appearance ?? openParam?.appearance ?? "");
+        }
+        const portraitUrl = this.extractPortraitUrlFromNpc(npc ?? openParam);
+        if (portraitUrl) {
+            this.displayPortraitUrl(portraitUrl);
+        } else if (this.lihui) {
+            this.lihui.spriteFrame = null;
+        }
     }
 
     private beginPortraitGeneration() {
@@ -295,15 +416,31 @@ export class EditNpcImg extends Component {
         }
     }
 
-    /** 轮询完成：暂只取 preview_url 展示 */
+    /** 轮询完成：使用 result.standee_url 刷新立绘 */
     private onStandeeTaskCompleted(resp: any) {
-        const previewUrl = String(resp?.result?.preview_url ?? "").trim();
-        if (previewUrl) {
-            this.displayPortraitUrl(previewUrl);
-            this.savePortraitToNpc(previewUrl);
+        const standeeUrl = this.extractStandeeUrlFromResponse(resp);
+        if (standeeUrl) {
+            const compositeNpcId = String(resp?.result?.npc_id ?? "").trim();
+            UGCModel.getInstance().applyStandeeUrlToNpc(
+                this.chooseNpcId,
+                standeeUrl,
+                compositeNpcId || undefined,
+            );
+            this.syncOpenParamPortrait(standeeUrl);
+            this.displayPortraitUrl(standeeUrl);
             return;
         }
         this.onPortraitGenerated(resp);
+    }
+
+    private extractStandeeUrlFromResponse(resp: any): string {
+        const result = resp?.result ?? resp?.data?.result ?? resp?.data;
+        return String(
+            result?.standee_url ??
+            result?.preview_url ??
+            resp?.standee_url ??
+            ""
+        ).trim();
     }
 
     private onPortraitGenerated(resp: any) {
@@ -322,8 +459,9 @@ export class EditNpcImg extends Component {
         }
 
         if (url) {
+            UGCModel.getInstance().applyStandeeUrlToNpc(this.chooseNpcId, url);
+            this.syncOpenParamPortrait(url);
             this.displayPortraitUrl(url);
-            this.savePortraitToNpc(url);
         } else if (dataUrl) {
             this.displayPortraitDataUrl(dataUrl);
         }
@@ -332,10 +470,13 @@ export class EditNpcImg extends Component {
     private extractPortraitFromResponse(resp: any): { url?: string; dataUrl?: string } {
         const data = resp?.data ?? resp;
         const url = String(
+            data?.standee_url ??
+            data?.result?.standee_url ??
             data?.portrait_url ??
             data?.image_url ??
             data?.model_url ??
             data?.url ??
+            resp?.result?.standee_url ??
             resp?.portrait_url ??
             ""
         ).trim();
@@ -360,20 +501,89 @@ export class EditNpcImg extends Component {
     private extractPortraitUrlFromNpc(npc: any): string {
         if (!npc) return "";
         return String(
-            npc.portrait_url ?? npc.model_url ?? npc.image_url ?? ""
+            npc.model_url ?? npc.standee_url ?? npc.portrait_url ?? npc.image_url ?? ""
         ).trim();
     }
 
+    /** 是否已生成立绘（以 model_url / standee_url 等为准） */
+    private hasNpcStandeePortrait(npcId?: number): boolean {
+        const id = npcId ?? this.chooseNpcId;
+        if (!id) {
+            return false;
+        }
+        const npc = UGCModel.getInstance().getNpcById(id);
+        return this.extractPortraitUrlFromNpc(npc ?? this.getOpenParam()).length > 0;
+    }
+
+    private syncOpenParamPortrait(url: string) {
+        const openParam = this.getOpenParam();
+        if (!openParam) {
+            return;
+        }
+        openParam.model_url = url;
+        openParam.standee_url = url;
+        openParam.portrait_url = url;
+    }
+
+    private appendCacheBust(url: string): string {
+        const sep = url.includes("?") ? "&" : "?";
+        return `${url}${sep}_t=${Date.now()}`;
+    }
+
+    private resolveRemoteImageUrl(url: string): string {
+        const raw = String(url || "").trim();
+        if (!raw) {
+            return "";
+        }
+        if (raw.startsWith("http://") || raw.startsWith("https://") || raw.startsWith("data:")) {
+            return raw;
+        }
+        return HttpManager.baseUrl + (raw.startsWith("/") ? raw : `/${raw}`);
+    }
+
     private displayPortraitUrl(url: string) {
-        if (!url || !this.lihui) return;
-        Utils.loadCover(url, this.lihui);
+        if (!url || !this.lihui?.isValid) {
+            return;
+        }
+        this.lihui.enabled = true;
+        const fullUrl = this.appendCacheBust(this.resolveRemoteImageUrl(url));
+        const image = new Image();
+        image.crossOrigin = "anonymous";
+        image.onload = () => {
+            if (!this.lihui?.isValid) {
+                return;
+            }
+            const imgAsset = new ImageAsset(image);
+            const texture = new Texture2D();
+            texture.image = imgAsset;
+            const spriteFrame = new SpriteFrame();
+            spriteFrame.texture = texture;
+            this.lihui.spriteFrame = spriteFrame;
+            this.lihui.sizeMode = Sprite.SizeMode.TRIMMED;
+            const ui = this.lihui.getComponent(UITransform);
+            if (ui && imgAsset.width > 0 && imgAsset.height > 0) {
+                const maxW = ui.width > 0 ? ui.width : 512;
+                const maxH = ui.height > 0 ? ui.height : 512;
+                const scale = Math.min(maxW / imgAsset.width, maxH / imgAsset.height, 1);
+                ui.setContentSize(imgAsset.width * scale, imgAsset.height * scale);
+            }
+        };
+        image.onerror = () => {
+            console.warn("[EditNpcImg] 立绘图 Image 加载失败，尝试 loadCover", fullUrl);
+            Utils.loadCover(fullUrl, this.lihui);
+        };
+        image.src = fullUrl;
     }
 
     private displayPortraitDataUrl(dataURL: string) {
-        if (!dataURL || !this.lihui?.isValid) return;
+        if (!dataURL || !this.lihui?.isValid) {
+            return;
+        }
         const image = new Image();
         image.onload = () => {
-            if (!this.lihui?.isValid) return;
+            if (!this.lihui?.isValid) {
+                return;
+            }
             const imgAsset = new ImageAsset(image);
             const texture = new Texture2D();
             texture.image = imgAsset;
@@ -388,15 +598,4 @@ export class EditNpcImg extends Component {
         image.src = dataURL;
     }
 
-    private savePortraitToNpc(url: string) {
-        const npc = UGCModel.getInstance().getNpcById(this.chooseNpcId);
-        if (!npc) return;
-        npc.model_url = url;
-        npc.portrait_url = url;
-        const openParam = this.getOpenParam();
-        if (openParam) {
-            openParam.model_url = url;
-            openParam.portrait_url = url;
-        }
-    }
 }

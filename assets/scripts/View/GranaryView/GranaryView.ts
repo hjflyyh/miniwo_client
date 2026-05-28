@@ -1,7 +1,8 @@
-import { _decorator, Color, Component, instantiate, Label, Layout, Node, ScrollView } from 'cc';
+import { _decorator, Color, Component, instantiate, Label, Layout, Node, resources, ScrollView, Sprite, SpriteFrame } from 'cc';
 import { AppConst } from '../../AppConst';
 import { GranaryItemCell } from './GranaryItemCell';
 import { GranaryStarCell } from './GranaryStarCell';
+import { getBasicSeedMatureSpriteResourcePath } from '../../Model/Farm/FarmSeedVisual';
 const { ccclass, property } = _decorator;
 
 type GranaryListRow = {
@@ -30,6 +31,24 @@ export class GranaryView extends Component {
     @property(Node)
     public starodeCell: Node = null;
 
+    @property(Node)
+    public tipNode : Node = null;
+
+    @property(Sprite)
+    public tipIcon : Sprite = null;
+
+    @property(Label)
+    public tipTime : Label = null;    
+
+     @property(Label)
+    public tipPrice : Label = null;       
+
+    @property(Label)
+    public tipQuailty : Label = null;       
+
+     @property(Label)
+    public tipName : Label = null;    
+
     /** item 列表 content 下的动态格子 */
     public showItems: Node[] = [];
 
@@ -53,7 +72,38 @@ export class GranaryView extends Component {
     }
 
     start() {
+        this.tipNode.active = false
         this.refrehsTab();
+
+        EventSystem.addListent("OnClickGranaryItemCell" , this.OnClickItemCell , this)
+    }
+
+    private OnClickItemCell(data){
+        this.openTips(data["type"] , data["id"])
+    }
+
+    public closeTips(){
+        this.tipNode.active = false
+    }
+
+    private openTips(type , id){
+        this.tipNode.active = true
+        let cfgCrops = AppConst.JSONManager.getItem("basicCrops" , id)
+        let cfgSeed = AppConst.JSONManager.getItem("basicSeeds" , id)
+        let seedItemId = cfgSeed["item_id"]
+        let url = type == 0 ? `UITexture/itemIcon/${seedItemId}/spriteFrame` : getBasicSeedMatureSpriteResourcePath(id + "")
+        let _this = this
+        resources.load(url, SpriteFrame, (err, sf) => {
+            _this.tipIcon.spriteFrame = sf;
+        });        
+        this.tipTime.string = cfgSeed["growth_time"]
+        this.tipPrice.string = cfgCrops["base_crop_price"]
+        this.tipQuailty.string = cfgCrops["correspondence_relation"]
+        if(type == 0){
+            this.tipName.string = cfgSeed["crop_name"]
+        }else if(type == 1){
+            this.tipName.string = cfgCrops["crop_name"]
+        }
     }
 
     /** itemNodeContent / starodeContent 可绑 ScrollView 根或 content，统一解析 */

@@ -516,7 +516,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 194.4140625,
+      "width": 136.12060546875,
       "height": 69.3
     },
     "_anchorPoint": {
@@ -552,7 +552,7 @@
       "b": 0,
       "a": 255
     },
-    "_string": "MY WORLD",
+    "_string": "MY NPC",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 35,

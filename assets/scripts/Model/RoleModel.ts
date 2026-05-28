@@ -217,7 +217,7 @@ export class RoleModel {
     }
 
     private OnHttpMessage(data) {
-        if (data.cmd == network.ServerHttpCommand.COMMON_LOGIN) {
+        if (data.cmd == network.ServerHttpCommand.COMMON_LOGIN || data.cmd == network.ServerHttpCommand.COMMON_REGISTER) {
             console.log("-----------data:")
             console.log(data.nakama_token)
             this.isForceLogoutHandling = false;
