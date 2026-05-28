@@ -632,6 +632,10 @@ export class GameView extends Component {
         }
     }
 
+    public onClickWork(){
+        AppConst.PanelManager.openView("res/View/NpcWork/NpcWorkView" , null , null , null , this.UI)
+    }
+
     public onClickChat(){
         if(this.editBox.string != ""){
             MapChatManager.instance.sendMapChat(this.editBox.string)

@@ -182,21 +182,44 @@ export class EditNpcImg extends Component {
         }
 
         const mapName = ugc.mapData?.map_name || "";
-        const tipsPayload = Object.assign({}, npc, this.getOpenParam(), { mapName });
 
         ugc.generateNpcSpriteFrames(this.chooseNpcId, name, referenceImageUrl).then((resp: any) => {
-            if (resp?.ok === false) {
+            if (!this.isSpriteFramesGenerateSuccess(resp)) {
                 EventSystem.send("ShowTips", String(resp?.message || resp?.error || "序列帧生成失败"));
                 return;
             }
+
+            ugc.setNpcSpriteGeneratingStatus(this.chooseNpcId, 1);
+
+            const updatedNpc = ugc.getNpcById(this.chooseNpcId) ?? npc;
+            const tipsPayload = Object.assign(
+                {},
+                updatedNpc,
+                this.getOpenParam(),
+                { mapName, sprite_generating_status: 1 },
+            );
+
             if (resp?.message) {
                 EventSystem.send("ShowTips", String(resp.message));
-
-                AppConst.PanelManager.CloseViewByUrl("res/View/CreateMap/EditNpcImg");
-                AppConst.PanelManager.CloseViewByUrl("res/View/CreateMap/CreateNpc");
-                AppConst.PanelManager.openView("res/View/CreateMap/NPCTips", tipsPayload);                
             }
+
+            AppConst.PanelManager.CloseViewByUrl("res/View/CreateMap/EditNpcImg");
+            AppConst.PanelManager.CloseViewByUrl("res/View/CreateMap/CreateNpc");
+            AppConst.PanelManager.openView("res/View/CreateMap/NPCTips", tipsPayload);
         }).catch(() => undefined);
+    }
+
+    private isSpriteFramesGenerateSuccess(resp: any): boolean {
+        if (!resp || resp.error) {
+            return false;
+        }
+        if (resp.ok === false || resp.success === false) {
+            return false;
+        }
+        if (resp.ok === true || resp.success === true) {
+            return true;
+        }
+        return !!String(resp?.message ?? "").trim();
     }
 
     /** 模式 A：本机参考图图生图 */

@@ -172,7 +172,9 @@ export class HttpManager extends Component {
                 EventSystem.send("HttpMessage", { functionName, raw: resp });
                 return resp;
             })
-            .catch((err) => this.handleRequestError(err));
+            .catch((err) => {
+                this.handleRequestError(err)
+            });
         request.catch(() => undefined)
         return request
     }

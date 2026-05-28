@@ -66,6 +66,9 @@ export class UGCModel {
     /** 登录回包里的热门 NPC 列表：data.daily_hot_npc_list */
     public dailyHotNpcList: any[] = [];
 
+    /** 个人全部 NPC（含 work_status），来自 listMyNpcs */
+    public myNpcList: any[] = [];
+
     public init() {
         EventSystem.addListent("HttpMessage", this.OnHttpMessage, this);
     }
@@ -314,6 +317,13 @@ export class UGCModel {
             } else {
                 this.dailyHotNpcList = [];
             }
+            this.myNpcList = [];
+            for(let d = 0 ; d < this.dailyHotNpcList.length ; d++){
+                if(this.dailyHotNpcList[d].player_id && this.dailyHotNpcList[d].player_id == RoleModel.getInstance().playerId){
+                    this.myNpcList.push(this.dailyHotNpcList[d])
+                }
+            }
+            console.log(this.myNpcList)
             EventSystem.send("OnRefreshDailyHotNpcList", this.dailyHotNpcList);
             return;
         }
@@ -344,7 +354,14 @@ export class UGCModel {
                 this.mergeNpcListFromLocal(mapId);
             }
             EventSystem.send("OnRefreshUGCMapNpc")
-        } else if (data.functionName == "creatorNpc") {
+        } else if (data.functionName == "listMyNpcs") {
+            const list = data;
+            this.myNpcList = Array.isArray(list) ? list : [];
+            EventSystem.send("OnRefreshMyNpcList", this.myNpcList);
+        } else if(data.functionName == "listGeneratedNpcs"){
+            const list = data;
+            EventSystem.send("OnRefreshGeneratedMyNpcList", list);
+        }else if (data.functionName == "creatorNpc") {
             // creatorNpc：统一壳 {success:true,data:{...,npc:{...}}}，这里收到的是 data.npc
             const npc = data;
             if (npc) {
@@ -485,6 +502,14 @@ export class UGCModel {
         )
     }
 
+    /** 获取当前玩家全部 NPC（含数据库 work_status） */
+    public listGeneratedNpcs() {
+        AppConst.HttpManager.sendPostHttp(
+            "listGeneratedNpcs",
+            JSON.stringify({ token: this.token() }),
+        );
+    }
+
     //#### updateNpcById
     public updateNpcById(mapId , npcId , name , sex , mbti , renshe , background , hobbies){
         AppConst.HttpManager.sendPostHttp(
@@ -564,6 +589,32 @@ export class UGCModel {
             const nid = n && (n.id != null ? n.id : n.npc_id);
             return Number(nid) === idNum;
         }) ?? null;
+    }
+
+    private patchNpcInList(list: any[], npcId: number, patch: Record<string, unknown>): boolean {
+        const idNum = Number(npcId);
+        if (!Array.isArray(list) || !Number.isFinite(idNum) || idNum <= 0) {
+            return false;
+        }
+        for (let i = 0; i < list.length; i++) {
+            const n = list[i];
+            const nid = Number(n?.id ?? n?.npc_id);
+            if (nid === idNum) {
+                Object.assign(list[i], patch);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** 序列帧生成任务已提交：同步 npcList / myNpcList 的 sprite_generating_status */
+    public setNpcSpriteGeneratingStatus(npcId: number, status: number) {
+        const patch = { sprite_generating_status: Math.floor(Number(status) || 0) };
+        this.patchNpcInList(this.npcList, npcId, patch);
+        this.patchNpcInList(this.myNpcList, npcId, patch);
+        this.saveNpcListToLocal();
+        EventSystem.send("OnRefreshUGCMapNpc");
+        EventSystem.send("OnRefreshMyNpcList", this.myNpcList);
     }
 
     private npcListLocalStorageKey(mapId: number): string {
@@ -697,9 +748,7 @@ export class UGCModel {
             "api/npc/character/generate",
             JSON.stringify({
                 token: this.token(),
-                name: String(name || ""),
                 npc_id: nid,
-                reference_image_url: ref,
             }),
             { silent: true },
         );
