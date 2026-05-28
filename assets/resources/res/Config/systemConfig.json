@@ -153,7 +153,7 @@
   },
   "40": {
     "function": "派遣消耗",
-    "configuration": "102_100#102_200"
+    "configuration": "100#200"
   },
   "41": {
     "function": "探索时长",
