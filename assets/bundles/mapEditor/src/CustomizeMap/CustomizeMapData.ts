@@ -7,6 +7,14 @@ import { MapNpc } from '../MapNpc';
 import { NpcHeadNode } from '../NpcHeadNode';
 const { ccclass, property } = _decorator;
 
+/** 服务端下发的 NPC 序列帧动作 URL */
+export interface NpcSpriteAnimations {
+    idle_url?: string;
+    walking_left_url?: string;
+    walking_up_url?: string;
+    walking_down_url?: string;
+}
+
 @ccclass('CustomizeMapData')
 export class CustomizeMapData extends Component {
     @property(MapEditor)
@@ -14,6 +22,8 @@ export class CustomizeMapData extends Component {
 
     npcNodes: Record<string, MapNpc> = {}
     npcDebugTiles: Record<string, NpcDebugTileData> = {}
+    /** npcId → 各方向序列帧条带图 URL */
+    private npcSpriteAnimations: Record<string, NpcSpriteAnimations> = {}
     private npcTileCoordMode: 'raw' | 'flipY' | 'oneBased' | 'oneBasedFlipY' = 'raw';
 
     protected onLoad(): void {
@@ -88,7 +98,30 @@ export class CustomizeMapData extends Component {
         npcHeadNode.setNpcId(npcId, newNpc)
         npcHeadNode.refreshNpcIconFromMap()
 
+        const cachedAnims = this.getNpcSpriteAnimations(npcId);
+        if (cachedAnims) {
+            mapNpc.setSpriteAnimations(cachedAnims);
+        }
+
         return mapNpc
+    }
+
+    public setNpcSpriteAnimations(npcId: string | number, anims: NpcSpriteAnimations | null) {
+        const key = String(npcId);
+        if (!anims) {
+            delete this.npcSpriteAnimations[key];
+            return;
+        }
+        this.npcSpriteAnimations[key] = { ...anims };
+        const npc = this.npcNodes[key];
+        if (npc) {
+            npc.setSpriteAnimations(this.npcSpriteAnimations[key]);
+        }
+    }
+
+    public getNpcSpriteAnimations(npcId: string | number): NpcSpriteAnimations | null {
+        const key = String(npcId);
+        return this.npcSpriteAnimations[key] ?? null;
     }
 
     private applyTileCoordMode(mode: 'raw' | 'flipY' | 'oneBased' | 'oneBasedFlipY', rawX: number, rawY: number): Vec2 {
@@ -185,36 +218,38 @@ export class CustomizeMapData extends Component {
                 // this.npcDebugTiles = {}
                 this.npcTileCoordMode = 'raw';
                 let npcs = data.payload.npcs
-                for(let n = 0 ;n < npcs.length ; n++){
-                    let npcId = data.payload.npcs[n].id
-                    
-                    // if(!this.npcNodes[npcId]){
-                    //     let mapNpc = this.AddNpc(npcId)
+                for (let n = 0; n < npcs.length; n++) {
+                    const npcEntry = npcs[n];
+                    const npcId = npcEntry.id;
+                    if (npcEntry.sprite_animations != null) {
+                        this.setNpcSpriteAnimations(npcId, npcEntry.sprite_animations);
+                    }
+                    if (!this.npcNodes[npcId]) {
+                        const mapNpc = this.AddNpc(npcId);
 
-                    //     let x = data.payload.npcs[n].x
-                    //     let y = data.payload.npcs[n].y
-                    //     const npcLocal = this.parseServerPos(x ,y)
-                    //     if (!npcLocal) {
-                    //         continue;
-                    //     }
-                    //     this.updateNpcDebugTileCache(npcs[n], npcLocal);
-    
-                    //     mapNpc.node.x = npcLocal.x
-                    //     mapNpc.node.y = npcLocal.y
-    
-                    //     mapNpc.onServerMove({
-                    //         x: npcLocal.x,
-                    //         y: npcLocal.y,
-                    //         tile_x: Number(npcs[n].tile_x),
-                    //         tile_y: Number(npcs[n].tile_y),
-                    //         target_tile_x: Number(npcs[n].target_tile_x),
-                    //         target_tile_y: Number(npcs[n].target_tile_y),
-                    //         timestamp: Number(npcs[n].timestamp ?? npcs[n].ts ?? data.payload.timestamp ?? serverTs ?? globalNowMs),
-                    //     });
-    
-                    //     this.npcNodes[npcId] = mapNpc
-                    // }
+                        const x = npcEntry.x;
+                        const y = npcEntry.y;
+                        const npcLocal = this.parseServerPos(x, y);
+                        if (!npcLocal) {
+                            continue;
+                        }
+                        this.updateNpcDebugTileCache(npcEntry, npcLocal);
 
+                        mapNpc.node.x = npcLocal.x;
+                        mapNpc.node.y = npcLocal.y;
+
+                        mapNpc.onServerMove({
+                            x: npcLocal.x,
+                            y: npcLocal.y,
+                            tile_x: Number(npcEntry.tile_x),
+                            tile_y: Number(npcEntry.tile_y),
+                            target_tile_x: Number(npcEntry.target_tile_x),
+                            target_tile_y: Number(npcEntry.target_tile_y),
+                            timestamp: Number(npcEntry.timestamp ?? npcEntry.ts ?? data.payload.timestamp ?? serverTs ?? globalNowMs),
+                        });
+
+                        this.npcNodes[npcId] = mapNpc;
+                    }
                 }
                 this.renderNpcDebugTileOverlay();
             }
@@ -222,10 +257,12 @@ export class CustomizeMapData extends Component {
             if(payloadMapId > 0 && payloadMapId == localMapId){
                 for(let s = 0 ;s < data.payload.npcs.length ; s++){
                     const npcData = data.payload.npcs[s];
-                    // const npcId = npcData.id;
+                    if (npcData.sprite_animations != null) {
+                        this.setNpcSpriteAnimations(npcData.id, npcData.sprite_animations);
+                    }
                     let npc = this.npcNodes[npcData.id];
                     // 兜底：如果首包没赶上，增量包到达时补创建 NPC，避免“第二次进入 NPC 不见”
-                    if(!npc){
+                    if (!npc) {
                         npc = this.AddNpc(npcData.id);
                         this.npcNodes[npcData.id] = npc;
                     }

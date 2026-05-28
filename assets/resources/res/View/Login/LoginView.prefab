@@ -44,28 +44,25 @@
       },
       {
         "__id__": 431
-      },
-      {
-        "__id__": 499
       }
     ],
     "_active": true,
     "_components": [
       {
-        "__id__": 511
+        "__id__": 499
       },
       {
-        "__id__": 513
+        "__id__": 501
       },
       {
-        "__id__": 515
+        "__id__": 503
       },
       {
-        "__id__": 517
+        "__id__": 505
       }
     ],
     "_prefab": {
-      "__id__": 519
+      "__id__": 507
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -12184,261 +12181,6 @@
     "nestedPrefabInstanceRoots": null
   },
   {
-    "__type__": "cc.Node",
-    "_name": "npc",
-    "_objFlags": 0,
-    "__editorExtras__": {},
-    "_parent": {
-      "__id__": 1
-    },
-    "_children": [
-      {
-        "__id__": 500
-      }
-    ],
-    "_active": false,
-    "_components": [
-      {
-        "__id__": 506
-      },
-      {
-        "__id__": 508
-      }
-    ],
-    "_prefab": {
-      "__id__": 510
-    },
-    "_lpos": {
-      "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "_lrot": {
-      "__type__": "cc.Quat",
-      "x": 0,
-      "y": 0,
-      "z": 0,
-      "w": 1
-    },
-    "_lscale": {
-      "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
-      "z": 1
-    },
-    "_mobility": 0,
-    "_layer": 1073741824,
-    "_euler": {
-      "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "_id": ""
-  },
-  {
-    "__type__": "cc.Node",
-    "_name": "Sprite",
-    "_objFlags": 0,
-    "__editorExtras__": {},
-    "_parent": {
-      "__id__": 499
-    },
-    "_children": [],
-    "_active": true,
-    "_components": [
-      {
-        "__id__": 501
-      },
-      {
-        "__id__": 503
-      }
-    ],
-    "_prefab": {
-      "__id__": 505
-    },
-    "_lpos": {
-      "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "_lrot": {
-      "__type__": "cc.Quat",
-      "x": 0,
-      "y": 0,
-      "z": 0,
-      "w": 1
-    },
-    "_lscale": {
-      "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
-      "z": 1
-    },
-    "_mobility": 0,
-    "_layer": 1073741824,
-    "_euler": {
-      "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "_id": ""
-  },
-  {
-    "__type__": "cc.UITransform",
-    "_name": "",
-    "_objFlags": 0,
-    "__editorExtras__": {},
-    "node": {
-      "__id__": 500
-    },
-    "_enabled": true,
-    "__prefab": {
-      "__id__": 502
-    },
-    "_contentSize": {
-      "__type__": "cc.Size",
-      "width": 40,
-      "height": 40
-    },
-    "_anchorPoint": {
-      "__type__": "cc.Vec2",
-      "x": 0.5,
-      "y": 0.5
-    },
-    "_id": ""
-  },
-  {
-    "__type__": "cc.CompPrefabInfo",
-    "fileId": "9dI/S7PAxJsr0VusGlsz52"
-  },
-  {
-    "__type__": "cc.Sprite",
-    "_name": "",
-    "_objFlags": 0,
-    "__editorExtras__": {},
-    "node": {
-      "__id__": 500
-    },
-    "_enabled": true,
-    "__prefab": {
-      "__id__": 504
-    },
-    "_customMaterial": null,
-    "_srcBlendFactor": 2,
-    "_dstBlendFactor": 4,
-    "_color": {
-      "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
-      "a": 255
-    },
-    "_spriteFrame": {
-      "__uuid__": "57520716-48c8-4a19-8acf-41c9f8777fb0@f9941",
-      "__expectedType__": "cc.SpriteFrame"
-    },
-    "_type": 0,
-    "_fillType": 0,
-    "_sizeMode": 2,
-    "_fillCenter": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
-    },
-    "_fillStart": 0,
-    "_fillRange": 0,
-    "_isTrimmedMode": true,
-    "_useGrayscale": false,
-    "_atlas": null,
-    "_id": ""
-  },
-  {
-    "__type__": "cc.CompPrefabInfo",
-    "fileId": "98whQZlBFBiqocZ6q+hztG"
-  },
-  {
-    "__type__": "cc.PrefabInfo",
-    "root": {
-      "__id__": 1
-    },
-    "asset": {
-      "__id__": 0
-    },
-    "fileId": "9f6cDieHpOr5HKvy18F9V+",
-    "instance": null,
-    "targetOverrides": null,
-    "nestedPrefabInstanceRoots": null
-  },
-  {
-    "__type__": "cc.UITransform",
-    "_name": "",
-    "_objFlags": 0,
-    "__editorExtras__": {},
-    "node": {
-      "__id__": 499
-    },
-    "_enabled": true,
-    "__prefab": {
-      "__id__": 507
-    },
-    "_contentSize": {
-      "__type__": "cc.Size",
-      "width": 100,
-      "height": 100
-    },
-    "_anchorPoint": {
-      "__type__": "cc.Vec2",
-      "x": 0.5,
-      "y": 0.5
-    },
-    "_id": ""
-  },
-  {
-    "__type__": "cc.CompPrefabInfo",
-    "fileId": "35D9trNihDH685JI6d+LIs"
-  },
-  {
-    "__type__": "6bb81uCmitAG6NvlPFW4XfW",
-    "_name": "",
-    "_objFlags": 0,
-    "__editorExtras__": {},
-    "node": {
-      "__id__": 499
-    },
-    "_enabled": true,
-    "__prefab": {
-      "__id__": 509
-    },
-    "targetSprite": {
-      "__id__": 503
-    },
-    "zuozhuRoot": "res/NPCImage/zuozhu",
-    "fps": 8,
-    "autoContentSize": true,
-    "_id": ""
-  },
-  {
-    "__type__": "cc.CompPrefabInfo",
-    "fileId": "396uO/L1tMFKyhtdKErKIf"
-  },
-  {
-    "__type__": "cc.PrefabInfo",
-    "root": {
-      "__id__": 1
-    },
-    "asset": {
-      "__id__": 0
-    },
-    "fileId": "52m0d+fg9H6onSckVEn3m/",
-    "instance": null,
-    "targetOverrides": null,
-    "nestedPrefabInstanceRoots": null
-  },
-  {
     "__type__": "10686O9PGJIUot2IXEU9k0o",
     "_name": "",
     "_objFlags": 0,
@@ -12448,7 +12190,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 512
+      "__id__": 500
     },
     "Hierarchy": "Cover",
     "FullScreen": false,
@@ -12470,7 +12212,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 514
+      "__id__": 502
     },
     "_contentSize": {
       "__type__": "cc.Size",
@@ -12498,7 +12240,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 516
+      "__id__": 504
     },
     "_alignFlags": 45,
     "_target": null,
@@ -12534,7 +12276,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 518
+      "__id__": 506
     },
     "webview": {
       "__id__": 409
@@ -12566,9 +12308,7 @@
     "registerPWDConfirm": {
       "__id__": 398
     },
-    "animator": {
-      "__id__": 508
-    },
+    "animator": null,
     "_id": ""
   },
   {

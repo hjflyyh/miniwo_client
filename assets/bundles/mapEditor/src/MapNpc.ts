@@ -1,8 +1,11 @@
-import { _decorator, Component, Label, Node, sp, UITransform, Vec2, Vec3 } from 'cc';
+import { _decorator, Component, Label, Node, UITransform, Vec2, Vec3 } from 'cc';
 import { MapEditor } from './MapEditor';
-import { CustomizeMapData } from './CustomizeMap/CustomizeMapData';
+import { CustomizeMapData, NpcSpriteAnimations } from './CustomizeMap/CustomizeMapData';
 import { AppConst } from '../../../scripts/AppConst';
-import { JSONManager } from '../../../scripts/Manager/JSONManager';
+import {
+    GenericSpritesheetAnimator,
+    ZUOZHU_ACTION_HORIZONTAL_SLICES,
+} from 'db://assets/scripts/Utils/GenericSpritesheetAnimator';
 
 const { ccclass, property } = _decorator;
 
@@ -10,6 +13,8 @@ enum NpcState {
     Idle = 1,
     Move = 2,
 }
+
+type NpcSpriteAnimKey = 'idle' | 'walking_left' | 'walking_up' | 'walking_down';
 
 interface NpcMovePacket {
     x: number;
@@ -125,8 +130,13 @@ export class MapNpc extends Component {
     @property(Node)
     dialogueNode : Node
 
-    private spineNode: Node = null!;
-    private spine: sp.Skeleton = null!;
+    private npcNode: Node = null;
+    private genericSpritesheetAnimator: GenericSpritesheetAnimator = null;
+
+    private spriteAnimations: NpcSpriteAnimations = {};
+    private currentAnimKey = '';
+    private moveAnimKey: NpcSpriteAnimKey = 'walking_left';
+    private animLoadToken = 0;
 
     private state: NpcState = NpcState.Idle;
     public inited = false;
@@ -155,15 +165,78 @@ export class MapNpc extends Component {
         } , 1);
     }
 
-    initNpcNode(){
+    initNpcNode() {
+        this.npcNode = this.node.getChildByName('npc')!;
+        this.dialogueNode = this.node.getChildByName('dialogueNode');
+        this.dialogueLabel = this.dialogueNode.getChildByName('dialogueLabel').getComponent(Label);
+        this.dialogueNode.active = false;
 
-        this.spineNode = this.node.getChildByName('spine')!;
-        this.dialogueNode = this.node.getChildByName('dialogueNode')
-        this.dialogueLabel = this.dialogueNode.getChildByName('dialogueLabel').getComponent(Label)
-        this.dialogueNode.active = false
-
-        this.spine = this.spineNode?.getComponent(sp.Skeleton)!;
+        this.genericSpritesheetAnimator = this.npcNode?.getComponent(GenericSpritesheetAnimator) ?? null;
         this.setState(NpcState.Idle, true);
+    }
+
+    public setSpriteAnimations(anims: NpcSpriteAnimations) {
+        this.spriteAnimations = { ...(anims ?? {}) };
+        this.currentAnimKey = '';
+        this.playSpriteByKey('idle', true);
+    }
+
+    private resolveAnimUrl(key: NpcSpriteAnimKey): string {
+        const a = this.spriteAnimations;
+        switch (key) {
+            case 'idle':
+                return String(a.idle_url ?? '').trim();
+            case 'walking_left':
+                return String(a.walking_left_url ?? '').trim();
+            case 'walking_up':
+                return String(a.walking_up_url ?? a.walking_left_url ?? '').trim();
+            case 'walking_down':
+                return String(a.walking_down_url ?? a.walking_left_url ?? '').trim();
+            default:
+                return '';
+        }
+    }
+
+    private animKeyToSliceAction(key: NpcSpriteAnimKey): string {
+        switch (key) {
+            case 'idle':
+                return 'idle';
+            case 'walking_left':
+                return 'walking-left';
+            case 'walking_up':
+                return 'walking-up';
+            case 'walking_down':
+                return 'walking-down';
+            default:
+                return 'idle';
+        }
+    }
+
+    private playSpriteByKey(key: NpcSpriteAnimKey, force = false) {
+        if (!this.genericSpritesheetAnimator?.isValid) {
+            return;
+        }
+        const url = this.resolveAnimUrl(key);
+        if (!url) {
+            return;
+        }
+        if (!force && this.currentAnimKey === key) {
+            return;
+        }
+        this.currentAnimKey = key;
+
+        const actionName = this.animKeyToSliceAction(key);
+        const cols = ZUOZHU_ACTION_HORIZONTAL_SLICES[actionName] ?? 8;
+        const token = ++this.animLoadToken;
+
+        this.genericSpritesheetAnimator.loadAndPlay(url, actionName, cols, (err) => {
+            if (token !== this.animLoadToken) {
+                return;
+            }
+            if (err) {
+                console.warn(`[MapNpc] sprite load failed npc=${this.npcId} key=${key}`, err);
+            }
+        });
     }
 
     update(dt: number) {
@@ -528,24 +601,15 @@ export class MapNpc extends Component {
 
     private setState(next: NpcState, force = false) {
         const prevState = this.state;
-        if (!force && prevState === next && next !== NpcState.Move) return;
+        if (!force && prevState === next && next !== NpcState.Move) {
+            return;
+        }
         this.state = next;
 
-        if (!this.spine) return;
-        const anim = next === NpcState.Move
-            ? (this.useHorizontalMoveAnim ? 'c walk' : 'z walk')
-            : 'z idle';
-        try {
-            // 可选混合，减少切换生硬感
-            if ((this.spine as any).setMix) {
-                this.spine.setMix('z idle', 'walk', 0.12);
-                this.spine.setMix('z walk', 'idle', 0.16);
-            }
-            if ((this.spine as any).animation !== anim || force || prevState !== next) {
-                this.spine.setAnimation(0, anim, true);
-            }
-        } catch (e) {
-            // 动画名不存在时防御
+        if (next === NpcState.Move) {
+            this.playSpriteByKey(this.moveAnimKey, force || prevState !== next);
+        } else {
+            this.playSpriteByKey('idle', force || prevState !== next);
         }
     }
 
@@ -559,12 +623,19 @@ export class MapNpc extends Component {
         const horizontal = Math.abs(dx) >= Math.abs(dy);
         this.useHorizontalMoveAnim = horizontal;
         if (horizontal) {
-            // c walk 默认朝左，右移时做镜像
+            this.moveAnimKey = 'walking_left';
             this.facingScaleX = dx >= 0 ? -1 : 1;
-            this.node.setScale(1, 1, 1);
-            this.spineNode.setScale(this.facingScaleX * 0.4, 0.4, 1);
+            if (this.npcNode?.isValid) {
+                this.npcNode.setScale(this.facingScaleX, 1, 1);
+            }
         } else {
-            this.node.setScale(1, 1, 1);
+            this.moveAnimKey = dy >= 0 ? 'walking_up' : 'walking_down';
+            if (this.npcNode?.isValid) {
+                this.npcNode.setScale(1, 1, 1);
+            }
+        }
+        if (this.state === NpcState.Move) {
+            this.playSpriteByKey(this.moveAnimKey);
         }
     }
 }
