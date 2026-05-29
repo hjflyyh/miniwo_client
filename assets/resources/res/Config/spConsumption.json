@@ -1,0 +1,58 @@
+{
+  "1": {
+    "operation_type": "播种",
+    "single_stamina_cost": "2"
+  },
+  "2": {
+    "operation_type": "浇水",
+    "single_stamina_cost": "1"
+  },
+  "3": {
+    "operation_type": "施肥",
+    "single_stamina_cost": "2"
+  },
+  "4": {
+    "operation_type": "施肥",
+    "single_stamina_cost": "5"
+  },
+  "5": {
+    "operation_type": "收获",
+    "single_stamina_cost": "3"
+  },
+  "6": {
+    "operation_type": "处理虫灾",
+    "single_stamina_cost": "5"
+  },
+  "7": {
+    "operation_type": "处理旱灾",
+    "single_stamina_cost": "4"
+  },
+  "8": {
+    "operation_type": "处理水灾",
+    "single_stamina_cost": "6"
+  },
+  "9": {
+    "operation_type": "处理雪灾",
+    "single_stamina_cost": "6"
+  },
+  "10": {
+    "operation_type": "除草",
+    "single_stamina_cost": "2"
+  },
+  "11": {
+    "operation_type": "探索派遣",
+    "single_stamina_cost": "100"
+  },
+  "12": {
+    "operation_type": "公园表演",
+    "single_stamina_cost": "100"
+  },
+  "13": {
+    "operation_type": "学习技能（训练手册）",
+    "single_stamina_cost": "150"
+  },
+  "14": {
+    "operation_type": "治疗其他角色",
+    "single_stamina_cost": "100"
+  }
+}

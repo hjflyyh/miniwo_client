@@ -5,11 +5,11 @@
   },
   "2": {
     "function": "回复1体力耗时",
-    "configuration": "120"
+    "configuration": "30"
   },
   "3": {
     "function": "体力存储上限",
-    "configuration": "150"
+    "configuration": "1000"
   },
   "4": {
     "function": "单次拾取地图场景物品消耗体力",
@@ -162,5 +162,13 @@
   "42": {
     "function": "犯罪被抓AI角色坐牢时长&保释金",
     "configuration": "18000#104_20000"
+  },
+  "43": {
+    "function": "AI角色回复1体力耗时",
+    "configuration": "30"
+  },
+  "44": {
+    "function": "AI角色体力存储上限",
+    "configuration": "1000"
   }
 }
