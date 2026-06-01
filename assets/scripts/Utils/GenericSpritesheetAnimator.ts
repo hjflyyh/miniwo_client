@@ -92,7 +92,7 @@ export const ZUOZHU_ACTION_HORIZONTAL_SLICES: Readonly<Record<string, number>> =
     idle: 6,
     jumping: 5,
     review: 6,
-    'running-left': 8,
+    'running-left': 4,
     /** 未在需求里写出，与 running-left 对称 */
     'running-right': 8,
     running: 6,
@@ -100,10 +100,10 @@ export const ZUOZHU_ACTION_HORIZONTAL_SLICES: Readonly<Record<string, number>> =
     /** 未在需求里写出，可按资源改 map */
     waving: 4,
     "running-up": 8,
-    "walking-left" : 8,
-    "walking-right" : 8,
-    "walking-up" : 8,
-    "walking-down" : 8,
+    "walking-left" : 4,
+    "walking-right" : 4,
+    "walking-up" : 4,
+    "walking-down" : 4,
     "running-down" : 8,
 };
 
@@ -146,7 +146,7 @@ export class GenericSpritesheetAnimator extends Component {
             /** RAW：每帧按 SpriteFrame 原始像素尺寸显示，避免 CUSTOM + 整纹理缩放造成「横向拖动」错觉 */
             this.targetSprite.sizeMode = Sprite.SizeMode.RAW;
         }
-        this.setGeneratedVisible(false);
+        this.setGeneratedVisible(true);
     }
 
     onDestroy(): void {

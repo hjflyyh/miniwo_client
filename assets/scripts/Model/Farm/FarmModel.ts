@@ -636,9 +636,9 @@ export class FarmModel {
         const at = Math.min(...candidates);
         const delayMs = Math.max(500, (at - nowSec) * 1000 + 200);
         const kind = at === buffAt && at !== growAt ? 'buff' : at === growAt && at !== buffAt ? 'grow' : 'grow+buff';
-        console.log(
-            `[FarmModel] 农田 UI 定时 ${at - nowSec}s 后刷新（${kind}，at=${at}）`,
-        );
+        // console.log(
+        //     `[FarmModel] 农田 UI 定时 ${at - nowSec}s 后刷新（${kind}，at=${at}）`,
+        // );
         this.farmRefreshTimer = setTimeout(() => {
             this.onFarmUiTimerFire();
         }, delayMs);
@@ -650,12 +650,12 @@ export class FarmModel {
             return;
         }
         const nowSec = this.nowUnixSec();
-        console.log('[FarmModel] 农田 UI 定时到期 → 刷新土地');
+        // console.log('[FarmModel] 农田 UI 定时到期 → 刷新土地');
         this.applyLocalGrowExpiredPlots(nowSec);
         GameFarmNode.syncAllInScene();
         const harvestable = this.getHarvestableFarmIds(nowSec);
         if (harvestable.length > 0) {
-            console.log('[FarmModel] 到期后可收获地块 farm_id=', harvestable);
+            // console.log('[FarmModel] 到期后可收获地块 farm_id=', harvestable);
         }
         this.scheduleGrowCountdown();
     }

@@ -114,17 +114,17 @@ export class EditNpcImg extends Component {
     /** 模式 B：AI 外貌描述文生图 */
     onClickAIText(){
         if (!this.chooseNpcId) {
-            EventSystem.send("ShowTips", "请先选择NPC");
+            EventSystem.send("ShowTips", "Please select an NPC first");
             return;
         }
         const desc = (this.editBox?.string || this.getOpenParam().appearance || "").trim();
         if (!desc) {
-            EventSystem.send("ShowTips", "请输入外貌描述");
+            EventSystem.send("ShowTips", "Please enter a appearance description");
             return;
         }
         const name = this.getNpcName();
         if (!name) {
-            EventSystem.send("ShowTips", "NPC 名称无效");
+            EventSystem.send("ShowTips", "Invalid NPC name");
             return;
         }
 
@@ -138,11 +138,11 @@ export class EditNpcImg extends Component {
 
     onClickNext(){
         if (!this.chooseNpcId) {
-            EventSystem.send("ShowTips", "请先选择NPC");
+            EventSystem.send("ShowTips", "Please select the NPC first.");
             return;
         }
         if (!this.hasNpcStandeePortrait(this.chooseNpcId)) {
-            EventSystem.send("ShowTips", "请先生成NPC立绘");
+            EventSystem.send("ShowTips", "Please generate the NPC standee portrait first.");
             return;
         }
         if (this.confirmNode) {
@@ -159,25 +159,25 @@ export class EditNpcImg extends Component {
             this.confirmNode.active = false;
         }
         if (!this.chooseNpcId) {
-            EventSystem.send("ShowTips", "请先选择NPC");
+            EventSystem.send("ShowTips", "Please select an NPC first.");
             return;
         }
         if (!this.hasNpcStandeePortrait(this.chooseNpcId)) {
-            EventSystem.send("ShowTips", "请先生成NPC立绘");
+            EventSystem.send("ShowTips", "Please generate the NPC character art first.");
             return;
         }
 
         const ugc = UGCModel.getInstance();
         const npc = ugc.getNpcById(this.chooseNpcId);
         if (!npc) {
-            EventSystem.send("ShowTips", "NPC不存在");
+            EventSystem.send("ShowTips", "NPC does not exist");
             return;
         }
 
         const name = this.getNpcName();
         const referenceImageUrl = ugc.getStandeeReferenceImageUrl(this.chooseNpcId);
         if (!referenceImageUrl) {
-            EventSystem.send("ShowTips", "立绘预览地址无效");
+            EventSystem.send("ShowTips", "Invalid standee preview URL");
             return;
         }
 
@@ -185,7 +185,7 @@ export class EditNpcImg extends Component {
 
         ugc.generateNpcSpriteFrames(this.chooseNpcId, name, referenceImageUrl).then((resp: any) => {
             if (!this.isSpriteFramesGenerateSuccess(resp)) {
-                EventSystem.send("ShowTips", String(resp?.message || resp?.error || "序列帧生成失败"));
+                EventSystem.send("ShowTips", String(resp?.message || resp?.error || "Sequence frame generation failed"));
                 return;
             }
 
@@ -202,6 +202,8 @@ export class EditNpcImg extends Component {
             if (resp?.message) {
                 EventSystem.send("ShowTips", String(resp.message));
             }
+
+            ugc.listMyNpcs();
 
             AppConst.PanelManager.CloseViewByUrl("res/View/CreateMap/EditNpcImg");
             AppConst.PanelManager.CloseViewByUrl("res/View/CreateMap/CreateNpc");
@@ -225,24 +227,24 @@ export class EditNpcImg extends Component {
     /** 模式 A：本机参考图图生图 */
     onClickAIImg(){
         if (!this.chooseNpcId) {
-            EventSystem.send("ShowTips", "请先选择NPC");
+            EventSystem.send("ShowTips", "Please select the NPC first.");
             return;
         }
         if (!this.localImageLoader?.hasSelectedImage()) {
-            EventSystem.send("ShowTips", "请先上传参考图");
+            EventSystem.send("ShowTips", "Please upload a reference image first.");
             return;
         }
         if (!this.isUploadImageSizeValid()) {
             EventSystem.send(
                 "ShowTips",
-                `上传图片不能小于${MIN_UPLOAD_IMAGE_WIDTH}×${MIN_UPLOAD_IMAGE_HEIGHT}`,
+                `Uploaded image cannot be smaller than ${MIN_UPLOAD_IMAGE_WIDTH}×${MIN_UPLOAD_IMAGE_HEIGHT}`,
             );
             return;
         }
         const dataUrl = this.localImageLoader.getSelectedDataUrl();
         const name = this.getNpcName();
         if (!name) {
-            EventSystem.send("ShowTips", "NPC 名称无效");
+            EventSystem.send("ShowTips", "Invalid NPC name");
             return;
         }
 
@@ -258,12 +260,12 @@ export class EditNpcImg extends Component {
     onClickNewNpc(){
         const npcId = this.chooseNpcId;
         if (!npcId) {
-            EventSystem.send("ShowTips", "请先选择NPC");
+            EventSystem.send("ShowTips", "Please select an NPC first.");
             return;
         }
         const npc = UGCModel.getInstance().getNpcById(npcId);
         if (!npc) {
-            EventSystem.send("ShowTips", "NPC不存在");
+            EventSystem.send("ShowTips", "NPC does not exist");
             return;
         }
 
@@ -403,7 +405,7 @@ export class EditNpcImg extends Component {
 
         if (this.standeePollAttempts >= STANDEE_POLL_MAX_ATTEMPTS) {
             this.endPortraitGeneration();
-            EventSystem.send("ShowTips", "立绘生成超时，请稍后重试");
+            EventSystem.send("ShowTips", "Standee generation timed out, please try again later");
             return;
         }
         this.standeePollAttempts += 1;
@@ -416,7 +418,7 @@ export class EditNpcImg extends Component {
 
             if (!resp?.ok) {
                 this.endPortraitGeneration();
-                EventSystem.send("ShowTips", String(resp?.message || resp?.error || "立绘生成失败"));
+                EventSystem.send("ShowTips", String(resp?.message || resp?.error || "Standee generation failed"));
                 return;
             }
 
@@ -429,7 +431,7 @@ export class EditNpcImg extends Component {
 
             if (status === "failed" || status === "error") {
                 this.endPortraitGeneration();
-                EventSystem.send("ShowTips", String(resp?.message || resp?.error || "立绘生成失败"));
+                EventSystem.send("ShowTips", String(resp?.message || resp?.error || "Standee generation failed"));
                 return;
             }
 

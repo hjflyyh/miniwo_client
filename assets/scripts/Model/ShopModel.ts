@@ -18,12 +18,20 @@ export class ShopModel {
         EventSystem.addListent("WebSocketMessage", this.OnWebSocketMessage, this)
     }
 
-    public getShopList() {
+    public getShopList(type) {
         if (this.shopList.length == 0) {
             const cfgAll = AppConst.JSONManager.getItemAll("gameStore")
             this.shopList = (Object as any).values(cfgAll)
         }
-        return this.shopList
+        // return this.shopList
+        let list = []
+        for(let i = 0 ; i < this.shopList.length; i++){
+            let item = this.shopList[i]
+            if(item.type == type){
+                list.push(item)
+            }
+        }
+        return list
     }
 
     private applyShopData(rows: any[]) {

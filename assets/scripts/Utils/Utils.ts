@@ -49,6 +49,53 @@ export class Utils{
         })
     }
 
+    /**
+     * 按目标高度等比缩放（宽度随比例变化，不裁切）。
+     * targetHeight 省略时优先取父节点 UITransform 高度，其次 Sprite 自身高度。
+     */
+    public static loadCoverFitHeight(url: string, sprite: Sprite, targetHeight: number | null = null) {
+        if (!url || !sprite) {
+            return;
+        }
+        if (!url.includes('http')) {
+            url = HttpManager.baseUrl + url;
+        }
+        assetManager.loadRemote<ImageAsset>(url, (err, imageAsset) => {
+            if (!sprite?.isValid) {
+                return;
+            }
+            if (err || !imageAsset) {
+                console.log("图片下载失败", err);
+                sprite.spriteFrame = null;
+                return;
+            }
+
+            const tex = new Texture2D();
+            tex.image = imageAsset;
+            const sf = new SpriteFrame();
+            sf.texture = tex;
+            sprite.spriteFrame = sf;
+            sprite.sizeMode = Sprite.SizeMode.CUSTOM;
+
+            const ui = sprite.getComponent(UITransform) || sprite.node.getComponent(UITransform);
+            if (!ui) {
+                return;
+            }
+
+            const parentUi = sprite.node.parent?.getComponent(UITransform);
+            const targetH = targetHeight ?? parentUi?.height ?? ui.height;
+            const srcW = imageAsset.width;
+            const srcH = imageAsset.height;
+            if (srcW <= 0 || srcH <= 0 || targetH <= 0) {
+                return;
+            }
+
+            const scale = targetH / srcH;
+            const finalW = srcW * scale;
+            ui.setContentSize(finalW, targetH);
+        });
+    }
+
     public static randomNum(minNum : number , maxNum: number){
         let num = 1;
         switch(arguments.length){

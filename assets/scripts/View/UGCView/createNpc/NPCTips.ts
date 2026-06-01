@@ -46,7 +46,7 @@ export class NPCTips extends Component {
         this.npcNameLabel && (this.npcNameLabel.string = String(npcInfo.name || ""));
 
         const sex = Number(npcInfo.sex);
-        const sexText = sex === 0 ? "男" : (sex === 1 ? "女" : (sex === 2 ? "其他" : ""));
+        const sexText = sex === 0 ? "Man" : (sex === 1 ? "Woman" : (sex === 2 ? "Other" : ""));
         this.genderLabel && (this.genderLabel.string = sexText);
 
         this.mbtiLabel && (this.mbtiLabel.string = this.resolveTagNameById(Number(npcInfo.mbti), 5));

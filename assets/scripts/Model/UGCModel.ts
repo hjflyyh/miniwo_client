@@ -78,7 +78,7 @@ export class UGCModel {
     public addNpcRenshe(npcId , rensheId){
         let renshe = this.getNpcRenshe(npcId);
         if(renshe.length >= 3){ 
-            EventSystem.send("ShowTips" , "最多3个人设");
+            EventSystem.send("ShowTips" , "At most 3 characters are set.");
             return false;
         }
         renshe.push(rensheId);
@@ -355,9 +355,7 @@ export class UGCModel {
             }
             EventSystem.send("OnRefreshUGCMapNpc")
         } else if (data.functionName == "listMyNpcs") {
-            const list = data;
-            this.myNpcList = Array.isArray(list) ? list : [];
-            EventSystem.send("OnRefreshMyNpcList", this.myNpcList);
+            this.applyListMyNpcsFromHttp(data);
         } else if(data.functionName == "listGeneratedNpcs"){
             const list = data;
             EventSystem.send("OnRefreshGeneratedMyNpcList", list);
@@ -376,9 +374,11 @@ export class UGCModel {
                     if (idx >= 0) {
                         list[idx] = npc;
                     } else {
+                        npc.id = npcId
                         list.push(npc);
                     }
                 } else {
+                    npc.id = npcId
                     list.push(npc);
                 }
                 this.npcList = list;
@@ -502,11 +502,68 @@ export class UGCModel {
         )
     }
 
+    /** 获取当前玩家全部 NPC（含 work_status 等） */
+    public listMyNpcs() {
+        AppConst.HttpManager.sendPostHttp(
+            "listMyNpcs",
+            JSON.stringify({ token: this.token() }),
+        );
+    }
+
+    private parseNpcListFromHttpPayload(data: any): any[] {
+        if (Array.isArray(data)) {
+            return data;
+        }
+        if (Array.isArray(data?.npc_list)) {
+            return data.npc_list;
+        }
+        if (Array.isArray(data?.npcs)) {
+            return data.npcs;
+        }
+        if (Array.isArray(data?.list)) {
+            return data.list;
+        }
+        return [];
+    }
+
+    /** listMyNpcs 回包：同步 myNpcList / npcList 并刷新 CreateNpcView */
+    private applyListMyNpcsFromHttp(data: any) {
+        const list = this.parseNpcListFromHttpPayload(data);
+        this.myNpcList = list;
+        this.npcList = list.slice();
+
+        const mapId = Number(
+            MapModel.getInstance().my_map_data?.id ?? this.mapData.id ?? data?.mapId ?? 0,
+        );
+        if (mapId > 0) {
+            this.mergeNpcListFromLocal(mapId);
+        }
+
+        EventSystem.send("OnRefreshMyNpcList", this.myNpcList);
+        EventSystem.send("OnRefreshUGCMapNpc");
+        EventSystem.send("OnRefreshCreateNpcView");
+    }
+
     /** 获取当前玩家全部 NPC（含数据库 work_status） */
     public listGeneratedNpcs() {
         AppConst.HttpManager.sendPostHttp(
             "listGeneratedNpcs",
             JSON.stringify({ token: this.token() }),
+        );
+    }
+
+    /** 批量设置 NPC work_status：0=回家待机，1=去农场工作 */
+    public batchSetNPCWorkStatus(npcIds: number[], workStatus: 0 | 1) {
+        const ids = (npcIds || [])
+            .map((id) => Number(id))
+            .filter((id) => Number.isFinite(id) && id > 0);
+        return AppConst.HttpManager.sendPostHttp(
+            "api/npc/work_status/batch",
+            JSON.stringify({
+                token: this.token(),
+                npc_ids: ids,
+                work_status: workStatus,
+            }),
         );
     }
 
@@ -831,9 +888,9 @@ export class UGCModel {
 
     private sexToText(sex: any): string {
         const sexNum = Number(sex);
-        if (sexNum === 0) return "男";
-        if (sexNum === 1) return "女";
-        if (sexNum === 2) return "其他";
+        if (sexNum === 0) return "Man";
+        if (sexNum === 1) return "Woman";
+        if (sexNum === 2) return "Other";
         if (typeof sex === "string" && sex.trim()) return sex.trim();
         return "";
     }

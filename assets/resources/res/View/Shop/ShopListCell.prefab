@@ -136,8 +136,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 225.68800000000002,
-      "height": 352.538
+      "width": 168,
+      "height": 292
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -167,9 +167,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 223,
+      "g": 223,
+      "b": 247,
       "a": 255
     },
     "_spriteFrame": {
@@ -289,7 +289,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 0,
+      "y": -21.804,
       "z": 0
     },
     "_lrot": {
@@ -461,7 +461,7 @@
     "node": {
       "__id__": 8
     },
-    "_enabled": true,
+    "_enabled": false,
     "__prefab": {
       "__id__": 20
     },
@@ -535,7 +535,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 1.815,
-      "y": -42.138,
+      "y": -36.033,
       "z": 0
     },
     "_lrot": {
@@ -613,9 +613,9 @@
     },
     "_string": "Limit:999",
     "_horizontalAlign": 1,
-    "_verticalAlign": 0,
-    "_actualFontSize": 25,
-    "_fontSize": 25,
+    "_verticalAlign": 1,
+    "_actualFontSize": 20,
+    "_fontSize": 20,
     "_fontFamily": "Arial",
     "_lineHeight": 30,
     "_overflow": 3,
@@ -624,7 +624,7 @@
     "_isSystemFontUsed": true,
     "_spacingX": 0,
     "_isItalic": false,
-    "_isBold": true,
+    "_isBold": false,
     "_isUnderline": false,
     "_underlineHeight": 2,
     "_cacheMode": 0,
@@ -701,7 +701,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 2.8,
-      "y": -110.851,
+      "y": -92.536,
       "z": 0
     },
     "_lrot": {
@@ -1247,8 +1247,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 193.75799999999998,
-      "height": 54.678999999999995
+      "width": 156,
+      "height": 44
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1278,9 +1278,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 154,
-      "g": 154,
-      "b": 236,
+      "r": 134,
+      "g": 129,
+      "b": 255,
       "a": 255
     },
     "_spriteFrame": {
@@ -1403,8 +1403,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 328,
-      "height": 500
+      "width": 168,
+      "height": 300
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",

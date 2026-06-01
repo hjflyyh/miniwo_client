@@ -331,12 +331,12 @@ export class GameView extends Component {
         this.syncFarmChooseCellsFarmId(null);
 
         if (plotNeedsWaterOverlay(plot)) {
-            // const result = await FarmModel.getInstance().water(farmId);
-            // if (result.ok) {
-            //     EventSystem.send('ShowTips', '浇水成功');
-            // } else {
-            //     EventSystem.send('ShowTips', result.message ?? '浇水失败');
-            // }
+            const result = await FarmModel.getInstance().water(farmId);
+            if (result.ok) {
+                EventSystem.send('ShowTips', 'The watering was successful.');
+            } else {
+                EventSystem.send('ShowTips', result.message ?? 'The watering failed.');
+            }
             return;
         }
 

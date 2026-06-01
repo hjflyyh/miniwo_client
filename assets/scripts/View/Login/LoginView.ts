@@ -69,7 +69,7 @@ export class LoginView extends Component {
         EventSystem.addListent("LoginSuccess" , this.onLoginSuccess , this)
 
         if (this.animator) {
-            this.animator.loadAndPlay('res/NPCImage/zuozhu/running-left', 'running-left');
+            this.animator.loadAndPlay('res/NPCImage/ban/decoded/walking-left', 'running-left');
         }
     }
 

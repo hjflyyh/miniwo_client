@@ -40,7 +40,7 @@ export class MapListItem extends Component implements InfiniteCell{
         this.likeNumber.string = mapData.map_like_count
         this.isLike.active = mapData.liked
 
-        Utils.loadCover(mapData["map_cover_url"], this.banner , 850 , 1420);
+        Utils.loadCoverFitHeight(mapData["map_cover_url"], this.banner);
     }
 
     OnClick(){
