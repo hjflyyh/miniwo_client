@@ -1,62 +1,92 @@
 {
   "1": {
     "result": "1",
-    "item": "100101"
+    "item": null,
+    "box": "100101",
+    "loss": ""
   },
   "2": {
     "result": "1",
-    "item": "100102"
+    "item": null,
+    "box": "100102",
+    "loss": ""
   },
   "3": {
     "result": "1",
-    "item": "100103"
+    "item": null,
+    "box": "100103",
+    "loss": ""
   },
   "4": {
     "result": "3",
-    "item": ""
+    "item": null,
+    "box": null,
+    "loss": ""
   },
   "5": {
     "result": "1",
-    "item": "100104"
+    "item": null,
+    "box": "100104",
+    "loss": ""
   },
   "6": {
     "result": "1",
-    "item": "114_10"
+    "item": "114_10",
+    "box": null,
+    "loss": ""
   },
   "7": {
     "result": "1",
-    "item": "121_10"
+    "item": "121_10",
+    "box": null,
+    "loss": ""
   },
   "8": {
     "result": "1",
-    "item": "116_10"
+    "item": "116_10",
+    "box": null,
+    "loss": ""
   },
   "9": {
     "result": "1",
-    "item": "104_1000"
+    "item": "104_1000",
+    "box": null,
+    "loss": ""
   },
   "10": {
     "result": "2",
-    "item": "104_500#106_200"
+    "item": null,
+    "box": null,
+    "loss": "104_500#106_200"
   },
   "11": {
     "result": "2",
-    "item": "104_200"
+    "item": null,
+    "box": null,
+    "loss": "104_200"
   },
   "12": {
     "result": "2",
-    "item": "104_200"
+    "item": null,
+    "box": null,
+    "loss": "104_200"
   },
   "13": {
     "result": "2",
-    "item": "106_200"
+    "item": null,
+    "box": null,
+    "loss": "106_200"
   },
   "14": {
     "result": "2",
-    "item": "104_500"
+    "item": null,
+    "box": null,
+    "loss": "104_500"
   },
   "15": {
     "result": "1",
-    "item": "100105"
+    "item": null,
+    "box": "100105",
+    "loss": ""
   }
 }
