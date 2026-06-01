@@ -49,8 +49,13 @@ export class MainFollowList extends Component {
     }
 
     onClickAddBtn() {
-        this.isOpenEdit = !this.isOpenEdit
-        this.setBtns()
+        // this.isOpenEdit = !this.isOpenEdit
+        // this.setBtns()
+        if (!SocialModel.getInstance().draftData) {
+            AppConst.SocialHttpManager.sendGetHttp("draft", {})
+        }
+
+        AppConst.PanelManager.openView("res/View/Follow/FollowEditView")        
     }
 
     onClickEditBtn() {

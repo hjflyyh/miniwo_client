@@ -227,8 +227,8 @@ export class LoginView extends Component {
     }
 
     onClickServer1(){
-        this.applyHttpEndpoints("127.0.0.1");
-        // this.applyHttpEndpoints("192.168.30.109")
+        // this.applyHttpEndpoints("127.0.0.1");
+        this.applyHttpEndpoints("192.168.30.109")
     }
 
     onClickServer2(){
