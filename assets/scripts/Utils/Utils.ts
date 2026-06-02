@@ -50,6 +50,71 @@ export class Utils{
     }
 
     /**
+     * 在父节点范围内等比缩放展示 modelImg（contain，不裁切）。
+     * maxWidth / maxHeight 省略时取 Sprite 父节点 UITransform 尺寸，再退回 Sprite 自身尺寸。
+     */
+    public static loadCoverFitInsideParent(
+        url: string,
+        sprite: Sprite,
+        maxWidth: number | null = null,
+        maxHeight: number | null = null,
+    ) {
+        if (!url || !sprite) {
+            return;
+        }
+        if (!url.includes('http')) {
+            url = HttpManager.baseUrl + url;
+        }
+        assetManager.loadRemote<ImageAsset>(url, (err, imageAsset) => {
+            if (!sprite?.isValid) {
+                return;
+            }
+            if (err || !imageAsset) {
+                console.log("图片下载失败", err);
+                sprite.spriteFrame = null;
+                return;
+            }
+
+            const tex = new Texture2D();
+            tex.image = imageAsset;
+            const sf = new SpriteFrame();
+            sf.texture = tex;
+            sprite.spriteFrame = sf;
+            Utils.fitSpriteInsideParent(sprite, imageAsset.width, imageAsset.height, maxWidth, maxHeight);
+        });
+    }
+
+    /** 将已挂载 spriteFrame 的 Sprite 按父节点范围等比缩放 */
+    public static fitSpriteInsideParent(
+        sprite: Sprite,
+        imgW: number,
+        imgH: number,
+        maxWidth: number | null = null,
+        maxHeight: number | null = null,
+    ) {
+        if (!sprite?.isValid || imgW <= 0 || imgH <= 0) {
+            return;
+        }
+
+        let ui = sprite.getComponent(UITransform);
+        if (!ui) {
+            ui = sprite.node.addComponent(UITransform);
+        }
+
+        const parentUi = sprite.node.parent?.getComponent(UITransform);
+        let maxW = maxWidth ?? parentUi?.width ?? 0;
+        let maxH = maxHeight ?? parentUi?.height ?? 0;
+        if (maxW <= 0 || maxH <= 0) {
+            maxW = ui.width > 0 ? ui.width : 512;
+            maxH = ui.height > 0 ? ui.height : 512;
+        }
+
+        const scale = Math.min(maxW / imgW, maxH / imgH);
+        sprite.sizeMode = Sprite.SizeMode.CUSTOM;
+        ui.setContentSize(imgW * scale, imgH * scale);
+    }
+
+    /**
      * 按目标高度等比缩放（宽度随比例变化，不裁切）。
      * targetHeight 省略时优先取父节点 UITransform 高度，其次 Sprite 自身高度。
      */

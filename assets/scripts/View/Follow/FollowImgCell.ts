@@ -33,7 +33,7 @@ export class FollowImgCell extends Component {
             this.showSp.spriteFrame = AppConst.JournalManager.imgSprite[this.data["localImgIndex"]]
         }
         if(this.data["type"] == "modelImg"){
-            Utils.loadCover(this.data["model_url"] , this.showSp)
+            Utils.loadCoverFitInsideParent(this.data["model_url"], this.showSp)
         }
     }
 

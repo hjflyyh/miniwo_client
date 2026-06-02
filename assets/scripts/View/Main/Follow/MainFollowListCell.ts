@@ -71,7 +71,13 @@ export class MainFollowListCell extends InfiniteCell {
                 this.imgSp.spriteFrame = AppConst.JournalManager.imgSprite[journalImg["localImgIndex"]]
             }
             if(imageUrl[0]["type"] == "modelImg"){
-                Utils.loadCover(imageUrl[0]["model_url"] , this.imgSp)
+                const journalModel = AppConst.JournalManager.journalImgs.find(
+                    (i) => i.type == "modelImg" && i.id == imageUrl[0]["id"],
+                )
+                const modelUrl = journalModel?.model_url ?? imageUrl[0]["model_url"]
+                if (modelUrl) {
+                    Utils.loadCoverFitInsideParent(modelUrl, this.imgSp)
+                }
             }
 
             this.imgNode.active = true

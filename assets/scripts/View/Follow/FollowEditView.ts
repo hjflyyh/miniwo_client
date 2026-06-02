@@ -80,7 +80,7 @@ export class FollowEditView extends Component {
                 if (journalImg) {
                     console.log("journalImg:", journalImg)
                     if(journalImg.type == "modelImg"){
-                        Utils.loadCover(journalImg.model_url, next.getComponent(Sprite))
+                        Utils.loadCoverFitInsideParent(journalImg.model_url, next.getChildByName("render").getComponent(Sprite))
                     }
                 //     next.getComponent(Sprite).spriteFrame = AppConst.JournalManager.imgSprite[journalImg["localImgIndex"]]
                 }

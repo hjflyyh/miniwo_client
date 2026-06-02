@@ -122,7 +122,7 @@ export class FollowView extends Component {
                     // let journalImg = AppConst.JournalManager.journalImgs.find((i) => i.type == "localImg" && i.id == img["id"])
                     if (journalImg) {
                         // imgSp.spriteFrame = AppConst.JournalManager.imgSprite[journalImg["localImgIndex"]]
-                        Utils.loadCover(journalImg.model_url, imgSp)
+                        Utils.loadCoverFitInsideParent(journalImg.model_url, imgSp)
                     }
                 }
             }
