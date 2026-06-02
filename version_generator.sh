@@ -1,0 +1,1 @@
+node version_generator.js -v 1.0.0 -u http://your-server-address/tutorial-hot-update/remote-assets/ -s build/ios-003/assets/ -d assets/

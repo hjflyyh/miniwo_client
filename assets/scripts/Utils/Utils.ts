@@ -1,8 +1,28 @@
-import { assetManager, Color, ImageAsset, instantiate, Sprite, SpriteFrame, Texture2D, UITransform, v2, Vec2, Vec3 } from "cc";
+import { assetManager, Color, ImageAsset, instantiate, Sprite, SpriteFrame, sys, Texture2D, UITransform, v2, Vec2, Vec3 } from "cc";
 import { PrefabLoad } from "./PrefabLoad";
 import { HttpManager } from "../Manager/HttpManager";
 
 export class Utils{
+
+    public static getIOSDeviceType(): string {
+        // 1. 基础平台检测：必须是原生平台且为 iOS 系统[citation:1][citation:10]
+        if (sys.isNative && sys.os === sys.OS.IOS) {
+            // 2. 获取用户代理字符串 (User Agent)
+            const ua = window.navigator.userAgent.toLowerCase();
+            
+            // 3. 通过特征字符串进行精确匹配[citation:9]
+            if (ua.includes('iphone') || ua.includes('ipod')) {
+                return 'iPhone';        // 检测到 iPod 也归类为 iPhone 逻辑
+            } else if (ua.includes('ipad')) {
+                return 'iPad';
+            } else {
+                return 'unknown';       // 可能是 Apple TV 或模拟器环境
+            }
+        }
+        
+        console.warn('当前并非原生 iOS 平台，无法进行 iOS 设备类型判断');
+        return 'unknown';
+    }
 
     public static loadCover(url : string , sprite : Sprite , width = null , height = null){
         if (!url) return;

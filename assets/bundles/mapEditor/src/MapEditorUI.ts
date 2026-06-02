@@ -13,6 +13,7 @@ import { CustomizeInput } from './CustomizeMap/CustomizeInput';
 import { EditHead } from './EditHead';
 import { network } from 'db://assets/scripts/Model/RequestData';
 import { GameBuildScroll } from 'db://assets/scripts/View/Game/GameBuildScroll';
+import { Utils } from 'db://assets/scripts/Utils/Utils';
 
 const { ccclass, property } = _decorator;
 
@@ -149,6 +150,9 @@ export class MapEditorUI extends Component {
     private static readonly REGION_MIN_GRID = 3;
 
     protected onLoad(): void {
+        if(Utils.getIOSDeviceType() === 'ipod'){
+            
+        }
         this.bottomAddNode.active = false
         
         MapManager.GetInstance().setMapEditorUI(this);

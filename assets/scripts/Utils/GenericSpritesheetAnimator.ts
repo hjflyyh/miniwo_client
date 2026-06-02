@@ -146,7 +146,7 @@ export class GenericSpritesheetAnimator extends Component {
             /** RAW：每帧按 SpriteFrame 原始像素尺寸显示，避免 CUSTOM + 整纹理缩放造成「横向拖动」错觉 */
             this.targetSprite.sizeMode = Sprite.SizeMode.RAW;
         }
-        this.setGeneratedVisible(true);
+        this.setGeneratedVisible(false);
     }
 
     onDestroy(): void {

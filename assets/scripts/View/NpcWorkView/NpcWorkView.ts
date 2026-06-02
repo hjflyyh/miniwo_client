@@ -18,6 +18,8 @@ export class NpcWorkView extends Component {
 
     private npcAnimCells: Node[] = [];
 
+
+    private showList = []
     start() {
         if (this.npcCell) {
             this.npcCell.active = false;
@@ -71,7 +73,7 @@ export class NpcWorkView extends Component {
             }
             comp.setSelected(this.chooseNpcId.includes(comp.getNpcId()));
         }
-        this.refreshNpcAnimList(UGCModel.getInstance().myNpcList);
+        this.refreshNpcAnimList();
     }
 
     private refreshNpcList(npcList: any[]) {
@@ -83,7 +85,16 @@ export class NpcWorkView extends Component {
             return;
         }
 
-        while (this.npcCells.length < npcList.length) {
+        this.showList = []
+        for(let i = 0; i < npcList.length; i++){
+            const npc = npcList[i];
+            const npcId = Number(npc?.id ?? npc?.npc_id ?? 0);
+            if(npcId && npc["sprite_generating_status"] && npc["sprite_generating_status"] == 2){
+                this.showList.push(npc)
+            }
+        }
+
+        while (this.npcCells.length < this.showList.length) {
             const cell = instantiate(this.npcCell);
             cell.parent = content;
             cell.active = true;
@@ -95,9 +106,9 @@ export class NpcWorkView extends Component {
             if (!cell?.isValid) {
                 continue;
             }
-            if (i < npcList.length) {
+            if (i < this.showList.length) {
                 cell.active = true;
-                const npc = npcList[i];
+                const npc = this.showList[i];
                 const comp = cell.getComponent(NpcWorkCell);
                 const npcId = Number(npc?.id ?? npc?.npc_id ?? 0);
                 const selected = this.chooseNpcId.includes(npcId);
@@ -110,11 +121,11 @@ export class NpcWorkView extends Component {
         const layout = content.getComponent(Layout);
         layout?.updateLayout();
 
-        this.refreshNpcAnimList(npcList);
+        this.refreshNpcAnimList();
     }
 
     /** 初始化 npcAnimCell 列表，数量与 npcCells 一致 */
-    private refreshNpcAnimList(npcList: any[]) {
+    private refreshNpcAnimList() {
         if (!this.npcAnimCell?.isValid) {
             return;
         }
@@ -123,7 +134,7 @@ export class NpcWorkView extends Component {
             return;
         }
 
-        while (this.npcAnimCells.length < npcList.length) {
+        while (this.npcAnimCells.length < this.showList.length) {
             const cell = instantiate(this.npcAnimCell);
             cell.parent = content;
             cell.active = true;
@@ -135,9 +146,9 @@ export class NpcWorkView extends Component {
             if (!cell?.isValid) {
                 continue;
             }
-            cell.active = i < npcList.length;
-            if(i < npcList.length){
-                const npc = npcList[i];
+            cell.active = i < this.showList.length;
+            if(i < this.showList.length){
+                const npc = this.showList[i];
                 const npcId = Number(npc?.id ?? npc?.npc_id ?? 0);
                 let isIn = false
                 for(let j = 0; j < this.chooseNpcId.length; j++){
@@ -158,7 +169,7 @@ export class NpcWorkView extends Component {
         EventSystem.send("OnNpcWorkAnimCellsRefresh", {
             animCells: this.npcAnimCells,
             npcCells: this.npcCells,
-            npcList,
+            npcList: this.showList,
         });
     }
 
