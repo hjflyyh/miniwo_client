@@ -424,12 +424,12 @@ export class GameView extends Component {
 
     private async onGameFarmSeedChoose(payload: GameFarmSeedChoosePayload) {
         if (!this.isCurrentMapOwnedBySelf()) {
-            EventSystem.send('ShowTips', '只能在自己的农场种植哦~');
+            EventSystem.send('ShowTips', 'You can only grow it on your own farm.~');
             return;
         }
         const farmId = this.selectedFarmPlot?.farmId;
         if (farmId == null || !Number.isFinite(farmId) || farmId <= 0) {
-            EventSystem.send('ShowTips', '请先选择一块农田');
+            EventSystem.send('ShowTips', 'Please select a piece of farmland first.');
             return;
         }
 
@@ -440,19 +440,19 @@ export class GameView extends Component {
         }
 
         if (BagModel.getInstance().getItemCount(itemId) <= 0) {
-            EventSystem.send('ShowTips', '种子不足');
+            EventSystem.send('ShowTips', 'Insufficient seeds');
             return;
         }
 
         const plot = FarmModel.getInstance().getPlot(farmId);
         if (!isPlotSeedEmpty(plot)) {
-            EventSystem.send('ShowTips', '该地块已有作物');
+            EventSystem.send('ShowTips', 'The plot already has a crop');
             return;
         }
 
         const result = await FarmModel.getInstance().grow(farmId, String(seedKey));
         if (!result.ok) {
-            EventSystem.send('ShowTips', result.message ?? '种植失败');
+            EventSystem.send('ShowTips', result.message ?? 'Planting failure');
             return;
         }
 
@@ -460,7 +460,7 @@ export class GameView extends Component {
             this.farmNode.active = false;
         }
         this.selectedFarmPlot = null;
-        EventSystem.send('ShowTips', '播种成功');
+        EventSystem.send('ShowTips', 'Successful sowing');
     }
 
     private refreshBuildContentVisibility() {
@@ -491,7 +491,7 @@ export class GameView extends Component {
         const text = this.editBox?.string ?? '';
         const mentions = MapChatManager.instance.buildMentionsFromText(text);
         if (mentions.length === 0) {
-            EventSystem.send('ShowTips', '需要先@一个npc');
+            EventSystem.send('ShowTips', 'Please mention an NPC first');
             return;
         }
         this.rewardTarget.active = true;
@@ -505,12 +505,12 @@ export class GameView extends Component {
         const text = this.editBox?.string ?? '';
         const mentions = MapChatManager.instance.buildMentionsFromText(text);
         if (mentions.length === 0) {
-            EventSystem.send('ShowTips', '需要先@一个npc');
+            EventSystem.send('ShowTips', 'Please mention an NPC first');
             return;
         }
         const count = BagModel.getInstance().getItemCount(id);
         if (count <= 0) {
-            EventSystem.send('ShowTips', '道具数量不足');
+            EventSystem.send('ShowTips', 'Insufficient items');
             return;
         }
         void this.sendGiftItemToMentionedNpc(id, mentions[0]);
@@ -519,7 +519,7 @@ export class GameView extends Component {
     private async sendGiftItemToMentionedNpc(itemId: number, mentionKey: string) {
         const npcId = this.resolveNpcIdFromMention(mentionKey);
         if (npcId <= 0) {
-            EventSystem.send('ShowTips', '无法识别NPC，请重新@');
+            EventSystem.send('ShowTips', 'Unable to identify NPC, please @ again');
             return;
         }
         const giftText = JSON.stringify({
@@ -535,10 +535,10 @@ export class GameView extends Component {
             if (this.rewardTarget) {
                 this.rewardTarget.active = false;
             }
-            EventSystem.send('ShowTips', "赠送成功");
+            EventSystem.send('ShowTips', "Gift delivery successful");
             this.editBox.string = '';
         } catch (e: any) {
-            EventSystem.send('ShowTips', String(e?.message || e || '赠送失败'));
+            EventSystem.send('ShowTips', String(e?.message || e || 'Gift delivery failed'));
         }
     }
 
@@ -594,7 +594,7 @@ export class GameView extends Component {
 
     public onClickBuild(){
         if(!this.isCurrentMapOwnedBySelf()){
-            EventSystem.send("ShowTips" , "只能编辑自己的地图哦~")
+            EventSystem.send("ShowTips" , "You can only edit your own map~")
             return
         }
         this.node.active = false

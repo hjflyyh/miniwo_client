@@ -51,12 +51,12 @@ export class CreateNpc extends Component {
     onClickEditImg(){
         const npcId = this.chooseNpcId;
         if (!npcId) {
-            EventSystem.send("ShowTips", "请先选择NPC");
+            EventSystem.send("ShowTips", "Please select the NPC first.");
             return;
         }
         const npc = UGCModel.getInstance().getNpcById(npcId);
         if (!npc) {
-            EventSystem.send("ShowTips", "NPC不存在");
+            EventSystem.send("ShowTips", "NPC does not exist.");
             return;
         }
 

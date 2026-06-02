@@ -286,19 +286,19 @@ export class Planting extends Component {
         const model = FarmModel.getInstance();
         const plot = model.getPlot(farmId);
         if (!plot || !String(plot.seed ?? '').trim()) {
-            EventSystem.send('ShowTips', '暂无作物');
+            EventSystem.send('ShowTips', 'No crops for the time being.');
             return;
         }
         if (model.isPlotHarvestableById(farmId)) {
-            EventSystem.send('ShowTips', '作物已成熟，请收获');
+            EventSystem.send('ShowTips', 'The crop has matured, please harvest it.');
             return;
         }
         if (!isPlotGrowing(plot, model.getNowUnixSec())) {
-            EventSystem.send('ShowTips', '请先浇水后再施肥');
+            EventSystem.send('ShowTips', 'Please water the crop before fertilizing it.');
             return;
         }
         if (BagModel.getInstance().getItemCount(itemId) <= 0) {
-            EventSystem.send('ShowTips', '肥料不足');
+            EventSystem.send('ShowTips', 'Insufficient fertilizer.');
             return;
         }
 

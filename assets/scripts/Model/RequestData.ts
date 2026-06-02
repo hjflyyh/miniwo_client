@@ -17,7 +17,8 @@ export module network {
         CodeAffinityGiftItem = 107, //好感度变更  结构："data": { "npc_id": 1001,  "affinity": 35, "delta_total": 10, "reasons": ["ITEM_GIFT"],"daily_gain_remaining": 50
         CodeMyMapList = 108, // 我的地图列表（分页）
         CodeFarmData = 109, // 我的农场数据
-        CodeSeedLv   = 110 // 种子种植等级与经验
+        CodeSeedLv   = 110, // 种子种植等级与经验
+        CodeMapCoverComplete = 112, //地图封面
     }
 
     export enum FollowSocialCode {
