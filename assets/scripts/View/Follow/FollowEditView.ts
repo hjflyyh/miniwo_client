@@ -5,6 +5,7 @@ import { RoleModel } from '../../Model/RoleModel';
 import { BagModel } from '../../Model/BagModel';
 import { FollowEditViewCell } from './FollowEditViewCell';
 import { FollowImgCell } from './FollowImgCell';
+import { Utils } from '../../Utils/Utils';
 const { ccclass, property } = _decorator;
 
 @ccclass('FollowEditView')
@@ -59,6 +60,13 @@ export class FollowEditView extends Component {
             let next = this.imgsRenderList[itemID]
             next.active = false
         }
+        for(let d = 0 ; d < data.length ; d++){
+            if(data[d].type == "modelImg"){
+                let journalImg = AppConst.JournalManager.journalImgs.find((i) => i.type == data[d].type && i.id == data[d].id)
+                data[d].model_url = journalImg.model_url
+            }
+        }
+
         this.openData = data
         this.openData.forEach((item) => {
             let next = this.imgsRenderList[item.id]
@@ -67,9 +75,14 @@ export class FollowEditView extends Component {
                 this.imgsAdd.addChild(next)
                 this.imgsRenderList[item.id] = next
 
+
                 let journalImg = AppConst.JournalManager.journalImgs.find((i) => i.type == item.type && i.id == item.id)
                 if (journalImg) {
-                    next.getComponent(Sprite).spriteFrame = AppConst.JournalManager.imgSprite[journalImg["localImgIndex"]]
+                    console.log("journalImg:", journalImg)
+                    if(journalImg.type == "modelImg"){
+                        Utils.loadCover(journalImg.model_url, next.getComponent(Sprite))
+                    }
+                //     next.getComponent(Sprite).spriteFrame = AppConst.JournalManager.imgSprite[journalImg["localImgIndex"]]
                 }
             }
             next.active = true

@@ -324,6 +324,9 @@ export class UGCModel {
                 }
             }
             console.log(this.myNpcList)
+            for(let m = 0 ; m < this.myNpcList.length ; m++){   
+                AppConst.JournalManager.addNpcJournal(this.myNpcList[m].npc_id , this.myNpcList[m].model_url)
+            }
             EventSystem.send("OnRefreshDailyHotNpcList", this.dailyHotNpcList);
             return;
         }
@@ -726,6 +729,7 @@ export class UGCModel {
                     this.npcList[idx].model_url = modelUrl;
                     this.npcList[idx].standee_url = String(cn?.standee_url ?? modelUrl).trim();
                     this.npcList[idx].portrait_url = String(cn?.portrait_url ?? modelUrl).trim();
+                    AppConst.JournalManager.addNpcJournal(idNum, modelUrl);
                 }
             }
         } catch (e) {
@@ -749,6 +753,7 @@ export class UGCModel {
         npc.model_url = url;
         npc.standee_url = url;
         npc.portrait_url = url;
+        AppConst.JournalManager.addNpcJournal(npcId, url);
         if (compositeNpcId) {
             npc.composite_npc_id = String(compositeNpcId);
             npc.reference_image_url = this.buildStandeePreviewPath(compositeNpcId);

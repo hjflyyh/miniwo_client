@@ -117,9 +117,12 @@ export class FollowView extends Component {
                 this.pageView.addPage(page)
                 const imgSp = page.getChildByName("banner").getComponent(Sprite);
                 if (imgSp) {
-                    let journalImg = AppConst.JournalManager.journalImgs.find((i) => i.type == "localImg" && i.id == img["id"])
+                    let journalImg = AppConst.JournalManager.journalImgs.find((i) => i.type == "modelImg" && i.id == img["id"])
+                    
+                    // let journalImg = AppConst.JournalManager.journalImgs.find((i) => i.type == "localImg" && i.id == img["id"])
                     if (journalImg) {
-                        imgSp.spriteFrame = AppConst.JournalManager.imgSprite[journalImg["localImgIndex"]]
+                        // imgSp.spriteFrame = AppConst.JournalManager.imgSprite[journalImg["localImgIndex"]]
+                        Utils.loadCover(journalImg.model_url, imgSp)
                     }
                 }
             }

@@ -2,6 +2,7 @@ import { _decorator, Component, Label, Node, Sprite } from 'cc';
 import InfiniteCell from '../../../plugin/InfiniteList/InfiniteCell';
 import { SocialModel } from '../../Model/SocialModel';
 import { AppConst } from '../../AppConst';
+import { Utils } from '../../Utils/Utils';
 const { ccclass, property } = _decorator;
 
 @ccclass('UserCenterShareCell')
@@ -62,10 +63,14 @@ export class UserCenterShareCell extends InfiniteCell {
             this.imgSp.spriteFrame = null
             let imageUrl = post?.ImageURL && JSON.parse(post?.ImageURL || "[]")
             if (imageUrl && imageUrl.length > 0) {
-                let journalImg = AppConst.JournalManager.journalImgs.find((i) => i.type == "localImg" && i.id == imageUrl[0]["id"])
+                let journalImg = AppConst.JournalManager.journalImgs.find((i) => i.type == "modelImg" && i.id == imageUrl[0]["id"])
                 if (journalImg) {
-                    this.imgSp.spriteFrame = AppConst.JournalManager.imgSprite[journalImg["localImgIndex"]]
+                    // this.imgSp.spriteFrame = AppConst.JournalManager.imgSprite[journalImg["localImgIndex"]]
+                    Utils.loadCover(imageUrl[0]["model_url"] , this.imgSp)
                 }
+                            // if(imageUrl[0]["type"] == "modelImg"){
+                            //     Utils.loadCover(imageUrl[0]["model_url"] , this.imgSp)
+                            // }
             }
         }
         if (SocialModel.getInstance().getPostDataByPostList(index * 2 + 1)) {
