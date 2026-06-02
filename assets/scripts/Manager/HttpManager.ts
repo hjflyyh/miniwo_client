@@ -3,7 +3,7 @@ import { AppConst } from '../AppConst';
 const { ccclass } = _decorator;
 
 /** 原生 App（真机/模拟器）默认 HTTP / WS 入口，与 LoginView 选服一致 */
-export const LOGIN_NATIVE_DEFAULT_IP = '115.190.225.83';
+export const LOGIN_NATIVE_DEFAULT_IP = '192.168.30.109';
 
 @ccclass('HttpManager')
 export class HttpManager extends Component {
@@ -44,7 +44,7 @@ export class HttpManager extends Component {
      * 从 fetch 抛出的 Error 中解析服务端错误文案。
      * 例：POST register HTTP 400: {"error":"密码不能为空且至少6位"}
      */
-    public static resolveErrorTip(err: unknown, fallback = "网络请求失败，请稍后重试"): string {
+    public static resolveErrorTip(err: unknown, fallback = "Network request failed. Please try again later."): string {
         const raw = err instanceof Error ? err.message : String(err ?? "");
         const fromBody = HttpManager.parseErrorBodyFromHttpMessage(raw);
         if (fromBody) {

@@ -10065,8 +10065,8 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 259.754,
-      "y": -696.839,
+      "x": 265.79400000000004,
+      "y": -704.738,
       "z": 0
     },
     "_lrot": {
@@ -10187,12 +10187,12 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 0,
-      "g": 0,
-      "b": 0,
+      "r": 255,
+      "g": 255,
+      "b": 255,
       "a": 255
     },
-    "_string": "修复客户端",
+    "_string": "Fix client",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 20,
@@ -10265,8 +10265,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 40
+      "width": 162.262,
+      "height": 55.798
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -10296,13 +10296,13 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 134,
+      "g": 129,
+      "b": 242,
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "20835ba4-6145-4fbc-a58a-051ce700aa3e@f9941",
+      "__uuid__": "ef1514d4-f1b9-4c0e-8c28-34f289889067@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 1,
@@ -10342,7 +10342,7 @@
       }
     ],
     "_interactable": true,
-    "_transition": 2,
+    "_transition": 3,
     "_normalColor": {
       "__type__": "cc.Color",
       "r": 214,
@@ -10372,7 +10372,7 @@
       "a": 255
     },
     "_normalSprite": {
-      "__uuid__": "20835ba4-6145-4fbc-a58a-051ce700aa3e@f9941",
+      "__uuid__": "ef1514d4-f1b9-4c0e-8c28-34f289889067@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_hoverSprite": {

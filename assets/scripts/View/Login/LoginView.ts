@@ -1,4 +1,4 @@
-import { _decorator, Component, EditBox, Node, WebView, sys } from 'cc';
+import { _decorator, Component, EditBox, Node, WebView, sys, native } from 'cc';
 import { GoogleAuthManager } from '../../Manager/GoogleAuthManager';
 import { RoleModel } from '../../Model/RoleModel';
 import { network } from '../../Model/RequestData';
@@ -114,6 +114,35 @@ export class LoginView extends Component {
         storage.setItem(this.STORAGE_WS_IP_KEY, HttpManager.wsIpBase);
     }
 
+    private bindNativeCallback() {
+        console.log("Binding native callback for Apple login result");
+        (globalThis as typeof globalThis & { onAppleLoginResult?: (isSuccess: boolean, jsonStr: string) => void }).onAppleLoginResult =
+            (isSuccess: boolean, jsonStr: string) => {
+                console.log("Received Apple login result from native:", isSuccess, jsonStr);
+                let jsonData = JSON.parse(jsonStr || "{}");
+                if (isSuccess) {
+                    let userID = jsonData.userID;
+                    this.loginMailPending = true;
+                    const req = AppConst.HttpManager.sendPostHttp("loginGame" , JSON.stringify({
+                        platform : 0,
+                        loginType : 3,
+                        token : userID,
+                        email : userID
+                    }));
+                    Promise.resolve(req).then(
+                        () => {},
+                        () => {}
+                    ).then(() => {
+                        if (this.isValid) {
+                            this.loginMailPending = false;
+                        }
+                    });
+                } else {
+                    EventSystem.send("ShowTips", "Apple login failed");
+                }
+            };
+    }    
+
     onGooleLoginClose(){
         this.webview.url = ""
         this.webview.node.active = false
@@ -131,6 +160,13 @@ export class LoginView extends Component {
     }
 
     onClickApple(){
+        if (sys.isNative && sys.platform === sys.Platform.IOS) {
+            // 调用原生登录方法
+            const reflection = native.reflection;
+            this.bindNativeCallback()
+            reflection.callStaticMethod('AppleLoginBridge', 'login');
+            return;
+        }
         EventSystem.send("ShowTips", "未开放苹果登录，请使用邮箱")
         return
         this.webview.node.active = true;

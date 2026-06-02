@@ -1,6 +1,12 @@
 // 将此组件挂载到一个包含 Button 和 Sprite 的节点上
-import { _decorator, Component, Node, Sprite, SpriteFrame, Texture2D, ImageAsset, sys, UITransform } from 'cc';
+import { _decorator, Component, Node, Sprite, SpriteFrame, Texture2D, ImageAsset, native, sys, UITransform } from 'cc';
 const { ccclass, property } = _decorator;
+
+declare const jsb: {
+    reflection?: {
+        callStaticMethod(className: string, methodName: string, ...args: unknown[]): unknown;
+    };
+};
 
 /** 用户上传参考图最小宽高（像素） */
 export const MIN_UPLOAD_IMAGE_WIDTH = 240;
@@ -8,6 +14,9 @@ export const MIN_UPLOAD_IMAGE_HEIGHT = 240;
 
 @ccclass('LoadLocalImage')
 export class LoadLocalImage extends Component {
+    /** 当前接收 iOS 相册回调的实例 */
+    private static activeInstance: LoadLocalImage | null = null;
+
     @property(Sprite)
     targetSprite: Sprite = null; // 用于显示图片的 Sprite 组件
 
@@ -43,6 +52,11 @@ export class LoadLocalImage extends Component {
         }
         if (this.targetSprite?.node) {
             this.targetSprite.node.active = false;
+        }
+
+        if (sys.isNative && sys.platform === sys.Platform.IOS) {
+            this.bindNativeImageCallback();
+            return;
         }
 
         if (!sys.isBrowser) {
@@ -157,7 +171,43 @@ export class LoadLocalImage extends Component {
         }
     }
 
+    /** iOS 原生相册回调（与 Web 的 data URL 一致） */
+    public onNativeImageSelected(dataUrl: string) {
+        const value = String(dataUrl || "").trim();
+        if (!value) {
+            this.clearSelection();
+            return;
+        }
+        this.createSpriteFrameFromDataURL(value);
+    }
+
+    private bindNativeImageCallback() {
+        LoadLocalImage.activeInstance = this;
+        (globalThis as typeof globalThis & { onImageSelected?: (url: string) => void }).onImageSelected =
+            (url: string) => {
+                LoadLocalImage.activeInstance?.onNativeImageSelected(url);
+            };
+    }
+
+    private callNativeSelectPhoto() {
+        const reflection = native.reflection ?? jsb?.reflection;
+        if (!reflection?.callStaticMethod) {
+            console.warn("[LoadLocalImage] native.reflection unavailable");
+            return;
+        }
+        (reflection.callStaticMethod as (cls: string, method: string, ...args: unknown[]) => unknown)(
+            "ImagePickerHelper",
+            "selectPhoto",
+        );
+    }
+
     onClick() {
+        if (sys.isNative && sys.platform === sys.Platform.IOS) {
+            this.bindNativeImageCallback();
+            this.callNativeSelectPhoto();
+            return;
+        }
+
         if (!sys.isBrowser || !this.input) {
             return;
         }
@@ -165,6 +215,13 @@ export class LoadLocalImage extends Component {
     }
 
     onDestroy() {
+        if (LoadLocalImage.activeInstance === this) {
+            LoadLocalImage.activeInstance = null;
+            const g = globalThis as typeof globalThis & { onImageSelected?: (url: string) => void };
+            if (g.onImageSelected) {
+                g.onImageSelected = undefined;
+            }
+        }
         if (this.input?.parentNode) {
             this.input.parentNode.removeChild(this.input);
         }

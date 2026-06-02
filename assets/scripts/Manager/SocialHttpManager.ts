@@ -49,7 +49,7 @@ export class SocialHttpManager extends Component {
             })
             .catch((err) => {
                 const error = err instanceof Error ? err : new Error(String(err));
-                EventSystem.send("ShowTips", "网络请求失败，请稍后重试");
+                EventSystem.send("ShowTips", "Network request failed. Please try again later.");
                 EventSystem.send("HttpError", error);
                 throw error;
             })
@@ -95,7 +95,7 @@ export class SocialHttpManager extends Component {
             })
             .catch((err) => {
                 const error = err instanceof Error ? err : new Error(String(err));
-                EventSystem.send("ShowTips", "网络请求失败，请稍后重试");
+                EventSystem.send("ShowTips", "Network request failed. Please try again later.");
                 EventSystem.send("HttpError", error);
                 throw error;
             })

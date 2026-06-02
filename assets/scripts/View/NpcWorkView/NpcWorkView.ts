@@ -71,6 +71,7 @@ export class NpcWorkView extends Component {
             }
             comp.setSelected(this.chooseNpcId.includes(comp.getNpcId()));
         }
+        this.refreshNpcAnimList(UGCModel.getInstance().myNpcList);
     }
 
     private refreshNpcList(npcList: any[]) {
@@ -135,10 +136,19 @@ export class NpcWorkView extends Component {
                 continue;
             }
             cell.active = i < npcList.length;
-            if(cell.active){
+            if(i < npcList.length){
                 const npc = npcList[i];
+                const npcId = Number(npc?.id ?? npc?.npc_id ?? 0);
+                let isIn = false
+                for(let j = 0; j < this.chooseNpcId.length; j++){
+                    if(this.chooseNpcId[j] === npcId){
+                        isIn = true
+                        break
+                    }
+                }
                 const comp = cell.getComponent(NpcWorkAnimCell);
                 comp.refreshData(npc);
+                cell.active = isIn
             }
         }
 
