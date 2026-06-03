@@ -76,6 +76,7 @@ export class ShopList extends Component {
             this.refreshShopList();
         }, 0.1)
         if (this.checkNode) {
+            this.checkItemSprite.spriteFrame = null
             this.checkNode.active = false
         }
         this.refrehsTab();
@@ -226,6 +227,7 @@ export class ShopList extends Component {
         this.chooseCheckShopId = 0
         this.chooseCheckShopNum = 1
         if (this.checkNode) {
+            this.checkItemSprite.spriteFrame = null
             this.checkNode.active = false
         }
     }
@@ -258,6 +260,7 @@ export class ShopList extends Component {
         this.chooseCheckShopId = 0
         this.chooseCheckShopNum = 1
         if (this.checkNode) {
+            this.checkItemSprite.spriteFrame = null
             this.checkNode.active = false
         }
     }
@@ -433,6 +436,7 @@ export class ShopList extends Component {
     }
 
     private loadItemSprite(sprite: Sprite | null, itemId: number) {
+        sprite.spriteFrame = null
         if (!sprite || !Number.isFinite(itemId) || itemId <= 0) {
             return
         }
@@ -441,11 +445,6 @@ export class ShopList extends Component {
                 sprite.spriteFrame = sf
                 return
             }
-            resources.load(`common/image/item_${itemId}/spriteFrame`, SpriteFrame, (err2, sf2) => {
-                if (!err2 && sf2 && sprite?.isValid) {
-                    sprite.spriteFrame = sf2
-                }
-            })
         })
     }
 }

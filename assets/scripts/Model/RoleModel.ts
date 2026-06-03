@@ -238,12 +238,15 @@ export class RoleModel {
                 this.mbti = userInfo?.mbti
                 this.bio = userInfo?.bio
             }
-
-            const nakamaToken = data.nakama_token != null ? String(data.nakama_token) : '';
-            const wsUrl = `ws://${HttpManager.wsIpBase}/ws?token=${encodeURIComponent(nakamaToken)}`;
-            console.log(wsUrl)
-            AppConst.WebSocketManager.setConfig(wsUrl);
-            AppConst.WebSocketManager.connect();
+            if(data.map_count && data.map_count > 0){
+                const nakamaToken = data.nakama_token != null ? String(data.nakama_token) : '';
+                const wsUrl = `ws://${HttpManager.wsIpBase}/ws?token=${encodeURIComponent(nakamaToken)}`;
+                console.log(wsUrl)
+                AppConst.WebSocketManager.setConfig(wsUrl);
+                AppConst.WebSocketManager.connect();
+            }else{
+                AppConst.PanelManager.openView("res/View/ChooseWorldView")
+            }
         }
     }
 }

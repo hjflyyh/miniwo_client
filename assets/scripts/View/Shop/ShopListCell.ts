@@ -83,17 +83,17 @@ export class ShopListCell extends Component {
 
     OnClickBuy() {
         console.log("ShopListCell OnClickBuy")
-        if (this.shopData && Number(this.shopData.currency) === 0) {
-            const needPrice = this.getSalePrice(this.shopData)
-            const diamond = this.getDiamondCount()
-            if (diamond < needPrice) {
-                EventSystem.send("ShowTips", "道具不足")
-                return
-            }
-        }
-        let json = new network.ShopBuyRequest();
-        AppConst.WebSocketManager.send(json.toJSON(this.itemID, 1))
-        // EventSystem.send("ShowBuyCheck", this.shopData)
+        // if (this.shopData && Number(this.shopData.currency) === 0) {
+        //     const needPrice = this.getSalePrice(this.shopData)
+        //     const diamond = this.getDiamondCount()
+        //     if (diamond < needPrice) {
+        //         EventSystem.send("ShowTips", "道具不足")
+        //         return
+        //     }
+        // }
+        // let json = new network.ShopBuyRequest();
+        // AppConst.WebSocketManager.send(json.toJSON(this.itemID, 1))
+        EventSystem.send("ShowBuyCheck", this.shopData)
     }
 
 }
