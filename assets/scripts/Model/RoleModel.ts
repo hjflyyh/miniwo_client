@@ -187,7 +187,7 @@ export class RoleModel {
             } catch { }
             return;
         }
-        const message = content.message || "账号已在其他设备登录";
+        const message = content.message || "The account has been logged in on another device.";
         this.handleForceLogout(message);
     }
 
@@ -213,7 +213,7 @@ export class RoleModel {
                 AppConst.PanelManager.openView(loginViewUrl);
             }
         }
-        EventSystem.send("ShowTips", message || "账号已在其他设备登录");
+        EventSystem.send("ShowTips", message || "The account has been logged in on another device.");
     }
 
     private OnHttpMessage(data) {
