@@ -118,6 +118,10 @@ export class MapEditorUI extends Component {
     @property([Node])
     public hideNodes : Node[] = []; 
 
+    
+    @property(Node)
+    public UITab : Node = null;
+
     private mapToolNode: { tool: Node; switch: Node; }[] = [];
     private tileMenu: Map<string, Node> = new Map;
     private tileContent: Node = null;
@@ -150,8 +154,8 @@ export class MapEditorUI extends Component {
     private static readonly REGION_MIN_GRID = 3;
 
     protected onLoad(): void {
-        if(Utils.getIOSDeviceType() === 'ipod'){
-            
+        if(Utils.handleAdaptation()){
+            this.UITab.scale = new Vec3(0.7, 0.7 , 1);
         }
         this.bottomAddNode.active = false
         

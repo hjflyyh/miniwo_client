@@ -1,8 +1,17 @@
-import { assetManager, Color, ImageAsset, instantiate, Sprite, SpriteFrame, sys, Texture2D, UITransform, v2, Vec2, Vec3 } from "cc";
+import { assetManager, Color, ImageAsset, instantiate, log, Sprite, SpriteFrame, sys, Texture2D, UITransform, v2, Vec2, Vec3, view } from "cc";
 import { PrefabLoad } from "./PrefabLoad";
 import { HttpManager } from "../Manager/HttpManager";
 
 export class Utils{
+
+    public static handleAdaptation(){
+        let winSize = view.getVisibleSize();
+        log("适配比例 ： " + (winSize.height / winSize.width))
+        if(winSize.height / winSize.width <= 1.8){
+            return true;            
+        }
+        return false;
+    }
 
     public static getIOSDeviceType(): string {
         // 1. 基础平台检测：必须是原生平台且为 iOS 系统[citation:1][citation:10]

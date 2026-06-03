@@ -1,4 +1,4 @@
-import { _decorator, Color, Component, Label, Node, resources, Size, Sprite, SpriteFrame } from 'cc';
+import { _decorator, Color, Component, Label, Node, resources, Size, Sprite, SpriteFrame, Vec3 } from 'cc';
 import { YXCollectionView } from '../../../plugin/list-3x/yx-collection-view';
 import { YXMasonryFlowLayout } from '../../../plugin/list-3x/yx-masonry-flow-layout';
 import { ShopListCell } from './ShopListCell';
@@ -6,6 +6,7 @@ import { ShopModel } from '../../Model/ShopModel';
 import { BagModel } from '../../Model/BagModel';
 import { network } from '../../Model/RequestData';
 import { AppConst } from '../../AppConst';
+import { Utils } from '../../Utils/Utils';
 const { ccclass, property } = _decorator;
 
 @ccclass('ShopList')
@@ -51,6 +52,9 @@ export class ShopList extends Component {
     @property([Label])
     public chooseLabeles: Label[] = [];
 
+    @property(Node)
+    public bottomNode : Node = null;
+
     chooseCheckShopId = 0
     chooseCheckShopNum = 1
     private chooseCheckShopData: any = null
@@ -58,6 +62,10 @@ export class ShopList extends Component {
     private showType = 0;
 
     start() {
+        if(Utils.handleAdaptation()){
+            this.bottomNode.scale = new Vec3(0.7 , 0.7 , 1)
+        }
+
         EventSystem.addListent("ShopDataUpdated", this.refreshShopList, this)
         EventSystem.addListent("ShowBuyCheck", this.onShowBuyCheck, this)
         EventSystem.addListent("BagUpdate", this.refreshCheckNode, this)

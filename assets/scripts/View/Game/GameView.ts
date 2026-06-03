@@ -1,4 +1,4 @@
-import { _decorator, Component, EditBox, instantiate, Label, math, Node, resources, Sprite, SpriteFrame, UITransform, director } from 'cc';
+import { _decorator, Component, EditBox, instantiate, Label, math, Node, resources, Sprite, SpriteFrame, UITransform, director, Vec3 } from 'cc';
 import { AppConst } from '../../AppConst';
 import { network } from '../../Model/RequestData';
 import { RoleModel } from '../../Model/RoleModel';
@@ -20,6 +20,7 @@ import {
     GameFarmSeedChoosePayload,
 } from './GameFarmChooseCell';
 import { isPlotSeedEmpty, plotNeedsWaterOverlay } from '../../Model/Farm/FarmTypes';
+import { Utils } from '../../Utils/Utils';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameView')
@@ -112,6 +113,9 @@ export class GameView extends Component {
     private selectedFarmPlot: GameFarmPlotClickPayload | null = null;
 
     start() {
+        if(Utils.handleAdaptation()){
+            this.node.scale = new Vec3(0.7, 0.7 , 1);
+        }        
         this.atNpc.active = false
 
         this.atNpcCell.active = false
