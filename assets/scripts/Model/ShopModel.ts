@@ -1,5 +1,4 @@
 import { AppConst } from "../AppConst";
-import { BagModel } from "./BagModel";
 import { network } from "./RequestData";
 
 export class ShopModel {
@@ -19,38 +18,13 @@ export class ShopModel {
         EventSystem.addListent("WebSocketMessage", this.OnWebSocketMessage, this)
     }
 
-    public getShopSellCrops(){
-        let list = []
-        let cfgAll = AppConst.JSONManager.getItemAll("basicCrops")
-        for(let c in cfgAll){
-            let crop = cfgAll[c]
-            if(crop.base_crop_price != null && crop.base_crop_price > 0){
-                let itemId = crop.item_id
-                let num = BagModel.getInstance().getItemCount(itemId)
-                console.log("getShopSellCrops itemId num" , itemId , num)
-                if(num > 0){
-                    crop.id = c
-                    list.push(crop)
-                }
-            }
-        }
-        return list
-    }
-
-    public getShopList(type) {
+    public getShopList() {
         if (this.shopList.length == 0) {
             const cfgAll = AppConst.JSONManager.getItemAll("gameStore")
             this.shopList = (Object as any).values(cfgAll)
         }
-        // return this.shopList
-        let list = []
-        for(let i = 0 ; i < this.shopList.length; i++){
-            let item = this.shopList[i]
-            if(item.type == type){
-                list.push(item)
-            }
-        }
-        return list
+        return this.shopList
+        
     }
 
     private applyShopData(rows: any[]) {
