@@ -17,7 +17,6 @@ export class UserCenter extends Component {
 
 
     start() {
-        console.log("UserCenter start:", RoleModel.getInstance().nakama_token)
         this.httpRequest()
         EventSystem.addListent("WebSocketNotifications", this.OnWSNotification, this)
         EventSystem.send("OnSetNowShowPanel", this.node["__url"])
@@ -57,10 +56,6 @@ export class UserCenter extends Component {
 
     OnClickUserInfo() {
         // AppConst.PanelManager.openView("res/View/UserCenter/UserInfo", null, null, "res/View/UserCenter/UserCenter")
-    }
-
-    OnClickVisit() {
-        AppConst.PanelManager.openView("res/View/Visit/VisitList", null, null, "res/View/UserCenter/UserCenter")
     }
 
     private OnWSNotification(data) {
