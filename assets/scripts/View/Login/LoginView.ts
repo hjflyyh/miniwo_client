@@ -149,7 +149,7 @@ export class LoginView extends Component {
     }
 
     onClickGoogle(){
-        EventSystem.send("ShowTips", "未开放谷歌登录，请使用邮箱")
+        EventSystem.send("ShowTips", "Google login is not available. Please use your email.")
         return
         GoogleAuthManager.GetInstance().login();
     }
@@ -167,7 +167,7 @@ export class LoginView extends Component {
             reflection.callStaticMethod('AppleLoginBridge', 'login');
             return;
         }
-        EventSystem.send("ShowTips", "未开放苹果登录，请使用邮箱")
+        EventSystem.send("ShowTips", "Apple login is not available. Please use your email.")
         return
         this.webview.node.active = true;
         this.webview.url = "http://"+ HttpManager.ipBase +"/apple-login.html";

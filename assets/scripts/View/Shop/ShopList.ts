@@ -7,6 +7,7 @@ import { BagModel } from '../../Model/BagModel';
 import { network } from '../../Model/RequestData';
 import { AppConst } from '../../AppConst';
 import { Utils } from '../../Utils/Utils';
+import { ShopCheckSellNode } from './ShopCheckSellNode';
 const { ccclass, property } = _decorator;
 
 @ccclass('ShopList')
@@ -21,12 +22,19 @@ export class ShopList extends Component {
     @property(YXCollectionView)
     listComp: YXCollectionView = null
 
+    @property(YXCollectionView)
+    listSellComp: YXCollectionView = null
+
     showShops = []
+    showSells = []
 
     private column = 4
 
     @property(Node)
     checkNode: Node = null
+
+    @property(Node)
+    checkSellNode : Node = null
 
     @property(Label)
     checkItemName: Label = null
@@ -79,6 +87,8 @@ export class ShopList extends Component {
             this.checkItemSprite.spriteFrame = null
             this.checkNode.active = false
         }
+        this.checkSellNode.active = false
+        
         this.refrehsTab();
     }
 
@@ -115,13 +125,19 @@ export class ShopList extends Component {
         if (!shopData) {
             return
         }
-        this.chooseCheckShopData = this.resolveShopData(shopData)
-        this.chooseCheckShopId = Number(this.chooseCheckShopData?.item_id)
-        this.chooseCheckShopNum = 1
-        if (this.checkNode) {
-            this.checkNode.active = true
+        if(this.showType == 2){
+            this.checkSellNode.active = true
+            let sellNode = this.checkSellNode.getComponent(ShopCheckSellNode) as ShopCheckSellNode
+            sellNode.refreshSellNode(shopData, 1)
+        }else{
+            this.chooseCheckShopData = this.resolveShopData(shopData)
+            this.chooseCheckShopId = Number(this.chooseCheckShopData?.item_id)
+            this.chooseCheckShopNum = 1
+            if (this.checkNode) {
+                this.checkNode.active = true
+            }
+            this.refreshCheckNode()
         }
-        this.refreshCheckNode()
     }
 
     refreshCheckNode() {
@@ -263,31 +279,58 @@ export class ShopList extends Component {
             this.checkItemSprite.spriteFrame = null
             this.checkNode.active = false
         }
+        this.checkSellNode.active = false
     }
 
     refreshShopList() {
-        this.showShops = ShopModel.getInstance().getShopList(this.showType)
-        console.log("ShopList refreshShopList", this.showShops)
+        if(this.showType == 2){
+            this.listComp.node.active = false
+            this.listSellComp.node.active = true
+            this.showSells = ShopModel.getInstance().getShopSellCrops()
 
-        if (this.checkNode?.active && this.chooseCheckShopData) {
-            this.refreshCheckNode()
-        }
+            this.listSellComp.numberOfItems = () => this.showSells.length;
+            if (!this.listSellComp.enabled) {
+                this.listSellComp.enabled = true
 
-        this.listComp.numberOfItems = () => this.showShops.length;
-        if (!this.listComp.enabled) {
-            this.listComp.enabled = true
+                this.listSellComp.cellForItemAt = (indexPath, collectionView) => {
+                    const data = this.showSells[indexPath.item]
+                    const cell = collectionView.dequeueReusableCell(`cell`)
+                    let listCell = cell.getComponent("ShopListCell") as ShopListCell
+                    listCell.setSellId(data)
+                    return cell
+                }
+                this.updateFlowLayout()
+                this.receivedData()
+            } else {
+                this.listSellComp.reloadData()
+            }            
+        }else{
+            this.listComp.node.active = true
+            this.listSellComp.node.active = false
 
-            this.listComp.cellForItemAt = (indexPath, collectionView) => {
-                const data = this.showShops[indexPath.item]
-                const cell = collectionView.dequeueReusableCell(`cell`)
-                let listCell = cell.getComponent("ShopListCell") as ShopListCell
-                listCell.setShopId(data)
-                return cell
+            this.showShops = ShopModel.getInstance().getShopList(this.showType)
+            console.log("ShopList refreshShopList", this.showShops)
+
+            if (this.checkNode?.active && this.chooseCheckShopData) {
+                this.refreshCheckNode()
             }
-            this.updateFlowLayout()
-            this.receivedData()
-        } else {
-            this.listComp.reloadData()
+
+            this.listComp.numberOfItems = () => this.showShops.length;
+            if (!this.listComp.enabled) {
+                this.listComp.enabled = true
+
+                this.listComp.cellForItemAt = (indexPath, collectionView) => {
+                    const data = this.showShops[indexPath.item]
+                    const cell = collectionView.dequeueReusableCell(`cell`)
+                    let listCell = cell.getComponent("ShopListCell") as ShopListCell
+                    listCell.setShopId(data)
+                    return cell
+                }
+                this.updateFlowLayout()
+                this.receivedData()
+            } else {
+                this.listComp.reloadData()
+            }
         }
     }
 
@@ -300,11 +343,13 @@ export class ShopList extends Component {
         layout.itemSize = () => {
             return new Size(0, 300)
         }
+        this.listSellComp.layout = layout
         this.listComp.layout = layout
     }
 
     receivedData() {
         this.listComp.reloadData()
+        this.listSellComp.reloadData()
     }
 
     private resolveShopData(shopData: any): any {

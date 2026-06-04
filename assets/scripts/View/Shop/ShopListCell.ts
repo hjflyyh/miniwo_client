@@ -1,4 +1,4 @@
-import { _decorator, Color, Component, instantiate, Label, math, Node, Size } from 'cc';
+import { _decorator, Color, Component, instantiate, Label, math, Node, resources, Size, Sprite, SpriteFrame } from 'cc';
 import { YXCollectionView } from '../../../plugin/list-3x/yx-collection-view';
 import { CardModel } from '../../Model/CardModel';
 import { CustomGridFlowLayout } from '../../../plugin/list-3x/custom-grid-flow-layout';
@@ -7,6 +7,7 @@ import { network } from '../../Model/RequestData';
 import { AppConst } from '../../AppConst';
 import { PrefabLoad } from '../../Utils/PrefabLoad';
 import { BagModel } from '../../Model/BagModel';
+import { getBasicSeedMatureSpriteResourcePath } from '../../Model/Farm/FarmSeedVisual';
 const { ccclass, property } = _decorator;
 
 @ccclass('ShopListCell')
@@ -25,13 +26,52 @@ export class ShopListCell extends Component {
     @property(PrefabLoad)
     icon : PrefabLoad = null
 
+
+    @property(Node)
+    zhuanshi : Node = null
+
+     @property(Node)
+    jinbi : Node = null   
+
+    @property(Node)
+    sellNode : Node = null
+
+    @property(Sprite)
+    buttonSprite : Sprite = null
+
     private itemID
     private shopData: any = null
     start() {
 
     }
 
+    setSellId(data){
+        this.shopData = data
+        this.ShopMoney.color = new Color(87, 80, 238, 255)
+        this.buttonSprite.color = Color.WHITE
+
+        this.sellNode.active = true;
+        this.jinbi.active = true
+        this.zhuanshi.active = false
+        this.itemID = data.item_id
+        let _this = this
+        resources.load(getBasicSeedMatureSpriteResourcePath(data.id + ""), SpriteFrame, (err, sf) => {
+            _this.icon.node.getComponent(Sprite).spriteFrame = sf;
+        });
+        this.ShopLimit.string = ""
+        this.ShopMoney.string = "" + data.base_crop_price
+
+        this.icon.node.scale = new math.Vec3(0.8, 0.8, 0.8)
+    }
+
     setShopId(Shop_data) {
+        this.ShopMoney.color = Color.WHITE
+        this.buttonSprite.color = new Color(134, 129, 255, 255)
+
+        this.sellNode.active = false;
+        this.jinbi.active = false
+        this.zhuanshi.active = true    
+        this.icon.node.scale = new math.Vec3(2, 2, 2)    
         // console.log("'ShopListCell'ShopId'", Shop_data)
         this.shopData = Shop_data
         this.itemID = Shop_data.item_id
@@ -47,8 +87,11 @@ export class ShopListCell extends Component {
         const needPrice = this.getSalePrice(Shop_data)
         this.ShopMoney.string = "X" + needPrice
         this.refreshMoneyColor(Shop_data, needPrice)
-        
-        this.icon.url = "UITexture/itemIcon/"+ Shop_data.item_id + "/spriteFrame"
+        let _this = this
+        resources.load("UITexture/itemIcon/"+ Shop_data.item_id + "/spriteFrame", SpriteFrame, (err, sf) => {
+            _this.icon.node.getComponent(Sprite).spriteFrame = sf;
+        });
+        // this.icon.url = "UITexture/itemIcon/"+ Shop_data.item_id + "/spriteFrame"
     }
 
     private getSalePrice(shopData: any): number {

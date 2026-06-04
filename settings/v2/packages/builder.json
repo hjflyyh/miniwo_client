@@ -30,5 +30,15 @@
         }
       }
     }
+  },
+  "splash-setting": {
+    "background": {
+      "image": "project://settings/底图.png",
+      "type": "default"
+    },
+    "logo": {
+      "type": "none"
+    },
+    "totalTime": 500
   }
 }

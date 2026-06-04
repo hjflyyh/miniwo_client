@@ -241,6 +241,11 @@ export module network {
             return { rpc: { id: "shop_buy", payload: JSON.stringify({ item_id: parseInt(itemID), count: parseInt(count) }) } };
         }
     }
+    export class ShopSellRequest {
+        toJSON(itemID, count) {
+            return { rpc: { id: "shop_sell", payload: JSON.stringify({ item_id: parseInt(itemID), count: parseInt(count) }) } };
+        }
+    }
     export class GetUserByIDRequest {
         toJSON(userIDs) {
             return { rpc: { id: "get_user_by_ids", payload: JSON.stringify({ playerIDs: userIDs }) } };

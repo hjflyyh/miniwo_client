@@ -185,7 +185,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "7d8f9b89-4fd1-4c9f-a3ab-38ec7cded7ca@f9941",
+      "__uuid__": "0293ff48-fcb8-4b83-b4d4-b5fca202c4a0@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -322,7 +322,7 @@
       "__id__": 10
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 12
@@ -544,9 +544,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 0,
-      "g": 0,
-      "b": 0,
+      "r": 255,
+      "g": 255,
+      "b": 255,
       "a": 255
     },
     "_string": "Choose your world",
@@ -1276,7 +1276,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 175,
+      "width": 386,
       "height": 80
     },
     "_anchorPoint": {
@@ -1313,7 +1313,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "1993628f-8a65-4750-8264-de4a239dc02d@f9941",
+      "__uuid__": "4578dc88-83b7-4fd1-85d7-81b40aa1cf68@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 1,
