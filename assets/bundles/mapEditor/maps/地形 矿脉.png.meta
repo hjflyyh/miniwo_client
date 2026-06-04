@@ -2,7 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "294d5be6-0284-4f69-947c-1c8b94d62594",
+  "uuid": "9a53b8db-691c-4734-b7fd-e0a842e046d8",
   "files": [
     ".json",
     ".png"
@@ -10,14 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "294d5be6-0284-4f69-947c-1c8b94d62594@6c48a",
-      "displayName": "image 723",
+      "uuid": "9a53b8db-691c-4734-b7fd-e0a842e046d8@6c48a",
+      "displayName": "地形 矿脉",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "294d5be6-0284-4f69-947c-1c8b94d62594",
+        "imageUuidOrDatabaseUri": "9a53b8db-691c-4734-b7fd-e0a842e046d8",
         "isUuid": true,
         "visible": false,
         "minfilter": "linear",
@@ -34,8 +34,8 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "294d5be6-0284-4f69-947c-1c8b94d62594@f9941",
-      "displayName": "image 723",
+      "uuid": "9a53b8db-691c-4734-b7fd-e0a842e046d8@f9941",
+      "displayName": "地形 矿脉",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
@@ -45,10 +45,10 @@
         "offsetY": 0,
         "trimX": 0,
         "trimY": 0,
-        "width": 646,
-        "height": 465,
-        "rawWidth": 646,
-        "rawHeight": 465,
+        "width": 512,
+        "height": 740,
+        "rawWidth": 512,
+        "rawHeight": 740,
         "borderTop": 0,
         "borderBottom": 0,
         "borderLeft": 0,
@@ -60,17 +60,17 @@
         "meshType": 0,
         "vertices": {
           "rawPosition": [
-            -323,
-            -232.5,
+            -256,
+            -370,
             0,
-            323,
-            -232.5,
+            256,
+            -370,
             0,
-            -323,
-            232.5,
+            -256,
+            370,
             0,
-            323,
-            232.5,
+            256,
+            370,
             0
           ],
           "indexes": [
@@ -83,12 +83,12 @@
           ],
           "uv": [
             0,
-            465,
-            646,
-            465,
+            740,
+            512,
+            740,
             0,
             0,
-            646,
+            512,
             0
           ],
           "nuv": [
@@ -102,18 +102,18 @@
             1
           ],
           "minPos": [
-            -323,
-            -232.5,
+            -256,
+            -370,
             0
           ],
           "maxPos": [
-            323,
-            232.5,
+            256,
+            370,
             0
           ]
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "294d5be6-0284-4f69-947c-1c8b94d62594@6c48a",
+        "imageUuidOrDatabaseUri": "9a53b8db-691c-4734-b7fd-e0a842e046d8@6c48a",
         "atlasUuid": "",
         "trimType": "auto"
       },
@@ -129,6 +129,6 @@
     "type": "sprite-frame",
     "fixAlphaTransparencyArtifacts": false,
     "hasAlpha": true,
-    "redirect": "294d5be6-0284-4f69-947c-1c8b94d62594@6c48a"
+    "redirect": "9a53b8db-691c-4734-b7fd-e0a842e046d8@6c48a"
   }
 }

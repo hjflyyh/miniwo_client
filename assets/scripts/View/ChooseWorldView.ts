@@ -24,7 +24,7 @@ export class ChooseWorldView extends Component {
 
     refreshTab(){
         for(let i = 0; i < this.worldNodes.length; i++){
-            this.worldNodes[i].active = i === this.chooseIndex;
+            this.worldNodes[i].active = i == this.chooseIndex;
         }
     }
 
@@ -77,13 +77,13 @@ export class ChooseWorldView extends Component {
         const req = AppConst.HttpManager.sendPostHttp("createUserMap", JSON.stringify({
                 token: RoleModel.getInstance().token,
                 mapName: name,
+                mapEra : this.chooseIndex,
             }));
         Promise.resolve(req).then(
                 () => {
                     console.log("createUserMap success")
                     const nakamaToken = RoleModel.getInstance().nakama_token != null ? String(RoleModel.getInstance().nakama_token) : '';
                     const wsUrl = `ws://${HttpManager.wsIpBase}/ws?token=${encodeURIComponent(nakamaToken)}`;
-                    console.log(wsUrl)
                     AppConst.WebSocketManager.setConfig(wsUrl);
                     AppConst.WebSocketManager.connect();    
                     AppConst.PanelManager.CloseViewByUrl("res/View/ChooseWorldView")           

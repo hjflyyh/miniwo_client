@@ -6206,12 +6206,12 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "fa287850-8f1e-4076-acf0-e25030e23ef3@f9941",
+      "__uuid__": "9f9554b0-4529-47ad-a431-6196f8f339b9@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
     "_fillType": 0,
-    "_sizeMode": 1,
+    "_sizeMode": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
       "x": 0,
