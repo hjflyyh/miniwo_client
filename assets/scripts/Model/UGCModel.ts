@@ -350,6 +350,7 @@ export class UGCModel {
             } else {
                 this.npcList = [];
             }
+            console.log("UGCModel getNpcByMap npcList", this.npcList)
             const mapId = Number(
                 MapModel.getInstance().my_map_data?.id ?? this.mapData.id ?? data.mapId ?? 0,
             );

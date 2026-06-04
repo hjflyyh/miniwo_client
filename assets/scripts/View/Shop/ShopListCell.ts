@@ -42,7 +42,6 @@ export class ShopListCell extends Component {
     private itemID
     private shopData: any = null
     start() {
-
     }
 
     setSellId(data){
