@@ -77,7 +77,7 @@ export class ChooseWorldView extends Component {
         const req = AppConst.HttpManager.sendPostHttp("createUserMap", JSON.stringify({
                 token: RoleModel.getInstance().token,
                 mapName: name,
-                mapEra : this.chooseIndex,
+                mapEra : this.chooseIndex + 1,
             }));
         Promise.resolve(req).then(
                 () => {
