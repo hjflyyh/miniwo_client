@@ -117,5 +117,12 @@
     "type": 15,
     "img_size": 1,
     "is_prefab": 1
+  },
+  "118": {
+    "name_cn": "3种地图类型",
+    "resource": "maps/mapTypePrefab",
+    "type": 15,
+    "img_size": 1,
+    "is_prefab": 1
   }
 }
