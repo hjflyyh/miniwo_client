@@ -3,7 +3,7 @@ import { AppConst } from '../AppConst';
 const { ccclass } = _decorator;
 
 /** 原生 App（真机/模拟器）默认 HTTP / WS 入口，与 LoginView 选服一致 */
-export const LOGIN_NATIVE_DEFAULT_IP = '192.168.30.109';
+export const LOGIN_NATIVE_DEFAULT_IP = '100.24.65.122';
 
 @ccclass('HttpManager')
 export class HttpManager extends Component {
