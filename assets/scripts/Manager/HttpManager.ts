@@ -96,6 +96,8 @@ export class HttpManager extends Component {
         const error = err instanceof Error ? err : new Error(String(err));
         EventSystem.send("ShowTips", HttpManager.resolveErrorTip(error));
         EventSystem.send("HttpError", error);
+
+        EventSystem.send("HideJuhua" ,"HttpSend")
         throw error;
     }
 
@@ -116,6 +118,7 @@ export class HttpManager extends Component {
         })
         .then(data => {
             console.log("请求回复：",data)
+            EventSystem.send("HideJuhua" ,"HttpSend")
             if(data.success){
                 if(data.data == null){
                     data.data = {}
@@ -152,6 +155,7 @@ export class HttpManager extends Component {
             body: data
         })
             .then(async res => {
+                EventSystem.send("HideJuhua" ,"HttpSend")
                 if (!res.ok) {
                     const raw = await res.text();
                     throw new Error(`POST ${functionName} HTTP ${res.status}: ${raw}`);
@@ -160,6 +164,7 @@ export class HttpManager extends Component {
             })
             .then(resp => {
                 console.log("请求回复：", resp);
+                EventSystem.send("HideJuhua" ,"HttpSend")
                 if (resp?.error) {
                     EventSystem.send("ShowTips", resp.error);
                     return resp;

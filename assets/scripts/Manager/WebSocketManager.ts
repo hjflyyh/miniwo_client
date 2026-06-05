@@ -87,6 +87,9 @@ export class WebSocketManager extends Component {
             console.warn('WebSocketManager: 配置错误，请配置url');
             return;
         }
+
+        EventSystem.send("ShowJuhua", "HttpSend")
+
         this.isManualClose = false;
         this.reconnectAttempts = 0;
         
@@ -233,6 +236,8 @@ export class WebSocketManager extends Component {
             this.setupWebSocketEvents();
 
         } catch (error) {
+            EventSystem.send("HideJuhua" ,"HttpSend")
+
             console.error('WebSocketManager: 创建连接失败', error);
             this.wsNativeLog('doConnect threw', String(error));
             this.handleConnectionError();
@@ -252,6 +257,8 @@ export class WebSocketManager extends Component {
      * 连接成功回调
      */
     private onOpen(event: Event): void {
+        EventSystem.send("HideJuhua" ,"HttpSend")
+
         const wasReconnecting = this.reconnectAttempts > 0 || this.state === WebSocketState.RECONNECTING;
         console.log('WebSocketManager: 连接成功');
         this.wsNativeLog('onOpen', 'wasReconnecting=', wasReconnecting, 'readyState=', this.ws?.readyState);
@@ -279,6 +286,8 @@ export class WebSocketManager extends Component {
      * 连接关闭回调
      */
     private onClose(event: CloseEvent): void {
+        EventSystem.send("HideJuhua" ,"HttpSend")
+        
         console.log(`WebSocketManager: 连接关闭, code: ${event.code}, reason: ${event.reason}`);
         this.wsNativeLog(
             'onClose',
