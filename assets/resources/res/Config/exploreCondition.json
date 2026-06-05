@@ -1,70 +1,70 @@
 {
-  "101": {
+  "111": {
     "name_cn": "体力值",
     "name_en": "stamina_value",
     "type": 1
   },
-  "102": {
+  "112": {
     "name_cn": "健康值",
     "name_en": "health value",
     "type": 1
   },
-  "103": {
+  "113": {
     "name_cn": "好感度",
     "name_en": "favorability",
     "type": 1
   },
-  "104": {
+  "114": {
     "name_cn": "善恶值",
     "name_en": "morality value",
     "type": 1
   },
-  "105": {
+  "115": {
     "name_cn": "心情值",
     "name_en": "mood value",
     "type": 1
   },
-  "106": {
+  "116": {
     "name_cn": "魅力值",
     "name_en": "charm value",
     "type": 1
   },
-  "107": {
+  "117": {
     "name_cn": "领导力",
     "name_en": "leadership",
     "type": 1
   },
-  "108": {
+  "118": {
     "name_cn": "自由度",
     "name_en": "freedom degree",
     "type": 1
   },
-  "109": {
+  "119": {
     "name_cn": "智力值",
     "name_en": "intelligence value",
     "type": 1
   },
-  "110": {
+  "120": {
     "name_cn": "创造力",
     "name_en": "creativity",
     "type": 1
   },
-  "111": {
+  "121": {
     "name_cn": "耐心值",
     "name_en": "patience value",
     "type": 1
   },
-  "112": {
+  "122": {
     "name_cn": "好奇心",
     "name_en": "curiosity",
     "type": 1
   },
-  "113": {
+  "123": {
     "name_cn": "灵力值",
     "name_en": "spiritual power",
     "type": 1
   },
-  "114": {
+  "124": {
     "name_cn": "幸运值",
     "name_en": "luck value",
     "type": 1
