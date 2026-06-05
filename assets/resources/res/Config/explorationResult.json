@@ -1,90 +1,105 @@
 {
   "1": {
     "result": "1",
+    "CG": "100",
     "item": null,
     "box": "100101",
     "loss": ""
   },
   "2": {
     "result": "1",
+    "CG": "100",
     "item": null,
     "box": "100102",
     "loss": ""
   },
   "3": {
     "result": "1",
+    "CG": "100",
     "item": null,
     "box": "100103",
     "loss": ""
   },
   "4": {
     "result": "3",
+    "CG": "800",
     "item": null,
     "box": null,
     "loss": ""
   },
   "5": {
     "result": "1",
+    "CG": "200",
     "item": null,
     "box": "100104",
     "loss": ""
   },
   "6": {
     "result": "1",
-    "item": "114_10",
+    "CG": "1000",
+    "item": "120_10",
     "box": null,
     "loss": ""
   },
   "7": {
     "result": "1",
-    "item": "121_10",
+    "CG": "1000",
+    "item": "203_10",
     "box": null,
     "loss": ""
   },
   "8": {
     "result": "1",
-    "item": "116_10",
+    "CG": "1000",
+    "item": "122_10",
     "box": null,
     "loss": ""
   },
   "9": {
     "result": "1",
+    "CG": "1000",
     "item": "104_1000",
     "box": null,
     "loss": ""
   },
   "10": {
     "result": "2",
+    "CG": "1000",
     "item": null,
     "box": null,
     "loss": "104_500#106_200"
   },
   "11": {
     "result": "2",
+    "CG": "1000",
     "item": null,
     "box": null,
     "loss": "104_200"
   },
   "12": {
     "result": "2",
+    "CG": "1000",
     "item": null,
     "box": null,
     "loss": "104_200"
   },
   "13": {
     "result": "2",
+    "CG": "1000",
     "item": null,
     "box": null,
-    "loss": "106_200"
+    "loss": "112_200"
   },
   "14": {
     "result": "2",
+    "CG": "1000",
     "item": null,
     "box": null,
     "loss": "104_500"
   },
   "15": {
     "result": "1",
+    "CG": "500",
     "item": null,
     "box": "100105",
     "loss": ""
