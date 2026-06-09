@@ -933,7 +933,8 @@ export class UGCModel {
         }
         return AppConst.HttpManager.sendPostHttpAny(
             "generateAICharacter",
-            JSON.stringify(body)
+            JSON.stringify(body),
+            { silent: false },
         );
     }
 
@@ -968,7 +969,7 @@ export class UGCModel {
                 name: String(name || ""),
                 npc_description: String(npcDescription || ""),
             }),
-            { silent: true },
+            { silent: false },
         );
     }
 
@@ -987,7 +988,7 @@ export class UGCModel {
                 name: String(name || ""),
                 reference_image_data: String(referenceImageData || ""),
             }),
-            { silent: true },
+            { silent: false },
         );
     }
 
@@ -999,7 +1000,7 @@ export class UGCModel {
         }
         return AppConst.HttpManager.sendGetHttpAny(
             `api/npc/character/standee/${id}?token=${encodeURIComponent(this.token())}`,
-            { silent: true },
+            { silent: false },
         );
     }
 

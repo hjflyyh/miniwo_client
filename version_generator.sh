@@ -1,1 +1,1 @@
-node version_generator.js -v 1.0.0 -u http://your-server-address/tutorial-hot-update/remote-assets/ -s build/ios-003/assets/ -d assets/
+node version_generator.js -v 1.0.5 -u https://dtqxq8libnjoe.cloudfront.net/uploads/hotUpdate/ -s build/ios-003/assets/ -d assets/

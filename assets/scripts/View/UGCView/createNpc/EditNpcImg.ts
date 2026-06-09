@@ -133,7 +133,7 @@ export class EditNpcImg extends Component {
             this.handleStandeeSubmitResponse(resp);
         }).catch(() => {
             this.endPortraitGeneration();
-        });
+        }); 
     }
 
     onClickNext(){
