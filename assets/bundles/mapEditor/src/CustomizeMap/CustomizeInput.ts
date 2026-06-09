@@ -71,7 +71,7 @@ export class CustomizeInput extends Component {
             this.mapEditor.isBuildSwitch = true;
         }
         const gridPos = MapModel.getInstance().worldPosToGride(loc, this.mapEditor);
-        this.mapEditor.signDeteleTile(gridPos);
+        this.mapEditor.signDeteleTile(gridPos, loc);
         this.mapEditor.isMousePoint = true;
         this.mapEditor.startMousePosition = loc.clone();
     }
@@ -434,7 +434,7 @@ export class CustomizeInput extends Component {
             }
             const touchLoc = event.getLocation();
             const gridPos = MapModel.getInstance().worldPosToGride(touchLoc, this.mapEditor);
-            this.mapEditor.signDeteleTile(gridPos);
+            this.mapEditor.signDeteleTile(gridPos, touchLoc);
             return;
         }
 

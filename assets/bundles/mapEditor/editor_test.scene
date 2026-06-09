@@ -1513,6 +1513,8 @@
     "sideDoorOffsetY": 0,
     "sideDoorInsetX": 10,
     "enablePlacementDragOffset": true,
+    "placementFingerLift": 40,
+    "deleteFingerLift": 120,
     "enableDecorStackPlacement": true,
     "enableRoadIgnoreGridOccupancy": true,
     "animator": null,
