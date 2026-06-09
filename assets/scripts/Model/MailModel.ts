@@ -1,7 +1,8 @@
+import { AppConst } from "../AppConst";
 import { network } from "./RequestData";
 
 export class MailModel {
-    public mails
+    public mails = []
 
     private static _inst: MailModel | null = null;
     public static getInstance(): MailModel {
@@ -18,12 +19,24 @@ export class MailModel {
 
     }
 
+    public OnRead(id){
+        for(let m = 0 ; m < this.mails.length ; m++){
+            if(this.mails[m].id == id && !this.mails[m].is_read){
+                this.mails[m].is_read = true;
+                let MailReadRequest = new network.MailReadRequest();
+                AppConst.WebSocketManager.send(MailReadRequest.toJSON(id));
+            }
+        }
+    }
+
     private OnWSNotification(data) {
         if (data.code == network.ServerCode.CodeMailList) {
             console.log("邮件列表")
             console.log(data)
             let content = JSON.parse(data.content)
-            this.mails = content.mails
+            if(content.mails){
+                this.mails = content.mails
+            }
             EventSystem.send("MailUpdate")
         }
     }    
