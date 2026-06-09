@@ -60,11 +60,11 @@ export class UserCenterShareCell extends InfiniteCell {
             this.onLike.active = isLike
             this.offLike.active = !isLike
 
-            this.imgSp.spriteFrame = null
             let imageUrl = post?.ImageURL && JSON.parse(post?.ImageURL || "[]")
             if (imageUrl && imageUrl.length > 0) {
                 let journalImg = AppConst.JournalManager.journalImgs.find((i) => i.type == "modelImg" && i.id == imageUrl[0]["id"])
                 if (journalImg?.model_url) {
+                    this.imgSp.spriteFrame = null
                     Utils.loadCoverFitInsideParent(journalImg.model_url, this.imgSp)
                 }
             }
