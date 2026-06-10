@@ -127,11 +127,6 @@ export class MapEditor extends Component {
     @property({ displayName: '启用格子拖动偏移', tooltip: '关闭时预览与摆放严格按格子中心；开启后手指/鼠标可带偏移（与逻辑占格无关）。含树/家具/墙饰/移动及农场农田(FRAM)。' })
     public enablePlacementDragOffset : boolean = false;
 
-    @property({ type: Number, tooltip: '手指跟随时物品相对于手指的上移像素' })
-    public placementFingerLift: number = 40;
-
-    @property({ type: Number, tooltip: '移动端删除模式下，预览相对手指的上移像素' })
-    public deleteFingerLift: number = 120;
 
     @property({ displayName: '允许道具堆叠摆放', tooltip: '勾选后：室内家具可叠放（放宽 place_type 与 decor_type 匹配）；农场地图(mapGameType=0)上外景树/农田(Plant、Fram)也可叠放，多实例用唯一 mapItems key。不勾选则沿用原规则。' })
     public enableDecorStackPlacement : boolean = false;
@@ -710,8 +705,7 @@ export class MapEditor extends Component {
             }
             if (this.lastPointerLocalPos) {
                 if (this.usePlacementFingerFollow() && screenPos) {
-                    const lift = this.placementFingerLift || 0;
-                    const fingerLocal = new Vec3(this.lastPointerLocalPos.x, this.lastPointerLocalPos.y + lift, 0);
+                    const fingerLocal = new Vec3(this.lastPointerLocalPos.x, this.lastPointerLocalPos.y, 0);
                     this.tileMaskNode.setWorldPosition(mapUi.convertToWorldSpaceAR(fingerLocal));
                     const snapGrid = MapModel.getInstance().worldPosToGride(screenPos, this);
                     this.showMaskColor(snapGrid);
@@ -2024,13 +2018,8 @@ export class MapEditor extends Component {
         }
         const w = this.mainCamera.screenToWorld(new Vec3(screenPos.x, screenPos.y, 0));
         const lp = mapUi.convertToNodeSpaceAR(new Vec3(w.x, w.y, 0));
-        const lift = this.deleteFingerLift > 0 ? this.deleteFingerLift : 120;
-        const fingerLocal = new Vec3(lp.x, lp.y + lift, 0);
+        const fingerLocal = new Vec3(lp.x, lp.y, 0);
         this.tileMaskNode.setWorldPosition(mapUi.convertToWorldSpaceAR(fingerLocal));
-    }
-
-    private shouldUseDeleteFingerLift(screenPos?: Vec2): boolean {
-        return this.isTouchPlacementDevice() && !!screenPos;
     }
 
     // 标识当前要删除的物品（优先单拆：房门、家具、墙饰；否则拆整屋）
@@ -2079,7 +2068,7 @@ export class MapEditor extends Component {
                 size = target.tile.getComponent(UITransform)?.contentSize || size;
             }
 
-            if (this.shouldUseDeleteFingerLift(screenPos)) {
+            if (screenPos && this.isTouchPlacementDevice()) {
                 this.applyDeleteTileMaskAtFinger(screenPos);
             } else if (target?.tileType === "House" && target?.belong) {
                 const house = this.allHouse.get(target.belong);

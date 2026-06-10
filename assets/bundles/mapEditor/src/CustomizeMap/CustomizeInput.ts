@@ -362,8 +362,9 @@ export class CustomizeInput extends Component {
         }
         this.isPinching = false;
         this.lastPinchDistance = 0;
-
-        const gridPos = MapModel.getInstance().worldPosToGride(event.getLocation() , this.mapEditor);
+        let eventLocation = event.getLocation()
+        eventLocation.y += 100
+        const gridPos = MapModel.getInstance().worldPosToGride(eventLocation , this.mapEditor);
         const localPos = MapModel.getInstance().gridToWorld(gridPos , null , this.mapEditor);
         this.mapEditor._startPoint = localPos
         this.mapEditor._startGrad = gridPos
@@ -380,15 +381,15 @@ export class CustomizeInput extends Component {
         }
 
         if (manager.actionStatus == ActionStatus.DETELE) {
-            this.beginDeleteFingerDrag(event.getLocation());
+            this.beginDeleteFingerDrag(eventLocation);
         } else if (this.isPlacementFingerDragActive(manager)) {
             this.beginPlacementFingerDrag(event);
         } else if (!this.mapEditor.isBuildSwitch) {
-            const mouseWorldPoint = this.mapEditor.mainCamera.screenToWorld(new Vec3(event.getLocation().x, event.getLocation().y, 0))
+            const mouseWorldPoint = this.mapEditor.mainCamera.screenToWorld(new Vec3(eventLocation.x, eventLocation.y, 0))
             if (this.mapEditor.tileMaskNode.getComponent(UITransform).getBoundingBoxToWorld().contains(new Vec2(mouseWorldPoint.x, mouseWorldPoint.y))) {
                 this.mapEditor.isBuildSwitch = true;
                 this.mapEditor.isMousePoint = true;
-                this.mapEditor.startMousePosition = event.getLocation();
+                this.mapEditor.startMousePosition = eventLocation;
             } else if (manager.actionStatus == ActionStatus.WALL) {
                 this.mapEditor.isMousePoint = true;
             }
@@ -427,12 +428,13 @@ export class CustomizeInput extends Component {
         if(activeTouches.length >= 2){
             return
         }
-
+        let eventLocation = event.getLocation()
+        eventLocation.y += 100
         if (manager.actionStatus == ActionStatus.DETELE) {
             if (!this.mapEditor.isBuildSwitch) {
                 this.mapEditor.isBuildSwitch = true;
             }
-            const touchLoc = event.getLocation();
+            const touchLoc = eventLocation;
             const gridPos = MapModel.getInstance().worldPosToGride(touchLoc, this.mapEditor);
             this.mapEditor.signDeteleTile(gridPos, touchLoc);
             return;
@@ -444,7 +446,7 @@ export class CustomizeInput extends Component {
                 this.mapEditor.isBuildSwitch = true;
             }
 
-            const touchLoc = event.getLocation();
+            const touchLoc = eventLocation;
             const gridPos = MapModel.getInstance().worldPosToGride(touchLoc, this.mapEditor);
             const localPos = MapModel.getInstance().gridToWorld(gridPos, null, this.mapEditor);
 

@@ -462,7 +462,7 @@ export class MapEditorUI extends Component {
 
     setBottomNode(){
         this.confirmBtn.active = MapManager.GetInstance().actionStatus == ActionStatus.DECOR || MapManager.GetInstance().actionStatus == ActionStatus.PLANT
-            || MapManager.GetInstance().actionStatus == ActionStatus.FRAM
+            || MapManager.GetInstance().actionStatus == ActionStatus.FRAM || MapManager.GetInstance().actionStatus == ActionStatus.DETELE
             || MapManager.GetInstance().actionStatus == ActionStatus.REGION
         this.fanzhuangBtn.active = MapManager.GetInstance().actionStatus == ActionStatus.DECOR  || MapManager.GetInstance().actionStatus == ActionStatus.PLANT
             || MapManager.GetInstance().actionStatus == ActionStatus.FRAM

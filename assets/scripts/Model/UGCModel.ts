@@ -812,7 +812,7 @@ export class UGCModel {
                 token: this.token(),
                 npc_id: nid,
             }),
-            { silent: true },
+            { silent: false },
         );
     }
 
