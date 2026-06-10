@@ -69,8 +69,8 @@ export class ShopListCell extends Component {
         this.buttonSprite.color = new Color(134, 129, 255, 255)
 
         this.sellNode.active = false;
-        this.jinbi.active = false
-        this.zhuanshi.active = true    
+        this.jinbi.active = Shop_data.currency == 2
+        this.zhuanshi.active = Shop_data.currency == 0    
         this.icon.node.scale = new math.Vec3(2, 2, 2)    
         // console.log("'ShopListCell'ShopId'", Shop_data)
         this.shopData = Shop_data
