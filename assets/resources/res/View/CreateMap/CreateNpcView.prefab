@@ -6371,9 +6371,7 @@
   },
   {
     "__type__": "cc.ClickEvent",
-    "target": {
-      "__id__": 1
-    },
+    "target": null,
     "component": "",
     "_componentId": "922e0lSNvhNZb/6ZLZ0KbLY",
     "handler": "onClickCloseNpcCreate",

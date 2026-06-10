@@ -170,5 +170,13 @@
   "44": {
     "function": "AI角色体力存储上限",
     "configuration": "1000"
+  },
+  "45": {
+    "function": "不同等级CG的漫画张数",
+    "configuration": "1#2#3#5"
+  },
+  "46": {
+    "function": "不同功能可获得的CG等级",
+    "configuration": "地图日常中生成:N#世界探索获得:R"
   }
 }

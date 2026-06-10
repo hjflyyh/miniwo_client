@@ -64,6 +64,12 @@ export module network {
         }
     }
 
+    export class MailReadRequest{
+        toJSON(mail_id) {
+            return { rpc: { id: "mail_read", payload: JSON.stringify({ mail_id: mail_id }) } };
+        }
+    }
+
     export class JoinMapEequest {
         toJSON(map_id) {
             return { rpc: { id: "join_map", payload: JSON.stringify({ map_id: map_id }) } };

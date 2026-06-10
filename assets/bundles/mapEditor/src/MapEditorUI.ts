@@ -261,8 +261,15 @@ export class MapEditorUI extends Component {
     public onClickBackSelect(){
         this.bottomAddNode.active = false;
         
+        // 隐藏删除控件，防止切回时仍显示删除动画/图标
+        const editor = MapManager.GetInstance().getMapEditor();
+        if (editor && editor.buildControl && editor.buildControl.detele && editor.buildControl.detele.node) {
+            editor.buildControl.detele.node.active = false;
+        }
         if(this.selectNode1.active){
             this.node.active = false
+            MapManager.GetInstance().actionStatus = ActionStatus.Back;
+            editor?.hideTileMask();
             EventSystem.send("CloseMapEditor")
             return
         }
@@ -270,7 +277,8 @@ export class MapEditorUI extends Component {
         this.selectNode2.active = false;
             // _index = 11;
         MapManager.GetInstance().actionStatus = ActionStatus.Back;
-        MapManager.GetInstance().getMapEditor().hideTileMask();
+
+        editor?.hideTileMask();
         this.bottomAddNode.active = false;        
     }
 
@@ -454,7 +462,7 @@ export class MapEditorUI extends Component {
 
     setBottomNode(){
         this.confirmBtn.active = MapManager.GetInstance().actionStatus == ActionStatus.DECOR || MapManager.GetInstance().actionStatus == ActionStatus.PLANT
-            || MapManager.GetInstance().actionStatus == ActionStatus.FRAM
+            || MapManager.GetInstance().actionStatus == ActionStatus.FRAM || MapManager.GetInstance().actionStatus == ActionStatus.DETELE
             || MapManager.GetInstance().actionStatus == ActionStatus.REGION
         this.fanzhuangBtn.active = MapManager.GetInstance().actionStatus == ActionStatus.DECOR  || MapManager.GetInstance().actionStatus == ActionStatus.PLANT
             || MapManager.GetInstance().actionStatus == ActionStatus.FRAM
@@ -905,6 +913,9 @@ export class MapEditorUI extends Component {
     }
 
     OnClickDelete(){
+        if(this.selectNode2.active){
+            this.onClickBackSelect()
+        }
         this.disableRegionSelectionMode();
         this.tileContent.active = false;
         MapManager.GetInstance().actionStatus = ActionStatus.DETELE;

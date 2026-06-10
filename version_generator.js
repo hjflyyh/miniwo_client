@@ -23,7 +23,7 @@ while (i < process.argv.length) {
         case '--url':
         case '-u':
             var url = process.argv[i + 1];
-            manifest.packageUrl = url;
+            manifest.packageUrl = url + manifest.version;;
             manifest.remoteManifestUrl = url + 'project.manifest';
             manifest.remoteVersionUrl = url + 'version.manifest';
             i += 2;
@@ -48,7 +48,8 @@ while (i < process.argv.length) {
             break;
     }
 }
-
+manifest.remoteManifestUrl += "?version=" + manifest.version;
+manifest.remoteVersionUrl += "?version=" + manifest.version;
 
 function readDir(dir, obj) {
     try {

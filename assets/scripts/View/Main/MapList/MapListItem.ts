@@ -31,11 +31,11 @@ export class MapListItem extends Component implements InfiniteCell{
     mapData
 
     start() {
-        GridEventSystem.addListent("WebSocketNotifications", this.OnWebSocketNotifications, this)
+        EventSystem.addListent("WebSocketNotifications", this.OnWebSocketNotifications, this)
     }
 
     OnWebSocketNotifications(data){
-        if (data.code == network.ServerCode.CodePlayerNpcAffinity) {
+        if (data.code == network.ServerCode.CodeMapCoverComplete) {
             //封面更新
             let content: any = data?.content;
             if (typeof content === "string") {
@@ -43,7 +43,12 @@ export class MapListItem extends Component implements InfiniteCell{
             }
             if(content?.map_id && content?.map_cover_url){
                 const mapId = Number(content.map_id);
-                const mapData = MapModel.getInstance().sceneMaps[mapId];
+                let mapData = null;
+                for(let m = 0 ; m < MapModel.getInstance().sceneMaps.length ; m++){
+                    if(MapModel.getInstance().sceneMaps[m].id == mapId){
+                        mapData = MapModel.getInstance().sceneMaps[m]
+                    }
+                }
                 if(mapData){
                     mapData["map_cover_url"] = content.map_cover_url;
                     if(this.mapData && Number(this.mapData["id"]) == mapId){

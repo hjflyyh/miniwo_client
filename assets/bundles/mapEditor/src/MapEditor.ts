@@ -127,6 +127,7 @@ export class MapEditor extends Component {
     @property({ displayName: '启用格子拖动偏移', tooltip: '关闭时预览与摆放严格按格子中心；开启后手指/鼠标可带偏移（与逻辑占格无关）。含树/家具/墙饰/移动及农场农田(FRAM)。' })
     public enablePlacementDragOffset : boolean = false;
 
+
     @property({ displayName: '允许道具堆叠摆放', tooltip: '勾选后：室内家具可叠放（放宽 place_type 与 decor_type 匹配）；农场地图(mapGameType=0)上外景树/农田(Plant、Fram)也可叠放，多实例用唯一 mapItems key。不勾选则沿用原规则。' })
     public enableDecorStackPlacement : boolean = false;
 
@@ -142,7 +143,7 @@ export class MapEditor extends Component {
     private curTileNode: Node = null;
     private maskSp: Sprite = null;
     private buildIcon: Node = null;
-    private buildControl: {
+    public buildControl: {
         move: Animation,
         detele: Animation,
         frame: UITransform,
@@ -2009,8 +2010,20 @@ export class MapEditor extends Component {
         return null;
     }
 
+    /** 移动端删除预览：相对手指位置上移，避免遮挡删除组件 */
+    private applyDeleteTileMaskAtFinger(screenPos: Vec2) {
+        const mapUi = this.mapContainer?.getComponent(UITransform);
+        if (!mapUi || !this.tileMaskNode || !this.mainCamera) {
+            return;
+        }
+        const w = this.mainCamera.screenToWorld(new Vec3(screenPos.x, screenPos.y, 0));
+        const lp = mapUi.convertToNodeSpaceAR(new Vec3(w.x, w.y, 0));
+        const fingerLocal = new Vec3(lp.x, lp.y, 0);
+        this.tileMaskNode.setWorldPosition(mapUi.convertToWorldSpaceAR(fingerLocal));
+    }
+
     // 标识当前要删除的物品（优先单拆：房门、家具、墙饰；否则拆整屋）
-    signDeteleTile(gridPos: Vec2) {
+    signDeteleTile(gridPos: Vec2, screenPos?: Vec2) {
         const manager = MapManager.GetInstance();
         if (manager.actionStatus == ActionStatus.DETELE) {
             if (!MapEditor.DELETE_SKIP_REGION_AND_HOUSE) {
@@ -2050,10 +2063,19 @@ export class MapEditor extends Component {
                 const house = this.allHouse.get(target.belong);
                 if (house) {
                     size = this.getHouseSize(house.grid);
-                    this.tileMaskNode.setWorldPosition(MapModel.getInstance().getHouseCenterPos(house.grid, this));
                 }
             } else if (target?.tile && target.tile.isValid) {
                 size = target.tile.getComponent(UITransform)?.contentSize || size;
+            }
+
+            if (screenPos && this.isTouchPlacementDevice()) {
+                this.applyDeleteTileMaskAtFinger(screenPos);
+            } else if (target?.tileType === "House" && target?.belong) {
+                const house = this.allHouse.get(target.belong);
+                if (house) {
+                    this.tileMaskNode.setWorldPosition(MapModel.getInstance().getHouseCenterPos(house.grid, this));
+                }
+            } else if (target?.tile && target.tile.isValid) {
                 this.tileMaskNode.setWorldPosition(target.tile.worldPosition);
             } else {
                 const localPos = MapModel.getInstance().gridToWorld(gridPos, size, this);
@@ -3990,6 +4012,10 @@ export class MapEditor extends Component {
 
         this.maskSp.color = new Color('#FFFFFF32');
         this.tileMaskNode.active = true;
+        // 选中家具时隐藏删除控件，避免与预览冲突
+        if (this.buildControl && this.buildControl.detele && this.buildControl.detele.node) {
+            this.buildControl.detele.node.active = false;
+        }
         this.setTileMaskSp();
     }
 

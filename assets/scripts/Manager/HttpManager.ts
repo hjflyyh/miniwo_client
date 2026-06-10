@@ -101,9 +101,11 @@ export class HttpManager extends Component {
         throw error;
     }
 
-    public sendPostHttp(functionName , data){
+    public sendPostHttp(functionName , data , isShowJuhua = true){
         log(functionName)
-        EventSystem.send("ShowJuhua" ,"HttpSend")
+        if(isShowJuhua){
+            EventSystem.send("ShowJuhua" ,"HttpSend")
+        }
         const request = fetch(HttpManager.baseUrl + "/" + functionName , {
             method :'POST',
             headers: {'Content-Type': 'application/json'},
@@ -146,49 +148,71 @@ export class HttpManager extends Component {
      */
     public sendPostHttpAny(functionName: string, data: any, options?: { silent?: boolean }) {
         log(functionName);
-        if (!options?.silent) {
+        if (options && options.silent) {
             EventSystem.send("ShowJuhua", "HttpSend");
-        }
-        const request = fetch(HttpManager.baseUrl + "/" + functionName, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: data
+        }        
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            let url = HttpManager.baseUrl + "/" + functionName
+            xhr.open('POST', url, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.timeout = 120000; // 关键：加长超时
+            xhr.onload = () => {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    try {
+                        resolve(JSON.parse(xhr.responseText));
+                    } catch (e) {
+                        reject(new Error('Invalid JSON'));
+                    }
+                } else {
+                    reject(new Error(`HTTP ${xhr.status}: ${xhr.responseText}`));
+                }
+            };
+            xhr.onerror = () => reject(new Error('Network error'));
+            xhr.ontimeout = () => reject(new Error('Request timed out'));
+            xhr.send(data);            
         })
-            .then(async res => {
-                EventSystem.send("HideJuhua" ,"HttpSend")
-                if (!res.ok) {
-                    const raw = await res.text();
-                    throw new Error(`POST ${functionName} HTTP ${res.status}: ${raw}`);
-                }
-                return res.json();
-            })
-            .then(resp => {
-                console.log("请求回复：", resp);
-                EventSystem.send("HideJuhua" ,"HttpSend")
-                if (resp?.error) {
-                    EventSystem.send("ShowTips", resp.error);
-                    return resp;
-                }
-                if (resp?.message && resp?.success === false) {
-                    EventSystem.send("ShowTips", resp.message);
-                    return resp;
-                }
-                // 统一派发：业务侧可按 functionName 区分解析
-                EventSystem.send("HttpMessage", { functionName, raw: resp });
-                return resp;
-            })
-            .catch((err) => {
-                this.handleRequestError(err)
-            });
-        request.catch(() => undefined)
-        return request
+
+        // const request = fetch(HttpManager.baseUrl + "/" + functionName, {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: data
+        // })
+        //     .then(async res => {
+        //         EventSystem.send("HideJuhua" ,"HttpSend")
+        //         if (!res.ok) {
+        //             const raw = await res.text();
+        //             throw new Error(`POST ${functionName} HTTP ${res.status}: ${raw}`);
+        //         }
+        //         return res.json();
+        //     })
+        //     .then(resp => {
+        //         console.log("请求回复：", resp);
+        //         EventSystem.send("HideJuhua" ,"HttpSend")
+        //         if (resp?.error) {
+        //             EventSystem.send("ShowTips", resp.error);
+        //             return resp;
+        //         }
+        //         if (resp?.message && resp?.success === false) {
+        //             EventSystem.send("ShowTips", resp.message);
+        //             return resp;
+        //         }
+        //         // 统一派发：业务侧可按 functionName 区分解析
+        //         EventSystem.send("HttpMessage", { functionName, raw: resp });
+        //         return resp;
+        //     })
+        //     .catch((err) => {
+        //         this.handleRequestError(err)
+        //     });
+        // request.catch(() => undefined)
+        // return request
     }
 
     /** GET 透传 JSON（用于立绘任务轮询等） */
     public sendGetHttpAny(path: string, options?: { silent?: boolean }) {
         const normalized = String(path || "").replace(/^\//, "");
         log("GET " + normalized);
-        if (!options?.silent) {
+        if (options && options.silent) {
             EventSystem.send("ShowJuhua", "HttpSend");
         }
         const request = fetch(HttpManager.baseUrl + "/" + normalized, {
