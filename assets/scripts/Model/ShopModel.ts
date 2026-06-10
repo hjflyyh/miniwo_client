@@ -37,7 +37,7 @@ export class ShopModel {
         return list
     }
 
-    public getShopList(type) {
+    public getShopList(type = null) {
         if (this.shopList.length == 0) {
             const cfgAll = AppConst.JSONManager.getItemAll("gameStore")
             this.shopList = (Object as any).values(cfgAll)

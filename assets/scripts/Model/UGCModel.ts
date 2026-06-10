@@ -2,6 +2,7 @@ import { sys } from "cc";
 import { AppConst } from "../AppConst";
 import { MapModel } from "./MapModel";
 import { RoleModel } from "./RoleModel";
+import { network } from "./RequestData";
 
 /**
  * 对应 miniwoedit `getMap` 返回的 `data.map`（见 mobile_creation_api.md）。
@@ -68,51 +69,54 @@ export class UGCModel {
 
     /** 个人全部 NPC（含 work_status），来自 listMyNpcs */
     public myNpcList: any[] = [];
+    /** 探索定时器 */
+    private timerId = null;
 
     public init() {
         EventSystem.addListent("HttpMessage", this.OnHttpMessage, this);
+        EventSystem.addListent("WebSocketMessage", this.OnWebSocketMessage, this);
     }
 
 
 
-    public addNpcRenshe(npcId , rensheId){
+    public addNpcRenshe(npcId, rensheId) {
         let renshe = this.getNpcRenshe(npcId);
-        if(renshe.length >= 3){ 
-            EventSystem.send("ShowTips" , "At most 3 characters are set.");
+        if (renshe.length >= 3) {
+            EventSystem.send("ShowTips", "At most 3 characters are set.");
             return false;
         }
         renshe.push(rensheId);
-        this.setNpcRenshe(npcId , renshe)
+        this.setNpcRenshe(npcId, renshe)
         return true;
     }
 
-    public removeNpcRenshe(npcId , rensheId){
+    public removeNpcRenshe(npcId, rensheId) {
         let renshe = this.getNpcRenshe(npcId);
-        for(let i = 0 ; i < renshe.length ; i++){   
-            if(renshe[i] == rensheId){  
-                renshe.splice(i , 1);
+        for (let i = 0; i < renshe.length; i++) {
+            if (renshe[i] == rensheId) {
+                renshe.splice(i, 1);
             }
         }
-        this.setNpcRenshe(npcId , renshe)
+        this.setNpcRenshe(npcId, renshe)
     }
 
-    public setNpcRenshe(npcId , renshe){    
-        for(let i = 0 ; i < this.npcList.length ; i++){
-            if(this.npcList[i].id == npcId){
+    public setNpcRenshe(npcId, renshe) {
+        for (let i = 0; i < this.npcList.length; i++) {
+            if (this.npcList[i].id == npcId) {
                 this.npcList[i].characteristics = renshe
             }
         }
     }
 
-    public getNpcRenshe(npcId){
-        for(let i = 0 ; i < this.npcList.length ; i++){
-            if(this.npcList[i].id == npcId){
-                if(this.npcList[i].characteristics == ""){
+    public getNpcRenshe(npcId) {
+        for (let i = 0; i < this.npcList.length; i++) {
+            if (this.npcList[i].id == npcId) {
+                if (this.npcList[i].characteristics == "") {
                     return [];
                 }
-                if(Array.isArray(this.npcList[i].characteristics)){
+                if (Array.isArray(this.npcList[i].characteristics)) {
                     return this.npcList[i].characteristics;
-                }else{
+                } else {
                     return JSON.parse(this.npcList[i].characteristics);
                 }
             }
@@ -120,66 +124,66 @@ export class UGCModel {
         return []
     }
 
-    public setNpcSex(npcId , sex){
-        for(let i = 0 ; i < this.npcList.length ; i++){
-            if(this.npcList[i].id == npcId){
+    public setNpcSex(npcId, sex) {
+        for (let i = 0; i < this.npcList.length; i++) {
+            if (this.npcList[i].id == npcId) {
                 this.npcList[i].sex = sex;
             }
         }
     }
 
-    public setNpcBackground(npcId , background){    
-        for(let i = 0 ; i < this.npcList.length ; i++){
-            if(this.npcList[i].id == npcId){
+    public setNpcBackground(npcId, background) {
+        for (let i = 0; i < this.npcList.length; i++) {
+            if (this.npcList[i].id == npcId) {
                 this.npcList[i].identity = background;
             }
-        }        
+        }
     }
 
-    public setNpcHobbies(npcId , hobbies){
-        for(let i = 0 ; i < this.npcList.length ; i++){
-            if(this.npcList[i].id == npcId){
+    public setNpcHobbies(npcId, hobbies) {
+        for (let i = 0; i < this.npcList.length; i++) {
+            if (this.npcList[i].id == npcId) {
                 this.npcList[i].hobbies = hobbies;
             }
-        }        
+        }
     }
 
-    public removeNpcHobbies(npcId , hobbiesId){
+    public removeNpcHobbies(npcId, hobbiesId) {
         let hobbies = this.getNpcHobbies(npcId);
-        for(let i = 0 ; i < hobbies.length ; i++){   
-            if(hobbies[i] == hobbiesId){  
-                hobbies.splice(i , 1);
+        for (let i = 0; i < hobbies.length; i++) {
+            if (hobbies[i] == hobbiesId) {
+                hobbies.splice(i, 1);
             }
         }
-        this.setNpcHobbies(npcId , hobbies)
+        this.setNpcHobbies(npcId, hobbies)
     }
 
-    public getNpcBackground(npcId){ 
-        for(let i = 0 ; i < this.npcList.length ; i++){
-            if(this.npcList[i].id == npcId){
+    public getNpcBackground(npcId) {
+        for (let i = 0; i < this.npcList.length; i++) {
+            if (this.npcList[i].id == npcId) {
                 return this.npcList[i].identity;
             }
         }
         return "";
     }
 
-    public addNpcHobbies(npcId , hobbiesId){    
+    public addNpcHobbies(npcId, hobbiesId) {
         let hobbies = this.getNpcHobbies(npcId);
         hobbies.push(hobbiesId);
-        this.setNpcHobbies(npcId , hobbies)
+        this.setNpcHobbies(npcId, hobbies)
         return true;
 
     }
 
-    public getNpcHobbies(npcId){ 
-        for(let i = 0 ; i < this.npcList.length ; i++){
-            if(this.npcList[i].id == npcId){
-                if(this.npcList[i].hobbies == ""){
+    public getNpcHobbies(npcId) {
+        for (let i = 0; i < this.npcList.length; i++) {
+            if (this.npcList[i].id == npcId) {
+                if (this.npcList[i].hobbies == "") {
                     return [];
                 }
-                if(Array.isArray(this.npcList[i].hobbies)){
+                if (Array.isArray(this.npcList[i].hobbies)) {
                     return this.npcList[i].hobbies;
-                }else{
+                } else {
                     return JSON.parse(this.npcList[i].hobbies);
                 }
             }
@@ -187,56 +191,56 @@ export class UGCModel {
         return []
     }
 
-    public getNpcSex(npcId){
-        for(let i = 0 ; i < this.npcList.length ; i++){
-            if(this.npcList[i].id == npcId){
+    public getNpcSex(npcId) {
+        for (let i = 0; i < this.npcList.length; i++) {
+            if (this.npcList[i].id == npcId) {
                 return this.npcList[i].sex;
             }
         }
         return 0;
     }
 
-    public getMBTIList(){
+    public getMBTIList() {
         let list = []
-        for(let i = 0 ; i < RoleModel.getInstance().tags.length ; i++){
-            if(RoleModel.getInstance().tags[i].tag_type == 5){
+        for (let i = 0; i < RoleModel.getInstance().tags.length; i++) {
+            if (RoleModel.getInstance().tags[i].tag_type == 5) {
                 list.push(RoleModel.getInstance().tags[i])
             }
-        }        
+        }
         return list;
     }
 
-    public getRensheList(){
+    public getRensheList() {
         let list = []
-        for(let i = 0 ; i < RoleModel.getInstance().tags.length ; i++){
-            if(RoleModel.getInstance().tags[i].tag_type == 2){
+        for (let i = 0; i < RoleModel.getInstance().tags.length; i++) {
+            if (RoleModel.getInstance().tags[i].tag_type == 2) {
                 list.push(RoleModel.getInstance().tags[i])
             }
-        }        
+        }
         return list;
     }
 
-    public getBackgroundList(){
+    public getBackgroundList() {
         let list = []
-        for(let i = 0 ; i < RoleModel.getInstance().tags.length ; i++){
-            if(RoleModel.getInstance().tags[i].tag_type == 7){
+        for (let i = 0; i < RoleModel.getInstance().tags.length; i++) {
+            if (RoleModel.getInstance().tags[i].tag_type == 7) {
                 list.push(RoleModel.getInstance().tags[i])
             }
-        }        
+        }
         return list;
     }
 
-    public setNpcMBTI(npcId , mbti){
-        for(let i = 0 ; i < this.npcList.length ; i++){
-            if(this.npcList[i].id == npcId){
+    public setNpcMBTI(npcId, mbti) {
+        for (let i = 0; i < this.npcList.length; i++) {
+            if (this.npcList[i].id == npcId) {
                 this.npcList[i].mbti = mbti;
             }
         }
     }
 
-    public getNpcMBTI(npcId){
-        for(let i = 0 ; i < this.npcList.length ; i++){
-            if(this.npcList[i].id == npcId){
+    public getNpcMBTI(npcId) {
+        for (let i = 0; i < this.npcList.length; i++) {
+            if (this.npcList[i].id == npcId) {
                 return this.npcList[i].mbti;
             }
         }
@@ -318,14 +322,14 @@ export class UGCModel {
                 this.dailyHotNpcList = [];
             }
             this.myNpcList = [];
-            for(let d = 0 ; d < this.dailyHotNpcList.length ; d++){
-                if(this.dailyHotNpcList[d].player_id && this.dailyHotNpcList[d].player_id == RoleModel.getInstance().playerId){
+            for (let d = 0; d < this.dailyHotNpcList.length; d++) {
+                if (this.dailyHotNpcList[d].player_id && this.dailyHotNpcList[d].player_id == RoleModel.getInstance().playerId) {
                     this.myNpcList.push(this.dailyHotNpcList[d])
                 }
             }
             console.log(this.myNpcList)
-            for(let m = 0 ; m < this.myNpcList.length ; m++){   
-                AppConst.JournalManager.addNpcJournal(this.myNpcList[m].npc_id , this.myNpcList[m].model_url)
+            for (let m = 0; m < this.myNpcList.length; m++) {
+                AppConst.JournalManager.addNpcJournal(this.myNpcList[m].npc_id, this.myNpcList[m].model_url)
             }
             EventSystem.send("OnRefreshDailyHotNpcList", this.dailyHotNpcList);
             return;
@@ -347,6 +351,7 @@ export class UGCModel {
             // getNpcByMap：返回 npc_list
             if (Array.isArray(data.npc_list)) {
                 this.npcList = data.npc_list;
+                this.checkExploration();
             } else {
                 this.npcList = [];
             }
@@ -359,10 +364,10 @@ export class UGCModel {
             EventSystem.send("OnRefreshUGCMapNpc")
         } else if (data.functionName == "listMyNpcs") {
             this.applyListMyNpcsFromHttp(data);
-        } else if(data.functionName == "listGeneratedNpcs"){
+        } else if (data.functionName == "listGeneratedNpcs") {
             const list = data;
             EventSystem.send("OnRefreshGeneratedMyNpcList", list);
-        }else if (data.functionName == "creatorNpc") {
+        } else if (data.functionName == "creatorNpc") {
             // creatorNpc：统一壳 {success:true,data:{...,npc:{...}}}，这里收到的是 data.npc
             const npc = data;
             if (npc) {
@@ -408,10 +413,11 @@ export class UGCModel {
         )
     }
 
-    public createMapWithTitle(mapTitle , mapName){
+    public createMapWithTitle(mapTitle, mapName) {
         AppConst.HttpManager.sendPostHttp(
             "createMapWithTitle",
-            JSON.stringify({ "token": this.token() , 
+            JSON.stringify({
+                "token": this.token(),
                 mapTitle: Number(mapTitle),
                 mapName: String(mapName || "")
             })
@@ -427,10 +433,10 @@ export class UGCModel {
     }
 
     //#### saveMapTitle
-    public saveMap(mapId , mapTitle , mapName) {
+    public saveMap(mapId, mapTitle, mapName) {
         AppConst.HttpManager.sendPostHttp(
             "saveMap",
-              JSON.stringify({
+            JSON.stringify({
                 "token": this.token(),
                 mapId: Number(mapId),
                 mapTitle: Number(mapTitle),
@@ -453,10 +459,10 @@ export class UGCModel {
     }
 
     //### Step 2：世界观保存 + AI 生成世界观
-    public saveMapWorldview(mapId , mapWorldview , mapRestriction , mapEra){
+    public saveMapWorldview(mapId, mapWorldview, mapRestriction, mapEra) {
         AppConst.HttpManager.sendPostHttp(
             "saveMapWorldview",
-              JSON.stringify({
+            JSON.stringify({
                 "token": this.token(),
                 mapId: Number(mapId),
                 mapWorldview: mapWorldview,
@@ -467,10 +473,10 @@ export class UGCModel {
     }
 
     //#### generateWorldviewByAI（AI 透传）
-    public generateWorldviewByAI(mapId , worldName , worldAttribute , eraBackground , ruleRestriction){
+    public generateWorldviewByAI(mapId, worldName, worldAttribute, eraBackground, ruleRestriction) {
         AppConst.HttpManager.sendPostHttpAny(
             "generateWorldviewByAI",
-              JSON.stringify({
+            JSON.stringify({
                 "token": this.token(),
                 mapId: Number(mapId),
                 worldName: worldName,
@@ -482,10 +488,10 @@ export class UGCModel {
     }
 
     //### Step 3：NPC 增删改查 + AI 生成人设
-    public creatorNpc(mapId , name , age){
+    public creatorNpc(mapId, name, age) {
         AppConst.HttpManager.sendPostHttp(
             "creatorNpc",
-              JSON.stringify({
+            JSON.stringify({
                 "token": this.token(),
                 mapId: Number(mapId),
                 name: name,
@@ -495,10 +501,10 @@ export class UGCModel {
     }
 
     //#### getNpcByMap
-    public getNpcByMap(mapId){
+    public getNpcByMap(mapId) {
         AppConst.HttpManager.sendPostHttp(
             "getNpcByMap",
-              JSON.stringify({
+            JSON.stringify({
                 "token": this.token(),
                 mapId: Number(mapId),
             })
@@ -571,20 +577,20 @@ export class UGCModel {
     }
 
     //#### updateNpcById
-    public updateNpcById(mapId , npcId , name , sex , mbti , renshe , background , hobbies){
+    public updateNpcById(mapId, npcId, name, sex, mbti, renshe, background, hobbies) {
         AppConst.HttpManager.sendPostHttp(
             "updateNpcById",
-              JSON.stringify({
+            JSON.stringify({
                 "token": this.token(),
                 mapId: Number(mapId),
                 npcId: Number(npcId),
-                name: name, 
+                name: name,
                 sex: sex,
                 mbti: mbti,
                 characteristics: renshe,
                 identity: background,
                 hobbies: hobbies
-              })
+            })
         )
     }
 
@@ -625,14 +631,14 @@ export class UGCModel {
             hobbies = "";
         }
         const identity = String(npc.identity ?? "");
-        
+
         this.updateNpcById(mapId, idNum, name, sex, mbti, characteristics, identity, hobbies);
     }
 
-    public delNpcById(mapId , npcId){
+    public delNpcById(mapId, npcId) {
         AppConst.HttpManager.sendPostHttp(
             "delNpcById",
-              JSON.stringify({
+            JSON.stringify({
                 "token": this.token(),
                 mapId: Number(mapId),
                 npcId: Number(npcId)
@@ -1004,10 +1010,10 @@ export class UGCModel {
     }
 
     //#### generateNpcByAI（AI 透传/准透传）
-    public generateNpcByAI(mapId , npcId , name , gender , occupation , MBTI , world_setting , special_traits , appearance , personality , backstory,hobbies){
+    public generateNpcByAI(mapId, npcId, name, gender, occupation, MBTI, world_setting, special_traits, appearance, personality, backstory, hobbies) {
         AppConst.HttpManager.sendPostHttpAny(
             "generateNpcByAI",
-              JSON.stringify({
+            JSON.stringify({
                 "token": this.token(),
                 mapId: Number(mapId),
                 npcId: Number(npcId),
@@ -1131,6 +1137,67 @@ export class UGCModel {
             "submitMapForReview",
             JSON.stringify({ "token": this.token(), mapId: Number(mapId) })
         )
+    }
+
+    private OnWebSocketMessage(data) {
+        if ((data["id"] == "exploration_start" || data["id"] == "exploration_end") && data["payload"]) {
+            let payload = JSON.parse(data["payload"]);
+            if (!payload || !payload.success || !payload.npc_id || !payload.hidden_attributes) {
+                return;
+            }
+
+            for (let npc of this.npcList) {
+                if (npc.npc_id == payload.npc_id) {
+                    npc.attributes = payload.hidden_attributes
+                    npc.exploration_at = payload.exploration_at
+                    break
+                }
+            }
+            this.checkExploration();
+            EventSystem.send("exploration_update")
+        }
+    }
+
+    checkExploration() {
+        const now = Date.now();
+        let isSend = false;
+        let nextTick = 0;
+        let npcID = 0;
+        for (let i = 0; i < this.npcList.length; i++) {
+            const npc = this.npcList[i];
+            let explorationAt = Number(npc.exploration_at)
+            if (!explorationAt) {
+                continue;
+            }
+            let hour = explorationAt % 10
+            if (explorationAt <= now || explorationAt - hour * 1000 * 60 * 60 <= now) {
+                isSend = true;
+                this.onClickEnd(npc.npc_id);
+            }
+            if (!isSend && explorationAt > now) {
+                nextTick = Math.min(nextTick, explorationAt - hour * 1000 * 60 * 60 - now);
+                npcID = npc.npc_id;
+            }
+        }
+        if (!isSend && nextTick > 0) {
+            if (this.timerId) {
+                clearTimeout(this.timerId);
+            }
+            this.timerId = setTimeout(() => {
+                this.checkExploration();
+            }, nextTick);
+        }
+    }
+
+    onClickEnd(npcID: number) {
+        let json = new network.ExplorationEndRequest();
+        let nakamaToken = RoleModel.getInstance().nakama_token != null ? String(RoleModel.getInstance().nakama_token) : '';
+        console.log("onClickEnd nakamaToken:", nakamaToken)
+        nakamaToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aWQiOiI2YTU5ZGRkZS04MDk4LTQ4MWUtODYzNS1mMDcyMjMxODhhYWEiLCJ1aWQiOiJmMjIyYzU3OC0xMWZjLTQwYTAtYjdmNS0wYjMyYzIyMTM1MTQiLCJ1c24iOiJ6alpHY2t2eGFXIiwiZXhwIjoxNzgxMDY1MDM0fQ.6bA51Wwn7OpDj0Z863BrhFf-FcLVjn87xLZJs0CuO48"
+        if (nakamaToken == "") {
+            return
+        }
+        AppConst.WebSocketManager.send(json.toJSON(npcID, 1, nakamaToken));
     }
 
 }

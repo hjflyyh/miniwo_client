@@ -256,4 +256,9 @@ export module network {
             return { rpc: { id: "exploration_start", payload: JSON.stringify({ npc_id: parseInt(npcID), hour: parseInt(hour) }) } };
         }
     }
+    export class ExplorationEndRequest {
+        toJSON(npcID, force, token) {
+            return { rpc: { id: "exploration_end", payload: JSON.stringify({ npc_id: parseInt(npcID), force: parseInt(force), token: token }) } };
+        }
+    } 
 }
