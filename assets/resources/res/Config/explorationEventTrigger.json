@@ -244,7 +244,7 @@
     "judgment_method": "1",
     "threshold": "10000",
     "weight_coefficient": "50",
-    "reward_pool": null
+    "reward_pool": "1011"
   },
   "20": {
     "event_id": "115",
@@ -257,7 +257,7 @@
     "judgment_method": "4",
     "threshold": "-20",
     "weight_coefficient": "200",
-    "reward_pool": null
+    "reward_pool": "1009"
   },
   "21": {
     "event_id": "115",
@@ -270,7 +270,7 @@
     "judgment_method": "3",
     "threshold": "100",
     "weight_coefficient": "300",
-    "reward_pool": null
+    "reward_pool": "1010"
   },
   "22": {
     "event_id": "116",
@@ -296,6 +296,6 @@
     "judgment_method": "4",
     "threshold": "-50",
     "weight_coefficient": "200",
-    "reward_pool": null
+    "reward_pool": "1013"
   }
 }
