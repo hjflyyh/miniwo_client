@@ -57,6 +57,10 @@ export class VisitListCell extends Component {
         this.slider.progress = 0;
         this.onSliderChange();
         EventSystem.addListent("exploration_log", this.onExplorationLog, this)
+
+        this.schedule(function(){
+
+        } , 1)
     }
 
     onExplorationLog({ npcID, reports }) {
@@ -139,7 +143,7 @@ export class VisitListCell extends Component {
         this.sliderImg.contentSize = new Size(312 * this.slider.progress , 8)
     }
 
-    protected update(dt: number): void {
+    // protected update(dt: number): void {
         
-    }
+    // }
 }
