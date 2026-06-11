@@ -1157,6 +1157,13 @@ export class UGCModel {
             this.checkExploration();
             EventSystem.send("exploration_update")
         }
+        if (data["id"] == "exploration_log" && data["payload"]) {
+            let payload = JSON.parse(data["payload"]);
+            if (!payload || !payload.success || !payload.npc_id || !payload.reports) {
+                return;
+            }
+            EventSystem.send("exploration_log",  { npcID: payload.npc_id, reports: payload.reports })
+        }
     }
 
     checkExploration() {
@@ -1190,7 +1197,7 @@ export class UGCModel {
         }
     }
 
-    onClickEnd(npcID: number) {
+    onClickEnd(npcID: number, force: number = 0) {
         let json = new network.ExplorationEndRequest();
         let nakamaToken = RoleModel.getInstance().nakama_token != null ? String(RoleModel.getInstance().nakama_token) : '';
         console.log("onClickEnd nakamaToken:", nakamaToken)
@@ -1198,7 +1205,7 @@ export class UGCModel {
         if (nakamaToken == "") {
             return
         }
-        AppConst.WebSocketManager.send(json.toJSON(npcID, 1, nakamaToken));
+        AppConst.WebSocketManager.send(json.toJSON(npcID, force, nakamaToken));
     }
 
 }

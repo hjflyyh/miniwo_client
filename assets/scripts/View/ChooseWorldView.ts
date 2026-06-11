@@ -15,6 +15,7 @@ export class ChooseWorldView extends Component {
     @property(EditBox)
     public createNameEdit : EditBox
 
+
     private chooseIndex = -1;
 
     start() {
