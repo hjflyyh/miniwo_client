@@ -345,6 +345,10 @@ export class WebSocketManager extends Component {
                     }else if(data.match_data != null){
                         const md = data.match_data
                         const opCode = Number(md.op_code)
+                        if(opCode == 200){
+                            console.log("退出地图")
+                            AppConst.PanelManager.openView("res/View/Common/CheckCommon" , {"showText" : "World updated, please re-enter" , "chenckType" : "worldExit"})
+                        }
                         const b64 = md.data as string
 
                         const binary = atob(b64)

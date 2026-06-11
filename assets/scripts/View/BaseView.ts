@@ -58,7 +58,9 @@ export class BaseView extends Component {
     onClickClose(){
         if(this.isClose){
             AppConst.PanelManager.CloseView(this)
+            return true
         }
+        return false
     }
 }
 
