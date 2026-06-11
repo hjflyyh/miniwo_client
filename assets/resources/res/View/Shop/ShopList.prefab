@@ -5124,7 +5124,7 @@
   {
     "__type__": "_yx_editor_register_element_info",
     "prefab": {
-      "__uuid__": "30ca0a39-c83c-4c64-8047-016ffc922a92",
+      "__uuid__": "fa1f7893-a18e-40e1-8911-18ae4cf523f4",
       "__expectedType__": "cc.Prefab"
     },
     "identifier": "cell",
@@ -5257,7 +5257,7 @@
   {
     "__type__": "_yx_editor_register_element_info",
     "prefab": {
-      "__uuid__": "30ca0a39-c83c-4c64-8047-016ffc922a92",
+      "__uuid__": "fa1f7893-a18e-40e1-8911-18ae4cf523f4",
       "__expectedType__": "cc.Prefab"
     },
     "identifier": "cell",

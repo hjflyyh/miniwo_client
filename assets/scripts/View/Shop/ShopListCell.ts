@@ -47,21 +47,24 @@ export class ShopListCell extends Component {
 
     setSellId(data){
         this.shopData = data
-        this.ShopMoney.color = new Color(87, 80, 238, 255)
-        this.buttonSprite.color = Color.WHITE
+        if (this.ShopMoney) this.ShopMoney.color = new Color(87, 80, 238, 255)
+        if (this.buttonSprite) this.buttonSprite.color = Color.WHITE
 
-        this.sellNode.active = true;
-        this.jinbi.active = true
-        this.zhuanshi.active = false
+        if (this.sellNode) this.sellNode.active = true;
+        if (this.jinbi) this.jinbi.active = true
+        if (this.zhuanshi) this.zhuanshi.active = false
         this.itemID = data.item_id
         let _this = this
         resources.load(getBasicSeedMatureSpriteResourcePath(data.id + ""), SpriteFrame, (err, sf) => {
-            _this.icon.node.getComponent(Sprite).spriteFrame = sf;
+            const spriteComp = _this.icon?.node?.getComponent(Sprite)
+            if (!err && sf && spriteComp && spriteComp.isValid) {
+                spriteComp.spriteFrame = sf;
+            }
         });
-        this.ShopLimit.string = ""
-        this.ShopMoney.string = "" + data.base_crop_price
+        if (this.ShopLimit) this.ShopLimit.string = ""
+        if (this.ShopMoney) this.ShopMoney.string = "" + data.base_crop_price
 
-        this.icon.node.scale = new math.Vec3(0.8, 0.8, 0.8)
+        if (this.icon && this.icon.node) this.icon.node.scale = new math.Vec3(0.8, 0.8, 0.8)
     }
 
     setShopId(Shop_data) {
@@ -85,11 +88,16 @@ export class ShopListCell extends Component {
         }
 
         const needPrice = this.getSalePrice(Shop_data)
-        this.ShopMoney.string = "X" + needPrice
+        if (this.ShopMoney) {
+            this.ShopMoney.string = "X" + needPrice
+        }
         this.refreshMoneyColor(Shop_data, needPrice)
         let _this = this
         resources.load("UITexture/itemIcon/"+ Shop_data.item_id + "/spriteFrame", SpriteFrame, (err, sf) => {
-            _this.icon.node.getComponent(Sprite).spriteFrame = sf;
+            const spriteComp = _this.icon?.node?.getComponent(Sprite)
+            if (!err && sf && spriteComp && spriteComp.isValid) {
+                spriteComp.spriteFrame = sf;
+            }
         });
         // this.icon.url = "UITexture/itemIcon/"+ Shop_data.item_id + "/spriteFrame"
     }

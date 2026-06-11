@@ -295,8 +295,10 @@ export class ShopList extends Component {
                 this.listSellComp.cellForItemAt = (indexPath, collectionView) => {
                     const data = this.showSells[indexPath.item]
                     const cell = collectionView.dequeueReusableCell(`cell`)
-                    let listCell = cell.getComponent("ShopListCell") as ShopListCell
-                    listCell.setSellId(data)
+                    let listCell = cell.getComponent(ShopListCell) as ShopListCell
+                    if (listCell && typeof listCell.setSellId === 'function') {
+                        listCell.setSellId(data)
+                    }
                     return cell
                 }
                 this.updateFlowLayout()
@@ -322,8 +324,10 @@ export class ShopList extends Component {
                 this.listComp.cellForItemAt = (indexPath, collectionView) => {
                     const data = this.showShops[indexPath.item]
                     const cell = collectionView.dequeueReusableCell(`cell`)
-                    let listCell = cell.getComponent("ShopListCell") as ShopListCell
-                    listCell.setShopId(data)
+                    let listCell = cell.getComponent(ShopListCell) as ShopListCell
+                    if (listCell && typeof listCell.setShopId === 'function') {
+                        listCell.setShopId(data)
+                    }
                     return cell
                 }
                 this.updateFlowLayout()
@@ -481,10 +485,13 @@ export class ShopList extends Component {
     }
 
     private loadItemSprite(sprite: Sprite | null, itemId: number) {
-        sprite.spriteFrame = null
         if (!sprite || !Number.isFinite(itemId) || itemId <= 0) {
+            if (sprite) {
+                sprite.spriteFrame = null
+            }
             return
         }
+        sprite.spriteFrame = null
         resources.load(`UITexture/itemIcon/${itemId}/spriteFrame`, SpriteFrame, (err, sf) => {
             if (!err && sf && sprite?.isValid) {
                 sprite.spriteFrame = sf
