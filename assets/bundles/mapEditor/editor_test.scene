@@ -1520,7 +1520,7 @@
       "__id__": 37
     },
     "debugShowWalkable": false,
-    "map_data_test": false,
+    "map_data_test": true,
     "minOrthoSize": 300,
     "maxOrthoSize": 2000,
     "defaultEntryOrthoSize": 4500,
