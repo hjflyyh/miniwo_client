@@ -164,7 +164,7 @@ export class LoginView extends Component {
             // 调用原生登录方法
             const reflection = native.reflection;
             this.bindNativeCallback()
-            reflection.callStaticMethod('AppleLoginBridge', 'login', null);
+            reflection.callStaticMethod('AppleLoginBridge', 'login');
             return;
         }
         EventSystem.send("ShowTips", "Apple login is not available. Please use your email.")
