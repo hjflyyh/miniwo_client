@@ -28,9 +28,9 @@ export class RandomFollowList extends Component {
     isOpenEdit = false
     
     start() {
-       EventSystem.addListent("followEditBack", this.postBack, this)
+        // EventSystem.addListent("followEditBack", this.postBack, this)
         this.httpRequest()
-        this.refreshData()
+        // this.refreshData()
     }
 
     refreshData() {
@@ -38,8 +38,8 @@ export class RandomFollowList extends Component {
     }
 
     postBack() {
-        AppConst.SocialHttpManager.sendGetHttp("followersTimeline", {})
-        this.refreshData()
+        // AppConst.SocialHttpManager.sendGetHttp("followersTimeline", {})
+        // this.refreshData()
     }
 
     setBtns() {
@@ -61,7 +61,7 @@ export class RandomFollowList extends Component {
     }
 
     httpRequest() {
-         AppConst.SocialHttpManager.sendGetHttp("randomTimeline", {})
+        AppConst.SocialHttpManager.sendGetHttp("randomTimeline", {})
     }
 
 }
