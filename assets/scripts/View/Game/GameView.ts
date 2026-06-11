@@ -642,6 +642,10 @@ export class GameView extends Component {
         }
     }
 
+    public onClickNpcVisit(){
+        AppConst.PanelManager.openView("res/View/Visit/VisitList", null, null, null , this.UI)
+    }
+
     public onClickWork(){
         AppConst.PanelManager.openView("res/View/NpcWork/NpcWorkView" , null , null , null , this.UI)
     }
