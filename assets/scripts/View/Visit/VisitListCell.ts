@@ -1,4 +1,4 @@
-import { _decorator, Color, Component, instantiate, Label, math, Node, ProgressBar, resources, Size, Sprite, SpriteFrame } from 'cc';
+import { _decorator, Color, Component, instantiate, Label, math, Node, ProgressBar, resources, Size, Slider, Sprite, SpriteFrame, UITransform } from 'cc';
 import { YXCollectionView } from '../../../plugin/list-3x/yx-collection-view';
 import { CardModel } from '../../Model/CardModel';
 import { CustomGridFlowLayout } from '../../../plugin/list-3x/custom-grid-flow-layout';
@@ -44,6 +44,12 @@ export class VisitListCell extends Component {
 
     @property(ProgressBar)
     tili: ProgressBar = null
+
+    @property(Slider)
+    slider : Slider
+
+    @property(UITransform)
+    sliderImg : UITransform
 
     textList = {}
     start() {
@@ -125,5 +131,13 @@ export class VisitListCell extends Component {
             }
             AppConst.WebSocketManager.send(json.toJSON(this.npcID, nakamaToken));
         }
+    }
+
+    onSliderChange(){
+        this.sliderImg.contentSize = new Size(312 * this.slider.progress , 8)
+    }
+
+    protected update(dt: number): void {
+        
     }
 }
