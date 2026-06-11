@@ -3,6 +3,7 @@ import { IFDataSource, InfiniteList } from '../../../plugin/InfiniteList/Infinit
 import InfiniteCell from '../../../plugin/InfiniteList/InfiniteCell';
 import { SocialModel } from '../../Model/SocialModel';
 import { MainFollowListCell } from '../Main/Follow/MainFollowListCell';
+import { AppConst } from '../../AppConst';
 const { ccclass, property } = _decorator;
 
 @ccclass('FollowListScroll')
@@ -62,13 +63,16 @@ export class FollowListScroll extends Component implements IFDataSource {
     }
     start() {
         this.scheduleOnce(() => {
-            if (this.showtype == 1) {
-                EventSystem.addListent("otherPostList", this.refreshData, this)
-            }  
             this.infiniteList = this.getComponent("InfiniteList") as InfiniteList
             this.infiniteList.Init(this)
+            if (this.showtype == 1) {
+                EventSystem.addListent("otherPostList", this.refreshData, this)
+            } else if(this.showtype == 2){
+                EventSystem.addListent("FollowRandomPostData", this.refreshData, this)
+                // AppConst.SocialHttpManager.sendGetHttp("randomTimeline", {})
+            }
 
-            this.refreshData();
+            // this.refreshData();
         }, 0.1)
     }
 

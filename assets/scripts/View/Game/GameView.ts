@@ -146,6 +146,7 @@ export class GameView extends Component {
         EventSystem.addListent(GAME_FARM_PLOT_CLICK_EVENT, this.onGameFarmPlotClick, this)
         EventSystem.addListent(GAME_FARM_SEED_CHOOSE_EVENT, this.onGameFarmSeedChoose, this)
         EventSystem.addListent('ConfigLoadAll', this.onConfigLoadAll, this)
+        EventSystem.addListent("leaveMap" , this.leaveMap , this)
 
         this.onEditEnd()
         
@@ -617,11 +618,8 @@ export class GameView extends Component {
         this.showChatArrow.setScale(1 , this.showChatUI.active ? 1 : -1 , 1)
     }
 
-    public OnWebSocketMessage(data){
-        if(data["id"] == "leave_map"){
+    public leaveMap(){
             FarmModel.getInstance().leaveFarm();
-            let request = new network.MatchLeaveEequest();
-            AppConst.WebSocketManager.send(request.toJSON(MapModel.getInstance().match_id));
             
             AppConst.PanelManager.CloseView(this)
             director.loadScene("GameScene", (error: Error) => {
@@ -633,6 +631,14 @@ export class GameView extends Component {
                     AppConst.PanelManager.openView("res/View/Main/MainView")
                 }
             });
+    }
+
+    public OnWebSocketMessage(data){
+        if(data["id"] == "leave_map"){
+            this.leaveMap()
+
+            let request = new network.MatchLeaveEequest();
+            AppConst.WebSocketManager.send(request.toJSON(MapModel.getInstance().match_id));
         }
     }
 

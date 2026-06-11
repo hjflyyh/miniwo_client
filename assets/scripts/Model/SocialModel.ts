@@ -139,6 +139,7 @@ export class SocialModel {
             this.receiveList(data.list || [])
             this.randomPostList = this.setPostData(data.list || [])
             console.log("randomPostList:", this.randomPostList)
+            EventSystem.send("FollowRandomPostData")
         }
         else if (cmd == network.FollowSocialCode.FollowSuccess) {
             this.followList.push(data.followedUserId)

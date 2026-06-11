@@ -476,6 +476,16 @@ export class MapModel {
                 console.log(this.my_map_data)
             }
                 
+        }else if (data.code == network.ServerCode.CodeMapCoverComplete) {
+            let content: any = data?.content;
+            if(content?.map_id && content?.map_cover_url){
+                for(let m = 0 ; m < MapModel.getInstance().sceneMaps.length ; m++){
+                    const mapId = Number(content.map_id);
+                    if(MapModel.getInstance().sceneMaps[m].id == mapId){
+                        MapModel.getInstance().sceneMaps[m].map_cover_url = content.map_cover_url
+                    }
+                }                
+            }
         }
     }
 
