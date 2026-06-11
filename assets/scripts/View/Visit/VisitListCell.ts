@@ -54,6 +54,8 @@ export class VisitListCell extends Component {
     textList = {}
     start() {
         this.textCell.active = false
+        this.slider.progress = 0;
+        this.onSliderChange();
         EventSystem.addListent("exploration_log", this.onExplorationLog, this)
     }
 
