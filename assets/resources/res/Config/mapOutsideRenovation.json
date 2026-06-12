@@ -1,5 +1,5 @@
 {
-  "1": {
+  "40001001": {
     "name_cn": "石墩灰色",
     "icon": "plant/icon/stone_pier_gray",
     "image": "plant/image/stone_pier_gray",
@@ -12,7 +12,7 @@
     "spine_pos": "0#0",
     "dialogue_id": null
   },
-  "2": {
+  "40001002": {
     "name_cn": "自行车2",
     "icon": "plant/icon/bicycle_2",
     "image": "plant/image/bicycle_2",
@@ -25,7 +25,7 @@
     "spine_pos": "0#0",
     "dialogue_id": null
   },
-  "3": {
+  "40001003": {
     "name_cn": "ATM机黄",
     "icon": "plant/icon/atm_2",
     "image": "plant/image/atm_2",
@@ -38,7 +38,7 @@
     "spine_pos": "0#0",
     "dialogue_id": null
   },
-  "4": {
+  "40001004": {
     "name_cn": "金球菊草丛生",
     "icon": "plant/icon/blooming_grass_yellow_ball",
     "image": "plant/image/blooming_grass_yellow_ball",
@@ -51,7 +51,7 @@
     "spine_pos": "0#0",
     "dialogue_id": null
   },
-  "5": {
+  "40001005": {
     "name_cn": "落叶树_4",
     "icon": "plant/icon/tree_4",
     "image": "plant/image/tree_4",
@@ -64,7 +64,7 @@
     "spine_pos": "0#0",
     "dialogue_id": null
   },
-  "6": {
+  "40001006": {
     "name_cn": "落叶树_5",
     "icon": "plant/icon/tree_5",
     "image": "plant/image/tree_5",
@@ -77,7 +77,7 @@
     "spine_pos": "0#0",
     "dialogue_id": null
   },
-  "7": {
+  "40001007": {
     "name_cn": "落叶树_6",
     "icon": "plant/icon/tree_6",
     "image": "plant/image/tree_6",
@@ -90,7 +90,7 @@
     "spine_pos": "0#0",
     "dialogue_id": null
   },
-  "8": {
+  "40001008": {
     "name_cn": "落叶树_7",
     "icon": "plant/icon/tree_7",
     "image": "plant/image/tree_7",
@@ -103,7 +103,7 @@
     "spine_pos": "0#0",
     "dialogue_id": null
   },
-  "9": {
+  "40001009": {
     "name_cn": "落叶树_8",
     "icon": "plant/icon/tree_8",
     "image": "plant/image/tree_8",
@@ -116,7 +116,7 @@
     "spine_pos": "0#0",
     "dialogue_id": null
   },
-  "10": {
+  "40001010": {
     "name_cn": "落叶树_9",
     "icon": "plant/icon/tree_9",
     "image": "plant/image/tree_9",
@@ -129,7 +129,7 @@
     "spine_pos": "0#0",
     "dialogue_id": null
   },
-  "11": {
+  "40001011": {
     "name_cn": "石墩白色",
     "icon": "plant/icon/stone_pier_white",
     "image": "plant/icon/stone_pier_white",
