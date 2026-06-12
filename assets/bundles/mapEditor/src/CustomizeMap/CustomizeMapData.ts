@@ -220,6 +220,8 @@ export class CustomizeMapData extends Component {
                 let npcs = data.payload.npcs
                 for (let n = 0; n < npcs.length; n++) {
                     const npcEntry = npcs[n];
+                    console.log("opcode 1")
+                    console.log(npcEntry)
                     const npcId = npcEntry.id;
                     if (npcEntry.sprite_animations != null) {
                         this.setNpcSpriteAnimations(npcId, npcEntry.sprite_animations);

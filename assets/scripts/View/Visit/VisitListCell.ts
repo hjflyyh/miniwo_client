@@ -11,6 +11,7 @@ import { getBasicSeedMatureSpriteResourcePath } from '../../Model/Farm/FarmSeedV
 import { RoleModel } from '../../Model/RoleModel';
 import { UGCModel } from '../../Model/UGCModel';
 import { VisitListTextCell } from './VisitListTextCell';
+import { Utils } from '../../Utils/Utils';
 const { ccclass, property } = _decorator;
 
 @ccclass('VisitListCell')
@@ -60,6 +61,9 @@ export class VisitListCell extends Component {
 
     @property(Label)
     hourLabel: Label = null
+
+    @property(Sprite)
+    head : Sprite
 
     textList = {}
     start() {
@@ -112,6 +116,9 @@ export class VisitListCell extends Component {
         this.npcID = Npc_data.npc_id
         this.nameLabel.string = Npc_data.name
         this.setVisit(Npc_data.exploration_at)
+
+        //npc_sprite_url
+        Utils.loadCover(Npc_data.npc_sprite_url , this.head)
     }
 
     setVisit(explorationAt: number) {
