@@ -1,0 +1,167 @@
+
+pond.png
+size: 1502,1032
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+3
+  rotate: false
+  xy: 814, 11
+  size: 88, 33
+  orig: 88, 33
+  offset: 0, 0
+  index: -1
+4
+  rotate: true
+  xy: 860, 874
+  size: 50, 95
+  orig: 50, 95
+  offset: 0, 0
+  index: -1
+chitang_01
+  rotate: true
+  xy: 541, 253
+  size: 263, 233
+  orig: 263, 233
+  offset: 0, 0
+  index: -1
+chitang_02
+  rotate: true
+  xy: 904, 12
+  size: 32, 29
+  orig: 32, 29
+  offset: 0, 0
+  index: -1
+chitang_03
+  rotate: false
+  xy: 860, 926
+  size: 152, 104
+  orig: 152, 104
+  offset: 0, 0
+  index: -1
+chitang_05
+  rotate: true
+  xy: 541, 518
+  size: 512, 317
+  orig: 512, 317
+  offset: 0, 0
+  index: -1
+chitang_06
+  rotate: true
+  xy: 2, 238
+  size: 792, 537
+  orig: 792, 537
+  offset: 0, 0
+  index: -1
+ef/1_00000
+  rotate: false
+  xy: 2, 2
+  size: 201, 234
+  orig: 201, 234
+  offset: 0, 0
+  index: -1
+ef/1_00001
+  rotate: false
+  xy: 205, 2
+  size: 201, 234
+  orig: 201, 234
+  offset: 0, 0
+  index: -1
+ef/1_00002
+  rotate: false
+  xy: 408, 2
+  size: 201, 234
+  orig: 201, 234
+  offset: 0, 0
+  index: -1
+ef/1_00003
+  rotate: false
+  xy: 611, 17
+  size: 201, 234
+  orig: 201, 234
+  offset: 0, 0
+  index: -1
+ef/1_00004
+  rotate: false
+  xy: 776, 282
+  size: 201, 234
+  orig: 201, 234
+  offset: 0, 0
+  index: -1
+ef/1_00005
+  rotate: false
+  xy: 814, 46
+  size: 201, 234
+  orig: 201, 234
+  offset: 0, 0
+  index: -1
+ef/1_00006
+  rotate: true
+  xy: 1017, 829
+  size: 201, 234
+  orig: 201, 234
+  offset: 0, 0
+  index: -1
+ef/1_00007
+  rotate: true
+  xy: 1253, 829
+  size: 201, 234
+  orig: 201, 234
+  offset: 0, 0
+  index: -1
+ef/1_00008
+  rotate: false
+  xy: 860, 593
+  size: 201, 234
+  orig: 201, 234
+  offset: 0, 0
+  index: -1
+ef/1_00009
+  rotate: false
+  xy: 979, 357
+  size: 201, 234
+  orig: 201, 234
+  offset: 0, 0
+  index: -1
+ef/1_00010
+  rotate: false
+  xy: 1063, 593
+  size: 201, 234
+  orig: 201, 234
+  offset: 0, 0
+  index: -1
+ef/1_00011
+  rotate: true
+  xy: 1266, 626
+  size: 201, 234
+  orig: 201, 234
+  offset: 0, 0
+  index: -1
+ef/1_00012
+  rotate: true
+  xy: 1266, 423
+  size: 201, 234
+  orig: 201, 234
+  offset: 0, 0
+  index: -1
+ef/1_00013
+  rotate: true
+  xy: 1182, 220
+  size: 201, 234
+  orig: 201, 234
+  offset: 0, 0
+  index: -1
+ef/1_00014
+  rotate: true
+  xy: 1017, 17
+  size: 201, 234
+  orig: 201, 234
+  offset: 0, 0
+  index: -1
+ef/1_00015
+  rotate: true
+  xy: 1253, 17
+  size: 201, 234
+  orig: 201, 234
+  offset: 0, 0
+  index: -1
