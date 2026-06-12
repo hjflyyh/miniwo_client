@@ -1,5 +1,5 @@
 {
-  "1": {
+  "20001001": {
     "name_cn": "墙面置物架",
     "icon": "WallDecor/icon/wall_shelf",
     "image": "WallDecor/image/wall_shelf",
@@ -12,7 +12,7 @@
     "spine_pos": "0#0",
     "dialogue_id": null
   },
-  "2": {
+  "20001002": {
     "name_cn": "带饰洞洞板",
     "icon": "WallDecor/icon/pegboard_with_toiletries",
     "image": "WallDecor/image/pegboard_with_toiletries",
@@ -25,7 +25,7 @@
     "spine_pos": "0#0",
     "dialogue_id": null
   },
-  "3": {
+  "20001003": {
     "name_cn": "木质格栅窗户",
     "icon": "WallDecor/icon/wooden_louvered_window",
     "image": "WallDecor/image/wooden_louvered_window",
@@ -38,7 +38,7 @@
     "spine_pos": "0#0",
     "dialogue_id": null
   },
-  "4": {
+  "20001004": {
     "name_cn": "胡桃木方形置物架",
     "icon": "WallDecor/icon/dark_wood_wall_shelf",
     "image": "WallDecor/image/dark_wood_wall_shelf",
@@ -51,7 +51,7 @@
     "spine_pos": "0#0",
     "dialogue_id": null
   },
-  "5": {
+  "20001005": {
     "name_cn": "深色木质墙面置物架",
     "icon": "WallDecor/icon/walnut_square_shelf",
     "image": "WallDecor/image/walnut_square_shelf",
@@ -64,7 +64,7 @@
     "spine_pos": "0#0",
     "dialogue_id": null
   },
-  "6": {
+  "20001006": {
     "name_cn": "上悬式木窗",
     "icon": "WallDecor/icon/top_hung_wooden_window",
     "image": "WallDecor/image/top_hung_wooden_window",

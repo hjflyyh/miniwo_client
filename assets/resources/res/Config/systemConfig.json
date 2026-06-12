@@ -178,5 +178,9 @@
   "46": {
     "function": "不同功能可获得的CG等级",
     "configuration": "地图日常中生成:N#世界探索获得:R"
+  },
+  "47": {
+    "function": "单次探索时长",
+    "configuration": "60"
   }
 }
