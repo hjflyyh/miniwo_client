@@ -1,0 +1,1222 @@
+{
+  "1001": {
+    "type": "0",
+    "attribute": "112",
+    "condition": "2",
+    "value": "20",
+    "limit": null,
+    "description_cn": "角色受伤",
+    "description_en": "Injured",
+    "quality": "1"
+  },
+  "1002": {
+    "type": "0",
+    "attribute": "112",
+    "condition": "3",
+    "value": "20#50",
+    "limit": null,
+    "description_cn": "大病初愈",
+    "description_en": "Recovered from Severe Illness",
+    "quality": "2"
+  },
+  "1003": {
+    "type": "0",
+    "attribute": "111",
+    "condition": "2",
+    "value": "200",
+    "limit": null,
+    "description_cn": "角色感到疲惫",
+    "description_en": "Weary",
+    "quality": "0"
+  },
+  "1004": {
+    "type": "0",
+    "attribute": "111",
+    "condition": "1",
+    "value": "0",
+    "limit": null,
+    "description_cn": "力竭倒地",
+    "description_en": "Collapsed from Exhaustion",
+    "quality": "2"
+  },
+  "1005": {
+    "type": "0",
+    "attribute": "111",
+    "condition": "4",
+    "value": "3#800",
+    "limit": null,
+    "description_cn": "过度劳累",
+    "description_en": "Overworked",
+    "quality": "0"
+  },
+  "1006": {
+    "type": "0",
+    "attribute": "115",
+    "condition": "2",
+    "value": "20",
+    "limit": null,
+    "description_cn": "极度沮丧",
+    "description_en": "Deep Despondency",
+    "quality": "3"
+  },
+  "1007": {
+    "type": "0",
+    "attribute": "115",
+    "condition": "0",
+    "value": "89",
+    "limit": null,
+    "description_cn": "心情愉悦巅峰",
+    "description_en": "Peak Joy",
+    "quality": "3"
+  },
+  "1008": {
+    "type": "0",
+    "attribute": "114",
+    "condition": "2",
+    "value": "-50",
+    "limit": null,
+    "description_cn": "角色开始显露出恶意",
+    "description_en": "Yearn for Freedom",
+    "quality": "1"
+  },
+  "1009": {
+    "type": "0",
+    "attribute": "114",
+    "condition": "0",
+    "value": "199",
+    "limit": null,
+    "description_cn": "角色获得善良特质",
+    "description_en": "Malice Unleashed",
+    "quality": "1"
+  },
+  "1010": {
+    "type": "0",
+    "attribute": "114",
+    "condition": "3",
+    "value": "-500#1",
+    "limit": null,
+    "description_cn": "洗心革面",
+    "description_en": "Gained Kindness Trait",
+    "quality": "3"
+  },
+  "1011": {
+    "type": "0",
+    "attribute": "116",
+    "condition": "0",
+    "value": "799",
+    "limit": null,
+    "description_cn": "成为农场明星",
+    "description_en": "Turn Over a New Leaf",
+    "quality": "3"
+  },
+  "1012": {
+    "type": "0",
+    "attribute": "123",
+    "condition": "0",
+    "value": "499",
+    "limit": null,
+    "description_cn": "灵力觉醒",
+    "description_en": "Farm Star",
+    "quality": "2"
+  },
+  "1013": {
+    "type": "0",
+    "attribute": "124",
+    "condition": "0",
+    "value": "499",
+    "limit": null,
+    "description_cn": "幸运连击",
+    "description_en": "Spirit Power Awakened",
+    "quality": "2"
+  },
+  "1014": {
+    "type": "0",
+    "attribute": "122",
+    "condition": "0",
+    "value": "799",
+    "limit": null,
+    "description_cn": "探索欲望爆发",
+    "description_en": "Lucky Combo",
+    "quality": "2"
+  },
+  "1015": {
+    "type": "0",
+    "attribute": "121",
+    "condition": "0",
+    "value": "799",
+    "limit": null,
+    "description_cn": "炼成耐心大师",
+    "description_en": "Exploration Urge Surged",
+    "quality": "2"
+  },
+  "1016": {
+    "type": "0",
+    "attribute": "120",
+    "condition": "0",
+    "value": "599",
+    "limit": null,
+    "description_cn": "创意迸发",
+    "description_en": "Master of Patience",
+    "quality": "1"
+  },
+  "1017": {
+    "type": "0",
+    "attribute": "119",
+    "condition": "0",
+    "value": "699",
+    "limit": null,
+    "description_cn": "智慧升华",
+    "description_en": "Burst of Creativity",
+    "quality": "1"
+  },
+  "1018": {
+    "type": "0",
+    "attribute": "117",
+    "condition": "0",
+    "value": "499",
+    "limit": null,
+    "description_cn": "获得号召力",
+    "description_en": "Wisdom Transcended",
+    "quality": "1"
+  },
+  "1019": {
+    "type": "0",
+    "attribute": "118",
+    "condition": "0",
+    "value": "799",
+    "limit": null,
+    "description_cn": "向往自由",
+    "description_en": "Gained Charisma",
+    "quality": "1"
+  },
+  "1020": {
+    "type": "0",
+    "attribute": "111",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "属性圆满",
+    "description_en": "Maxed All Stats",
+    "quality": "3"
+  },
+  "1021": {
+    "type": "0",
+    "attribute": "112",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "属性圆满",
+    "description_en": "Maxed All Stats",
+    "quality": "3"
+  },
+  "1022": {
+    "type": "0",
+    "attribute": "113",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "属性圆满",
+    "description_en": "Maxed All Stats",
+    "quality": "3"
+  },
+  "1023": {
+    "type": "0",
+    "attribute": "114",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "属性圆满",
+    "description_en": "Maxed All Stats",
+    "quality": "3"
+  },
+  "1024": {
+    "type": "0",
+    "attribute": "115",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "属性圆满",
+    "description_en": "Maxed All Stats",
+    "quality": "3"
+  },
+  "1025": {
+    "type": "0",
+    "attribute": "116",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "属性圆满",
+    "description_en": "Maxed All Stats",
+    "quality": "3"
+  },
+  "1026": {
+    "type": "0",
+    "attribute": "117",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "属性圆满",
+    "description_en": "Maxed All Stats",
+    "quality": "3"
+  },
+  "1027": {
+    "type": "0",
+    "attribute": "118",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "属性圆满",
+    "description_en": "Maxed All Stats",
+    "quality": "3"
+  },
+  "1028": {
+    "type": "0",
+    "attribute": "119",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "属性圆满",
+    "description_en": "Maxed All Stats",
+    "quality": "3"
+  },
+  "1029": {
+    "type": "0",
+    "attribute": "120",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "属性圆满",
+    "description_en": "Maxed All Stats",
+    "quality": "3"
+  },
+  "1030": {
+    "type": "0",
+    "attribute": "121",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "属性圆满",
+    "description_en": "Maxed All Stats",
+    "quality": "3"
+  },
+  "1031": {
+    "type": "0",
+    "attribute": "122",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "属性圆满",
+    "description_en": "Maxed All Stats",
+    "quality": "3"
+  },
+  "1032": {
+    "type": "0",
+    "attribute": "123",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "属性圆满",
+    "description_en": "Maxed All Stats",
+    "quality": "3"
+  },
+  "1033": {
+    "type": "0",
+    "attribute": "124",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "属性圆满",
+    "description_en": "Maxed All Stats",
+    "quality": "3"
+  },
+  "1034": {
+    "type": "1",
+    "attribute": "201",
+    "condition": "0",
+    "value": "199",
+    "limit": null,
+    "description_cn": "种植提升",
+    "description_en": "Farming Upgrade",
+    "quality": "2"
+  },
+  "1035": {
+    "type": "1",
+    "attribute": "202",
+    "condition": "0",
+    "value": "199",
+    "limit": null,
+    "description_cn": "养殖提升",
+    "description_en": "Animal Husbandry Upgrade",
+    "quality": "2"
+  },
+  "1036": {
+    "type": "1",
+    "attribute": "203",
+    "condition": "0",
+    "value": "199",
+    "limit": null,
+    "description_cn": "武术提升",
+    "description_en": "Martial Arts Upgrade",
+    "quality": "2"
+  },
+  "1037": {
+    "type": "1",
+    "attribute": "204",
+    "condition": "0",
+    "value": "199",
+    "limit": null,
+    "description_cn": "舞乐提升",
+    "description_en": "Dance & Music Upgrade",
+    "quality": "2"
+  },
+  "1038": {
+    "type": "1",
+    "attribute": "205",
+    "condition": "0",
+    "value": "199",
+    "limit": null,
+    "description_cn": "制造提升",
+    "description_en": "Crafting Upgrade",
+    "quality": "2"
+  },
+  "1039": {
+    "type": "1",
+    "attribute": "206",
+    "condition": "0",
+    "value": "199",
+    "limit": null,
+    "description_cn": "创造提升",
+    "description_en": "Creation Upgrade",
+    "quality": "2"
+  },
+  "1040": {
+    "type": "1",
+    "attribute": "207",
+    "condition": "0",
+    "value": "199",
+    "limit": null,
+    "description_cn": "医疗提升",
+    "description_en": "Medicine Upgrade",
+    "quality": "2"
+  },
+  "1041": {
+    "type": "1",
+    "attribute": "208",
+    "condition": "0",
+    "value": "199",
+    "limit": null,
+    "description_cn": "法术提升",
+    "description_en": "Magic Upgrade",
+    "quality": "2"
+  },
+  "1042": {
+    "type": "1",
+    "attribute": "209",
+    "condition": "0",
+    "value": "199",
+    "limit": null,
+    "description_cn": "挖矿提升",
+    "description_en": "Mining Upgrade",
+    "quality": "2"
+  },
+  "1043": {
+    "type": "1",
+    "attribute": "210",
+    "condition": "0",
+    "value": "199",
+    "limit": null,
+    "description_cn": "钓鱼提升",
+    "description_en": "Fishing Upgrade",
+    "quality": "2"
+  },
+  "1044": {
+    "type": "1",
+    "attribute": "211",
+    "condition": "0",
+    "value": "199",
+    "limit": null,
+    "description_cn": "烹饪提升",
+    "description_en": "Cooking Upgrade",
+    "quality": "2"
+  },
+  "1045": {
+    "type": "1",
+    "attribute": "212",
+    "condition": "0",
+    "value": "199",
+    "limit": null,
+    "description_cn": "考古提升",
+    "description_en": "Archaeology Upgrade",
+    "quality": "2"
+  },
+  "1046": {
+    "type": "1",
+    "attribute": "213",
+    "condition": "0",
+    "value": "199",
+    "limit": null,
+    "description_cn": "园艺提升",
+    "description_en": "Gardening Upgrade",
+    "quality": "2"
+  },
+  "1047": {
+    "type": "1",
+    "attribute": "214",
+    "condition": "0",
+    "value": "199",
+    "limit": null,
+    "description_cn": "交易提升",
+    "description_en": "Trading Upgrade",
+    "quality": "2"
+  },
+  "1048": {
+    "type": "1",
+    "attribute": "201",
+    "condition": "0",
+    "value": "499",
+    "limit": null,
+    "description_cn": "种植提升",
+    "description_en": "Farming Upgrade",
+    "quality": "2"
+  },
+  "1049": {
+    "type": "1",
+    "attribute": "202",
+    "condition": "0",
+    "value": "499",
+    "limit": null,
+    "description_cn": "养殖提升",
+    "description_en": "Animal Husbandry Upgrade",
+    "quality": "2"
+  },
+  "1050": {
+    "type": "1",
+    "attribute": "203",
+    "condition": "0",
+    "value": "499",
+    "limit": null,
+    "description_cn": "武术提升",
+    "description_en": "Martial Arts Upgrade",
+    "quality": "2"
+  },
+  "1051": {
+    "type": "1",
+    "attribute": "204",
+    "condition": "0",
+    "value": "499",
+    "limit": null,
+    "description_cn": "舞乐提升",
+    "description_en": "Dance & Music Upgrade",
+    "quality": "2"
+  },
+  "1052": {
+    "type": "1",
+    "attribute": "205",
+    "condition": "0",
+    "value": "499",
+    "limit": null,
+    "description_cn": "制造提升",
+    "description_en": "Crafting Upgrade",
+    "quality": "2"
+  },
+  "1053": {
+    "type": "1",
+    "attribute": "206",
+    "condition": "0",
+    "value": "499",
+    "limit": null,
+    "description_cn": "创造提升",
+    "description_en": "Creation Upgrade",
+    "quality": "2"
+  },
+  "1054": {
+    "type": "1",
+    "attribute": "207",
+    "condition": "0",
+    "value": "499",
+    "limit": null,
+    "description_cn": "医疗提升",
+    "description_en": "Medicine Upgrade",
+    "quality": "2"
+  },
+  "1055": {
+    "type": "1",
+    "attribute": "208",
+    "condition": "0",
+    "value": "499",
+    "limit": null,
+    "description_cn": "法术提升",
+    "description_en": "Magic Upgrade",
+    "quality": "2"
+  },
+  "1056": {
+    "type": "1",
+    "attribute": "209",
+    "condition": "0",
+    "value": "499",
+    "limit": null,
+    "description_cn": "挖矿提升",
+    "description_en": "Mining Upgrade",
+    "quality": "2"
+  },
+  "1057": {
+    "type": "1",
+    "attribute": "210",
+    "condition": "0",
+    "value": "499",
+    "limit": null,
+    "description_cn": "钓鱼提升",
+    "description_en": "Fishing Upgrade",
+    "quality": "2"
+  },
+  "1058": {
+    "type": "1",
+    "attribute": "211",
+    "condition": "0",
+    "value": "499",
+    "limit": null,
+    "description_cn": "烹饪提升",
+    "description_en": "Cooking Upgrade",
+    "quality": "2"
+  },
+  "1059": {
+    "type": "1",
+    "attribute": "212",
+    "condition": "0",
+    "value": "499",
+    "limit": null,
+    "description_cn": "考古提升",
+    "description_en": "Archaeology Upgrade",
+    "quality": "2"
+  },
+  "1060": {
+    "type": "1",
+    "attribute": "213",
+    "condition": "0",
+    "value": "499",
+    "limit": null,
+    "description_cn": "园艺提升",
+    "description_en": "Gardening Upgrade",
+    "quality": "2"
+  },
+  "1061": {
+    "type": "1",
+    "attribute": "214",
+    "condition": "0",
+    "value": "499",
+    "limit": null,
+    "description_cn": "交易提升",
+    "description_en": "Trading Upgrade",
+    "quality": "2"
+  },
+  "1062": {
+    "type": "1",
+    "attribute": "201",
+    "condition": "0",
+    "value": "799",
+    "limit": null,
+    "description_cn": "种植提升",
+    "description_en": "Farming Upgrade",
+    "quality": "2"
+  },
+  "1063": {
+    "type": "1",
+    "attribute": "202",
+    "condition": "0",
+    "value": "799",
+    "limit": null,
+    "description_cn": "养殖提升",
+    "description_en": "Animal Husbandry Upgrade",
+    "quality": "2"
+  },
+  "1064": {
+    "type": "1",
+    "attribute": "203",
+    "condition": "0",
+    "value": "799",
+    "limit": null,
+    "description_cn": "武术提升",
+    "description_en": "Martial Arts Upgrade",
+    "quality": "2"
+  },
+  "1065": {
+    "type": "1",
+    "attribute": "204",
+    "condition": "0",
+    "value": "799",
+    "limit": null,
+    "description_cn": "舞乐提升",
+    "description_en": "Dance & Music Upgrade",
+    "quality": "2"
+  },
+  "1066": {
+    "type": "1",
+    "attribute": "205",
+    "condition": "0",
+    "value": "799",
+    "limit": null,
+    "description_cn": "制造提升",
+    "description_en": "Crafting Upgrade",
+    "quality": "2"
+  },
+  "1067": {
+    "type": "1",
+    "attribute": "206",
+    "condition": "0",
+    "value": "799",
+    "limit": null,
+    "description_cn": "创造提升",
+    "description_en": "Creation Upgrade",
+    "quality": "2"
+  },
+  "1068": {
+    "type": "1",
+    "attribute": "207",
+    "condition": "0",
+    "value": "799",
+    "limit": null,
+    "description_cn": "医疗提升",
+    "description_en": "Medicine Upgrade",
+    "quality": "2"
+  },
+  "1069": {
+    "type": "1",
+    "attribute": "208",
+    "condition": "0",
+    "value": "799",
+    "limit": null,
+    "description_cn": "法术提升",
+    "description_en": "Magic Upgrade",
+    "quality": "2"
+  },
+  "1070": {
+    "type": "1",
+    "attribute": "209",
+    "condition": "0",
+    "value": "799",
+    "limit": null,
+    "description_cn": "挖矿提升",
+    "description_en": "Mining Upgrade",
+    "quality": "2"
+  },
+  "1071": {
+    "type": "1",
+    "attribute": "210",
+    "condition": "0",
+    "value": "799",
+    "limit": null,
+    "description_cn": "钓鱼提升",
+    "description_en": "Fishing Upgrade",
+    "quality": "2"
+  },
+  "1072": {
+    "type": "1",
+    "attribute": "211",
+    "condition": "0",
+    "value": "799",
+    "limit": null,
+    "description_cn": "烹饪提升",
+    "description_en": "Cooking Upgrade",
+    "quality": "2"
+  },
+  "1073": {
+    "type": "1",
+    "attribute": "212",
+    "condition": "0",
+    "value": "799",
+    "limit": null,
+    "description_cn": "考古提升",
+    "description_en": "Archaeology Upgrade",
+    "quality": "2"
+  },
+  "1074": {
+    "type": "1",
+    "attribute": "213",
+    "condition": "0",
+    "value": "799",
+    "limit": null,
+    "description_cn": "园艺提升",
+    "description_en": "Gardening Upgrade",
+    "quality": "2"
+  },
+  "1075": {
+    "type": "1",
+    "attribute": "214",
+    "condition": "0",
+    "value": "799",
+    "limit": null,
+    "description_cn": "交易提升",
+    "description_en": "Trading Upgrade",
+    "quality": "2"
+  },
+  "1076": {
+    "type": "1",
+    "attribute": "201",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "种植提升",
+    "description_en": "Farming Upgrade",
+    "quality": "2"
+  },
+  "1077": {
+    "type": "1",
+    "attribute": "202",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "养殖提升",
+    "description_en": "Animal Husbandry Upgrade",
+    "quality": "2"
+  },
+  "1078": {
+    "type": "1",
+    "attribute": "203",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "武术提升",
+    "description_en": "Martial Arts Upgrade",
+    "quality": "2"
+  },
+  "1079": {
+    "type": "1",
+    "attribute": "204",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "舞乐提升",
+    "description_en": "Dance & Music Upgrade",
+    "quality": "2"
+  },
+  "1080": {
+    "type": "1",
+    "attribute": "205",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "制造提升",
+    "description_en": "Crafting Upgrade",
+    "quality": "2"
+  },
+  "1081": {
+    "type": "1",
+    "attribute": "206",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "创造提升",
+    "description_en": "Creation Upgrade",
+    "quality": "2"
+  },
+  "1082": {
+    "type": "1",
+    "attribute": "207",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "医疗提升",
+    "description_en": "Medicine Upgrade",
+    "quality": "2"
+  },
+  "1083": {
+    "type": "1",
+    "attribute": "208",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "法术提升",
+    "description_en": "Magic Upgrade",
+    "quality": "2"
+  },
+  "1084": {
+    "type": "1",
+    "attribute": "209",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "挖矿提升",
+    "description_en": "Mining Upgrade",
+    "quality": "2"
+  },
+  "1085": {
+    "type": "1",
+    "attribute": "210",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "钓鱼提升",
+    "description_en": "Fishing Upgrade",
+    "quality": "2"
+  },
+  "1086": {
+    "type": "1",
+    "attribute": "211",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "烹饪提升",
+    "description_en": "Cooking Upgrade",
+    "quality": "2"
+  },
+  "1087": {
+    "type": "1",
+    "attribute": "212",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "考古提升",
+    "description_en": "Archaeology Upgrade",
+    "quality": "2"
+  },
+  "1088": {
+    "type": "1",
+    "attribute": "213",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "园艺提升",
+    "description_en": "Gardening Upgrade",
+    "quality": "2"
+  },
+  "1089": {
+    "type": "1",
+    "attribute": "214",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "交易提升",
+    "description_en": "Trading Upgrade",
+    "quality": "2"
+  },
+  "1090": {
+    "type": "1",
+    "attribute": "201",
+    "condition": "0",
+    "value": "2999",
+    "limit": null,
+    "description_cn": "种植提升",
+    "description_en": "Farming Upgrade",
+    "quality": "3"
+  },
+  "1091": {
+    "type": "1",
+    "attribute": "202",
+    "condition": "0",
+    "value": "2999",
+    "limit": null,
+    "description_cn": "养殖提升",
+    "description_en": "Animal Husbandry Upgrade",
+    "quality": "3"
+  },
+  "1092": {
+    "type": "1",
+    "attribute": "203",
+    "condition": "0",
+    "value": "2999",
+    "limit": null,
+    "description_cn": "武术提升",
+    "description_en": "Martial Arts Upgrade",
+    "quality": "3"
+  },
+  "1093": {
+    "type": "1",
+    "attribute": "204",
+    "condition": "0",
+    "value": "2999",
+    "limit": null,
+    "description_cn": "舞乐提升",
+    "description_en": "Dance & Music Upgrade",
+    "quality": "3"
+  },
+  "1094": {
+    "type": "1",
+    "attribute": "205",
+    "condition": "0",
+    "value": "2999",
+    "limit": null,
+    "description_cn": "制造提升",
+    "description_en": "Crafting Upgrade",
+    "quality": "3"
+  },
+  "1095": {
+    "type": "1",
+    "attribute": "206",
+    "condition": "0",
+    "value": "2999",
+    "limit": null,
+    "description_cn": "创造提升",
+    "description_en": "Creation Upgrade",
+    "quality": "3"
+  },
+  "1096": {
+    "type": "1",
+    "attribute": "207",
+    "condition": "0",
+    "value": "2999",
+    "limit": null,
+    "description_cn": "医疗提升",
+    "description_en": "Medicine Upgrade",
+    "quality": "3"
+  },
+  "1097": {
+    "type": "1",
+    "attribute": "208",
+    "condition": "0",
+    "value": "2999",
+    "limit": null,
+    "description_cn": "法术提升",
+    "description_en": "Magic Upgrade",
+    "quality": "3"
+  },
+  "1098": {
+    "type": "1",
+    "attribute": "209",
+    "condition": "0",
+    "value": "2999",
+    "limit": null,
+    "description_cn": "挖矿提升",
+    "description_en": "Mining Upgrade",
+    "quality": "3"
+  },
+  "1099": {
+    "type": "1",
+    "attribute": "210",
+    "condition": "0",
+    "value": "2999",
+    "limit": null,
+    "description_cn": "钓鱼提升",
+    "description_en": "Fishing Upgrade",
+    "quality": "3"
+  },
+  "1100": {
+    "type": "1",
+    "attribute": "211",
+    "condition": "0",
+    "value": "2999",
+    "limit": null,
+    "description_cn": "烹饪提升",
+    "description_en": "Cooking Upgrade",
+    "quality": "3"
+  },
+  "1101": {
+    "type": "1",
+    "attribute": "212",
+    "condition": "0",
+    "value": "2999",
+    "limit": null,
+    "description_cn": "考古提升",
+    "description_en": "Archaeology Upgrade",
+    "quality": "3"
+  },
+  "1102": {
+    "type": "1",
+    "attribute": "213",
+    "condition": "0",
+    "value": "2999",
+    "limit": null,
+    "description_cn": "园艺提升",
+    "description_en": "Gardening Upgrade",
+    "quality": "3"
+  },
+  "1103": {
+    "type": "1",
+    "attribute": "214",
+    "condition": "0",
+    "value": "2999",
+    "limit": null,
+    "description_cn": "交易提升",
+    "description_en": "Trading Upgrade",
+    "quality": "3"
+  },
+  "1104": {
+    "type": "2",
+    "attribute": "113",
+    "condition": "0",
+    "value": "49",
+    "limit": null,
+    "description_cn": "好感度提升",
+    "description_en": "Affection Level Up",
+    "quality": "2"
+  },
+  "1105": {
+    "type": "2",
+    "attribute": "113",
+    "condition": "0",
+    "value": "149",
+    "limit": null,
+    "description_cn": "好感度提升",
+    "description_en": "Affection Level Up",
+    "quality": "2"
+  },
+  "1106": {
+    "type": "2",
+    "attribute": "113",
+    "condition": "0",
+    "value": "299",
+    "limit": null,
+    "description_cn": "好感度提升",
+    "description_en": "Affection Level Up",
+    "quality": "2"
+  },
+  "1107": {
+    "type": "2",
+    "attribute": "113",
+    "condition": "0",
+    "value": "499",
+    "limit": null,
+    "description_cn": "好感度提升",
+    "description_en": "Affection Level Up",
+    "quality": "2"
+  },
+  "1108": {
+    "type": "2",
+    "attribute": "113",
+    "condition": "0",
+    "value": "799",
+    "limit": null,
+    "description_cn": "好感度提升",
+    "description_en": "Affection Level Up",
+    "quality": "2"
+  },
+  "1109": {
+    "type": "2",
+    "attribute": "113",
+    "condition": "0",
+    "value": "999",
+    "limit": null,
+    "description_cn": "好感度提升",
+    "description_en": "Affection Level Up",
+    "quality": "3"
+  },
+  "1110": {
+    "type": "3",
+    "attribute": null,
+    "condition": "5",
+    "value": null,
+    "limit": "1",
+    "description_cn": "角色派遣处理虫灾",
+    "description_en": "Dispatch: Pest Control",
+    "quality": "0"
+  },
+  "1111": {
+    "type": "3",
+    "attribute": null,
+    "condition": "6",
+    "value": null,
+    "limit": "1",
+    "description_cn": "角色派遣处理旱灾",
+    "description_en": "Dispatch: Drought Relief",
+    "quality": "0"
+  },
+  "1112": {
+    "type": "3",
+    "attribute": null,
+    "condition": "7",
+    "value": null,
+    "limit": "1",
+    "description_cn": "角色派遣处理水灾",
+    "description_en": "Dispatch: Flood Management",
+    "quality": "0"
+  },
+  "1113": {
+    "type": "3",
+    "attribute": null,
+    "condition": "8",
+    "value": null,
+    "limit": "1",
+    "description_cn": "角色派遣处理雪灾",
+    "description_en": "Dispatch: Snow Disaster Relief",
+    "quality": "0"
+  },
+  "1114": {
+    "type": "3",
+    "attribute": null,
+    "condition": "9",
+    "value": null,
+    "limit": "1",
+    "description_cn": "角色派遣除草",
+    "description_en": "Dispatch: Weeding",
+    "quality": "0"
+  },
+  "1115": {
+    "type": "3",
+    "attribute": null,
+    "condition": "10",
+    "value": null,
+    "limit": "0",
+    "description_cn": "种植了季节专属作物并成功收获",
+    "description_en": "Harvested Seasonal Crops",
+    "quality": "0"
+  },
+  "1116": {
+    "type": "3",
+    "attribute": null,
+    "condition": "11",
+    "value": null,
+    "limit": "0",
+    "description_cn": "种植了稀有作物并成功收获",
+    "description_en": "Harvested Rare Crops",
+    "quality": "0"
+  },
+  "1117": {
+    "type": "3",
+    "attribute": null,
+    "condition": "12",
+    "value": null,
+    "limit": "0",
+    "description_cn": "角色在收获时获得变异作物",
+    "description_en": "Gained Mutated Crops",
+    "quality": "0"
+  },
+  "1118": {
+    "type": "4",
+    "attribute": null,
+    "condition": "13",
+    "value": null,
+    "limit": "1",
+    "description_cn": "角色被玩家辱骂",
+    "description_en": "Insulted by Player",
+    "quality": "0"
+  },
+  "1119": {
+    "type": "5",
+    "attribute": null,
+    "condition": "14",
+    "value": "6",
+    "limit": null,
+    "description_cn": "角色创建满7天",
+    "description_en": "7 Days Since Creation",
+    "quality": "3"
+  },
+  "1120": {
+    "type": "5",
+    "attribute": null,
+    "condition": "14",
+    "value": "29",
+    "limit": null,
+    "description_cn": "角色创建满30天",
+    "description_en": "30 Days Since Creation",
+    "quality": "3"
+  },
+  "1121": {
+    "type": "5",
+    "attribute": null,
+    "condition": "14",
+    "value": "99",
+    "limit": null,
+    "description_cn": "角色创建满100天",
+    "description_en": "100 Days Since Creation",
+    "quality": "3"
+  },
+  "1122": {
+    "type": "5",
+    "attribute": null,
+    "condition": "15",
+    "value": null,
+    "limit": null,
+    "description_cn": "角色生日（创建日）",
+    "description_en": "Character Birthday",
+    "quality": "3"
+  }
+}
