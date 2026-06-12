@@ -38,6 +38,7 @@ export class Utils{
         if(!url.includes('http')){
             url = HttpManager.baseUrl + url
         }
+        sprite.spriteFrame = null
         assetManager.loadRemote<ImageAsset>(url , (err , ImageAsset) => {
             // 异步返回时 cell 可能已回收 / 节点已销毁，避免访问无效 Sprite 报错
             if (!sprite || !sprite.isValid) {

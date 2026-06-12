@@ -4798,6 +4798,8 @@
       "__id__": 0
     },
     "fileId": "81/xlrzohFk6Vz4cNTKNtW",
+    "instance": null,
+    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {
@@ -12284,7 +12286,7 @@
       "b": 0,
       "a": 255
     },
-    "_string": "Version 1.1.9",
+    "_string": "Version 1.2.1",
     "_horizontalAlign": 2,
     "_verticalAlign": 1,
     "_actualFontSize": 20,
