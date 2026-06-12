@@ -37,7 +37,6 @@ export class VisitList extends Component {
             UGCModel.getInstance().npcList = json?.data
         }
         UGCModel.getInstance().checkExploration();
-        console.log("npcList::", UGCModel.getInstance().npcList)
     }
 
     refreshVisitList() {

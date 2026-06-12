@@ -63,18 +63,17 @@ export class VisitListCell extends Component {
     hourLabel: Label = null
 
     @property(Sprite)
-    head : Sprite
+    head: Sprite
 
     textList = {}
+    sliderNum: number = 5
     start() {
         this.textCell.active = false
-        this.slider.progress = 0;
-        this.onSliderChange();
         EventSystem.addListent("exploration_log", this.onExplorationLog, this)
 
         this.schedule(() => {
             if (this.isVisited) {
-                let interval = (this.explorationAt - Date.now())/1000
+                let interval = (this.explorationAt - Date.now()) / 1000
                 let hour = ~~(interval / 60 / 60)
                 let minute = ~~(interval / 60 % 60)
                 let second = ~~(interval % 60)
@@ -117,8 +116,17 @@ export class VisitListCell extends Component {
         this.nameLabel.string = Npc_data.name
         this.setVisit(Npc_data.exploration_at)
 
+        this.slider.progress = 0;
+
+        let sendStamina = UGCModel.getInstance().getSendStamina()
+        this.sliderNum = 5
+        if (sendStamina && sendStamina > 0) {
+            this.sliderNum = Math.min(9, ~~(stamina / sendStamina))
+        }
+        this.onSliderChange();
+
         //npc_sprite_url
-        Utils.loadCover(Npc_data.npc_sprite_url , this.head)
+        Utils.loadCover(Npc_data.npc_sprite_url, this.head)
     }
 
     setVisit(explorationAt: number) {
@@ -140,8 +148,8 @@ export class VisitListCell extends Component {
             return
         }
         let json = new network.ExplorationStartRequest();
-        let hour = ~~(this.sliderImg.contentSize.width / 312 * 5) + 1
-        AppConst.WebSocketManager.send(json.toJSON(this.npcID, hour));
+        let num = ~~(this.sliderImg.contentSize.width / 312 * this.sliderNum) + 1
+        AppConst.WebSocketManager.send(json.toJSON(this.npcID, Math.min(9, num)));
     }
 
     onClickEnd() {
@@ -153,7 +161,6 @@ export class VisitListCell extends Component {
         if (this.textNode.active) {
             let json = new network.ExplorationLogRequest();
             let nakamaToken = RoleModel.getInstance().nakama_token != null ? String(RoleModel.getInstance().nakama_token) : '';
-            console.log("onClickEnd nakamaToken:", nakamaToken)
             nakamaToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aWQiOiI2YTU5ZGRkZS04MDk4LTQ4MWUtODYzNS1mMDcyMjMxODhhYWEiLCJ1aWQiOiJmMjIyYzU3OC0xMWZjLTQwYTAtYjdmNS0wYjMyYzIyMTM1MTQiLCJ1c24iOiJ6alpHY2t2eGFXIiwiZXhwIjoxNzgxMDY1MDM0fQ.6bA51Wwn7OpDj0Z863BrhFf-FcLVjn87xLZJs0CuO48"
             if (nakamaToken == "") {
                 return
@@ -164,7 +171,9 @@ export class VisitListCell extends Component {
 
     onSliderChange() {
         this.sliderImg.contentSize = new Size(312 * this.slider.progress, 8)
-        let hour = ~~(this.sliderImg.contentSize.width / 312 * 5) + 1
+        let num = ~~(this.sliderImg.contentSize.width / 312 * this.sliderNum) + 1
+        let explorationTime = UGCModel.getInstance().getExplorationTime()
+        let hour = ~~((explorationTime * num) / 3600 * 100) / 100
         this.hourLabel.string = hour.toString() + "H"
     }
 }

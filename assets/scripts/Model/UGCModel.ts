@@ -1140,6 +1140,17 @@ export class UGCModel {
         )
     }
 
+    //单次探索时长 单位：秒
+    public getExplorationTime() {
+        return AppConst.JSONManager.getItemAll("systemConfig")[47]["configuration"]
+    }
+
+    //派遣消耗
+    public getSendStamina() {
+        return AppConst.JSONManager.getItemAll("systemConfig")[40]["configuration"].split("#")[0]
+    }
+
+
     private OnWebSocketMessage(data) {
         if ((data["id"] == "exploration_start" || data["id"] == "exploration_end") && data["payload"]) {
             let payload = JSON.parse(data["payload"]);
@@ -1169,26 +1180,29 @@ export class UGCModel {
     checkExploration() {
         const now = Date.now();
         let isSend = false;
-        let max = 1000 * 60 * 60 * 5; // 最大5 小时
+        let max = 1000 * 60 * 60 * 10; // 最大10 小时
         let nextTick = max;
         let npcID = 0;
+        let explorationTime = this.getExplorationTime() * 1000
+        console.log("checkExploration explorationTime:", explorationTime)
         for (let i = 0; i < this.npcList.length; i++) {
             const npc = this.npcList[i];
             let explorationAt = Number(npc.exploration_at)
             if (!explorationAt) {
                 continue;
             }
-            let hour = explorationAt % 10 - 1
-            let nextEAt = explorationAt - hour * 1000 * 60 * 60 // 下一个探索时间
+            let num = explorationAt % 10 - 1
+            let nextEAt = explorationAt - num * explorationTime // 下一个探索时间
             let interval = nextEAt - now;
+            console.log("checkExploration num:", num, " nextEAt:", nextEAt, "interval:", interval)
 
             if (explorationAt <= now || interval <= 0) {
                 isSend = true;
-                console.log("checkExploration onClickEnd npcID:", npc.npc_id)
+                console.log("checkExploration onClickEnd npcID:", npc.npc_id, "interval:", interval)
                 this.onClickEnd(npc.npc_id);
             }
-            if (!isSend && explorationAt > now) {
-                nextTick = Math.min(nextTick, interval);
+            if (!isSend && explorationAt > now && interval < nextTick) {
+                nextTick = interval;
                 npcID = npc.npc_id;
             }
         }
@@ -1198,15 +1212,14 @@ export class UGCModel {
                 clearTimeout(this.timerId);
             }
             this.timerId = setTimeout(() => {
-               this.onClickEnd(npcID);
-            }, nextTick + 60000);
+                this.onClickEnd(npcID);
+            }, nextTick + 2000);
         }
     }
 
     onClickEnd(npcID: number, force: number = 0) {
         let json = new network.ExplorationEndRequest();
         let nakamaToken = RoleModel.getInstance().nakama_token != null ? String(RoleModel.getInstance().nakama_token) : '';
-        console.log("onClickEnd nakamaToken:", nakamaToken)
         nakamaToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aWQiOiI2YTU5ZGRkZS04MDk4LTQ4MWUtODYzNS1mMDcyMjMxODhhYWEiLCJ1aWQiOiJmMjIyYzU3OC0xMWZjLTQwYTAtYjdmNS0wYjMyYzIyMTM1MTQiLCJ1c24iOiJ6alpHY2t2eGFXIiwiZXhwIjoxNzgxMDY1MDM0fQ.6bA51Wwn7OpDj0Z863BrhFf-FcLVjn87xLZJs0CuO48"
         if (nakamaToken == "") {
             return
