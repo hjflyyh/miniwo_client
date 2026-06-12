@@ -17,6 +17,7 @@ const { ccclass, property } = _decorator;
 export class VisitListCell extends Component {
     private npcID: number = 0
     private isVisited: boolean = false
+    private explorationAt: number = 0
 
     @property(Node)
     dispatchNode: Node = null
@@ -31,7 +32,10 @@ export class VisitListCell extends Component {
     statusNode: Node = null
 
     @property(Label)
-    numberLabel: Label = null
+    tiliLabel: Label = null
+
+    @property(Label)
+    tili2Label: Label = null
 
     @property(Label)
     nameLabel: Label = null
@@ -45,11 +49,17 @@ export class VisitListCell extends Component {
     @property(ProgressBar)
     tili: ProgressBar = null
 
+    @property(ProgressBar)
+    tili2: ProgressBar = null
+
     @property(Slider)
-    slider : Slider
+    slider: Slider
 
     @property(UITransform)
-    sliderImg : UITransform
+    sliderImg: UITransform
+
+    @property(Label)
+    hourLabel: Label = null
 
     textList = {}
     start() {
@@ -58,9 +68,15 @@ export class VisitListCell extends Component {
         this.onSliderChange();
         EventSystem.addListent("exploration_log", this.onExplorationLog, this)
 
-        this.schedule(function(){
-
-        } , 1)
+        this.schedule(() => {
+            if (this.isVisited) {
+                let interval = (this.explorationAt - Date.now())/1000
+                let hour = ~~(interval / 60 / 60)
+                let minute = ~~(interval / 60 % 60)
+                let second = ~~(interval % 60)
+                this.tili2Label.string = hour.toString() + ":" + minute.toString() + ":" + second.toString()
+            }
+        }, 1)
     }
 
     onExplorationLog({ npcID, reports }) {
@@ -87,42 +103,42 @@ export class VisitListCell extends Component {
         }
     }
 
-
-
     setNpcId(Npc_data) {
         console.log("setNpcId", Npc_data.attributes["111"])
         let stamina = Npc_data.attributes["111"]
         stamina = Math.max(0, Math.min(1000, stamina))
-        this.numberLabel.string = ~~(stamina / 10).toString() + "/100"
+        this.tiliLabel.string = ~~(stamina / 10).toString() + "/100"
         this.tili.progress = stamina / 1000
         this.npcID = Npc_data.npc_id
         this.nameLabel.string = Npc_data.name
-        this.isVisited = Npc_data.exploration_at > new Date().getTime()
-        this.setVisit()
+        this.setVisit(Npc_data.exploration_at)
     }
 
-    setVisit() {
-        console.log("setVisit", this.isVisited, this.npcID)
+    setVisit(explorationAt: number) {
+        this.isVisited = explorationAt > Date.now()
+        this.explorationAt = explorationAt
 
         this.textNode.active = false
         this.dispatchNode.active = this.isVisited
         this.startNode.active = !this.isVisited
         this.statusNode.active = this.endNode.active = this.isVisited
+        this.tili2.node.active = this.isVisited
+        this.slider.node.active = !this.isVisited
     }
 
     onClickVisit() {
-        const st = Number(this.numberLabel.string)
+        const st = Number(this.tiliLabel.string)
         console.log("onClickVisit", this.isVisited, this.npcID, st)
         if (st <= 20) {
             return
         }
         let json = new network.ExplorationStartRequest();
-        AppConst.WebSocketManager.send(json.toJSON(this.npcID, 3));
+        let hour = ~~(this.sliderImg.contentSize.width / 312 * 5) + 1
+        AppConst.WebSocketManager.send(json.toJSON(this.npcID, hour));
     }
 
     onClickEnd() {
-        UGCModel.getInstance().onClickEnd(this.npcID)
-        // UGCModel.getInstance().onClickEnd(this.npcID, 1)
+        UGCModel.getInstance().onClickEnd(this.npcID, 1)
     }
 
     onClickStatus() {
@@ -139,11 +155,9 @@ export class VisitListCell extends Component {
         }
     }
 
-    onSliderChange(){
-        this.sliderImg.contentSize = new Size(312 * this.slider.progress , 8)
+    onSliderChange() {
+        this.sliderImg.contentSize = new Size(312 * this.slider.progress, 8)
+        let hour = ~~(this.sliderImg.contentSize.width / 312 * 5) + 1
+        this.hourLabel.string = hour.toString() + "H"
     }
-
-    // protected update(dt: number): void {
-        
-    // }
 }

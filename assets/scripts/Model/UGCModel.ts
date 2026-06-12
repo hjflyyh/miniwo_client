@@ -1162,14 +1162,15 @@ export class UGCModel {
             if (!payload || !payload.success || !payload.npc_id || !payload.reports) {
                 return;
             }
-            EventSystem.send("exploration_log",  { npcID: payload.npc_id, reports: payload.reports })
+            EventSystem.send("exploration_log", { npcID: payload.npc_id, reports: payload.reports })
         }
     }
 
     checkExploration() {
         const now = Date.now();
         let isSend = false;
-        let nextTick = 0;
+        let max = 1000 * 60 * 60 * 5; // 最大5 小时
+        let nextTick = max;
         let npcID = 0;
         for (let i = 0; i < this.npcList.length; i++) {
             const npc = this.npcList[i];
@@ -1177,23 +1178,28 @@ export class UGCModel {
             if (!explorationAt) {
                 continue;
             }
-            let hour = explorationAt % 10
-            if (explorationAt <= now || explorationAt - hour * 1000 * 60 * 60 <= now) {
+            let hour = explorationAt % 10 - 1
+            let nextEAt = explorationAt - hour * 1000 * 60 * 60 // 下一个探索时间
+            let interval = nextEAt - now;
+
+            if (explorationAt <= now || interval <= 0) {
                 isSend = true;
+                console.log("checkExploration onClickEnd npcID:", npc.npc_id)
                 this.onClickEnd(npc.npc_id);
             }
             if (!isSend && explorationAt > now) {
-                nextTick = Math.min(nextTick, explorationAt - hour * 1000 * 60 * 60 - now);
+                nextTick = Math.min(nextTick, interval);
                 npcID = npc.npc_id;
             }
         }
-        if (!isSend && nextTick > 0) {
+        if (!isSend && nextTick > 0 && nextTick < max) {
+            console.log("checkExploration nextTick:", nextTick, "npcID:", npcID)
             if (this.timerId) {
                 clearTimeout(this.timerId);
             }
             this.timerId = setTimeout(() => {
-                this.checkExploration();
-            }, nextTick);
+               this.onClickEnd(npcID);
+            }, nextTick + 60000);
         }
     }
 

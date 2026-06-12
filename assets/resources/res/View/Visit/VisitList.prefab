@@ -6497,7 +6497,7 @@
         "__id__": 271
       }
     ],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 277
@@ -6741,7 +6741,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 61.171875,
+      "width": 50.048828125,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -6777,7 +6777,7 @@
       "b": 255,
       "a": 255
     },
-    "_string": "50/100",
+    "_string": "12:04",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 20,
@@ -6969,7 +6969,7 @@
         "__id__": 305
       }
     ],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 311
@@ -9469,8 +9469,11 @@
     "statusNode": {
       "__id__": 153
     },
-    "numberLabel": {
+    "tiliLabel": {
       "__id__": 254
+    },
+    "tili2Label": {
+      "__id__": 274
     },
     "nameLabel": {
       "__id__": 223
@@ -9484,11 +9487,17 @@
     "tili": {
       "__id__": 261
     },
+    "tili2": {
+      "__id__": 281
+    },
     "slider": {
       "__id__": 315
     },
     "sliderImg": {
       "__id__": 292
+    },
+    "hourLabel": {
+      "__id__": 308
     },
     "_id": ""
   },
@@ -9562,7 +9571,7 @@
     "_paddingTop": 0,
     "_paddingBottom": 0,
     "_spacingX": 0,
-    "_spacingY": 0,
+    "_spacingY": 30,
     "_verticalDirection": 1,
     "_horizontalDirection": 0,
     "_constraint": 0,

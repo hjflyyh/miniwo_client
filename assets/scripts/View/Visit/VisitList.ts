@@ -26,6 +26,7 @@ export class VisitList extends Component {
 
     async initNpcList() {
         if (!UGCModel?.getInstance()?.npcList?.length) {
+            console.log("VisitList initNpcList")
             const token = RoleModel.getInstance().token;
             const res = await fetch(`${HttpManager.baseUrl}/getMyNPCs`, {
                 method: 'POST',
@@ -35,6 +36,7 @@ export class VisitList extends Component {
             const json = await res.json();
             UGCModel.getInstance().npcList = json?.data
         }
+        UGCModel.getInstance().checkExploration();
         console.log("npcList::", UGCModel.getInstance().npcList)
     }
 
