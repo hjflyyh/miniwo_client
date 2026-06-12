@@ -6,6 +6,7 @@ import { RoleModel } from '../../Model/RoleModel';
 import { UGCModel } from '../../Model/UGCModel';
 import { YXMasonryFlowLayout } from '../../../plugin/list-3x/yx-masonry-flow-layout';
 import { VisitListCell } from './VisitListCell';
+import { AppConst } from '../../AppConst';
 
 @ccclass('VisitList')
 export class VisitList extends Component {
@@ -19,24 +20,34 @@ export class VisitList extends Component {
         EventSystem.addListent("exploration_update", this.refreshVisitList, this);
         this.visitCellRender.active = false
         this.initNpcList()
-        this.scheduleOnce(() => {
-            this.refreshVisitList();
-        }, 0.1)
+        // this.scheduleOnce(() => {
+        //     this.refreshVisitList();
+        // }, 0.1)
+
+        EventSystem.addListent("OnRefreshUGCMapNpc", this.refreshVisitList, this);
     }
 
     async initNpcList() {
-        if (!UGCModel?.getInstance()?.npcList?.length) {
-            console.log("VisitList initNpcList")
-            const token = RoleModel.getInstance().token;
-            const res = await fetch(`${HttpManager.baseUrl}/getMyNPCs`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ token }),
-            });
-            const json = await res.json();
-            UGCModel.getInstance().npcList = json?.data
-        }
-        UGCModel.getInstance().checkExploration();
+        // if (!UGCModel?.getInstance()?.npcList?.length) {
+
+        // }
+        console.log("VisitList initNpcList")
+        // const token = RoleModel.getInstance().token;
+        // const res = await fetch(`${HttpManager.baseUrl}/getMyNPCs`, {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify({ token }),
+        // });
+
+        // const json = await res.json();
+        // UGCModel.getInstance().npcList = json?.data        
+
+
+        // UGCModel.getInstance().checkExploration();
+        // console.log("npcList::", UGCModel.getInstance().npcList)
+        // const token = RoleModel.getInstance().token;
+        // AppConst.HttpManager.sendPostHttpAny("getMyNPCs" , JSON.stringify({ token }));
+        UGCModel.getInstance().listMyNpcs();
     }
 
     refreshVisitList() {
