@@ -996,6 +996,16 @@ export class MapEditorUI extends Component {
     // 发送地图数据保存
     sendSaveMapData() {
         const editor = MapManager.GetInstance().getMapEditor();
+        if (!editor) {
+            return;
+        }
+
+        // 原生端无 canvas.toBlob / FileReader，且 UGC 保存不依赖预览图
+        if (sys.isNative) {
+            MapModel.getInstance().saveMapData(editor, "");
+            return;
+        }
+
         const visible = view.getVisibleSize();
         const rt = new RenderTexture();
         rt.reset({
@@ -1006,20 +1016,19 @@ export class MapEditorUI extends Component {
         editor.mainCamera.targetTexture = rt;
         director.root.frameMove(0);
         editor.mainCamera.targetTexture = prevTarget;
-        
+
         CaptureUtils.captureScreenToBlob(rt, (blob) => {
-            if (!blob) return;
+            if (!blob) {
+                MapModel.getInstance().saveMapData(editor, "");
+                return;
+            }
             const reader = new FileReader();
             reader.onloadend = () => {
-            let base64Image = String(reader.result || '');
-                if (base64Image) {
-                    console.log(base64Image)
-                    // sys.localStorage.setItem("MapDataPreview", base64Image);
-                    MapModel.getInstance().saveMapData(editor , base64Image);
-                }
+                const base64Image = String(reader.result || '');
+                MapModel.getInstance().saveMapData(editor, base64Image);
             };
             reader.readAsDataURL(blob);
-        });        
+        });
     }
 
     onClickBack() {

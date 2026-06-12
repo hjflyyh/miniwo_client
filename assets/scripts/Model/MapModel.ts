@@ -788,10 +788,10 @@ export class MapModel {
                 source: 'miniwo-cocos',
                 type: 'COCOS_SEND_MAP_DATA',
                 data : _data,
-                base64Image : base64Image
+                base64Image : base64Image || ""
             }, '*');
-        }else if(this.my_map_data.id > 0){
-            UGCModel.getInstance().saveMapData(this.my_map_data.id , _data , "");
+        }else if(this.my_map_data?.id > 0){
+            UGCModel.getInstance().saveMapData(this.my_map_data.id , _data , base64Image || "");
         }else{
             sys.localStorage.setItem("MapData", _data);
         }
