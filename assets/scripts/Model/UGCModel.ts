@@ -362,6 +362,12 @@ export class UGCModel {
                 this.mergeNpcListFromLocal(mapId);
             }
             EventSystem.send("OnRefreshUGCMapNpc")
+        } else if (data.functionName == "getNpcById") {
+            const npc = this.extractNpcFromHttpPayload(data);
+            if (npc) {
+                this.upsertNpcFromHttp(npc);
+                EventSystem.send("OnGetNpcByIdSuccess", npc);
+            }
         } else if (data.functionName == "listMyNpcs") {
             this.applyListMyNpcsFromHttp(data);
         } else if (data.functionName == "listGeneratedNpcs") {
@@ -391,6 +397,8 @@ export class UGCModel {
                 }
                 this.npcList = list;
                 EventSystem.send("OnRefreshUGCMapNpc");
+
+                AppConst.PanelManager.openView("res/View/CreateMap/CreateNpc" , npc)
             }
         }
     }
@@ -509,6 +517,70 @@ export class UGCModel {
                 mapId: Number(mapId),
             })
         )
+    }
+
+    /** 按 NPC id 拉取详情（POST /getNpcById） */
+    public requestGetNpcById(npcId: number, mapId?: number): Promise<any | null> {
+        const idNum = Number(npcId);
+        if (!Number.isFinite(idNum) || idNum <= 0) {
+            return Promise.resolve(null);
+        }
+        const mid = Number(
+            mapId ?? MapModel.getInstance().my_map_data?.id ?? this.mapData.id ?? 0,
+        );
+        const body: Record<string, unknown> = {
+            token: this.token(),
+            npcId: idNum,
+        };
+        if (mid > 0) {
+            body.mapId = mid;
+        }
+        return AppConst.HttpManager.sendPostHttp(
+            "getNpcById",
+            JSON.stringify(body),
+        ).then((resp: any) => {
+            if (!resp?.success) {
+                return null;
+            }
+            const npc = this.extractNpcFromHttpPayload(resp.data ?? {});
+            if (npc) {
+                this.upsertNpcFromHttp(npc);
+            }
+            return npc;
+        });
+    }
+
+    private extractNpcFromHttpPayload(data: any): any | null {
+        if (!data) {
+            return null;
+        }
+        if (data.npc) {
+            return data.npc;
+        }
+        if (data.npc_info) {
+            return data.npc_info;
+        }
+        if (data.id != null || data.npc_id != null) {
+            return data;
+        }
+        return null;
+    }
+
+    private upsertNpcFromHttp(npc: any) {
+        const list = this.npcList || [];
+        const npcId = Number(npc?.id ?? npc?.npc_id);
+        if (!Number.isFinite(npcId) || npcId <= 0) {
+            return;
+        }
+        const idx = list.findIndex((it: any) => Number(it?.id ?? it?.npc_id) === npcId);
+        if (idx >= 0) {
+            list[idx] = Object.assign({}, list[idx], npc);
+        } else {
+            list.push(npc);
+        }
+        this.npcList = list;
+        this.patchNpcInList(this.myNpcList, npcId, npc);
+        this.saveNpcListToLocal();
     }
 
     /** 获取当前玩家全部 NPC（含 work_status 等） */
@@ -949,6 +1021,10 @@ export class UGCModel {
         const npc = this.getNpcById(npcId);
         if (!npc || !aiData) return;
         Object.assign(npc, aiData);
+        
+        for(let c = 0 ; c < this.myNpcList.length ; c++){
+            
+        }
     }
 
     private resolveNpcIdForRequest(npcId: number): number | null {

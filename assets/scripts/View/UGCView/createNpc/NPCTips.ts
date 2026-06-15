@@ -1,6 +1,7 @@
 import { _decorator, Component, ImageAsset, Label, Sprite, SpriteFrame, Texture2D, UITransform } from 'cc';
 import { RoleModel } from '../../../Model/RoleModel';
 import { HttpManager } from '../../../Manager/HttpManager';
+import { UGCModel } from '../../../Model/UGCModel';
 import { Utils } from '../../../Utils/Utils';
 const { ccclass, property } = _decorator;
 
@@ -36,8 +37,35 @@ export class NPCTips extends Component {
     public characteristics : Label[] = [];  
 
     start() {
-        const npcInfo = (this.node as any)["_openParam"];
-        this.refresh(npcInfo);
+        const openParam = (this.node as any)["_openParam"] || {};
+        const npcId = Number(openParam.id ?? openParam.npc_id);
+        const mapId = Number(
+            openParam.map_id ?? openParam.mapId ?? UGCModel.getInstance().mapData?.id ?? 0,
+        );
+        const mapName = String(
+            openParam.mapName ?? openParam.map_name ?? UGCModel.getInstance().mapData?.map_name ?? "",
+        );
+
+        if (!Number.isFinite(npcId) || npcId <= 0) {
+            this.refresh(openParam);
+            return;
+        }
+
+        UGCModel.getInstance().requestGetNpcById(npcId, mapId).then((npc) => {
+            if (!this.isValid) {
+                return;
+            }
+            if (!npc) {
+                EventSystem.send("ShowTips", "Failed to load NPC details");
+                this.refresh(openParam);
+                return;
+            }
+            this.refresh(Object.assign({}, openParam, npc, { mapName }));
+        }).catch(() => {
+            if (this.isValid) {
+                this.refresh(openParam);
+            }
+        });
     }
 
     private refresh(npcInfo: any) {

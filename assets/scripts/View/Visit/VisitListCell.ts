@@ -173,7 +173,18 @@ export class VisitListCell extends Component {
         this.sliderImg.contentSize = new Size(312 * this.slider.progress, 8)
         let num = ~~(this.sliderImg.contentSize.width / 312 * this.sliderNum) + 1
         let explorationTime = UGCModel.getInstance().getExplorationTime()
-        let hour = ~~((explorationTime * num) / 3600 * 100) / 100
-        this.hourLabel.string = hour.toString() + "H"
+        let totalSec = Math.round(explorationTime * num)
+        let h = Math.floor(totalSec / 3600)
+        let m = Math.floor((totalSec % 3600) / 60)
+        let s = totalSec % 60
+        let text = ""
+        if (h > 0) {
+            text = h.toString() + "H" + (m > 0 ? m.toString() + "M" : "")
+        } else if (m > 0) {
+            text = m.toString() + "M" + (s > 0 ? s.toString() + "S" : "")
+        } else {
+            text = s.toString() + "S"
+        }
+        this.hourLabel.string = text
     }
 }

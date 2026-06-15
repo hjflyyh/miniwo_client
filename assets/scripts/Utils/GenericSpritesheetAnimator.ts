@@ -89,9 +89,9 @@ function putCachedRemoteImage(url: string, img: ImageAsset): void {
 export const ZUOZHU_ACTION_HORIZONTAL_SLICES: Readonly<Record<string, number>> = {
     base: 1,
     failed: 8,
-    idle: 6,
+    idle: 4,
     jumping: 5,
-    review: 6,
+    review: 4,
     'running-left': 4,
     /** 未在需求里写出，与 running-left 对称 */
     'running-right': 8,

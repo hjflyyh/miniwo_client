@@ -673,6 +673,10 @@ export class GameView extends Component {
         AppConst.PanelManager.openView("res/View/Mail/MailView", null, null  , null , this.UI)
     }
 
+    public onClickCG(){
+        // AppConst.PanelManager.openView("res/View/Visit/VisitList", null, null , null , this.UI)
+    }
+
     public onClickNpcAt(){
         this.atNpc.active = true
         if(this.atNpcCells.length <= 0){
