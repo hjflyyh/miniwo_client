@@ -2,7 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "9614d3ef-c098-4569-a6a3-31cb71d2ca7c",
+  "uuid": "f0f7c050-4972-47d6-b531-6682cea585de",
   "files": [
     ".json",
     ".png"
@@ -10,14 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "9614d3ef-c098-4569-a6a3-31cb71d2ca7c@6c48a",
+      "uuid": "f0f7c050-4972-47d6-b531-6682cea585de@6c48a",
       "displayName": "rice_1",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "9614d3ef-c098-4569-a6a3-31cb71d2ca7c",
+        "imageUuidOrDatabaseUri": "f0f7c050-4972-47d6-b531-6682cea585de",
         "isUuid": true,
         "visible": false,
         "minfilter": "linear",
@@ -34,7 +34,7 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "9614d3ef-c098-4569-a6a3-31cb71d2ca7c@f9941",
+      "uuid": "f0f7c050-4972-47d6-b531-6682cea585de@f9941",
       "displayName": "rice_1",
       "id": "f9941",
       "name": "spriteFrame",
@@ -113,7 +113,7 @@
           ]
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "9614d3ef-c098-4569-a6a3-31cb71d2ca7c@6c48a",
+        "imageUuidOrDatabaseUri": "f0f7c050-4972-47d6-b531-6682cea585de@6c48a",
         "atlasUuid": "",
         "trimType": "auto"
       },
@@ -129,6 +129,6 @@
     "type": "sprite-frame",
     "fixAlphaTransparencyArtifacts": false,
     "hasAlpha": true,
-    "redirect": "9614d3ef-c098-4569-a6a3-31cb71d2ca7c@6c48a"
+    "redirect": "f0f7c050-4972-47d6-b531-6682cea585de@6c48a"
   }
 }

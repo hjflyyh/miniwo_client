@@ -1,4 +1,4 @@
-import { _decorator, Color, Component, instantiate, Label, math, Node, Size } from 'cc';
+import { _decorator, Color, Component, instantiate, Label, math, Node, resources, Size, Sprite, SpriteFrame } from 'cc';
 import { YXCollectionView } from '../../../plugin/list-3x/yx-collection-view';
 import { CardModel } from '../../Model/CardModel';
 import { CustomGridFlowLayout } from '../../../plugin/list-3x/custom-grid-flow-layout';
@@ -7,6 +7,7 @@ import { network } from '../../Model/RequestData';
 import { AppConst } from '../../AppConst';
 import { PrefabLoad } from '../../Utils/PrefabLoad';
 import { BagModel } from '../../Model/BagModel';
+import { getBasicSeedMatureSpriteResourcePath } from '../../Model/Farm/FarmSeedVisual';
 const { ccclass, property } = _decorator;
 
 @ccclass('ShopListCell')
@@ -25,13 +26,55 @@ export class ShopListCell extends Component {
     @property(PrefabLoad)
     icon : PrefabLoad = null
 
+
+    @property(Node)
+    zhuanshi : Node = null
+
+     @property(Node)
+    jinbi : Node = null   
+
+    @property(Node)
+    sellNode : Node = null
+
+    @property(Sprite)
+    buttonSprite : Sprite = null
+
     private itemID
     private shopData: any = null
     start() {
 
     }
 
+    setSellId(data){
+        this.shopData = data
+        if (this.ShopMoney) this.ShopMoney.color = new Color(87, 80, 238, 255)
+        if (this.buttonSprite) this.buttonSprite.color = Color.WHITE
+
+        if (this.sellNode) this.sellNode.active = true;
+        if (this.jinbi) this.jinbi.active = true
+        if (this.zhuanshi) this.zhuanshi.active = false
+        this.itemID = data.item_id
+        let _this = this
+        resources.load(getBasicSeedMatureSpriteResourcePath(data.id + ""), SpriteFrame, (err, sf) => {
+            const spriteComp = _this.icon?.node?.getComponent(Sprite)
+            if (!err && sf && spriteComp && spriteComp.isValid) {
+                spriteComp.spriteFrame = sf;
+            }
+        });
+        if (this.ShopLimit) this.ShopLimit.string = ""
+        if (this.ShopMoney) this.ShopMoney.string = "" + data.base_crop_price
+
+        if (this.icon && this.icon.node) this.icon.node.scale = new math.Vec3(0.8, 0.8, 0.8)
+    }
+
     setShopId(Shop_data) {
+        this.ShopMoney.color = Color.WHITE
+        this.buttonSprite.color = new Color(134, 129, 255, 255)
+
+        this.sellNode.active = false;
+        this.jinbi.active = Shop_data.currency == 2
+        this.zhuanshi.active = Shop_data.currency == 0    
+        this.icon.node.scale = new math.Vec3(2, 2, 2)    
         // console.log("'ShopListCell'ShopId'", Shop_data)
         this.shopData = Shop_data
         this.itemID = Shop_data.item_id
@@ -45,10 +88,18 @@ export class ShopListCell extends Component {
         }
 
         const needPrice = this.getSalePrice(Shop_data)
-        this.ShopMoney.string = "X" + needPrice
+        if (this.ShopMoney) {
+            this.ShopMoney.string = "X" + needPrice
+        }
         this.refreshMoneyColor(Shop_data, needPrice)
-        
-        this.icon.url = "UITexture/itemIcon/"+ Shop_data.item_id + "/spriteFrame"
+        let _this = this
+        resources.load("UITexture/itemIcon/"+ Shop_data.item_id + "/spriteFrame", SpriteFrame, (err, sf) => {
+            const spriteComp = _this.icon?.node?.getComponent(Sprite)
+            if (!err && sf && spriteComp && spriteComp.isValid) {
+                spriteComp.spriteFrame = sf;
+            }
+        });
+        // this.icon.url = "UITexture/itemIcon/"+ Shop_data.item_id + "/spriteFrame"
     }
 
     private getSalePrice(shopData: any): number {
@@ -83,16 +134,17 @@ export class ShopListCell extends Component {
 
     OnClickBuy() {
         console.log("ShopListCell OnClickBuy")
-        if (this.shopData && Number(this.shopData.currency) === 0) {
-            const needPrice = this.getSalePrice(this.shopData)
-            const diamond = this.getDiamondCount()
-            if (diamond < needPrice) {
-                EventSystem.send("ShowTips", "道具不足")
-                return
-            }
-        }
-        let json = new network.ShopBuyRequest();
-        AppConst.WebSocketManager.send(json.toJSON(this.itemID, 1))
+        // if (this.shopData && Number(this.shopData.currency) === 0) {
+        //     const needPrice = this.getSalePrice(this.shopData)
+        //     const diamond = this.getDiamondCount()
+        //     if (diamond < needPrice) {
+        //         EventSystem.send("ShowTips", "道具不足")
+        //         return
+        //     }
+        // }
+        // let json = new network.ShopBuyRequest();
+        // AppConst.WebSocketManager.send(json.toJSON(this.itemID, 1))
+        EventSystem.send("ShowBuyCheck", this.shopData)
     }
 
 }

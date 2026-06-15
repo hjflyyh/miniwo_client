@@ -2,7 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "2ee8c5f9-6029-416a-b907-6f25fd679cef",
+  "uuid": "6c1daa50-d0b0-4512-a3c1-b1996578dd69",
   "files": [
     ".json",
     ".png"
@@ -10,14 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "2ee8c5f9-6029-416a-b907-6f25fd679cef@6c48a",
+      "uuid": "6c1daa50-d0b0-4512-a3c1-b1996578dd69@6c48a",
       "displayName": "corn_1",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "2ee8c5f9-6029-416a-b907-6f25fd679cef",
+        "imageUuidOrDatabaseUri": "6c1daa50-d0b0-4512-a3c1-b1996578dd69",
         "isUuid": true,
         "visible": false,
         "minfilter": "linear",
@@ -34,7 +34,7 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "2ee8c5f9-6029-416a-b907-6f25fd679cef@f9941",
+      "uuid": "6c1daa50-d0b0-4512-a3c1-b1996578dd69@f9941",
       "displayName": "corn_1",
       "id": "f9941",
       "name": "spriteFrame",
@@ -113,7 +113,7 @@
           ]
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "2ee8c5f9-6029-416a-b907-6f25fd679cef@6c48a",
+        "imageUuidOrDatabaseUri": "6c1daa50-d0b0-4512-a3c1-b1996578dd69@6c48a",
         "atlasUuid": "",
         "trimType": "auto"
       },
@@ -129,6 +129,6 @@
     "type": "sprite-frame",
     "fixAlphaTransparencyArtifacts": false,
     "hasAlpha": true,
-    "redirect": "2ee8c5f9-6029-416a-b907-6f25fd679cef@6c48a"
+    "redirect": "6c1daa50-d0b0-4512-a3c1-b1996578dd69@6c48a"
   }
 }

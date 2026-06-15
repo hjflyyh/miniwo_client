@@ -1,27 +1,22 @@
 {
   "1": {
     "event type": "1",
-    "base weight": "50",
-    "daily max trigger times": "3"
+    "base weight": "50"
   },
   "2": {
     "event type": "2",
-    "base weight": "5",
-    "daily max trigger times": "1"
+    "base weight": "5"
   },
   "3": {
     "event type": "3",
-    "base weight": "30",
-    "daily max trigger times": "5"
+    "base weight": "30"
   },
   "4": {
     "event type": "4",
-    "base weight": "10",
-    "daily max trigger times": "2"
+    "base weight": "10"
   },
   "5": {
     "event type": "5",
-    "base weight": "0",
-    "daily max trigger times": "1"
+    "base weight": "0"
   }
 }

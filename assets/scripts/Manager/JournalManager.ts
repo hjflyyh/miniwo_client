@@ -9,9 +9,9 @@ export class JournalManager extends Component {
     public imgSprite : SpriteFrame[] = []
 
     public journalImgs = [
-        {id : 1 , type : "localImg" , localImgIndex : 0},
-        {id : 2 , type : "localImg" , localImgIndex : 1},
-        {id : 3 , type : "localImg" , localImgIndex : 2},
+        // {id : 1 , type : "localImg" , localImgIndex : 0},
+        // {id : 2 , type : "localImg" , localImgIndex : 1},
+        // {id : 3 , type : "localImg" , localImgIndex : 2},
     ]
 
     protected onLoad(): void {
@@ -21,6 +21,15 @@ export class JournalManager extends Component {
 
     start() {
 
+    }
+
+    addNpcJournal(npcId : number , model_url : string){
+        for(let i = 0 ; i < this.journalImgs.length ; i++){
+            if(this.journalImgs[i].id == npcId){
+                return
+            }
+        }
+        this.journalImgs.push({id : npcId , type : "modelImg" , model_url : model_url})
     }
 }
 

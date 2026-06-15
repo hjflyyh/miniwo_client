@@ -4,7 +4,7 @@ const { ccclass, property } = _decorator;
 
 @ccclass('LanguageManager')
 export class LanguageManager extends Component {
-    public language : string = "cn"
+    public language : string = "en"
 
     start() {
         AppConst.LanguageManager = this

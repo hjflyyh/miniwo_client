@@ -21,6 +21,8 @@ export class MapModel {
     public mapEditAdminToken;
     public mapEditMapId;
     public mapEditData;
+
+    public my_map_data = null
     /**
      * 编辑态 NPC 列表（配置长什么样就怎样实例化，与「哪个区域选了哪些 npc」无关；区域各自 npc 在 mapRegions[].npcIds）。
      * 单条绑定：prefab / prefabPath / mapPrefab，prefabBundle，或 tileId / tilePrefabId。
@@ -466,6 +468,24 @@ export class MapModel {
                 this.maps[mapId] = this.sceneMaps.length;
                 this.sceneMaps.push(maps[m]);
             }
+        }else if(data.code == network.ServerCode.CodeMyMapList){
+            console.log("更新我的地图数据")
+            let contentData = JSON.parse(data.content)
+            if(contentData.maps.length > 0){  
+                this.my_map_data = contentData.maps[0];
+                console.log(this.my_map_data)
+            }
+                
+        }else if (data.code == network.ServerCode.CodeMapCoverComplete) {
+            let content: any = data?.content;
+            if(content?.map_id && content?.map_cover_url){
+                for(let m = 0 ; m < MapModel.getInstance().sceneMaps.length ; m++){
+                    const mapId = Number(content.map_id);
+                    if(MapModel.getInstance().sceneMaps[m].id == mapId){
+                        MapModel.getInstance().sceneMaps[m].map_cover_url = content.map_cover_url
+                    }
+                }                
+            }
         }
     }
 
@@ -768,10 +788,10 @@ export class MapModel {
                 source: 'miniwo-cocos',
                 type: 'COCOS_SEND_MAP_DATA',
                 data : _data,
-                base64Image : base64Image
+                base64Image : base64Image || ""
             }, '*');
-        }else if(UGCModel.getInstance().mapData.id > 0){
-            UGCModel.getInstance().saveMapData(UGCModel.getInstance().mapData.id , _data , base64Image);
+        }else if(this.my_map_data?.id > 0){
+            UGCModel.getInstance().saveMapData(this.my_map_data.id , _data , base64Image || "");
         }else{
             sys.localStorage.setItem("MapData", _data);
         }

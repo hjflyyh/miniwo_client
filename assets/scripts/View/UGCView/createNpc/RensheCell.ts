@@ -1,4 +1,4 @@
-import { _decorator, Component, Label, Node } from 'cc';
+import { _decorator, Component, Label, Node, Sprite, SpriteFrame } from 'cc';
 import { UGCModel } from '../../../Model/UGCModel';
 const { ccclass, property } = _decorator;
 
@@ -7,8 +7,14 @@ export class RensheCell extends Component {
     @property(Label)
     public rensheLabel : Label = null;
 
-    @property(Node)
-    public chooseNode : Node = null;
+    @property(SpriteFrame)
+    public chooseSprite : SpriteFrame = null;
+
+    @property(SpriteFrame)
+    public unChooseSprite : SpriteFrame = null;
+
+    @property(Sprite)
+    public spriteNode : Sprite = null;
 
     private npcId = 0;
     private rensheId = 0;
@@ -31,7 +37,8 @@ export class RensheCell extends Component {
             }
             
         }
-        this.chooseNode.active = isIn;
+        this.spriteNode.spriteFrame = isIn ? this.chooseSprite : this.unChooseSprite;
+        // this.chooseSprite.enabled = isIn;
     }
 
     onClickRenshe(){

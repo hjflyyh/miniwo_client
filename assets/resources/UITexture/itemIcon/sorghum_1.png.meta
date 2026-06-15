@@ -2,7 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "1fd2c7ed-9704-4bb4-916e-a7c315e68b0a",
+  "uuid": "9624bac6-c41d-476b-9ccf-411ed1036390",
   "files": [
     ".json",
     ".png"
@@ -10,14 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "1fd2c7ed-9704-4bb4-916e-a7c315e68b0a@6c48a",
+      "uuid": "9624bac6-c41d-476b-9ccf-411ed1036390@6c48a",
       "displayName": "sorghum_1",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "1fd2c7ed-9704-4bb4-916e-a7c315e68b0a",
+        "imageUuidOrDatabaseUri": "9624bac6-c41d-476b-9ccf-411ed1036390",
         "isUuid": true,
         "visible": false,
         "minfilter": "linear",
@@ -34,7 +34,7 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "1fd2c7ed-9704-4bb4-916e-a7c315e68b0a@f9941",
+      "uuid": "9624bac6-c41d-476b-9ccf-411ed1036390@f9941",
       "displayName": "sorghum_1",
       "id": "f9941",
       "name": "spriteFrame",
@@ -113,7 +113,7 @@
           ]
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "1fd2c7ed-9704-4bb4-916e-a7c315e68b0a@6c48a",
+        "imageUuidOrDatabaseUri": "9624bac6-c41d-476b-9ccf-411ed1036390@6c48a",
         "atlasUuid": "",
         "trimType": "auto"
       },
@@ -129,6 +129,6 @@
     "type": "sprite-frame",
     "fixAlphaTransparencyArtifacts": false,
     "hasAlpha": true,
-    "redirect": "1fd2c7ed-9704-4bb4-916e-a7c315e68b0a@6c48a"
+    "redirect": "9624bac6-c41d-476b-9ccf-411ed1036390@6c48a"
   }
 }

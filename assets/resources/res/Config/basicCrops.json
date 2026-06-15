@@ -2,7 +2,7 @@
   "1": {
     "item_id": "100039",
     "crop_name": "玉米作物",
-    "icon": "itemIcon/corn2",
+    "icon": "itemIcon/corn",
     "correspondence_relation": "1",
     "crop_name_en": "corn_crop",
     "base_crop_price": "12"
@@ -10,7 +10,7 @@
   "2": {
     "item_id": "100040",
     "crop_name": "水稻作物",
-    "icon": "itemIcon/rice2",
+    "icon": "itemIcon/rice",
     "correspondence_relation": "2",
     "crop_name_en": "rice_crop",
     "base_crop_price": "12"
@@ -18,7 +18,7 @@
   "3": {
     "item_id": "100041",
     "crop_name": "小麦作物",
-    "icon": "itemIcon/wheat2",
+    "icon": "itemIcon/wheat",
     "correspondence_relation": "3",
     "crop_name_en": "wheat_crop",
     "base_crop_price": "12"
@@ -26,7 +26,7 @@
   "4": {
     "item_id": "100042",
     "crop_name": "红薯作物",
-    "icon": "itemIcon/sweetpotato2",
+    "icon": "itemIcon/sweet potato",
     "correspondence_relation": "4",
     "crop_name_en": "sweet_potato_crop",
     "base_crop_price": "12"
@@ -34,7 +34,7 @@
   "5": {
     "item_id": "100043",
     "crop_name": "土豆作物",
-    "icon": "itemIcon/potato2",
+    "icon": "itemIcon/potato",
     "correspondence_relation": "5",
     "crop_name_en": "potato_crop",
     "base_crop_price": "12"
@@ -42,7 +42,7 @@
   "6": {
     "item_id": "100044",
     "crop_name": "高粱作物",
-    "icon": "itemIcon/sorghum2",
+    "icon": "itemIcon/sorghum",
     "correspondence_relation": "6",
     "crop_name_en": "sorghum_crop",
     "base_crop_price": "32"
@@ -50,7 +50,7 @@
   "7": {
     "item_id": "100045",
     "crop_name": "青菜作物",
-    "icon": "",
+    "icon": "itemIcon/green vegetables",
     "correspondence_relation": "7",
     "crop_name_en": "green_vegetable_crop",
     "base_crop_price": "110"
@@ -58,7 +58,7 @@
   "8": {
     "item_id": "100046",
     "crop_name": "向日葵作物",
-    "icon": "",
+    "icon": "itemIcon/sunflower",
     "correspondence_relation": "8",
     "crop_name_en": "sunflower_crop",
     "base_crop_price": "1100"
@@ -66,7 +66,7 @@
   "9": {
     "item_id": "100047",
     "crop_name": "油菜作物",
-    "icon": "",
+    "icon": "itemIcon/rape flower",
     "correspondence_relation": "9",
     "crop_name_en": "rape_crop",
     "base_crop_price": "1100"
@@ -74,7 +74,7 @@
   "10": {
     "item_id": "100048",
     "crop_name": "白菜作物",
-    "icon": "",
+    "icon": "itemIcon/cabbage",
     "correspondence_relation": "10",
     "crop_name_en": "chinese_cabbage_crop",
     "base_crop_price": "1100"
@@ -82,7 +82,7 @@
   "11": {
     "item_id": "100049",
     "crop_name": "紫甘蓝作物",
-    "icon": "",
+    "icon": "itemIcon/purple cabbage",
     "correspondence_relation": "11",
     "crop_name_en": "purple_cabbage_crop",
     "base_crop_price": "1100"
@@ -90,7 +90,7 @@
   "12": {
     "item_id": "100050",
     "crop_name": "玫瑰花作物",
-    "icon": "",
+    "icon": "itemIcon/red rose",
     "correspondence_relation": "12",
     "crop_name_en": "rose_crop",
     "base_crop_price": "1100"
@@ -98,7 +98,7 @@
   "13": {
     "item_id": "100051",
     "crop_name": "兰花作物",
-    "icon": "",
+    "icon": "itemIcon/orchid",
     "correspondence_relation": "13",
     "crop_name_en": "orchid_crop",
     "base_crop_price": "1100"

@@ -20,6 +20,12 @@ export class BagList extends Component {
 
     private column = 5
 
+    private showIndex = 0;
+
+    private types = {
+        0 : {type : 4}
+    }
+
     start() {
         this.scheduleOnce(() => {
             this.refreshBagList();
@@ -28,20 +34,26 @@ export class BagList extends Component {
 
     refreshBagList() {
         const slots = BagModel.getInstance().slots || []
-        this.showBags = slots.filter((slot: any) => {
-            const itemId = slot?.item_id
-            if (!itemId) {
-                return false
-            }
-            const itemCfg = AppConst.JSONManager.getItem("item", `${itemId}`)
-            if (!itemCfg) {
-                return false
-            }
-            return `${itemCfg.is_displayed_in_backpack}` === "0"
-        })
-        console.log("BagList refreshBagList" , this.showBags)
 
-        this.listComp.numberOfItems = () => this.showBags.length;
+        this.listComp.numberOfItems = () => {
+            // return this.showBags.length
+            let _this = this
+            this.showBags = slots.filter((slot: any) => {
+                const itemId = slot?.item_id
+                if (!itemId) {
+                    return false
+                }
+                const itemCfg = AppConst.JSONManager.getItem("item", `${itemId}`)
+                if (!itemCfg) {
+                    return false
+                }
+                if(itemCfg["type"] == _this.types[_this.showIndex].type){
+                    return `${itemCfg.is_displayed_in_backpack}` === "0"
+                }
+            })
+            console.log("BagList refreshBagList" , this.showBags)
+            return this.showBags.length
+        };
         if (!this.listComp.enabled) {
             this.listComp.enabled = true
 

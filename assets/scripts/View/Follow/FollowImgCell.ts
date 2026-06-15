@@ -1,6 +1,7 @@
 import { _decorator, Component, Node, Sprite } from 'cc';
 import { AppConst } from '../../AppConst';
 import { FollowImgChoose } from './FollowImgChoose';
+import { Utils } from '../../Utils/Utils';
 const { ccclass, property } = _decorator;
 
 @ccclass('FollowImgCell')
@@ -30,6 +31,9 @@ export class FollowImgCell extends Component {
     setImg(){
         if(this.data["type"] == "localImg"){
             this.showSp.spriteFrame = AppConst.JournalManager.imgSprite[this.data["localImgIndex"]]
+        }
+        if(this.data["type"] == "modelImg"){
+            Utils.loadCoverFitInsideParent(this.data["model_url"], this.showSp)
         }
     }
 

@@ -4,6 +4,7 @@ import { MapModel } from '../../../Model/MapModel';
 import { Utils } from '../../../Utils/Utils';
 import { AppConst } from '../../../AppConst';
 import { RoleModel } from '../../../Model/RoleModel';
+import { network } from '../../../Model/RequestData';
 const { ccclass, property } = _decorator;
 
 @ccclass('MapListItem')
@@ -28,8 +29,34 @@ export class MapListItem extends Component implements InfiniteCell{
     isLike : Node
 
     mapData
-    start() {
 
+    start() {
+        EventSystem.addListent("WebSocketNotifications", this.OnWebSocketNotifications, this)
+    }
+
+    OnWebSocketNotifications(data){
+        if (data.code == network.ServerCode.CodeMapCoverComplete) {
+            //封面更新
+            let content: any = data?.content;
+            if (typeof content === "string") {
+                try { content = JSON.parse(content); } catch { content = null; }
+            }
+            if(content?.map_id && content?.map_cover_url){
+                const mapId = Number(content.map_id);
+                let mapData = null;
+                for(let m = 0 ; m < MapModel.getInstance().sceneMaps.length ; m++){
+                    if(MapModel.getInstance().sceneMaps[m].id == mapId){
+                        mapData = MapModel.getInstance().sceneMaps[m]
+                    }
+                }
+                if(mapData){
+                    mapData["map_cover_url"] = content.map_cover_url;
+                    if(this.mapData && Number(this.mapData["id"]) == mapId){
+                        Utils.loadCoverFitHeight(content.map_cover_url, this.banner);
+                    }
+                }
+            }
+        }
     }
 
     UpdateContent(data: any): void {
@@ -40,7 +67,10 @@ export class MapListItem extends Component implements InfiniteCell{
         this.likeNumber.string = mapData.map_like_count
         this.isLike.active = mapData.liked
 
-        Utils.loadCover(mapData["map_cover_url"], this.banner , 850 , 1420);
+        if(mapData["map_cover_url"] && mapData["map_cover_url"] != ""){
+            this.banner.spriteFrame = null
+            Utils.loadCoverFitHeight(mapData["map_cover_url"], this.banner);
+        }
     }
 
     OnClick(){

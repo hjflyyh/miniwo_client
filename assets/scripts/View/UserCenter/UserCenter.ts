@@ -58,6 +58,13 @@ export class UserCenter extends Component {
         // AppConst.PanelManager.openView("res/View/UserCenter/UserInfo", null, null, "res/View/UserCenter/UserCenter")
     }
 
+    OnClickMail(){
+        AppConst.PanelManager.openView("res/View/Mail/MailView", null, null)
+    }
+    OnClickVisit(){
+        AppConst.PanelManager.openView("res/View/Visit/VisitList", null, null, "res/View/UserCenter/UserCenter")
+    }
+
     private OnWSNotification(data) {
         if (data.code == network.ServerCode.CodeProfile) {
             this.setUser()

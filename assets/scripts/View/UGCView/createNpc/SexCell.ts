@@ -21,13 +21,13 @@ export class SexCell extends Component {
         this.npcId = npcId;
         this.sexId = sex;
         if(this.sexId == 0){
-            this.sexLabel.string = "男";
+            this.sexLabel.string = "Man";
         }
         if(this.sexId == 1){
-            this.sexLabel.string = "女";
+            this.sexLabel.string = "Woman";
         }
         if(this.sexId == 2){
-            this.sexLabel.string = "其他";
+            this.sexLabel.string = "Other";
         }
         let npcSex = UGCModel.getInstance().getNpcSex(this.npcId);
         this.chooseNode.active = npcSex == sex;

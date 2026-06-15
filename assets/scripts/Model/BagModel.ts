@@ -42,7 +42,7 @@ export class BagModel {
             return 0
         }
         const slots = (this.slots as any[]) || []
-        const slot = slots.find((s: any) => Number(s?.item_id) === itemId)
+        const slot = slots.find((s: any) => Number(s?.item_id) == itemId)
         const count = Number(slot?.count ?? 0)
         return Number.isFinite(count) ? Math.max(0, count) : 0
     }

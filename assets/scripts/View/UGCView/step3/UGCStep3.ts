@@ -1,4 +1,4 @@
-import { _decorator, Component, instantiate, Label, Node } from 'cc';
+import { _decorator, Component, instantiate, Node } from 'cc';
 import { UGCModel } from '../../../Model/UGCModel';
 import { UGCNpcTabCell } from './UGCNpcTabCell';
 import { UGCNpcInfoCell } from './UGCNpcInfoCell';
@@ -16,14 +16,10 @@ export class UGCStep3 extends Component {
 
 
     start() {
-        this.npcTabCell.active = false
-        this.npcInfoCell.active = false
-
-        UGCModel.getInstance().getNpcByMap(UGCModel.getInstance().mapData.id);
-
+        this.npcTabCell.active = false;
+        this.npcInfoCell.active = false;
         this.refreshTabNpc();
-        
-        EventSystem.addListent("OnRefreshUGCMapNpc" , this.refreshTabNpc , this)
+        EventSystem.addListent("OnRefreshUGCMapNpc", this.refreshTabNpc, this);
     }
     
     refreshTabNpc(){
@@ -45,8 +41,14 @@ export class UGCStep3 extends Component {
             }
         }
 
-        if(this.npcNodes.length < UGCModel.getInstance().npcList.length){
-            for(let i = this.npcNodes.length ; i < UGCModel.getInstance().npcList.length ; i++){
+        let npcList = []
+        for(let n = 0 ; n < UGCModel.getInstance().npcList.length ; n++){
+            if(UGCModel.getInstance().npcList[n] && UGCModel.getInstance().npcList[n].sprite_generating_status > 0){
+                npcList.push(UGCModel.getInstance().npcList[n])
+            }
+        }
+        if(this.npcNodes.length < npcList.length){
+            for(let i = this.npcNodes.length ; i < npcList.length ; i++){
                 let npcNew = instantiate(this.npcInfoCell);
                 npcNew.parent = this.npcInfoCell.parent;
                 npcNew.active = true;
@@ -54,9 +56,9 @@ export class UGCStep3 extends Component {
             }   
         }
         for(let i = 0 ; i < this.npcNodes.length ; i++){
-            if(i < UGCModel.getInstance().npcList.length){
+            if(i < npcList.length){
                 this.npcNodes[i].active = true;
-                let npcInfo = UGCModel.getInstance().npcList[i];
+                let npcInfo = npcList[i];
                 this.npcNodes[i].getComponent(UGCNpcInfoCell).refreshNpcInfo(npcInfo);
             } else {
                 this.npcNodes[i].active = false;

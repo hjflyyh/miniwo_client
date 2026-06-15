@@ -36,9 +36,16 @@ export class GameFarmChooseCell extends Component {
         this.seedKey = seedKey;
         this.setCount(count);
 
+        if (this.spriteRoot) {
+            this.spriteRoot.enabled = false;
+        }
         resources.load(`UITexture/itemIcon/${itemId}/spriteFrame`, SpriteFrame, (err, sf) => {
-            if (!err && sf && this.spriteRoot?.isValid) {
+            if (!this.spriteRoot?.isValid) {
+                return;
+            }
+            if (!err && sf) {
                 this.spriteRoot.spriteFrame = sf;
+                this.spriteRoot.enabled = true;
             }
         });
     }
@@ -53,18 +60,18 @@ export class GameFarmChooseCell extends Component {
 
     async onClick() {
         if (this.itemCount <= 0) {
-            EventSystem.send('ShowTips', '种子不足');
+            EventSystem.send('ShowTips', 'Insufficient seeds');
             return;
         }
         if (this.farmId == null) {
-            EventSystem.send('ShowTips', '请先选择一块农田');
+            EventSystem.send('ShowTips', 'Please select a farm first');
             return;
         }
 
         await FarmModel.getInstance().refreshFarms();
         const plot = FarmModel.getInstance().getPlot(this.farmId);
         if (!isPlotSeedEmpty(plot)) {
-            EventSystem.send('ShowTips', '该地块已有作物');
+            EventSystem.send('ShowTips', 'The plot already has a crop');
             return;
         }
 

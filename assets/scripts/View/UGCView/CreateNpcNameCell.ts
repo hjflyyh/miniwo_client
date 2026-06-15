@@ -1,5 +1,6 @@
 import { _decorator, Component, Label, Node, Sprite } from 'cc';
 import { CreateNpc } from './CreateNpc';
+import { EditNpcImg } from './createNpc/EditNpcImg';
 const { ccclass, property } = _decorator;
 
 @ccclass('CreateNpcNameCell')
@@ -20,6 +21,12 @@ export class CreateNpcNameCell extends Component {
         this.chooseNode.enabled = createNpcView.chooseNpcId == npcInfo.id;
         this.nameLabel.string = npcInfo.name;
     }
+
+    refreshNpcInfoEditImg(npcInfo: any , editNpcImg : EditNpcImg){
+        this.npcId = npcInfo.id;
+        this.chooseNode.enabled = editNpcImg.chooseNpcId == npcInfo.id;
+        this.nameLabel.string = npcInfo.name;
+    }    
 
     onClickNpc(){
         EventSystem.send("CreateNpcNameCell" , this.npcId)

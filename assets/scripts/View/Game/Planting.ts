@@ -17,6 +17,7 @@ import {
     FarmPlotFunctionHidePayload,
     getPlotGrowRemainSec,
     isPlotGrowing,
+    isPlotHarvestable,
 } from '../../Model/Farm/FarmTypes';
 import { BagModel } from '../../Model/BagModel';
 import { FarmModel } from '../../Model/Farm/FarmModel';
@@ -263,10 +264,6 @@ export class Planting extends Component {
             return;
         }
         this.refreshCountdownDisplay();
-        const model = FarmModel.getInstance();
-        if (model.isPlotHarvestableById(this.farmId)) {
-            model.notifyGrowCountdownEnded(this.farmId);
-        }
     }
 
     /** 刷新 function 面板上两种肥料背包数量 */
@@ -289,19 +286,19 @@ export class Planting extends Component {
         const model = FarmModel.getInstance();
         const plot = model.getPlot(farmId);
         if (!plot || !String(plot.seed ?? '').trim()) {
-            EventSystem.send('ShowTips', '暂无作物');
+            EventSystem.send('ShowTips', 'No crops for the time being.');
             return;
         }
         if (model.isPlotHarvestableById(farmId)) {
-            EventSystem.send('ShowTips', '作物已成熟，请收获');
+            EventSystem.send('ShowTips', 'The crop has matured, please harvest it.');
             return;
         }
         if (!isPlotGrowing(plot, model.getNowUnixSec())) {
-            EventSystem.send('ShowTips', '请先浇水后再施肥');
+            EventSystem.send('ShowTips', 'Please water the crop before fertilizing it.');
             return;
         }
         if (BagModel.getInstance().getItemCount(itemId) <= 0) {
-            EventSystem.send('ShowTips', '肥料不足');
+            EventSystem.send('ShowTips', 'Insufficient fertilizer.');
             return;
         }
 
@@ -310,7 +307,15 @@ export class Planting extends Component {
             const result = await model.fertilize(farmId, itemId);
             if (result.ok) {
                 this.refreshFertilizerDisplay();
-                this.refreshCountdownDisplay();
+                const plot = model.getPlot(farmId);
+                const nowSec = model.getNowUnixSec();
+                if (isPlotHarvestable(plot, nowSec)) {
+                    this.growExpiredNotified = true;
+                    model.notifyGrowCountdownEnded(farmId);
+                } else {
+                    this.refreshCountdownDisplay();
+                    GameFarmNode.refreshPlotByFarmId(farmId);
+                }
                 EventSystem.send('ShowTips', '施肥成功');
             } else {
                 EventSystem.send('ShowTips', result.message ?? '施肥失败');
@@ -341,7 +346,7 @@ export class Planting extends Component {
             }
             return;
         }
-        this.timeLabel.string = formatGrowRemain(remain);
+        this.timeLabel.string = "Remaining time:" + formatGrowRemain(remain);
     }
 
     private loadPlantSprite(seedKey: string) {

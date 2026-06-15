@@ -5,11 +5,11 @@
   },
   "2": {
     "function": "回复1体力耗时",
-    "configuration": "120"
+    "configuration": "30"
   },
   "3": {
     "function": "体力存储上限",
-    "configuration": "150"
+    "configuration": "1000"
   },
   "4": {
     "function": "单次拾取地图场景物品消耗体力",
@@ -153,7 +153,7 @@
   },
   "40": {
     "function": "派遣消耗",
-    "configuration": "102_100#102_200"
+    "configuration": "100#200"
   },
   "41": {
     "function": "探索时长",
@@ -162,5 +162,25 @@
   "42": {
     "function": "犯罪被抓AI角色坐牢时长&保释金",
     "configuration": "18000#104_20000"
+  },
+  "43": {
+    "function": "AI角色回复1体力耗时",
+    "configuration": "30"
+  },
+  "44": {
+    "function": "AI角色体力存储上限",
+    "configuration": "1000"
+  },
+  "45": {
+    "function": "不同等级CG的漫画张数",
+    "configuration": "1#2#3#5"
+  },
+  "46": {
+    "function": "不同功能可获得的CG等级",
+    "configuration": "地图日常中生成:N#世界探索获得:R"
+  },
+  "47": {
+    "function": "单次探索时长",
+    "configuration": "60"
   }
 }

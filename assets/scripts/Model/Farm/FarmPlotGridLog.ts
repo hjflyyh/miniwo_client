@@ -2,15 +2,23 @@ import { Node, UITransform, Vec2, Vec3 } from 'cc';
 import { MapEditor } from '../../../bundles/mapEditor/src/MapEditor';
 import { GameFarmNode, FARM_PLOT_COUNT } from '../../View/Game/GameFarmNode';
 import { MapModel } from '../MapModel';
+import {
+    FARM_MAIN_FIELD_COUNT,
+    FARM_PLOTS_PER_FIELD,
+    FARM_STARTER_FIELD_INDEX,
+    FARM_STARTER_PLOT_COUNT,
+    toServerFarmId,
+} from './FarmPlotMapper';
 
-/** 场景里大田分区数量（tudiPrefab1～4） */
-export const FARM_FIELD_COUNT = 4;
+/** 新手区 7 格 + 大田 4×36 格 */
+export const FARM_PLOT_TOTAL =
+    FARM_STARTER_PLOT_COUNT + FARM_MAIN_FIELD_COUNT * FARM_PLOTS_PER_FIELD;
 
-/** 4 块大田 × 36 子格 */
-export const FARM_PLOT_TOTAL = FARM_FIELD_COUNT * FARM_PLOT_COUNT;
+/** @deprecated 请用 toServerFarmId；与 FarmPlotMapper 一致 */
+export const FARM_FIELD_COUNT = FARM_MAIN_FIELD_COUNT;
 
 export type FarmNearestGridEntry = {
-    /** 全局地块编号 1～144：第 n 块大田 + 块内第 m 格 → (n-1)*36 + m */
+    /** 与服务端 farm_id 一致：-1 区 plotIndex 0～6 → 1～7；0～3 区从 7 起 */
     plot_index: number;
     nearest_grid: {
         x: number;
@@ -26,9 +34,9 @@ function plotKey(farmIndex: number, plotIndexInField: number): string {
     return `${farmIndex},${plotIndexInField}`;
 }
 
-/** 大田 farmIndex(0～3) + 块内格 plotIndexInField(0～35) → 全局 id 1～144 */
+/** 与 toServerFarmId 一致，供旧引用 */
 export function toGlobalPlotId(farmIndex: number, plotIndexInField: number): number {
-    return farmIndex * FARM_PLOT_COUNT + plotIndexInField + 1;
+    return toServerFarmId(farmIndex, plotIndexInField, FARM_PLOT_TOTAL) ?? 0;
 }
 
 function parseTudiPlotIndex(nodeName: string): number {
@@ -93,7 +101,9 @@ function collectAllFieldPlotNodes(
 
     for (let n = 0; n < farmNodes.length; n++) {
         const farmNode = farmNodes[n];
-        const farmIndex = Number(farmNode.farmIndex) || 0;
+        const farmIndex = Number.isFinite(Number(farmNode.farmIndex))
+            ? Number(farmNode.farmIndex)
+            : 0;
         const children = farmNode.node.children;
 
         for (let i = 0; i < children.length; i++) {
@@ -113,34 +123,55 @@ function collectAllFieldPlotNodes(
     return byKey;
 }
 
-/** 144 条：plot_index 为 1～144，每格一个最近地图 grid */
+function pushPlotNearestGridEntries(
+    farms: FarmNearestGridEntry[],
+    plotByKey: Map<string, { node: Node; farmIndex: number; plotIndexInField: number }>,
+    map: MapEditor,
+    farmIndex: number,
+    plotCountInField: number
+) {
+    for (let plotIndexInField = 0; plotIndexInField < plotCountInField; plotIndexInField++) {
+        const plotIndex = toServerFarmId(farmIndex, plotIndexInField, FARM_PLOT_TOTAL);
+        if (plotIndex == null) {
+            continue;
+        }
+        const hit = plotByKey.get(plotKey(farmIndex, plotIndexInField));
+
+        if (!hit) {
+            farms.push({
+                plot_index: plotIndex,
+                nearest_grid: null,
+            });
+            continue;
+        }
+
+        const local = worldToMapLocal(hit.node.worldPosition, map);
+        const nearest = local ? findNearestGridInMap(local, map) : null;
+
+        farms.push({
+            plot_index: plotIndex,
+            nearest_grid: nearest,
+        });
+    }
+}
+
+/** 新手区 + 大田：plot_index 为服务端 farm_id */
 export function buildFarmsNearestGridJson(map: MapEditor): FarmsNearestGridJson {
     const plotByKey = collectAllFieldPlotNodes(map);
     const farms: FarmNearestGridEntry[] = [];
 
-    for (let farmIndex = 0; farmIndex < FARM_FIELD_COUNT; farmIndex++) {
-        for (let plotIndexInField = 0; plotIndexInField < FARM_PLOT_COUNT; plotIndexInField++) {
-            const globalPlotId = toGlobalPlotId(farmIndex, plotIndexInField);
-            const hit = plotByKey.get(plotKey(farmIndex, plotIndexInField));
-
-            if (!hit) {
-                farms.push({
-                    plot_index: globalPlotId,
-                    nearest_grid: null,
-                });
-                continue;
-            }
-
-            const local = worldToMapLocal(hit.node.worldPosition, map);
-            const nearest = local ? findNearestGridInMap(local, map) : null;
-
-            farms.push({
-                plot_index: globalPlotId,
-                nearest_grid: nearest,
-            });
-        }
+    pushPlotNearestGridEntries(
+        farms,
+        plotByKey,
+        map,
+        FARM_STARTER_FIELD_INDEX,
+        FARM_STARTER_PLOT_COUNT
+    );
+    for (let farmIndex = 0; farmIndex < FARM_MAIN_FIELD_COUNT; farmIndex++) {
+        pushPlotNearestGridEntries(farms, plotByKey, map, farmIndex, FARM_PLOTS_PER_FIELD);
     }
 
+    farms.sort((a, b) => a.plot_index - b.plot_index);
     return { farms };
 }
 
@@ -148,7 +179,7 @@ export function logFarmPlotGridsOnSave(map: MapEditor): void {
     const json = buildFarmsNearestGridJson(map);
     const found = json.farms.filter((f) => f.nearest_grid != null).length;
     console.log(
-        `[FarmPlotGrid] farms 共 ${json.farms.length} 条（plot_index 1～${FARM_PLOT_TOTAL}），场景命中 ${found} 条`
+        `[FarmPlotGrid] farms 共 ${json.farms.length} 条（含新手区 farmIndex=-1 共 ${FARM_STARTER_PLOT_COUNT} 格，plot_index 与服务端 farm_id 一致），场景命中 ${found} 条`
     );
     console.log(JSON.stringify(json, null, 2));
 }

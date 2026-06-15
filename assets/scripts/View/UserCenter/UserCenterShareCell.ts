@@ -2,6 +2,7 @@ import { _decorator, Component, Label, Node, Sprite } from 'cc';
 import InfiniteCell from '../../../plugin/InfiniteList/InfiniteCell';
 import { SocialModel } from '../../Model/SocialModel';
 import { AppConst } from '../../AppConst';
+import { Utils } from '../../Utils/Utils';
 const { ccclass, property } = _decorator;
 
 @ccclass('UserCenterShareCell')
@@ -59,12 +60,12 @@ export class UserCenterShareCell extends InfiniteCell {
             this.onLike.active = isLike
             this.offLike.active = !isLike
 
-            this.imgSp.spriteFrame = null
             let imageUrl = post?.ImageURL && JSON.parse(post?.ImageURL || "[]")
             if (imageUrl && imageUrl.length > 0) {
-                let journalImg = AppConst.JournalManager.journalImgs.find((i) => i.type == "localImg" && i.id == imageUrl[0]["id"])
-                if (journalImg) {
-                    this.imgSp.spriteFrame = AppConst.JournalManager.imgSprite[journalImg["localImgIndex"]]
+                let journalImg = AppConst.JournalManager.journalImgs.find((i) => i.type == "modelImg" && i.id == imageUrl[0]["id"])
+                if (journalImg?.model_url) {
+                    this.imgSp.spriteFrame = null
+                    Utils.loadCoverFitInsideParent(journalImg.model_url, this.imgSp)
                 }
             }
         }
@@ -80,9 +81,20 @@ export class UserCenterShareCell extends InfiniteCell {
             this.imgSp2.spriteFrame = null
             let imageUrl2 = post2?.ImageURL && JSON.parse(post2?.ImageURL || "[]")
             if (imageUrl2 && imageUrl2.length > 0) {
-                let journalImg2 = AppConst.JournalManager.journalImgs.find((i) => i.type == "localImg" && i.id == imageUrl2[0]["id"])
-                if (journalImg2) {
-                    this.imgSp2.spriteFrame = AppConst.JournalManager.imgSprite[journalImg2["localImgIndex"]]
+                if (imageUrl2[0]["type"] == "modelImg") {
+                    const journalImg2 = AppConst.JournalManager.journalImgs.find(
+                        (i) => i.type == "modelImg" && i.id == imageUrl2[0]["id"],
+                    )
+                    if (journalImg2?.model_url) {
+                        Utils.loadCoverFitInsideParent(journalImg2.model_url, this.imgSp2)
+                    }
+                } else {
+                    const journalImg2 = AppConst.JournalManager.journalImgs.find(
+                        (i) => i.type == "localImg" && i.id == imageUrl2[0]["id"],
+                    )
+                    if (journalImg2) {
+                        this.imgSp2.spriteFrame = AppConst.JournalManager.imgSprite[journalImg2["localImgIndex"]]
+                    }
                 }
             }
         } else {

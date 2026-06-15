@@ -75,7 +75,7 @@ export class PlantingEnd extends Component {
         }
         const model = FarmModel.getInstance();
         if (!model.isPlotHarvestableById(farmId)) {
-            EventSystem.send('ShowTips', '作物尚未成熟');
+            EventSystem.send('ShowTips', 'The crops are not yet ripe.');
             return;
         }
 
@@ -85,9 +85,9 @@ export class PlantingEnd extends Component {
             if (result.ok) {
                 this.setFunctionPanelVisible(false);
                 EventSystem.send(FARM_PLOT_FUNCTION_HIDE_OTHERS, {});
-                EventSystem.send('ShowTips', '收获成功');
+                EventSystem.send('ShowTips', 'The harvesting was successful.');
             } else {
-                EventSystem.send('ShowTips', result.message ?? '收获失败');
+                EventSystem.send('ShowTips', result.message ?? 'The harvesting failed.');
             }
         } finally {
             this.harvesting = false;

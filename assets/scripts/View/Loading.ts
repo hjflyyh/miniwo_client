@@ -19,8 +19,8 @@ export class Loading extends Component {
     @property(Node)
     imgGrassArr: Node[] = [];
 
-    @property(Node)
-    public npcNode: Node;
+    // @property(Node)
+    // public npcNode: Node;
 
     _frameIndex: number = 0;
 
@@ -123,18 +123,18 @@ export class Loading extends Component {
           })
 
           this._frameIndex = 0;
-          this.npcNode.getComponent(Sprite).spriteFrame = this.animationFrameArr[this._frameIndex];
-          if (this.animationFrameArr.length > 0) {
-            tween(this.npcNode).repeatForever(tween(this.npcNode).delay(0.12).call(() => {
-              if (this._frameIndex < this.animationFrameArr.length - 1) {
-                this._frameIndex++;
-              }
-              else {
-                this._frameIndex = 0
-              }
-              this.npcNode.getComponent(Sprite).spriteFrame = this.animationFrameArr[this._frameIndex];
-            }).start()).start();
-          }
+          // this.npcNode.getComponent(Sprite).spriteFrame = this.animationFrameArr[this._frameIndex];
+          // if (this.animationFrameArr.length > 0) {
+          //   tween(this.npcNode).repeatForever(tween(this.npcNode).delay(0.12).call(() => {
+          //     if (this._frameIndex < this.animationFrameArr.length - 1) {
+          //       this._frameIndex++;
+          //     }
+          //     else {
+          //       this._frameIndex = 0
+          //     }
+          //     this.npcNode.getComponent(Sprite).spriteFrame = this.animationFrameArr[this._frameIndex];
+          //   }).start()).start();
+          // }
     }
 
     protected update(dt: number): void {

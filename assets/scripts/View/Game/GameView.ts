@@ -1,4 +1,4 @@
-import { _decorator, Component, EditBox, instantiate, Label, math, Node, resources, Sprite, SpriteFrame, UITransform, director } from 'cc';
+import { _decorator, Component, EditBox, instantiate, Label, math, Node, resources, Sprite, SpriteFrame, UITransform, director, Vec3 } from 'cc';
 import { AppConst } from '../../AppConst';
 import { network } from '../../Model/RequestData';
 import { RoleModel } from '../../Model/RoleModel';
@@ -20,6 +20,7 @@ import {
     GameFarmSeedChoosePayload,
 } from './GameFarmChooseCell';
 import { isPlotSeedEmpty, plotNeedsWaterOverlay } from '../../Model/Farm/FarmTypes';
+import { Utils } from '../../Utils/Utils';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameView')
@@ -112,6 +113,9 @@ export class GameView extends Component {
     private selectedFarmPlot: GameFarmPlotClickPayload | null = null;
 
     start() {
+        if(Utils.handleAdaptation()){
+            this.node.scale = new Vec3(0.7, 0.7 , 1);
+        }        
         this.atNpc.active = false
 
         this.atNpcCell.active = false
@@ -138,9 +142,11 @@ export class GameView extends Component {
         EventSystem.addListent("CloseMapEditor" , this.CloseMapEditor , this)
         EventSystem.addListent("WebSocketNotifications", this.onWebSocketNotification, this)
         EventSystem.addListent("OpenGameShop", this.OpenGameShop, this)
+        EventSystem.addListent("OpenGameWarehouse", this.OpenGameWarehouse, this)
         EventSystem.addListent(GAME_FARM_PLOT_CLICK_EVENT, this.onGameFarmPlotClick, this)
         EventSystem.addListent(GAME_FARM_SEED_CHOOSE_EVENT, this.onGameFarmSeedChoose, this)
         EventSystem.addListent('ConfigLoadAll', this.onConfigLoadAll, this)
+        EventSystem.addListent("leaveMap" , this.leaveMap , this)
 
         this.onEditEnd()
         
@@ -330,12 +336,12 @@ export class GameView extends Component {
         this.syncFarmChooseCellsFarmId(null);
 
         if (plotNeedsWaterOverlay(plot)) {
-            // const result = await FarmModel.getInstance().water(farmId);
-            // if (result.ok) {
-            //     EventSystem.send('ShowTips', '浇水成功');
-            // } else {
-            //     EventSystem.send('ShowTips', result.message ?? '浇水失败');
-            // }
+            const result = await FarmModel.getInstance().water(farmId);
+            if (result.ok) {
+                EventSystem.send('ShowTips', 'The watering was successful.');
+            } else {
+                EventSystem.send('ShowTips', result.message ?? 'The watering failed.');
+            }
             return;
         }
 
@@ -344,7 +350,7 @@ export class GameView extends Component {
         }
 
         this.selectedFarmPlot = {
-            farmIndex: Number(payload?.farmIndex) || 0,
+            farmIndex: Number.isFinite(Number(payload?.farmIndex)) ? Number(payload.farmIndex) : 0,
             plotIndex,
             farmId,
             plotNodeName: payload?.plotNodeName,
@@ -355,10 +361,32 @@ export class GameView extends Component {
         if (this.atNpc) {
             this.atNpc.active = false;
         }
+        this.refreshAllFarmChooseCells(farmId);
         if (this.farmNode) {
             this.farmNode.active = true;
         }
-        this.syncFarmChooseCellsFarmId(farmId);
+    }
+
+    /** 打开种子面板前：重设 farmId 并重新 load 图标（避免 Sprite 空 spriteFrame onEnable） */
+    private refreshAllFarmChooseCells(farmId: number | null) {
+        for (let i = 0; i < this.farmCells.length; i++) {
+            const node = this.farmCells[i];
+            if (!node?.isValid) {
+                continue;
+            }
+            const cell = node.getComponent(GameFarmChooseCell);
+            if (!cell) {
+                continue;
+            }
+            cell.setFarmId(farmId);
+            const itemId = Number((node as any)._farmItemId);
+            const seedKey = Number((node as any)._farmSeedKey);
+            if (!Number.isFinite(itemId) || itemId <= 0 || !Number.isFinite(seedKey)) {
+                continue;
+            }
+            const count = BagModel.getInstance().getItemCount(itemId);
+            cell.refreshNode(itemId, count, seedKey);
+        }
     }
 
     private syncFarmChooseCellsFarmId(farmId: number | null) {
@@ -401,12 +429,12 @@ export class GameView extends Component {
 
     private async onGameFarmSeedChoose(payload: GameFarmSeedChoosePayload) {
         if (!this.isCurrentMapOwnedBySelf()) {
-            EventSystem.send('ShowTips', '只能在自己的农场种植哦~');
+            EventSystem.send('ShowTips', 'You can only grow it on your own farm.~');
             return;
         }
         const farmId = this.selectedFarmPlot?.farmId;
         if (farmId == null || !Number.isFinite(farmId) || farmId <= 0) {
-            EventSystem.send('ShowTips', '请先选择一块农田');
+            EventSystem.send('ShowTips', 'Please select a piece of farmland first.');
             return;
         }
 
@@ -417,19 +445,19 @@ export class GameView extends Component {
         }
 
         if (BagModel.getInstance().getItemCount(itemId) <= 0) {
-            EventSystem.send('ShowTips', '种子不足');
+            EventSystem.send('ShowTips', 'Insufficient seeds');
             return;
         }
 
         const plot = FarmModel.getInstance().getPlot(farmId);
         if (!isPlotSeedEmpty(plot)) {
-            EventSystem.send('ShowTips', '该地块已有作物');
+            EventSystem.send('ShowTips', 'The plot already has a crop');
             return;
         }
 
         const result = await FarmModel.getInstance().grow(farmId, String(seedKey));
         if (!result.ok) {
-            EventSystem.send('ShowTips', result.message ?? '种植失败');
+            EventSystem.send('ShowTips', result.message ?? 'Planting failure');
             return;
         }
 
@@ -437,7 +465,7 @@ export class GameView extends Component {
             this.farmNode.active = false;
         }
         this.selectedFarmPlot = null;
-        EventSystem.send('ShowTips', '播种成功');
+        EventSystem.send('ShowTips', 'Successful sowing');
     }
 
     private refreshBuildContentVisibility() {
@@ -468,7 +496,7 @@ export class GameView extends Component {
         const text = this.editBox?.string ?? '';
         const mentions = MapChatManager.instance.buildMentionsFromText(text);
         if (mentions.length === 0) {
-            EventSystem.send('ShowTips', '需要先@一个npc');
+            EventSystem.send('ShowTips', 'Please mention an NPC first');
             return;
         }
         this.rewardTarget.active = true;
@@ -482,12 +510,12 @@ export class GameView extends Component {
         const text = this.editBox?.string ?? '';
         const mentions = MapChatManager.instance.buildMentionsFromText(text);
         if (mentions.length === 0) {
-            EventSystem.send('ShowTips', '需要先@一个npc');
+            EventSystem.send('ShowTips', 'Please mention an NPC first');
             return;
         }
         const count = BagModel.getInstance().getItemCount(id);
         if (count <= 0) {
-            EventSystem.send('ShowTips', '道具数量不足');
+            EventSystem.send('ShowTips', 'Insufficient items');
             return;
         }
         void this.sendGiftItemToMentionedNpc(id, mentions[0]);
@@ -496,7 +524,7 @@ export class GameView extends Component {
     private async sendGiftItemToMentionedNpc(itemId: number, mentionKey: string) {
         const npcId = this.resolveNpcIdFromMention(mentionKey);
         if (npcId <= 0) {
-            EventSystem.send('ShowTips', '无法识别NPC，请重新@');
+            EventSystem.send('ShowTips', 'Unable to identify NPC, please @ again');
             return;
         }
         const giftText = JSON.stringify({
@@ -512,10 +540,10 @@ export class GameView extends Component {
             if (this.rewardTarget) {
                 this.rewardTarget.active = false;
             }
-            EventSystem.send('ShowTips', "赠送成功");
+            EventSystem.send('ShowTips', "Gift delivery successful");
             this.editBox.string = '';
         } catch (e: any) {
-            EventSystem.send('ShowTips', String(e?.message || e || '赠送失败'));
+            EventSystem.send('ShowTips', String(e?.message || e || 'Gift delivery failed'));
         }
     }
 
@@ -571,7 +599,7 @@ export class GameView extends Component {
 
     public onClickBuild(){
         if(!this.isCurrentMapOwnedBySelf()){
-            EventSystem.send("ShowTips" , "只能编辑自己的地图哦~")
+            EventSystem.send("ShowTips" , "You can only edit your own map~")
             return
         }
         this.node.active = false
@@ -590,11 +618,8 @@ export class GameView extends Component {
         this.showChatArrow.setScale(1 , this.showChatUI.active ? 1 : -1 , 1)
     }
 
-    public OnWebSocketMessage(data){
-        if(data["id"] == "leave_map"){
+    public leaveMap(){
             FarmModel.getInstance().leaveFarm();
-            let request = new network.MatchLeaveEequest();
-            AppConst.WebSocketManager.send(request.toJSON(MapModel.getInstance().match_id));
             
             AppConst.PanelManager.CloseView(this)
             director.loadScene("GameScene", (error: Error) => {
@@ -606,7 +631,23 @@ export class GameView extends Component {
                     AppConst.PanelManager.openView("res/View/Main/MainView")
                 }
             });
+    }
+
+    public OnWebSocketMessage(data){
+        if(data["id"] == "leave_map"){
+            this.leaveMap()
+
+            let request = new network.MatchLeaveEequest();
+            AppConst.WebSocketManager.send(request.toJSON(MapModel.getInstance().match_id));
         }
+    }
+
+    public onClickNpcVisit(){
+        AppConst.PanelManager.openView("res/View/Visit/VisitList", null, null, null , this.UI)
+    }
+
+    public onClickWork(){
+        AppConst.PanelManager.openView("res/View/NpcWork/NpcWorkView" , null , null , null , this.UI)
     }
 
     public onClickChat(){
@@ -616,12 +657,20 @@ export class GameView extends Component {
         }
     }
 
+    public OpenGameWarehouse(){
+        AppConst.PanelManager.openView("res/View/Granary/GranaryView" , null , null , null , this.UI)
+    }
+
     public OpenGameShop(){
         AppConst.PanelManager.openView("res/View/Shop/ShopList" , null , null , null , this.UI)
     }
 
     public onClickBag(){
         AppConst.PanelManager.openView("res/View/Bag/BagList" , null , null , null , this.UI)
+    }
+
+    public onClickMail(){
+        AppConst.PanelManager.openView("res/View/Mail/MailView", null, null  , null , this.UI)
     }
 
     public onClickNpcAt(){

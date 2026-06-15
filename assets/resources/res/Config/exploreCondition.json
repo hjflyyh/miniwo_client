@@ -1,0 +1,167 @@
+{
+  "111": {
+    "name_cn": "体力值",
+    "name_en": "stamina_value",
+    "type": 1
+  },
+  "112": {
+    "name_cn": "健康值",
+    "name_en": "health value",
+    "type": 1
+  },
+  "113": {
+    "name_cn": "好感度",
+    "name_en": "favorability",
+    "type": 1
+  },
+  "114": {
+    "name_cn": "善恶值",
+    "name_en": "morality value",
+    "type": 1
+  },
+  "115": {
+    "name_cn": "心情值",
+    "name_en": "mood value",
+    "type": 1
+  },
+  "116": {
+    "name_cn": "魅力值",
+    "name_en": "charm value",
+    "type": 1
+  },
+  "117": {
+    "name_cn": "领导力",
+    "name_en": "leadership",
+    "type": 1
+  },
+  "118": {
+    "name_cn": "自由度",
+    "name_en": "freedom degree",
+    "type": 1
+  },
+  "119": {
+    "name_cn": "智力值",
+    "name_en": "intelligence value",
+    "type": 1
+  },
+  "120": {
+    "name_cn": "创造力",
+    "name_en": "creativity",
+    "type": 1
+  },
+  "121": {
+    "name_cn": "耐心值",
+    "name_en": "patience value",
+    "type": 1
+  },
+  "122": {
+    "name_cn": "好奇心",
+    "name_en": "curiosity",
+    "type": 1
+  },
+  "123": {
+    "name_cn": "灵力值",
+    "name_en": "spiritual power",
+    "type": 1
+  },
+  "124": {
+    "name_cn": "幸运值",
+    "name_en": "luck value",
+    "type": 1
+  },
+  "201": {
+    "name_cn": "种植",
+    "name_en": "planting",
+    "type": 2
+  },
+  "202": {
+    "name_cn": "养殖",
+    "name_en": "breeding",
+    "type": 2
+  },
+  "203": {
+    "name_cn": "武术",
+    "name_en": "martial arts",
+    "type": 2
+  },
+  "204": {
+    "name_cn": "舞乐",
+    "name_en": "dance and music",
+    "type": 2
+  },
+  "205": {
+    "name_cn": "制造",
+    "name_en": "manufacturing",
+    "type": 2
+  },
+  "206": {
+    "name_cn": "创造",
+    "name_en": "creation",
+    "type": 2
+  },
+  "207": {
+    "name_cn": "医疗",
+    "name_en": "medical treatment",
+    "type": 2
+  },
+  "208": {
+    "name_cn": "法术",
+    "name_en": "magic",
+    "type": 2
+  },
+  "209": {
+    "name_cn": "挖矿",
+    "name_en": "mining",
+    "type": 2
+  },
+  "210": {
+    "name_cn": "钓鱼",
+    "name_en": "fishing",
+    "type": 2
+  },
+  "211": {
+    "name_cn": "烹饪",
+    "name_en": "cooking",
+    "type": 2
+  },
+  "212": {
+    "name_cn": "考古",
+    "name_en": "archaeology",
+    "type": 2
+  },
+  "213": {
+    "name_cn": "园艺",
+    "name_en": "gardening",
+    "type": 2
+  },
+  "214": {
+    "name_cn": "交易",
+    "name_en": "trading",
+    "type": 2
+  },
+  "301": {
+    "name_cn": "MBTI(E)",
+    "name_en": "MBTI(E)",
+    "type": 3
+  },
+  "302": {
+    "name_cn": "MBTI(I)",
+    "name_en": "MBTI(I)",
+    "type": 3
+  },
+  "303": {
+    "name_cn": "探索时长",
+    "name_en": "explore duration",
+    "type": 4
+  },
+  "304": {
+    "name_cn": "持有金币",
+    "name_en": "held gold",
+    "type": 5
+  },
+  "305": {
+    "name_cn": "世界等级",
+    "name_en": "world level",
+    "type": 6
+  }
+}

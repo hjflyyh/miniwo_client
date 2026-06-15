@@ -72,6 +72,10 @@ type PlotHit = {
 
 @ccclass('GameFarmNode')
 export class GameFarmNode extends Component {
+    /**
+     * 场景农田分区：-1=tudiPrefab0（格子 0～6 → farm_id 1～7）；
+     * 0～3=tudiPrefab1～4（从 farm_id 7 起，每区 36 格）。
+     */
     @property
     farmIndex: number = 0;
 
@@ -147,6 +151,10 @@ export class GameFarmNode extends Component {
         }
     }
 
+    private static _sceneSyncing = false;
+
+    private _syncing = false;
+
     start() {
         EventSystem.addListent(FARM_EVENT_DATA_UPDATED, this.onFarmDataUpdated, this);
         this.syncFromFarmModel();
@@ -154,12 +162,45 @@ export class GameFarmNode extends Component {
 
     /** 进图或 farm_data 更新后：刷新显隐与可收获 PlantingEnd */
     public syncFromFarmModel() {
-        this.syncPlotVisibilityFromModel();
-        this.syncPlotOverlaysFromModel();
+        if (this._syncing) {
+            return;
+        }
+        this._syncing = true;
+        try {
+            this.syncPlotVisibilityFromModel();
+            this.syncPlotOverlaysFromModel();
+        } finally {
+            this._syncing = false;
+        }
     }
 
     /** 农场数据就绪后刷新场景中所有 GameFarmNode（进图优化） */
     public static syncAllInScene(root?: Node) {
+        if (GameFarmNode._sceneSyncing) {
+            return;
+        }
+        GameFarmNode._sceneSyncing = true;
+        try {
+            const scene = director.getScene();
+            if (!scene) {
+                return;
+            }
+            const base = root ?? scene;
+            const nodes = base.getComponentsInChildren(GameFarmNode);
+            for (let i = 0; i < nodes.length; i++) {
+                nodes[i].syncFromFarmModel();
+            }
+        } finally {
+            GameFarmNode._sceneSyncing = false;
+        }
+    }
+
+    /** 刷新指定 farm_id 对应地块的 overlay（施肥等单地块变更后调用） */
+    public static refreshPlotByFarmId(farmId: number, root?: Node): void {
+        const id = Math.floor(Number(farmId) || 0);
+        if (id <= 0) {
+            return;
+        }
         const scene = director.getScene();
         if (!scene) {
             return;
@@ -167,7 +208,29 @@ export class GameFarmNode extends Component {
         const base = root ?? scene;
         const nodes = base.getComponentsInChildren(GameFarmNode);
         for (let i = 0; i < nodes.length; i++) {
-            nodes[i].syncFromFarmModel();
+            nodes[i].refreshPlotOverlayByFarmId(id);
+        }
+    }
+
+    /** 刷新本 GameFarmNode 内指定 farm_id 的地块 overlay */
+    public refreshPlotOverlayByFarmId(farmId: number): void {
+        const id = Math.floor(Number(farmId) || 0);
+        if (id <= 0) {
+            return;
+        }
+        const farmCount = FarmModel.getInstance().getFarmCount();
+        const children = this.node.children;
+        for (let i = 0; i < children.length; i++) {
+            const plotNode = children[i];
+            const plotIndex = this.parsePlotIndex(plotNode);
+            if (plotIndex < 0) {
+                continue;
+            }
+            const mappedId = toServerFarmId(this.farmIndex, plotIndex, farmCount);
+            if (mappedId === id) {
+                this.refreshPlotNode(plotNode, id);
+                return;
+            }
         }
     }
 
@@ -334,14 +397,19 @@ export class GameFarmNode extends Component {
             if (!child?.isValid || !child.active) {
                 continue;
             }
-            child.setSiblingIndex(nextIndex);
+            if (child.getSiblingIndex() !== nextIndex) {
+                child.setSiblingIndex(nextIndex);
+            }
             nextIndex++;
         }
         const top =
             plotNode.getChildByName(PLANTING_END_PREFAB_NODE_NAME) ??
             plotNode.getChildByName(PLANTING_PREFAB_NODE_NAME);
         if (top?.isValid && top.active) {
-            top.setSiblingIndex(plotNode.children.length - 1);
+            const lastIndex = plotNode.children.length - 1;
+            if (top.getSiblingIndex() !== lastIndex) {
+                top.setSiblingIndex(lastIndex);
+            }
         }
     }
 
@@ -774,7 +842,7 @@ export class GameFarmNode extends Component {
 
     private onPlotClick(hit: PlotHit) {
         const payload: GameFarmPlotClickPayload = {
-            farmIndex: Number(this.farmIndex) || 0,
+            farmIndex: Number.isFinite(Number(this.farmIndex)) ? Number(this.farmIndex) : 0,
             plotIndex: hit.plotIndex,
             farmId: hit.farmId,
             plotNodeName: hit.node.name,

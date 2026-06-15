@@ -13,6 +13,7 @@ import { CustomizeInput } from './CustomizeMap/CustomizeInput';
 import { EditHead } from './EditHead';
 import { network } from 'db://assets/scripts/Model/RequestData';
 import { GameBuildScroll } from 'db://assets/scripts/View/Game/GameBuildScroll';
+import { Utils } from 'db://assets/scripts/Utils/Utils';
 
 const { ccclass, property } = _decorator;
 
@@ -117,6 +118,10 @@ export class MapEditorUI extends Component {
     @property([Node])
     public hideNodes : Node[] = []; 
 
+    
+    @property(Node)
+    public UITab : Node = null;
+
     private mapToolNode: { tool: Node; switch: Node; }[] = [];
     private tileMenu: Map<string, Node> = new Map;
     private tileContent: Node = null;
@@ -149,6 +154,9 @@ export class MapEditorUI extends Component {
     private static readonly REGION_MIN_GRID = 3;
 
     protected onLoad(): void {
+        if(Utils.handleAdaptation()){
+            this.UITab.scale = new Vec3(0.7, 0.7 , 1);
+        }
         this.bottomAddNode.active = false
         
         MapManager.GetInstance().setMapEditorUI(this);
@@ -253,8 +261,15 @@ export class MapEditorUI extends Component {
     public onClickBackSelect(){
         this.bottomAddNode.active = false;
         
+        // 隐藏删除控件，防止切回时仍显示删除动画/图标
+        const editor = MapManager.GetInstance().getMapEditor();
+        if (editor && editor.buildControl && editor.buildControl.detele && editor.buildControl.detele.node) {
+            editor.buildControl.detele.node.active = false;
+        }
         if(this.selectNode1.active){
             this.node.active = false
+            MapManager.GetInstance().actionStatus = ActionStatus.Back;
+            editor?.hideTileMask();
             EventSystem.send("CloseMapEditor")
             return
         }
@@ -262,7 +277,8 @@ export class MapEditorUI extends Component {
         this.selectNode2.active = false;
             // _index = 11;
         MapManager.GetInstance().actionStatus = ActionStatus.Back;
-        MapManager.GetInstance().getMapEditor().hideTileMask();
+
+        editor?.hideTileMask();
         this.bottomAddNode.active = false;        
     }
 
@@ -446,7 +462,7 @@ export class MapEditorUI extends Component {
 
     setBottomNode(){
         this.confirmBtn.active = MapManager.GetInstance().actionStatus == ActionStatus.DECOR || MapManager.GetInstance().actionStatus == ActionStatus.PLANT
-            || MapManager.GetInstance().actionStatus == ActionStatus.FRAM
+            || MapManager.GetInstance().actionStatus == ActionStatus.FRAM || MapManager.GetInstance().actionStatus == ActionStatus.DETELE
             || MapManager.GetInstance().actionStatus == ActionStatus.REGION
         this.fanzhuangBtn.active = MapManager.GetInstance().actionStatus == ActionStatus.DECOR  || MapManager.GetInstance().actionStatus == ActionStatus.PLANT
             || MapManager.GetInstance().actionStatus == ActionStatus.FRAM
@@ -897,6 +913,9 @@ export class MapEditorUI extends Component {
     }
 
     OnClickDelete(){
+        if(this.selectNode2.active){
+            this.onClickBackSelect()
+        }
         this.disableRegionSelectionMode();
         this.tileContent.active = false;
         MapManager.GetInstance().actionStatus = ActionStatus.DETELE;
@@ -977,6 +996,16 @@ export class MapEditorUI extends Component {
     // 发送地图数据保存
     sendSaveMapData() {
         const editor = MapManager.GetInstance().getMapEditor();
+        if (!editor) {
+            return;
+        }
+
+        // 原生端无 canvas.toBlob / FileReader，且 UGC 保存不依赖预览图
+        if (sys.isNative) {
+            MapModel.getInstance().saveMapData(editor, "");
+            return;
+        }
+
         const visible = view.getVisibleSize();
         const rt = new RenderTexture();
         rt.reset({
@@ -987,20 +1016,19 @@ export class MapEditorUI extends Component {
         editor.mainCamera.targetTexture = rt;
         director.root.frameMove(0);
         editor.mainCamera.targetTexture = prevTarget;
-        
+
         CaptureUtils.captureScreenToBlob(rt, (blob) => {
-            if (!blob) return;
+            if (!blob) {
+                MapModel.getInstance().saveMapData(editor, "");
+                return;
+            }
             const reader = new FileReader();
             reader.onloadend = () => {
-            let base64Image = String(reader.result || '');
-                if (base64Image) {
-                    console.log(base64Image)
-                    // sys.localStorage.setItem("MapDataPreview", base64Image);
-                    MapModel.getInstance().saveMapData(editor , base64Image);
-                }
+                const base64Image = String(reader.result || '');
+                MapModel.getInstance().saveMapData(editor, base64Image);
             };
             reader.readAsDataURL(blob);
-        });        
+        });
     }
 
     onClickBack() {

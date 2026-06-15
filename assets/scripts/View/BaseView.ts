@@ -1,5 +1,6 @@
-import { _decorator, Component, Node , assetManager} from 'cc';
+import { _decorator, Component, Node , assetManager, Widget} from 'cc';
 import { AppConst } from '../AppConst';
+import { Utils } from '../Utils/Utils';
 const { ccclass, property } = _decorator;
 
 @ccclass('BaseView')
@@ -28,6 +29,12 @@ export class BaseView extends Component {
     suppressUpperReopen: boolean = false;
 
     start() {
+        if(Utils.handleAdaptation()){
+            let top = this.node.getChildByName("top")
+            if(top){
+                top.getComponent(Widget).top -= 60
+            }
+        }
         this.isClose = false
         this.scheduleOnce(function(){{
             this.isClose = true
@@ -51,7 +58,9 @@ export class BaseView extends Component {
     onClickClose(){
         if(this.isClose){
             AppConst.PanelManager.CloseView(this)
+            return true
         }
+        return false
     }
 }
 

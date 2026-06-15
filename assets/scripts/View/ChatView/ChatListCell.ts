@@ -80,5 +80,9 @@ export class ChatListCell extends InfiniteCell {
         }
         Utils.loadCover(avatar, this.npcHead , 78 , 78);
     }
+
+    onClickNpcHead(){
+        
+    }
 }
 

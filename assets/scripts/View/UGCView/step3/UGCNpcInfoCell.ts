@@ -1,12 +1,16 @@
-import { _decorator, Component, Label, Node } from 'cc';
+import { _decorator, Component, Label, Node, Sprite } from 'cc';
 import { AppConst } from '../../../AppConst';
 import { UGCModel } from '../../../Model/UGCModel';
+import { Utils } from '../../../Utils/Utils';
 const { ccclass, property } = _decorator;
 
 @ccclass('UGCNpcInfoCell')
 export class UGCNpcInfoCell extends Component {
     @property(Label)
     public npcNameLabel : Label = null;
+
+    @property(Sprite)
+    public npcLihui : Sprite = null;
 
     private npcInfo : any = null;
 
@@ -18,6 +22,9 @@ export class UGCNpcInfoCell extends Component {
     refreshNpcInfo(npcInfo){
         this.npcInfo = npcInfo;
         this.npcNameLabel.string = npcInfo.name;
+        if(npcInfo["model_url"]){
+            Utils.loadCover(npcInfo["model_url"], this.npcLihui);
+        }
     }
 
     onClickNpc(){

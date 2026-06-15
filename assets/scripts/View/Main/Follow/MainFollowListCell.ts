@@ -3,6 +3,7 @@ import { AppConst } from '../../../AppConst';
 import { SocialModel } from '../../../Model/SocialModel';
 import { RoleModel } from '../../../Model/RoleModel';
 import InfiniteCell from '../../../../plugin/InfiniteList/InfiniteCell';
+import { Utils } from '../../../Utils/Utils';
 const { ccclass, property } = _decorator;
 
 @ccclass('MainFollowListCell')
@@ -68,6 +69,15 @@ export class MainFollowListCell extends InfiniteCell {
             let journalImg = AppConst.JournalManager.journalImgs.find((i) => i.type == "localImg" && i.id == imageUrl[0]["id"])
             if (journalImg) {
                 this.imgSp.spriteFrame = AppConst.JournalManager.imgSprite[journalImg["localImgIndex"]]
+            }
+            if(imageUrl[0]["type"] == "modelImg"){
+                const journalModel = AppConst.JournalManager.journalImgs.find(
+                    (i) => i.type == "modelImg" && i.id == imageUrl[0]["id"],
+                )
+                const modelUrl = journalModel?.model_url ?? imageUrl[0]["model_url"]
+                if (modelUrl) {
+                    Utils.loadCoverFitInsideParent(modelUrl, this.imgSp)
+                }
             }
 
             this.imgNode.active = true

@@ -1,0 +1,48 @@
+
+jiesuo.png
+size: 91,73
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+shan01
+  rotate: false
+  xy: 73, 64
+  size: 7, 7
+  orig: 7, 7
+  offset: 0, 0
+  index: -1
+shan02
+  rotate: false
+  xy: 73, 55
+  size: 7, 7
+  orig: 7, 7
+  offset: 0, 0
+  index: -1
+shan03
+  rotate: false
+  xy: 82, 64
+  size: 7, 7
+  orig: 7, 7
+  offset: 0, 0
+  index: -1
+shan04
+  rotate: false
+  xy: 73, 46
+  size: 7, 7
+  orig: 7, 7
+  offset: 0, 0
+  index: -1
+shan05
+  rotate: false
+  xy: 82, 55
+  size: 7, 7
+  orig: 7, 7
+  offset: 0, 0
+  index: -1
+xingxing
+  rotate: false
+  xy: 2, 2
+  size: 69, 69
+  orig: 69, 69
+  offset: 0, 0
+  index: -1

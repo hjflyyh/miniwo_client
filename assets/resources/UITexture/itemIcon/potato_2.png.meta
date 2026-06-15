@@ -2,7 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "df32e6f8-09a5-454b-bb94-2ecfe03f14ad",
+  "uuid": "0cd5da76-c0af-4ed5-86ff-3d1f2cd9760b",
   "files": [
     ".json",
     ".png"
@@ -10,14 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "df32e6f8-09a5-454b-bb94-2ecfe03f14ad@6c48a",
+      "uuid": "0cd5da76-c0af-4ed5-86ff-3d1f2cd9760b@6c48a",
       "displayName": "potato_2",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "df32e6f8-09a5-454b-bb94-2ecfe03f14ad",
+        "imageUuidOrDatabaseUri": "0cd5da76-c0af-4ed5-86ff-3d1f2cd9760b",
         "isUuid": true,
         "visible": false,
         "minfilter": "linear",
@@ -34,7 +34,7 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "df32e6f8-09a5-454b-bb94-2ecfe03f14ad@f9941",
+      "uuid": "0cd5da76-c0af-4ed5-86ff-3d1f2cd9760b@f9941",
       "displayName": "potato_2",
       "id": "f9941",
       "name": "spriteFrame",
@@ -113,7 +113,7 @@
           ]
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "df32e6f8-09a5-454b-bb94-2ecfe03f14ad@6c48a",
+        "imageUuidOrDatabaseUri": "0cd5da76-c0af-4ed5-86ff-3d1f2cd9760b@6c48a",
         "atlasUuid": "",
         "trimType": "auto"
       },
@@ -129,6 +129,6 @@
     "type": "sprite-frame",
     "fixAlphaTransparencyArtifacts": false,
     "hasAlpha": true,
-    "redirect": "df32e6f8-09a5-454b-bb94-2ecfe03f14ad@6c48a"
+    "redirect": "0cd5da76-c0af-4ed5-86ff-3d1f2cd9760b@6c48a"
   }
 }

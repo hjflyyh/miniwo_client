@@ -1,14 +1,11 @@
-import { _decorator, Component, EditBox, Node, WebView, sys } from 'cc';
+import { _decorator, Component, EditBox, Node, WebView, sys, native } from 'cc';
 import { GoogleAuthManager } from '../../Manager/GoogleAuthManager';
 import { RoleModel } from '../../Model/RoleModel';
 import { network } from '../../Model/RequestData';
-import { HttpManager } from '../../Manager/HttpManager';
+import { HttpManager, LOGIN_NATIVE_DEFAULT_IP } from '../../Manager/HttpManager';
 import { AppConst } from '../../AppConst';
 import { MapModel } from '../../Model/MapModel';
 import { GenericSpritesheetAnimator } from '../../Utils/GenericSpritesheetAnimator';
-
-/** 与 onClickServer3 一致：原生 App（真机/模拟器）默认 HTTP / WS 入口 */
-const LOGIN_NATIVE_DEFAULT_IP = '115.190.225.83';
 
 const { ccclass, property } = _decorator;
 
@@ -20,6 +17,8 @@ export class LoginView extends Component {
 
     /** 邮箱登录：HTTP loginGame 进行中，需等本次请求结束后再允许下一次点击 */
     private loginMailPending = false;
+    /** 邮箱注册：HTTP register 进行中 */
+    private registerPending = false;
 
     @property(WebView)
     public webview: WebView;
@@ -30,6 +29,9 @@ export class LoginView extends Component {
     @property(Node)
     public mailNode;
 
+    @property(Node)
+    public mailRegisterNode;
+
     @property(EditBox)
     public mailEditBox
 
@@ -38,6 +40,15 @@ export class LoginView extends Component {
 
     @property(Node)
     public serverSelectNode
+
+    @property(EditBox)
+    public registerMail : EditBox
+
+    @property(EditBox)
+    public registerPWD : EditBox
+
+    @property(EditBox)
+    public registerPWDConfirm : EditBox
 
     @property(GenericSpritesheetAnimator)
     public animator: GenericSpritesheetAnimator;
@@ -49,6 +60,7 @@ export class LoginView extends Component {
         }
         this.firstNode.active = true
         this.mailNode.active = false
+        this.mailRegisterNode.active = false
         GoogleAuthManager.GetInstance().init()
         GoogleAuthManager.GetInstance().bindWebView(this.webview)
         window.addEventListener("message" , onMsg)
@@ -57,15 +69,14 @@ export class LoginView extends Component {
         EventSystem.addListent("LoginSuccess" , this.onLoginSuccess , this)
 
         if (this.animator) {
-            this.animator.loadAndPlay('res/NPCImage/zuozhu/running-left', 'running-left');
+            this.animator.loadAndPlay('res/NPCImage/ban/decoded/walking-left', 'running-left');
         }
     }
 
     private initHttpServerFromStorage() {
         if (sys.isNative) {
-            // this.applyHttpEndpoints(LOGIN_NATIVE_DEFAULT_IP , "c3a28e10a5be4672.natapp.cc");
-            // this.applyHttpEndpoints("192.168.30.109");
-            this.applyHttpEndpoints(LOGIN_NATIVE_DEFAULT_IP , LOGIN_NATIVE_DEFAULT_IP);
+            HttpManager.initNativeDefaultEndpoints();
+            this.persistHttpServer();
             return;
         }
         const defaultIp = "192.168.30.109";
@@ -103,13 +114,42 @@ export class LoginView extends Component {
         storage.setItem(this.STORAGE_WS_IP_KEY, HttpManager.wsIpBase);
     }
 
+    private bindNativeCallback() {
+        console.log("Binding native callback for Apple login result");
+        (globalThis as typeof globalThis & { onAppleLoginResult?: (isSuccess: boolean, jsonStr: string) => void }).onAppleLoginResult =
+            (isSuccess: boolean, jsonStr: string) => {
+                console.log("Received Apple login result from native:", isSuccess, jsonStr);
+                let jsonData = JSON.parse(jsonStr || "{}");
+                if (isSuccess) {
+                    let userID = jsonData.userID;
+                    this.loginMailPending = true;
+                    const req = AppConst.HttpManager.sendPostHttp("loginGame" , JSON.stringify({
+                        platform : 0,
+                        loginType : 3,
+                        token : userID,
+                        email : userID
+                    }));
+                    Promise.resolve(req).then(
+                        () => {},
+                        () => {}
+                    ).then(() => {
+                        if (this.isValid) {
+                            this.loginMailPending = false;
+                        }
+                    });
+                } else {
+                    EventSystem.send("ShowTips", "Apple login failed");
+                }
+            };
+    }    
+
     onGooleLoginClose(){
         this.webview.url = ""
         this.webview.node.active = false
     }
 
     onClickGoogle(){
-        EventSystem.send("ShowTips", "未开放谷歌登录，请使用邮箱")
+        EventSystem.send("ShowTips", "Google login is not available. Please use your email.")
         return
         GoogleAuthManager.GetInstance().login();
     }
@@ -120,7 +160,14 @@ export class LoginView extends Component {
     }
 
     onClickApple(){
-        EventSystem.send("ShowTips", "未开放苹果登录，请使用邮箱")
+        if (sys.isNative && sys.platform === sys.Platform.IOS) {
+            // 调用原生登录方法
+            const reflection = native.reflection;
+            this.bindNativeCallback()
+            reflection.callStaticMethod('AppleLoginBridge', 'login');
+            return;
+        }
+        EventSystem.send("ShowTips", "Apple login is not available. Please use your email.")
         return
         this.webview.node.active = true;
         this.webview.url = "http://"+ HttpManager.ipBase +"/apple-login.html";
@@ -147,9 +194,63 @@ export class LoginView extends Component {
         });
     }
 
+    onClickRegister(){
+        if (this.registerPending) {
+            return;
+        }
+
+        const email = (this.registerMail?.string || "").trim();
+        const password = this.registerPWD?.string || "";
+        const passwordConfirm = this.registerPWDConfirm?.string || "";
+
+        if (!email) {
+            EventSystem.send("ShowTips", "Please enter email");
+            return;
+        }
+        if (!password) {
+            EventSystem.send("ShowTips", "Please enter password");
+            return;
+        }
+        if (!passwordConfirm) {
+            EventSystem.send("ShowTips", "Please confirm password");
+            return;
+        }
+        if (password !== passwordConfirm) {
+            EventSystem.send("ShowTips", "Passwords do not match");
+            return;
+        }
+
+        this.registerPending = true;
+        const req = AppConst.HttpManager.sendPostHttp("register", JSON.stringify({
+            email,
+            loginType: 1,
+            token: password,
+            plantform: 0,
+        }));
+        Promise.resolve(req).then(
+            () => {},
+            () => {},
+        ).then(() => {
+            if (this.isValid) {
+                this.registerPending = false;
+            }
+        });
+    }
+
+    onOpenRegister(){
+        this.mailNode.active = false
+        this.mailRegisterNode.active = true        
+    }
+
+    onCloseMailRegister(){
+        this.mailNode.active = true
+        this.mailRegisterNode.active = false     
+    }
+
     onClickMailBack(){
         this.firstNode.active = true
         this.mailNode.active = false
+        this.mailRegisterNode.active = false
     }
 
     onLoginSuccess(){
@@ -163,11 +264,11 @@ export class LoginView extends Component {
 
     onClickServer1(){
         // this.applyHttpEndpoints("127.0.0.1");
-        this.applyHttpEndpoints("192.168.30.109")
+        this.applyHttpEndpoints("192.168.30.53")
     }
 
     onClickServer2(){
-        this.applyHttpEndpoints("192.168.31.102");
+        this.applyHttpEndpoints("192.168.30.63");
     }
 
     onClickServer3(){

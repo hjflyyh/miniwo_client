@@ -187,7 +187,7 @@ export class RoleModel {
             } catch { }
             return;
         }
-        const message = content.message || "账号已在其他设备登录";
+        const message = content.message || "The account has been logged in on another device.";
         this.handleForceLogout(message);
     }
 
@@ -213,11 +213,11 @@ export class RoleModel {
                 AppConst.PanelManager.openView(loginViewUrl);
             }
         }
-        EventSystem.send("ShowTips", message || "账号已在其他设备登录");
+        EventSystem.send("ShowTips", message || "The account has been logged in on another device.");
     }
 
     private OnHttpMessage(data) {
-        if (data.cmd == network.ServerHttpCommand.COMMON_LOGIN) {
+        if (data.cmd == network.ServerHttpCommand.COMMON_LOGIN || data.cmd == network.ServerHttpCommand.COMMON_REGISTER) {
             console.log("-----------data:")
             console.log(data.nakama_token)
             this.isForceLogoutHandling = false;
@@ -238,12 +238,15 @@ export class RoleModel {
                 this.mbti = userInfo?.mbti
                 this.bio = userInfo?.bio
             }
-
-            const nakamaToken = data.nakama_token != null ? String(data.nakama_token) : '';
-            const wsUrl = `ws://${HttpManager.wsIpBase}/ws?token=${encodeURIComponent(nakamaToken)}`;
-            console.log(wsUrl)
-            AppConst.WebSocketManager.setConfig(wsUrl);
-            AppConst.WebSocketManager.connect();
+            if(data.map_count && data.map_count > 0){
+                const nakamaToken = data.nakama_token != null ? String(data.nakama_token) : '';
+                const wsUrl = `ws://${HttpManager.wsIpBase}/ws?token=${encodeURIComponent(nakamaToken)}`;
+                console.log(wsUrl)
+                AppConst.WebSocketManager.setConfig(wsUrl);
+                AppConst.WebSocketManager.connect();
+            }else{
+                AppConst.PanelManager.openView("res/View/ChooseWorldView")
+            }
         }
     }
 }

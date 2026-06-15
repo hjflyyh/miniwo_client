@@ -11,6 +11,7 @@ import {
     assetManager,
     resources,
     _decorator,
+    Node
 } from 'cc';
 import { HttpManager } from '../Manager/HttpManager';
 
@@ -37,6 +38,50 @@ function isRemoteSource(src: string): boolean {
     return t.includes('/');
 }
 
+/** 运行期远程图缓存（Web / iOS / Android 通用，同 URL 二次加载不显示 generated） */
+const remoteImageCache = new Map<string, ImageAsset>();
+
+function isUsableRemoteImage(img: ImageAsset | null | undefined): img is ImageAsset {
+    return !!(img?.isValid && img.width > 0 && img.height > 0);
+}
+
+function getRemoteCacheKey(url: string): string {
+    return resolveDynamicImageUrl(url).trim();
+}
+
+function getCachedRemoteImage(url: string): ImageAsset | null {
+    const key = getRemoteCacheKey(url);
+    if (!key) {
+        return null;
+    }
+
+    const cached = remoteImageCache.get(key);
+    if (isUsableRemoteImage(cached)) {
+        return cached;
+    }
+    if (cached) {
+        remoteImageCache.delete(key);
+    }
+
+    const assetKeys = [key, `${key}.png`, `${key}.jpg`, `${key}.jpeg`, `${key}.webp`];
+    for (let i = 0; i < assetKeys.length; i++) {
+        const asset = assetManager.assets.get(assetKeys[i]) as ImageAsset | undefined;
+        if (isUsableRemoteImage(asset)) {
+            remoteImageCache.set(key, asset);
+            return asset;
+        }
+    }
+    return null;
+}
+
+function putCachedRemoteImage(url: string, img: ImageAsset): void {
+    const key = getRemoteCacheKey(url);
+    if (!key || !isUsableRemoteImage(img)) {
+        return;
+    }
+    remoteImageCache.set(key, img);
+}
+
 /**
  * zuozhu：每个动作一张横向条带整图，按列数均分宽度为序列帧。
  * 键与 png 文件名一致（无后缀），如 running-left → running-left.png
@@ -47,7 +92,7 @@ export const ZUOZHU_ACTION_HORIZONTAL_SLICES: Readonly<Record<string, number>> =
     idle: 6,
     jumping: 5,
     review: 6,
-    'running-left': 8,
+    'running-left': 4,
     /** 未在需求里写出，与 running-left 对称 */
     'running-right': 8,
     running: 6,
@@ -55,9 +100,10 @@ export const ZUOZHU_ACTION_HORIZONTAL_SLICES: Readonly<Record<string, number>> =
     /** 未在需求里写出，可按资源改 map */
     waving: 4,
     "running-up": 8,
-    "walking-left" : 8,
-    "walking-right" : 8,
-    "walking-down" : 8,
+    "walking-left" : 4,
+    "walking-right" : 4,
+    "walking-up" : 4,
+    "walking-down" : 4,
     "running-down" : 8,
 };
 
@@ -68,6 +114,9 @@ export const ZUOZHU_ACTION_HORIZONTAL_SLICES: Readonly<Record<string, number>> =
 export class GenericSpritesheetAnimator extends Component {
     @property(Sprite)
     targetSprite: Sprite | null = null;
+
+    @property(Node)
+    public generated : Node = null
 
     /** 例如 res/NPCImage/zuozhu，其下为 base.png、idle.png、running-left.png … */
     @property
@@ -85,6 +134,8 @@ export class GenericSpritesheetAnimator extends Component {
     private _builtSpriteFrames: SpriteFrame[] = [];
     /** 仅 ImageAsset → new Texture2D() 时持有，便于释放 */
     private _ownedTexture: Texture2D | null = null;
+    /** 每次 loadAndPlay 递增，过期回调不再改 Sprite，避免销毁后仍渲染 */
+    private _loadToken = 0;
 
     onLoad(): void {
         if (!this.targetSprite) {
@@ -95,11 +146,20 @@ export class GenericSpritesheetAnimator extends Component {
             /** RAW：每帧按 SpriteFrame 原始像素尺寸显示，避免 CUSTOM + 整纹理缩放造成「横向拖动」错觉 */
             this.targetSprite.sizeMode = Sprite.SizeMode.RAW;
         }
+        this.setGeneratedVisible(true);
     }
 
     onDestroy(): void {
+        this._loadToken++;
         this.stop();
         this.releaseBuiltAssets();
+        this.setGeneratedVisible(false);
+    }
+
+    private setGeneratedVisible(visible: boolean) {
+        if (this.generated?.isValid) {
+            this.generated.active = visible;
+        }
     }
 
     /**
@@ -149,10 +209,18 @@ export class GenericSpritesheetAnimator extends Component {
             return;
         }
 
+        const loadToken = ++this._loadToken;
+        const isStale = () => loadToken !== this._loadToken || !this.isValid;
+
         this.stop();
         this.releaseBuiltAssets();
+        this.setGeneratedVisible(false);
 
         const finishPlay = (frames: SpriteFrame[]) => {
+            if (isStale()) {
+                return;
+            }
+            this.setGeneratedVisible(false);
             this._builtSpriteFrames = frames;
             this._frames = frames;
             this._frameIndex = 0;
@@ -161,7 +229,10 @@ export class GenericSpritesheetAnimator extends Component {
                 onDone?.(new Error('Sprite 无效或无帧'));
                 return;
             }
-            this.applyFrame(frames[0]);
+            if (!this.applyFrame(frames[0])) {
+                onDone?.(new Error('SpriteFrame 无效'));
+                return;
+            }
 
             const interval = 1 / Math.max(1, this.fps);
             this.schedule(this.tickFrames, interval);
@@ -169,6 +240,9 @@ export class GenericSpritesheetAnimator extends Component {
         };
 
         const fromImageAsset = (img: ImageAsset) => {
+            if (isStale()) {
+                return;
+            }
             const tex = new Texture2D();
             tex.image = img;
             this._ownedTexture = tex;
@@ -178,10 +252,25 @@ export class GenericSpritesheetAnimator extends Component {
         /** 远端：下载 ImageAsset → Texture2D → 横切 */
         if (isRemoteSource(pathStr)) {
             const url = resolveDynamicImageUrl(pathStr);
+            const cachedImg = getCachedRemoteImage(url);
+            if (cachedImg) {
+                this.setGeneratedVisible(false);
+                fromImageAsset(cachedImg);
+                return;
+            }
+
+            this.setGeneratedVisible(true);
             const tryRemote = (ext?: string) => {
+                if (isStale()) {
+                    return;
+                }
                 const opts = ext ? { ext } : {};
                 assetManager.loadRemote<ImageAsset>(url, opts as { ext: string }, (err, img) => {
-                    if (!err && img?.width > 0) {
+                    if (isStale()) {
+                        return;
+                    }
+                    if (!err && isUsableRemoteImage(img)) {
+                        putCachedRemoteImage(url, img);
                         fromImageAsset(img);
                         return;
                     }
@@ -193,7 +282,10 @@ export class GenericSpritesheetAnimator extends Component {
                         tryRemote('.jpg');
                         return;
                     }
-                    onDone?.(err || new Error(`远程图加载失败: ${url}`));
+                    if (!isStale()) {
+                        this.setGeneratedVisible(false);
+                        onDone?.(err || new Error(`远程图加载失败: ${url}`));
+                    }
                 });
             };
             tryRemote();
@@ -206,21 +298,33 @@ export class GenericSpritesheetAnimator extends Component {
             : `${this.zuozhuRoot.replace(/\/$/, '')}/${pathStr}`;
 
         resources.load(bundlePath, ImageAsset, (err, img) => {
+            if (isStale()) {
+                return;
+            }
             if (!err && img?.width > 0) {
                 fromImageAsset(img);
                 return;
             }
             resources.load(`${bundlePath}/spriteFrame`, SpriteFrame, (err2, sf) => {
+                if (isStale()) {
+                    return;
+                }
                 if (!err2 && sf?.texture) {
                     finishPlay(this.buildStripFromTexture(sf.texture as Texture2D, cols));
                     return;
                 }
                 resources.load(bundlePath, SpriteFrame, (err3, sf2) => {
+                    if (isStale()) {
+                        return;
+                    }
                     if (!err3 && sf2?.texture) {
                         finishPlay(this.buildStripFromTexture(sf2.texture as Texture2D, cols));
                         return;
                     }
-                    onDone?.(err || err2 || err3 || new Error(`无法加载: ${bundlePath}`));
+                    if (!isStale()) {
+                        this.setGeneratedVisible(false);
+                        onDone?.(err || err2 || err3 || new Error(`无法加载: ${bundlePath}`));
+                    }
                 });
             });
         });
@@ -266,9 +370,27 @@ export class GenericSpritesheetAnimator extends Component {
         return out;
     }
 
+    private detachSpriteFrame(): void {
+        const sp = this.targetSprite;
+        if (!sp?.isValid) {
+            return;
+        }
+        const current = sp.spriteFrame;
+        if (current && this._builtSpriteFrames.includes(current)) {
+            sp.spriteFrame = null;
+        }
+    }
+
+    private isFrameUsable(sf: SpriteFrame | null | undefined): boolean {
+        return !!(sf?.isValid && sf.texture?.isValid);
+    }
+
     private releaseBuiltAssets(): void {
+        this.detachSpriteFrame();
         for (const sf of this._builtSpriteFrames) {
-            if (sf?.isValid) sf.destroy();
+            if (sf?.isValid) {
+                sf.destroy();
+            }
         }
         this._builtSpriteFrames = [];
         this._frames = [];
@@ -279,27 +401,50 @@ export class GenericSpritesheetAnimator extends Component {
     }
 
     private tickFrames = (): void => {
-        if (!this._frames.length || !this.targetSprite?.isValid) return;
+        if (!this._frames.length || !this.targetSprite?.isValid) {
+            return;
+        }
         this._frameIndex = (this._frameIndex + 1) % this._frames.length;
-        this.applyFrame(this._frames[this._frameIndex]);
+        const sf = this._frames[this._frameIndex];
+        if (!this.isFrameUsable(sf)) {
+            this.stop();
+            this.detachSpriteFrame();
+            return;
+        }
+        this.applyFrame(sf);
     };
 
-    private applyFrame(sf: SpriteFrame): void {
-        const sp = this.targetSprite!;
+    /** @returns 是否成功绑定到 Sprite */
+    private applyFrame(sf: SpriteFrame): boolean {
+        const sp = this.targetSprite;
+        if (!sp?.isValid) {
+            return false;
+        }
+        if (!this.isFrameUsable(sf)) {
+            sp.spriteFrame = null;
+            return false;
+        }
         sp.spriteFrame = sf;
         /** 同一纹理多 SpriteFrame 切换时强制刷新绘制数据，否则会沿用上一帧 UV，看起来像条带在滑 */
         sp.markForUpdateRenderData();
 
-        if (!this.autoContentSize) return;
+        if (!this.autoContentSize) {
+            return true;
+        }
         /** RAW 下列表尺寸随帧变化；若仍不对再用手动宽高兜底 */
-        if (sp.sizeMode === Sprite.SizeMode.RAW) return;
+        if (sp.sizeMode === Sprite.SizeMode.RAW) {
+            return true;
+        }
 
         const ui = sp.getComponent(UITransform);
-        if (!ui || !sf) return;
+        if (!ui) {
+            return true;
+        }
         const rw = sf.rect?.width ?? sf.texture?.width ?? 0;
         const rh = sf.rect?.height ?? sf.texture?.height ?? 0;
         if (rw > 0 && rh > 0) {
             ui.setContentSize(rw, rh);
         }
+        return true;
     }
 }

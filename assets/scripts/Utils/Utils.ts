@@ -1,14 +1,44 @@
-import { assetManager, Color, ImageAsset, instantiate, Sprite, SpriteFrame, Texture2D, UITransform, v2, Vec2, Vec3 } from "cc";
+import { assetManager, Color, ImageAsset, instantiate, log, Sprite, SpriteFrame, sys, Texture2D, UITransform, v2, Vec2, Vec3, view } from "cc";
 import { PrefabLoad } from "./PrefabLoad";
 import { HttpManager } from "../Manager/HttpManager";
 
 export class Utils{
+
+    public static handleAdaptation(){
+        let winSize = view.getVisibleSize();
+        log("适配比例 ： " + (winSize.height / winSize.width))
+        if(winSize.height / winSize.width <= 1.8){
+            return true;            
+        }
+        return false;
+    }
+
+    public static getIOSDeviceType(): string {
+        // 1. 基础平台检测：必须是原生平台且为 iOS 系统[citation:1][citation:10]
+        if (sys.isNative && sys.os === sys.OS.IOS) {
+            // 2. 获取用户代理字符串 (User Agent)
+            const ua = window.navigator.userAgent.toLowerCase();
+            
+            // 3. 通过特征字符串进行精确匹配[citation:9]
+            if (ua.includes('iphone') || ua.includes('ipod')) {
+                return 'iPhone';        // 检测到 iPod 也归类为 iPhone 逻辑
+            } else if (ua.includes('ipad')) {
+                return 'iPad';
+            } else {
+                return 'unknown';       // 可能是 Apple TV 或模拟器环境
+            }
+        }
+        
+        console.warn('当前并非原生 iOS 平台，无法进行 iOS 设备类型判断');
+        return 'unknown';
+    }
 
     public static loadCover(url : string , sprite : Sprite , width = null , height = null){
         if (!url) return;
         if(!url.includes('http')){
             url = HttpManager.baseUrl + url
         }
+        sprite.spriteFrame = null
         assetManager.loadRemote<ImageAsset>(url , (err , ImageAsset) => {
             // 异步返回时 cell 可能已回收 / 节点已销毁，避免访问无效 Sprite 报错
             if (!sprite || !sprite.isValid) {
@@ -47,6 +77,118 @@ export class Utils{
             //    如果你希望目标框固定 + 裁切，请确保父节点有 Mask
             ui.setContentSize(finalW, finalH);
         })
+    }
+
+    /**
+     * 在父节点范围内等比缩放展示 modelImg（contain，不裁切）。
+     * maxWidth / maxHeight 省略时取 Sprite 父节点 UITransform 尺寸，再退回 Sprite 自身尺寸。
+     */
+    public static loadCoverFitInsideParent(
+        url: string,
+        sprite: Sprite,
+        maxWidth: number | null = null,
+        maxHeight: number | null = null,
+    ) {
+        if (!url || !sprite) {
+            return;
+        }
+        if (!url.includes('http')) {
+            url = HttpManager.baseUrl + url;
+        }
+        assetManager.loadRemote<ImageAsset>(url, (err, imageAsset) => {
+            if (!sprite?.isValid) {
+                return;
+            }
+            if (err || !imageAsset) {
+                console.log("图片下载失败", err);
+                sprite.spriteFrame = null;
+                return;
+            }
+
+            const tex = new Texture2D();
+            tex.image = imageAsset;
+            const sf = new SpriteFrame();
+            sf.texture = tex;
+            sprite.spriteFrame = sf;
+            Utils.fitSpriteInsideParent(sprite, imageAsset.width, imageAsset.height, maxWidth, maxHeight);
+        });
+    }
+
+    /** 将已挂载 spriteFrame 的 Sprite 按父节点范围等比缩放 */
+    public static fitSpriteInsideParent(
+        sprite: Sprite,
+        imgW: number,
+        imgH: number,
+        maxWidth: number | null = null,
+        maxHeight: number | null = null,
+    ) {
+        if (!sprite?.isValid || imgW <= 0 || imgH <= 0) {
+            return;
+        }
+
+        let ui = sprite.getComponent(UITransform);
+        if (!ui) {
+            ui = sprite.node.addComponent(UITransform);
+        }
+
+        const parentUi = sprite.node.parent?.getComponent(UITransform);
+        let maxW = maxWidth ?? parentUi?.width ?? 0;
+        let maxH = maxHeight ?? parentUi?.height ?? 0;
+        if (maxW <= 0 || maxH <= 0) {
+            maxW = ui.width > 0 ? ui.width : 512;
+            maxH = ui.height > 0 ? ui.height : 512;
+        }
+
+        const scale = Math.min(maxW / imgW, maxH / imgH);
+        sprite.sizeMode = Sprite.SizeMode.CUSTOM;
+        ui.setContentSize(imgW * scale, imgH * scale);
+    }
+
+    /**
+     * 按目标高度等比缩放（宽度随比例变化，不裁切）。
+     * targetHeight 省略时优先取父节点 UITransform 高度，其次 Sprite 自身高度。
+     */
+    public static loadCoverFitHeight(url: string, sprite: Sprite, targetHeight: number | null = null) {
+        if (!url || !sprite) {
+            return;
+        }
+        if (!url.includes('http')) {
+            url = HttpManager.baseUrl + url;
+        }
+        assetManager.loadRemote<ImageAsset>(url, (err, imageAsset) => {
+            if (!sprite?.isValid) {
+                return;
+            }
+            if (err || !imageAsset) {
+                console.log("图片下载失败", err);
+                sprite.spriteFrame = null;
+                return;
+            }
+
+            const tex = new Texture2D();
+            tex.image = imageAsset;
+            const sf = new SpriteFrame();
+            sf.texture = tex;
+            sprite.spriteFrame = sf;
+            sprite.sizeMode = Sprite.SizeMode.CUSTOM;
+
+            const ui = sprite.getComponent(UITransform) || sprite.node.getComponent(UITransform);
+            if (!ui) {
+                return;
+            }
+
+            const parentUi = sprite.node.parent?.getComponent(UITransform);
+            const targetH = targetHeight ?? parentUi?.height ?? ui.height;
+            const srcW = imageAsset.width;
+            const srcH = imageAsset.height;
+            if (srcW <= 0 || srcH <= 0 || targetH <= 0) {
+                return;
+            }
+
+            const scale = targetH / srcH;
+            const finalW = srcW * scale;
+            ui.setContentSize(finalW, targetH);
+        });
     }
 
     public static randomNum(minNum : number , maxNum: number){

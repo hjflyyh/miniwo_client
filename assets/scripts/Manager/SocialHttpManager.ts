@@ -30,6 +30,7 @@ export class SocialHttpManager extends Component {
             body: JSON.stringify(data)
         })
             .then(async res => {
+                EventSystem.send("HideJuhua" ,"HttpSend")
                 if (!res.ok) {
                     const raw = await res.text();
                     throw new Error(`Social POST ${functionName} HTTP ${res.status}: ${raw}`);
@@ -37,6 +38,7 @@ export class SocialHttpManager extends Component {
                 return res.json();
             })
             .then(data => {
+                EventSystem.send("HideJuhua" ,"HttpSend")
                 console.log("post 请求回复：", data)
                 if (data.success && data.data) {
                     EventSystem.send("SocialHttpMessage", data.data)
@@ -48,8 +50,9 @@ export class SocialHttpManager extends Component {
                 return data;
             })
             .catch((err) => {
+                EventSystem.send("HideJuhua" ,"HttpSend")
                 const error = err instanceof Error ? err : new Error(String(err));
-                EventSystem.send("ShowTips", "网络请求失败，请稍后重试");
+                EventSystem.send("ShowTips", "Network request failed. Please try again later.");
                 EventSystem.send("HttpError", error);
                 throw error;
             })
@@ -76,6 +79,7 @@ export class SocialHttpManager extends Component {
             },
         })
             .then(async res => {
+                EventSystem.send("HideJuhua" ,"HttpSend")
                 if (!res.ok) {
                     const raw = await res.text();
                     throw new Error(`Social GET ${functionName} HTTP ${res.status}: ${raw}`);
@@ -84,6 +88,7 @@ export class SocialHttpManager extends Component {
             })
             .then(data => {
                 console.log("get 请求回复：", data)
+                EventSystem.send("HideJuhua" ,"HttpSend")
                 if (data.success && data.data) {
                     EventSystem.send("SocialHttpMessage", data.data)
                 } else {
@@ -94,8 +99,9 @@ export class SocialHttpManager extends Component {
                 return data;
             })
             .catch((err) => {
+                EventSystem.send("HideJuhua" ,"HttpSend")
                 const error = err instanceof Error ? err : new Error(String(err));
-                EventSystem.send("ShowTips", "网络请求失败，请稍后重试");
+                EventSystem.send("ShowTips", "Network request failed. Please try again later.");
                 EventSystem.send("HttpError", error);
                 throw error;
             })

@@ -3,6 +3,7 @@ import { MapModel } from "./MapModel";
 export module network {
     export enum ServerHttpCommand {
         COMMON_LOGIN = 1, // 登录
+        COMMON_REGISTER = 7,//注册
     }
 
     export enum ServerCode {
@@ -14,6 +15,10 @@ export module network {
         CodeMapList = 105, //地图列表
         CodePlayerNpcAffinity = 106, //玩家->好感度
         CodeAffinityGiftItem = 107, //好感度变更  结构："data": { "npc_id": 1001,  "affinity": 35, "delta_total": 10, "reasons": ["ITEM_GIFT"],"daily_gain_remaining": 50
+        CodeMyMapList = 108, // 我的地图列表（分页）
+        CodeFarmData = 109, // 我的农场数据
+        CodeSeedLv   = 110, // 种子种植等级与经验
+        CodeMapCoverComplete = 112, //地图封面
     }
 
     export enum FollowSocialCode {
@@ -56,6 +61,12 @@ export module network {
     export class HeartbeatRequest {
         toJSON() {
             return { rpc: { id: "heartbeat", payload: JSON.stringify({}) } };
+        }
+    }
+
+    export class MailReadRequest{
+        toJSON(mail_id) {
+            return { rpc: { id: "mail_read", payload: JSON.stringify({ mail_id: mail_id }) } };
         }
     }
 
@@ -236,9 +247,29 @@ export module network {
             return { rpc: { id: "shop_buy", payload: JSON.stringify({ item_id: parseInt(itemID), count: parseInt(count) }) } };
         }
     }
+    export class ShopSellRequest {
+        toJSON(itemID, count) {
+            return { rpc: { id: "shop_sell", payload: JSON.stringify({ item_id: parseInt(itemID), count: parseInt(count) }) } };
+        }
+    }
     export class GetUserByIDRequest {
         toJSON(userIDs) {
             return { rpc: { id: "get_user_by_ids", payload: JSON.stringify({ playerIDs: userIDs }) } };
         }
     }
+    export class ExplorationStartRequest {
+        toJSON(npcID, num) {
+            return { rpc: { id: "exploration_start", payload: JSON.stringify({ npc_id: parseInt(npcID), num: parseInt(num) }) } };
+        }
+    }
+    export class ExplorationEndRequest {
+        toJSON(npcID, force, token) {
+            return { rpc: { id: "exploration_end", payload: JSON.stringify({ npc_id: parseInt(npcID), force: parseInt(force), token: token }) } };
+        }
+    } 
+    export class ExplorationLogRequest {
+        toJSON(npcID, token) {
+            return { rpc: { id: "exploration_log", payload: JSON.stringify({ npc_id: parseInt(npcID),  token: token }) } };
+        }
+    } 
 }

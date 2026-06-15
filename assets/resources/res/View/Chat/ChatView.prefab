@@ -978,7 +978,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 170.671875,
+      "width": 0,
       "height": 69.3
     },
     "_anchorPoint": {
@@ -1014,7 +1014,7 @@
       "b": 0,
       "a": 255
     },
-    "_string": "NPC NAME",
+    "_string": "",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 32,
@@ -1137,7 +1137,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 190.107421875,
+      "width": 0,
       "height": 69.3
     },
     "_anchorPoint": {
@@ -1173,7 +1173,7 @@
       "b": 99,
       "a": 255
     },
-    "_string": "<world name>",
+    "_string": "",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 30,
@@ -1551,7 +1551,7 @@
       "__id__": 51
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 59
@@ -1918,7 +1918,7 @@
       "__id__": 67
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 75
@@ -2285,7 +2285,7 @@
       "__id__": 83
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 91
@@ -2652,7 +2652,7 @@
       "__id__": 99
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 107
@@ -3019,7 +3019,7 @@
       "__id__": 115
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 123
@@ -4025,8 +4025,6 @@
       "__id__": 0
     },
     "fileId": "787kiCxDxBBoAhkNtL6kG4",
-    "instance": null,
-    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {

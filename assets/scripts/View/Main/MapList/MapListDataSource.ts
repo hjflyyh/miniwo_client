@@ -29,7 +29,7 @@ export class MapListDataSource extends Component implements IFDataSource{
         return ""
     }
     GetCellSize(dataIndex: number): number {
-        return 1246
+        return 500
     }
     GetCellView(dataIndex: number, identifier?: string): MapListItem {
         let node = Utils.instantiate(this.cellPrefab);
