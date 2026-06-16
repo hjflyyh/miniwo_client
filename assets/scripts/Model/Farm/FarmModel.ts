@@ -21,6 +21,7 @@ import {
     WeatherSnapshot,
     weatherTypeName,
     FARM_MATCH_OPCODE_DATA_HARVEST,
+    FARM_MATCH_OPCODE_DATA_WORK,
 } from './FarmTypes';
 import { network } from '../RequestData';
 
@@ -67,6 +68,10 @@ export class FarmModel {
             let content = JSON.parse(data.content)
             console.log(content)
             this.seedLevelData = content
+            return
+        }
+        if (data.code == network.ServerCode.CodeFarmData) {
+            this.applyFarmPushPayload(data?.content, 'notification:farm_data');
         }
     }
 
@@ -124,10 +129,14 @@ export class FarmModel {
         if (!this.active || !MapModel.getInstance().isFarmMapGameType()) {
             return;
         }
-        if (Number(data?.opCode) !== FARM_MATCH_OPCODE_DATA && Number(data?.opCode) !== FARM_MATCH_OPCODE_DATA_HARVEST) {
+        if (
+            Number(data?.opCode) !== FARM_MATCH_OPCODE_DATA &&
+            Number(data?.opCode) !== FARM_MATCH_OPCODE_DATA_HARVEST &&
+            Number(data?.opCode) !== FARM_MATCH_OPCODE_DATA_WORK
+        ) {
             return;
         }
-        this.applyFarmPushPayload(data?.payload, 'match:farm_water');
+        this.applyFarmPushPayload(data?.payload, 'match:farm_data');
     }
 
     public isActive(): boolean {

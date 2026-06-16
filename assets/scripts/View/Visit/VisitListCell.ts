@@ -78,6 +78,9 @@ export class VisitListCell extends Component {
                 let minute = ~~(interval / 60 % 60)
                 let second = ~~(interval % 60)
                 this.tili2Label.string = hour.toString() + ":" + minute.toString() + ":" + second.toString()
+                
+                let timedata = Date.now()
+                this.tili2.progress = timedata / this.explorationAt
             }
         }, 1)
     }

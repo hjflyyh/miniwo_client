@@ -792,7 +792,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 60.689,
+      "y": 58.849999999999994,
       "z": 0
     },
     "_lrot": {
@@ -868,7 +868,7 @@
       "b": 0,
       "a": 255
     },
-    "_string": "labellabellabellabellabellabellabellabellabellabel",
+    "_string": "123123123123123123123123123",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 20,
@@ -923,8 +923,6 @@
       "__id__": 0
     },
     "fileId": "52hzQj1qRIebYWLoDWThwt",
-    "instance": null,
-    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {
@@ -942,7 +940,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 200,
-      "height": 106.5
+      "height": 103.1
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1013,7 +1011,7 @@
       "__id__": 42
     },
     "_resizeMode": 1,
-    "_layoutType": 1,
+    "_layoutType": 2,
     "_cellSize": {
       "__type__": "cc.Size",
       "width": 40,
@@ -1022,8 +1020,8 @@
     "_startAxis": 0,
     "_paddingLeft": 25,
     "_paddingRight": 25,
-    "_paddingTop": 0,
-    "_paddingBottom": 0,
+    "_paddingTop": 3.5,
+    "_paddingBottom": 18.1,
     "_spacingX": 0,
     "_spacingY": 0,
     "_verticalDirection": 1,

@@ -4955,7 +4955,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 43,
-      "y": -18.823,
+      "y": -23.88,
       "z": 0
     },
     "_lrot": {
@@ -4967,8 +4967,8 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1.3,
-      "y": 1.3,
+      "x": 1,
+      "y": 1,
       "z": 1
     },
     "_mobility": 0,
@@ -8103,7 +8103,7 @@
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 20,
-    "_fontSize": 20,
+    "_fontSize": 26,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
     "_overflow": 1,
@@ -8261,8 +8261,8 @@
     "_string": "Enter text here...",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
-    "_actualFontSize": 20,
-    "_fontSize": 20,
+    "_actualFontSize": 26,
+    "_fontSize": 26,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
     "_overflow": 1,

@@ -17,9 +17,10 @@ export interface FarmPlotFunctionHidePayload {
     except?: import('cc').Component | null;
 }
 
-/** 地图 Match 推送 op_code：农田数据更新（payload 与 farm_water 成功响应一致） */
+/** 地图 Match 推送 op_code：农田数据更新（payload 与 farm_* 成功响应一致） */
 export const FARM_MATCH_OPCODE_DATA = 4;
 export const FARM_MATCH_OPCODE_DATA_HARVEST = 5;
+export const FARM_MATCH_OPCODE_DATA_WORK = 6;
 
 export interface FarmBuff {
     buff_type: number;

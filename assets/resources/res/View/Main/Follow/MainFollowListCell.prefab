@@ -489,7 +489,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 138.6708984375,
+      "width": 149.337890625,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -528,8 +528,8 @@
     "_string": "NPC NAME",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
-    "_actualFontSize": 26,
-    "_fontSize": 26,
+    "_actualFontSize": 28,
+    "_fontSize": 28,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
     "_overflow": 0,
@@ -607,7 +607,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 144.352,
+      "x": 141.408,
       "y": -82.659,
       "z": 0
     },
@@ -648,7 +648,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 54.9326171875,
+      "width": 50.70703125,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -687,8 +687,8 @@
     "_string": "label",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
-    "_actualFontSize": 26,
-    "_fontSize": 26,
+    "_actualFontSize": 24,
+    "_fontSize": 24,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
     "_overflow": 0,
@@ -1305,7 +1305,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 52.199981689453125,
+      "width": 56,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -1344,8 +1344,8 @@
     "_string": "标题",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
-    "_actualFontSize": 26.1,
-    "_fontSize": 26.1,
+    "_actualFontSize": 28,
+    "_fontSize": 28,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
     "_overflow": 0,

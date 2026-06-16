@@ -411,7 +411,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 102.783203125,
+      "width": 131.5625,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -442,16 +442,16 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 0,
-      "g": 0,
-      "b": 0,
+      "r": 15,
+      "g": 15,
+      "b": 19,
       "a": 255
     },
     "_string": "NPC名字",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
-    "_actualFontSize": 25,
-    "_fontSize": 25,
+    "_actualFontSize": 32,
+    "_fontSize": 32,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
     "_overflow": 0,
@@ -601,16 +601,16 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 0,
-      "g": 0,
-      "b": 0,
+      "r": 15,
+      "g": 15,
+      "b": 19,
       "a": 255
     },
     "_string": "NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容NPC聊天内容",
     "_horizontalAlign": 0,
     "_verticalAlign": 0,
-    "_actualFontSize": 20,
-    "_fontSize": 20,
+    "_actualFontSize": 26,
+    "_fontSize": 26,
     "_fontFamily": "Arial",
     "_lineHeight": 25,
     "_overflow": 1,

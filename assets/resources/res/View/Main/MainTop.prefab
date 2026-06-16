@@ -855,7 +855,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 104.220703125,
+      "width": 105.751953125,
       "height": 56.7
     },
     "_anchorPoint": {
@@ -904,7 +904,7 @@
     "_isSystemFontUsed": true,
     "_spacingX": 0,
     "_isItalic": false,
-    "_isBold": false,
+    "_isBold": true,
     "_isUnderline": false,
     "_underlineHeight": 2,
     "_cacheMode": 0,
@@ -1014,7 +1014,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 104.220703125,
+      "width": 105.751953125,
       "height": 56.7
     },
     "_anchorPoint": {
@@ -1063,7 +1063,7 @@
     "_isSystemFontUsed": true,
     "_spacingX": 0,
     "_isItalic": false,
-    "_isBold": false,
+    "_isBold": true,
     "_isUnderline": false,
     "_underlineHeight": 2,
     "_cacheMode": 0,
@@ -1892,7 +1892,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 104.220703125,
+      "width": 105.751953125,
       "height": 56.7
     },
     "_anchorPoint": {
@@ -1941,7 +1941,7 @@
     "_isSystemFontUsed": true,
     "_spacingX": 0,
     "_isItalic": false,
-    "_isBold": false,
+    "_isBold": true,
     "_isUnderline": false,
     "_underlineHeight": 2,
     "_cacheMode": 0,
@@ -2051,7 +2051,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 174.234375,
+      "width": 177.32421875,
       "height": 56.7
     },
     "_anchorPoint": {
@@ -2100,7 +2100,7 @@
     "_isSystemFontUsed": true,
     "_spacingX": 0,
     "_isItalic": false,
-    "_isBold": false,
+    "_isBold": true,
     "_isUnderline": false,
     "_underlineHeight": 2,
     "_cacheMode": 0,
@@ -2749,6 +2749,8 @@
       "__id__": 0
     },
     "fileId": "83TxQCkzxA+IxBzV9zp+15",
+    "instance": null,
+    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {
