@@ -91,6 +91,12 @@ export class VisitListCell extends Component {
         if (this.npcID != npcID) {
             return
         }
+        if (reports.length == 0) {
+            EventSystem.send('ShowTips', 'The story has not been generated.');
+            return
+        }
+
+        this.textNode.active = true
         console.log("onExplorationLog", reports)
         for (let report of reports) {
             if (!report.report_text || !report.hour_index) {
@@ -115,7 +121,7 @@ export class VisitListCell extends Component {
         console.log("setNpcId", Npc_data.attributes["111"])
         let stamina = Npc_data.attributes["111"]
         stamina = Math.max(0, Math.min(1000, stamina))
-        this.tiliLabel.string = ~~(stamina / 10).toString() + "/100"
+        this.tiliLabel.string = stamina.toString() + "/1000"
         this.tili.progress = stamina / 1000
         this.npcID = Npc_data.npc_id
         this.nameLabel.string = Npc_data.name
@@ -132,6 +138,13 @@ export class VisitListCell extends Component {
 
         //npc_sprite_url
         Utils.loadCover(Npc_data.npc_sprite_url, this.head)
+    }
+
+    // 计算探索开始时间戳
+    calStartAt() : number{
+        let startNum = ~~(this.explorationAt / 10 % 10)
+        let explorationTime = UGCModel.getInstance().getExplorationTime()
+        return this.explorationAt - startNum * explorationTime //  起始时间戳
     }
 
     setVisit(explorationAt: number) {
@@ -162,8 +175,7 @@ export class VisitListCell extends Component {
     }
 
     onClickStatus() {
-        this.textNode.active = !this.textNode.active
-        if (this.textNode.active) {
+        if (!this.textNode.active) {
             let json = new network.ExplorationLogRequest();
             let nakamaToken = RoleModel.getInstance().nakama_token != null ? String(RoleModel.getInstance().nakama_token) : '';
             nakamaToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aWQiOiI2YTU5ZGRkZS04MDk4LTQ4MWUtODYzNS1mMDcyMjMxODhhYWEiLCJ1aWQiOiJmMjIyYzU3OC0xMWZjLTQwYTAtYjdmNS0wYjMyYzIyMTM1MTQiLCJ1c24iOiJ6alpHY2t2eGFXIiwiZXhwIjoxNzgxMDY1MDM0fQ.6bA51Wwn7OpDj0Z863BrhFf-FcLVjn87xLZJs0CuO48"
@@ -171,6 +183,8 @@ export class VisitListCell extends Component {
                 return
             }
             AppConst.WebSocketManager.send(json.toJSON(this.npcID, nakamaToken));
+        }else{
+            this.textNode.active = false
         }
     }
 
