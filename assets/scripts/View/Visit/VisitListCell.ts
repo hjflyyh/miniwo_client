@@ -86,11 +86,11 @@ export class VisitListCell extends Component {
                 let formattedSecond = second.toString().padStart(2, '0')
                 this.tili2Label.string = `${formattedHour}:${formattedMinute}:${formattedSecond}`
 
-                if(this.explorationAt - Utils.getServerNowMs() <= 0){
+                if (this.explorationAt - Utils.getServerNowMs() <= 0) {
                     this.npcData.exploration_at = 0;
                     this.setNpcId(this.npcData);
                 }
-                console.log(Utils.calculateRemainingPercentage(this.calStartAt() , this.explorationAt , Utils.getServerNowMs()))
+                console.log(Utils.calculateRemainingPercentage(this.calStartAt(), this.explorationAt, Utils.getServerNowMs()))
             }
         }, 1)
     }
@@ -138,7 +138,7 @@ export class VisitListCell extends Component {
 
         this.slider.progress = 0;
 
-        let sendStamina = UGCModel.getInstance().getSendStamina(Npc_data.attributes["112"] ?? 0 > 20)
+        let sendStamina = UGCModel.getInstance().getSendStamina((Npc_data.attributes["112"] ?? 0) > 20)
         this.sliderNum = 5
         if (sendStamina && sendStamina > 0) {
             this.sliderNum = Math.min(9, ~~(stamina / sendStamina))
@@ -153,7 +153,7 @@ export class VisitListCell extends Component {
     calStartAt(): number {
         let startNum = ~~(this.explorationAt / 10) % 10
         let explorationTime = UGCModel.getInstance().getExplorationTime()
-        return this.explorationAt - startNum * explorationTime //  起始时间戳
+        return (this.explorationAt - startNum * explorationTime * 1000) //  起始时间戳
     }
 
     setVisit(explorationAt: number) {
@@ -199,7 +199,7 @@ export class VisitListCell extends Component {
 
     onSliderChange() {
         this.sliderImg.contentSize = new Size(312 * this.slider.progress, 8)
-        let num = ~~(this.sliderImg.contentSize.width / 312 * this.sliderNum) + 1
+        let num = Math.min(~~(this.sliderImg.contentSize.width / 312 * this.sliderNum) + 1, this.sliderNum) 
         let explorationTime = UGCModel.getInstance().getExplorationTime()
         let totalSec = Math.round(explorationTime * num)
         let h = Math.floor(totalSec / 3600)
