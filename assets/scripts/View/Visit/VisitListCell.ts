@@ -150,8 +150,8 @@ export class VisitListCell extends Component {
     }
 
     // 计算探索开始时间戳
-    calStartAt() : number{
-        let startNum = ~~(this.explorationAt / 10 % 10)
+    calStartAt(): number {
+        let startNum = ~~(this.explorationAt / 10) % 10
         let explorationTime = UGCModel.getInstance().getExplorationTime()
         return this.explorationAt - startNum * explorationTime //  起始时间戳
     }
@@ -192,7 +192,7 @@ export class VisitListCell extends Component {
                 return
             }
             AppConst.WebSocketManager.send(json.toJSON(this.npcID, nakamaToken));
-        }else{
+        } else {
             this.textNode.active = false
         }
     }
