@@ -138,7 +138,7 @@ export class VisitListCell extends Component {
 
         this.slider.progress = 0;
 
-        let sendStamina = UGCModel.getInstance().getSendStamina()
+        let sendStamina = UGCModel.getInstance().getSendStamina(Npc_data.attributes["112"] ?? 0 > 20)
         this.sliderNum = 5
         if (sendStamina && sendStamina > 0) {
             this.sliderNum = Math.min(9, ~~(stamina / sendStamina))

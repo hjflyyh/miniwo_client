@@ -399,7 +399,7 @@ export class UGCModel {
                 this.npcList = list;
                 EventSystem.send("OnRefreshUGCMapNpc");
 
-                AppConst.PanelManager.openView("res/View/CreateMap/CreateNpc" , npc)
+                AppConst.PanelManager.openView("res/View/CreateMap/CreateNpc", npc)
             }
         }
     }
@@ -1022,9 +1022,9 @@ export class UGCModel {
         const npc = this.getNpcById(npcId);
         if (!npc || !aiData) return;
         Object.assign(npc, aiData);
-        
-        for(let c = 0 ; c < this.myNpcList.length ; c++){
-            
+
+        for (let c = 0; c < this.myNpcList.length; c++) {
+
         }
     }
 
@@ -1223,8 +1223,9 @@ export class UGCModel {
     }
 
     //派遣消耗
-    public getSendStamina() {
-        return AppConst.JSONManager.getItemAll("systemConfig")[40]["configuration"].split("#")[0]
+    public getSendStamina(isHealth: boolean) {
+        return isHealth ? AppConst.JSONManager.getItemAll("systemConfig")[40]["configuration"].split("#")[0]
+            : AppConst.JSONManager.getItemAll("systemConfig")[40]["configuration"].split("#")[1]
     }
 
 
