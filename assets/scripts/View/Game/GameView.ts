@@ -674,7 +674,7 @@ export class GameView extends Component {
     }
 
     public onClickCG(){
-        // AppConst.PanelManager.openView("res/View/Visit/VisitList", null, null , null , this.UI)
+        AppConst.PanelManager.openView("res/View/CG/CGView", null, null , null , this.UI)
     }
 
     public onClickNpcAt(){

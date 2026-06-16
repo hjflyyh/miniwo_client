@@ -11,7 +11,7 @@ export class Utils{
         if (Number.isFinite(wsNow) && wsNow > 0) {
             return wsNow;
         }
-        return Date.now();
+        // return Date.now();
     }
 
     /** 当前时刻（Unix 秒）：优先服务端时间 */

@@ -90,7 +90,7 @@ export class VisitListCell extends Component {
                     this.npcData.exploration_at = 0;
                     this.setNpcId(this.npcData);
                 }
-                console.log(Utils.calculateRemainingPercentage(this.calStartAt(), this.explorationAt, Utils.getServerNowMs()))
+                this.tili2.progress = Utils.calculateRemainingPercentage(this.calStartAt(), this.explorationAt, Utils.getServerNowMs()) / 100
             }
         }, 1)
     }
