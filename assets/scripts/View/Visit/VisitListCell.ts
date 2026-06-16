@@ -67,6 +67,8 @@ export class VisitListCell extends Component {
 
     textList = {}
     sliderNum: number = 5
+
+    npcData = null
     start() {
         this.textCell.active = false
         EventSystem.addListent("exploration_log", this.onExplorationLog, this)
@@ -83,6 +85,12 @@ export class VisitListCell extends Component {
                 let formattedMinute = minute.toString().padStart(2, '0')
                 let formattedSecond = second.toString().padStart(2, '0')
                 this.tili2Label.string = `${formattedHour}:${formattedMinute}:${formattedSecond}`
+
+                if(this.explorationAt - Utils.getServerNowMs() <= 0){
+                    this.npcData.exploration_at = 0;
+                    this.setNpcId(this.npcData);
+                }
+                console.log(Utils.calculateRemainingPercentage(this.calStartAt() , this.explorationAt , Utils.getServerNowMs()))
             }
         }, 1)
     }
@@ -118,6 +126,7 @@ export class VisitListCell extends Component {
     }
 
     setNpcId(Npc_data) {
+        this.npcData = Npc_data
         console.log("setNpcId", Npc_data.attributes["111"])
         let stamina = Npc_data.attributes["111"]
         stamina = Math.max(0, Math.min(1000, stamina))

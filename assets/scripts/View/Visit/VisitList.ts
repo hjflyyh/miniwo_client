@@ -55,7 +55,7 @@ export class VisitList extends Component {
         console.log("VisitList refreshVisitList", showNpcs)
         for (let data of showNpcs) {
             if (!data.npc_sprite_url || data.npc_sprite_url == "") {
-                // continue
+                continue
             }
             let next = this.npcList[data.npc_id]
             if (!next) {
