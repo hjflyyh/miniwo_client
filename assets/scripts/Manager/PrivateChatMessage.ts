@@ -3,6 +3,7 @@
 // import { AppConst } from "../AppConst";       // 按你项目路径改
 import { sys, log } from "cc";
 import { AppConst } from "../AppConst";
+import { Utils } from "../Utils/Utils";
 
 type Role = "self" | "peer";
 
@@ -353,7 +354,7 @@ public markSessionRead(peerUid: string) {
       peerAvatar: local.peerAvatar ?? null,
       isNPC: !!local.isNPC || this.isKnownNpcPeerUid(uid),
       channelId: String(local.channelId),
-      openedAt: Date.now(),
+      openedAt: Utils.getServerNowMs(),
     };
     this.sessionsByPeer.set(uid, s);
     this.sessionsByChannel.set(s.channelId, s);
@@ -545,7 +546,7 @@ public markSessionRead(peerUid: string) {
         peerAvatar: peerAvatar ?? localRow.peerAvatar ?? null,
         isNPC,
         channelId: String(localRow.channelId),
-        openedAt: Date.now(),
+        openedAt: Utils.getServerNowMs(),
       };
       this.sessionsByPeer.set(peerUid, s0);
       this.sessionsByChannel.set(s0.channelId, s0);
@@ -564,7 +565,7 @@ public markSessionRead(peerUid: string) {
       peerAvatar,
       isNPC,
       channelId: channel.id,
-      openedAt: Date.now(),
+      openedAt: Utils.getServerNowMs(),
     };
 
     this.sessionsByPeer.set(peerUid, s);
@@ -621,7 +622,7 @@ public markSessionRead(peerUid: string) {
       if (!text) continue;
       if (mid && seen.has(mid)) continue;
       const ts =
-        typeof row.create_time_ms === "number" ? row.create_time_ms : Date.now();
+        typeof row.create_time_ms === "number" ? row.create_time_ms : Utils.getServerNowMs();
       // 对账：历史里出现“自己刚发的消息”，若本地已存在 local-*，则升级而不是插入新的一条
       const isSelf = String(row.sender_id || "") === String(this.selfUid || "");
       if (isSelf) {
@@ -741,12 +742,12 @@ public markSessionRead(peerUid: string) {
       Number.isFinite(serverTsRaw) && serverTsRaw > 0
         ? (serverTsRaw > 1e12 ? serverTsRaw : serverTsRaw * 1000)
         : 0;
-    const sentTs = serverTsMs > 0 ? serverTsMs : Date.now();
+    const sentTs = serverTsMs > 0 ? serverTsMs : Utils.getServerNowMs();
 
     // NPC 回复异步写入；若 WS 推丢失，短时拉历史补全
     if (s.isNPC) {
       // 标记 pending，直到收到 NPC 新消息（ts > sentTs）或超时自动解除
-      this.npcPendingByPeer.set(peerUid, { lastSendTs: sentTs, startedAt: Date.now() });
+      this.npcPendingByPeer.set(peerUid, { lastSendTs: sentTs, startedAt: Utils.getServerNowMs() });
       // 彻底关闭“发送后轮询拉历史”：只依赖后端主动推送（channel_message）。
       // 为避免永远卡住，给一个超时解锁（不拉历史、不主动补消息）。
       this.startNpcPendingUnlock(peerUid);
@@ -892,7 +893,7 @@ public markSessionRead(peerUid: string) {
           peerAvatar: npcAvatarRaw,
           isNPC: this.isKnownNpcPeerUid(peerUid),
           channelId,
-          openedAt: Date.now(),
+          openedAt: Utils.getServerNowMs(),
         };
         this.sessionsByPeer.set(peerUid, session);
         this.sessionsByChannel.set(channelId, session);
@@ -1274,7 +1275,7 @@ public markSessionRead(peerUid: string) {
       const t = Date.parse(createTime);
       if (!Number.isNaN(t)) return t;
     }
-    return Date.now();
+    return Utils.getServerNowMs();
   }
 
   private insertMsg(msg: PrivateMsg) {

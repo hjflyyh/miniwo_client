@@ -228,8 +228,8 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
+      "x": 1.02,
+      "y": 1.02,
       "z": 1
     },
     "_mobility": 0,
@@ -324,6 +324,8 @@
       "__id__": 0
     },
     "fileId": "a9HRQuarxAtok8+R/+kQr8",
+    "instance": null,
+    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {
@@ -588,6 +590,8 @@
       "__id__": 0
     },
     "fileId": "3fmgLSxGpGXZ2pfOB6S5aW",
+    "instance": null,
+    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {
@@ -722,6 +726,8 @@
       "__id__": 0
     },
     "fileId": "ad7mAomChJP5Fw7Zaidj1B",
+    "instance": null,
+    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {
@@ -879,6 +885,8 @@
       "__id__": 0
     },
     "fileId": "40hgYLw+pNmJdlmJ3MY6Q3",
+    "instance": null,
+    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {
@@ -1039,6 +1047,8 @@
       "__id__": 0
     },
     "fileId": "aedOHFTnlGN4ic0zGepia7",
+    "instance": null,
+    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {
@@ -1388,6 +1398,8 @@
       "__id__": 0
     },
     "fileId": "7fo/9isaRBHL/h9wfAgvAi",
+    "instance": null,
+    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {
@@ -1545,6 +1557,8 @@
       "__id__": 0
     },
     "fileId": "71OXyYZAhO6L0UNFTisF6z",
+    "instance": null,
+    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {

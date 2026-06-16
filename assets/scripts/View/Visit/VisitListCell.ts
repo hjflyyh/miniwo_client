@@ -73,14 +73,16 @@ export class VisitListCell extends Component {
 
         this.schedule(() => {
             if (this.isVisited) {
-                let interval = (this.explorationAt - Date.now()) / 1000
+                let interval = (this.explorationAt - Utils.getServerNowMs()) / 1000
                 let hour = ~~(interval / 60 / 60)
                 let minute = ~~(interval / 60 % 60)
                 let second = ~~(interval % 60)
-                this.tili2Label.string = hour.toString() + ":" + minute.toString() + ":" + second.toString()
-                
-                let timedata = Date.now()
-                this.tili2.progress = timedata / this.explorationAt
+
+                // 格式化为两位数，不足两位前面补0
+                let formattedHour = hour.toString().padStart(2, '0')
+                let formattedMinute = minute.toString().padStart(2, '0')
+                let formattedSecond = second.toString().padStart(2, '0')
+                this.tili2Label.string = `${formattedHour}:${formattedMinute}:${formattedSecond}`
             }
         }, 1)
     }
@@ -133,7 +135,7 @@ export class VisitListCell extends Component {
     }
 
     setVisit(explorationAt: number) {
-        this.isVisited = explorationAt > Date.now()
+        this.isVisited = explorationAt > Utils.getServerNowMs()
         this.explorationAt = explorationAt
 
         this.textNode.active = false

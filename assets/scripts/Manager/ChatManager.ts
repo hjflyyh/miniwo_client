@@ -1,4 +1,5 @@
 import { AppConst } from "../AppConst";
+import { Utils } from "../Utils/Utils";
 import { MapModel } from "../Model/MapModel";
 import { network } from "../Model/RequestData";
 import { RoleModel } from "../Model/RoleModel";
@@ -160,7 +161,7 @@ export class MapChatManager {
             // 保留原始类型（可能是 string 或 {message,mentions} 对象），交给 getDisplayText 解析展示
             text: (c as any).text ?? "",
             map_id: mapId,
-            ts: Number(c.ts ?? Date.now()),
+            ts: Number(c.ts ?? Utils.getServerNowMs()),
             username: String(c.nick_name ?? data?.username ?? ""),
             npc_name: c.npc_name != null ? String(c.npc_name) : undefined,
         };

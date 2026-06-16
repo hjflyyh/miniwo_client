@@ -6574,7 +6574,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 61.171875,
+      "width": 11.123046875,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -6610,7 +6610,7 @@
       "b": 255,
       "a": 255
     },
-    "_string": "50/100",
+    "_string": "0",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 20,
@@ -7076,7 +7076,7 @@
       "b": 255,
       "a": 255
     },
-    "_string": "12:04",
+    "_string": "00:00:00",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 20,

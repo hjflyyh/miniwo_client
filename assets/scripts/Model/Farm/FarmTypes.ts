@@ -1,3 +1,5 @@
+import { Utils } from '../../Utils/Utils';
+
 /** 天气数据更新（Model 拉取成功后广播） */
 export const FARM_EVENT_WEATHER_UPDATED = 'FarmWeatherUpdated';
 
@@ -131,7 +133,7 @@ export enum FarmPlotPhase {
 }
 
 export function nowUnixSec(): number {
-    return Math.floor(Date.now() / 1000);
+    return Utils.getServerNowSec();
 }
 
 export function isPlotSeedEmpty(plot: FarmPlotState | null): boolean {

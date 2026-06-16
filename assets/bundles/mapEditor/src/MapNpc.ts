@@ -2,6 +2,7 @@ import { _decorator, Component, Label, Node, UITransform, Vec2, Vec3 } from 'cc'
 import { MapEditor } from './MapEditor';
 import { CustomizeMapData, NpcSpriteAnimations } from './CustomizeMap/CustomizeMapData';
 import { AppConst } from '../../../scripts/AppConst';
+import { Utils } from '../../../scripts/Utils/Utils';
 import {
     GenericSpritesheetAnimator,
     ZUOZHU_ACTION_HORIZONTAL_SLICES,
@@ -536,15 +537,7 @@ export class MapNpc extends Component {
     }
 
     private getNowServerMs(): number {
-        const wsNow = AppConst?.WebSocketManager?.getServerTimestampMs?.();
-        if (Number.isFinite(wsNow) && wsNow > 0) {
-            return wsNow;
-        }
-        const customizeNow = this.customizeMapData?.getServerTimeMs?.();
-        if (Number.isFinite(customizeNow) && customizeNow > 0) {
-            return customizeNow;
-        }
-        return Date.now();
+        return Utils.getServerNowMs();
     }
 
     private applyAnimState(isMoving: boolean, nowMs: number) {

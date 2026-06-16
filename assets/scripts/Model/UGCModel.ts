@@ -3,6 +3,7 @@ import { AppConst } from "../AppConst";
 import { MapModel } from "./MapModel";
 import { RoleModel } from "./RoleModel";
 import { network } from "./RequestData";
+import { Utils } from "../Utils/Utils";
 
 /**
  * 对应 miniwoedit `getMap` 返回的 `data.map`（见 mobile_creation_api.md）。
@@ -1254,7 +1255,7 @@ export class UGCModel {
     }
 
     checkExploration() {
-        const now = Date.now();
+        const now = Utils.getServerNowMs();
         let isSend = false;
         let max = 1000 * 60 * 60 * 10; // 最大10 小时
         let nextTick = max;

@@ -181,6 +181,14 @@ export class WebSocketManager extends Component {
         return this.serverTimestampMs + Math.max(0, elapsed);
     }
 
+    /** 从 HTTP/WS 回包中提取并同步服务端时间 */
+    public trySyncTimestampFromPayload(data: any): void {
+        const ts = this.extractServerTimestampMs(data);
+        if (ts > 0) {
+            this.syncServerTimestampMs(ts);
+        }
+    }
+
     /**
      * 发送消息
      * @param data 要发送的数据

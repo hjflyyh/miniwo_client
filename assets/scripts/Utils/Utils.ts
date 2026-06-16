@@ -1,8 +1,23 @@
 import { assetManager, Color, ImageAsset, instantiate, log, Sprite, SpriteFrame, sys, Texture2D, UITransform, v2, Vec2, Vec3, view } from "cc";
 import { PrefabLoad } from "./PrefabLoad";
 import { HttpManager } from "../Manager/HttpManager";
+import { AppConst } from "../AppConst";
 
 export class Utils{
+
+    /** 当前时刻（毫秒）：优先 WebSocket 校准后的服务端时间 */
+    public static getServerNowMs(): number {
+        const wsNow = AppConst.WebSocketManager?.getServerTimestampMs?.();
+        if (Number.isFinite(wsNow) && wsNow > 0) {
+            return wsNow;
+        }
+        return Date.now();
+    }
+
+    /** 当前时刻（Unix 秒）：优先服务端时间 */
+    public static getServerNowSec(): number {
+        return Math.floor(Utils.getServerNowMs() / 1000);
+    }
 
     public static handleAdaptation(){
         let winSize = view.getVisibleSize();
@@ -12,6 +27,47 @@ export class Utils{
         }
         return false;
     }
+
+
+    /**
+     * 计算两个时间戳之间的进度百分比
+     * @param startTimestamp 开始时间戳（毫秒）
+     * @param endTimestamp 结束时间戳（毫秒）
+     * @param currentTimestamp 当前时间戳（毫秒，默认为当前时间）
+     * @returns 剩余百分比（0-100），如果时间范围无效则返回0
+     */
+    public static calculateRemainingPercentage(
+    startTimestamp: number,
+    endTimestamp: number,
+    currentTimestamp: number = Utils.getServerNowMs()
+    ): number {
+    // 验证时间戳有效性
+    if (startTimestamp >= endTimestamp) {
+        console.warn('开始时间必须小于结束时间');
+        return 0;
+    }
+
+    // 如果当前时间已经超过结束时间，返回0%
+    if (currentTimestamp >= endTimestamp) {
+        return 0;
+    }
+
+    // 如果当前时间小于开始时间，返回100%
+    if (currentTimestamp <= startTimestamp) {
+        return 100;
+    }
+
+    // 计算总时长和已过去时长
+    const totalDuration = endTimestamp - startTimestamp;
+    const elapsedDuration = currentTimestamp - startTimestamp;
+
+    // 计算剩余百分比
+    const remainingPercentage = ((totalDuration - elapsedDuration) / totalDuration) * 100;
+
+    // 保留两位小数并确保在0-100范围内
+    return Math.min(100, Math.max(0, Math.round(remainingPercentage * 100) / 100));
+    }
+
 
     public static getIOSDeviceType(): string {
         // 1. 基础平台检测：必须是原生平台且为 iOS 系统[citation:1][citation:10]

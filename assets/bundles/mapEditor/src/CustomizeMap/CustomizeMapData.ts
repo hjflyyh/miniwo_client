@@ -3,6 +3,7 @@ import { MapEditor, NpcDebugTileData } from '../MapEditor';
 import { MapManager } from '../MapManager';
 import { AppConst } from '../../../../scripts/AppConst';
 import { MapModel } from '../../../../scripts/Model/MapModel';
+import { Utils } from '../../../../scripts/Utils/Utils';
 import { MapNpc } from '../MapNpc';
 import { NpcHeadNode } from '../NpcHeadNode';
 const { ccclass, property } = _decorator;
@@ -35,10 +36,7 @@ export class CustomizeMapData extends Component {
     }
 
     public getServerTimeMs(): number {
-        if (AppConst.WebSocketManager && AppConst.WebSocketManager.getServerTimestampMs) {
-            return AppConst.WebSocketManager.getServerTimestampMs();
-        }
-        return Date.now();
+        return Utils.getServerNowMs();
     }
 
     private extractServerTimestamp(data: any): number | null {

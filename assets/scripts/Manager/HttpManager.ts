@@ -121,6 +121,8 @@ export class HttpManager extends Component {
         .then(data => {
             console.log("请求回复：",data)
             EventSystem.send("HideJuhua" ,"HttpSend")
+            AppConst.WebSocketManager?.trySyncTimestampFromPayload?.(data);
+            AppConst.WebSocketManager?.trySyncTimestampFromPayload?.(data?.data);
             if(data.success){
                 if(data.data == null){
                     data.data = {}

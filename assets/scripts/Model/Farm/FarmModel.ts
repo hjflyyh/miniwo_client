@@ -2,6 +2,7 @@ import { AppConst } from '../../AppConst';
 import { MapModel } from '../MapModel';
 import { GameFarmNode } from '../../View/Game/GameFarmNode';
 import { nakamaRpc } from '../../Utils/NakamaRpc';
+import { Utils } from '../../Utils/Utils';
 import {
     FARM_EVENT_DATA_UPDATED,
     FARM_EVENT_WEATHER_UPDATED,
@@ -14,7 +15,6 @@ import {
     isFarmBuffActive,
     isPlotGrowing,
     isPlotHarvestable,
-    nowUnixSec,
     getPlotGrowRemainSec,
     resolveFarmPlotPhase,
     WeatherDataResponse,
@@ -541,11 +541,7 @@ export class FarmModel {
     }
 
     private nowUnixSec(): number {
-        const wsNow = AppConst.WebSocketManager?.getServerTimestampMs?.();
-        if (Number.isFinite(wsNow) && wsNow > 0) {
-            return Math.floor(wsNow / 1000);
-        }
-        return nowUnixSec();
+        return Utils.getServerNowSec();
     }
 
     private clearWeatherRefreshTimer(): void {

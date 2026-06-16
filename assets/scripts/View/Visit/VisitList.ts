@@ -54,15 +54,17 @@ export class VisitList extends Component {
         let showNpcs = UGCModel.getInstance().npcList
         console.log("VisitList refreshVisitList", showNpcs)
         for (let data of showNpcs) {
-            let next = this.npcList[data.npc_id]
-            if (!next) {
-                next = instantiate(this.visitCellRender)
-                next.active = true
-                next.parent = this.visitCellRender.parent
-                this.npcList[data.npc_id] = next
+                if(data.npc_sprite_url && data.npc_sprite_url != ""){
+                let next = this.npcList[data.npc_id]
+                if (!next) {
+                    next = instantiate(this.visitCellRender)
+                    next.active = true
+                    next.parent = this.visitCellRender.parent
+                    this.npcList[data.npc_id] = next
+                }
+                let cell = next.getComponent("VisitListCell") as VisitListCell;
+                cell.setNpcId(data)
             }
-            let cell = next.getComponent("VisitListCell") as VisitListCell;
-            cell.setNpcId(data)
         }
     }
 
