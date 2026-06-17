@@ -1,0 +1,27 @@
+{
+  "1": {
+    "daily_task": "系统售卖作物",
+    "base_world_exp": "104/20",
+    "daily_cap": "2000"
+  },
+  "2": {
+    "daily_task": "探索",
+    "base_world_exp": "5",
+    "daily_cap": null
+  },
+  "3": {
+    "daily_task": "解锁CG",
+    "base_world_exp": "2",
+    "daily_cap": null
+  },
+  "4": {
+    "daily_task": "种子等级升级",
+    "base_world_exp": "3",
+    "daily_cap": null
+  },
+  "5": {
+    "daily_task": "好感度突破（每50点）",
+    "base_world_exp": "5",
+    "daily_cap": null
+  }
+}
