@@ -179,9 +179,7 @@ export class CustomizeInput extends Component {
                         this.mapEditor.targetPos = newWorldPos;
                         this.mapEditor.lastMousePosition.set(currentPosition);
 
-                        // 确保相机在边界内
-                        this.mapEditor.targetPos.x = Math.max(this.mapEditor.minXCamera, Math.min(this.mapEditor.maxXCamera, this.mapEditor.targetPos.x));
-                        this.mapEditor.targetPos.y = Math.max(this.mapEditor.minYCamera, Math.min(this.mapEditor.maxYCamera, this.mapEditor.targetPos.y));
+                        this.mapEditor.clampCameraTarget(this.mapEditor.targetPos);
                     }
                 }
             }, this);
@@ -503,9 +501,7 @@ export class CustomizeInput extends Component {
             this.mapEditor.targetPos = newWorldPos;
             this.mapEditor.lastMousePosition.set(currentPosition);
 
-            // 确保相机在边界内
-            this.mapEditor.targetPos.x = Math.max(this.mapEditor.minXCamera, Math.min(this.mapEditor.maxXCamera, this.mapEditor.targetPos.x));
-            this.mapEditor.targetPos.y = Math.max(this.mapEditor.minYCamera, Math.min(this.mapEditor.maxYCamera, this.mapEditor.targetPos.y));
+            this.mapEditor.clampCameraTarget(this.mapEditor.targetPos);
         }
     }
 

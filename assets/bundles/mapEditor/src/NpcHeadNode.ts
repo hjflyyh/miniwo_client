@@ -307,9 +307,7 @@ export class NpcHeadNode extends Component {
             target.set(this.tmpWorld.x, this.tmpWorld.y, curCamPos.z);
         }
 
-        // 保证目标在相机边界内
-        target.x = Math.max(editor.minXCamera, Math.min(editor.maxXCamera, target.x));
-        target.y = Math.max(editor.minYCamera, Math.min(editor.maxYCamera, target.y));
+        editor.clampCameraTarget(target);
 
         // 按“速度=距离/时间”换算平滑时间
         const dist = Math.hypot(target.x - curCamPos.x, target.y - curCamPos.y);

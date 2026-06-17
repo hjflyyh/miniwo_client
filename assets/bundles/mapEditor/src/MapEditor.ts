@@ -402,9 +402,12 @@ export class MapEditor extends Component {
         // if (this.animator) {
         //     this.animator.loadAndPlay('res/NPCImage/zuozhu/walking-down', 'walking-down');
         // }
+
+        view.on('canvas-resize', this.onCanvasResize, this);
     }
 
     protected onDestroy(): void {
+        view.off('canvas-resize', this.onCanvasResize, this);
         this.disposeFarmBackgroundResources();
     }
 
@@ -521,10 +524,20 @@ export class MapEditor extends Component {
             const moveStep = 1 - Math.exp(-dt / this.smoothTime);
             let m = new Vec3(0, 0, 0);
             Vec3.lerp(m, this.mainCamera.node.getPosition(), this.targetPos, moveStep);
+            this.clampCameraTarget(m);
             this.mainCamera.node.setPosition(m);
         }
 
     }
+
+    private onCanvasResize = (): void => {
+        if (!this.mainCamera?.node?.isValid) {
+            return;
+        }
+        this.updateSizeLabel();
+        this.clampCameraTarget(this.targetPos);
+        this.mainCamera.node.setPosition(this.targetPos);
+    };
 
     private init() {
         MapManager.GetInstance().setMapEditor(this);
@@ -4220,15 +4233,33 @@ export class MapEditor extends Component {
 
         this.mainCamera.orthoHeight = this.currentOrthoSize;
 
-        // 获取相机视口大小
-        const viewportWidth = this.currentOrthoSize * view.getVisibleSize().width / 960;
-        const viewportHeight = this.currentOrthoSize * view.getVisibleSize().height / 960;
+        const visible = view.getVisibleSize();
+        const aspect = visible.height > 0 ? visible.width / visible.height : 1;
+        const halfW = this.currentOrthoSize * aspect;
+        const halfH = this.currentOrthoSize;
 
-        // 计算相机可移动的边界
-        this.minXCamera = this.boundaryMin.x + viewportWidth / 2;
-        this.maxXCamera = this.boundaryMax.x - viewportWidth / 2;
-        this.minYCamera = this.boundaryMin.y + viewportHeight / 2;
-        this.maxYCamera = this.boundaryMax.y - viewportHeight / 2;
+        this.minXCamera = this.boundaryMin.x + halfW;
+        this.maxXCamera = this.boundaryMax.x - halfW;
+        this.minYCamera = this.boundaryMin.y + halfH;
+        this.maxYCamera = this.boundaryMax.y - halfH;
+    }
+
+    /** 将相机目标位置限制在地图可见范围内；视口大于地图时居中。 */
+    public clampCameraTarget(pos: Vec3): void {
+        const centerX = (this.boundaryMin.x + this.boundaryMax.x) * 0.5;
+        const centerY = (this.boundaryMin.y + this.boundaryMax.y) * 0.5;
+
+        if (this.minXCamera <= this.maxXCamera) {
+            pos.x = Math.max(this.minXCamera, Math.min(this.maxXCamera, pos.x));
+        } else {
+            pos.x = centerX;
+        }
+
+        if (this.minYCamera <= this.maxYCamera) {
+            pos.y = Math.max(this.minYCamera, Math.min(this.maxYCamera, pos.y));
+        } else {
+            pos.y = centerY;
+        }
     }
 
     /**
@@ -4252,6 +4283,7 @@ export class MapEditor extends Component {
             cy = (this.boundaryMin.y + this.boundaryMax.y) * 0.5;
         }
         this.targetPos.set(cx, cy, z);
+        this.clampCameraTarget(this.targetPos);
         this.mainCamera.node.setPosition(this.targetPos);
     }
 
@@ -5311,8 +5343,7 @@ export class MapEditor extends Component {
 
         this.updateSizeLabel()
         if(this.targetPos){
-            this.targetPos.x = Math.max(this.minXCamera , Math.min(this.maxXCamera , this.targetPos.x))
-            this.targetPos.y = Math.max(this.minYCamera , Math.min(this.maxYCamera , this.targetPos.y))
+            this.clampCameraTarget(this.targetPos);
             this.mainCamera.node.setPosition(this.targetPos)
         }
     }
@@ -5321,8 +5352,7 @@ export class MapEditor extends Component {
         this.currentOrthoSize = Math.max(this.minOrthoSize, Math.min(this.maxOrthoSize, orthoSize));
         this.updateSizeLabel();
         if (this.targetPos) {
-            this.targetPos.x = Math.max(this.minXCamera, Math.min(this.maxXCamera, this.targetPos.x));
-            this.targetPos.y = Math.max(this.minYCamera, Math.min(this.maxYCamera, this.targetPos.y));
+            this.clampCameraTarget(this.targetPos);
             this.mainCamera.node.setPosition(this.targetPos);
         }
     }
@@ -5375,8 +5405,7 @@ export class MapEditor extends Component {
         }
         const z = this.mainCamera.node.position.z;
         this.targetPos.set(worldPos.x, worldPos.y, z);
-        this.targetPos.x = Math.max(this.minXCamera, Math.min(this.maxXCamera, this.targetPos.x));
-        this.targetPos.y = Math.max(this.minYCamera, Math.min(this.maxYCamera, this.targetPos.y));
+        this.clampCameraTarget(this.targetPos);
     }
 
     /** mapGameType>=0 的玩法地图不允许拆除整栋房屋 */
