@@ -1,0 +1,20 @@
+
+school-whiteblackborad.png
+size: 882,245
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+school-whiteblackborad
+  rotate: false
+  xy: 13, 13
+  size: 447, 219
+  orig: 447, 219
+  offset: 0, 0
+  index: -1
+school-whiteblackborad_txt
+  rotate: false
+  xy: 473, 82
+  size: 396, 150
+  orig: 396, 150
+  offset: 0, 0
+  index: -1

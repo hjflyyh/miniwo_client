@@ -1,0 +1,41 @@
+
+school-waterdispenser2.png
+size: 228,273
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+drink_box (1)
+  rotate: true
+  xy: 167, 164
+  size: 96, 48
+  orig: 96, 48
+  offset: 0, 0
+  index: -1
+drink_box (10)
+  rotate: true
+  xy: 13, 13
+  size: 114, 81
+  orig: 114, 81
+  offset: 0, 0
+  index: -1
+drink_box (2)
+  rotate: true
+  xy: 13, 140
+  size: 120, 141
+  orig: 120, 141
+  offset: 0, 0
+  index: -1
+drink_box (6)
+  rotate: true
+  xy: 167, 139
+  size: 12, 42
+  orig: 12, 42
+  offset: 0, 0
+  index: -1
+drink_box (7)
+  rotate: true
+  xy: 107, 33
+  size: 93, 87
+  orig: 93, 87
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,48 @@
+
+school_ip-cap.png
+size: 219,247
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+box (2)
+  rotate: true
+  xy: 13, 45
+  size: 189, 69
+  orig: 189, 69
+  offset: 0, 0
+  index: -1
+ip
+  rotate: false
+  xy: 95, 32
+  size: 111, 54
+  orig: 111, 54
+  offset: 0, 0
+  index: -1
+ip (1)
+  rotate: true
+  xy: 95, 99
+  size: 135, 102
+  orig: 135, 102
+  offset: 0, 0
+  index: -1
+ip (2)
+  rotate: false
+  xy: 13, 17
+  size: 39, 15
+  orig: 39, 15
+  offset: 0, 0
+  index: -1
+ip (3)
+  rotate: false
+  xy: 65, 16
+  size: 57, 3
+  orig: 57, 3
+  offset: 0, 0
+  index: -1
+ip (4)
+  rotate: false
+  xy: 135, 13
+  size: 12, 6
+  orig: 12, 6
+  offset: 0, 0
+  index: -1

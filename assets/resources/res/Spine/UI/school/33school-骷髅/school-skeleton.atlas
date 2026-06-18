@@ -1,0 +1,62 @@
+
+school-skeleton.png
+size: 539,146
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+skelon (1)
+  rotate: false
+  xy: 338, 25
+  size: 24, 108
+  orig: 24, 108
+  offset: 0, 0
+  index: -1
+skelon (2)
+  rotate: false
+  xy: 301, 25
+  size: 24, 108
+  orig: 24, 108
+  offset: 0, 0
+  index: -1
+skelon (3)
+  rotate: false
+  xy: 221, 25
+  size: 27, 108
+  orig: 27, 108
+  offset: 0, 0
+  index: -1
+skelon (4)
+  rotate: false
+  xy: 261, 25
+  size: 27, 108
+  orig: 27, 108
+  offset: 0, 0
+  index: -1
+skelon (5)
+  rotate: false
+  xy: 460, 64
+  size: 66, 69
+  orig: 66, 69
+  offset: 0, 0
+  index: -1
+skelon (6)
+  rotate: false
+  xy: 375, 37
+  size: 72, 96
+  orig: 72, 96
+  offset: 0, 0
+  index: -1
+skelon (7)
+  rotate: false
+  xy: 460, 15
+  size: 60, 36
+  orig: 60, 36
+  offset: 0, 0
+  index: -1
+skelon_hang
+  rotate: true
+  xy: 13, 13
+  size: 120, 195
+  orig: 120, 195
+  offset: 0, 0
+  index: -1

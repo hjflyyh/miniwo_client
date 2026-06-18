@@ -62,6 +62,8 @@ export type GameFarmPlotClickPayload = {
     /** 服务端 farm_id；无匹配时为 null */
     farmId: number | null;
     plotNodeName?: string;
+    /** 地块是否已解锁（服务端 farm_data 中存在该 farm_id） */
+    isUnlocked: boolean;
 };
 
 type PlotHit = {
@@ -95,6 +97,9 @@ export class GameFarmNode extends Component {
     @property(Prefab)
     plantingEndPrefab: Prefab = null;
 
+    @property(Node)
+    weilan : Node
+
     private static readonly TAP_MOVE_THRESHOLD = 12;
 
     private wateringPrefabResolved: Prefab | null = null;
@@ -107,7 +112,6 @@ export class GameFarmNode extends Component {
 
     private readonly plotBaseScale = new Map<Node, Vec3>();
     private functionOverlayRoot: Node | null = null;
-    private serverFarmIdSet = new Set<number>();
     private farmDataListener: Record<string, unknown> = {};
 
     private touchStartPos: Vec2 | null = null;
@@ -260,11 +264,6 @@ export class GameFarmNode extends Component {
     private syncPlotVisibilityFromModel() {
         const farmModel = FarmModel.getInstance();
         const farmCount = farmModel.getFarmCount();
-        this.serverFarmIdSet.clear();
-        const plots = farmModel.getAllPlots();
-        for (let i = 0; i < plots.length; i++) {
-            this.serverFarmIdSet.add(plots[i].farm_id);
-        }
 
         const children = this.node.children;
         for (let i = 0; i < children.length; i++) {
@@ -275,23 +274,23 @@ export class GameFarmNode extends Component {
             }
 
             const farmId = toServerFarmId(this.farmIndex, plotIndex, farmCount);
-            const visible =
-                farmId != null &&
-                this.serverFarmIdSet.has(farmId) &&
-                farmModel.getPlot(farmId) != null;
+            const unlocked = this.isPlotUnlocked(farmId);
 
-            // plotNode.active = visible;
-            if(!visible){
-                plotNode.getComponent(Sprite).color = Color.GRAY
-            }else{
-                plotNode.getComponent(Sprite).color = Color.WHITE
+            // plotNode.active = unlocked;
+            if (!unlocked) {
+                plotNode.getComponent(Sprite).color = Color.GRAY;
+            } else {
+                plotNode.getComponent(Sprite).color = Color.WHITE;
+                if(this.weilan){
+                    this.weilan.active = false
+                }
             }
-            if (visible) {
+            if (unlocked) {
                 const base = this.plotBaseScale.get(plotNode);
                 if (base) {
                     plotNode.setScale(base);
                 }
-                this.refreshPlotNode(plotNode, farmId);
+                this.refreshPlotNode(plotNode, farmId!);
             } else {
                 this.setPlotWateringVisible(plotNode, false);
                 this.setPlotPlantingVisible(plotNode, false);
@@ -765,16 +764,20 @@ export class GameFarmNode extends Component {
         return editor?.mainCamera ?? null;
     }
 
-    private resolveFarmIdForPlot(plotIndex: number): number | null {
-        const farmId = toServerFarmId(
+    private mapFarmIdForPlot(plotIndex: number): number | null {
+        return toServerFarmId(
             this.farmIndex,
             plotIndex,
             FarmModel.getInstance().getFarmCount()
         );
-        if (farmId == null || !this.serverFarmIdSet.has(farmId)) {
-            return null;
+    }
+
+    /** 地块是否已解锁：farm_id 可映射且服务端 farm_data 中存在 */
+    private isPlotUnlocked(farmId: number | null): boolean {
+        if (farmId == null) {
+            return false;
         }
-        return farmId;
+        return FarmModel.getInstance().getPlot(farmId) != null;
     }
 
     private hitTestPlotAtScreen(screen: Vec2): PlotHit | null {
@@ -793,10 +796,6 @@ export class GameFarmNode extends Component {
             if (plotIndex < 0) {
                 continue;
             }
-            const farmId = this.resolveFarmIdForPlot(plotIndex);
-            if (farmId == null) {
-                continue;
-            }
             const ui = plotNode.getComponent(UITransform);
             if (!ui) {
                 continue;
@@ -805,7 +804,11 @@ export class GameFarmNode extends Component {
             const halfW = ui.width * 0.5;
             const halfH = ui.height * 0.5;
             if (local.x >= -halfW && local.x <= halfW && local.y >= -halfH && local.y <= halfH) {
-                return { node: plotNode, plotIndex, farmId };
+                return {
+                    node: plotNode,
+                    plotIndex,
+                    farmId: this.mapFarmIdForPlot(plotIndex),
+                };
             }
         }
         return null;
@@ -841,11 +844,13 @@ export class GameFarmNode extends Component {
     }
 
     private onPlotClick(hit: PlotHit) {
+        const unlocked = this.isPlotUnlocked(hit.farmId);
         const payload: GameFarmPlotClickPayload = {
             farmIndex: Number.isFinite(Number(this.farmIndex)) ? Number(this.farmIndex) : 0,
             plotIndex: hit.plotIndex,
             farmId: hit.farmId,
             plotNodeName: hit.node.name,
+            isUnlocked: unlocked,
         };
         EventSystem.send(GAME_FARM_PLOT_CLICK_EVENT, payload);
     }

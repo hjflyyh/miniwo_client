@@ -1,0 +1,55 @@
+
+school_ip-chair_cap.png
+size: 520,191
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+box (2)
+  rotate: false
+  xy: 203, 109
+  size: 189, 69
+  orig: 189, 69
+  offset: 0, 0
+  index: -1
+ip
+  rotate: false
+  xy: 203, 42
+  size: 111, 54
+  orig: 111, 54
+  offset: 0, 0
+  index: -1
+ip (1)
+  rotate: true
+  xy: 405, 43
+  size: 135, 102
+  orig: 135, 102
+  offset: 0, 0
+  index: -1
+ip (2)
+  rotate: false
+  xy: 327, 81
+  size: 39, 15
+  orig: 39, 15
+  offset: 0, 0
+  index: -1
+ip (3)
+  rotate: false
+  xy: 203, 26
+  size: 57, 3
+  orig: 57, 3
+  offset: 0, 0
+  index: -1
+ip (4)
+  rotate: false
+  xy: 327, 62
+  size: 12, 6
+  orig: 12, 6
+  offset: 0, 0
+  index: -1
+leather_sofa (1)
+  rotate: true
+  xy: 13, 13
+  size: 165, 177
+  orig: 165, 177
+  offset: 0, 0
+  index: -1

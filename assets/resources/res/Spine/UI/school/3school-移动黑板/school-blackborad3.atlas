@@ -1,0 +1,20 @@
+
+school-blackborad3.png
+size: 486,308
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+b-blackborad3
+  rotate: true
+  xy: 13, 13
+  size: 282, 324
+  orig: 282, 324
+  offset: 0, 0
+  index: -1
+b-blackborad3_txt
+  rotate: true
+  xy: 350, 88
+  size: 207, 123
+  orig: 207, 123
+  offset: 0, 0
+  index: -1

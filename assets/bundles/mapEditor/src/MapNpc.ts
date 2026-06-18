@@ -156,7 +156,11 @@ export class MapNpc extends Component {
     private useHorizontalMoveAnim = false;
     private facingScaleX = 1;
 
+    private tiredNode : Node
+
     start() {
+        this.tiredNode = this.node.getChildByName("tired")
+        this.tiredNode.active = false
         this.schedule(()=>{
             this.closeDialogTime--;
             if(this.closeDialogTime <= 0){  
@@ -252,7 +256,7 @@ export class MapNpc extends Component {
 
     private closeDialogTime = 10
     private dialogTime = 10
-    public onServerDialog(data){
+    public onServerDialog(data , tili){
         if(data.dialogue_idle != null && data.dialogue_idle["id"] != null && AppConst.LanguageManager.getDialogString(data.dialogue_idle["id"]) != ""){
             this.dialogueNode.active = true
             this.dialogueLabel.string = AppConst.LanguageManager.getDialogString(data.dialogue_idle["id"])
@@ -263,6 +267,18 @@ export class MapNpc extends Component {
             this.closeDialogTime = this.dialogTime
         }else{
             // this.dialogueNode.active = false
+        }
+        this.setTili(tili)
+    }
+
+    public setTili(tili){
+        if(this.tiredNode){
+            if(tili <= 200){
+                this.dialogueNode.active = false
+                this.tiredNode.active = true
+            }else{
+                this.tiredNode.active = false
+            }
         }
     }
 

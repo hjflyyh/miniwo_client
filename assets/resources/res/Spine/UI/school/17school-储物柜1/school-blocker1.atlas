@@ -1,0 +1,27 @@
+
+school-blocker1.png
+size: 532,305
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+cabinet (4)
+  rotate: true
+  xy: 13, 13
+  size: 279, 393
+  orig: 279, 393
+  offset: 0, 0
+  index: -1
+cabinet_door (2)
+  rotate: false
+  xy: 504, 142
+  size: 15, 150
+  orig: 15, 150
+  offset: 0, 0
+  index: -1
+cabinet_door (5)
+  rotate: false
+  xy: 419, 145
+  size: 72, 147
+  orig: 72, 147
+  offset: 0, 0
+  index: -1

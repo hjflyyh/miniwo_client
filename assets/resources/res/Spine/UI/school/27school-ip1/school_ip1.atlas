@@ -1,0 +1,41 @@
+
+school_ip1.png
+size: 363,130
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+box (2)
+  rotate: false
+  xy: 13, 48
+  size: 189, 69
+  orig: 189, 69
+  offset: 0, 0
+  index: -1
+ip (1)
+  rotate: false
+  xy: 215, 15
+  size: 135, 102
+  orig: 135, 102
+  offset: 0, 0
+  index: -1
+ip (2)
+  rotate: false
+  xy: 83, 20
+  size: 39, 15
+  orig: 39, 15
+  offset: 0, 0
+  index: -1
+ip (3)
+  rotate: false
+  xy: 13, 32
+  size: 57, 3
+  orig: 57, 3
+  offset: 0, 0
+  index: -1
+ip (4)
+  rotate: false
+  xy: 13, 13
+  size: 12, 6
+  orig: 12, 6
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,27 @@
+
+school-black-drapes1.png
+size: 251,412
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+curtain (1)
+  rotate: true
+  xy: 13, 224
+  size: 81, 225
+  orig: 81, 225
+  offset: 0, 0
+  index: -1
+curtain (2)
+  rotate: true
+  xy: 13, 318
+  size: 81, 225
+  orig: 81, 225
+  offset: 0, 0
+  index: -1
+curtain (3)
+  rotate: true
+  xy: 13, 13
+  size: 198, 216
+  orig: 198, 216
+  offset: 0, 0
+  index: -1

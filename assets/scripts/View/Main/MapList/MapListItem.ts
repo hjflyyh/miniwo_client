@@ -29,9 +29,15 @@ export class MapListItem extends Component implements InfiniteCell{
     isLike : Node
 
     mapData
+    data
 
     start() {
         EventSystem.addListent("WebSocketNotifications", this.OnWebSocketNotifications, this)
+        EventSystem.addListent("OnCodeMapLevelPushContent" , this.OnCodeMapLevelPushContent , this)
+    }
+
+    OnCodeMapLevelPushContent(){
+        this.UpdateContent(this.data)
     }
 
     OnWebSocketNotifications(data){
@@ -60,10 +66,11 @@ export class MapListItem extends Component implements InfiniteCell{
     }
 
     UpdateContent(data: any): void {
+        this.data = data
         let mapData = MapModel.getInstance().sceneMaps[data]
         this.mapData = mapData
         this.mapName.string = mapData.map_name
-        this.mapInfo.string = mapData.map_worldview
+        this.mapInfo.string = "Lv." + mapData.map_level
         this.likeNumber.string = mapData.map_like_count
         this.isLike.active = mapData.liked
 

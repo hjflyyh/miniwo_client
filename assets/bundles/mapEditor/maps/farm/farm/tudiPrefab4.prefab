@@ -125,22 +125,25 @@
       },
       {
         "__id__": 352
+      },
+      {
+        "__id__": 362
       }
     ],
     "_active": true,
     "_components": [
       {
-        "__id__": 362
+        "__id__": 368
       },
       {
-        "__id__": 364
+        "__id__": 370
       },
       {
-        "__id__": 366
+        "__id__": 372
       }
     ],
     "_prefab": {
-      "__id__": 368
+      "__id__": 374
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -8380,6 +8383,142 @@
     "nestedPrefabInstanceRoots": null
   },
   {
+    "__type__": "cc.Node",
+    "_name": "Sprite",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "_parent": {
+      "__id__": 1
+    },
+    "_children": [],
+    "_active": true,
+    "_components": [
+      {
+        "__id__": 363
+      },
+      {
+        "__id__": 365
+      }
+    ],
+    "_prefab": {
+      "__id__": 367
+    },
+    "_lpos": {
+      "__type__": "cc.Vec3",
+      "x": -3,
+      "y": 0,
+      "z": 0
+    },
+    "_lrot": {
+      "__type__": "cc.Quat",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "w": 1
+    },
+    "_lscale": {
+      "__type__": "cc.Vec3",
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "_mobility": 0,
+    "_layer": 1073741824,
+    "_euler": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.UITransform",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 362
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 364
+    },
+    "_contentSize": {
+      "__type__": "cc.Size",
+      "width": 387,
+      "height": 384
+    },
+    "_anchorPoint": {
+      "__type__": "cc.Vec2",
+      "x": 0.5,
+      "y": 0.5
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "fb9bquB4BKOZkuSxq++xEI"
+  },
+  {
+    "__type__": "cc.Sprite",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 362
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 366
+    },
+    "_customMaterial": null,
+    "_srcBlendFactor": 2,
+    "_dstBlendFactor": 4,
+    "_color": {
+      "__type__": "cc.Color",
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "_spriteFrame": {
+      "__uuid__": "3ffd2988-6cef-448c-ba14-4d06051c5e79@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "_type": 0,
+    "_fillType": 0,
+    "_sizeMode": 1,
+    "_fillCenter": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
+    },
+    "_fillStart": 0,
+    "_fillRange": 0,
+    "_isTrimmedMode": true,
+    "_useGrayscale": false,
+    "_atlas": null,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "64ROP3281ETK7dVPRarGKL"
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 1
+    },
+    "asset": {
+      "__id__": 0
+    },
+    "fileId": "77mUy3sjtLeKM59bSDEv10",
+    "instance": null,
+    "targetOverrides": null,
+    "nestedPrefabInstanceRoots": null
+  },
+  {
     "__type__": "cc.UITransform",
     "_name": "",
     "_objFlags": 0,
@@ -8389,7 +8528,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 363
+      "__id__": 369
     },
     "_contentSize": {
       "__type__": "cc.Size",
@@ -8417,7 +8556,7 @@
     },
     "_enabled": false,
     "__prefab": {
-      "__id__": 365
+      "__id__": 371
     },
     "_resizeMode": 1,
     "_layoutType": 3,
@@ -8455,7 +8594,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 367
+      "__id__": 373
     },
     "farmIndex": 3,
     "clickScale": 0.9,
@@ -8463,10 +8602,16 @@
       "__uuid__": "a83b2876-33a9-4138-9182-5cfa3f231dee",
       "__expectedType__": "cc.Prefab"
     },
-    "plantingPrefab": null,
+    "plantingPrefab": {
+      "__uuid__": "38b00983-22f6-4405-8540-61bf85413eec",
+      "__expectedType__": "cc.Prefab"
+    },
     "plantingEndPrefab": {
       "__uuid__": "38dd7fe4-d929-4deb-bf76-06a845636ac8",
       "__expectedType__": "cc.Prefab"
+    },
+    "weilan": {
+      "__id__": 362
     },
     "_id": ""
   },

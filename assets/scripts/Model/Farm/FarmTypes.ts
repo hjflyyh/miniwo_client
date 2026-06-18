@@ -125,6 +125,18 @@ export interface FarmDataResponse {
     farms?: FarmPlotDto[];
 }
 
+export interface FarmOpenProgress {
+    map_level: number;
+    map_exp: number;
+    farm_unlocked: number;
+    max_farm_at_level: number;
+}
+
+export interface OpenFarmResponse extends FarmDataResponse {
+    farm_id?: number;
+    progress?: FarmOpenProgress;
+}
+
 export enum FarmPlotPhase {
     Idle,
     Planted,

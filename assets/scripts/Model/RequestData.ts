@@ -19,6 +19,7 @@ export module network {
         CodeFarmData = 109, // 我的农场数据
         CodeSeedLv   = 110, // 种子种植等级与经验
         CodeMapCoverComplete = 112, //地图封面
+        CodeMapLevelPushContent = 113
     }
 
     export enum FollowSocialCode {

@@ -1,0 +1,27 @@
+
+school_vending-machine2.png
+size: 441,278
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+drink_saler (1)
+  rotate: true
+  xy: 13, 13
+  size: 252, 372
+  orig: 252, 372
+  offset: 0, 0
+  index: -1
+drink_saler (6)
+  rotate: false
+  xy: 398, 93
+  size: 27, 42
+  orig: 27, 42
+  offset: 0, 0
+  index: -1
+drink_saler (8)
+  rotate: true
+  xy: 398, 148
+  size: 117, 30
+  orig: 117, 30
+  offset: 0, 0
+  index: -1

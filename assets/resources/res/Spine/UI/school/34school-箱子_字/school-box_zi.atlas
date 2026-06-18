@@ -1,0 +1,20 @@
+
+school-box_zi.png
+size: 186,98
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+lbox1
+  rotate: false
+  xy: 13, 28
+  size: 78, 57
+  orig: 78, 57
+  offset: 0, 0
+  index: -1
+lbox2
+  rotate: true
+  xy: 104, 13
+  size: 72, 69
+  orig: 72, 69
+  offset: 0, 0
+  index: -1

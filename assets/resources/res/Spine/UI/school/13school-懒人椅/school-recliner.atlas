@@ -1,0 +1,13 @@
+
+school-recliner.png
+size: 236,218
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+lazy_sofa
+  rotate: false
+  xy: 13, 13
+  size: 210, 192
+  orig: 210, 192
+  offset: 0, 0
+  index: -1

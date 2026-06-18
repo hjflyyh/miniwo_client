@@ -486,6 +486,15 @@ export class MapModel {
                     }
                 }                
             }
+        }else if(data.code == network.ServerCode.CodeMapLevelPushContent){
+            let contentData = JSON.parse(data.content)
+            let map_level = contentData.map_level
+            let map_exp = contentData.map_exp
+
+            this.my_map_data.map_level = map_level;
+            this.my_map_data.map_exp = map_exp;
+            this.sceneMaps[0] = this.my_map_data
+            EventSystem.send("OnCodeMapLevelPushContent")
         }
     }
 

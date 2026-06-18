@@ -283,7 +283,7 @@ export class CustomizeMapData extends Component {
                                 target_tile_y: Number(npcData.target_tile_y),
                                 timestamp: Number(npcData.timestamp ?? npcData.ts ?? data.payload.timestamp ?? serverTs ?? globalNowMs),
                             })
-                            npc.onServerDialog(npcData)
+                            npc.onServerDialog(npcData , npcData.stamina)
                         }else if(npcData.state == 2){
                             if(!npc.inited){
                                 npc.onServerMove({
@@ -296,7 +296,7 @@ export class CustomizeMapData extends Component {
                                     timestamp: Number(npcData.timestamp ?? npcData.ts ?? data.payload.timestamp ?? serverTs ?? globalNowMs),
                                 })
                             }
-                            npc.onServerDialog(npcData)
+                            npc.onServerDialog(npcData , npcData.stamina)
                         }
                     }
                 }

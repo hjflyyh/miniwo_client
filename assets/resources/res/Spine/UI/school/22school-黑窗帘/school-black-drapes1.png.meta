@@ -1,0 +1,134 @@
+{
+  "ver": "1.0.27",
+  "importer": "image",
+  "imported": true,
+  "uuid": "e711837b-8b56-4e19-9da6-1e4ee55ec512",
+  "files": [
+    ".json",
+    ".png"
+  ],
+  "subMetas": {
+    "6c48a": {
+      "importer": "texture",
+      "uuid": "e711837b-8b56-4e19-9da6-1e4ee55ec512@6c48a",
+      "displayName": "school-black-drapes1",
+      "id": "6c48a",
+      "name": "texture",
+      "userData": {
+        "wrapModeS": "clamp-to-edge",
+        "wrapModeT": "clamp-to-edge",
+        "imageUuidOrDatabaseUri": "e711837b-8b56-4e19-9da6-1e4ee55ec512",
+        "isUuid": true,
+        "visible": false,
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "none",
+        "anisotropy": 0
+      },
+      "ver": "1.0.22",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "f9941": {
+      "importer": "sprite-frame",
+      "uuid": "e711837b-8b56-4e19-9da6-1e4ee55ec512@f9941",
+      "displayName": "school-black-drapes1",
+      "id": "f9941",
+      "name": "spriteFrame",
+      "userData": {
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 0,
+        "offsetY": 0,
+        "trimX": 13,
+        "trimY": 13,
+        "width": 225,
+        "height": 386,
+        "rawWidth": 251,
+        "rawHeight": 412,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [
+            -112.5,
+            -193,
+            0,
+            112.5,
+            -193,
+            0,
+            -112.5,
+            193,
+            0,
+            112.5,
+            193,
+            0
+          ],
+          "indexes": [
+            0,
+            1,
+            2,
+            2,
+            1,
+            3
+          ],
+          "uv": [
+            13,
+            399,
+            238,
+            399,
+            13,
+            13,
+            238,
+            13
+          ],
+          "nuv": [
+            0.05179282868525897,
+            0.03155339805825243,
+            0.9482071713147411,
+            0.03155339805825243,
+            0.05179282868525897,
+            0.9684466019417476,
+            0.9482071713147411,
+            0.9684466019417476
+          ],
+          "minPos": [
+            -112.5,
+            -193,
+            0
+          ],
+          "maxPos": [
+            112.5,
+            193,
+            0
+          ]
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "e711837b-8b56-4e19-9da6-1e4ee55ec512@6c48a",
+        "atlasUuid": "",
+        "trimType": "auto"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "type": "sprite-frame",
+    "fixAlphaTransparencyArtifacts": false,
+    "hasAlpha": true,
+    "redirect": "e711837b-8b56-4e19-9da6-1e4ee55ec512@6c48a"
+  }
+}

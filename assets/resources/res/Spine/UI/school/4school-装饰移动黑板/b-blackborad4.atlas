@@ -1,0 +1,69 @@
+
+b-blackborad4.png
+size: 807,313
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+blackboard (1)
+  rotate: false
+  xy: 667, 68
+  size: 57, 69
+  orig: 57, 69
+  offset: 0, 0
+  index: -1
+blackboard (14)
+  rotate: false
+  xy: 350, 150
+  size: 396, 150
+  orig: 396, 150
+  offset: 0, 0
+  index: -1
+blackboard (17)
+  rotate: false
+  xy: 350, 14
+  size: 207, 123
+  orig: 207, 123
+  offset: 0, 0
+  index: -1
+blackboard (18)
+  rotate: true
+  xy: 13, 18
+  size: 282, 324
+  orig: 282, 324
+  offset: 0, 0
+  index: -1
+blackboard (2)
+  rotate: false
+  xy: 737, 68
+  size: 57, 69
+  orig: 57, 69
+  offset: 0, 0
+  index: -1
+blackboard (3)
+  rotate: false
+  xy: 722, 34
+  size: 27, 21
+  orig: 27, 21
+  offset: 0, 0
+  index: -1
+blackboard (4)
+  rotate: false
+  xy: 759, 270
+  size: 24, 30
+  orig: 24, 30
+  offset: 0, 0
+  index: -1
+blackboard (5)
+  rotate: false
+  xy: 570, 29
+  size: 84, 108
+  orig: 84, 108
+  offset: 0, 0
+  index: -1
+blackboard (6)
+  rotate: false
+  xy: 667, 13
+  size: 42, 42
+  orig: 42, 42
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,34 @@
+
+school-tv.png
+size: 334,206
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+TV
+  rotate: true
+  xy: 13, 13
+  size: 180, 150
+  orig: 180, 150
+  offset: 0, 0
+  index: -1
+TV_screen
+  rotate: true
+  xy: 176, 127
+  size: 66, 96
+  orig: 66, 96
+  offset: 0, 0
+  index: -1
+TV_screen2
+  rotate: false
+  xy: 176, 18
+  size: 66, 96
+  orig: 66, 96
+  offset: 0, 0
+  index: -1
+TV_screen3 
+  rotate: false
+  xy: 255, 18
+  size: 66, 96
+  orig: 66, 96
+  offset: 0, 0
+  index: -1

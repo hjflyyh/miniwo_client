@@ -912,8 +912,8 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 94.784,
-      "y": -302.495,
+      "x": 90.672,
+      "y": -325.986,
       "z": 0
     },
     "_lrot": {
@@ -959,7 +959,7 @@
     "_anchorPoint": {
       "__type__": "cc.Vec2",
       "x": 0,
-      "y": 1
+      "y": 0.5
     },
     "_id": ""
   },
@@ -991,9 +991,9 @@
     },
     "_string": "地图介绍地图介绍地图介绍地图介绍地图介绍地图介绍地图介绍地图介绍",
     "_horizontalAlign": 0,
-    "_verticalAlign": 0,
-    "_actualFontSize": 20,
-    "_fontSize": 20,
+    "_verticalAlign": 1,
+    "_actualFontSize": 22,
+    "_fontSize": 22,
     "_fontFamily": "Arial",
     "_lineHeight": 30,
     "_overflow": 3,

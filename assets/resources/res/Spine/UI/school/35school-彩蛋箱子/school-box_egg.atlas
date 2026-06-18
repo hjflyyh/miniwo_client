@@ -1,0 +1,34 @@
+
+school-box_egg.png
+size: 195,165
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+box1
+  rotate: false
+  xy: 13, 13
+  size: 78, 57
+  orig: 78, 57
+  offset: 0, 0
+  index: -1
+box2
+  rotate: false
+  xy: 13, 83
+  size: 72, 69
+  orig: 72, 69
+  offset: 0, 0
+  index: -1
+box_egg1
+  rotate: false
+  xy: 104, 13
+  size: 78, 57
+  orig: 78, 57
+  offset: 0, 0
+  index: -1
+box_egg2
+  rotate: false
+  xy: 98, 83
+  size: 72, 69
+  orig: 72, 69
+  offset: 0, 0
+  index: -1

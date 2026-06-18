@@ -1,0 +1,20 @@
+
+school-miniborad.png
+size: 228,131
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+school-miniborad
+  rotate: false
+  xy: 13, 13
+  size: 129, 105
+  orig: 129, 105
+  offset: 0, 0
+  index: -1
+school-miniborad_txt
+  rotate: true
+  xy: 155, 25
+  size: 93, 60
+  orig: 93, 60
+  offset: 0, 0
+  index: -1

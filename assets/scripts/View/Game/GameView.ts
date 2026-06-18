@@ -1,4 +1,4 @@
-import { _decorator, Component, EditBox, instantiate, Label, math, Node, resources, Sprite, SpriteFrame, UITransform, director, Vec3 } from 'cc';
+import { _decorator, Component, EditBox, instantiate, Label, math, Node, resources, Sprite, SpriteFrame, UITransform, director, Vec3, tween } from 'cc';
 import { AppConst } from '../../AppConst';
 import { network } from '../../Model/RequestData';
 import { RoleModel } from '../../Model/RoleModel';
@@ -14,6 +14,7 @@ import { GameSendRewardCell } from './GameSendRewardCell';
 import { BagModel } from '../../Model/BagModel';
 import { GAME_FARM_PLOT_CLICK_EVENT, GameFarmPlotClickPayload } from './GameFarmNode';
 import { FarmModel } from '../../Model/Farm/FarmModel';
+import { getOpenFarmRequirement } from '../../Model/Farm/FarmUnlockConfig';
 import {
     GAME_FARM_SEED_CHOOSE_EVENT,
     GameFarmChooseCell,
@@ -47,6 +48,9 @@ export class GameView extends Component {
 
     @property(Node)
     atNpcCell: Node = null
+
+    @property(Node)
+    leftBottomNode = null
 
     private atNpcCells = []
 
@@ -112,6 +116,12 @@ export class GameView extends Component {
 
     private selectedFarmPlot: GameFarmPlotClickPayload | null = null;
 
+    @property(Node)
+    myNode : Node = null
+
+    @property(Node)
+    otherNode : Node = null
+
     start() {
         if(Utils.handleAdaptation()){
             this.node.scale = new Vec3(0.7, 0.7 , 1);
@@ -160,6 +170,10 @@ export class GameView extends Component {
         if (MapModel.getInstance().isFarmMapGameType()) {
             void FarmModel.getInstance().enterFarm();
         }
+
+        console.log(MapModel.getInstance().map_detail)
+        this.myNode.active = MapModel.getInstance().map_detail.player_id == RoleModel.getInstance().playerId
+        this.otherNode.active = MapModel.getInstance().map_detail.player_id != RoleModel.getInstance().playerId
     }
 
     private onConfigLoadAll() {
@@ -314,13 +328,19 @@ export class GameView extends Component {
 
     private async onGameFarmPlotClick(payload: GameFarmPlotClickPayload) {
         if (!this.isCurrentMapOwnedBySelf()) {
-            EventSystem.send('ShowTips', '只能在自己的农场种植哦~');
+            EventSystem.send('ShowTips', 'You can only grow it on your own farm.~');
             return;
         }
         const plotIndex = Number(payload?.plotIndex);
         if (!Number.isFinite(plotIndex) || plotIndex < 0) {
             return;
         }
+
+        if (!payload.isUnlocked) {
+            this.onGameFarmLockedPlotClick(payload);
+            return;
+        }
+
         const farmId = payload?.farmId != null ? Number(payload.farmId) : null;
         if (farmId == null || !Number.isFinite(farmId) || farmId <= 0) {
             return;
@@ -354,6 +374,7 @@ export class GameView extends Component {
             plotIndex,
             farmId,
             plotNodeName: payload?.plotNodeName,
+            isUnlocked: true,
         };
         if (this.rewardTarget) {
             this.rewardTarget.active = false;
@@ -365,6 +386,74 @@ export class GameView extends Component {
         if (this.farmNode) {
             this.farmNode.active = true;
         }
+    }
+
+    /** 未解锁（置灰）地块点击：校验上一块田、等级与道具后调用 open_farm */
+    private async onGameFarmLockedPlotClick(payload: GameFarmPlotClickPayload) {
+        const farmId = payload?.farmId != null ? Math.floor(Number(payload.farmId)) : 0;
+        if (!Number.isFinite(farmId) || farmId <= 0) {
+            return;
+        }
+
+        const farmModel = FarmModel.getInstance();
+
+        if (farmId > 1 && !farmModel.isPlotUnlocked(farmId - 1)) {
+            EventSystem.send('ShowTips', 'Need to enable the previous field');
+            return;
+        }
+
+        const requirement = getOpenFarmRequirement(farmId);
+        if (!requirement) {
+            EventSystem.send('ShowTips', 'Cannot open this farmland');
+            return;
+        }
+
+        const mapLevel = this.getCurrentMapLevel();
+        if (mapLevel < requirement.requiredLevel) {
+            EventSystem.send('ShowTips', `The map level is insufficient. It needs to be increased to... Lv.${requirement.requiredLevel}`);
+            return;
+        }
+
+        const { openItemId, openItemCount } = requirement.config;
+        if (openItemId > 0 && openItemCount > 0) {
+            const owned = BagModel.getInstance().getItemCount(openItemId);
+            if (owned < openItemCount) {
+                const itemName = this.getItemDisplayName(openItemId);
+                EventSystem.send('ShowTips', `${itemName} is insufficient, Needs: ${openItemCount}`);
+                return;
+            }
+        }
+
+        this.upFramId = farmId
+        AppConst.PanelManager.openView("res/View/Common/CheckCancelCommon" , {
+            "showText" : "Do you want to use " + openItemCount + " gold coins to unlock a new farmland?",
+            "callback" : this.checkUpFram ,
+            "callbackParent" : this
+        })
+    }
+
+    private upFramId
+    private async checkUpFram(){
+        const result = await FarmModel.getInstance().openFarm(this.upFramId);
+        if (result.ok) {
+            EventSystem.send('ShowTips', 'The field cultivation was successful.');
+        } else {
+            EventSystem.send('ShowTips', result.message ?? 'The attempt to cultivate the land failed.');
+        }
+    }
+
+    private getCurrentMapLevel(): number {
+        const mapModel = MapModel.getInstance();
+        const level =
+            mapModel.my_map_data?.map_level ??
+            mapModel.map_detail?.map_level ??
+            mapModel.showMatchPayLoad?.map_level;
+        return Math.floor(Number(level) || 0);
+    }
+
+    private getItemDisplayName(itemId: number): string {
+        const cfg = AppConst.JSONManager.getItem('item', `${itemId}`);
+        return cfg?.name_cn || cfg?.name_en || '道具';
     }
 
     /** 打开种子面板前：重设 farmId 并重新 load 图标（避免 Sprite 空 spriteFrame onEnable） */
@@ -616,6 +705,11 @@ export class GameView extends Component {
     public onClickShowChatUI(){ 
         this.showChatUI.active = !this.showChatUI.active
         this.showChatArrow.setScale(1 , this.showChatUI.active ? 1 : -1 , 1)
+        if(!this.showChatUI.active){
+            tween(this.leftBottomNode).to(0.2 , {position : new Vec3(this.leftBottomNode.x, -220, 1)}).start()
+        }else{
+            tween(this.leftBottomNode).to(0.2 , {position : new Vec3(this.leftBottomNode.x, 68, 1)}).start()
+        }
     }
 
     public leaveMap(){

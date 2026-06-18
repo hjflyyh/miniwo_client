@@ -12,6 +12,8 @@ import {
     FarmPlotPhase,
     FarmPlotDto,
     FarmPlotState,
+    OpenFarmResponse,
+    FarmOpenProgress,
     isFarmBuffActive,
     isPlotGrowing,
     isPlotHarvestable,
@@ -436,6 +438,66 @@ export class FarmModel {
         }
         this.applyFarms(res.farms, 'farm_data', { replaceAll: true });
         this.logFarmSnapshot();
+    }
+
+    /** 开启新农田（open_farm） */
+    public async openFarm(farmId: number): Promise<{ ok: boolean; message?: string }> {
+        if (!this.active) {
+            return { ok: false, message: '未在农场中' };
+        }
+        const id = Math.floor(Number(farmId) || 0);
+        if (!Number.isFinite(id) || id <= 0) {
+            return { ok: false, message: 'invalid params' };
+        }
+
+        let res: OpenFarmResponse | null = null;
+        try {
+            res = await nakamaRpc<OpenFarmResponse>('open_farm', { farm_id: id });
+        } catch (e: any) {
+            console.log('[FarmModel] open_farm 请求异常', e?.message ?? e);
+            return { ok: false, message: e?.message ?? '请求失败' };
+        }
+
+        if (!res || res.success === false) {
+            console.log('[FarmModel] open_farm 业务失败', res?.message ?? 'unknown');
+            return { ok: false, message: res?.message ?? '开田失败' };
+        }
+
+        this.applyOpenFarmProgress(res.progress);
+        if (Array.isArray(res.farms)) {
+            this.applyFarms(res.farms, 'open_farm', { replaceAll: true });
+        } else {
+            GameFarmNode.syncAllInScene();
+        }
+        console.log('[FarmModel] open_farm 成功', { farm_id: id, progress: res.progress });
+        return { ok: true };
+    }
+
+    /** 地块是否已在服务端解锁 */
+    public isPlotUnlocked(farmId: number): boolean {
+        const id = Math.floor(Number(farmId) || 0);
+        if (id <= 0) {
+            return false;
+        }
+        return this.getPlot(id) != null;
+    }
+
+    private applyOpenFarmProgress(progress: FarmOpenProgress | undefined): void {
+        if (!progress) {
+            return;
+        }
+        const mapLevel = Math.floor(Number(progress.map_level) || 0);
+        const mapExp = Math.floor(Number(progress.map_exp) || 0);
+        const mapModel = MapModel.getInstance();
+        if (mapModel.my_map_data) {
+            mapModel.my_map_data.map_level = mapLevel;
+            mapModel.my_map_data.map_exp = mapExp;
+        }
+        if (mapModel.map_detail) {
+            mapModel.map_detail.map_level = mapLevel;
+            mapModel.map_detail.map_exp = mapExp;
+        }
+        EventSystem.send('OnCodeMapLevelPushContent');
     }
 
     private applyWeather(res: WeatherDataResponse): boolean {
