@@ -1,5 +1,5 @@
 {
-  "1": {
+  "110001001": {
     "item_id": "100026",
     "crop_name": "玉米种子",
     "icon": "itemIcon/corn2",
@@ -17,7 +17,7 @@
     "cold_resistance_attribute": "4",
     "lodging_resistance_attribute": "6"
   },
-  "2": {
+  "110001002": {
     "item_id": "100027",
     "crop_name": "水稻种子",
     "icon": "itemIcon/rice2",
@@ -35,7 +35,7 @@
     "cold_resistance_attribute": "3",
     "lodging_resistance_attribute": "4"
   },
-  "3": {
+  "110001003": {
     "item_id": "100028",
     "crop_name": "小麦种子",
     "icon": "itemIcon/wheat2",
@@ -53,7 +53,7 @@
     "cold_resistance_attribute": "6",
     "lodging_resistance_attribute": "7"
   },
-  "4": {
+  "110001004": {
     "item_id": "100029",
     "crop_name": "红薯种子",
     "icon": "itemIcon/sweet_potato2",
@@ -71,7 +71,7 @@
     "cold_resistance_attribute": "5",
     "lodging_resistance_attribute": "5"
   },
-  "5": {
+  "110001005": {
     "item_id": "100030",
     "crop_name": "土豆种子",
     "icon": "itemIcon/potato2",
@@ -89,7 +89,7 @@
     "cold_resistance_attribute": "7",
     "lodging_resistance_attribute": "5"
   },
-  "6": {
+  "110001006": {
     "item_id": "100031",
     "crop_name": "高粱种子",
     "icon": "itemIcon/sorghum2",
@@ -107,7 +107,7 @@
     "cold_resistance_attribute": "4",
     "lodging_resistance_attribute": "8"
   },
-  "7": {
+  "110001007": {
     "item_id": "100032",
     "crop_name": "青菜种子",
     "icon": "",
@@ -125,7 +125,7 @@
     "cold_resistance_attribute": "3",
     "lodging_resistance_attribute": "4"
   },
-  "8": {
+  "110001008": {
     "item_id": "100033",
     "crop_name": "向日葵种子",
     "icon": "",
@@ -143,7 +143,7 @@
     "cold_resistance_attribute": "2",
     "lodging_resistance_attribute": "3"
   },
-  "9": {
+  "110001009": {
     "item_id": "100034",
     "crop_name": "油菜种子",
     "icon": "",
@@ -161,7 +161,7 @@
     "cold_resistance_attribute": "5",
     "lodging_resistance_attribute": "5"
   },
-  "10": {
+  "110001010": {
     "item_id": "100035",
     "crop_name": "白菜种子",
     "icon": "",
@@ -179,7 +179,7 @@
     "cold_resistance_attribute": "6",
     "lodging_resistance_attribute": "6"
   },
-  "11": {
+  "110001011": {
     "item_id": "100036",
     "crop_name": "紫甘蓝种子",
     "icon": "",
@@ -197,7 +197,7 @@
     "cold_resistance_attribute": "7",
     "lodging_resistance_attribute": "6"
   },
-  "12": {
+  "110001012": {
     "item_id": "100037",
     "crop_name": "玫瑰花种子",
     "icon": "",
@@ -215,7 +215,7 @@
     "cold_resistance_attribute": "3",
     "lodging_resistance_attribute": "4"
   },
-  "13": {
+  "110001013": {
     "item_id": "100038",
     "crop_name": "兰花种子",
     "icon": "",
@@ -232,5 +232,203 @@
     "rain_attribute": "6",
     "cold_resistance_attribute": "4",
     "lodging_resistance_attribute": "5"
+  },
+  "110001014": {
+    "item_id": "100057",
+    "crop_name": "番茄种子",
+    "icon": "",
+    "correspondence_relation": "14",
+    "crop_name_en": "tomato",
+    "category": "0",
+    "season": "0",
+    "base_seed_price": "10",
+    "growth_time": "180",
+    "base_production": "2",
+    "base_harvest_exp": "1",
+    "mutation_rate_per_mil": "1",
+    "sunlight_attribute": "7",
+    "rain_attribute": "5",
+    "cold_resistance_attribute": "4",
+    "lodging_resistance_attribute": "6"
+  },
+  "110001015": {
+    "item_id": "100058",
+    "crop_name": "茄子种子",
+    "icon": "",
+    "correspondence_relation": "15",
+    "crop_name_en": "eggplant",
+    "category": "0",
+    "season": "0",
+    "base_seed_price": "10",
+    "growth_time": "180",
+    "base_production": "2",
+    "base_harvest_exp": "1",
+    "mutation_rate_per_mil": "1",
+    "sunlight_attribute": "6",
+    "rain_attribute": "8",
+    "cold_resistance_attribute": "3",
+    "lodging_resistance_attribute": "4"
+  },
+  "110001016": {
+    "item_id": "100059",
+    "crop_name": "胡萝卜种子",
+    "icon": "",
+    "correspondence_relation": "16",
+    "crop_name_en": "carrot",
+    "category": "0",
+    "season": "0",
+    "base_seed_price": "10",
+    "growth_time": "300",
+    "base_production": "2",
+    "base_harvest_exp": "1",
+    "mutation_rate_per_mil": "1",
+    "sunlight_attribute": "6",
+    "rain_attribute": "5",
+    "cold_resistance_attribute": "6",
+    "lodging_resistance_attribute": "7"
+  },
+  "110001017": {
+    "item_id": "100060",
+    "crop_name": "草莓种子",
+    "icon": "",
+    "correspondence_relation": "17",
+    "crop_name_en": "strawberry",
+    "category": "0",
+    "season": "0",
+    "base_seed_price": "10",
+    "growth_time": "300",
+    "base_production": "2",
+    "base_harvest_exp": "1",
+    "mutation_rate_per_mil": "1",
+    "sunlight_attribute": "7",
+    "rain_attribute": "4",
+    "cold_resistance_attribute": "5",
+    "lodging_resistance_attribute": "5"
+  },
+  "110001018": {
+    "item_id": "100061",
+    "crop_name": "西瓜种子",
+    "icon": "",
+    "correspondence_relation": "18",
+    "crop_name_en": "watermelon",
+    "category": "0",
+    "season": "4",
+    "base_seed_price": "10",
+    "growth_time": "300",
+    "base_production": "2",
+    "base_harvest_exp": "1",
+    "mutation_rate_per_mil": "1",
+    "sunlight_attribute": "5",
+    "rain_attribute": "5",
+    "cold_resistance_attribute": "7",
+    "lodging_resistance_attribute": "5"
+  },
+  "110001019": {
+    "item_id": "100062",
+    "crop_name": "南瓜种子",
+    "icon": "",
+    "correspondence_relation": "19",
+    "crop_name_en": "pumpkin",
+    "category": "1",
+    "season": "3",
+    "base_seed_price": "30",
+    "growth_time": "300",
+    "base_production": "2",
+    "base_harvest_exp": "2",
+    "mutation_rate_per_mil": "3",
+    "sunlight_attribute": "8",
+    "rain_attribute": "4",
+    "cold_resistance_attribute": "4",
+    "lodging_resistance_attribute": "8"
+  },
+  "110001020": {
+    "item_id": "100063",
+    "crop_name": "棉花种子",
+    "icon": "",
+    "correspondence_relation": "20",
+    "crop_name_en": "cotton",
+    "category": "1",
+    "season": "1",
+    "base_seed_price": "100",
+    "growth_time": "600",
+    "base_production": "2",
+    "base_harvest_exp": "6",
+    "mutation_rate_per_mil": "5",
+    "sunlight_attribute": "5",
+    "rain_attribute": "7",
+    "cold_resistance_attribute": "3",
+    "lodging_resistance_attribute": "4"
+  },
+  "110001021": {
+    "item_id": "100064",
+    "crop_name": "彩椒种子",
+    "icon": "",
+    "correspondence_relation": "21",
+    "crop_name_en": "bell_pepper",
+    "category": "1",
+    "season": "2",
+    "base_seed_price": "1000",
+    "growth_time": "7200",
+    "base_production": "2",
+    "base_harvest_exp": "6",
+    "mutation_rate_per_mil": "5",
+    "sunlight_attribute": "9",
+    "rain_attribute": "3",
+    "cold_resistance_attribute": "2",
+    "lodging_resistance_attribute": "3"
+  },
+  "110001022": {
+    "item_id": "100065",
+    "crop_name": "黄瓜种子",
+    "icon": "",
+    "correspondence_relation": "22",
+    "crop_name_en": "cucumber",
+    "category": "1",
+    "season": "0",
+    "base_seed_price": "1000",
+    "growth_time": "5400",
+    "base_production": "2",
+    "base_harvest_exp": "6",
+    "mutation_rate_per_mil": "5",
+    "sunlight_attribute": "6",
+    "rain_attribute": "6",
+    "cold_resistance_attribute": "5",
+    "lodging_resistance_attribute": "5"
+  },
+  "110001023": {
+    "item_id": "100066",
+    "crop_name": "三七种子",
+    "icon": "",
+    "correspondence_relation": "23",
+    "crop_name_en": "panax_notoginseng",
+    "category": "1",
+    "season": "0",
+    "base_seed_price": "1000",
+    "growth_time": "5400",
+    "base_production": "2",
+    "base_harvest_exp": "6",
+    "mutation_rate_per_mil": "5",
+    "sunlight_attribute": "5",
+    "rain_attribute": "5",
+    "cold_resistance_attribute": "6",
+    "lodging_resistance_attribute": "6"
+  },
+  "110001024": {
+    "item_id": "100067",
+    "crop_name": "甘蔗种子",
+    "icon": "",
+    "correspondence_relation": "24",
+    "crop_name_en": "sugarcane",
+    "category": "0",
+    "season": "0",
+    "base_seed_price": "10",
+    "growth_time": "180",
+    "base_production": "2",
+    "base_harvest_exp": "1",
+    "mutation_rate_per_mil": "1",
+    "sunlight_attribute": "7",
+    "rain_attribute": "5",
+    "cold_resistance_attribute": "4",
+    "lodging_resistance_attribute": "6"
   }
 }
