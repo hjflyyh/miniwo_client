@@ -22,7 +22,9 @@ export class UGCNpcInfoCell extends Component {
     refreshNpcInfo(npcInfo){
         this.npcInfo = npcInfo;
         this.npcNameLabel.string = npcInfo.name;
-        if(npcInfo["model_url"]){
+        if(npcInfo["character_poster_url"] && npcInfo["character_poster_url"] != ""){
+            Utils.loadCover(npcInfo["character_poster_url"], this.npcLihui);
+        }else if(npcInfo["model_url"]){
             Utils.loadCover(npcInfo["model_url"], this.npcLihui);
         }
     }

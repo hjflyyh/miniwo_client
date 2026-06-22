@@ -94,7 +94,7 @@ export class NPCTips extends Component {
         this.renderCharacteristics(characteristics);
 
         const portraitUrl = String(
-            npcInfo.model_url ?? npcInfo.standee_url ?? npcInfo.portrait_url ?? ""
+            npcInfo.character_poster_url ?? npcInfo.model_url ?? npcInfo.standee_url ?? npcInfo.portrait_url ?? ""
         ).trim();
         if (portraitUrl) {
             this.displayPortraitUrl(portraitUrl);

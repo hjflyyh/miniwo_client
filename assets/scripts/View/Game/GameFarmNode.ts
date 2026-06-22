@@ -34,6 +34,7 @@ import {
     sortFarmBuffsForDisplay,
 } from '../../Model/Farm/FarmTypes';
 import { getFarmBuffSpriteResourcePath } from '../../Model/Farm/FarmPlotBuffVisual';
+import { getBasicSeedItemId } from '../../Model/Farm/FarmSeedVisual';
 import { FarmModel } from '../../Model/Farm/FarmModel';
 import { toServerFarmId } from '../../Model/Farm/FarmPlotMapper';
 import { Planting } from './Planting';
@@ -500,7 +501,7 @@ export class GameFarmNode extends Component {
         const showWater = plotNeedsWaterOverlay(plot) && !showEnd;
         const showPlanting = isPlotGrowing(plot, nowSec) && !showEnd;
         this.refreshPlotBuffOverlay(plotNode, plot, nowSec);
-        this.setPlotWateringVisible(plotNode, showWater);
+        this.setPlotWateringVisible(plotNode, showWater, plot);
         this.setPlotPlantingVisible(plotNode, showPlanting, plot);
         this.setPlotPlantingEndVisible(plotNode, showEnd, plot);
         this.syncPlotOverlayDrawOrder(plotNode);
@@ -531,11 +532,19 @@ export class GameFarmNode extends Component {
         }
     }
 
-    private setPlotWateringVisible(plotNode: Node, visible: boolean) {
-        this.ensureWateringPrefabInstance(plotNode, visible);
+    private setPlotWateringVisible(
+        plotNode: Node,
+        visible: boolean,
+        plot?: FarmPlotState | null,
+    ) {
+        this.ensureWateringPrefabInstance(plotNode, visible, plot ?? null);
     }
 
-    private ensureWateringPrefabInstance(plotNode: Node, visible: boolean) {
+    private ensureWateringPrefabInstance(
+        plotNode: Node,
+        visible: boolean,
+        plot: FarmPlotState | null,
+    ) {
         let wateringNode = plotNode.getChildByName(WATERING_PREFAB_NODE_NAME);
         if (!visible) {
             if (wateringNode) {
@@ -555,7 +564,34 @@ export class GameFarmNode extends Component {
             wateringNode.setParent(plotNode);
         }
         wateringNode.active = true;
+        this.refreshWateringSeedIcon(wateringNode, plot);
         this.syncPlotOverlayDrawOrder(plotNode);
+    }
+
+    private refreshWateringSeedIcon(wateringNode: Node, plot: FarmPlotState | null) {
+        const iconSprite =
+            wateringNode.getChildByName('icon')?.getComponent(Sprite) ?? null;
+        if (!iconSprite) {
+            return;
+        }
+
+        const itemId = getBasicSeedItemId(String(plot?.seed ?? '').trim());
+        if (!itemId) {
+            iconSprite.enabled = false;
+            iconSprite.spriteFrame = null;
+            return;
+        }
+
+        iconSprite.enabled = false;
+        resources.load(`UITexture/itemIcon/${itemId}/spriteFrame`, SpriteFrame, (err, sf) => {
+            if (!iconSprite.isValid) {
+                return;
+            }
+            if (!err && sf) {
+                iconSprite.spriteFrame = sf;
+                iconSprite.enabled = true;
+            }
+        });
     }
 
     private setPlotPlantingVisible(plotNode: Node, visible: boolean, plot?: FarmPlotState | null) {

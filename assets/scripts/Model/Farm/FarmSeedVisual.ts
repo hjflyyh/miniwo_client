@@ -6,7 +6,8 @@ export function getBasicSeedMatureSpriteResourcePath(seedKey: string): string | 
     if (!key) {
         return null;
     }
-    const cfg = AppConst.JSONManager?.getItem?.('basicCrops', key);
+    let seedCfg = AppConst.JSONManager?.getItem?.('basicSeeds', key);
+    const cfg = AppConst.JSONManager?.getItem?.('basicCrops', seedCfg["correspondence_relation"]);
     const icon = cfg?.icon != null ? String(cfg.icon).trim() : '';
     if (!icon) {
         return null;
@@ -19,10 +20,22 @@ export function getBasicSeedSpriteResourcePath(seedKey: string): string | null {
     if (!key) {
         return null;
     }
-    const cfg = AppConst.JSONManager?.getItem?.('basicCrops', key);
+    let seedCfg = AppConst.JSONManager?.getItem?.('basicSeeds', key);
+    const cfg = AppConst.JSONManager?.getItem?.('basicCrops', seedCfg["correspondence_relation"]);
     const icon = cfg?.icon != null ? String(cfg.icon).trim() : '';
     if (!icon) {
         return null;
     }
     return `UITexture/${icon}_1/spriteFrame`;
+}
+
+/** basicSeeds 配置中的背包道具 id */
+export function getBasicSeedItemId(seedKey: string): number | null {
+    const key = String(seedKey ?? '').trim();
+    if (!key) {
+        return null;
+    }
+    const cfg = AppConst.JSONManager?.getItem?.('basicSeeds', key);
+    const itemId = Number(cfg?.item_id);
+    return Number.isFinite(itemId) && itemId > 0 ? itemId : null;
 }

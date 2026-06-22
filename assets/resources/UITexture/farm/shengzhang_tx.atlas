@@ -1,0 +1,55 @@
+
+shengzhang_tx.png
+size: 188,520
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+changpian_hong
+  rotate: false
+  xy: 2, 232
+  size: 91, 284
+  orig: 91, 284
+  offset: 0, 0
+  index: -1
+changpian_zhi
+  rotate: false
+  xy: 95, 232
+  size: 91, 284
+  orig: 91, 284
+  offset: 0, 0
+  index: -1
+duanpian_anhuang
+  rotate: false
+  xy: 2, 117
+  size: 145, 113
+  orig: 145, 113
+  offset: 0, 0
+  index: -1
+duanpian_zhi
+  rotate: false
+  xy: 2, 2
+  size: 145, 113
+  orig: 145, 113
+  offset: 0, 0
+  index: -1
+lizi_hong
+  rotate: false
+  xy: 178, 28
+  size: 8, 98
+  orig: 8, 98
+  offset: 0, 0
+  index: -1
+lizi_huang
+  rotate: false
+  xy: 149, 19
+  size: 27, 107
+  orig: 27, 107
+  offset: 0, 0
+  index: -1
+quan_huangse
+  rotate: true
+  xy: 149, 128
+  size: 102, 36
+  orig: 102, 36
+  offset: 0, 0
+  index: -1

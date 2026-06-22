@@ -79,7 +79,7 @@ export class HttpManager extends Component {
             if (body == null || typeof body !== "object") {
                 return "";
             }
-            const fields = ["error", "message", "messager"];
+            const fields = ["message", "error", "messager"];
             for (const key of fields) {
                 const val = body[key];
                 if (val != null && String(val).trim()) {

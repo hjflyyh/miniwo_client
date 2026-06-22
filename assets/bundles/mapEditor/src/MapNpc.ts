@@ -273,7 +273,7 @@ export class MapNpc extends Component {
 
     public setTili(tili){
         if(this.tiredNode){
-            if(tili <= 200){
+            if(tili <= 0){
                 this.dialogueNode.active = false
                 this.tiredNode.active = true
             }else{
