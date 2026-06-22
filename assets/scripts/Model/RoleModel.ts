@@ -14,7 +14,7 @@ export class RoleModel {
     public nickName: string;
     public avatar: string;
     public lv: number;
-    public gender: number;
+    public gender: string;
     public birth: string;
     public age: number;
     public mbti: string;
@@ -230,10 +230,10 @@ export class RoleModel {
 
             this.tags = data.tags
 
-            if (data.info) {
-                const userInfo = JSON.parse(data.info)
+            if (data.info && data.info != "") {
+                const userInfo = data.info
                 this.gender = userInfo?.gender
-                this.birth = userInfo?.birth
+                this.birth = userInfo?.birthday
                 this.age = userInfo?.age
                 this.mbti = userInfo?.mbti
                 this.bio = userInfo?.bio
@@ -247,6 +247,35 @@ export class RoleModel {
             }else{
                 AppConst.PanelManager.openView("res/View/ChooseWorldView")
             }
+        }
+
+        if (data.functionName == "changeNickName" || data.functionName == "changeUserBirthday" || data.functionName == "changeUserAge" || data.functionName == "changeUserMbti" || data.functionName == "changeUserGender") {
+            this.applyUserInfo(data.info);
+            if(data.nick_name){
+                this.nickName = data.nick_name
+            }
+            EventSystem.send("RefreshRoleData");
+        }
+    }
+
+    private applyUserInfo(info: any) {
+        if (!info) {
+            return;
+        }
+        if (info.gender != null) {
+            this.gender = info.gender;
+        }
+        if (info.birthday != null && info.birthday !== "") {
+            this.birth = info.birthday;
+        }
+        if (info.age != null) {
+            this.age = info.age;
+        }
+        if (info.mbti != null) {
+            this.mbti = info.mbti;
+        }
+        if (info.bio != null) {
+            this.bio = info.bio;
         }
     }
 }

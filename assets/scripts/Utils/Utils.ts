@@ -68,6 +68,11 @@ export class Utils{
     return Math.min(100, Math.max(0, Math.round(remainingPercentage * 100) / 100));
     }
 
+    public static getMonthDays(year:number,mon:number) {
+		let date = new Date(year, mon, 0)
+		let days = date.getDate();
+		return days;
+	}
 
     public static getIOSDeviceType(): string {
         // 1. 基础平台检测：必须是原生平台且为 iOS 系统[citation:1][citation:10]

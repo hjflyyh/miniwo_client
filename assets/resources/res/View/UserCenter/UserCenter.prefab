@@ -2690,8 +2690,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 170,
-      "height": 170
+      "width": 250,
+      "height": 287
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2727,7 +2727,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "47f9be06-7bfd-41d3-ac3f-03710375c43a@f9941",
+      "__uuid__": "3ee62921-859b-4145-99f3-191dbac8c740@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -2758,6 +2758,8 @@
       "__id__": 0
     },
     "fileId": "72Dgfao1FLf7HQ1l0sv7Cg",
+    "instance": null,
+    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {
@@ -2800,7 +2802,7 @@
     "__prefab": {
       "__id__": 107
     },
-    "_type": 3,
+    "_type": 1,
     "_inverted": false,
     "_segments": 64,
     "_alphaThreshold": 0.1,
@@ -2811,7 +2813,7 @@
     "fileId": "d8lilxEGdCjYQih+gJqA8K"
   },
   {
-    "__type__": "cc.Sprite",
+    "__type__": "cc.Graphics",
     "_name": "",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -2832,28 +2834,29 @@
       "b": 255,
       "a": 255
     },
-    "_spriteFrame": {
-      "__uuid__": "6032bb66-a4b0-4be4-b064-8c6b8371b069@f9941",
-      "__expectedType__": "cc.SpriteFrame"
+    "_lineWidth": 1,
+    "_strokeColor": {
+      "__type__": "cc.Color",
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 255
     },
-    "_type": 0,
-    "_fillType": 0,
-    "_sizeMode": 0,
-    "_fillCenter": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
+    "_lineJoin": 2,
+    "_lineCap": 0,
+    "_fillColor": {
+      "__type__": "cc.Color",
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 0
     },
-    "_fillStart": 0,
-    "_fillRange": 0,
-    "_isTrimmedMode": true,
-    "_useGrayscale": false,
-    "_atlas": null,
+    "_miterLimit": 10,
     "_id": ""
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "02V8He6uVDuYr3tTEw/wkr"
+    "fileId": "254UyA8npDEZuMiUH8o0sI"
   },
   {
     "__type__": "cc.PrefabInfo",

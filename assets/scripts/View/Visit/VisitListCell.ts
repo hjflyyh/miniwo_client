@@ -127,8 +127,8 @@ export class VisitListCell extends Component {
 
     setNpcId(Npc_data) {
         this.npcData = Npc_data
-        console.log("setNpcId", Npc_data.attributes["111"])
-        let stamina = Npc_data.attributes["111"]
+        // console.log("setNpcId", Npc_data.attributes["111"])
+        let stamina = Npc_data.stamina
         stamina = Math.max(0, Math.min(1000, stamina))
         this.tiliLabel.string = stamina.toString() + "/1000"
         this.tili.progress = stamina / 1000

@@ -89,6 +89,8 @@ export class MapListItem extends Component implements InfiniteCell{
             mapModel.pendingMapGameType = gameType;
         }
         mapModel.requestJoinMap(Number(this.mapData["id"]));
+
+        EventSystem.send("ShowJuhua", "EnterGameMap");
     }
 
     OnClickLike(){

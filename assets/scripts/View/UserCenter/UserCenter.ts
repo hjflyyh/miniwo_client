@@ -19,9 +19,12 @@ export class UserCenter extends Component {
     start() {
         this.httpRequest()
         EventSystem.addListent("WebSocketNotifications", this.OnWSNotification, this)
+        EventSystem.addListent("RefreshRoleData" , this.setUser , this)
+
         EventSystem.send("OnSetNowShowPanel", this.node["__url"])
         this.setUser()
     }
+    
 
     httpRequest() {
         AppConst.SocialHttpManager.sendGetHttp("myfollows", {})
@@ -55,7 +58,7 @@ export class UserCenter extends Component {
     }
 
     OnClickUserInfo() {
-        // AppConst.PanelManager.openView("res/View/UserCenter/UserInfo", null, null, "res/View/UserCenter/UserCenter")
+        AppConst.PanelManager.openView("res/View/UserCenter/UserInfo", null, null)
     }
 
     OnClickMail(){

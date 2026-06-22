@@ -19,6 +19,8 @@ export class EditMapLoading extends Component {
         this.loadSpeed = 0.02;
         this.isLoadSuccess = false;
         void this.runLoadingPipeline();
+
+        EventSystem.send("HideJuhua", "EnterGameMap");
     }
 
     private setProgress(ratio: number) {
