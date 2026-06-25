@@ -5,20 +5,17 @@ import { MapModel } from '../MapModel';
 import {
     FARM_MAIN_FIELD_COUNT,
     FARM_PLOTS_PER_FIELD,
-    FARM_STARTER_FIELD_INDEX,
-    FARM_STARTER_PLOT_COUNT,
     toServerFarmId,
 } from './FarmPlotMapper';
 
-/** 新手区 7 格 + 大田 4×36 格 */
-export const FARM_PLOT_TOTAL =
-    FARM_STARTER_PLOT_COUNT + FARM_MAIN_FIELD_COUNT * FARM_PLOTS_PER_FIELD;
+/** 大田 4×36 格 */
+export const FARM_PLOT_TOTAL = FARM_MAIN_FIELD_COUNT * FARM_PLOTS_PER_FIELD;
 
 /** @deprecated 请用 toServerFarmId；与 FarmPlotMapper 一致 */
 export const FARM_FIELD_COUNT = FARM_MAIN_FIELD_COUNT;
 
 export type FarmNearestGridEntry = {
-    /** 与服务端 farm_id 一致：-1 区 plotIndex 0～6 → 1～7；0～3 区从 7 起 */
+    /** 与服务端 farm_id 一致：farmIndex 0 起 plotIndex 0 → 1 */
     plot_index: number;
     nearest_grid: {
         x: number;
@@ -155,18 +152,11 @@ function pushPlotNearestGridEntries(
     }
 }
 
-/** 新手区 + 大田：plot_index 为服务端 farm_id */
+/** 大田：plot_index 为服务端 farm_id */
 export function buildFarmsNearestGridJson(map: MapEditor): FarmsNearestGridJson {
     const plotByKey = collectAllFieldPlotNodes(map);
     const farms: FarmNearestGridEntry[] = [];
 
-    pushPlotNearestGridEntries(
-        farms,
-        plotByKey,
-        map,
-        FARM_STARTER_FIELD_INDEX,
-        FARM_STARTER_PLOT_COUNT
-    );
     for (let farmIndex = 0; farmIndex < FARM_MAIN_FIELD_COUNT; farmIndex++) {
         pushPlotNearestGridEntries(farms, plotByKey, map, farmIndex, FARM_PLOTS_PER_FIELD);
     }
@@ -179,7 +169,7 @@ export function logFarmPlotGridsOnSave(map: MapEditor): void {
     const json = buildFarmsNearestGridJson(map);
     const found = json.farms.filter((f) => f.nearest_grid != null).length;
     console.log(
-        `[FarmPlotGrid] farms 共 ${json.farms.length} 条（含新手区 farmIndex=-1 共 ${FARM_STARTER_PLOT_COUNT} 格，plot_index 与服务端 farm_id 一致），场景命中 ${found} 条`
+        `[FarmPlotGrid] farms 共 ${json.farms.length} 条（farmIndex 0 起 farm_id=1，plot_index 与服务端 farm_id 一致），场景命中 ${found} 条`
     );
     console.log(JSON.stringify(json, null, 2));
 }

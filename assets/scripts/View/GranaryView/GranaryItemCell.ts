@@ -2,7 +2,7 @@ import { _decorator, Component, Label, resources, Sprite, SpriteFrame } from 'cc
 import { AppConst } from '../../AppConst';
 import { BagModel } from '../../Model/BagModel';
 import { PrefabLoad } from '../../Utils/PrefabLoad';
-import { getBasicSeedMatureSpriteResourcePath } from '../../Model/Farm/FarmSeedVisual';
+import { getBasicCropsSprite, getBasicSeedMatureSpriteResourcePath } from '../../Model/Farm/FarmSeedVisual';
 const { ccclass, property } = _decorator;
 
 @ccclass('GranaryItemCell')
@@ -50,7 +50,7 @@ export class GranaryItemCell extends Component {
             this.numLabel.string = `x${count}`;
         }
         
-        let url = type == 0 ? `UITexture/itemIcon/${itemId}/spriteFrame` : getBasicSeedMatureSpriteResourcePath(id + "")
+        let url = type == 0 ? `UITexture/itemIcon/${itemId}/spriteFrame` : getBasicCropsSprite(id + "")
         let _this = this
         resources.load(url, SpriteFrame, (err, sf) => {
             _this.prefabLoader.spriteFrame = sf;

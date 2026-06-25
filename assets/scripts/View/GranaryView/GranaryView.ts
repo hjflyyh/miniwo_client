@@ -2,7 +2,11 @@ import { _decorator, Color, Component, instantiate, Label, Layout, Node, resourc
 import { AppConst } from '../../AppConst';
 import { GranaryItemCell } from './GranaryItemCell';
 import { GranaryStarCell } from './GranaryStarCell';
-import { getBasicSeedMatureSpriteResourcePath } from '../../Model/Farm/FarmSeedVisual';
+import { getBasicCropsSprite } from '../../Model/Farm/FarmSeedVisual';
+import {
+    buildDisplayableBasicCropRows,
+    buildDisplayableBasicSeedRows,
+} from '../../Model/Farm/FarmSeedCatalog';
 const { ccclass, property } = _decorator;
 
 type GranaryListRow = {
@@ -55,6 +59,9 @@ export class GranaryView extends Component {
     /** starode 列表 content 下的动态格子 */
     public showStarodes: Node[] = [];
 
+    @property(Node)
+    buyBtn : Node
+
     private showType = 0;
     private itemScrollRoot: Node | null = null;
     private starodeScrollRoot: Node | null = null;
@@ -88,22 +95,45 @@ export class GranaryView extends Component {
 
     private openTips(type , id){
         this.tipNode.active = true
-        let cfgCrops = AppConst.JSONManager.getItem("basicCrops" , id)
-        let cfgSeed = AppConst.JSONManager.getItem("basicSeeds" , id)
+        let cfgSeed = null
+        let cfgCrops = null
+        if(type == 0){
+            cfgSeed = AppConst.JSONManager.getItem("basicSeeds" , id)
+            cfgCrops = AppConst.JSONManager.getItem("basicCrops" , cfgSeed["correspondence_relation"])
+        }else{
+            cfgCrops = AppConst.JSONManager.getItem("basicCrops" , id)
+            cfgSeed = AppConst.JSONManager.getItem("basicSeeds" , cfgCrops["correspondence_relation"])
+        }
+
         let seedItemId = cfgSeed["item_id"]
-        let url = type == 0 ? `UITexture/itemIcon/${seedItemId}/spriteFrame` : getBasicSeedMatureSpriteResourcePath(id + "")
+        let url = type == 0 ? `UITexture/itemIcon/${seedItemId}/spriteFrame` : getBasicCropsSprite(id + "")
         let _this = this
         resources.load(url, SpriteFrame, (err, sf) => {
             _this.tipIcon.spriteFrame = sf;
         });        
         this.tipTime.string = cfgSeed["growth_time"]
         this.tipPrice.string = cfgCrops["base_crop_price"]
-        this.tipQuailty.string = cfgCrops["correspondence_relation"]
+        // this.tipQuailty.string = cfgCrops["correspondence_relation"]
+        if(cfgSeed["category"] == 0){
+            this.tipQuailty.string = "Ordinary"
+        }else if(cfgSeed["category"] == 1){
+            this.tipQuailty.string = "Advanced"
+        }else if(cfgSeed["category"] == 2){
+            this.tipQuailty.string = "Rare"
+        }else{
+            this.tipQuailty.string = "Ordinary"
+        }
+        this.buyBtn.active = type == 0
         if(type == 0){
             this.tipName.string = cfgSeed["crop_name"]
         }else if(type == 1){
             this.tipName.string = cfgCrops["crop_name"]
         }
+    }
+
+    onClickBuy(){
+        AppConst.PanelManager.CloseView(this)
+        EventSystem.send("OpenGameShopList")
     }
 
     /** itemNodeContent / starodeContent 可绑 ScrollView 根或 content，统一解析 */
@@ -207,46 +237,14 @@ export class GranaryView extends Component {
     }
 
     private buildBasicSeedsRows(): GranaryListRow[] {
-        const rawSeedsCfg = AppConst.JSONManager?.getItemAll?.('basicSeeds') as Record<string, any> | null;
-        const rawItemCfg = AppConst.JSONManager?.getItemAll?.('item') as Record<string, any> | null;
-        if (!rawSeedsCfg || !rawItemCfg) {
-            return [];
-        }
-        return Object.keys(rawSeedsCfg)
-            .map((seedKey) => {
-                const seed = rawSeedsCfg[seedKey] || {};
-                const configKey = Number(seedKey);
-                const itemId = Number(seed.item_id);
-                return { configKey, itemId, seed, item: rawItemCfg[String(itemId)] };
-            })
-            .filter((row) => Number.isFinite(row.configKey) && Number.isFinite(row.itemId) && row.itemId > 0)
-            .filter((row) => row.item != null)
-            .filter((row) => row.seed.base_seed_price != null && row.seed.base_seed_price !== '')
-            .sort((a, b) => {
-                const categoryDiff = Number(a.seed.category) - Number(b.seed.category);
-                if (categoryDiff !== 0) {
-                    return categoryDiff;
-                }
-                return a.configKey - b.configKey;
-            })
-            .map((row) => ({ configKey: row.configKey, itemId: row.itemId }));
+        return buildDisplayableBasicSeedRows().map((row) => ({
+            configKey: row.seedKey,
+            itemId: row.itemId,
+        }));
     }
 
     private buildBasicCropsRows(): GranaryListRow[] {
-        const rawCropsCfg = AppConst.JSONManager?.getItemAll?.('basicCrops') as Record<string, any> | null;
-        if (!rawCropsCfg) {
-            return [];
-        }
-        return Object.keys(rawCropsCfg)
-            .map((cropKey) => {
-                const crop = rawCropsCfg[cropKey] || {};
-                return {
-                    configKey: Number(cropKey),
-                    itemId: Number(crop.item_id),
-                };
-            })
-            .filter((row) => Number.isFinite(row.configKey) && Number.isFinite(row.itemId) && row.itemId > 0)
-            .sort((a, b) => a.configKey - b.configKey);
+        return buildDisplayableBasicCropRows();
     }
 
     private syncListCells(

@@ -1,4 +1,4 @@
-import { _decorator, Component, ImageAsset, Label, Sprite, SpriteFrame, Texture2D, UITransform } from 'cc';
+import { _decorator, Component, ImageAsset, Label, Sprite, SpriteFrame, Texture2D, UITransform , Node} from 'cc';
 import { RoleModel } from '../../../Model/RoleModel';
 import { HttpManager } from '../../../Manager/HttpManager';
 import { UGCModel } from '../../../Model/UGCModel';
@@ -32,6 +32,8 @@ export class NPCTips extends Component {
     public habits : Label[] = [];  
 
     //Characteristics
+    @property(Node)
+    loadingImgNode : Node    
 
     @property([Label])
     public characteristics : Label[] = [];  
@@ -93,9 +95,7 @@ export class NPCTips extends Component {
         const characteristics = this.resolveCharacteristicsNames(npcInfo.characteristics);
         this.renderCharacteristics(characteristics);
 
-        const portraitUrl = String(
-            npcInfo.character_poster_url ?? npcInfo.model_url ?? npcInfo.standee_url ?? npcInfo.portrait_url ?? ""
-        ).trim();
+        const portraitUrl = npcInfo.model_url
         if (portraitUrl) {
             this.displayPortraitUrl(portraitUrl);
         } else if (this.lihui) {
@@ -140,9 +140,10 @@ export class NPCTips extends Component {
                 const scale = Math.min(maxW / imgAsset.width, maxH / imgAsset.height, 1);
                 ui.setContentSize(imgAsset.width * scale, imgAsset.height * scale);
             }
+            this.loadingImgNode.active = false
         };
         image.onerror = () => {
-            Utils.loadCover(fullUrl, this.lihui);
+            Utils.loadCover(fullUrl, this.lihui , null , null , this.loadingImgNode);
         };
         image.src = fullUrl;
     }

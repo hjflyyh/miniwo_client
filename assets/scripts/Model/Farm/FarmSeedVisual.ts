@@ -1,5 +1,14 @@
 import { AppConst } from "../../AppConst";
 
+export function getBasicCropsSprite(cropsId){
+    const cfg = AppConst.JSONManager?.getItem?.('basicCrops', cropsId);
+    const icon = cfg?.icon != null ? String(cfg.icon).trim() : '';
+    if (!icon) {
+        return null;
+    }
+    return `UITexture/${icon}_2/spriteFrame`;    
+}
+
 /** basicSeeds 配置 icon 对应成熟阶段贴图：icon + "_2" */
 export function getBasicSeedMatureSpriteResourcePath(seedKey: string): string | null {
     const key = String(seedKey ?? '').trim();

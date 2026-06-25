@@ -1,5 +1,6 @@
 import { sys } from "cc";
 import { AppConst } from "../AppConst";
+import { HttpManager } from "../Manager/HttpManager";
 import { MapModel } from "./MapModel";
 import { RoleModel } from "./RoleModel";
 import { network } from "./RequestData";
@@ -399,7 +400,7 @@ export class UGCModel {
                 this.npcList = list;
                 EventSystem.send("OnRefreshUGCMapNpc");
 
-                AppConst.PanelManager.openView("res/View/CreateMap/CreateNpc", npc)
+                AppConst.PanelManager.openView("res/View/CreateMap/CreateNpc", npc);
             }
         }
     }
@@ -509,6 +510,71 @@ export class UGCModel {
         )
     }
 
+    /** CreateNpcNew 一键创建：POST /api/npc/create */
+    public createNpcNew(payload: {
+        name: string;
+        sex: number;
+        age: number;
+        mbti: string;
+        characteristics: number[];
+        hobbies: number[];
+    }): Promise<any | null> {
+        const body = {
+            token: this.token(),
+            name: String(payload.name || "").trim(),
+            sex: Math.floor(Number(payload.sex) || 0),
+            age: Math.floor(Number(payload.age) || 0),
+            mbti: String(payload.mbti || "").trim(),
+            characteristics: JSON.stringify(payload.characteristics),
+            hobbies: JSON.stringify(payload.hobbies)
+        };
+        return AppConst.HttpManager.sendPostHttpAny(
+            "api/npc/create",
+            JSON.stringify(body),
+            { silent: false },
+        ).then((resp: any) => {
+            if (resp?.error || resp?.success === false) {
+                const msg = String(resp?.error || resp?.message || "Create NPC failed");
+                EventSystem.send("ShowTips", msg);
+                return Promise.reject(new Error(msg));
+            }
+            const npc = this.extractNpcFromCreateResponse(resp);
+            if (!npc) {
+                const msg = "Create NPC failed";
+                EventSystem.send("ShowTips", msg);
+                return Promise.reject(new Error(msg));
+            }
+            this.upsertNpcFromHttp(npc);
+            EventSystem.send("OnRefreshUGCMapNpc");
+            EventSystem.send("CreateNpcNewNpcCreated", npc);
+            return npc;
+        }).catch((err) => {
+            EventSystem.send("ShowTips", HttpManager.resolveErrorTip(err, "Create NPC failed"));
+            return Promise.reject(err);
+        });
+    }
+
+    private extractNpcFromCreateResponse(resp: any): any | null {
+        if (!resp) {
+            return null;
+        }
+        const fromData = this.extractNpcFromHttpPayload(resp.data ?? {});
+        if (fromData) {
+            return fromData;
+        }
+        if (resp?.data?.npc) {
+            return resp.data.npc;
+        }
+        if (resp?.npc) {
+            return resp.npc;
+        }
+        return this.extractNpcFromHttpPayload(resp);
+    }
+
+    public getTagNameById(id: number, tagType?: number): string {
+        return this.resolveTagNameById(id, tagType);
+    }
+
     //#### getNpcByMap
     public getNpcByMap(mapId) {
         AppConst.HttpManager.sendPostHttp(
@@ -585,10 +651,11 @@ export class UGCModel {
     }
 
     /** 获取当前玩家全部 NPC（含 work_status 等） */
-    public listMyNpcs() {
+    public listMyNpcs(showJuhua = true) {
         AppConst.HttpManager.sendPostHttp(
             "listMyNpcs",
             JSON.stringify({ token: this.token() }),
+            showJuhua
         );
     }
 

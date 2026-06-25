@@ -3,7 +3,7 @@
     "item_id": "100039",
     "crop_name": "玉米作物",
     "icon": "itemIcon/corn",
-    "correspondence_relation": "1",
+    "correspondence_relation": "110001001",
     "crop_name_en": "corn_crop",
     "base_crop_price": "12"
   },
@@ -11,7 +11,7 @@
     "item_id": "100040",
     "crop_name": "水稻作物",
     "icon": "itemIcon/rice",
-    "correspondence_relation": "2",
+    "correspondence_relation": "110001002",
     "crop_name_en": "rice_crop",
     "base_crop_price": "12"
   },
@@ -19,7 +19,7 @@
     "item_id": "100041",
     "crop_name": "小麦作物",
     "icon": "itemIcon/wheat",
-    "correspondence_relation": "3",
+    "correspondence_relation": "110001003",
     "crop_name_en": "wheat_crop",
     "base_crop_price": "12"
   },
@@ -27,7 +27,7 @@
     "item_id": "100042",
     "crop_name": "红薯作物",
     "icon": "itemIcon/sweet potato",
-    "correspondence_relation": "4",
+    "correspondence_relation": "110001004",
     "crop_name_en": "sweet_potato_crop",
     "base_crop_price": "12"
   },
@@ -35,7 +35,7 @@
     "item_id": "100043",
     "crop_name": "土豆作物",
     "icon": "itemIcon/potato",
-    "correspondence_relation": "5",
+    "correspondence_relation": "110001005",
     "crop_name_en": "potato_crop",
     "base_crop_price": "12"
   },
@@ -43,7 +43,7 @@
     "item_id": "100044",
     "crop_name": "高粱作物",
     "icon": "itemIcon/sorghum",
-    "correspondence_relation": "6",
+    "correspondence_relation": "110001006",
     "crop_name_en": "sorghum_crop",
     "base_crop_price": "32"
   },

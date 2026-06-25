@@ -1,4 +1,4 @@
-import { assetManager, Color, ImageAsset, instantiate, log, Sprite, SpriteFrame, sys, Texture2D, UITransform, v2, Vec2, Vec3, view } from "cc";
+import { assetManager, Color, ImageAsset, instantiate, log, Sprite, SpriteFrame, sys, Texture2D, UITransform, v2, Vec2, Vec3, view , Node} from "cc";
 import { PrefabLoad } from "./PrefabLoad";
 import { HttpManager } from "../Manager/HttpManager";
 import { AppConst } from "../AppConst";
@@ -94,15 +94,22 @@ export class Utils{
         return 'unknown';
     }
 
-    public static loadCover(url : string , sprite : Sprite , width = null , height = null){
+    public static loadCover(url : string , sprite : Sprite , width = null , height = null , waitNode : Node = null){
         if (!url) return;
         if(!url.includes('http')){
             url = HttpManager.baseUrl + url
         }
         sprite.spriteFrame = null
+        if(waitNode != null){
+            waitNode.active = true
+        }
         assetManager.loadRemote<ImageAsset>(url , (err , ImageAsset) => {
+            if(waitNode != null){
+                waitNode.active = false
+            }                  
             // 异步返回时 cell 可能已回收 / 节点已销毁，避免访问无效 Sprite 报错
             if (!sprite || !sprite.isValid) {
+                
                 return;
             }
             if(err || !ImageAsset){

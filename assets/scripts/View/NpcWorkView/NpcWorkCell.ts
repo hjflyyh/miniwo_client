@@ -1,4 +1,4 @@
-import { _decorator, Component, Label, Node, Sprite } from 'cc';
+import { _decorator, Component, Label, Node, ProgressBar, Sprite } from 'cc';
 import { Utils } from '../../Utils/Utils';
 const { ccclass, property } = _decorator;
 
@@ -14,6 +14,15 @@ export class NpcWorkCell extends Component {
     @property(Node)
     public chooseNode: Node = null;
 
+    @property(ProgressBar)
+    tilliProg : ProgressBar
+
+    @property(Label)
+    tiliLabel : Label
+
+    @property(Label)
+    workStatue : Label
+
     public npcData: any = null;
 
     refreshData(data: any, selected = false) {
@@ -23,6 +32,16 @@ export class NpcWorkCell extends Component {
             return;
         }
 
+        if(this.npcData.work_status == 0){
+            this.workStatue.string = "Resting..."
+        }else if(this.npcData.work_status == 1){
+            this.workStatue.string = "On the farm..."
+        }else if(this.npcData.work_status == 4){
+            this.workStatue.string = "Dispatch..."
+        }
+
+        this.tilliProg.progress = data.stamina / 1000
+        this.tiliLabel.string = data.stamina + "/1000"
         if (this.npcName) {
             this.npcName.string = String(data.name ?? "");
         }

@@ -35,12 +35,21 @@ export class MapChatManager {
         EventSystem.addListent("ChannelMessage" , this.OnChannelMessage , this)
   }
 
+  /** 离开地图时重置，下次进入可重新 join 并拉历史 */
+  public leaveMap() {
+    this._inited = false;
+    this._currentMapId = -1;
+    this.msessages = [];
+  }
+
   /** 在 websocket 连接成功后、进入地图后调用一次 */
   public initMap(mapId?: number) {
-    if (this._inited) return;
+    const mid = Number(mapId ?? MapModel.getInstance().currentMapId);
+    if (this._inited && this._currentMapId === mid) {
+      return;
+    }
 
-    const mid = mapId ?? MapModel.getInstance().currentMapId;
-    this._currentMapId = Number(mid);
+    this._currentMapId = mid;
 
     // 1) joinChat：加入 Room 才会收到实时推送
     // 假设你的 WebSocketManager 支持像 rpc 一样的指令透传：
@@ -172,23 +181,29 @@ export class MapChatManager {
 
     private OnWebSocketMessage(data){
       if(data["id"] == "map_chat_history"){
-        let payload = JSON.parse(data["payload"]);
+        let payload: { messages?: Array<{ content: any; username?: string }> };
+        try {
+          payload = JSON.parse(data["payload"]);
+        } catch {
+          payload = { messages: [] };
+        }
         this.msessages = [];
-        for(let m = 0 ; m < payload.messages.length ; m++){ 
-          let content = payload.messages[m].content
+        const list = Array.isArray(payload?.messages) ? payload.messages : [];
+        for(let m = 0 ; m < list.length ; m++){ 
+          let content = list[m].content
           const msg: ChatMessage = {
             from_type: content.from_type,
             from_id: String(content.from_id ?? ""),
             text: content.text,
             map_id: Number(content.map_id),
             ts: Number(content.ts),
-            username : payload.messages[m].username,
+            username : list[m].username,
             npc_name : content.npc_name
           };
           this.msessages.push(msg);
         }
 
-        // console.log(this.msessages)
+        EventSystem.send("EventRefreshChat");
       }
     }
 

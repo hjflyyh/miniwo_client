@@ -5366,7 +5366,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -250,
+      "x": -125,
       "y": 0,
       "z": 0
     },
@@ -6101,7 +6101,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 0,
+      "x": 125,
       "y": 0,
       "z": 0
     },
@@ -6824,7 +6824,7 @@
         "__id__": 308
       }
     ],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 314
@@ -7559,7 +7559,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 680,
+      "width": 430,
       "height": 100
     },
     "_anchorPoint": {

@@ -20,6 +20,7 @@ import {
     GameFarmChooseCell,
     GameFarmSeedChoosePayload,
 } from './GameFarmChooseCell';
+import { buildDisplayableBasicSeedRows } from '../../Model/Farm/FarmSeedCatalog';
 import { isPlotSeedEmpty, plotNeedsWaterOverlay } from '../../Model/Farm/FarmTypes';
 import { Utils } from '../../Utils/Utils';
 const { ccclass, property } = _decorator;
@@ -157,6 +158,7 @@ export class GameView extends Component {
         EventSystem.addListent(GAME_FARM_SEED_CHOOSE_EVENT, this.onGameFarmSeedChoose, this)
         EventSystem.addListent('ConfigLoadAll', this.onConfigLoadAll, this)
         EventSystem.addListent("leaveMap" , this.leaveMap , this)
+        EventSystem.addListent("OpenGameShopList" , this.OpenGameShop , this)
 
         this.onEditEnd()
         
@@ -172,8 +174,8 @@ export class GameView extends Component {
         }
 
         console.log(MapModel.getInstance().map_detail)
-        this.myNode.active = MapModel.getInstance().map_detail.player_id == RoleModel.getInstance().playerId
-        this.otherNode.active = MapModel.getInstance().map_detail.player_id != RoleModel.getInstance().playerId
+        // this.myNode.active = MapModel.getInstance().map_detail.player_id == RoleModel.getInstance().playerId
+        // this.otherNode.active = MapModel.getInstance().map_detail.player_id != RoleModel.getInstance().playerId
     }
 
     private onConfigLoadAll() {
@@ -251,15 +253,11 @@ export class GameView extends Component {
     }
 
     private initFarmList() {
-        const seedsCfg = AppConst.JSONManager?.getItemAll?.('basicSeeds');
-        const itemCfg = AppConst.JSONManager?.getItemAll?.('item');
-        if (seedsCfg && itemCfg) {
-            this.renderFarmList(seedsCfg, itemCfg);
-        }
+        this.renderFarmList(buildDisplayableBasicSeedRows());
     }
 
-    private renderFarmList(rawSeedsCfg: Record<string, any>, rawItemCfg: Record<string, any>) {
-        if (!this.farmContent || !this.farmItemCell || !rawSeedsCfg || !rawItemCfg) {
+    private renderFarmList(rows: ReturnType<typeof buildDisplayableBasicSeedRows>) {
+        if (!this.farmContent || !this.farmItemCell) {
             return;
         }
         const templateNode = this.farmItemCell;
@@ -282,29 +280,6 @@ export class GameView extends Component {
             if (!Number.isFinite(id) || id <= 0) continue;
             bagCountByItemId.set(id, Math.max(0, Number.isFinite(count) ? count : 0));
         }
-
-        const rows = Object.keys(rawSeedsCfg)
-            .map((seedKey) => {
-                const seed = rawSeedsCfg[seedKey] || {};
-                const itemId = Number(seed.item_id);
-                const item = rawItemCfg[String(itemId)] || null;
-                return {
-                    seedKey: Number(seedKey),
-                    itemId,
-                    seed,
-                    item,
-                };
-            })
-            .filter((row) => Number.isFinite(row.itemId) && row.itemId > 0)
-            .filter((row) => row.item != null)
-            .filter((row) => row.seed.base_seed_price != null && row.seed.base_seed_price !== '')
-            .sort((a, b) => {
-                const categoryDiff = Number(a.seed.category) - Number(b.seed.category);
-                if (categoryDiff !== 0) {
-                    return categoryDiff;
-                }
-                return a.seedKey - b.seedKey;
-            });
 
         for (let i = 0; i < rows.length; i++) {
             const row = rows[i];
@@ -408,11 +383,11 @@ export class GameView extends Component {
             return;
         }
 
-        const mapLevel = this.getCurrentMapLevel();
-        if (mapLevel < requirement.requiredLevel) {
-            EventSystem.send('ShowTips', `The map level is insufficient. It needs to be increased to... Lv.${requirement.requiredLevel}`);
-            return;
-        }
+        // const mapLevel = this.getCurrentMapLevel();
+        // if (mapLevel < requirement.requiredLevel) {
+        //     EventSystem.send('ShowTips', `The map level is insufficient. It needs to be increased to... Lv.${requirement.requiredLevel}`);
+        //     return;
+        // }
 
         const { openItemId, openItemCount } = requirement.config;
         if (openItemId > 0 && openItemCount > 0) {
@@ -424,12 +399,25 @@ export class GameView extends Component {
             }
         }
 
-        this.upFramId = farmId
-        AppConst.PanelManager.openView("res/View/Common/CheckCancelCommon" , {
-            "showText" : "Do you want to use " + openItemCount + " gold coins to unlock a new farmland?",
-            "callback" : this.checkUpFram ,
-            "callbackParent" : this
-        })
+        const mapLevel = this.getCurrentMapLevel();
+        if (mapLevel < requirement.requiredLevel) {
+            AppConst.PanelManager.openView("res/View/Common/CheckCancelCommon" , {
+                "showText" : `The map level is insufficient. It needs to be increased to... Lv.${requirement.requiredLevel}`,
+                "callback" : this.closeUpFram ,
+                "callbackParent" : this
+            })
+        }else{
+            this.upFramId = farmId
+            AppConst.PanelManager.openView("res/View/Common/CheckCancelCommon" , {
+                "showText" : "Do you want to use " + openItemCount + " gold coins to unlock a new farmland?",
+                "callback" : this.checkUpFram ,
+                "callbackParent" : this
+            })
+        }
+    }
+
+    private closeUpFram(){
+
     }
 
     private upFramId
@@ -714,6 +702,7 @@ export class GameView extends Component {
 
     public leaveMap(){
             FarmModel.getInstance().leaveFarm();
+            MapChatManager.instance.leaveMap();
             
             AppConst.PanelManager.CloseView(this)
             director.loadScene("GameScene", (error: Error) => {
@@ -832,10 +821,7 @@ export class GameView extends Component {
     }
     
     receivedData() {
-        const n = MapChatManager.instance.msessages.length;
-        if(n == 0) return;
-        
-        this.chatScroll.refreshChat(MapChatManager.instance.msessages)
+        this.chatScroll?.refreshChat(MapChatManager.instance.msessages ?? []);
     }
 }
 

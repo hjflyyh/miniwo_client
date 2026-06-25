@@ -1,6 +1,6 @@
 import { _decorator, Component, Label, Node, resources, Sprite, SpriteFrame } from 'cc';
 import { AppConst } from '../../AppConst';
-import { getBasicSeedMatureSpriteResourcePath } from '../../Model/Farm/FarmSeedVisual';
+import { getBasicCropsSprite, getBasicSeedMatureSpriteResourcePath } from '../../Model/Farm/FarmSeedVisual';
 import { FarmModel } from '../../Model/Farm/FarmModel';
 const { ccclass, property } = _decorator;
 
@@ -47,7 +47,7 @@ export class GranaryStarCell extends Component {
             this.nameLabel.string = displayName;
         }
         
-        let url = getBasicSeedMatureSpriteResourcePath(id + "")
+        let url = getBasicCropsSprite(id + "")
         let _this = this
         resources.load(url, SpriteFrame, (err, sf) => {
             _this.prefabLoader.spriteFrame = sf;

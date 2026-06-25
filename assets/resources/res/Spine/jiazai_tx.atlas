@@ -1,0 +1,20 @@
+
+jiazai_tx.png
+size: 36,48
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bai
+  rotate: false
+  xy: 18, 2
+  size: 14, 41
+  orig: 14, 41
+  offset: 0, 0
+  index: -1
+lan
+  rotate: false
+  xy: 2, 2
+  size: 14, 41
+  orig: 14, 41
+  offset: 0, 0
+  index: -1

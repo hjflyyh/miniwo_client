@@ -36,7 +36,7 @@ import {
 import { getFarmBuffSpriteResourcePath } from '../../Model/Farm/FarmPlotBuffVisual';
 import { getBasicSeedItemId } from '../../Model/Farm/FarmSeedVisual';
 import { FarmModel } from '../../Model/Farm/FarmModel';
-import { toServerFarmId } from '../../Model/Farm/FarmPlotMapper';
+import { toServerFarmId, FARM_DISABLED_FIELD_INDEX } from '../../Model/Farm/FarmPlotMapper';
 import { Planting } from './Planting';
 import { PlantingEnd } from './PlantingEnd';
 import { AppConst } from '../../AppConst';
@@ -48,6 +48,8 @@ const PLANTING_PREFAB_NODE_NAME = 'Planting';
 const PLANTING_PREFAB_RESOURCE_PATH = 'UITexture/farm/Planting';
 const PLANTING_END_PREFAB_NODE_NAME = 'PlantingEnd';
 const PLANTING_END_PREFAB_RESOURCE_PATH = 'UITexture/farm/PlantingEnd';
+const FARM_LOCK_NODE_NAME = 'framLack';
+const FARM_LOCK_PREFAB_RESOURCE_PATH = 'UITexture/farm/framLack';
 const PLOT_BUFF_NODE_NAME = 'buff';
 /** 农田 function 面板统一挂在此层，避免相邻地块遮挡 */
 const FARM_FUNCTION_OVERLAY_NAME = 'FarmPlotFunctionOverlay';
@@ -76,8 +78,9 @@ type PlotHit = {
 @ccclass('GameFarmNode')
 export class GameFarmNode extends Component {
     /**
-     * 场景农田分区：-1=tudiPrefab0（格子 0～6 → farm_id 1～7）；
-     * 0～3=tudiPrefab1～4（从 farm_id 7 起，每区 36 格）。
+     * 场景农田分区：farmIndex 0～3 = tudiPrefab1～4，每区 36 格；
+     * farm_id = farmIndex * 36 + plotIndex + 1（第一块田从 1 起）。
+     * farmIndex -1（tudiPrefab0）已屏蔽。
      */
     @property
     farmIndex: number = 0;
@@ -98,16 +101,25 @@ export class GameFarmNode extends Component {
     @property(Prefab)
     plantingEndPrefab: Prefab = null;
 
+    /** 待解锁地块锁（可不绑，从 resources 加载 framLack） */
+    @property(Prefab)
+    framLackPrefab: Prefab = null;
+
     @property(Node)
     weilan : Node
 
     private static readonly TAP_MOVE_THRESHOLD = 12;
+    private static readonly FARM_LOCK_ROTATE_ANGLE = 12;
 
     private wateringPrefabResolved: Prefab | null = null;
     private plantingPrefabResolved: Prefab | null = null;
     private plantingPrefabLoading = false;
     private plantingEndPrefabResolved: Prefab | null = null;
     private plantingEndPrefabLoading = false;
+    private framLackPrefabResolved: Prefab | null = null;
+    private framLackPrefabLoading = false;
+    private farmLockNode: Node | null = null;
+    private farmLockHostPlot: Node | null = null;
     private readonly buffSpriteCache = new Map<number, SpriteFrame>();
     private readonly buffSpriteMissing = new Set<number>();
 
@@ -123,6 +135,10 @@ export class GameFarmNode extends Component {
     private mouseMoved = false;
 
     onLoad() {
+        if (this.isFieldDisabled()) {
+            this.node.active = false;
+            return;
+        }
         this.cachePlotBaseScales();
         this.stripPlotButtons();
         this.bindGlobalInput();
@@ -130,6 +146,7 @@ export class GameFarmNode extends Component {
         this.resolveWateringPrefab();
         this.resolvePlantingPrefab();
         this.resolvePlantingEndPrefab();
+        this.resolveFarmLockPrefab();
     }
 
     /** Planting.fNode 展开时挂到该节点，置于整块农田分区最上层 */
@@ -161,12 +178,18 @@ export class GameFarmNode extends Component {
     private _syncing = false;
 
     start() {
+        if (this.isFieldDisabled()) {
+            return;
+        }
         EventSystem.addListent(FARM_EVENT_DATA_UPDATED, this.onFarmDataUpdated, this);
         this.syncFromFarmModel();
     }
 
     /** 进图或 farm_data 更新后：刷新显隐与可收获 PlantingEnd */
     public syncFromFarmModel() {
+        if (this.isFieldDisabled()) {
+            return;
+        }
         if (this._syncing) {
             return;
         }
@@ -174,6 +197,7 @@ export class GameFarmNode extends Component {
         try {
             this.syncPlotVisibilityFromModel();
             this.syncPlotOverlaysFromModel();
+            this.syncFarmLockIndicator();
         } finally {
             this._syncing = false;
         }
@@ -240,6 +264,7 @@ export class GameFarmNode extends Component {
     }
 
     onDestroy() {
+        this.hideFarmLock();
         EventSystem.remove(this);
         this.unbindGlobalInput();
     }
@@ -299,6 +324,139 @@ export class GameFarmNode extends Component {
                 this.refreshPlotBuffOverlay(plotNode, null, farmModel.getNowUnixSec());
             }
         }
+    }
+
+    /** 下一块可解锁地块：显示 framLack 并旋转摆动；解锁后自动移到后一格 */
+    private syncFarmLockIndicator() {
+        const targetPlot = this.findNextUnlockPlotNode();
+        if (!targetPlot?.isValid) {
+            this.hideFarmLock();
+            return;
+        }
+
+        const lockNode = this.ensureFarmLockOnPlot(targetPlot);
+        if (!lockNode) {
+            return;
+        }
+
+        lockNode.active = true;
+        if (this.farmLockHostPlot !== targetPlot) {
+            this.farmLockHostPlot = targetPlot;
+            this.startFarmLockRotate(lockNode);
+        }
+        this.syncPlotOverlayDrawOrder(targetPlot);
+    }
+
+    private findNextUnlockPlotNode(): Node | null {
+        const farmModel = FarmModel.getInstance();
+        const nextFarmId = farmModel.getNextUnlockFarmId();
+        if (nextFarmId <= 0 || farmModel.isPlotUnlocked(nextFarmId)) {
+            return null;
+        }
+
+        for (let plotIndex = 0; plotIndex < FARM_PLOT_COUNT; plotIndex++) {
+            const farmId = toServerFarmId(this.farmIndex, plotIndex, farmModel.getFarmCount());
+            if (farmId !== nextFarmId) {
+                continue;
+            }
+            return this.getPlotNodeByIndex(plotIndex);
+        }
+        return null;
+    }
+
+    private getPlotNodeByIndex(plotIndex: number): Node | null {
+        const children = this.node.children;
+        for (let i = 0; i < children.length; i++) {
+            const plotNode = children[i];
+            if (this.parsePlotIndex(plotNode) === plotIndex) {
+                return plotNode;
+            }
+        }
+        return null;
+    }
+
+  private applyNodeLayerTree(node: Node, layer: number) {
+        if (!node?.isValid) {
+            return;
+        }
+        node.layer = layer;
+        const children = node.children;
+        for (let i = 0; i < children.length; i++) {
+            this.applyNodeLayerTree(children[i], layer);
+        }
+    }
+
+    private ensureFarmLockOnPlot(plotNode: Node): Node | null {
+        const prefab = this.getFarmLockPrefab();
+        if (!prefab) {
+            return null;
+        }
+
+        if (!this.farmLockNode?.isValid) {
+            this.farmLockNode = instantiate(prefab);
+            this.farmLockNode.name = FARM_LOCK_NODE_NAME;
+        }
+
+        if (this.farmLockNode.parent !== plotNode) {
+            this.farmLockNode.setParent(plotNode);
+            this.farmLockNode.setPosition(0, 0, 0);
+            this.farmLockNode.setRotationFromEuler(0, 0, 0);
+        }
+        // framLack 预制体默认 UI_2D 层，挂到地图地块上需与地块同层才能被地图相机渲染
+        this.applyNodeLayerTree(this.farmLockNode, plotNode.layer);
+        return this.farmLockNode;
+    }
+
+    private hideFarmLock() {
+        this.farmLockHostPlot = null;
+        if (this.farmLockNode?.isValid) {
+            tween(this.farmLockNode).stop();
+            this.farmLockNode.setRotationFromEuler(0, 0, 0);
+            this.farmLockNode.active = false;
+        }
+    }
+
+    private startFarmLockRotate(lockNode: Node) {
+        tween(lockNode).stop();
+        lockNode.setRotationFromEuler(0, 0, 0);
+        const angle = GameFarmNode.FARM_LOCK_ROTATE_ANGLE;
+        tween(lockNode)
+            .repeatForever(
+                tween(lockNode)
+                    .to(0.45, { eulerAngles: v3(0, 0, angle) }, { easing: 'sineInOut' })
+                    .to(0.45, { eulerAngles: v3(0, 0, -angle) }, { easing: 'sineInOut' })
+                    .to(0.45, { eulerAngles: v3(0, 0, 0) }, { easing: 'sineInOut' }),
+            )
+            .start();
+    }
+
+    private resolveFarmLockPrefab() {
+        if (this.framLackPrefab) {
+            this.framLackPrefabResolved = this.framLackPrefab;
+            if (this.node?.isValid) {
+                this.syncFarmLockIndicator();
+            }
+            return;
+        }
+        if (this.framLackPrefabResolved || this.framLackPrefabLoading) {
+            return;
+        }
+        this.framLackPrefabLoading = true;
+        resources.load(FARM_LOCK_PREFAB_RESOURCE_PATH, Prefab, (err, prefab) => {
+            this.framLackPrefabLoading = false;
+            if (err || !prefab) {
+                console.log('[GameFarmNode] framLack 加载失败', err?.message ?? err);
+                return;
+            }
+            this.framLackPrefabResolved = prefab;
+            if (this.node?.isValid) {
+                this.syncFarmLockIndicator();
+            }
+        });
+    }
+
+    private getFarmLockPrefab(): Prefab | null {
+        return this.framLackPrefabResolved ?? this.framLackPrefab;
     }
 
     /** 根据地块 buff 数组在子节点 buff 上显示 farmBuff/buffType_{type} */
@@ -390,6 +548,7 @@ export class GameFarmNode extends Component {
             WATERING_PREFAB_NODE_NAME,
             PLANTING_PREFAB_NODE_NAME,
             PLANTING_END_PREFAB_NODE_NAME,
+            FARM_LOCK_NODE_NAME,
         ];
         let nextIndex = 0;
         for (let i = 0; i < layerNames.length; i++) {
@@ -798,6 +957,10 @@ export class GameFarmNode extends Component {
     private getMapCamera() {
         const editor = AppConst.mapManager.getMapEditor?.();
         return editor?.mainCamera ?? null;
+    }
+
+    private isFieldDisabled(): boolean {
+        return Math.floor(Number(this.farmIndex)) === FARM_DISABLED_FIELD_INDEX;
     }
 
     private mapFarmIdForPlot(plotIndex: number): number | null {

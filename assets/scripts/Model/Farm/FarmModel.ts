@@ -164,6 +164,19 @@ export class FarmModel {
         return Array.from(this.plots.values()).sort((a, b) => a.farm_id - b.farm_id);
     }
 
+    /** 当前序列上下一块待解锁的 farm_id（不校验等级/道具） */
+    public getNextUnlockFarmId(): number {
+        const plots = this.getAllPlots();
+        if (!plots.length) {
+            return 1;
+        }
+        let maxId = 0;
+        for (let i = 0; i < plots.length; i++) {
+            maxId = Math.max(maxId, Math.floor(Number(plots[i].farm_id) || 0));
+        }
+        return maxId + 1;
+    }
+
     public getPhase(farmId: number, nowSec = this.nowUnixSec()): FarmPlotPhase {
         return resolveFarmPlotPhase(this.getPlot(farmId), nowSec);
     }
