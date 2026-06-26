@@ -113,8 +113,8 @@ export module network {
             this.player_id = player_id
         }
 
-        toJSON() {
-            return { rpc: { id: "game_login", payload: JSON.stringify({ player_id: this.player_id }) } };
+        toJSON(nakama_token: string) {
+            return { rpc: { id: "game_login", payload: JSON.stringify({ player_id: this.player_id, token: nakama_token }) } };
         }
     }
 
