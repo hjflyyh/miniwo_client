@@ -14,6 +14,7 @@ import { GameSendRewardCell } from './GameSendRewardCell';
 import { BagModel } from '../../Model/BagModel';
 import { GAME_FARM_PLOT_CLICK_EVENT, GameFarmPlotClickPayload } from './GameFarmNode';
 import { FarmModel } from '../../Model/Farm/FarmModel';
+import { WorkshopModel } from '../../Model/Workshop/WorkshopModel';
 import { getOpenFarmRequirement } from '../../Model/Farm/FarmUnlockConfig';
 import {
     GAME_FARM_SEED_CHOOSE_EVENT,
@@ -159,6 +160,9 @@ export class GameView extends Component {
         EventSystem.addListent('ConfigLoadAll', this.onConfigLoadAll, this)
         EventSystem.addListent("leaveMap" , this.leaveMap , this)
         EventSystem.addListent("OpenGameShopList" , this.OpenGameShop , this)
+        EventSystem.addListent("OpenGameGongfang", this.OpenGameGongfang, this)
+        EventSystem.addListent("OnCongratulations" , this.OnCongratulations , this)
+
 
         this.onEditEnd()
         
@@ -172,10 +176,15 @@ export class GameView extends Component {
         if (MapModel.getInstance().isFarmMapGameType()) {
             void FarmModel.getInstance().enterFarm();
         }
+        void WorkshopModel.getInstance().fetchInfo();
 
         console.log(MapModel.getInstance().map_detail)
         // this.myNode.active = MapModel.getInstance().map_detail.player_id == RoleModel.getInstance().playerId
         // this.otherNode.active = MapModel.getInstance().map_detail.player_id != RoleModel.getInstance().playerId
+    }
+
+    OnCongratulations(data){
+        AppConst.PanelManager.openView("res/View/Congratulations" , data , null , null , this.UI)
     }
 
     private onConfigLoadAll() {
@@ -742,6 +751,10 @@ export class GameView extends Component {
 
     public OpenGameWarehouse(){
         AppConst.PanelManager.openView("res/View/Granary/GranaryView" , null , null , null , this.UI)
+    }
+
+    public OpenGameGongfang(){
+        AppConst.PanelManager.openView("res/View/Gongfang/GongfangView", null, null, null, this.UI)
     }
 
     public OpenGameShop(){

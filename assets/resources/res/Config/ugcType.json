@@ -1,0 +1,65 @@
+{
+  "100": {
+    "name_cn": "植物",
+    "name_en": "plants",
+    "Inside_and_outside": 1,
+    "icon": "",
+    "player_open_lv": 0,
+    "map_open_lv": 1,
+    "is_show": 0
+  },
+  "101": {
+    "name_cn": "摊位",
+    "name_en": "stalls",
+    "Inside_and_outside": 1,
+    "icon": "",
+    "player_open_lv": 0,
+    "map_open_lv": 1,
+    "is_show": 0
+  },
+  "102": {
+    "name_cn": "室外装饰",
+    "name_en": "outdoor decor",
+    "Inside_and_outside": 1,
+    "icon": "",
+    "player_open_lv": 0,
+    "map_open_lv": 1,
+    "is_show": 0
+  },
+  "200": {
+    "name_cn": "家具",
+    "name_en": "furniture",
+    "Inside_and_outside": 0,
+    "icon": "",
+    "player_open_lv": 0,
+    "map_open_lv": 1,
+    "is_show": 1
+  },
+  "201": {
+    "name_cn": "电器",
+    "name_en": "appliances",
+    "Inside_and_outside": 0,
+    "icon": "",
+    "player_open_lv": 0,
+    "map_open_lv": 1,
+    "is_show": 1
+  },
+  "202": {
+    "name_cn": "室内装饰",
+    "name_en": "indoor decor",
+    "Inside_and_outside": 0,
+    "icon": "",
+    "player_open_lv": 0,
+    "map_open_lv": 1,
+    "is_show": 1
+  },
+  "203": {
+    "name_cn": "墙饰",
+    "name_en": "wall decor",
+    "Inside_and_outside": 0,
+    "icon": "",
+    "player_open_lv": 0,
+    "map_open_lv": 1,
+    "is_show": 0
+  }
+}

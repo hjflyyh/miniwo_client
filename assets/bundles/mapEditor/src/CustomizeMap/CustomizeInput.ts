@@ -321,6 +321,9 @@ export class CustomizeInput extends Component {
     //翻转x轴物品
     OnClickUIFanzhuan(){
         if (!this.ensureMapEditor()) return;
+        if (this.mapEditor.flipSelectedPlacedItem()) {
+            return;
+        }
         const previewNode = this.mapEditor["curTileNode"] as Node;
         if (!previewNode || !previewNode.isValid) return;
         const curScale = previewNode.getScale();

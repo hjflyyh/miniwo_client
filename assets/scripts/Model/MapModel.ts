@@ -592,7 +592,17 @@ export class MapModel {
         };
     }
 
-    public saveMapData(map : MapEditor , base64Image) {
+    /** 保存地图时格子内偏移最多保留一位小数 */
+    private roundMapSaveOffset(value: unknown): number {
+        const n = Number(value);
+        if (!Number.isFinite(n)) {
+            return 0;
+        }
+        return Math.round(n * 10) / 10;
+    }
+
+    /** 将当前编辑器状态序列化为 map_data JSON（不写盘、不发请求） */
+    public buildMapDataJson(map: MapEditor): string {
         const { width: saveWidth, height: saveHeight } = this.getMapSaveGridSize(map);
 
         map.allMapAssetsData.Ground = [];
@@ -636,8 +646,8 @@ export class MapModel {
                     _type: "Plant",
                     position: plantFramPos,
                     flipX,
-                    offsetX: (value as any).offsetX ?? 0,
-                    offsetY: (value as any).offsetY ?? 0,
+                    offsetX: this.roundMapSaveOffset((value as any).offsetX),
+                    offsetY: this.roundMapSaveOffset((value as any).offsetY),
                     // cfgId : value
                 })
             } else if (value.tileType == "Fram") {
@@ -648,8 +658,8 @@ export class MapModel {
                     _type: "Fram",
                     position: plantFramPos,
                     flipX,
-                    offsetX: (value as any).offsetX ?? 0,
-                    offsetY: (value as any).offsetY ?? 0,
+                    offsetX: this.roundMapSaveOffset((value as any).offsetX),
+                    offsetY: this.roundMapSaveOffset((value as any).offsetY),
                 })
             }
         })
@@ -724,8 +734,8 @@ export class MapModel {
                         _type: decorType,
                         position: posKey,
                         flipX,
-                        offsetX: (value_4 as any).offsetX ?? 0,
-                        offsetY: (value_4 as any).offsetY ?? 0
+                        offsetX: this.roundMapSaveOffset((value_4 as any).offsetX),
+                        offsetY: this.roundMapSaveOffset((value_4 as any).offsetY)
                     })
                 }
             })
@@ -766,30 +776,12 @@ export class MapModel {
             cells: walkableCells,
         };
 
-        const _data = JSON.stringify(map.allMapAssetsData);
+        return JSON.stringify(map.allMapAssetsData);
+    }
+
+    public saveMapData(map : MapEditor , base64Image) {
+        const _data = this.buildMapDataJson(map);
         console.log(_data);
-
-
-        // let base64Image = '';
-        // 截图改为直接抓主相机输出，保证与 mainCamera 看到的画面一致（中心、朝向、可见层）
-        try {
-
-
-            // CaptureUtils.captureScreenToBlob(rt, (blob) => {
-            //     if (!blob) return;
-            //     const reader = new FileReader();
-            //     reader.onloadend = () => {
-            //         base64Image = String(reader.result || '');
-            //         if (base64Image) {
-            //             console.log(base64Image)
-            //             // sys.localStorage.setItem("MapDataPreview", base64Image);
-            //         }
-            //     };
-            //     reader.readAsDataURL(blob);
-            // });
-        } catch (e) {
-            console.warn("[saveMapData] capture preview failed", e);
-        }
 
         if(AppConst.SDKManager.isEditMapingWeb){
             postMessageToParent({

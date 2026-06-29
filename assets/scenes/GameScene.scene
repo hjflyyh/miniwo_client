@@ -1892,7 +1892,7 @@
     "asset": null,
     "fileId": "c89dc327-e8e8-4f31-b1d4-dfb92a50aea7",
     "instance": null,
-    "targetOverrides": null
+    "targetOverrides": []
   },
   {
     "__type__": "cc.SceneGlobals",

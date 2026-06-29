@@ -152,6 +152,14 @@ export class MapEditorUI extends Component {
     private npcHeadsSavedParent: Node | null = null;
     private npcHeadsSavedSiblingIndex = 0;
     private static readonly REGION_MIN_GRID = 3;
+    /** 已选中地图上的摆放道具时，保持 bottomAddNode 显示（避免被 setBottomNode 关掉） */
+    private placedItemSelectionActive = false;
+
+    @property(Node)
+    itemDeleteNode : Node
+
+    @property(Node)
+    itemCheckNode : Node
 
     protected onLoad(): void {
         if(Utils.handleAdaptation()){
@@ -232,6 +240,9 @@ export class MapEditorUI extends Component {
         EventSystem.addListent("OnClickTileGroundIcon" , this.OnClickTileGroundIcon , this)
         EventSystem.addListent("OnClickTileOhterIcon" , this.OnClickTileOhterIcon , this)
         EventSystem.addListent("OnClickFloorIcon" , this.OnClickFloorIcon , this)
+        EventSystem.addListent("OnBuildFurniture" , this.OnBuildFurniture , this)
+        EventSystem.addListent("OnBackChooseType" , this.OnBackChooseType , this)
+        EventSystem.addListent("MapEditorPlacedItemTouched" , this.MapEditorPlacedItemTouched , this)
         // this.groundList.Init(this.groundList.node.getComponent("GroundDataSource") as GroundDataSource)
         // this.plantList.Init(this.plantList.node.getComponent("GroundDataSource") as GroundDataSource)
         // this.wallList.Init(this.wallList.node.getComponent("GroundDataSource") as GroundDataSource)
@@ -255,7 +266,10 @@ export class MapEditorUI extends Component {
 
 
     OpenMapEditor() {
-        this.node.active = true
+        this.node.active = true;
+        if (MapModel.getInstance().showEditMapType === 0) {
+            MapManager.GetInstance().getMapEditor()?.beginInGameEditSession();
+        }
     }
 
     public onClickBackSelect(){
@@ -267,6 +281,10 @@ export class MapEditorUI extends Component {
             editor.buildControl.detele.node.active = false;
         }
         if(this.selectNode1.active){
+            if (MapModel.getInstance().showEditMapType === 0) {
+                MapManager.GetInstance().getMapEditor()?.restoreMapEntrySnapshot();
+                this.clearPlacedItemSelection();
+            }
             this.node.active = false
             MapManager.GetInstance().actionStatus = ActionStatus.Back;
             editor?.hideTileMask();
@@ -280,6 +298,40 @@ export class MapEditorUI extends Component {
 
         editor?.hideTileMask();
         this.bottomAddNode.active = false;        
+    }
+
+    MapEditorPlacedItemTouched() {
+        this.showBottomAddForSelectedPlacedItem();
+    }
+
+    public showBottomAddForSelectedPlacedItem() {
+        const editor = MapManager.GetInstance().getMapEditor();
+        if (!editor?.selectedPlacedItem?.tile?.isValid) {
+            return;
+        }
+        this.placedItemSelectionActive = true;
+        this.bottomAddNode.active = true;
+        this.confirmBtn.active = false;
+        this.fanzhuangBtn.active = true;
+        if (this.itemDeleteNode?.isValid) {
+            this.itemDeleteNode.active = true;
+        }
+    }
+
+    public clearPlacedItemSelection() {
+        MapManager.GetInstance().getMapEditor()?.clearSelectedPlacedItem();
+        this.placedItemSelectionActive = false;
+        this.setBottomNode();
+    }
+
+    OnBackChooseType(){
+        MapManager.GetInstance().actionStatus = ActionStatus.Back;
+        const editor = MapManager.GetInstance().getMapEditor();
+        editor?.hideTileMask();
+        if (editor && editor.buildControl && editor.buildControl.detele && editor.buildControl.detele.node) {
+            editor.buildControl.detele.node.active = false;
+        }
+        this.setBottomNode();
     }
 
     update(deltaTime: number) {
@@ -322,6 +374,10 @@ export class MapEditorUI extends Component {
         this.tileContent.active = false;
     }
 
+    OnBuildFurniture(){
+        MapManager.GetInstance().actionStatus = ActionStatus.DECOR;
+    }
+
     onClickTool(event: EventTouch) {
         const target = event.target as Node;
         if (target.name !== "region") {
@@ -337,6 +393,10 @@ export class MapEditorUI extends Component {
             pt.active = false;
         })
 
+        if (MapManager.GetInstance().getMapEditor()?.selectedPlacedItem) {
+            MapManager.GetInstance().getMapEditor()?.clearSelectedPlacedItem();
+        }
+        this.placedItemSelectionActive = false;
         this.bottomAddNode.active = false;
         this.tileContent.active = true;
         MapManager.GetInstance().restTouch();
@@ -461,6 +521,16 @@ export class MapEditorUI extends Component {
     fanzhuangBtn: Node = null;
 
     setBottomNode(){
+        if (this.placedItemSelectionActive) {
+            this.bottomAddNode.active = true;
+            this.confirmBtn.active = false;
+            this.fanzhuangBtn.active = true;
+            if (this.itemDeleteNode?.isValid) {
+                this.itemDeleteNode.active = true;
+            }
+            return;
+        }
+
         this.confirmBtn.active = MapManager.GetInstance().actionStatus == ActionStatus.DECOR || MapManager.GetInstance().actionStatus == ActionStatus.PLANT
             || MapManager.GetInstance().actionStatus == ActionStatus.FRAM || MapManager.GetInstance().actionStatus == ActionStatus.DETELE
             || MapManager.GetInstance().actionStatus == ActionStatus.REGION
@@ -469,6 +539,10 @@ export class MapEditorUI extends Component {
 
         this.bottomAddNode.active = MapManager.GetInstance().actionStatus != ActionStatus.MOVE
             && MapManager.GetInstance().actionStatus != ActionStatus.Back
+
+        if (this.itemDeleteNode?.isValid) {
+            this.itemDeleteNode.active = MapManager.GetInstance().actionStatus == ActionStatus.Back;
+        }
     }
 
     private getOrCreateRegionGraphics(editor: any): Graphics | null {
@@ -913,6 +987,13 @@ export class MapEditorUI extends Component {
     }
 
     OnClickDelete(){
+        const editor = MapManager.GetInstance().getMapEditor();
+        if (editor?.selectedPlacedItem) {
+            if (editor.deleteSelectedPlacedItem()) {
+                this.clearPlacedItemSelection();
+            }
+            return;
+        }
         if(this.selectNode2.active){
             this.onClickBackSelect()
         }
@@ -1003,6 +1084,7 @@ export class MapEditorUI extends Component {
         // 原生端无 canvas.toBlob / FileReader，且 UGC 保存不依赖预览图
         if (sys.isNative) {
             MapModel.getInstance().saveMapData(editor, "");
+            editor.commitInGameEditSessionSave();
             return;
         }
 
@@ -1020,12 +1102,14 @@ export class MapEditorUI extends Component {
         CaptureUtils.captureScreenToBlob(rt, (blob) => {
             if (!blob) {
                 MapModel.getInstance().saveMapData(editor, "");
+                editor.commitInGameEditSessionSave();
                 return;
             }
             const reader = new FileReader();
             reader.onloadend = () => {
                 const base64Image = String(reader.result || '');
                 MapModel.getInstance().saveMapData(editor, base64Image);
+                editor.commitInGameEditSessionSave();
             };
             reader.readAsDataURL(blob);
         });
@@ -1035,6 +1119,10 @@ export class MapEditorUI extends Component {
         if (MapManager.GetInstance().actionStatus == ActionStatus.REGION) {
             this.cancelPendingRegionSelection();
             this.disableRegionSelectionMode();
+        }
+        const editor = MapManager.GetInstance().getMapEditor();
+        if (editor?.selectedPlacedItem) {
+            this.clearPlacedItemSelection();
         }
         this.mapToolNode.forEach((pt) => {
             pt.tool.active = true;
@@ -1048,8 +1136,10 @@ export class MapEditorUI extends Component {
         if(!this.selectNode2.active){
             MapManager.GetInstance().actionStatus = ActionStatus.Back;
         }
-        MapManager.GetInstance().getMapEditor().hideTileMask();
-        this.bottomAddNode.active = false;
+        editor?.hideTileMask();
+        if (!this.placedItemSelectionActive) {
+            this.bottomAddNode.active = false;
+        }
     }
 
     checkButtonVisible(agin: boolean = false) {

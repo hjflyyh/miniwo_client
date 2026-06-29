@@ -13,6 +13,7 @@ import { RegionNpcCellBinder } from './RegionNpcCellBinder';
 import { network } from '../../../scripts/Model/RequestData';
 import { FARM_MAP_GRID_HEIGHT, FARM_MAP_GRID_WIDTH } from './farm/FarmMapConstants';
 import { FarmMapEditorModule, setMapBgGrassSpriteVisible } from './farm/FarmMapEditorModule';
+import { PlacedItemTouch, PlacedItemTouchMeta } from './PlacedItemTouch';
 import { FarmModel } from '../../../scripts/Model/Farm/FarmModel';
 import { postMessageToParent } from '../../../scripts/Utils/ParentPostMessage';
 import { GenericSpritesheetAnimator } from 'db://assets/scripts/Utils/GenericSpritesheetAnimator';
@@ -136,6 +137,17 @@ export class MapEditor extends Component {
         tooltip: '勾选后：铺路(GROUND)忽略 mapData、地板/墙/家具、其它路面类型、邻格类型与是否已铺；点击/拖过即强制铺当前选中路面。',
     })
     public enableRoadIgnoreGridOccupancy = false;
+
+    @property(CCBoolean)
+    enablePlacedItemTouch = true;
+
+    /** 当前选中的已摆放道具（图片触摸实验，可整段回退） */
+    public selectedPlacedItem: (PlacedItemTouchMeta & { tile: Node }) | null = null;
+    private selectedPlacedItemColorBackup: { node: Node, color: Color }[] = [];
+    private static readonly SELECTED_PLACED_ITEM_TINT = new Color(140, 255, 140, 255);
+    /** 游戏内游玩：进入地图时的 map_data 快照；退出编辑时用于还原 */
+    private mapEntrySnapshot: string | null = null;
+    private editSessionDirty = false;
 
     /** 最近一次鼠标/触摸在 mapContainer 下的本地坐标（用于格子内偏移摆放） */
     public lastPointerLocalPos: Vec2 | null = null;
@@ -676,6 +688,9 @@ export class MapEditor extends Component {
 
         this.refreshWalkableDebugOverlayIfNeeded();
         this.sendWebMapInfoIfChanged();
+        if (manager.actionStatus !== ActionStatus.MOVE) {
+            this.markInGameEditDirty();
+        }
     }
 
     /**
@@ -1037,8 +1052,11 @@ export class MapEditor extends Component {
         //进入地图，根据地图显示内容
         if(MapModel.getInstance().showEditMapType == 0){
             this.map_id = MapModel.getInstance().map_detail.id
-            let data = JSON.parse(MapModel.getInstance().map_detail.map_data)
+            const rawMapData = MapModel.getInstance().map_detail.map_data;
+            let data = JSON.parse(rawMapData)
             MapLoadMap.loadMapData(data , this)
+            this.mapEntrySnapshot = typeof rawMapData === 'string' ? rawMapData : JSON.stringify(data);
+            this.editSessionDirty = false;
             return
         }
 
@@ -1522,7 +1540,8 @@ export class MapEditor extends Component {
                 tile.destroy();
                 return;
             }
-            house.decor.set(this.buildDecorStackKey(gridPos, tile.name), {
+            const decorKey = this.buildDecorStackKey(gridPos, tile.name);
+            house.decor.set(decorKey, {
                 tile: tile,
                 tileType: "Decor",
                 width: size.width,
@@ -1532,6 +1551,12 @@ export class MapEditor extends Component {
                 flipX,
                 offsetX: offset.x,
                 offsetY: offset.y
+            });
+
+            this.bindPlacedItemTouch(tile, this.curTileNode["tileType"], {
+                belong: floorBelong,
+                decorKey,
+                grid: `${gridPos.x},${gridPos.y}`,
             });
 
             // 更新网格数据
@@ -1775,7 +1800,8 @@ export class MapEditor extends Component {
         this.mapContainer.addChild(tile);
 
         const house = this.allHouse.get(belong);
-        house.decor.set(this.buildDecorStackKey(gridPos, tile.name), {
+        const wallDecorKey = this.buildDecorStackKey(gridPos, tile.name);
+        house.decor.set(wallDecorKey, {
             tile: tile,
             tileType: "WallDacoration",
             width: size.width,
@@ -1785,6 +1811,12 @@ export class MapEditor extends Component {
             flipX,
             offsetX: offset.x,
             offsetY: offset.y
+        });
+
+        this.bindPlacedItemTouch(tile, this.curTileNode["tileType"], {
+            belong,
+            decorKey: wallDecorKey,
+            grid: `${gridPos.x},${gridPos.y}`,
         });
 
         MapManager.GetInstance().getMapEditorUI().checkButtonVisible();
@@ -1919,6 +1951,333 @@ export class MapEditor extends Component {
             this.maskSp.getComponent(UITransform).setContentSize(size);
             this.tileMaskNode.getComponent(UITransform).setContentSize(size);
             this.buildControl.frame.setContentSize(size.width + 10, size.height + 10);
+        }
+    }
+
+    private forEachPlacedItemSprite(tile: Node, fn: (sp: Sprite) => void): void {
+        const rootSp = tile.getComponent(Sprite);
+        if (rootSp) {
+            fn(rootSp);
+        }
+        for (let i = 0; i < tile.children.length; i++) {
+            const childSp = tile.children[i].getComponent(Sprite);
+            if (childSp) {
+                fn(childSp);
+            }
+        }
+    }
+
+    private applySelectedPlacedItemHighlight(tile: Node): void {
+        if (!tile?.isValid) {
+            return;
+        }
+        this.forEachPlacedItemSprite(tile, (sp) => {
+            this.selectedPlacedItemColorBackup.push({ node: sp.node, color: sp.color.clone() });
+            sp.color = MapEditor.SELECTED_PLACED_ITEM_TINT.clone();
+        });
+    }
+
+    private clearSelectedPlacedItemHighlight(): void {
+        for (let i = 0; i < this.selectedPlacedItemColorBackup.length; i++) {
+            const entry = this.selectedPlacedItemColorBackup[i];
+            if (entry.node?.isValid) {
+                const sp = entry.node.getComponent(Sprite);
+                if (sp) {
+                    sp.color = entry.color;
+                }
+            }
+        }
+        this.selectedPlacedItemColorBackup.length = 0;
+    }
+
+    /** 已摆放图片道具触摸回调（Back/Move 下由 PlacedItemTouch 触发） */
+    public handlePlacedItemTouch(tile: Node, meta: PlacedItemTouchMeta): void {
+        if (!this.enablePlacedItemTouch || !meta || !tile?.isValid) {
+            return;
+        }
+        this.isDragging = false;
+        if (this.selectedPlacedItem?.tile !== tile) {
+            this.clearSelectedPlacedItemHighlight();
+            this.selectedPlacedItem = { ...meta, tile };
+            this.applySelectedPlacedItemHighlight(tile);
+        }
+        MapManager.GetInstance().getMapEditorUI()?.showBottomAddForSelectedPlacedItem();
+        EventSystem.send('MapEditorPlacedItemTouched', this.selectedPlacedItem);
+    }
+
+    public clearSelectedPlacedItem(): void {
+        this.clearSelectedPlacedItemHighlight();
+        this.selectedPlacedItem = null;
+    }
+
+    public deleteSelectedPlacedItem(): boolean {
+        const selected = this.selectedPlacedItem;
+        if (!selected?.tile?.isValid) {
+            return false;
+        }
+
+        if (selected.belong && selected.decorKey) {
+            const decor = this.allHouse.get(selected.belong)?.decor.get(selected.decorKey);
+            if (decor && (decor.tileType === 'Decor' || this.isWallDacorationTileType(decor.tileType))) {
+                this.removeHouseDecor({ belong: selected.belong, decorKey: selected.decorKey });
+                MapManager.GetInstance().getMapEditorUI()?.checkButtonVisible(true);
+                this.sendWebMapInfoIfChanged();
+                this.markInGameEditDirty();
+                return true;
+            }
+            return false;
+        }
+
+        const storageKey = selected.mapItemKey;
+        if (storageKey && this.mapItems.has(storageKey)) {
+            const mapItem = this.mapItems.get(storageKey);
+            const anchorPos = this.getMapItemAnchorVecForFootprint(storageKey, mapItem)
+                ?? (selected.grid ? this.parseAnchorStringToVec(selected.grid) : null);
+            if (!mapItem || !anchorPos) {
+                return false;
+            }
+
+            if (mapItem.tileType === 'Floor') {
+                for (let i = 0; i < this.buildFloorPoints.length; i++) {
+                    const element = this.buildFloorPoints[i];
+                    if (element.x === anchorPos.x && element.y === anchorPos.y) {
+                        this.buildFloorPoints.splice(i, 1);
+                        break;
+                    }
+                }
+            }
+
+            const buildingSize = this.getNodeGridSize(mapItem.tile);
+            if (mapItem.tile) {
+                mapItem.tile.destroy();
+            }
+            this.mapItems.delete(storageKey);
+
+            if (this.isOutdoorPlantFramTileType(mapItem.tileType)) {
+                this.refreshOutdoorPlantFramFootprintMapData(anchorPos, buildingSize);
+            } else {
+                for (let x = 0; x < buildingSize.x; x++) {
+                    for (let y = 0; y < buildingSize.y; y++) {
+                        const gridX = anchorPos.x + x;
+                        const gridY = anchorPos.y - y;
+                        this.mapData[gridX][gridY] = 0;
+                    }
+                }
+            }
+
+            MapManager.GetInstance().getMapEditorUI()?.checkButtonVisible(true);
+            this.sendWebMapInfoIfChanged();
+            this.markInGameEditDirty();
+            return true;
+        }
+
+        return false;
+    }
+
+    private shouldTrackInGameEditSession(): boolean {
+        return MapModel.getInstance().showEditMapType === 0
+            && !!MapManager.GetInstance().getMapEditorUI()?.node?.active;
+    }
+
+    public beginInGameEditSession(): void {
+        if (MapModel.getInstance().showEditMapType !== 0) {
+            return;
+        }
+        this.editSessionDirty = false;
+    }
+
+    public commitInGameEditSessionSave(): void {
+        if (MapModel.getInstance().showEditMapType !== 0) {
+            return;
+        }
+        const savedJson = MapModel.getInstance().buildMapDataJson(this);
+        this.mapEntrySnapshot = savedJson;
+        this.editSessionDirty = false;
+        if (MapModel.getInstance().map_detail) {
+            MapModel.getInstance().map_detail.map_data = savedJson;
+        }
+    }
+
+    public markInGameEditDirty(): void {
+        if (!this.shouldTrackInGameEditSession()) {
+            return;
+        }
+        this.editSessionDirty = true;
+    }
+
+    /** 退出编辑：还原为进入地图时（或上次保存后）的场景 */
+    public restoreMapEntrySnapshot(): void {
+        if (MapModel.getInstance().showEditMapType !== 0 || !this.mapEntrySnapshot || !this.editSessionDirty) {
+            return;
+        }
+        try {
+            this.reloadMapFromData(JSON.parse(this.mapEntrySnapshot) as MapData);
+        } catch (e) {
+            console.warn('[MapEditor] restoreMapEntrySnapshot failed', e);
+        }
+        this.editSessionDirty = false;
+    }
+
+    public reloadMapFromData(data: MapData): void {
+        this.clearMapRuntimeState();
+        MapLoadMap.loadMapData(data, this);
+        MapManager.GetInstance().getMapEditorUI()?.refreshRegionHighlightsFromData?.();
+    }
+
+    public clearMapRuntimeState(): void {
+        this.clearSelectedPlacedItem();
+        this.moveItem = null;
+        this.deteleItem = null;
+        this.hideTileMask();
+
+        const mapChildren = [...this.mapContainer.children];
+        for (let i = 0; i < mapChildren.length; i++) {
+            mapChildren[i].destroy();
+        }
+
+        if (this.homeWallTilemap?.isValid) {
+            const wallChildren = [...this.homeWallTilemap.children];
+            for (let i = 0; i < wallChildren.length; i++) {
+                wallChildren[i].destroy();
+            }
+        }
+
+        if (this.disMapContainer?.isValid) {
+            const disChildren = [...this.disMapContainer.children];
+            for (let i = 0; i < disChildren.length; i++) {
+                disChildren[i].destroy();
+            }
+        }
+
+        this.mapItems.clear();
+        this.houseItems.clear();
+        this.allHouse.clear();
+        this.buildFloorPoints.length = 0;
+        this.mapRegions.length = 0;
+        this.placeholderTilemap.clear();
+        this.displayTilemap.clear();
+        this.clearPendingRegionNpcHeads();
+
+        for (const key of [...this.regionNpcHeadLayerMap.keys()]) {
+            this.clearRegionNpcHeadLayer(key);
+        }
+        this.regionNpcHeadLayerMap.clear();
+
+        this.allMapAssetsData = {
+            Ground: [],
+            Plant: [],
+            Fram: [],
+            Region: [],
+            Floor: [],
+            House: [],
+            Walkable: {
+                width: 0,
+                height: 0,
+                cells: [],
+            },
+        };
+
+        this.initGridData();
+
+        for (let x = 0; x < this.mapWidth; x++) {
+            for (let y = 0; y < this.mapHeight; y++) {
+                this.placeholderTilemap.set(`${x},${y}`, {
+                    _type: 1,
+                    empty: true,
+                    _tileType: this.groundType,
+                    cfgId: this.chooseGroundId,
+                });
+            }
+        }
+
+        if (this.mapGameType != 0) {
+            for (let x = 0; x < this.mapWidth; x++) {
+                for (let y = 0; y < this.mapHeight; y++) {
+                    this.setDisplayTile(new Vec2(x, y), new Size(32, 32), this.groundType);
+                }
+            }
+        }
+
+        this.clearWalkableDebugOverlay();
+        this.clearNpcTileDebugOverlay();
+    }
+
+    public flipSelectedPlacedItem(): boolean {
+        const selected = this.selectedPlacedItem;
+        if (!selected?.tile?.isValid) {
+            return false;
+        }
+        const tile = selected.tile;
+        const scale = tile.getScale();
+        const nextScaleX = scale.x >= 0 ? -1 : 1;
+        tile.setScale(nextScaleX, scale.y, scale.z);
+
+        if (selected.belong && selected.decorKey) {
+            const decor = this.allHouse.get(selected.belong)?.decor.get(selected.decorKey);
+            if (decor) {
+                decor.flipX = nextScaleX;
+            }
+        } else if (selected.mapItemKey) {
+            const item = this.mapItems.get(selected.mapItemKey);
+            if (item) {
+                item.flipX = nextScaleX;
+            }
+        }
+        this.markInGameEditDirty();
+        return true;
+    }
+
+    public bindPlacedItemTouch(
+        tile: Node,
+        tileType: string,
+        meta: Omit<PlacedItemTouchMeta, 'tileType' | 'configId'>,
+    ): void {
+        if (!this.enablePlacedItemTouch || !tile?.isValid) {
+            return;
+        }
+        const cfgName = this.resolvePlacedItemCfgName(tileType);
+        if (!cfgName) {
+            return;
+        }
+        const configId = this.extractDecorConfigId(tile.name);
+        if (!configId) {
+            return;
+        }
+        const cfg = AppConst.JSONManager.getItem(cfgName, configId) as { is_prefab?: number } | null;
+        if (!cfg || Number(cfg.is_prefab) === 1) {
+            return;
+        }
+
+        let touch = tile.getComponent(PlacedItemTouch);
+        if (!touch) {
+            touch = tile.addComponent(PlacedItemTouch);
+        }
+        touch.setup({
+            tileType,
+            configId,
+            belong: meta.belong,
+            decorKey: meta.decorKey,
+            mapItemKey: meta.mapItemKey,
+            grid: meta.grid,
+        });
+    }
+
+    private resolvePlacedItemCfgName(tileType: string): string {
+        switch (tileType) {
+            case 'OutsideRenovation':
+            case 'Plant':
+                return 'mapOutsideRenovation';
+            case 'Fram':
+                return 'mapEdit';
+            case 'Decor':
+            case 'DecorOrnament':
+            case 'Appliance':
+                return 'mapDecor';
+            case 'WallDacoration':
+            case 'WallDecor':
+                return 'mapWallDecor';
+            default:
+                return '';
         }
     }
 
@@ -2447,6 +2806,7 @@ export class MapEditor extends Component {
 
                 this.moveStatus = 0;
                 this.buildControl.move.play('move_up');
+                this.markInGameEditDirty();
 
                 if (sys.isMobile) {
                     this.moveItem = null;
@@ -3309,6 +3669,7 @@ export class MapEditor extends Component {
             maxY,
             npcIds: Array.isArray(npcIds) ? [...npcIds] : []
         });
+        this.markInGameEditDirty();
         return true;
     }
 
@@ -3965,6 +4326,10 @@ export class MapEditor extends Component {
                     plantEntry.gridAnchor = `${gridPos.x},${gridPos.y}`;
                 }
                 this.mapItems.set(storageKey, plantEntry);
+                this.bindPlacedItemTouch(tile, this.curTileNode["tileType"], {
+                    mapItemKey: storageKey,
+                    grid: `${gridPos.x},${gridPos.y}`,
+                });
             } else if (manager.actionStatus == ActionStatus.FRAM) {
                 const previewScaleX = this.curTileNode?.getScale()?.x ?? 1;
                 const flipX = previewScaleX < 0 ? -1 : 1;
@@ -3985,6 +4350,10 @@ export class MapEditor extends Component {
                     framEntry.gridAnchor = `${gridPos.x},${gridPos.y}`;
                 }
                 this.mapItems.set(storageKey, framEntry);
+                this.bindPlacedItemTouch(tile, 'Fram', {
+                    mapItemKey: storageKey,
+                    grid: `${gridPos.x},${gridPos.y}`,
+                });
             } else if (manager.actionStatus == ActionStatus.FLOOR) {
                 this.mapItems.set(`${gridPos.x},${gridPos.y}`, { id: tile.name, tile: tile, tileType: "Floor" });
                 this.buildFloorPoints.push(gridPos);
@@ -5721,7 +6090,8 @@ export class MapEditor extends Component {
                 tile.setPosition(worldPos.x + ox, worldPos.y + oy, worldPos.z);
                 this.mapContainer.addChild(tile);
 
-                wallHouse.decor.set(this.buildDecorStackKey(gridPos, tile.name), {
+                const decorKey = this.buildDecorStackKey(gridPos, tile.name);
+                wallHouse.decor.set(decorKey, {
                     tile: tile,
                     tileType: decorType,
                     width: size.width,
@@ -5731,6 +6101,12 @@ export class MapEditor extends Component {
                     flipX: flipX != null ? (flipX < 0 ? -1 : 1) : 1,
                     offsetX: ox,
                     offsetY: oy
+                });
+
+                this.bindPlacedItemTouch(tile, decorType, {
+                    belong: _name,
+                    decorKey,
+                    grid: `${gridPos.x},${gridPos.y}`,
                 });
 
                 if (decorType === "Decor") {

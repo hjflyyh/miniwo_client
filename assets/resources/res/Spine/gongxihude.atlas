@@ -1,0 +1,146 @@
+
+gongxihude.png
+size: 988,900
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+baikuai
+  rotate: false
+  xy: 121, 534
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+baodian
+  rotate: false
+  xy: 223, 534
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+caihong
+  rotate: true
+  xy: 2, 9
+  size: 306, 150
+  orig: 306, 150
+  offset: 0, 0
+  index: -1
+guangdian_01
+  rotate: false
+  xy: 154, 2
+  size: 350, 327
+  orig: 350, 327
+  offset: 0, 0
+  index: -1
+laba
+  rotate: false
+  xy: 480, 580
+  size: 50, 54
+  orig: 50, 54
+  offset: 0, 0
+  index: -1
+lizi_baozha0001
+  rotate: false
+  xy: 80, 331
+  size: 262, 198
+  orig: 262, 198
+  offset: 0, 0
+  index: -1
+lizi_baozha0003
+  rotate: true
+  xy: 121, 636
+  size: 262, 198
+  orig: 262, 198
+  offset: 0, 0
+  index: -1
+lizi_baozha0005
+  rotate: true
+  xy: 321, 636
+  size: 262, 198
+  orig: 262, 198
+  offset: 0, 0
+  index: -1
+lizi_baozha0007
+  rotate: false
+  xy: 344, 344
+  size: 262, 198
+  orig: 262, 198
+  offset: 0, 0
+  index: -1
+lizi_baozha0009
+  rotate: true
+  xy: 521, 636
+  size: 262, 198
+  orig: 262, 198
+  offset: 0, 0
+  index: -1
+lizi_baozha0011
+  rotate: false
+  xy: 721, 700
+  size: 262, 198
+  orig: 262, 198
+  offset: 0, 0
+  index: -1
+lizi_baozha0013
+  rotate: false
+  xy: 721, 500
+  size: 262, 198
+  orig: 262, 198
+  offset: 0, 0
+  index: -1
+lizi_baozha0015
+  rotate: true
+  xy: 506, 80
+  size: 262, 198
+  orig: 262, 198
+  offset: 0, 0
+  index: -1
+lizi_baozha0017
+  rotate: false
+  xy: 706, 300
+  size: 262, 198
+  orig: 262, 198
+  offset: 0, 0
+  index: -1
+maozi
+  rotate: false
+  xy: 532, 584
+  size: 46, 50
+  orig: 46, 50
+  offset: 0, 0
+  index: -1
+shenti
+  rotate: true
+  xy: 325, 544
+  size: 90, 74
+  orig: 90, 74
+  offset: 0, 0
+  index: -1
+shexian_01
+  rotate: true
+  xy: 80, 531
+  size: 367, 39
+  orig: 367, 39
+  offset: 0, 0
+  index: -1
+shizipian
+  rotate: false
+  xy: 706, 50
+  size: 248, 248
+  orig: 248, 248
+  offset: 0, 0
+  index: -1
+tuiwei
+  rotate: true
+  xy: 2, 317
+  size: 581, 76
+  orig: 581, 76
+  offset: 0, 0
+  index: -1
+wujiaoxing
+  rotate: true
+  xy: 401, 556
+  size: 78, 77
+  orig: 78, 77
+  offset: 0, 0
+  index: -1

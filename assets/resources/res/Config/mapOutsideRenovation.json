@@ -1,48 +1,10 @@
 {
-  "40001001": {
-    "name_cn": "石墩灰色",
-    "icon": "plant/icon/stone_pier_gray",
-    "image": "plant/image/stone_pier_gray",
-    "tags": "",
-    "map_size": "16#32",
-    "img_size": "0.35",
-    "img_pos": "0#0",
-    "spine_url": "",
-    "spine_size": "1",
-    "spine_pos": "0#0",
-    "dialogue_id": null
-  },
-  "40001002": {
-    "name_cn": "自行车2",
-    "icon": "plant/icon/bicycle_2",
-    "image": "plant/image/bicycle_2",
-    "tags": "",
-    "map_size": "84#57",
-    "img_size": "0.35",
-    "img_pos": "0#0",
-    "spine_url": "",
-    "spine_size": "1",
-    "spine_pos": "0#0",
-    "dialogue_id": null
-  },
-  "40001003": {
-    "name_cn": "ATM机黄",
-    "icon": "plant/icon/atm_2",
-    "image": "plant/image/atm_2",
-    "tags": "",
-    "map_size": "54#106",
-    "img_size": "0.35",
-    "img_pos": "0#0",
-    "spine_url": "",
-    "spine_size": "1",
-    "spine_pos": "0#0",
-    "dialogue_id": null
-  },
-  "40001004": {
+  "10100001": {
     "name_cn": "金球菊草丛生",
     "icon": "plant/icon/blooming_grass_yellow_ball",
     "image": "plant/image/blooming_grass_yellow_ball",
     "tags": "",
+    "ugc_Tab_id": 1000,
     "map_size": "65#62",
     "img_size": "0.35",
     "img_pos": "0#0",
@@ -51,11 +13,12 @@
     "spine_pos": "0#0",
     "dialogue_id": null
   },
-  "40001005": {
+  "10110001": {
     "name_cn": "落叶树_4",
     "icon": "plant/icon/tree_4",
     "image": "plant/image/tree_4",
     "tags": "",
+    "ugc_Tab_id": 1001,
     "map_size": "126#221",
     "img_size": "0.35",
     "img_pos": "0#0",
@@ -64,11 +27,12 @@
     "spine_pos": "0#0",
     "dialogue_id": null
   },
-  "40001006": {
+  "10110002": {
     "name_cn": "落叶树_5",
     "icon": "plant/icon/tree_5",
     "image": "plant/image/tree_5",
     "tags": "",
+    "ugc_Tab_id": 1001,
     "map_size": "87#232",
     "img_size": "0.35",
     "img_pos": "0#0",
@@ -77,11 +41,12 @@
     "spine_pos": "0#0",
     "dialogue_id": null
   },
-  "40001007": {
+  "10110003": {
     "name_cn": "落叶树_6",
     "icon": "plant/icon/tree_6",
     "image": "plant/image/tree_6",
     "tags": "",
+    "ugc_Tab_id": 1001,
     "map_size": "197#229",
     "img_size": "0.35",
     "img_pos": "0#0",
@@ -90,11 +55,12 @@
     "spine_pos": "0#0",
     "dialogue_id": null
   },
-  "40001008": {
+  "10110004": {
     "name_cn": "落叶树_7",
     "icon": "plant/icon/tree_7",
     "image": "plant/image/tree_7",
     "tags": "",
+    "ugc_Tab_id": 1001,
     "map_size": "126#221",
     "img_size": "0.35",
     "img_pos": "0#0",
@@ -103,11 +69,12 @@
     "spine_pos": "0#0",
     "dialogue_id": null
   },
-  "40001009": {
+  "10110005": {
     "name_cn": "落叶树_8",
     "icon": "plant/icon/tree_8",
     "image": "plant/image/tree_8",
     "tags": "",
+    "ugc_Tab_id": 1001,
     "map_size": "87#232",
     "img_size": "0.35",
     "img_pos": "0#0",
@@ -116,11 +83,12 @@
     "spine_pos": "0#0",
     "dialogue_id": null
   },
-  "40001010": {
+  "10110006": {
     "name_cn": "落叶树_9",
     "icon": "plant/icon/tree_9",
     "image": "plant/image/tree_9",
     "tags": "",
+    "ugc_Tab_id": 1001,
     "map_size": "197#229",
     "img_size": "0.35",
     "img_pos": "0#0",
@@ -129,11 +97,110 @@
     "spine_pos": "0#0",
     "dialogue_id": null
   },
-  "40001011": {
+  "20120001": {
+    "name_cn": "ATM机黄",
+    "icon": "plant/icon/atm_2",
+    "image": "plant/image/atm_2",
+    "tags": "",
+    "ugc_Tab_id": 2002,
+    "map_size": "54#106",
+    "img_size": "0.35",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "dialogue_id": null
+  },
+  "30110001": {
+    "name_cn": "自行车2",
+    "icon": "plant/icon/bicycle_2",
+    "image": "plant/image/bicycle_2",
+    "tags": "",
+    "ugc_Tab_id": 3001,
+    "map_size": "84#57",
+    "img_size": "0.35",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "dialogue_id": null
+  },
+  "30110002": {
+    "name_cn": "救护车",
+    "icon": "plant/icon/ambulance",
+    "image": "plant/image/ambulance",
+    "tags": "",
+    "ugc_Tab_id": 3001,
+    "map_size": "76#46",
+    "img_size": "0.35",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "dialogue_id": null
+  },
+  "30110003": {
+    "name_cn": "双层巴士",
+    "icon": "plant/icon/bus_double",
+    "image": "plant/image/bus_double",
+    "tags": "",
+    "ugc_Tab_id": 3001,
+    "map_size": "84#57",
+    "img_size": "0.35",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "dialogue_id": null
+  },
+  "30110004": {
+    "name_cn": "公交车",
+    "icon": "plant/icon/bus",
+    "image": "plant/image/bus",
+    "tags": "",
+    "ugc_Tab_id": 3001,
+    "map_size": "102#50",
+    "img_size": "0.35",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "dialogue_id": null
+  },
+  "30110005": {
+    "name_cn": "公交车正视",
+    "icon": "plant/icon/bus_front",
+    "image": "plant/image/bus_front",
+    "tags": "",
+    "ugc_Tab_id": 3001,
+    "map_size": "72#190",
+    "img_size": "0.35",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "dialogue_id": null
+  },
+  "30120001": {
+    "name_cn": "石墩灰色",
+    "icon": "plant/icon/stone_pier_gray",
+    "image": "plant/image/stone_pier_gray",
+    "tags": "",
+    "ugc_Tab_id": 3002,
+    "map_size": "16#32",
+    "img_size": "0.35",
+    "img_pos": "0#0",
+    "spine_url": "",
+    "spine_size": "1",
+    "spine_pos": "0#0",
+    "dialogue_id": null
+  },
+  "30120002": {
     "name_cn": "石墩白色",
     "icon": "plant/icon/stone_pier_white",
     "image": "plant/icon/stone_pier_white",
     "tags": "",
+    "ugc_Tab_id": 3002,
     "map_size": "17#28",
     "img_size": "0.35",
     "img_pos": "0#0",

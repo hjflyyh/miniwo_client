@@ -3,8 +3,11 @@ import { network } from '../Model/RequestData';
 import { AppConst } from '../AppConst';
 import { RoleModel } from '../Model/RoleModel';
 import { NPCModel } from '../Model/NPCModel';
+import { MapModel } from '../Model/MapModel';
 import { HttpManager } from './HttpManager';
 const { ccclass, property } = _decorator;
+
+const GAME_VIEW_URL = 'res/View/Game/GameView';
 
 /**
  * WebSocket 连接状态枚举
@@ -346,8 +349,23 @@ export class WebSocketManager extends Component {
                         EventSystem.send("WebSocketMessage" , data.rpc)
                     }else if(data.notifications != null && data.notifications.notifications != null){
                         for(let d = 0 ; d < data.notifications.notifications.length ; d++){
-                            EventSystem.send("WebSocketNotifications" , data.notifications.notifications[d])
-                            console.log(JSON.parse(data.notifications.notifications[d].content))
+                            const notification = data.notifications.notifications[d];
+                            EventSystem.send("WebSocketNotifications" , notification)
+                            console.log(JSON.parse(notification.content))
+                            if (notification.code == network.ServerCode.CodeCongratulations) {
+                                let contentData = JSON.parse(notification.content)
+                                const items = contentData?.items;
+                                if (!Array.isArray(items) || items.length <= 0) {
+                                    continue;
+                                }
+                                if (this.isInWorldMap()) {
+                                    // 在世界地图中抛出事件，由 GameView 挂载到地图 UI 上打开
+                                    EventSystem.send("OnCongratulations" , items)
+                                } else {
+                                    // 不在世界地图中，直接打开
+                                    AppConst.PanelManager.openView("res/View/Congratulations" , items)
+                                }
+                            }
                         }
                         
                     }else if(data.match_data != null){
@@ -755,6 +773,11 @@ export class WebSocketManager extends Component {
         }
 
         return 0;
+    }
+
+    /** 是否处于世界地图（GameView 已打开且在地图中） */
+    private isInWorldMap(): boolean {
+        return MapModel.getInstance().isInMap && AppConst.PanelManager.viewIsOpen(GAME_VIEW_URL);
     }
 }
 

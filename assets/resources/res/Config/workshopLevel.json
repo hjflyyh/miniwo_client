@@ -1,0 +1,50 @@
+{
+  "1": {
+    "level": 1,
+    "name_cn": "初级工坊",
+    "required_map_level": 1,
+    "build_items": "104#200",
+    "upgrade_items": "",
+    "npc_slot_count": 0,
+    "branch_unlock_level": 0,
+    "time_reduce_cap": 0,
+    "time_reduce_per_npc": 0,
+    "output_bonus_per_npc": 0
+  },
+  "2": {
+    "level": 2,
+    "name_cn": "进阶工坊",
+    "required_map_level": 3,
+    "build_items": "",
+    "upgrade_items": "104#500",
+    "npc_slot_count": 1,
+    "branch_unlock_level": 0,
+    "time_reduce_cap": 5000,
+    "time_reduce_per_npc": 500,
+    "output_bonus_per_npc": 200
+  },
+  "3": {
+    "level": 3,
+    "name_cn": "熟练工坊",
+    "required_map_level": 5,
+    "build_items": "",
+    "upgrade_items": "104#1000",
+    "npc_slot_count": 2,
+    "branch_unlock_level": 3,
+    "time_reduce_cap": 7500,
+    "time_reduce_per_npc": 500,
+    "output_bonus_per_npc": 300
+  },
+  "4": {
+    "level": 4,
+    "name_cn": "大师工坊",
+    "required_map_level": 8,
+    "build_items": "",
+    "upgrade_items": "104#2000",
+    "npc_slot_count": 3,
+    "branch_unlock_level": 3,
+    "time_reduce_cap": 7500,
+    "time_reduce_per_npc": 500,
+    "output_bonus_per_npc": 400
+  }
+}

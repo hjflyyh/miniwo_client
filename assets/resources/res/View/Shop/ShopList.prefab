@@ -774,8 +774,8 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 141.526,
-      "y": 454.497,
+      "x": 202.313,
+      "y": 253.006,
       "z": 0
     },
     "_lrot": {
@@ -787,8 +787,8 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 0.5,
-      "y": 0.5,
+      "x": 1.5,
+      "y": 1.5,
       "z": 1
     },
     "_mobility": 0,
@@ -815,13 +815,13 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 636,
-      "height": 806
+      "width": 198.63999938964844,
+      "height": 252.47000122070312
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
-      "x": 0.5,
-      "y": 0.5
+      "x": 0.47145590925107106,
+      "y": 0.07383055135074762
     },
     "_id": ""
   },
@@ -830,7 +830,7 @@
     "fileId": "23ZOurXgRFyp+kQTtsBcxm"
   },
   {
-    "__type__": "cc.Sprite",
+    "__type__": "sp.Skeleton",
     "_name": "",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -851,28 +851,28 @@
       "b": 255,
       "a": 255
     },
-    "_spriteFrame": {
-      "__uuid__": "26771dd9-a0b1-4ddb-816e-1ad10bfd8ee2@f9941",
-      "__expectedType__": "cc.SpriteFrame"
+    "_skeletonData": {
+      "__uuid__": "9e666b5c-c8b2-477b-9489-b7a50ebb7c1b",
+      "__expectedType__": "sp.SkeletonData"
     },
-    "_type": 0,
-    "_fillType": 0,
-    "_sizeMode": 1,
-    "_fillCenter": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
-    },
-    "_fillStart": 0,
-    "_fillRange": 0,
-    "_isTrimmedMode": true,
-    "_useGrayscale": false,
-    "_atlas": null,
+    "defaultSkin": "default",
+    "defaultAnimation": "animation",
+    "_premultipliedAlpha": false,
+    "_timeScale": 1,
+    "_preCacheMode": 0,
+    "_cacheMode": 0,
+    "_sockets": [],
+    "_useTint": false,
+    "_debugMesh": false,
+    "_debugBones": false,
+    "_debugSlots": false,
+    "_enableBatch": false,
+    "loop": true,
     "_id": ""
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "e4zhZrUWZBWZNdKinwpMmU"
+    "fileId": "9eZ5iO0xxJxpOEL3ehjTWS"
   },
   {
     "__type__": "cc.PrefabInfo",

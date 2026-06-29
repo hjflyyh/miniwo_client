@@ -124,5 +124,11 @@
     "type": 0,
     "img_size": 1,
     "is_prefab": 1
+  },
+  "122": {
+    "resource": "maps/architecture/gongfang",
+    "type": 0,
+    "img_size": 1,
+    "is_prefab": 1
   }
 }

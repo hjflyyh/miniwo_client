@@ -1,0 +1,76 @@
+
+daojukuang_tx.png
+size: 584,236
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+saoguang_00000
+  rotate: false
+  xy: 2, 118
+  size: 114, 114
+  orig: 114, 114
+  offset: 0, 0
+  index: -1
+saoguang_00002
+  rotate: false
+  xy: 2, 2
+  size: 114, 114
+  orig: 114, 114
+  offset: 0, 0
+  index: -1
+saoguang_00004
+  rotate: false
+  xy: 118, 118
+  size: 114, 114
+  orig: 114, 114
+  offset: 0, 0
+  index: -1
+saoguang_00006
+  rotate: false
+  xy: 118, 2
+  size: 114, 114
+  orig: 114, 114
+  offset: 0, 0
+  index: -1
+saoguang_00008
+  rotate: false
+  xy: 234, 118
+  size: 114, 114
+  orig: 114, 114
+  offset: 0, 0
+  index: -1
+saoguang_00010
+  rotate: false
+  xy: 234, 2
+  size: 114, 114
+  orig: 114, 114
+  offset: 0, 0
+  index: -1
+saoguang_00012
+  rotate: false
+  xy: 350, 118
+  size: 114, 114
+  orig: 114, 114
+  offset: 0, 0
+  index: -1
+saoguang_00014
+  rotate: false
+  xy: 350, 2
+  size: 114, 114
+  orig: 114, 114
+  offset: 0, 0
+  index: -1
+saoguang_00016
+  rotate: false
+  xy: 466, 118
+  size: 114, 114
+  orig: 114, 114
+  offset: 0, 0
+  index: -1
+saoguang_00018
+  rotate: false
+  xy: 466, 2
+  size: 114, 114
+  orig: 114, 114
+  offset: 0, 0
+  index: -1

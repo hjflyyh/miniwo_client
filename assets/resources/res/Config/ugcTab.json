@@ -1,0 +1,226 @@
+{
+  "1000": {
+    "name_cn": "草团",
+    "name_en": "grass",
+    "ugc_type_id": 100,
+    "need_cfg": "mapOutsideRenovation",
+    "icon": "",
+    "is_show": 1
+  },
+  "1001": {
+    "name_cn": "树",
+    "name_en": "trees",
+    "ugc_type_id": 100,
+    "need_cfg": "mapOutsideRenovation",
+    "icon": "",
+    "is_show": 1
+  },
+  "1002": {
+    "name_cn": "花",
+    "name_en": "flowers",
+    "ugc_type_id": 100,
+    "need_cfg": "mapOutsideRenovation",
+    "icon": "",
+    "is_show": 0
+  },
+  "2000": {
+    "name_cn": "食物",
+    "name_en": "food_stalls",
+    "ugc_type_id": 101,
+    "need_cfg": "mapOutsideRenovation",
+    "icon": "",
+    "is_show": 0
+  },
+  "2001": {
+    "name_cn": "饮品",
+    "name_en": "drink_stalls",
+    "ugc_type_id": 101,
+    "need_cfg": "mapOutsideRenovation",
+    "icon": "",
+    "is_show": 0
+  },
+  "2002": {
+    "name_cn": "商品",
+    "name_en": "shops",
+    "ugc_type_id": 101,
+    "need_cfg": "mapOutsideRenovation",
+    "icon": "",
+    "is_show": 1
+  },
+  "3000": {
+    "name_cn": "水池",
+    "name_en": "pools",
+    "ugc_type_id": 102,
+    "need_cfg": "mapOutsideRenovation",
+    "icon": "",
+    "is_show": 0
+  },
+  "3001": {
+    "name_cn": "车辆",
+    "name_en": "vehicles",
+    "ugc_type_id": 102,
+    "need_cfg": "mapOutsideRenovation",
+    "icon": "",
+    "is_show": 1
+  },
+  "3002": {
+    "name_cn": "栏杆",
+    "name_en": "fences",
+    "ugc_type_id": 102,
+    "need_cfg": "mapOutsideRenovation",
+    "icon": "",
+    "is_show": 1
+  },
+  "4000": {
+    "name_cn": "桌子",
+    "name_en": "tables",
+    "ugc_type_id": 200,
+    "need_cfg": "mapDecor",
+    "icon": "",
+    "is_show": 1
+  },
+  "4001": {
+    "name_cn": "椅子",
+    "name_en": "chairs",
+    "ugc_type_id": 200,
+    "need_cfg": "mapDecor",
+    "icon": "",
+    "is_show": 1
+  },
+  "4002": {
+    "name_cn": "柜子",
+    "name_en": "cabinets",
+    "ugc_type_id": 200,
+    "need_cfg": "mapDecor",
+    "icon": "",
+    "is_show": 1
+  },
+  "4003": {
+    "name_cn": "床",
+    "name_en": "beds",
+    "ugc_type_id": 200,
+    "need_cfg": "mapDecor",
+    "icon": "",
+    "is_show": 1
+  },
+  "4004": {
+    "name_cn": "浴室",
+    "name_en": "bathroom",
+    "ugc_type_id": 200,
+    "need_cfg": "mapDecor",
+    "icon": "",
+    "is_show": 1
+  },
+  "4005": {
+    "name_cn": "地毯",
+    "name_en": "rugs",
+    "ugc_type_id": 200,
+    "need_cfg": "mapDecor",
+    "icon": "",
+    "is_show": 1
+  },
+  "5000": {
+    "name_cn": "卫生间",
+    "name_en": "bathroom_appliances",
+    "ugc_type_id": 201,
+    "need_cfg": "mapDecor",
+    "icon": "",
+    "is_show": 0
+  },
+  "5001": {
+    "name_cn": "客厅",
+    "name_en": "living_room",
+    "ugc_type_id": 201,
+    "need_cfg": "mapDecor",
+    "icon": "",
+    "is_show": 1
+  },
+  "5002": {
+    "name_cn": "餐厅",
+    "name_en": "dining_room",
+    "ugc_type_id": 201,
+    "need_cfg": "mapDecor",
+    "icon": "",
+    "is_show": 1
+  },
+  "5003": {
+    "name_cn": "卧室",
+    "name_en": "living_room_appliances",
+    "ugc_type_id": 201,
+    "need_cfg": "mapDecor",
+    "icon": "",
+    "is_show": 1
+  },
+  "5004": {
+    "name_cn": "书房",
+    "name_en": "study_room",
+    "ugc_type_id": 201,
+    "need_cfg": "mapDecor",
+    "icon": "",
+    "is_show": 0
+  },
+  "6000": {
+    "name_cn": "盆栽",
+    "name_en": "potted_plants",
+    "ugc_type_id": 202,
+    "need_cfg": "mapDecor",
+    "icon": "",
+    "is_show": 1
+  },
+  "6001": {
+    "name_cn": "摆件",
+    "name_en": "ornaments",
+    "ugc_type_id": 202,
+    "need_cfg": "mapDecor",
+    "icon": "",
+    "is_show": 1
+  },
+  "6002": {
+    "name_cn": "食物",
+    "name_en": "foods",
+    "ugc_type_id": 202,
+    "need_cfg": "mapDecor",
+    "icon": "",
+    "is_show": 1
+  },
+  "6003": {
+    "name_cn": "宠物",
+    "name_en": "pets",
+    "ugc_type_id": 202,
+    "need_cfg": "mapDecor",
+    "icon": "",
+    "is_show": 1
+  },
+  "7000": {
+    "name_cn": "墙上家具",
+    "name_en": "wall_furnitures",
+    "ugc_type_id": 203,
+    "need_cfg": "mapDecor",
+    "icon": "",
+    "is_show": 1
+  },
+  "7001": {
+    "name_cn": "展示架",
+    "name_en": "display_shelves",
+    "ugc_type_id": 203,
+    "need_cfg": "mapDecor",
+    "icon": "",
+    "is_show": 1
+  },
+  "7002": {
+    "name_cn": "挂画",
+    "name_en": "wall_art",
+    "ugc_type_id": 203,
+    "need_cfg": "mapDecor",
+    "icon": "",
+    "is_show": 0
+  },
+  "7003": {
+    "name_cn": "墙上装饰",
+    "name_en": "wall_decor",
+    "ugc_type_id": 203,
+    "need_cfg": "mapDecor",
+    "icon": "",
+    "is_show": 1
+  }
+}

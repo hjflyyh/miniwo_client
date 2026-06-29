@@ -20,8 +20,8 @@ export class TileIconLayout extends Component implements InfiniteCell {
     }
 
     UpdateContent(data: any): void {
-        let startIndex = data["dataIndex"] * 4
-        for(let s = 0 ; s < 4 ; s++){
+        let startIndex = data["dataIndex"] * 5
+        for(let s = 0 ; s < 5 ; s++){
             if(data["list"][startIndex + s]){
                 this.tileIcon[s].active = true
                 const prefab = this.tileIcon[s].getChildByName('icon').getComponent("PrefabLoad") as PrefabLoad;

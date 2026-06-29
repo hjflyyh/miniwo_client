@@ -11,6 +11,7 @@ import { UGCModel } from '../Model/UGCModel';
 import { ShopModel } from '../Model/ShopModel';
 import { AffinitieModel } from '../Model/AffinitieModel';
 import { FarmModel } from '../Model/Farm/FarmModel';
+import { WorkshopModel } from '../Model/Workshop/WorkshopModel';
 import { MailModel } from '../Model/MailModel';
 import { CGModel } from '../Model/CGModel';
 const { ccclass, property } = _decorator;
@@ -31,6 +32,7 @@ export class UtilsManager extends Component {
         UGCModel.getInstance().init()
         AffinitieModel.getInstance().init()
         FarmModel.getInstance().init()
+        WorkshopModel.getInstance().init()
 
         MailModel.getInstance().init()
         CGModel.getInstance().init()
