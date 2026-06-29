@@ -65,7 +65,7 @@ export class RoleModel {
 
     public loginWS() {
         let json = new network.LoginRequest(this.playerId);
-        AppConst.WebSocketManager.send(json.toJSON());
+        AppConst.WebSocketManager.send(json.toJSON(this.nakama_token));
     }
 
     private parseRpcPayload(rawPayload: any): any {
