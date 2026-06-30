@@ -28,7 +28,7 @@ export class UGCBuildTypeCell extends Component {
         this.typeName.string = data["name_en"]
         this.chooseNode.active = showIndex == buildTool.chooseTabIndex
         this.unchooseNode.active = showIndex != buildTool.chooseTabIndex
-        this.typeName.color = showIndex == buildTool.chooseTabIndex ? Color.WHITE : Color.BLACK
+        this.typeName.color = showIndex == buildTool.chooseTabIndex ? new Color(134 , 129 , 242 , 255) : Color.WHITE
     }    
 
     onClick(){

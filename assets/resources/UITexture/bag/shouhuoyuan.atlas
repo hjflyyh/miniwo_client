@@ -6,21 +6,21 @@ filter: Linear,Linear
 repeat: none
 biaopai
   rotate: false
-  xy: 726, 16
+  xy: 727, 12
   size: 34, 38
   orig: 34, 38
   offset: 0, 0
   index: -1
 bozi
   rotate: false
-  xy: 653, 56
+  xy: 687, 11
   size: 38, 39
   orig: 38, 39
   offset: 0, 0
   index: -1
 daimao
   rotate: true
-  xy: 598, 13
+  xy: 599, 54
   size: 41, 47
   orig: 41, 47
   offset: 0, 0
@@ -41,7 +41,7 @@ douzi_02
   index: -1
 er
   rotate: false
-  xy: 774, 74
+  xy: 716, 52
   size: 55, 50
   orig: 55, 50
   offset: 0, 0
@@ -96,8 +96,8 @@ houfa_02
   offset: 0, 0
   index: -1
 hudiejie
-  rotate: false
-  xy: 774, 126
+  rotate: true
+  xy: 658, 97
   size: 58, 56
   orig: 58, 56
   offset: 0, 0
@@ -124,15 +124,15 @@ maozi_03
   offset: 0, 0
   index: -1
 meimao_01
-  rotate: true
-  xy: 757, 122
+  rotate: false
+  xy: 539, 17
   size: 34, 15
   orig: 34, 15
   offset: 0, 0
   index: -1
 meimao_02
-  rotate: false
-  xy: 539, 18
+  rotate: true
+  xy: 857, 241
   size: 45, 14
   orig: 45, 14
   offset: 0, 0
@@ -145,15 +145,15 @@ shenti_01
   offset: 0, 0
   index: -1
 shenti_02
-  rotate: true
-  xy: 647, 11
+  rotate: false
+  xy: 598, 20
   size: 43, 32
   orig: 43, 32
   offset: 0, 0
   index: -1
 shuimu_01
-  rotate: false
-  xy: 870, 388
+  rotate: true
+  xy: 465, 2
   size: 12, 14
   orig: 12, 14
   offset: 0, 0
@@ -187,8 +187,8 @@ tui_01
   offset: 0, 0
   index: -1
 tui_02
-  rotate: true
-  xy: 831, 69
+  rotate: false
+  xy: 773, 36
   size: 55, 50
   orig: 55, 50
   offset: 0, 0
@@ -202,7 +202,7 @@ y_dabi
   index: -1
 y_jiao
   rotate: true
-  xy: 599, 56
+  xy: 830, 27
   size: 39, 52
   orig: 39, 52
   offset: 0, 0
@@ -229,8 +229,8 @@ y_xiaobi_01
   offset: 0, 0
   index: -1
 y_xiaobi_02
-  rotate: false
-  xy: 703, 100
+  rotate: true
+  xy: 716, 104
   size: 52, 56
   orig: 52, 56
   offset: 0, 0
@@ -242,16 +242,23 @@ y_yanbai
   orig: 66, 61
   offset: 0, 0
   index: -1
+y_yanjing
+  rotate: false
+  xy: 774, 133
+  size: 58, 49
+  orig: 58, 49
+  offset: 0, 0
+  index: -1
 y_yanpi
   rotate: false
-  xy: 846, 389
+  xy: 539, 2
   size: 22, 13
   orig: 22, 13
   offset: 0, 0
   index: -1
 y_yanqiu
-  rotate: false
-  xy: 681, 10
+  rotate: true
+  xy: 648, 52
   size: 43, 44
   orig: 43, 44
   offset: 0, 0
@@ -278,8 +285,8 @@ z_bi_03
   offset: 0, 0
   index: -1
 z_jiemao
-  rotate: true
-  xy: 658, 98
+  rotate: false
+  xy: 774, 88
   size: 57, 43
   orig: 57, 43
   offset: 0, 0
@@ -287,6 +294,13 @@ z_jiemao
 z_yanbai
   rotate: true
   xy: 834, 126
+  size: 56, 48
+  orig: 56, 48
+  offset: 0, 0
+  index: -1
+z_yanjing
+  rotate: true
+  xy: 833, 68
   size: 56, 48
   orig: 56, 48
   offset: 0, 0
@@ -299,8 +313,8 @@ z_yanpi
   offset: 0, 0
   index: -1
 z_yanqiu
-  rotate: true
-  xy: 703, 56
+  rotate: false
+  xy: 643, 9
   size: 42, 41
   orig: 42, 41
   offset: 0, 0

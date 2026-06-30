@@ -29,6 +29,10 @@ export class FarmMapEditorModule {
         this.background.setup(opts.disMapContainer, opts.mapPixelWidth, opts.mapPixelHeight);
     }
 
+    whenBackgroundReady(): Promise<void> {
+        return this.background.whenReady();
+    }
+
     dispose(mapBgNode: Node | null | undefined): void {
         this.background.dispose();
         setMapBgGrassSpriteVisible(mapBgNode, true);

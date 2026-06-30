@@ -68,7 +68,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Sprite",
+    "_name": "Node",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -89,8 +89,8 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 0,
+      "x": 5.233,
+      "y": -255.363,
       "z": 0
     },
     "_lrot": {
@@ -102,8 +102,8 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
+      "x": 1.5,
+      "y": 1.5,
       "z": 1
     },
     "_mobility": 0,
@@ -130,22 +130,22 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 576,
-      "height": 555
+      "width": 386,
+      "height": 372
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
-      "x": 0.5,
-      "y": 0.5
+      "x": 0.5075647620957132,
+      "y": 0.04056451653921476
     },
     "_id": ""
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "ecx4RNAkxKGbOpFw7Adcwj"
+    "fileId": "3ehHdAg/tFeoY7ASEILr7W"
   },
   {
-    "__type__": "cc.Sprite",
+    "__type__": "sp.Skeleton",
     "_name": "",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -166,28 +166,28 @@
       "b": 255,
       "a": 255
     },
-    "_spriteFrame": {
-      "__uuid__": "8bf0a0dc-95c2-4bbd-a0c4-ae1a1becfd8d@f9941",
-      "__expectedType__": "cc.SpriteFrame"
+    "_skeletonData": {
+      "__uuid__": "dccce8f9-87a6-415e-9898-e5b5fc744fe3",
+      "__expectedType__": "sp.SkeletonData"
     },
-    "_type": 0,
-    "_fillType": 0,
-    "_sizeMode": 1,
-    "_fillCenter": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
-    },
-    "_fillStart": 0,
-    "_fillRange": 0,
-    "_isTrimmedMode": true,
-    "_useGrayscale": false,
-    "_atlas": null,
+    "defaultSkin": "default",
+    "defaultAnimation": "animation",
+    "_premultipliedAlpha": false,
+    "_timeScale": 1,
+    "_preCacheMode": 0,
+    "_cacheMode": 0,
+    "_sockets": [],
+    "_useTint": false,
+    "_debugMesh": false,
+    "_debugBones": false,
+    "_debugSlots": false,
+    "_enableBatch": false,
+    "loop": true,
     "_id": ""
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "4chY4km6BKwLAl4ZwzO8vG"
+    "fileId": "78zWf7tEJEa6Kyhpv6ob/c"
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -197,7 +197,7 @@
     "asset": {
       "__id__": 0
     },
-    "fileId": "f74o+s1SJDupqhpYougCf3",
+    "fileId": "3cbbo49aROOpNNyJtwgUAr",
     "instance": null,
     "targetOverrides": null,
     "nestedPrefabInstanceRoots": null

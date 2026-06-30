@@ -13,11 +13,65 @@ export const FARM_BG_LAYOUT_GRID = 256;
 export interface TileSliceItem {
     row: number;
     col: number;
-    /** 该块宽（边缘块可能 < 1024） */
+    /** 拼接布局中的显示宽（与旧版 resized_bg 网格一致） */
     width: number;
-    /** 该块高（边缘块可能 < 1024） */
+    /** 拼接布局中的显示高 */
     height: number;
     spriteFrame: SpriteFrame;
+}
+
+/** 农场底图 10×9 马赛克网格描述（与 FarmMapConstants 中设计尺寸一致） */
+export interface FarmBgMosaicGridSpec {
+    cols: number;
+    rows: number;
+    designMosaicWidth: number;
+    designMosaicHeight: number;
+    colWidth: (col: number) => number;
+    rowHeight: (row: number) => number;
+    colLeft: (col: number) => number;
+    rowTop: (row: number) => number;
+}
+
+/**
+ * 按与 resized_bg 相同的马赛克网格，从 HD 整图纹理切块（非固定 1024 网格）。
+ * 布局尺寸用设计宽/高，保证与 FARM_BG_USE_HD=false 时画面一致。
+ */
+export function sliceTextureToMosaicGrid(texture: Texture2D, spec: FarmBgMosaicGridSpec): TileSliceItem[] {
+    const tw = texture.width;
+    const th = texture.height;
+    if (tw <= 0 || th <= 0 || spec.designMosaicWidth <= 0 || spec.designMosaicHeight <= 0) {
+        return [];
+    }
+
+    const scaleX = tw / spec.designMosaicWidth;
+    const scaleY = th / spec.designMosaicHeight;
+    const out: TileSliceItem[] = [];
+
+    for (let row = 0; row < spec.rows; row++) {
+        for (let col = 0; col < spec.cols; col++) {
+            const x0Design = spec.colLeft(col);
+            const y0Design = spec.rowTop(row);
+            const wDesign = spec.colWidth(col);
+            const hDesign = spec.rowHeight(row);
+
+            const x = Math.round(x0Design * scaleX);
+            const yTop = Math.round(y0Design * scaleY);
+            const w = Math.max(1, Math.round(wDesign * scaleX));
+            const h = Math.max(1, Math.round(hDesign * scaleY));
+            const yBl = th - yTop - h;
+            const rect = new Rect(x, yBl, w, h);
+
+            const sf = new SpriteFrame();
+            sf.texture = texture;
+            sf.rect = rect;
+            sf.originalSize = new Size(wDesign, hDesign);
+            sf.offset = new Vec2(0, 0);
+            sf.packable = false;
+
+            out.push({ row, col, width: wDesign, height: hDesign, spriteFrame: sf });
+        }
+    }
+    return out;
 }
 
 /**
@@ -69,41 +123,31 @@ export interface FarmBgTilesLoadResult {
 }
 
 /**
- * 从 mapEditor 分包加载 `maps/farm/bg`，按 1024×1024 切成多块 SpriteFrame。
- * 使用前需已加载 bundle，或直接由本函数内部 loadBundle。
+ * 从 mapEditor 分包加载底图纹理（不切片）。
  */
-export function loadFarmBgTiles1024(
-    done: (err: Error | null, result: FarmBgTilesLoadResult | null) => void,
+export function loadFarmBgTexture(
+    assetPath: string,
+    done: (err: Error | null, texture: Texture2D | null, ownsTexture: boolean) => void,
 ): void {
-    const finish = (texture: Texture2D, ownsTexture: boolean) => {
-        const tiles = sliceTextureToTiles(texture, FARM_BG_TILE_SIZE, FARM_BG_TILE_SIZE);
-        const tw = texture.width;
-        const th = texture.height;
-        const cols = Math.ceil(tw / FARM_BG_TILE_SIZE);
-        const rows = Math.ceil(th / FARM_BG_TILE_SIZE);
-        done(null, { texture, ownsTexture, tiles, cols, rows });
-    };
-
     const tryLoadFromBundle = (bundle: import('cc').AssetManager.Bundle) => {
-        const path = 'maps/farm/bg';
-        bundle.load(path, ImageAsset, (err, img) => {
+        bundle.load(assetPath, ImageAsset, (err, img) => {
             if (!err && img?.width > 0) {
                 const tex = new Texture2D();
                 tex.image = img;
-                finish(tex, true);
+                done(null, tex, true);
                 return;
             }
-            bundle.load(`${path}/spriteFrame`, SpriteFrame, (err2, sf) => {
+            bundle.load(`${assetPath}/spriteFrame`, SpriteFrame, (err2, sf) => {
                 if (!err2 && sf?.texture) {
-                    finish(sf.texture as Texture2D, false);
+                    done(null, sf.texture as Texture2D, false);
                     return;
                 }
-                bundle.load(path, SpriteFrame, (err3, sf2) => {
+                bundle.load(assetPath, SpriteFrame, (err3, sf2) => {
                     if (!err3 && sf2?.texture) {
-                        finish(sf2.texture as Texture2D, false);
+                        done(null, sf2.texture as Texture2D, false);
                         return;
                     }
-                    done(err || err2 || err3 || new Error('maps/farm/bg 加载失败'), null);
+                    done(err || err2 || err3 || new Error(`${assetPath} 加载失败`), null, false);
                 });
             });
         });
@@ -111,11 +155,66 @@ export function loadFarmBgTiles1024(
 
     assetManager.loadBundle('mapEditor', (err, bundle) => {
         if (err || !bundle) {
-            done(err || new Error('mapEditor bundle 加载失败'), null);
+            done(err || new Error('mapEditor bundle 加载失败'), null, false);
             return;
         }
         tryLoadFromBundle(bundle);
     });
+}
+
+/**
+ * 从 mapEditor 分包加载指定路径底图，按 1024×1024 切成多块 SpriteFrame。
+ */
+export function loadFarmBgTextureTiles(
+    assetPath: string,
+    done: (err: Error | null, result: FarmBgTilesLoadResult | null) => void,
+): void {
+    loadFarmBgTexture(assetPath, (err, texture, ownsTexture) => {
+        if (err || !texture) {
+            done(err ?? new Error(`${assetPath} 加载失败`), null);
+            return;
+        }
+        const tiles = sliceTextureToTiles(texture, FARM_BG_TILE_SIZE, FARM_BG_TILE_SIZE);
+        const tw = texture.width;
+        const th = texture.height;
+        const cols = Math.ceil(tw / FARM_BG_TILE_SIZE);
+        const rows = Math.ceil(th / FARM_BG_TILE_SIZE);
+        done(null, { texture, ownsTexture, tiles, cols, rows });
+    });
+}
+
+/**
+ * 加载 HD 整图，并按与 resized_bg 相同的马赛克网格切片。
+ */
+export function loadFarmBgMosaicTexture(
+    assetPath: string,
+    spec: FarmBgMosaicGridSpec,
+    done: (err: Error | null, result: FarmBgTilesLoadResult | null) => void,
+): void {
+    loadFarmBgTexture(assetPath, (err, texture, ownsTexture) => {
+        if (err || !texture) {
+            done(err ?? new Error(`${assetPath} 加载失败`), null);
+            return;
+        }
+        const tiles = sliceTextureToMosaicGrid(texture, spec);
+        done(null, {
+            texture,
+            ownsTexture,
+            tiles,
+            cols: spec.cols,
+            rows: spec.rows,
+        });
+    });
+}
+
+/**
+ * 从 mapEditor 分包加载 `maps/farm/bg`，按 1024×1024 切成多块 SpriteFrame。
+ * 使用前需已加载 bundle，或直接由本函数内部 loadBundle。
+ */
+export function loadFarmBgTiles1024(
+    done: (err: Error | null, result: FarmBgTilesLoadResult | null) => void,
+): void {
+    loadFarmBgTextureTiles('maps/farm/bg', done);
 }
 
 /** 释放 loadFarmBgTiles1024 且 ownsTexture 为 true 时创建的纹理，并销毁所有切片 SpriteFrame */

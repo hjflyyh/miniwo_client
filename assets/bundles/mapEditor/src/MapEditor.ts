@@ -322,6 +322,8 @@ export class MapEditor extends Component {
 
     /** mapGameType===0 时农场专属逻辑（底图、mapBg 草地显隐等），见 farm/FarmMapEditorModule */
     private farmModule: FarmMapEditorModule | null = null;
+    private editMapEditorReadySent = false;
+    private editMapEditorReadyInProgress = false;
 
     /**
      * 绘制选择框
@@ -431,6 +433,30 @@ export class MapEditor extends Component {
         this.farmModule = null;
     }
 
+    /** 地图内容 initMapGround 完成且（农场）分包底图 mosaic 就绪后通知 Loading 关闭 */
+    private onMapContentInitialized(): void {
+        void this.trySignalEditMapEditorReady();
+    }
+
+    private async trySignalEditMapEditorReady(): Promise<void> {
+        if (this.editMapEditorReadySent || this.editMapEditorReadyInProgress) {
+            return;
+        }
+        this.editMapEditorReadyInProgress = true;
+        try {
+            if (this.mapGameType === 0 && this.farmModule) {
+                await this.farmModule.whenBackgroundReady();
+            }
+            if (this.editMapEditorReadySent || !this.node?.isValid) {
+                return;
+            }
+            this.editMapEditorReadySent = true;
+            EventSystem.send('EditMapEditorReady');
+        } finally {
+            this.editMapEditorReadyInProgress = false;
+        }
+    }
+
     private parseGridSizeFromMapData(data: any): { width: number, height: number } | null {
         if (!data || typeof data !== 'object') {
             return null;
@@ -484,6 +510,7 @@ export class MapEditor extends Component {
         this.mapDataTestLoaded = true;
         this.sendWebMapInfoIfChanged();
         console.log('[map_data_test] loaded map from beifeng.json');
+        this.onMapContentInitialized();
     }
 
     private getBootMapDataForGridSize(): any | null {
@@ -1057,6 +1084,7 @@ export class MapEditor extends Component {
             MapLoadMap.loadMapData(data , this)
             this.mapEntrySnapshot = typeof rawMapData === 'string' ? rawMapData : JSON.stringify(data);
             this.editSessionDirty = false;
+            this.onMapContentInitialized();
             return
         }
 
@@ -1069,6 +1097,7 @@ export class MapEditor extends Component {
                 this.mapDataTestLoaded = true;
                 this.sendWebMapInfoIfChanged();
                 console.log('[map_data_test] loaded map from beifeng.json');
+                this.onMapContentInitialized();
                 return;
             }
             console.log('[map_data_test] waiting for beifeng.json (ConfigLoadAll)');
@@ -1080,6 +1109,7 @@ export class MapEditor extends Component {
             MapLoadMap.loadMapData(JSON.parse(MapModel.getInstance().mapEditData) , this)
             this.sendWebMapInfoIfChanged();
         }
+        this.onMapContentInitialized();
     }
 
     private isRoadGridInBounds(gridPos: Vec2): boolean {

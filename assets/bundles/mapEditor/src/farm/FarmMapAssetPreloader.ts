@@ -1,6 +1,6 @@
 import { assetManager, AssetManager, Prefab, SpriteFrame } from 'cc';
 import { AppConst } from '../../../../scripts/AppConst';
-import { FARM_BG_TILE_COLS, FARM_BG_TILE_ROWS } from './FarmMapConstants';
+import { FARM_BG_HD_TILE_DIR, FARM_BG_TILE_COLS, FARM_BG_TILE_ROWS, FARM_BG_USE_HD } from './FarmMapConstants';
 
 function farmBgSliceName(serial: number): string {
     const n = Math.floor(serial);
@@ -27,10 +27,11 @@ function collectFarmAssetPaths(): string[] {
         paths.push(p);
     };
 
+    const tileDir = FARM_BG_USE_HD ? FARM_BG_HD_TILE_DIR : 'maps/farm/bg';
     for (let r = 0; r < FARM_BG_TILE_ROWS; r++) {
         for (let c = 0; c < FARM_BG_TILE_COLS; c++) {
             const serial = r * FARM_BG_TILE_COLS + c + 1;
-            add(`maps/farm/bg/${farmBgSliceName(serial)}/spriteFrame`);
+            add(`${tileDir}/${farmBgSliceName(serial)}/spriteFrame`);
         }
     }
 
@@ -77,59 +78,4 @@ function loadBundlePath(
     });
 }
 
-/**
- * 进入农场地图(mapGameType===0)前预加载 mapEditor 分包内农场资源，避免进图后底图/农田 prefab 逐张闪现。
- */
-export class FarmMapAssetPreloader {
-    public static preload(onProgress?: (ratio: number) => void): Promise<void> {
-        const paths = collectFarmAssetPaths();
-        if (paths.length <= 0) {
-            onProgress?.(1);
-            return Promise.resolve();
-        }
 
-        return new Promise((resolve, reject) => {
-            const run = (bundle: AssetManager.Bundle) => {
-                let done = 0;
-                const total = paths.length;
-                const report = () => {
-                    done++;
-                    onProgress?.(Math.min(1, done / total));
-                };
-
-                const batchSize = 8;
-                const runBatch = async (start: number) => {
-                    if (start >= total) {
-                        onProgress?.(1);
-                        resolve();
-                        return;
-                    }
-                    const end = Math.min(start + batchSize, total);
-                    const tasks: Promise<void>[] = [];
-                    for (let i = start; i < end; i++) {
-                        tasks.push(
-                            loadBundlePath(bundle, paths[i]).then(report)
-                        );
-                    }
-                    await Promise.all(tasks);
-                    await runBatch(end);
-                };
-
-                void runBatch(0).catch((e) => reject(e));
-            };
-
-            const existing = assetManager.getBundle('mapEditor');
-            if (existing) {
-                run(existing);
-                return;
-            }
-            assetManager.loadBundle('mapEditor', (err, bundle) => {
-                if (err || !bundle) {
-                    reject(err ?? new Error('loadBundle mapEditor failed'));
-                    return;
-                }
-                run(bundle);
-            });
-        });
-    }
-}

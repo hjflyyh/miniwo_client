@@ -30,6 +30,8 @@ export class MainFollowListCell extends InfiniteCell {
     @property(Label)
     public nikeName: Label = null
 
+    @property(Node)
+    followBtn : Node
     private postAt
     private postID
     private userID
@@ -91,7 +93,14 @@ export class MainFollowListCell extends InfiniteCell {
         }
 
         this.setBtnByIsLike()
+
+        this.followBtn.active = this.userID != RoleModel.getInstance().playerId
     }
+
+    //关注
+    onClickFollow(){
+        //this.userID
+    }    
 
     OnClickCell() {
         let post = SocialModel.getInstance().postData[this.postID]

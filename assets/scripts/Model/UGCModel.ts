@@ -331,7 +331,9 @@ export class UGCModel {
             }
             console.log(this.myNpcList)
             for (let m = 0; m < this.myNpcList.length; m++) {
-                AppConst.JournalManager.addNpcJournal(this.myNpcList[m].npc_id, this.myNpcList[m].model_url)
+                if(this.myNpcList[m].character_poster_url && this.myNpcList[m].character_poster_url != ""){
+                    AppConst.JournalManager.addNpcJournal(this.myNpcList[m].npc_id, this.myNpcList[m].character_poster_url)
+                }
             }
             EventSystem.send("OnRefreshDailyHotNpcList", this.dailyHotNpcList);
             return;
@@ -701,11 +703,91 @@ export class UGCModel {
         );
     }
 
+    /** 农场同时最多允许工作的 NPC 数量（work_status === 1） */
+    public static readonly FARM_MAX_WORKING_NPC_COUNT = 1;
+
+    /** 当前在农场工作的 NPC id 列表 */
+    public listFarmWorkingNpcIds(): number[] {
+        const list = this.myNpcList?.length ? this.myNpcList : this.npcList;
+        const ids: number[] = [];
+        for (const npc of list ?? []) {
+            if (Number(npc?.work_status ?? 0) !== 1) {
+                continue;
+            }
+            const id = Math.floor(Number(npc?.id ?? npc?.npc_id ?? 0));
+            if (id > 0) {
+                ids.push(id);
+            }
+        }
+        return ids;
+    }
+
+    /** 读取 NPC 的 work_status */
+    public getNpcWorkStatus(npcId: number): number {
+        const safeId = Math.floor(Number(npcId));
+        if (!Number.isFinite(safeId) || safeId <= 0) {
+            return 0;
+        }
+        const list = this.myNpcList?.length ? this.myNpcList : this.npcList;
+        for (const npc of list ?? []) {
+            const id = Math.floor(Number(npc?.id ?? npc?.npc_id ?? 0));
+            if (id === safeId) {
+                return Number(npc?.work_status ?? 0);
+            }
+        }
+        return 0;
+    }
+
+    /** 是否可派遣该 NPC 去农场（同时仅 1 人；须休息中） */
+    public canAssignNpcToFarm(npcId: number): { ok: boolean; message?: string } {
+        const safeId = Math.floor(Number(npcId));
+        if (!Number.isFinite(safeId) || safeId <= 0) {
+            return { ok: false, message: 'Please select an NPC.' };
+        }
+
+        const workers = this.listFarmWorkingNpcIds();
+        if (
+            workers.length >= UGCModel.FARM_MAX_WORKING_NPC_COUNT &&
+            workers.indexOf(safeId) < 0
+        ) {
+            return { ok: false, message: '已有 NPC 在农场工作，请先让其回家' };
+        }
+
+        const workStatus = this.getNpcWorkStatus(safeId);
+        if (workStatus === 1) {
+            return { ok: false, message: 'Already working on the farm.' };
+        }
+        if (workStatus === 5) {
+            return { ok: false, message: 'NPC is working in the workshop.' };
+        }
+        if (workStatus === 4) {
+            return { ok: false, message: 'NPC is exploring.' };
+        }
+        if (workStatus !== 0) {
+            return { ok: false, message: 'NPC must be resting.' };
+        }
+        return { ok: true };
+    }
+
     /** 批量设置 NPC work_status：0=回家待机，1=去农场工作 */
     public batchSetNPCWorkStatus(npcIds: number[], workStatus: 0 | 1) {
         const ids = (npcIds || [])
             .map((id) => Number(id))
             .filter((id) => Number.isFinite(id) && id > 0);
+
+        if (workStatus === 1) {
+            if (ids.length > 1) {
+                const message = '只能选择一个';
+                EventSystem.send('ShowTips', message);
+                return Promise.resolve({ success: false, message });
+            }
+            const check = this.canAssignNpcToFarm(ids[0]);
+            if (!check.ok) {
+                EventSystem.send('ShowTips', check.message ?? 'Cannot assign NPC to farm.');
+                return Promise.resolve({ success: false, message: check.message });
+            }
+        }
+
         return AppConst.HttpManager.sendPostHttp(
             "api/npc/work_status/batch",
             JSON.stringify({
@@ -870,11 +952,14 @@ export class UGCModel {
                 if (idx < 0) {
                     continue;
                 }
+                // character_poster_url
                 const modelUrl = String(cn?.model_url ?? cn?.standee_url ?? cn?.portrait_url ?? "").trim();
                 if (modelUrl) {
                     this.npcList[idx].model_url = modelUrl;
                     this.npcList[idx].standee_url = String(cn?.standee_url ?? modelUrl).trim();
                     this.npcList[idx].portrait_url = String(cn?.portrait_url ?? modelUrl).trim();
+                }
+                if(cn.character_poster_url && cn.character_poster_url != ""){
                     AppConst.JournalManager.addNpcJournal(idNum, modelUrl);
                 }
             }
@@ -899,7 +984,7 @@ export class UGCModel {
         npc.model_url = url;
         npc.standee_url = url;
         npc.portrait_url = url;
-        AppConst.JournalManager.addNpcJournal(npcId, url);
+        
         if (compositeNpcId) {
             npc.composite_npc_id = String(compositeNpcId);
             npc.reference_image_url = this.buildStandeePreviewPath(compositeNpcId);

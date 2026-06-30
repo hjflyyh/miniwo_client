@@ -1,5 +1,14 @@
 import { FARM_BG_LAYOUT_GRID } from '../../../../scripts/Utils/FarmBgTileGrid';
 
+/** 使用 maps/farm/bgHD/resized_bg_*（由 tools/generate_bghd_tiles_from_bg.py 从 bg 放大）；false 则用 maps/farm/bg/resized_bg_* */
+export const FARM_BG_USE_HD = true;
+
+/** 高清整图（可选；勿用 split_farm_bg_hd_to_tiles.py 整图横切替代 bg 放大，编号易错位） */
+export const FARM_BG_HD_SOURCE_PATH = 'maps/farm/bgHD/bg';
+
+/** 高清切片目录（与 bg 相同命名 resized_bg_XX，运行时与 bg 同一套拼接逻辑） */
+export const FARM_BG_HD_TILE_DIR = 'maps/farm/bgHD';
+
 /** mapGameType===0 农场模式下的逻辑格子数量 */
 export const FARM_MAP_GRID_WIDTH = 303 / 2;
 export const FARM_MAP_GRID_HEIGHT = 262 /2;

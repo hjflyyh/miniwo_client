@@ -9,7 +9,6 @@ import { GameViewNpcCell } from './GameViewNpcCell';
 
 import { GameMapChatScroll } from './GameMapChatScroll';
 
-// import { MapManager } from 'db://assets/bundles/mapEditor/src/MapManager';
 import { GameSendRewardCell } from './GameSendRewardCell';
 import { BagModel } from '../../Model/BagModel';
 import { GAME_FARM_PLOT_CLICK_EVENT, GameFarmPlotClickPayload } from './GameFarmNode';

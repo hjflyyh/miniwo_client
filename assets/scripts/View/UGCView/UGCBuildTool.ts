@@ -1,9 +1,8 @@
 import { _decorator, Component, instantiate, Node, tween, Vec3 } from 'cc';
-import { MapManager } from 'db://assets/bundles/mapEditor/src/MapManager';
+
 import { AppConst } from '../../AppConst';
 import { UGCBuildTabCell } from './UGCBuildTabCell';
 import { UGCBuildTypeCell } from './UGCBuildTypeCell';
-// import { GroundDataSource } from 'db://assets/bundles/mapEditor/src/UI/GroundDataSource';
 import { InfiniteList } from 'db://assets/plugin/InfiniteList/InfiniteList';
 import { UGCGroundDataSource } from './UGCGroundDataSource';
 const { ccclass, property } = _decorator;
@@ -25,6 +24,9 @@ export class UGCBuildToole extends Component {
     chooseTabIndex = -1
     ugcTabAry = []
 
+    @property(Node)
+    tabNode : Node
+
     @property(InfiniteList)
     showGround : InfiniteList
 
@@ -41,24 +43,28 @@ export class UGCBuildToole extends Component {
         EventSystem.addListent("MapEditorPlacedItemTouched" , this.MapEditorPlacedItemTouched , this)
     }
 
+    onClickArrow(){
+        this.onClickType(-1);
+    }
+
     refreshPos(){
         if(this.chooseTypeIndex < 0){
                     tween(this.node)
-                        .to(0.1, { position: new Vec3(0, 0, 0) })
+                        .to(0.1, { position: new Vec3(0, -10, 0) })
                         .start();
             // this.node.setPosition(new Vec3(0 , 0 , 0))
             return
         }
         if(this.chooseTabIndex < 0){
-                    tween(this.node)
-                        .to(0.1, { position: new Vec3(0, 90, 0) })
-                        .start();            
+                    // tween(this.node)
+                    //     .to(0.1, { position: new Vec3(0, 90, 0) })
+                    //     .start();            
             // this.node.setPosition(new Vec3(0 , 90 , 0))
             return
         }        
         if(this.chooseTypeIndex >= 0){
             tween(this.node)
-                        .to(0.1, { position: new Vec3(0, 375, 0) })
+                        .to(0.1, { position: new Vec3(0, 470, 0) })
                         .start();            
             // this.node.setPosition(new Vec3(0 , 90 , 0))
             return
@@ -70,7 +76,7 @@ export class UGCBuildToole extends Component {
     }
     
     onClickTab(index){
-        MapManager.GetInstance().getMapEditorUI()?.clearPlacedItemSelection();
+        AppConst.mapManager.getMapEditorUI()?.clearPlacedItemSelection();
         if(this.chooseTabIndex == index){
             this.chooseTabIndex = -1
         }else{
@@ -81,7 +87,7 @@ export class UGCBuildToole extends Component {
 
     onClickType(index, fromItemTouch = false){
         if (!fromItemTouch) {
-            MapManager.GetInstance().getMapEditorUI()?.clearPlacedItemSelection();
+            AppConst.mapManager.getMapEditorUI()?.clearPlacedItemSelection();
         }
         if(index == -1){
             this.chooseTypeIndex = -1
@@ -144,6 +150,7 @@ export class UGCBuildToole extends Component {
     }
 
     refreshBuildType(){
+        this.tabNode.active = this.chooseTypeIndex >= 0
         if(this.chooseTypeIndex < 0){
             return
         }

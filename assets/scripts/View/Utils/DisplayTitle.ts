@@ -1,9 +1,7 @@
 import { _decorator, Camera, Component, UITransform, Vec3, view, Sprite, v3, Rect, Color , Node, SpriteFrame, log, director} from 'cc';
-// import {MapManager} from "db://assets/bundles/mapEditor/src/MapManager";
 import { GridPoolManager } from '../../Manager/GridPoolManager';
 import {MapAssetsManager} from "db://assets/src/common/MapAssetsManager";
 import {PrefabLoad} from "db://assets/scripts/Utils/PrefabLoad";
-// import { MapEditor } from '../../../bundles/mapEditor/src/MapEditor';
 const { ccclass, property } = _decorator;
 
 /**

@@ -56,6 +56,9 @@ export class FollowView extends Component {
     @property(Node)
     pagePrefab: Node = null!; // 提前做一个空节点，带 Sprite 组件
 
+    @property(Node)
+    followBtn : Node
+
     @property(Label)
     public isFollow: Label = null
 
@@ -117,12 +120,12 @@ export class FollowView extends Component {
                 this.pageView.addPage(page)
                 const imgSp = page.getChildByName("banner").getComponent(Sprite);
                 if (imgSp) {
-                    let journalImg = AppConst.JournalManager.journalImgs.find((i) => i.type == "modelImg" && i.id == img["id"])
+                    let journalImg = img.model_url
                     
                     // let journalImg = AppConst.JournalManager.journalImgs.find((i) => i.type == "localImg" && i.id == img["id"])
                     if (journalImg) {
                         // imgSp.spriteFrame = AppConst.JournalManager.imgSprite[journalImg["localImgIndex"]]
-                        Utils.loadCoverFitInsideParent(journalImg.model_url, imgSp)
+                        Utils.loadCoverFitInsideParent(journalImg, imgSp)
                     }
                 }
             }
@@ -142,6 +145,13 @@ export class FollowView extends Component {
         this.likeCount = post?.LikeCount || 0
         this.isLike = SocialModel.getInstance().postLikeList.indexOf(this.postID) !== -1
         this.setBtnByIsLike()
+
+        this.followBtn.active = this.userID != RoleModel.getInstance().playerId
+    }
+
+    //关注
+    onClickFollow(){
+        //this.userID
     }
 
 

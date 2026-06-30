@@ -120,7 +120,7 @@ export class GongfangView extends Component {
     onClickCanel() {
         const job = this.getCurrentJob();
         if (!job || Number(job.status) !== 0) {
-            EventSystem.send('ShowTips', '当前无法取消');
+            EventSystem.send('ShowTips', 'It is currently not possible to cancel.');
             return;
         }
         void WorkshopModel.getInstance().cancel(job.job_id);
@@ -167,7 +167,7 @@ export class GongfangView extends Component {
             return;
         }
         if (recipe.locked) {
-            EventSystem.send('ShowTips', recipe.lock_reason || '图纸未解锁');
+            EventSystem.send('ShowTips', recipe.lock_reason || 'The drawing has not been unlocked.');
             return;
         }
         const state = WorkshopModel.getInstance().getState();
@@ -285,7 +285,7 @@ export class GongfangView extends Component {
                 this.attribute2.string = '';
             }
             if (this.info) {
-                this.info.string = '请选择图纸';
+                this.info.string = 'Please select the drawing.';
             }
             for (let i = 0; i < this.tuzhiItems.length; i++) {
                 this.tuzhiItems[i]?.refreshEmpty();
@@ -301,15 +301,15 @@ export class GongfangView extends Component {
         const successRate = Number(recipe.success_rate ?? 0);
         const successText = successRate > 0 ? `${(successRate / 100).toFixed(1)}%` : '--';
         if (this.attribute1) {
-            this.attribute1.string = `成功率 ${successText}`;
+            this.attribute1.string = `Success rate ${successText}`;
         }
         if (this.attribute2) {
-            this.attribute2.string = `耗时 ${Math.max(0, Number(recipe.craft_time_sec ?? 0))}秒`;
+            this.attribute2.string = `Time-consuming ${Math.max(0, Number(recipe.craft_time_sec ?? 0))}秒`;
         }
         if (this.info) {
             const blueprintCount = Math.max(0, Number(recipe.count ?? 0));
-            const lockText = recipe.locked ? ` (${recipe.lock_reason || '未解锁'})` : '';
-            this.info.string = `${recipe.name_cn || recipe.recipe_id}  图纸x${blueprintCount}${lockText}`;
+            const lockText = recipe.locked ? ` (${recipe.lock_reason || 'Not unlocked'})` : '';
+            this.info.string = `${recipe.name_cn || recipe.recipe_id}  Drawingx${blueprintCount}${lockText}`;
         }
     }
 
@@ -404,7 +404,7 @@ export class GongfangView extends Component {
         }
         if (this.workTimeLabel) {
             if (job.craft_success != null && remainSec <= 0) {
-                this.workTimeLabel.string = Number(job.craft_success) === 1 ? '制作成功' : '制作失败';
+                this.workTimeLabel.string = Number(job.craft_success) === 1 ? 'Produced successfully' : 'Production failure';
             } else {
                 this.workTimeLabel.string = this.formatRemainTime(remainSec);
             }
@@ -454,7 +454,7 @@ export class GongfangView extends Component {
         }
         const latest = this.getCurrentJob();
         if (!latest || latest.craft_success == null) {
-            EventSystem.send('ShowTips', '制作结果尚未判定');
+            EventSystem.send('ShowTips', 'The production result has not yet been determined.');
             return;
         }
         await WorkshopModel.getInstance().collect(job.job_id);

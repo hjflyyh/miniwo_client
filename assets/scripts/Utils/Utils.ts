@@ -216,7 +216,7 @@ export class Utils{
      * 按目标高度等比缩放（宽度随比例变化，不裁切）。
      * targetHeight 省略时优先取父节点 UITransform 高度，其次 Sprite 自身高度。
      */
-    public static loadCoverFitHeight(url: string, sprite: Sprite, targetHeight: number | null = null) {
+    public static loadCoverFitHeight(url: string, sprite: Sprite, targetHeight: number | null = null , waitNode : Node = null) {
         if (!url || !sprite) {
             return;
         }

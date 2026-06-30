@@ -2,7 +2,7 @@ import { _decorator, Component, Node, Prefab } from 'cc';
 import InfiniteCell from 'db://assets/plugin/InfiniteList/InfiniteCell';
 import { PrefabLoad } from '../../Utils/PrefabLoad';
 import { AppConst } from '../../AppConst';
-import { MapManager } from 'db://assets/bundles/mapEditor/src/MapManager';
+
 const { ccclass, property } = _decorator;
 @ccclass('GameBuildCell')
 export class GameBuildCell extends Component implements InfiniteCell {

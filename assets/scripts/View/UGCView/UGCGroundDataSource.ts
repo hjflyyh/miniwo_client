@@ -63,6 +63,9 @@ export class UGCGroundDataSource extends Component {
         
         // let mapTag = MapModel.getInstance().EditMapTag
         let mapGroundAll = AppConst.JSONManager.getItemAll(cfg_name)
+        let listCellNum = 5
+        // let nowCellNum = 0
+        let nowIndex = 0
         for(let m in mapGroundAll){
             // let tags = mapGroundAll[m].tags
             // let isAdd = !tags || tags == ""
@@ -88,10 +91,19 @@ export class UGCGroundDataSource extends Component {
             //         })
             //     }
             // }
+            // if(mapGroundAll[m]["ugc_Tab_id"] == this.tabCfg["id"]){
+            //         this.list.push({
+            //             id : m
+            //         })
+            // }
             if(mapGroundAll[m]["ugc_Tab_id"] == this.tabCfg["id"]){
-                    this.list.push({
-                        id : m
-                    })
+                if(!this.list[nowIndex]){
+                    this.list.push([])
+                }
+                this.list[nowIndex].push({id : m})
+                if(this.list[nowIndex].length >= listCellNum){
+                    nowIndex++
+                }
             }
         }
         return this.list.length

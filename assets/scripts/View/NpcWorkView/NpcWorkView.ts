@@ -61,7 +61,7 @@ export class NpcWorkView extends Component {
             chooseNpcIds: [...this.chooseNpcId],
             npcId,
             npcData: payload?.npcData,
-            selected: this.chooseNpcId.includes(npcId),
+            selected: this.chooseNpcId.indexOf(npcId) >= 0,
         });
     }
 
@@ -174,6 +174,19 @@ export class NpcWorkView extends Component {
     }
 
     public goToFarm() {
+        if (this.chooseNpcId.length > 1) {
+            EventSystem.send("ShowTips", "只能选择一个");
+            return;
+        }
+        if (this.chooseNpcId.length !== 1) {
+            EventSystem.send("ShowTips", "请先选择 NPC");
+            return;
+        }
+        const check = UGCModel.getInstance().canAssignNpcToFarm(this.chooseNpcId[0]);
+        if (!check.ok) {
+            EventSystem.send("ShowTips", check.message ?? "无法派遣该 NPC 去农场");
+            return;
+        }
         this.applyWorkStatus(1);
     }
 

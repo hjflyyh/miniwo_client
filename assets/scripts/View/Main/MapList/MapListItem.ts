@@ -28,6 +28,9 @@ export class MapListItem extends Component implements InfiniteCell{
     @property(Node)
     isLike : Node
 
+    @property(Node)
+    waitNode : Node
+
     mapData
     data
 
