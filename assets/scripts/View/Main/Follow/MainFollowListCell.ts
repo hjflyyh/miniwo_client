@@ -32,6 +32,11 @@ export class MainFollowListCell extends InfiniteCell {
 
     @property(Node)
     followBtn : Node
+
+
+    @property(Node)
+    waitNode : Node
+
     private postAt
     private postID
     private userID
@@ -62,7 +67,8 @@ export class MainFollowListCell extends InfiniteCell {
         this.postAt = data?.CreatedAt
         this.postID = data?.ID
         this.isLike = SocialModel.getInstance().postLikeList.indexOf(this.postID) !== -1
-        this.isFollow.node.active = false
+        // this.isFollow.node.active = false
+        this.isFollow.string = Utils.getDateFromStr(data?.CreatedAt || "")
         this.setFollow()
         this.setNikeName()
         this.imgSp.spriteFrame = null
@@ -94,13 +100,26 @@ export class MainFollowListCell extends InfiniteCell {
 
         this.setBtnByIsLike()
 
-        this.followBtn.active = this.userID != RoleModel.getInstance().playerId
+        this.updateFollowBtnVisible()
+    }
+
+    protected update(dt: number): void {
+        this.waitNode.active = this.imgSp == null
     }
 
     //关注
-    onClickFollow(){
-        //this.userID
-    }    
+    onClickFollow() {
+        if (!this.userID || this.userID == RoleModel.getInstance().playerId) {
+            return
+        }
+        if (SocialModel.getInstance().isFollowing(this.userID)) {
+            return
+        }
+        this.followBtn.active = false
+        AppConst.SocialHttpManager.sendPostHttp("follow", {
+            followedUserId: this.userID
+        })
+    }
 
     OnClickCell() {
         let post = SocialModel.getInstance().postData[this.postID]
@@ -131,11 +150,20 @@ export class MainFollowListCell extends InfiniteCell {
         this.setBtnByIsLike()
     }
 
-    setFollow() {
-        if (this.userID != RoleModel.getInstance().playerId) {
-            this.isFollow.node.active = true
-            this.isFollow.string = SocialModel.getInstance().followList.indexOf(this.userID) !== -1 ? "unfollow" : "follow"
+    setFollow(followedUserId?: number) {
+        if (followedUserId != null && followedUserId != this.userID) {
+            return
         }
+        this.updateFollowBtnVisible()
+    }
+
+    updateFollowBtnVisible() {
+        if (!this.followBtn) {
+            return
+        }
+        const isSelf = this.userID == RoleModel.getInstance().playerId
+        const alreadyFollowed = SocialModel.getInstance().isFollowing(this.userID)
+        this.followBtn.active = !isSelf && !alreadyFollowed
     }
 
     setNikeName() {

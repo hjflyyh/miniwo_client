@@ -68,6 +68,11 @@ export class MapListItem extends Component implements InfiniteCell{
         }
     }
 
+    protected update(dt: number): void {
+        this.waitNode.active = this.banner == null
+    }
+
+
     UpdateContent(data: any): void {
         this.data = data
         let mapData = MapModel.getInstance().sceneMaps[data]

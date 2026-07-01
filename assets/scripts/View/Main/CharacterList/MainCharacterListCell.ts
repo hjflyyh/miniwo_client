@@ -35,7 +35,11 @@ export class MainCharacterListCell extends Component {
         this.npcInfo.string = data.info
         this.likeNum.string = data.npc_like_count
 
-        Utils.loadCover(data["avatar"], this.npcSp);
+        if(data["character_poster_url"]){
+            Utils.loadCover(data["character_poster_url"], this.npcSp);
+        }else{
+            Utils.loadCover(data["avatar"], this.npcSp);
+        }
     }
 
     onClickLike(){

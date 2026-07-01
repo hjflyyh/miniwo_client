@@ -27,8 +27,8 @@ export class UserCenter extends Component {
     
 
     httpRequest() {
-        AppConst.SocialHttpManager.sendGetHttp("myfollows", {})
-        AppConst.SocialHttpManager.sendGetHttp("timelineList", {})
+        AppConst.SocialHttpManager.sendGetHttp("myfollows", {} , false)
+        AppConst.SocialHttpManager.sendGetHttp("timelineList", {} , false)
     }
 
     setUser() {

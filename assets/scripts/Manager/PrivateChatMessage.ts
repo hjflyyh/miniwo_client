@@ -4,6 +4,7 @@
 import { sys, log } from "cc";
 import { AppConst } from "../AppConst";
 import { Utils } from "../Utils/Utils";
+import { UGCModel } from "../Model/UGCModel";
 
 type Role = "self" | "peer";
 
@@ -351,7 +352,11 @@ public markSessionRead(peerUid: string) {
     const s: ChatSession = {
       peerUid: uid,
       peerName: local.peerName ?? null,
-      peerAvatar: local.peerAvatar ?? null,
+      peerAvatar: this.resolveNpcPeerAvatar(
+        this.getNpcIdByPeerUid(uid),
+        null,
+        local.peerAvatar ?? null,
+      ),
       isNPC: !!local.isNPC || this.isKnownNpcPeerUid(uid),
       channelId: String(local.channelId),
       openedAt: Utils.getServerNowMs(),
@@ -405,6 +410,65 @@ public markSessionRead(peerUid: string) {
     return this.getNpcIdByPeerUid(peerUid) != null;
   }
 
+  /** 从 payload 取头像 URL，优先 character_poster_url */
+  private pickAvatarUrlFromPayload(o: any): string | null {
+    if (!o || typeof o !== "object") {
+      return null;
+    }
+    const fields = ["character_poster_url", "npc_sprite_url", "npc_avatar", "avatar"];
+    for (let i = 0; i < fields.length; i++) {
+      const v = o[fields[i]];
+      if (typeof v === "string" && v.trim()) {
+        return v.trim();
+      }
+    }
+    return null;
+  }
+
+  /** 从 myNpcList 读取 character_poster_url */
+  private getCharacterPosterUrlByNpcId(npcId: number): string | null {
+    const id = Math.floor(Number(npcId));
+    if (!Number.isFinite(id) || id <= 0) {
+      return null;
+    }
+    const list = UGCModel.getInstance().myNpcList ?? [];
+    for (let i = 0; i < list.length; i++) {
+      const npc = list[i];
+      const nid = Math.floor(Number(npc?.id ?? npc?.npc_id ?? 0));
+      if (nid !== id) {
+        continue;
+      }
+      const url = String(npc?.character_poster_url ?? "").trim();
+      if (url) {
+        return url;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * 解析 NPC 会话头像：优先 payload.character_poster_url，
+   * 其次 myNpcList.character_poster_url，再 fallback 旧字段。
+   */
+  private resolveNpcPeerAvatar(
+    npcId: number | null | undefined,
+    payload?: any,
+    fallback?: string | null,
+  ): string | null {
+    const fromPayload = this.pickAvatarUrlFromPayload(payload);
+    if (fromPayload) {
+      return fromPayload;
+    }
+    if (npcId != null && Number.isFinite(npcId) && npcId > 0) {
+      const fromList = this.getCharacterPosterUrlByNpcId(npcId);
+      if (fromList) {
+        return fromList;
+      }
+    }
+    const fb = String(fallback ?? "").trim();
+    return fb || null;
+  }
+
   private getCachedNpcPeerUid(npcId: number): string | null {
     const id = Number(npcId);
     if (!Number.isFinite(id) || id <= 0) return null;
@@ -456,7 +520,12 @@ public markSessionRead(peerUid: string) {
           cachedUid,
           true,
           this.localSessionsByPeer.get(cachedUid)?.peerName ?? null,
-          this.localSessionsByPeer.get(cachedUid)?.peerAvatar ?? null
+          this.resolveNpcPeerAvatar(
+            npcId,
+            null,
+            this.localSessionsByPeer.get(cachedUid)?.peerAvatar ?? null,
+          ),
+          npcId,
         );
       } catch (e) {
         const msg = String((e as any)?.message || e);
@@ -487,7 +556,13 @@ public markSessionRead(peerUid: string) {
 
     this.cacheNpcPeerUid(npcId, String(r.nakama_uid));
     try { chatLog("[openNpcSession] got uid", { npcId, peerUid: String(r.nakama_uid) }); } catch {}
-    return this.openSessionByUid(r.nakama_uid, true, r.name ?? null, r.avatar ?? null);
+    return this.openSessionByUid(
+      r.nakama_uid,
+      true,
+      r.name ?? null,
+      this.resolveNpcPeerAvatar(npcId, r, null),
+      npcId,
+    );
   }
 
   /** 打开真人私聊 */
@@ -499,15 +574,28 @@ public markSessionRead(peerUid: string) {
   async openNpcSessionByPeerUid(peerUid: string, peerName?: string | null): Promise<ChatSession> {
     const uid = String(peerUid || "");
     if (!uid) throw new Error("peerUid 无效");
-    return this.openSessionByUid(uid, true, peerName ?? null, null);
+    const npcId = this.getNpcIdByPeerUid(uid);
+    return this.openSessionByUid(
+      uid,
+      true,
+      peerName ?? null,
+      this.resolveNpcPeerAvatar(npcId, null, this.localSessionsByPeer.get(uid)?.peerAvatar ?? null),
+      npcId,
+    );
   }
 
   private async openSessionByUid(
     peerUid: string,
     isNPC: boolean,
     peerName: string | null,
-    peerAvatar: string | null
+    peerAvatar: string | null,
+    npcIdHint?: number | null,
   ): Promise<ChatSession> {
+    const npcId = npcIdHint ?? (isNPC ? this.getNpcIdByPeerUid(peerUid) : null);
+    const localRow = this.localSessionsByPeer.get(peerUid);
+    const normalizedAvatar = isNPC
+      ? this.resolveNpcPeerAvatar(npcId, null, peerAvatar ?? localRow?.peerAvatar ?? null)
+      : peerAvatar;
     try { chatLog("[openSessionByUid] enter", { peerUid, isNPC }); } catch {}
     const cached = this.sessionsByPeer.get(peerUid);
     if (cached) {
@@ -534,16 +622,22 @@ public markSessionRead(peerUid: string) {
           throw e instanceof Error ? e : new Error(msg);
         }
       }
+      if (isNPC && normalizedAvatar && cached.peerAvatar !== normalizedAvatar) {
+        cached.peerAvatar = normalizedAvatar;
+        const row = this.localSessionsByPeer.get(peerUid);
+        if (row) {
+          this.upsertLocalSession({ ...row, peerAvatar: normalizedAvatar });
+        }
+      }
       return cached;
     }
 
     // 进入界面时优先用本地缓存（若存在），让 ChatView 先渲染本地记录；随后再 join 实时 channel
-    const localRow = this.localSessionsByPeer.get(peerUid);
     if (localRow?.channelId) {
       const s0: ChatSession = {
         peerUid,
         peerName: peerName ?? localRow.peerName ?? null,
-        peerAvatar: peerAvatar ?? localRow.peerAvatar ?? null,
+        peerAvatar: normalizedAvatar ?? localRow.peerAvatar ?? null,
         isNPC,
         channelId: String(localRow.channelId),
         openedAt: Utils.getServerNowMs(),
@@ -562,7 +656,7 @@ public markSessionRead(peerUid: string) {
     const s: ChatSession = {
       peerUid,
       peerName,
-      peerAvatar,
+      peerAvatar: normalizedAvatar,
       isNPC,
       channelId: channel.id,
       openedAt: Utils.getServerNowMs(),
@@ -851,12 +945,19 @@ public markSessionRead(peerUid: string) {
       typeof content.send_name === "string" && content.send_name.trim()
         ? content.send_name.trim()
         : null;
-    const npcAvatarRaw =
-      typeof content.npc_sprite_url === "string" && content.npc_sprite_url.trim()
-        ? content.npc_sprite_url.trim()
-        : (typeof content.npc_avatar === "string" && content.npc_avatar.trim()
-            ? content.npc_avatar.trim()
-            : null);
+
+    let session = this.sessionsByChannel.get(channelId);
+    const peerUidForAvatar =
+      session?.peerUid ||
+      (String(data?.sender_id || "") !== this.selfUid ? String(data?.sender_id || "") : "");
+    const npcIdForAvatar = peerUidForAvatar
+      ? this.getNpcIdByPeerUid(peerUidForAvatar)
+      : null;
+    const npcAvatarRaw = this.resolveNpcPeerAvatar(
+      npcIdForAvatar,
+      content,
+      session?.peerAvatar ?? null,
+    );
 
     try {
       chatLog("[pm] onChannelMessage", {
@@ -866,12 +967,14 @@ public markSessionRead(peerUid: string) {
         create_time: data?.create_time,
         content,
         npc_name: npcNameRaw,
+        character_poster_url:
+          typeof content.character_poster_url === "string" ? content.character_poster_url : null,
         npc_sprite_url: typeof content.npc_sprite_url === "string" ? content.npc_sprite_url : null,
-        npc_avatar: npcAvatarRaw,
+        npc_avatar: typeof content.npc_avatar === "string" ? content.npc_avatar : null,
+        peerAvatar: npcAvatarRaw,
       });
     } catch {}
 
-    let session = this.sessionsByChannel.get(channelId);
     if (!session) {
       // 未打开会话也尽量补一份最小会话，避免列表漏消息
       const senderId = String(data?.sender_id || "");
@@ -1330,10 +1433,14 @@ public markSessionRead(peerUid: string) {
         if (!s || !s.peerUid) continue;
         const uid = String(s.peerUid);
         const inferredNpc = this.isKnownNpcPeerUid(uid);
+        const npcId = inferredNpc ? this.getNpcIdByPeerUid(uid) : null;
+        const peerAvatar = inferredNpc
+          ? this.resolveNpcPeerAvatar(npcId, null, s.peerAvatar ?? null)
+          : (s.peerAvatar ?? null);
         this.localSessionsByPeer.set(uid, {
           peerUid: uid,
           peerName: s.peerName ?? null,
-          peerAvatar: s.peerAvatar ?? null,
+          peerAvatar,
           isNPC: !!s.isNPC || inferredNpc,
           channelId: String(s.channelId || ""),
           lastMsg: String(s.lastMsg || ""),

@@ -1,6 +1,7 @@
 import { _decorator, Label, Node, Sprite, UITransform } from 'cc';
 import InfiniteCell from 'db://assets/plugin/InfiniteList/InfiniteCell';
 import { Utils } from '../../Utils/Utils';
+import { applyMyBubbleLayout } from './ChatMyBubbleLayout';
 const { ccclass, property } = _decorator;
 
 @ccclass('ChatListCell')
@@ -24,13 +25,17 @@ export class ChatListCell extends InfiniteCell {
         this.otherBaseY = this.otherNode ? this.otherNode.position.y : 0;
     }
 
-    private getBubbleLabel(isSelf: boolean): Label | null {
+    private getBubbleNodes(isSelf: boolean): {
+        bubble: Node | null;
+        label: Label | null;
+    } {
         const holder = isSelf ? this.myNode : this.otherNode;
-        const labelNode = holder?.getChildByName('Sprite')?.getChildByName('Label');
-        return labelNode?.getComponent(Label) ?? null;
+        const bubble = holder?.getChildByName('Sprite') ?? null;
+        const label = bubble?.getChildByName('Label')?.getComponent(Label) ?? null;
+        return { bubble, label };
     }
 
-    /** 设置文本并按“超过2行”上移 30 像素 */
+    /** 自己消息：底图宽高随文字；对方消息：保持 prefab 固定宽逻辑 */
     public setMessageText(text: string, isSelf: boolean) {
         const my = this.myNode;
         const other = this.otherNode;
@@ -44,8 +49,18 @@ export class ChatListCell extends InfiniteCell {
             other.setPosition(other.position.x, this.otherBaseY, other.position.z);
         }
 
-        const lb = this.getBubbleLabel(isSelf);
-        if (!lb) return;
+        if (isSelf) {
+            const { bubble, label } = this.getBubbleNodes(true);
+            if (bubble && label && this.myNode) {
+                applyMyBubbleLayout(this.myNode, bubble, label, text);
+            }
+            return;
+        }
+
+        const lb = this.getBubbleNodes(false).label;
+        if (!lb) {
+            return;
+        }
         lb.string = text || '';
         lb.updateRenderData(true);
 
@@ -55,15 +70,12 @@ export class ChatListCell extends InfiniteCell {
         const lineCount = Math.max(1, Math.ceil(textH / lineHeight));
         const dy = lineCount > 2 ? 30 : 0;
 
-        // 需求：超过2行时，my/other 节点上移 30（复用前已恢复 baseY）
-        if (dy !== 0) {
-            if (my) my.setPosition(my.position.x, this.myBaseY + dy, my.position.z);
-            if (other) other.setPosition(other.position.x, this.otherBaseY + dy, other.position.z);
+        if (dy !== 0 && other) {
+            other.setPosition(other.position.x, this.otherBaseY + dy, other.position.z);
         }
     }
 
     UpdateContent(data: any): void {
-        // data: { kind:'msg', msg: PrivateMsg }
         const msg = data?.msg;
         const isSelf = msg?.role === 'self';
         const text = msg?.text != null ? String(msg.text) : '';
@@ -73,16 +85,14 @@ export class ChatListCell extends InfiniteCell {
             ? String(data.npc_sprite_url)
             : (data?.npc_avatar != null ? String(data.npc_avatar) : '');
         if (!this.npcHead) return;
-        // 列表复用时先清空，避免头像串到其它 cell
         if (isSelf || !avatar) {
             this.npcHead.spriteFrame = null;
             return;
         }
-        Utils.loadCover(avatar, this.npcHead , 78 , 78);
+        Utils.loadCover(avatar, this.npcHead , 130 , 130);
     }
 
     onClickNpcHead(){
         
     }
 }
-

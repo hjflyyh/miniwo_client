@@ -23,6 +23,9 @@ export class SocialModel {
 
     public userListCache: {} = {}
 
+    /** userTimeline 搜索结果写入 randomPostList 或 otherPostList */
+    public userTimelineListTarget: 'random' | 'other' = 'random'
+
     public static getInstance(): SocialModel {
         if (!this._instance) {
             this._instance = new SocialModel();
@@ -58,11 +61,15 @@ export class SocialModel {
         const cmd = data?.cmd || data?.data?.cmd
         data = data?.data || data
         if (cmd == network.FollowSocialCode.FollowData) {
-            const followList = data.list || []
-            this.followList = followList.map((i) => i.FollowedUserID)
+            this.followList = data.list || []
             console.log("followList:", this.followList)
+            EventSystem.send("followBack")
         }
-        else if (cmd == network.FollowSocialCode.PostData) {
+        else if (this.isPostDataCmd(cmd)) {
+            if (data?.nick_name && data?.list) {
+                this.applyUserTimelineResult(data)
+                return
+            }
             this.receiveList(data.list || [])
             this.postList = this.setPostData(data.list || [])
             const postLikeIDs = data.postLikeIDs || []
@@ -136,8 +143,9 @@ export class SocialModel {
             if (postLikeIDs.length > 0) {
                 this.postLikeList = [...new Set([...this.postLikeList, ...postLikeIDs])]
             }
-            this.receiveList(data.list || [])
-            this.randomPostList = this.setPostData(data.list || [])
+            const sortedList = this.sortPostListByCreatedAtDesc(data.list || [])
+            this.receiveList(sortedList)
+            this.randomPostList = this.setPostData(sortedList)
             console.log("randomPostList:", this.randomPostList)
             EventSystem.send("FollowRandomPostData")
         }
@@ -187,6 +195,18 @@ export class SocialModel {
         return ans
     }
 
+    /** 帖子按 CreatedAt 降序；时间相同则 ID 大的在前 */
+    private sortPostListByCreatedAtDesc(list: any[]): any[] {
+        return list.slice().sort((a, b) => {
+            const ta = Date.parse(String(a?.CreatedAt ?? '')) || 0
+            const tb = Date.parse(String(b?.CreatedAt ?? '')) || 0
+            if (tb !== ta) {
+                return tb - ta
+            }
+            return Number(b?.ID ?? 0) - Number(a?.ID ?? 0)
+        })
+    }
+
     public getPostDataByPostList(index: number) {
         const id = this.postList[index]
         return this.postData[id]
@@ -212,11 +232,53 @@ export class SocialModel {
         return this.postData[id]
     }
 
+    public isFollowing(userId: any): boolean {
+        if (userId == null || userId === '') {
+            return false
+        }
+        return this.followList.some((item: any) => {
+            if (item == userId) {
+                return true
+            }
+            const id = item?.player_id ?? item?.playerId ?? item?.UserID ?? item?.userID ?? item?.id
+            return id == userId
+        })
+    }
+
     private receiveList(list: any[]) {
         const userIDs = [...new Set(list.filter(item => !this.userListCache[item.UserID]).map(item => Number(item.UserID)))];
         if (userIDs.length > 0) {
             let json = new network.GetUserByIDRequest();
             AppConst.WebSocketManager.send(json.toJSON(userIDs))
+        }
+    }
+
+    private isPostDataCmd(cmd: any): boolean {
+        return cmd == network.FollowSocialCode.PostData || cmd === 'PostData'
+    }
+
+    private applyUserTimelineResult(data: any) {
+        const postLikeIDs = data.postLikeIDs || []
+        if (postLikeIDs.length > 0) {
+            this.postLikeList = [...new Set([...this.postLikeList, ...postLikeIDs])]
+        }
+        const sortedList = this.sortPostListByCreatedAtDesc(data.list || [])
+        this.receiveList(sortedList)
+        const ids = this.setPostData(sortedList)
+        if (data.player_id) {
+            this.userListCache[data.player_id] = {
+                ...(this.userListCache[data.player_id] || {}),
+                player_id: data.player_id,
+                nick_name: data.nick_name,
+            }
+            EventSystem.send("userListCache")
+        }
+        if (this.userTimelineListTarget === 'other') {
+            this.otherPostList = ids
+            EventSystem.send("otherPostList")
+        } else {
+            this.randomPostList = ids
+            EventSystem.send("FollowRandomPostData")
         }
     }
 }

@@ -247,6 +247,18 @@ export class RoleModel {
             }else{
                 AppConst.PanelManager.openView("res/View/ChooseWorldView")
             }
+
+            let json = {
+                token: RoleModel.getInstance().token,
+                cg_type : "",
+                rarity: "",
+                sort_by: "created_at",
+                sort_order: "desc"
+            }
+            AppConst.HttpManager.sendPostHttp(
+                "npc/cgGallery/list",
+                JSON.stringify(json),
+            );                    
         }
 
         if (data.functionName == "changeNickName" || data.functionName == "changeUserBirthday" || data.functionName == "changeUserAge" || data.functionName == "changeUserMbti" || data.functionName == "changeUserGender") {

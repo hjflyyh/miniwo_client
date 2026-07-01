@@ -65,6 +65,10 @@ export class FollowView extends Component {
     @property(Label)
     public nikeName: Label = null
 
+    @property(Node)
+    waitNode : Node
+
+
     private isLike: boolean = false
     private likeCount: number = 0
     private collectCount: number = 0
@@ -81,6 +85,8 @@ export class FollowView extends Component {
     private userID: string
 
     private followCommentList: {} = {}
+
+    private imgSps : Sprite[] = []
 
     start() {
         EventSystem.addListent("postLikeConfirmBack", this.postLikeConfirmBack, this)
@@ -100,7 +106,7 @@ export class FollowView extends Component {
         }
         this.userID = post?.UserID
         this.setNikeName()
-        this.isFollow.node.active = false
+        // this.isFollow.node.active = false
         this.setFollow()
         this.eggID = post?.EggID || 0
         AppConst.SocialHttpManager.sendGetHttp("firstCommentList", {
@@ -120,6 +126,7 @@ export class FollowView extends Component {
                 this.pageView.addPage(page)
                 const imgSp = page.getChildByName("banner").getComponent(Sprite);
                 if (imgSp) {
+                    this.imgSps.push(imgSp)
                     let journalImg = img.model_url
                     
                     // let journalImg = AppConst.JournalManager.journalImgs.find((i) => i.type == "localImg" && i.id == img["id"])
@@ -146,12 +153,35 @@ export class FollowView extends Component {
         this.isLike = SocialModel.getInstance().postLikeList.indexOf(this.postID) !== -1
         this.setBtnByIsLike()
 
-        this.followBtn.active = this.userID != RoleModel.getInstance().playerId
+        this.updateFollowBtnVisible()
+    }
+
+    protected update(dt: number): void {
+        if(this.imgSps.length <= 0){
+            this.waitNode.active = false
+            return
+        }
+        let isShow = false
+        for(let i = 0 ; i < this.imgSps.length ; i++){
+            if(this.imgSps[i].spriteFrame == null){
+                isShow = true
+            }
+        }
+        this.waitNode.active = isShow
     }
 
     //关注
-    onClickFollow(){
-        //this.userID
+    onClickFollow() {
+        if (!this.userID || this.userID == RoleModel.getInstance().playerId) {
+            return
+        }
+        if (SocialModel.getInstance().isFollowing(this.userID)) {
+            return
+        }
+        this.followBtn.active = false
+        AppConst.SocialHttpManager.sendPostHttp("follow", {
+            followedUserId: this.userID
+        })
     }
 
 
@@ -221,14 +251,14 @@ export class FollowView extends Component {
         })
     }
 
-    OnClickFollow() {
-        if (this.userID == RoleModel.getInstance().playerId) {
-            return
-        }
-        AppConst.SocialHttpManager.sendPostHttp(SocialModel.getInstance().followList.indexOf(this.userID) !== -1 ? "unfollow" : "follow", {
-            followedUserId: this.userID,
-        })
-    }
+    // OnClickFollow() {
+    //     if (this.userID == RoleModel.getInstance().playerId) {
+    //         return
+    //     }
+    //     AppConst.SocialHttpManager.sendPostHttp(SocialModel.getInstance().followList.indexOf(this.userID) !== -1 ? "unfollow" : "follow", {
+    //         followedUserId: this.userID,
+    //     })
+    // }
 
     OnClickEggReward() {
         this.eggRewardBtn.active = false
@@ -270,11 +300,20 @@ export class FollowView extends Component {
         this.nikeName.string = SocialModel.getInstance().userListCache[this.userID]?.nick_name
     }
 
-    setFollow() {
-        if (this.userID != RoleModel.getInstance().playerId) {
-            this.isFollow.node.active = true
-            this.isFollow.string = SocialModel.getInstance().followList.indexOf(this.userID) !== -1 ? "unfollow" : "follow"
+    setFollow(followedUserId?: number) {
+        if (followedUserId != null && followedUserId != this.userID) {
+            return
         }
+        this.updateFollowBtnVisible()
+    }
+
+    updateFollowBtnVisible() {
+        if (!this.followBtn) {
+            return
+        }
+        const isSelf = this.userID == RoleModel.getInstance().playerId
+        const alreadyFollowed = SocialModel.getInstance().isFollowing(this.userID)
+        this.followBtn.active = !isSelf && !alreadyFollowed
     }
 
     setBtnByIsLike() {

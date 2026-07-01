@@ -1,5 +1,5 @@
 import { _decorator, Component, Label, Node, resources, Sprite, SpriteFrame } from 'cc';
-import { getBasicSeedMatureSpriteResourcePath } from '../../Model/Farm/FarmSeedVisual';
+import { getBasicCropsSprite, getBasicSeedMatureSpriteResourcePath } from '../../Model/Farm/FarmSeedVisual';
 import { BagModel } from '../../Model/BagModel';
 import { AppConst } from '../../AppConst';
 import { network } from '../../Model/RequestData';
@@ -36,13 +36,17 @@ export class ShopCheckSellNode extends Component {
     
     refreshSellNode(shopData, chooseCount){
         console.log("刷新出售界面", shopData, chooseCount)
+        if(BagModel.getInstance().getItemCount(Number(shopData.item_id)) <= 0){
+            this.onClickClose()
+            return
+        }
         this.shopData = shopData
         this.chooseCount = chooseCount
         this.checkChooseCount.string = "" + chooseCount
         this.checkNeedItemCount.string = "" + shopData.base_crop_price * chooseCount
         this.checkLimitCount.string = "Inventory:" + BagModel.getInstance().getItemCount(Number(shopData.item_id))
         let _this = this
-        resources.load(getBasicSeedMatureSpriteResourcePath(shopData.id + ""), SpriteFrame, (err, sf) => {
+        resources.load(getBasicCropsSprite(shopData.id + ""), SpriteFrame, (err, sf) => {
             _this.checkItemSprite.spriteFrame = sf;
         });
     }
@@ -70,6 +74,10 @@ export class ShopCheckSellNode extends Component {
 
         const json = new network.ShopSellRequest()
         AppConst.WebSocketManager.send(json.toJSON(this.shopData.item_id, this.chooseCount))
+    }
+
+    onClickClose(){
+        this.node.active = false
     }
 }
 

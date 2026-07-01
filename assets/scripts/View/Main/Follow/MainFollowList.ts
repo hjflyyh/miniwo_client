@@ -1,4 +1,4 @@
-import { _decorator, Component, math, Node } from 'cc';
+import { _decorator, Component, EditBox, math, Node } from 'cc';
 import { YXCollectionView } from '../../../../plugin/list-3x/yx-collection-view';
 import { CustomGridFlowLayout } from '../../../../plugin/list-3x/custom-grid-flow-layout';
 import { AppConst } from '../../../AppConst';
@@ -25,11 +25,15 @@ export class MainFollowList extends Component {
     @property(Node)
     oldBtn: Node = null
 
+    @property(EditBox)
+    editBox: EditBox = null
+
     isOpenEdit = false
     
     start() {
         EventSystem.addListent("followEditBack", this.postBack, this)
         EventSystem.addListent("otherPostList", this.refreshData, this)
+        this.editBox?.node.on('editing-did-ended', this.onEditEnd, this)
         this.httpRequest()
         this.refreshData()
     }
@@ -64,6 +68,20 @@ export class MainFollowList extends Component {
         }
 
         AppConst.PanelManager.openView("res/View/Follow/FollowEditView")
+    }
+
+    onEditEnd() {
+        this.onClickFollow()
+    }
+
+    onClickFollow() {
+        const nick = (this.editBox?.string ?? '').trim()
+        if (!nick) {
+            AppConst.SocialHttpManager.sendGetHttp("followersTimeline", {})
+            return
+        }
+        SocialModel.getInstance().userTimelineListTarget = 'other'
+        AppConst.SocialHttpManager.sendGetHttp("userTimeline", { nick_name: nick })
     }
 
     httpRequest() {

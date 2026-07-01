@@ -40,13 +40,7 @@ export class SocialHttpManager extends Component {
             .then(data => {
                 EventSystem.send("HideJuhua" ,"HttpSend")
                 console.log("post 请求回复：", data)
-                if (data.success && data.data) {
-                    EventSystem.send("SocialHttpMessage", data.data)
-                } else {
-                    if (data.error) {
-                        EventSystem.send("ShowTips", data.error)
-                    }
-                }
+                this.dispatchSocialResponse(data)
                 return data;
             })
             .catch((err) => {
@@ -60,7 +54,7 @@ export class SocialHttpManager extends Component {
         return request
     }
 
-    public sendGetHttp(functionName, data) {
+    public sendGetHttp(functionName, data , isShowJuhua = true) {
         let queryMap = []
         for (let key in data) {
             queryMap.push([key, data[key]])
@@ -69,7 +63,9 @@ export class SocialHttpManager extends Component {
             .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
             .join("&");
         const fullUrl = queryString ? `${functionName}?${queryString}` : functionName;
-        EventSystem.send("ShowJuhua", "HttpSend")
+        if(isShowJuhua){
+            EventSystem.send("ShowJuhua", "HttpSend")
+        }
         console.log("get 请求url：", fullUrl)
         const request = fetch(this.getBaseUrl() + "/" + fullUrl, {
             method: 'GET',
@@ -79,7 +75,9 @@ export class SocialHttpManager extends Component {
             },
         })
             .then(async res => {
-                EventSystem.send("HideJuhua" ,"HttpSend")
+                if(isShowJuhua){
+                    EventSystem.send("HideJuhua" ,"HttpSend")
+                }
                 if (!res.ok) {
                     const raw = await res.text();
                     throw new Error(`Social GET ${functionName} HTTP ${res.status}: ${raw}`);
@@ -88,18 +86,16 @@ export class SocialHttpManager extends Component {
             })
             .then(data => {
                 console.log("get 请求回复：", data)
-                EventSystem.send("HideJuhua" ,"HttpSend")
-                if (data.success && data.data) {
-                    EventSystem.send("SocialHttpMessage", data.data)
-                } else {
-                    if (data.error) {
-                        EventSystem.send("ShowTips", data.error)
-                    }
+                if(isShowJuhua){
+                    EventSystem.send("HideJuhua" ,"HttpSend")
                 }
+                this.dispatchSocialResponse(data)
                 return data;
             })
             .catch((err) => {
-                EventSystem.send("HideJuhua" ,"HttpSend")
+                if(isShowJuhua){
+                    EventSystem.send("HideJuhua" ,"HttpSend")
+                }
                 const error = err instanceof Error ? err : new Error(String(err));
                 EventSystem.send("ShowTips", "Network request failed. Please try again later.");
                 EventSystem.send("HttpError", error);
@@ -107,6 +103,20 @@ export class SocialHttpManager extends Component {
             })
         request.catch(() => undefined)
         return request
+    }
+
+    private dispatchSocialResponse(data: any) {
+        const payload = data?.data
+        const ok = (data?.success && payload) || (data?.code === 200 && payload);
+        if (ok) {
+            EventSystem.send("SocialHttpMessage", payload)
+            return
+        }
+        if (data?.error) {
+            EventSystem.send("ShowTips", data.error)
+        } else if (data?.msg) {
+            EventSystem.send("ShowTips", data.msg)
+        }
     }
 
 }

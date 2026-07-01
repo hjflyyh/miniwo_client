@@ -7,6 +7,8 @@ import {
     buildDisplayableBasicCropRows,
     buildDisplayableBasicSeedRows,
 } from '../../Model/Farm/FarmSeedCatalog';
+import { ShopCheckSellNode } from '../Shop/ShopCheckSellNode';
+import { BagModel } from '../../Model/BagModel';
 const { ccclass, property } = _decorator;
 
 type GranaryListRow = {
@@ -59,8 +61,14 @@ export class GranaryView extends Component {
     /** starode 列表 content 下的动态格子 */
     public showStarodes: Node[] = [];
 
+    @property(ShopCheckSellNode)
+    shopCheckSellNode : ShopCheckSellNode
+
     @property(Node)
     buyBtn : Node
+
+    @property(Node)
+    sellBtn : Node
 
     private showType = 0;
     private itemScrollRoot: Node | null = null;
@@ -76,6 +84,7 @@ export class GranaryView extends Component {
         if (this.starodeCell?.isValid) {
             this.starodeCell.active = false;
         }
+        this.shopCheckSellNode.node.active = false
     }
 
     start() {
@@ -83,6 +92,7 @@ export class GranaryView extends Component {
         this.refrehsTab();
 
         EventSystem.addListent("OnClickGranaryItemCell" , this.OnClickItemCell , this)
+        EventSystem.addListent("BagUpdate", this.refreshList, this)
     }
 
     private OnClickItemCell(data){
@@ -93,6 +103,7 @@ export class GranaryView extends Component {
         this.tipNode.active = false
     }
 
+    private showCropCfg
     private openTips(type , id){
         this.tipNode.active = true
         let cfgSeed = null
@@ -103,6 +114,7 @@ export class GranaryView extends Component {
         }else{
             cfgCrops = AppConst.JSONManager.getItem("basicCrops" , id)
             cfgSeed = AppConst.JSONManager.getItem("basicSeeds" , cfgCrops["correspondence_relation"])
+            this.showCropCfg = cfgCrops
         }
 
         let seedItemId = cfgSeed["item_id"]
@@ -124,11 +136,22 @@ export class GranaryView extends Component {
             this.tipQuailty.string = "Ordinary"
         }
         this.buyBtn.active = type == 0
+        this.sellBtn.active = type == 1
         if(type == 0){
             this.tipName.string = cfgSeed["crop_name"]
         }else if(type == 1){
             this.tipName.string = cfgCrops["crop_name"]
         }
+    }
+
+    onClickSell(){
+        if(BagModel.getInstance().getItemCount(Number(this.showCropCfg.item_id)) <= 0){
+            EventSystem.send("ShowTips" , "Insufficient items")
+            return
+        }
+        this.tipNode.active = false
+        this.shopCheckSellNode.node.active = true
+        this.shopCheckSellNode.refreshSellNode(this.showCropCfg , 1);
     }
 
     onClickBuy(){

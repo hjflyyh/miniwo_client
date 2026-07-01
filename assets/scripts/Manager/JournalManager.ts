@@ -25,12 +25,22 @@ export class JournalManager extends Component {
 
     addNpcJournal(npcId : number , model_url : string){
         for(let i = 0 ; i < this.journalImgs.length ; i++){
-            if(this.journalImgs[i].id == npcId){
+            if(this.journalImgs[i].id == npcId && this.journalImgs[i].id == "modelImg"){
                 return
             }
         }
         this.journalImgs.push({id : npcId , type : "modelImg" , model_url : model_url})
     }
+
+
+    addCGJournal(cgId : number , url : string){
+        for(let i = 0 ; i < this.journalImgs.length ; i++){
+            if(this.journalImgs[i].id == cgId  && this.journalImgs[i].id == "cgImg"){
+                return
+            }
+        }
+        this.journalImgs.push({id : cgId , type : "modelImg" , model_url : url})
+    }    
 }
 
 

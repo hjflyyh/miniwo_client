@@ -1,4 +1,4 @@
-import { _decorator, Component, math, Node } from 'cc';
+import { _decorator, Component, EditBox, math, Node } from 'cc';
 import { YXCollectionView } from '../../../../plugin/list-3x/yx-collection-view';
 import { CustomGridFlowLayout } from '../../../../plugin/list-3x/custom-grid-flow-layout';
 import { AppConst } from '../../../AppConst';
@@ -25,6 +25,9 @@ export class RandomFollowList extends Component {
     @property(Node)
     oldBtn: Node = null
 
+    @property(EditBox)
+    editBox : EditBox
+
     isOpenEdit = false
     
     start() {
@@ -35,6 +38,20 @@ export class RandomFollowList extends Component {
 
     refreshData() {
         this.setBtns()
+    }
+
+    onEditEnd() {
+        this.onClickFollow()
+    }
+
+    onClickFollow() {
+        const nick = (this.editBox?.string ?? '').trim()
+        if (!nick) {
+            AppConst.SocialHttpManager.sendGetHttp("randomTimeline", {})
+            return
+        }
+        SocialModel.getInstance().userTimelineListTarget = 'random'
+        AppConst.SocialHttpManager.sendGetHttp("userTimeline", { nick_name: nick })
     }
 
     postBack() {
@@ -61,6 +78,7 @@ export class RandomFollowList extends Component {
     }
 
     httpRequest() {
+        AppConst.SocialHttpManager.sendGetHttp("myfollows", {})
         AppConst.SocialHttpManager.sendGetHttp("randomTimeline", {})
     }
 
