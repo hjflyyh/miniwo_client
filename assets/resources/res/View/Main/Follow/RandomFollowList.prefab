@@ -2177,7 +2177,7 @@
     },
     "component": "",
     "_componentId": "d4a0fJzysVBw4b/V5pAuYQW",
-    "handler": "onClickAddBtn",
+    "handler": "onClickEditBtn",
     "customEventData": ""
   },
   {

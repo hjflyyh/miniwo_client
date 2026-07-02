@@ -19,6 +19,8 @@ export class LoginView extends Component {
     private loginMailPending = false;
     /** 邮箱注册：HTTP register 进行中 */
     private registerPending = false;
+    /** 本地自动登录开关（与 saveNode 显示同步） */
+    private autoLoginEnabled = false;
 
     @property(WebView)
     public webview: WebView;
@@ -53,6 +55,9 @@ export class LoginView extends Component {
     @property(GenericSpritesheetAnimator)
     public animator: GenericSpritesheetAnimator;
 
+    @property(Node)
+    public saveNode : Node
+
     start() {
         this.initHttpServerFromStorage();
         if (sys.isNative && this.serverSelectNode) {
@@ -71,6 +76,77 @@ export class LoginView extends Component {
         if (this.animator) {
             this.animator.loadAndPlay('res/NPCImage/ban/decoded/walking-left', 'running-left');
         }
+
+        this.autoLoginEnabled = RoleModel.isAutoLoginEnabled();
+        this.refreshSaveNode();
+        this.tryAutoLogin();
+    }
+
+    onClickSave() {
+        this.autoLoginEnabled = !this.autoLoginEnabled;
+        RoleModel.setAutoLoginEnabled(this.autoLoginEnabled);
+        this.refreshSaveNode();
+    }
+
+    private refreshSaveNode() {
+        if (this.saveNode) {
+            this.saveNode.active = this.autoLoginEnabled;
+        }
+    }
+
+    private tryAutoLogin() {
+        if (!this.autoLoginEnabled || this.loginMailPending) {
+            return;
+        }
+        const cred = RoleModel.getSavedLoginCredentials();
+        if (!cred?.email || !cred?.token) {
+            return;
+        }
+        if (this.mailEditBox) {
+            this.mailEditBox.string = cred.email;
+        }
+        if (this.passwordEditBox) {
+            this.passwordEditBox.string = cred.token;
+        }
+        this.requestMailLogin(cred.email, cred.token, cred.loginType ?? 1, cred.platform ?? 0);
+    }
+
+    private requestMailLogin(email: string, password: string, loginType = 1, platform = 0) {
+        if (this.loginMailPending) {
+            return;
+        }
+        this.loginMailPending = true;
+        const req = AppConst.HttpManager.sendPostHttp("loginGame", JSON.stringify({
+            platform,
+            loginType,
+            token: password,
+            email,
+        }));
+        Promise.resolve(req).then(
+            () => {},
+            () => {},
+        ).then(() => {
+            if (this.isValid) {
+                this.loginMailPending = false;
+            }
+        });
+    }
+
+    private persistLoginCredentialsIfNeeded() {
+        if (!this.autoLoginEnabled) {
+            return;
+        }
+        const email = (this.mailEditBox?.string ?? "").trim();
+        const password = this.passwordEditBox?.string ?? "";
+        if (!email || !password) {
+            return;
+        }
+        RoleModel.saveLoginCredentials({
+            email,
+            token: password,
+            loginType: 1,
+            platform: 0,
+        });
     }
 
     private initHttpServerFromStorage() {
@@ -174,24 +250,17 @@ export class LoginView extends Component {
     }
 
     onClickMailNext(){
-        if (this.loginMailPending) {
+        const email = (this.mailEditBox?.string ?? "").trim();
+        const password = this.passwordEditBox?.string ?? "";
+        if (!email) {
+            EventSystem.send("ShowTips", "Please enter email");
             return;
         }
-        this.loginMailPending = true;
-        const req = AppConst.HttpManager.sendPostHttp("loginGame" , JSON.stringify({
-            platform : 0,
-            loginType : 1,
-            token : this.passwordEditBox.string,
-            email : this.mailEditBox.string
-        }));
-        Promise.resolve(req).then(
-            () => {},
-            () => {}
-        ).then(() => {
-            if (this.isValid) {
-                this.loginMailPending = false;
-            }
-        });
+        if (!password) {
+            EventSystem.send("ShowTips", "Please enter password");
+            return;
+        }
+        this.requestMailLogin(email, password);
     }
 
     onClickRegister(){
@@ -254,6 +323,7 @@ export class LoginView extends Component {
     }
 
     onLoginSuccess(){
+        this.persistLoginCredentialsIfNeeded();
         AppConst.PanelManager.CloseView(this)
         AppConst.PanelManager.openView("res/View/Main/MainView")
     }

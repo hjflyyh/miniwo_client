@@ -11,6 +11,10 @@ export class CGModel {
         return this._instance;
     }
 
+    public static resetInstance(): void {
+        CGModel._instance = null;
+    }
+
     public cgAry = []
 
     public init(){

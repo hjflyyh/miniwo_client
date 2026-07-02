@@ -11,6 +11,8 @@ export class CustomizeInput extends Component {
     @property(MapEditor)
     mapEditor : MapEditor = null
 
+    private _clickStartScreenPos: Vec2 | null = null
+
     /** 与 MapEditor.placeBuilding / 预览遮罩一致：含农场农田 FRAM */
     private isPlacementDragOffsetAction(status: ActionStatus): boolean {
         return (
@@ -78,6 +80,28 @@ export class CustomizeInput extends Component {
 
     private shouldKeepBuildSwitchOnTouchEnd(manager: ReturnType<typeof MapManager.GetInstance>): boolean {
         return this.isPlacementFingerDragActive(manager) || manager.actionStatus === ActionStatus.DETELE;
+    }
+
+    private tryLogEditMapGroundGridClick(screenPos: Vec2, startPos: Vec2 | null): void {
+        if (MapModel.getInstance().showEditMapType !== 1 || !this.mapEditor) {
+            return;
+        }
+        const manager = MapManager.GetInstance();
+        if (manager.actionStatus !== ActionStatus.Back) {
+            return;
+        }
+        if (startPos && Vec2.distance(screenPos, startPos) > 10) {
+            return;
+        }
+        const gridPos = MapModel.getInstance().worldPosToGride(screenPos, this.mapEditor);
+        if (
+            gridPos.x < 0 || gridPos.y < 0 ||
+            gridPos.x >= this.mapEditor.mapWidth ||
+            gridPos.y >= this.mapEditor.mapHeight
+        ) {
+            return;
+        }
+        console.log('[EnterMap=1] 点击地面格子', gridPos.x, gridPos.y, `(${gridPos.x}, ${gridPos.y})`);
     }
 
     start() {
@@ -189,6 +213,7 @@ export class CustomizeInput extends Component {
                 const manager = MapManager.GetInstance();
                 if (manager.actionStatus == ActionStatus.REGION) return;
 
+                this._clickStartScreenPos = event.getLocation().clone();
                 const gridPos = MapModel.getInstance().worldPosToGride(event.getLocation() , this.mapEditor);
                 const localPos = MapModel.getInstance().gridToWorld(gridPos , null , this.mapEditor);
                 // 转换到当前节点的局部坐标
@@ -287,6 +312,9 @@ export class CustomizeInput extends Component {
 
                 this.mapEditor.isDragging = false;
 
+                this.tryLogEditMapGroundGridClick(event.getLocation(), this._clickStartScreenPos);
+                this._clickStartScreenPos = null;
+
                 this.mapEditor._startGrad = new Vec2(0,0)
                 this.mapEditor._currentGrad = new Vec2(0,0)
             }, this);
@@ -364,6 +392,7 @@ export class CustomizeInput extends Component {
         this.isPinching = false;
         this.lastPinchDistance = 0;
         let eventLocation = event.getLocation()
+        this._clickStartScreenPos = eventLocation.clone();
         eventLocation.y += 100
         const gridPos = MapModel.getInstance().worldPosToGride(eventLocation , this.mapEditor);
         const localPos = MapModel.getInstance().gridToWorld(gridPos , null , this.mapEditor);
@@ -559,6 +588,15 @@ export class CustomizeInput extends Component {
         }
         this.mapEditor.isMousePoint = false;
         this.mapEditor.isDragging = false;
+
+        const touchLoc = event.getLocation().clone();
+        touchLoc.y += 100;
+        const touchStart = this._clickStartScreenPos ? this._clickStartScreenPos.clone() : null;
+        if (touchStart) {
+            touchStart.y += 100;
+        }
+        this.tryLogEditMapGroundGridClick(touchLoc, touchStart);
+        this._clickStartScreenPos = null;
     }
 }
 

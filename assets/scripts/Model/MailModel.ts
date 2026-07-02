@@ -10,6 +10,10 @@ export class MailModel {
         return this._inst;
     }
 
+    public static resetInstance(): void {
+        MailModel._inst = null;
+    }
+
     public init() {
         EventSystem.addListent("HttpMessage", this.OnHttpMessage, this);
         EventSystem.addListent("WebSocketNotifications", this.OnWSNotification, this)

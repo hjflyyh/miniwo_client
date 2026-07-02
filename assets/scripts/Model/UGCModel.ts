@@ -61,6 +61,10 @@ export class UGCModel {
         return this._inst;
     }
 
+    public static resetInstance(): void {
+        UGCModel._inst = null;
+    }
+
     /** 当前编辑地图快照（由 getMap / save* 等 HttpMessage 回填） */
     public mapData: UGCMapSnapshot = defaultMapSnapshot();
 

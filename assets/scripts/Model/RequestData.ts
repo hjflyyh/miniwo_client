@@ -44,6 +44,8 @@ export module network {
         FavoriteCancel  = 4017, // 取消收藏确认
         LikePostData    = 4018, // 点赞帖子数据
         FavoritePostData = 4019, // 收藏帖子数据
+        UserSocialStats  = 4020, // 用户社交统计
+        UserFollowRelations = 4021, // 互关/粉丝关系列表
     }
 
     export enum ServerCommandConstants {

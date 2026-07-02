@@ -22,6 +22,10 @@ export class WorkshopModel {
         return this._instance;
     }
 
+    public static resetInstance(): void {
+        WorkshopModel._instance = null;
+    }
+
     public init(): void {
         EventSystem.addListent('WebSocketNotifications', this.onWsNotification, this);
     }

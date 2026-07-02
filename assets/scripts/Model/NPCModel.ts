@@ -15,6 +15,10 @@ export class NPCModel {
         return this._instance;
     }
 
+    public static resetInstance(): void {
+        NPCModel._instance = null;
+    }
+
     public init(){
         EventSystem.addListent("WebSocketMessage" , this.OnWebSocketMessage , this)
     }

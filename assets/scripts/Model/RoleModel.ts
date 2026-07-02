@@ -1,12 +1,23 @@
-import { sys } from "cc";
+import { game, sys } from "cc";
 import { network } from "./RequestData";
 import { AppConst } from "../AppConst";
 import { NPCModel } from "./NPCModel";
 import { HttpManager } from "../Manager/HttpManager";
 import { PrivateChatManager } from "../Manager/PrivateChatMessage";
+import { resetAllGameModelsExceptRole } from "./ModelReset";
+
+export interface SavedLoginCredentials {
+    email: string
+    token: string
+    loginType: number
+    platform: number
+}
 
 export class RoleModel {
     private static _instance: RoleModel = null;
+
+    private static readonly STORAGE_AUTO_LOGIN_KEY = "LOGIN_AUTO_ENABLED";
+    private static readonly STORAGE_LOGIN_CREDENTIALS_KEY = "LOGIN_SAVED_CREDENTIALS";
 
     public loginType: number;
     public name: string;
@@ -47,6 +58,64 @@ export class RoleModel {
             this._instance = new RoleModel();
         }
         return this._instance;
+    }
+
+    public static resetInstance(): void {
+        RoleModel._instance = null;
+    }
+
+    public static isAutoLoginEnabled(): boolean {
+        return sys.localStorage.getItem(RoleModel.STORAGE_AUTO_LOGIN_KEY) === "1";
+    }
+
+    public static setAutoLoginEnabled(enabled: boolean): void {
+        sys.localStorage.setItem(RoleModel.STORAGE_AUTO_LOGIN_KEY, enabled ? "1" : "0");
+        if (!enabled) {
+            RoleModel.clearSavedLoginCredentials();
+        }
+    }
+
+    public static saveLoginCredentials(credentials: SavedLoginCredentials): void {
+        if (!RoleModel.isAutoLoginEnabled()) {
+            return;
+        }
+        sys.localStorage.setItem(
+            RoleModel.STORAGE_LOGIN_CREDENTIALS_KEY,
+            JSON.stringify(credentials),
+        );
+    }
+
+    public static getSavedLoginCredentials(): SavedLoginCredentials | null {
+        const raw = sys.localStorage.getItem(RoleModel.STORAGE_LOGIN_CREDENTIALS_KEY);
+        if (!raw) {
+            return null;
+        }
+        try {
+            return JSON.parse(raw) as SavedLoginCredentials;
+        } catch {
+            return null;
+        }
+    }
+
+    public static clearSavedLoginCredentials(): void {
+        sys.localStorage.removeItem(RoleModel.STORAGE_LOGIN_CREDENTIALS_KEY);
+    }
+
+    /** 切换账号：清除本地登录信息、清空 Model 数据并重启游戏 */
+    public switchAccount(): void {
+        RoleModel.clearSavedLoginCredentials();
+        RoleModel.setAutoLoginEnabled(false);
+
+        if (AppConst.WebSocketManager?.disconnect) {
+            AppConst.WebSocketManager.disconnect();
+        }
+        if (AppConst.PanelManager?.CloseAll) {
+            AppConst.PanelManager.CloseAll();
+        }
+
+        resetAllGameModelsExceptRole();
+        RoleModel.resetInstance();
+        game.restart();
     }
 
     public init() {

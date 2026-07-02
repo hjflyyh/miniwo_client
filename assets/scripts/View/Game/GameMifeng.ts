@@ -525,10 +525,10 @@ export class GameMifeng extends Component {
     }
 
     private scheduleNextDialogueShow(waitSec: number) {
-        this.dialogueTimer = setTimeout(() => {
-            this.dialogueTimer = null;
-            this.presentDialogue();
-        }, Math.max(0, waitSec) * 1000);
+        // this.dialogueTimer = setTimeout(() => {
+        //     this.dialogueTimer = null;
+        //     this.presentDialogue();
+        // }, Math.max(0, waitSec) * 1000);
     }
 
     private presentDialogue() {

@@ -12,10 +12,17 @@ export class FollowImgCell extends Component {
     @property(Sprite)
     public showSp : Sprite;
 
+    @property(Node)
+    public waitNode : Node;
+
     private data
     private parentView : FollowImgChoose
     start() {
 
+    }
+
+    protected update(dt: number): void {
+        this.waitNode.active = !this.showSp.spriteFrame
     }
 
     refreshData(data){

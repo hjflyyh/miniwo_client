@@ -1,1 +1,1 @@
-node version_generator.js -v 1.4.8 -u https://dtqxq8libnjoe.cloudfront.net/uploads/hotUpdate/ -s build/ios-003/assets/ -d assets/
+node version_generator.js -v 1.5.1 -u https://dtqxq8libnjoe.cloudfront.net/uploads/hotUpdate/ -s build/ios-003/assets/ -d assets/

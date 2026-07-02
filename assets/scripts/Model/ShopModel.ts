@@ -15,6 +15,10 @@ export class ShopModel {
         return this._instance;
     }
 
+    public static resetInstance(): void {
+        ShopModel._instance = null;
+    }
+
     public init() {
         EventSystem.addListent("WebSocketMessage", this.OnWebSocketMessage, this)
     }

@@ -65,8 +65,8 @@ export class RandomFollowList extends Component {
     }
 
     onClickAddBtn() {
-        this.isOpenEdit = !this.isOpenEdit
-        this.setBtns()
+        // this.isOpenEdit = !this.isOpenEdit
+        // this.setBtns()
     }
 
     onClickEditBtn() {

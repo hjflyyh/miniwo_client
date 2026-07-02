@@ -2,6 +2,7 @@ import { _decorator, Label, Node, Sprite, UITransform } from 'cc';
 import InfiniteCell from 'db://assets/plugin/InfiniteList/InfiniteCell';
 import { Utils } from '../../Utils/Utils';
 import { applyMyBubbleLayout } from './ChatMyBubbleLayout';
+import { AppConst } from '../../AppConst';
 const { ccclass, property } = _decorator;
 
 @ccclass('ChatListCell')
@@ -17,6 +18,8 @@ export class ChatListCell extends InfiniteCell {
 
     @property(Sprite)
     private npcHead : Sprite;
+
+    npcData : any = null;
 
     onLoad() {
         this.myNode = this.myNode || this.node.getChildByName('my');
@@ -77,6 +80,7 @@ export class ChatListCell extends InfiniteCell {
 
     UpdateContent(data: any): void {
         const msg = data?.msg;
+        this.npcData = data
         const isSelf = msg?.role === 'self';
         const text = msg?.text != null ? String(msg.text) : '';
         this.setMessageText(text, isSelf);
@@ -93,6 +97,6 @@ export class ChatListCell extends InfiniteCell {
     }
 
     onClickNpcHead(){
-        
+        // AppConst.PanelManager.openView('res/View/CreateMap/NPCTips', {npc_id : this.npcData?.npc_id});
     }
 }

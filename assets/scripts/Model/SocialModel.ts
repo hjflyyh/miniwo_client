@@ -26,11 +26,30 @@ export class SocialModel {
     /** userTimeline 搜索结果写入 randomPostList 或 otherPostList */
     public userTimelineListTarget: 'random' | 'other' = 'random'
 
+    public userSocialStats: {
+        mutual_follow_count: number
+        liked_post_count: number
+        post_received_like_count: number
+    } = null
+
+    public userFollowRelations: {
+        mutual_follow_list: { player_id: number, nick_name: string }[]
+        mutual_follow_total: number
+        follower_list: { player_id: number, nick_name: string }[]
+        follower_total: number
+        page: number
+        page_size: number
+    } = null
+
     public static getInstance(): SocialModel {
         if (!this._instance) {
             this._instance = new SocialModel();
         }
         return this._instance;
+    }
+
+    public static resetInstance(): void {
+        SocialModel._instance = null;
     }
 
     public init() {
@@ -151,6 +170,7 @@ export class SocialModel {
         }
         else if (cmd == network.FollowSocialCode.FollowSuccess) {
             this.followList.push(data.followedUserId)
+            this.promoteFollowerToMutualFollow(data.followedUserId)
             EventSystem.send("followBack", data.followedUserId)
         }
         else if (cmd == network.FollowSocialCode.UnFollowSuccess) {
@@ -184,6 +204,127 @@ export class SocialModel {
             this.favoritePostList = this.setPostData(data.list || [])
             console.log("favoritePostList:", this.favoritePostList)
         }
+        else if (cmd == network.FollowSocialCode.UserSocialStats) {
+            this.userSocialStats = {
+                mutual_follow_count: Number(data.mutual_follow_count ?? 0),
+                liked_post_count: Number(data.liked_post_count ?? 0),
+                post_received_like_count: Number(data.post_received_like_count ?? 0),
+            }
+            console.log("userSocialStats:", this.userSocialStats)
+            EventSystem.send("userSocialStats", this.userSocialStats)
+        }
+        else if (cmd == network.FollowSocialCode.UserFollowRelations) {
+            this.applyUserFollowRelations(data)
+        }
+    }
+
+    private applyUserFollowRelations(data: any) {
+        const page = Number(data.page ?? 1)
+        const pageSize = Number(data.page_size ?? data.pageSize ?? 20)
+        const mutualList = data.mutual_follow_list || []
+        const followerList = data.follower_list || []
+        if (page <= 1) {
+            this.userFollowRelations = {
+                mutual_follow_list: mutualList,
+                mutual_follow_total: Number(data.mutual_follow_total ?? 0),
+                follower_list: followerList,
+                follower_total: Number(data.follower_total ?? 0),
+                page,
+                page_size: pageSize,
+            }
+        } else if (this.userFollowRelations) {
+            this.userFollowRelations.mutual_follow_list = [
+                ...this.userFollowRelations.mutual_follow_list,
+                ...mutualList,
+            ]
+            this.userFollowRelations.follower_list = [
+                ...this.userFollowRelations.follower_list,
+                ...followerList,
+            ]
+            this.userFollowRelations.mutual_follow_total = Number(data.mutual_follow_total ?? this.userFollowRelations.mutual_follow_total)
+            this.userFollowRelations.follower_total = Number(data.follower_total ?? this.userFollowRelations.follower_total)
+            this.userFollowRelations.page = page
+            this.userFollowRelations.page_size = pageSize
+        } else {
+            this.userFollowRelations = {
+                mutual_follow_list: mutualList,
+                mutual_follow_total: Number(data.mutual_follow_total ?? 0),
+                follower_list: followerList,
+                follower_total: Number(data.follower_total ?? 0),
+                page,
+                page_size: pageSize,
+            }
+        }
+        this.cacheFollowRelationUsers([...mutualList, ...followerList])
+        console.log("userFollowRelations:", this.userFollowRelations)
+        EventSystem.send("userFollowRelations", this.userFollowRelations)
+    }
+
+    private cacheFollowRelationUsers(users: { player_id?: number, nick_name?: string }[]) {
+        let changed = false
+        users.forEach((user) => {
+            if (!user?.player_id) {
+                return
+            }
+            this.userListCache[user.player_id] = {
+                ...(this.userListCache[user.player_id] || {}),
+                player_id: user.player_id,
+                nick_name: user.nick_name,
+            }
+            changed = true
+        })
+        if (changed) {
+            EventSystem.send("userListCache")
+        }
+    }
+
+    /** 粉丝回关成功后，移入互关列表并刷新好友界面 */
+    private promoteFollowerToMutualFollow(followedUserId: any) {
+        if (followedUserId == null || followedUserId === '') {
+            return
+        }
+        const playerId = Number(followedUserId)
+        if (!playerId) {
+            return
+        }
+        if (!this.userFollowRelations) {
+            this.userFollowRelations = {
+                mutual_follow_list: [],
+                mutual_follow_total: 0,
+                follower_list: [],
+                follower_total: 0,
+                page: 1,
+                page_size: 20,
+            }
+        }
+        const relations = this.userFollowRelations
+        if (relations.mutual_follow_list.some((item) => item.player_id == playerId)) {
+            return
+        }
+        let user = relations.follower_list.find((item) => item.player_id == playerId)
+        if (!user) {
+            const cached = this.userListCache[playerId]
+            user = {
+                player_id: playerId,
+                nick_name: cached?.nick_name || "",
+            }
+        } else {
+            user = { player_id: user.player_id, nick_name: user.nick_name }
+        }
+        const prevFollowerLen = relations.follower_list.length
+        relations.follower_list = relations.follower_list.filter((item) => item.player_id != playerId)
+        if (relations.follower_list.length < prevFollowerLen) {
+            relations.follower_total = Math.max(0, relations.follower_total - 1)
+        }
+        relations.mutual_follow_list = [user, ...relations.mutual_follow_list]
+        relations.mutual_follow_total += 1
+        this.cacheFollowRelationUsers([user])
+        if (this.userSocialStats) {
+            this.userSocialStats.mutual_follow_count += 1
+            EventSystem.send("userSocialStats", this.userSocialStats)
+        }
+        console.log("promoteFollowerToMutualFollow:", playerId, relations)
+        EventSystem.send("userFollowRelations", relations)
     }
 
     private setPostData(list: any[]) : number[] {

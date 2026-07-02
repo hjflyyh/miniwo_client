@@ -301,9 +301,9 @@ export class FollowView extends Component {
     }
 
     setFollow(followedUserId?: number) {
-        if (followedUserId != null && followedUserId != this.userID) {
-            return
-        }
+        // if (followedUserId != null && followedUserId != this.userID) {
+        //     return
+        // }
         this.updateFollowBtnVisible()
     }
 

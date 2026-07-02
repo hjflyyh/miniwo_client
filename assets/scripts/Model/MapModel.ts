@@ -101,6 +101,10 @@ export class MapModel {
         return this._instance;
     }
 
+    public static resetInstance(): void {
+        MapModel._instance = null;
+    }
+
     public init(){
         EventSystem.addListent("WebSocketNotifications" , this.OnWSNotification , this)
         EventSystem.addListent("WebSocketMessage" , this.OnWebSocketMessage , this)

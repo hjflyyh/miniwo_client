@@ -14,6 +14,10 @@ export class BagModel {
         return this._instance;
     }
 
+    public static resetInstance(): void {
+        BagModel._instance = null;
+    }
+
     public init() {
         EventSystem.addListent("WebSocketNotifications", this.OnWSNotification, this)
     }

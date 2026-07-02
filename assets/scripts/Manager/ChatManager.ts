@@ -23,6 +23,10 @@ export class MapChatManager {
     return this._instance;
   }
 
+  public static resetInstance(): void {
+    MapChatManager._instance = null;
+  }
+
   public onMessages: (msgs: ChatMessage[]) => void = () => {
 
   };

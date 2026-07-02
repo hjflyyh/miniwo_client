@@ -52,6 +52,10 @@ export class FarmModel {
         return this._instance;
     }
 
+    public static resetInstance(): void {
+        FarmModel._instance = null;
+    }
+
     public init(): void {
         EventSystem.addListent('OnMatchData', this.onMatchData, this);
         EventSystem.addListent("WebSocketNotifications" , this.OnWSNotification , this)

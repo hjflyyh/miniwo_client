@@ -1,6 +1,7 @@
 import { _decorator, Component, Label, Node } from 'cc';
 import { AppConst } from '../../AppConst';
 import { RoleModel } from '../../Model/RoleModel';
+import { SocialModel } from '../../Model/SocialModel';
 import { network } from '../../Model/RequestData';
 const { ccclass, property } = _decorator;
 
@@ -15,22 +16,65 @@ export class UserCenter extends Component {
     @property(Label)
     info: Label
 
+    @property(Label)
+    likeNumber : Label
+
+    @property(Label)
+    firendNumber : Label
+
+    @property(Label)
+    heatNumber : Label
 
     start() {
         this.httpRequest()
         EventSystem.addListent("WebSocketNotifications", this.OnWSNotification, this)
         EventSystem.addListent("RefreshRoleData" , this.setUser , this)
+        EventSystem.addListent("userSocialStats", this.setSocialStats, this)
 
         EventSystem.send("OnSetNowShowPanel", this.node["__url"])
         this.setUser()
+        this.setSocialStats(SocialModel.getInstance().userSocialStats)
     }
     
 
     httpRequest() {
         AppConst.SocialHttpManager.sendGetHttp("myfollows", {} , false)
         AppConst.SocialHttpManager.sendGetHttp("timelineList", {} , false)
+        AppConst.SocialHttpManager.sendGetHttp("userSocialStats", {}, false)
     }
 
+    setSocialStats(stats?: {
+        mutual_follow_count: number
+        liked_post_count: number
+        post_received_like_count: number
+    }) {
+        const data = stats ?? SocialModel.getInstance().userSocialStats
+        if (!data) {
+            return
+        }
+        if (this.likeNumber) {
+            this.likeNumber.string = String(data.liked_post_count ?? 0)
+        }
+        if (this.firendNumber) {
+            this.firendNumber.string = String(data.mutual_follow_count ?? 0)
+        }
+        if (this.heatNumber) {
+            this.heatNumber.string = String(data.post_received_like_count ?? 0)
+        }
+    }
+
+    OnClickSwitch(){
+             AppConst.PanelManager.openView('res/View/Common/CheckCancelCommon', {
+                showText: `Log out and switch accounts`,
+                "callback" : this.callBackSwitch ,
+                "callbackParent" : this
+            });       
+    }
+
+    callBackSwitch(){
+        RoleModel.getInstance().switchAccount()
+    }
+    
     setUser() {
         this.userName.string = RoleModel.getInstance().nickName
         this.userId.string = "id: " + RoleModel.getInstance().playerId
@@ -66,6 +110,10 @@ export class UserCenter extends Component {
     }
     OnClickVisit(){
         AppConst.PanelManager.openView("res/View/Visit/VisitList", null, null, "res/View/UserCenter/UserCenter")
+    }
+
+    OnClickFriend(){
+         AppConst.PanelManager.openView("res/View/FriendView/FriendView", null, null , "res/View/UserCenter/UserCenter")
     }
 
     private OnWSNotification(data) {

@@ -120,6 +120,10 @@ export class PrivateChatManager {
     return this._ins;
   }
 
+  static resetInstance() {
+    PrivateChatManager._ins = null;
+  }
+
   private selfUid = "";
   private sessionsByPeer = new Map<string, ChatSession>();
   private sessionsByChannel = new Map<string, ChatSession>();
